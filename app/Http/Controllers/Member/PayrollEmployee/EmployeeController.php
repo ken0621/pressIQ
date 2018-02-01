@@ -56,8 +56,8 @@ class EmployeeController extends PayrollMember
 	public static function approver_access($employee_id)
 	{
 		$data['approver_rfp'] 	= Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','rfp')->first();
-		$data['approver_ot'] 	= Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','rfp')->first();
-		$data['approver_leave'] = Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','rfp')->first();
+		$data['approver_ot'] 	= Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','overtime')->first();
+		$data['approver_leave'] = Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','leave')->first();
 		$data['approver_ob'] 	= Tbl_payroll_approver_employee::where('payroll_employee_id',$employee_id)->where('payroll_approver_employee_type','ob')->first();
 		
 		if ($data['approver_rfp'] != null || $data['approver_ot'] != null || $data['approver_leave'] != null || $data['approver_ob'] != null) 
@@ -65,6 +65,20 @@ class EmployeeController extends PayrollMember
 			echo view('member.payroll2.employee_dashboard.authorized_access_menu', $data);
 		}
 	} 
+
+	public static function authorized_access($employee_id)
+	{
+		$shop_id = Tbl_payroll_employee_basic::select('shop_id')->where('payroll_employee_id',$employee_id)->first();
+
+		if($shop_id['shop_id'] == 21)
+		{
+			echo view('member.payroll2.employee_dashboard.authorized_yangming_access');
+		}
+		else
+		{
+			echo view('member.payroll2.employee_dashboard.authorized_all_access_menu');
+		}
+	}
 
 	public function employee()
 	{
@@ -156,12 +170,6 @@ class EmployeeController extends PayrollMember
         }
 	}
 
-	public function employee_summary_of_leave()
-	{
-		$data['page']	= 'Summary of Leave';
-		return view('member.payroll2.employee_dashboard.employee_summary_of_leave',$data);
-	}
-
 	public function employee_official_business()
 	{
 		$data['page']	= 'Official Business Form';
@@ -187,15 +195,6 @@ class EmployeeController extends PayrollMember
 		return view('member.payroll2.employee_dashboard.employee_overtime_view_shift',$data);
 	}
 
-	public function authorized_access_leave()
-	{
-		$data['page']					= 'Authorized Access Leave';
-		$data["_leave_name"] 			= Tbl_payroll_leave_temp::where("shop_id", $this->employee_info->shop_id)->get();
-		
-		return view('member.payroll2.employee_dashboard.authorized_access_leave',$data);
-	}
-
-
 	/*Start Overtime Management*/
 
 	public function employee_overtime_management()
@@ -211,14 +210,14 @@ class EmployeeController extends PayrollMember
 		$status = Request::input('status');
 		$data['_overtime_request'] = Tbl_payroll_request_overtime::where('payroll_employee_id', $this->employee_info->payroll_employee_id)->where('payroll_request_overtime_status', $status)->get();
 		
-		return view('member.payroll2.employee_dashboard.employee_overtime_management_table',$data);
+	return view('member.payroll2.employee_dashboard.employee_overtime_management_table',$data);
 	}
 
 	public function employee_overtime_application()
 	{
 		$data['page']	= 'Overtime Application';
 		$data['_group_approver'] = Tbl_payroll_approver_group::where('tbl_payroll_approver_group.shop_id', Self::employee_shop_id())->where('payroll_approver_group_type','overtime')->where('archived', 0)->get();
-			
+		
 		return view('member.payroll2.employee_dashboard.employee_overtime_application',$data);
 	}
 
@@ -380,16 +379,11 @@ class EmployeeController extends PayrollMember
 		$data['page']	= 'Authorized Access Official Business';
 		return view('member.payroll2.employee_dashboard.authorized_access_official_business',$data);
 	}
+	
 	public function authorized_access_approver()
 	{
 		$data['page']	= 'Authorized Access Approver';
 		return view('member.payroll2.employee_dashboard.authorized_access_approver',$data);
-	}
-	public function employee_leave_management()
-	{
-		$data['page']			= 'Leave Management';
-		$data["_leave_name"] 	= tbl_payroll_leave_temp::where("shop_id", $this->employee_info->shop_id)->get();
-	  	return view('member.payroll2.employee_dashboard.employee_leave_management',$data);
 	}
 
 	public function employee_official_business_management()
@@ -403,6 +397,9 @@ class EmployeeController extends PayrollMember
 
 		$data['page']				= 'Time Keeping';
 		$data['period_record'] 		= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->get();
+
+		$data['access_timekeeping'] = Self::employee_shop_id();
+
 		// dd($data['period_record']);
 		return view('member.payroll2.employee_dashboard.employee_time_keeping',$data);
 	}
@@ -520,17 +517,7 @@ class EmployeeController extends PayrollMember
 		$data['page']	= 'Official Business Management';
 		return view('member.payroll2.employee_dashboard.sample',$data);
 	}
-	public function employee_leave_application()
-	{
-		$data['page']		= 'Employee Leave Application';
-        $data["company"] 	= Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
-    	return view('member.payroll2.employee_dashboard.employee_leave_application',$data);
-    }
-    public function create_employee_leave()
-    {
-		$data['page']	= 'Create Employee Leave';
-    	return view('member.payroll2.employee_dashboard.create_employee_leave',$data);
-    }
+
     public function create_employee_overtime()
     {
 		$data['page']	= 'Create Employee Overtime';

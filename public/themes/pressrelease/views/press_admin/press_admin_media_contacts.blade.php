@@ -1,15 +1,5 @@
 @extends("press_admin.admin")
 @section("pressview")
-<style >
-.table 
-{
-   width: 100%;
-   display:block;
-   height: 500px;
-   overflow-y: scroll;
-   text-align: center;
-}
-</style>
 <div class="background-container">
     <div class="pressview">
         <div class="dashboard-container">
@@ -30,33 +20,42 @@
                   <div class="alert alert-danger">
                      <center>{{ Session::get('delete') }}</center>
                   </div>
-                  @endif    
+                  @endif
+
                 <div class="col-md-12">
-                     
-                  <div class="left-container" id="press_table" name="press_table">
-                    <table  class="table table-bordered" style="background-color: #FFFFFF;" id="showHere_table">
-                        <tr>
-                            <th style="text-align: center;">Contact Name</th>
-                            <th style="text-align: center;">Company</th>
-                            <th style="text-align: center;">Country</th>
-                            <th style="text-align: center;">Action</th>
-                        </tr>
-                         @foreach($_media_contacts as $_media)
-                           <tr>
-                              <td style="text-align: center;">{{$_media->name}}</td>
-                              <td style="text-align: center;">{{$_media->company_name}}</td>
-                              <td style="text-align: center;">{{$_media->country}}</td>
-                              <td style="text-align: center;">
-                                <a href="/pressadmin/pressreleases_edit_recipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-warning center">
-                                <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button>
-                                <a href="/pressadmin/pressreleases_deleterecipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-danger center">
-                                <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button>
-                              </td>
-                           </tr>
-                           @endforeach
-                        
-                    </table>
-                  </div>
+                 <div class="press-holder-container">
+                    <div class="title-container">Media Contacts
+                        <div class="search-container pull-right">
+                         <input placeholder="Search" type="text"  name="search_media" id="search_media">
+                         <button  type="button" name="search_button" id="search_button" class="btn btn-success">Search</button>
+                        </div>   
+                    </div>
+                   <div class="left-container" name="press_table" id="press_table1">
+                     <table  class="table table-bordered" id="showHere_table1">
+                         <tr>
+                             <th style="width: 25%;">Contact Name</th>
+                             <th style="width: 25%;">Company</th>
+                             <th style="width: 25%;">Country</th>
+                             <th style="width: 25%;">Action</th>
+                         </tr>
+                          @foreach($_media_contacts as $_media)
+                            <tr>
+                               <td>{{$_media->name}}</td>
+                               <td>{{$_media->company_name}}</td>
+                               <td>{{$_media->country}}</td>
+                               <td>
+                                 <a href="/pressadmin/pressreleases_edit_recipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-warning center">
+                                 <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button>
+                                 
+                                 <a href="/pressadmin/pressreleases_deleterecipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-danger center">
+                                 <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button>
+                               </td>
+                            </tr>
+                            @endforeach
+                         
+                     </table>
+                   </div>
+                 </div>    
                 </div>
             </div>
 
@@ -82,16 +81,16 @@
                     <input type="email" id="contact_email" name="contact_email" class="form-control" value="{{$edits->research_email_address}}" required>
 
                     <div class="title">Website: *</div>
-                    <input type="text"  id="contact_website" name="contact_website" class="form-control" value="{{$edits->website}}" required>
+                    <input type="text"  id="contact_website" name="contact_website" class="form-control" value="{{$edits->website}}">
 
                     <div class="title">Media Type: *</div>
-                    <input type="text" id="media_type" name="media_type" class="form-control" value="{{$edits->media_type}}" required>
+                    <input type="text" id="media_type" name="media_type" class="form-control" value="{{$edits->media_type}}">
 
                     <div class="title">Industry Type: *</div>
-                    <input type="text" id="industry_type" name="industry_type" class="form-control" value="{{$edits->industry_type}}" required>
+                    <input type="text" id="industry_type" name="industry_type" class="form-control" value="{{$edits->industry_type}}">
 
                     <div class="title">Title Journalist: *</div>
-                    <input type="text" id="title_journalist" name="title_journalist" class="form-control" value="{{$edits->title_of_journalist}}" required>
+                    <input type="text" id="title_journalist" name="title_journalist" class="form-control" value="{{$edits->title_of_journalist}}">
 
                     <div class="title">Description: *</div>
                     <textarea id="description" name="description">{{$edits->description}}</textarea>
@@ -112,7 +111,6 @@
                     <div class="title">Company Name: *</div>
                     <input type="text" id="company_name" name="company_name" class="form-control" required>
 
-
                     <div class="title">Country: *</div>
                     <input type="text" id="country" name="country" class="form-control" required>
 
@@ -120,16 +118,16 @@
                     <input type="email" id="contact_email" name="contact_email" class="form-control" required>
 
                     <div class="title">Website: *</div>
-                    <input type="text"  id="contact_website" name="contact_website" class="form-control" required>
+                    <input type="text"  id="contact_website" name="contact_website" class="form-control">
 
                     <div class="title">Media Type: *</div>
-                    <input type="text" id="media_type" name="media_type" class="form-control" required>
+                    <input type="text" id="media_type" name="media_type" class="form-control">
 
                     <div class="title">Industry Type: *</div>
-                    <input type="text" id="industry_type" name="industry_type" class="form-control" required>
+                    <input type="text" id="industry_type" name="industry_type" class="form-control" >
 
                     <div class="title">Title Journalist: *</div>
-                    <input type="text" id="title_journalist" name="title_journalist" class="form-control" required>
+                    <input type="text" id="title_journalist" name="title_journalist" class="form-control">
 
                     <div class="title">Description: *</div>
                     <textarea id="description" name="description"></textarea>
@@ -151,7 +149,7 @@
 @endsection
 
 @section("script")
-
+<script  src="/assets/js/media_contacts.js"></script>
 <script>
 function openCity(evt, cityName) 
 {

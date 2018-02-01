@@ -6,17 +6,100 @@
         <!-- <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script> -->
         <script type="text/javascript" src="/assets/external/jquery.minv1.js"></script>
         <script type="text/javascript" src="/assets/slot_genealogy/genealogy/drag.js"></script>
+        <script type="text/javascript" src="/assets/slot_genealogy/genealogy/genealogy_modal.js"></script>
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/old_genealogy.css" />
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/genealogy_modal.css" />
+        <link rel="stylesheet" type="text/css" href="/assets/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/assets/member/styles/6227bbe5.font-awesome.css" type="text/css"/>
+        <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
+        <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
 
         <!-- Trial-->
         <link rel="stylesheet" href="/resources/assets/remodal/src/jquery.remodal.css">
         <link rel="stylesheet" href="/resources/assets/remodal/src/remodal-default-theme.css">
         <link rel="stylesheet" href="/assets/external/chosen/chosen/chosen.css" media="screen"/>
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
         <style type="text/css">
         </style>
         <title>Genealogy</title>
     </head>
     <body id="body" class="body" style="height: 100%;">
+        
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <form class="form-create-slot" role="form" action="/members/create-slot" method="post">
+                {{csrf_field()}}
+                <div class="modal-header">
+                    <h4 class="modal-title">CREATE SLOT</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="holder">
+                        <label>Membership</label>
+                        <select style="width: 100%;" name="codevault" class="code-vault">
+                            @foreach($_codes as $code)
+                            <option value="{{$code->transaction_id}}">{{$code->mlm_activation.'('.$code->item_name.')'}}</option>
+                            @endforeach
+                        </select>
+                        <input type="hidden" name="no_of_codes" class="no_of_codes" value="{{count($_codes)}}">
+                        <input type="hidden" name="placement" class="slot-placement">
+                        <input type="hidden" name="position" class="slot-position">
+                        <input type="hidden" name="shop_id" class="shop_id" value="{{$shop_id}}">
+                    </div>
+                    
+                    <div class="holder">
+                        <label>Sponsor</label>
+                        <input type="text" name="sponsor" class="sponsor"><span class="verify-sponsor" verify='false'><font color="red"><i class="fa fa-times-circle-o" aria-hidden="true"></font></i></span>
+                    </div>
+                    
+                    <div class="holder">
+                        <label>Choose Owner</label>
+                        <input type="radio" class="btn-radio" name="owner" value="self" checked="checked"> Your Account<br>
+                        <input type="radio" class="btn-radio" name="owner" value="new"> New User<br>
+                    </div>
+
+                    <div class="holder">
+                        <div class="new-user">
+                            <label>First Name</label>
+                            <input type="text" name="first_name" class="same-width fname">
+                            <label>Middle Name</label>
+                            <input type="text" name="middle_name" class="same-width mname">
+                            <label>Last Name</label>
+                            <input type="text" name="last_name" class="same-width lname">
+                            <label>Contact</label>
+                            <input type="text" name="contact" class="same-width contact">
+                            <label>Email</label>
+                            <input type="text" name="email" class="same-width email">
+                            <label>Username</label>
+                            <input type="text" name="username" class="same-width username">
+                            <label>Password</label>
+                            <input type="password" name="password" class="same-width password">
+                            <label>Confirm Password</label>
+                            <input type="password" name="confirm_pass" class="same-width confirm_pass">
+                            <label>Country</label>
+                            <select name="country" class="country">
+                                <option value="420">Philippines</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-custom-close close-modal" type="button">Close</button>
+                    <button class="btn btn-custom-primary" type="submit">Submit</button>
+                </div>
+            </form>
+          </div>
+
+        </div>
+        {{-- Modal End --}}
+
         <!-- backup style="height: 100%;" -->
         <div class="overscroll" style="width: 100%; height: inherit; overflow: auto;">
 
@@ -63,7 +146,8 @@
     <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
     <!-- Trial -->
     <script src="/resources/assets/remodal/src/jquery.remodal.js"></script>
-    <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script> 
+    <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script type="text/javascript">
         var mode = "{{ Request::input('mode') }}";
         var g_width = 0;

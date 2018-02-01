@@ -24,9 +24,11 @@ use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_pagibig;
 use App\Models\Tbl_payroll_holiday_company;
+use App\Models\Tbl_payroll_holiday_employee;
 use App\Models\Tbl_payroll_time_sheet_record_approved;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_period;
+use App\Models\Tbl_payroll_13th_month_basis;
 
 use App\Globals\PayrollLeave;
 
@@ -640,26 +642,38 @@ class Payroll2
 
 		$return->is_holiday = $is_holiday = Payroll2::timesheet_get_is_holiday($employee_id, $date);
 		//$return->leave = $leave = $this->timesheet_get_leave_hours($employee_id, $date, $_shift_raw);
-
+		
 		/*START leave function*/
 		// $leave_data_all = PayrollLeave::employee_leave_data($employee_id);
   		// $leave_cap_data = PayrollLeave::employee_leave_capacity($employee_id);
-        $leave_date_data = PayrollLeave::employee_leave_date_datav2($employee_id,$date);
+        $leave_info_v1 =  Tbl_payroll_leave_schedule::getemployeeleavedatedata($employee_id, $date)->first();
         $use_leave = false;
-
+        
         $leave = "00:00:00";
         $data_this = PayrollLeave::employee_leave_capacity_consume_remainingv2($employee_id)->get();
         $leavepay = 0;
-
-        if (count($leave_date_data) > 0) 
+        // dd($leave_info_v1);
+        if ($leave_info_v1) 
         {
-        	// $used_leave_data = PayrollLeave::employee_leave_consumed($leave_date_data["payroll_leave_employee_id"]);
-        	// $remaining_leave_data = PayrollLeave::employee_leave_remaining($employee_id, $leave_data_all["payroll_leave_employee_id"]);
-
-        	$use_leave = true;
-        	$leave=$leave_date_data["leave_hours"];
-        	$leavepay=$leave_date_data["payroll_leave_temp_with_pay"];
+        	$use_leave 	= true;
+        	$leave 		= $leave_info_v1["leave_hours"];
+        	$leavepay 	= 1;
         }
+        else
+        {
+        	$leave_date_data = PayrollLeave::employee_leave_date_datav2($employee_id,$date);
+        	
+        	if (count($leave_date_data) > 0) 
+        	{
+        		// $used_leave_data = PayrollLeave::employee_leave_consumed($leave_date_data["payroll_leave_employee_id"]);
+        		// $remaining_leave_data = PayrollLeave::employee_leave_remaining($employee_id, $leave_data_all["payroll_leave_employee_id"]);
+
+        		$use_leave = true;
+        		$leave=$leave_date_data["leave_hours"];
+        		$leavepay=$leave_date_data["payroll_leave_temp_with_pay"];
+        	}
+        }
+        
 
     	$return->use_leave = $use_leave;             
 		$return->leave = $leave;
@@ -674,11 +688,11 @@ class Payroll2
 
 		if($return->time_compute_mode == "flexi")
 		{
-			$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, $return->shift_break_hours, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $use_leave, $testing = false, $leavepay);
+			$return->time_output =  Payroll2::compute_time_mode_flexi($return->compute_shift, $return->shift_target_hours, $return->shift_break_hours, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday, $leave, $leave_fill_undertime, $use_leave, $compute_type, $leavepay, $testing = false);
 		}
 		else
 		{
-			$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours, $use_leave, false, $leavepay);
+			$return->time_output = Payroll2::compute_time_mode_regular($return->compute_shift, $_shift_raw, $late_grace_time, $grace_time_rule_late, $overtime_grace_time, $grace_time_rule_overtime, $day_type, $is_holiday , $leave, $leave_fill_late, $leave_fill_undertime, $return->shift_target_hours, $use_leave, $compute_type, $leavepay, false);
 
 		}
 		
@@ -922,7 +936,10 @@ class Payroll2
 		$day_type	= 'not_holiday';
 		// $day_type["holiday_name"]	= '';
 		$company_id	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->value('payroll_employee_company_id');
-		$holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
+
+		// $holiday	= Tbl_payroll_holiday_company::getholiday($company_id, $date)->first();
+		$holiday	= Tbl_payroll_holiday_employee::getholidayv2($employee_id, $date)->first();
+		
 		if($holiday != null)
 		{
 			$day_type = strtolower($holiday->payroll_holiday_category);
@@ -987,7 +1004,7 @@ class Payroll2
 		{
 			$_timesheet_record_db = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_db->payroll_time_sheet_id)->get();
 			$_timesheet_record = Payroll2::timesheet_process_in_out_record($_timesheet_record_db);
-			// dd($_timesheet_record);
+			
 		}
 		else
 		{
@@ -1458,9 +1475,8 @@ class Payroll2
      * @author (Kim Briel Oraya)
      *
      */
-	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift",$overtime_grace_time = "00:00:00",$grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00",$leave_fill_late=0,$leave_fill_undertime=0,$target_hours=0, $use_leave = false ,$testing = false, $leavepay=0)
+	public static function compute_time_mode_regular($_time, $_shift, $late_grace_time = "00:00:00", $grace_time_rule_late="per_shift", $overtime_grace_time = "00:00:00", $grace_time_rule_overtime = "per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_late = 0, $leave_fill_undertime = 0, $target_hours = 0, $use_leave = false , $compute_type , $leavepay = 0, $testing = false)
 	{
-
 		$leave_fill_undertime	= 1;
 		$leave_fill_late		= 1;
 		$time_spent				= "00:00:00";
@@ -1874,6 +1890,7 @@ class Payroll2
 		if ($is_holiday=="special") 
 		{
 			$special_holiday_hours = $regular_hours;
+			
 			if ($compute_type == "monthly") 
 			{
 				$is_absent = false;
@@ -1950,7 +1967,7 @@ class Payroll2
      */
 
 
-	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours=0, $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $use_leave = false, $testing = false,$leavepay=0)
+	public static function compute_time_mode_flexi($_time, $target_hours="08:00:00", $break_hours=0, $overtime_grace_time = "00:00:00", $grace_time_rule_overtime="per_shift", $day_type = "regular", $is_holiday = "not_holiday", $leave = "00:00:00", $leave_fill_undertime=0, $use_leave = false, $compute_type , $leavepay = 0, $testing = false)
 
 	{
 
@@ -2275,7 +2292,7 @@ class Payroll2
 		$return = new stdClass();
 
 		$time_spent = Self::time_float($_time['time_spent']);
-
+		
 		/* START leave pay computation */
 		if (Self::time_float($_time['leave_hours']) != 0) 
 		{
@@ -2341,7 +2358,7 @@ class Payroll2
 		}
 
 		
-		$total_day_income 				= $daily_rate ;
+		$total_day_income 				= $daily_rate;
 		$target_float 					= Self::time_float($_time['target_hours']);
 		$daily_rate_plus_cola			= $daily_rate + $cola;
 
@@ -2406,40 +2423,41 @@ class Payroll2
 		{
 			if ($rest_float != 0) 
 			{
-				//Rest Day
-				if($compute_type == "daily")
-				{
-					$total_day_income = 0;
-					$return->_breakdown_addition["Rest Day"]["time"] = ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($regular_param['payroll_overtime_rest_day']).")"; 
-					$return->_breakdown_addition["Rest Day"]["rate"] = (( ( $time_spent >= $target_float ? $target_float:$time_spent ) * $hourly_rate ) * ($regular_param['payroll_overtime_rest_day']));
-					$return->_breakdown_addition["Rest Day"]["hour"] = ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]);
-					
-					$total_day_income 		= $total_day_income + $return->_breakdown_addition["Rest Day"]["rate"]; 			
-					$additional_percentage 	= ($regular_param['payroll_overtime_rest_day']);
-					$breakdown_addition     += $return->_breakdown_addition["Rest Day"]["rate"];
-				}
-				else if($compute_type == "hourly")
-				{
-					$total_day_income   = 0;
-					$return->daily_rate = 0;
-					$return->_breakdown_addition["Rest Day"]["time"] = ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($regular_param['payroll_overtime_rest_day']).")"; 
-					$return->_breakdown_addition["Rest Day"]["rate"] = (( ( $time_spent >= $target_float ? $target_float:$time_spent ) * $hourly_rate ) * ($regular_param['payroll_overtime_rest_day']));
-					$return->_breakdown_addition["Rest Day"]["hour"] = ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]);
-					
-					$total_day_income 		= $total_day_income + $return->_breakdown_addition["Rest Day"]["rate"]; 			
-					$additional_percentage 	= ($regular_param['payroll_overtime_rest_day']);
-					$breakdown_addition     += $return->_breakdown_addition["Rest Day"]["rate"];
-				}
-				else if($compute_type == "monthly")
-				{
-					$return->_breakdown_addition["Rest Day"]["time"] =  ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($regular_param['payroll_overtime_rest_day']).")"; 
-					$return->_breakdown_addition["Rest Day"]["rate"] = ((($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) * $hourly_rate) * ($regular_param['payroll_overtime_rest_day']));
-					$return->_breakdown_addition["Rest Day"]["hour"] =  ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]);
-					
-					$total_day_income 		 = ($return->_breakdown_addition["Rest Day"]["rate"]); 
-					$additional_percentage 	 = ($regular_param['payroll_overtime_rest_day']);
-					$breakdown_addition 	 += $return->_breakdown_addition["Rest Day"]["rate"];
-				}
+					//Rest Day
+					if($compute_type == "daily")
+					{
+						$total_day_income = 0;
+						$return->_breakdown_addition["Rest Day"]["time"] = ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($regular_param['payroll_overtime_rest_day']).")"; 
+						$return->_breakdown_addition["Rest Day"]["rate"] = (( ( $time_spent >= $target_float ? $target_float:$time_spent ) * $hourly_rate ) * ($regular_param['payroll_overtime_rest_day']));
+						$return->_breakdown_addition["Rest Day"]["hour"] = ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]);
+						
+						$total_day_income 		= $total_day_income + $return->_breakdown_addition["Rest Day"]["rate"]; 			
+						$additional_percentage 	= ($regular_param['payroll_overtime_rest_day']);
+						$breakdown_addition     += $return->_breakdown_addition["Rest Day"]["rate"];
+					}
+					else if($compute_type == "hourly")
+					{
+						$total_day_income   = 0;
+						$return->daily_rate = 0;
+						$return->_breakdown_addition["Rest Day"]["time"] = ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($regular_param['payroll_overtime_rest_day']).")"; 
+						$return->_breakdown_addition["Rest Day"]["rate"] = (($target_float * $hourly_rate ) * ($regular_param['payroll_overtime_rest_day']));
+						$return->_breakdown_addition["Rest Day"]["hour"] = ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]);
+						
+						$total_day_income 		= $total_day_income + $return->_breakdown_addition["Rest Day"]["rate"]; 			
+						$additional_percentage 	= ($regular_param['payroll_overtime_rest_day']);
+						$breakdown_addition     += $return->_breakdown_addition["Rest Day"]["rate"];
+					}
+					else if($compute_type == "monthly")
+					{
+						$return->_breakdown_addition["Rest Day"]["time"] =  ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($regular_param['payroll_overtime_rest_day']).")"; 
+						$return->_breakdown_addition["Rest Day"]["rate"] = ((($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) * $hourly_rate) * ($regular_param['payroll_overtime_rest_day']));
+						$return->_breakdown_addition["Rest Day"]["hour"] =  ($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]);
+						
+						$total_day_income 		 = ($return->_breakdown_addition["Rest Day"]["rate"]); 
+						$additional_percentage 	 = ($regular_param['payroll_overtime_rest_day']);
+						$breakdown_addition 	 += $return->_breakdown_addition["Rest Day"]["rate"];
+					}
+				
 
 				//Rest Day Over Time
 				if ($overtime_float != 0) 
@@ -2466,12 +2484,13 @@ class Payroll2
 			}
 			else
 			{
+
 				if ($compute_type == "hourly") 
 				{
-					$return->daily_rate = $hourly_rate * $time_spent;
-					$total_day_income   = $hourly_rate * $time_spent;
+					$return->daily_rate = $hourly_rate * $target_float;
+					$total_day_income   = $return->daily_rate;
 				}
-				if ($overtime_float != 0) 
+		  		if ($overtime_float != 0) 
 				{
 					$return->_breakdown_addition["Over Time"]["time"] = $_time["overtime"] ." (".ctopercent($regular_param['payroll_overtime_overtime']).")"; 
 					$return->_breakdown_addition["Over Time"]["rate"] = ($hourly_rate * $overtime_float) * ($regular_param['payroll_overtime_overtime']);
@@ -2499,38 +2518,40 @@ class Payroll2
 			//Legal Holiday with rest day
 			if($rest_float > 0)
 			{
-				if ($compute_type == "daily") 
-				{
-					$return->daily_rate = 0;
-					$return->_breakdown_addition["Legal Holiday Rest Day"]["time"] = "";  //.($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($legal_param['payroll_overtime_rest_day']).")"; 
-					$return->_breakdown_addition["Legal Holiday Rest Day"]["rate"] = ( $daily_rate) * ($legal_param['payroll_overtime_rest_day']);
-					$return->_breakdown_addition["Legal Holiday Rest Day"]["hour"] = "";
 
-					$total_day_income 	   =  $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"]; 
-					$additional_percentage =  ($legal_param['payroll_overtime_rest_day']);
-					$breakdown_addition    += $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"];
-				}
-				else if ($compute_type == "hourly") 
-				{
-					$return->daily_rate = 0;
-					$return->_breakdown_addition["Legal Holiday Rest Day"]["time"] = "";  //.($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($legal_param['payroll_overtime_rest_day']).")"; 
-					$return->_breakdown_addition["Legal Holiday Rest Day"]["rate"] = ($time_spent) * ($hourly_rate * $legal_param['payroll_overtime_rest_day']);
-					$return->_breakdown_addition["Legal Holiday Rest Day"]["hour"] = "";
+					if ($compute_type == "daily") 
+					{
+						$return->daily_rate = 0;
+						$return->_breakdown_addition["Legal Holiday Rest Day"]["time"] = "";  //.($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($legal_param['payroll_overtime_rest_day']).")"; 
+						$return->_breakdown_addition["Legal Holiday Rest Day"]["rate"] = ( $daily_rate) * ($legal_param['payroll_overtime_rest_day']);
+						$return->_breakdown_addition["Legal Holiday Rest Day"]["hour"] = "";
 
-					$total_day_income 	   =  $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"]; 
-					$additional_percentage = ($legal_param['payroll_overtime_rest_day']);
-					$breakdown_addition    += $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"];
-				}
-				else if($compute_type == "monthly")
-				{
-					$return->_breakdown_addition["Legal Holiday Rest Day"]["time"] = "";  //.($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($legal_param['payroll_overtime_rest_day']).")"; 
-					$return->_breakdown_addition["Legal Holiday Rest Day"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_rest_day']);
-					$return->_breakdown_addition["Legal Holiday Rest Day"]["hour"] = "";
-					
-					$total_day_income 	   = $total_day_income + $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"]; 
-					$additional_percentage = ($legal_param['payroll_overtime_rest_day']);
-					$breakdown_addition    += $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"];
-				}
+						$total_day_income 	   =  $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"]; 
+						$additional_percentage =  ($legal_param['payroll_overtime_rest_day']);
+						$breakdown_addition    += $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"];
+					}
+					else if ($compute_type == "hourly") 
+					{
+						$return->daily_rate = 0;
+						$return->_breakdown_addition["Legal Holiday Rest Day"]["time"] = "";  //.($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($legal_param['payroll_overtime_rest_day']).")"; 
+						$return->_breakdown_addition["Legal Holiday Rest Day"]["rate"] = ($target_float) * ($hourly_rate * $legal_param['payroll_overtime_rest_day']);
+						$return->_breakdown_addition["Legal Holiday Rest Day"]["hour"] = "";
+
+						$total_day_income 	   =  $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"]; 
+						$additional_percentage = ($legal_param['payroll_overtime_rest_day']);
+						$breakdown_addition    += $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"];
+					}
+					else if($compute_type == "monthly")
+					{
+						$return->_breakdown_addition["Legal Holiday Rest Day"]["time"] = "";  //.($time_spent>=$target_float ? $_time["target_hours"]:$_time["time_spent"]) ." (".ctopercent($legal_param['payroll_overtime_rest_day']).")"; 
+						$return->_breakdown_addition["Legal Holiday Rest Day"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_rest_day']);
+						$return->_breakdown_addition["Legal Holiday Rest Day"]["hour"] = "";
+						
+						$total_day_income 	   = $total_day_income + $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"]; 
+						$additional_percentage = ($legal_param['payroll_overtime_rest_day']);
+						$breakdown_addition    += $return->_breakdown_addition["Legal Holiday Rest Day"]["rate"];
+					}
+				
 
 				//Legal Holiday Rest Day Over Time
 				if ($overtime_float!=0) 
@@ -2559,66 +2580,77 @@ class Payroll2
 			else
 			{
 				//Legal Holiday
-				if ($compute_type=="daily" ) 
-				{
-					if(($legal_param['payroll_overtime_regular']) == 0)
+					if ($compute_type=="daily" ) 
 					{
-						$return->_breakdown_addition["Legal Holiday"]["time"] = "";
-						$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
+						if(($legal_param['payroll_overtime_regular']) == 0)
+						{
+							$return->_breakdown_addition["Legal Holiday"]["time"] = "";
+							$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
+							$return->_breakdown_addition["Legal Holiday"]["hour"] = "";
+							
+							$total_day_income 	    = $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
+							$additional_percentage  = ($legal_param['payroll_overtime_regular']);
+							$breakdown_addition 	+= $return->_breakdown_addition["Legal Holiday"]["rate"];
+						}
+						else
+						{
+							$daily_rate = $daily_true_rate;
+							$return->_breakdown_addition["Legal Holiday"]["time"] = ""; 
+							$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
+							$return->_breakdown_addition["Legal Holiday"]["hour"] = "";
+
+							$total_day_income 		= $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
+							$additional_percentage  = ($legal_param['payroll_overtime_regular']);
+							$breakdown_addition 	+= $return->_breakdown_addition["Legal Holiday"]["rate"];
+						}
+					}
+					else if ($compute_type == "hourly")
+					{
+						$total_day_income = 0;
+
+						if($time_spent != 0)
+						{
+							$return->daily_rate = $hourly_rate * $target_float;
+						}
+						else
+						{
+							$return->daily_rate = 0;
+						}
+
+						$return->_breakdown_addition["Legal Holiday"]["time"] = ""; 
+						$return->_breakdown_addition["Legal Holiday"]["rate"] = $target_float * ($hourly_rate * $legal_param['payroll_overtime_regular']);
 						$return->_breakdown_addition["Legal Holiday"]["hour"] = "";
-						
-						$total_day_income 	    = $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
+
+						$total_day_income 		= $return->daily_rate + $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
 						$additional_percentage  = ($legal_param['payroll_overtime_regular']);
 						$breakdown_addition 	+= $return->_breakdown_addition["Legal Holiday"]["rate"];
 					}
-					else
+					else if ($compute_type == "monthly") 
 					{
-						$daily_rate = $daily_true_rate;
-						$return->_breakdown_addition["Legal Holiday"]["time"] = ""; 
-						$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
-						$return->_breakdown_addition["Legal Holiday"]["hour"] = "";
+						if(($legal_param['payroll_overtime_regular']) == 0)
+						{
+							$return->_breakdown_addition["Legal Holiday"]["time"] = "";
+							$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
+							$return->_breakdown_addition["Legal Holiday"]["hour"] = "";
 
-						$total_day_income 		= $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
-						$additional_percentage  = ($legal_param['payroll_overtime_regular']);
-						$breakdown_addition 	+= $return->_breakdown_addition["Legal Holiday"]["rate"];
+							$total_day_income 		= $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
+							$additional_percentage 	= ($legal_param['payroll_overtime_regular']);
+							$breakdown_addition 	+= $return->_breakdown_addition["Legal Holiday"]["rate"];
+						}
+						else
+						{
+							$return->_breakdown_addition["Legal Holiday"]["time"] = ""; 
+							$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
+							$return->_breakdown_addition["Legal Holiday"]["hour"] = "";
+
+							$total_day_income 	   = $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
+							$additional_percentage = ($legal_param['payroll_overtime_regular']);
+							$breakdown_addition    += $return->_breakdown_addition["Legal Holiday"]["rate"];
+						}
 					}
-				}
-				else if ($compute_type == "hourly")
-				{
-					$total_day_income = 0;
-					$return->daily_rate = $hourly_rate * $time_spent;
+			    
 
-					$return->_breakdown_addition["Legal Holiday"]["time"] = ""; 
-					$return->_breakdown_addition["Legal Holiday"]["rate"] = $time_spent * ($hourly_rate * $legal_param['payroll_overtime_regular']);
-					$return->_breakdown_addition["Legal Holiday"]["hour"] = "";
 
-					$total_day_income 		= $return->daily_rate + $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
-					$additional_percentage  = ($legal_param['payroll_overtime_regular']);
-					$breakdown_addition 	+= $return->_breakdown_addition["Legal Holiday"]["rate"];
-				}
-				else if ($compute_type == "monthly") 
-				{
-					if(($legal_param['payroll_overtime_regular']) == 0)
-					{
-						$return->_breakdown_addition["Legal Holiday"]["time"] = "";
-						$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
-						$return->_breakdown_addition["Legal Holiday"]["hour"] = "";
-
-						$total_day_income 		= $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
-						$additional_percentage 	= ($legal_param['payroll_overtime_regular']);
-						$breakdown_addition 	+= $return->_breakdown_addition["Legal Holiday"]["rate"];
-					}
-					else
-					{
-						$return->_breakdown_addition["Legal Holiday"]["time"] = ""; 
-						$return->_breakdown_addition["Legal Holiday"]["rate"] = $daily_rate * ($legal_param['payroll_overtime_regular']);
-						$return->_breakdown_addition["Legal Holiday"]["hour"] = "";
-
-						$total_day_income 	   = $total_day_income + $return->_breakdown_addition["Legal Holiday"]["rate"];
-						$additional_percentage = ($legal_param['payroll_overtime_regular']);
-						$breakdown_addition    += $return->_breakdown_addition["Legal Holiday"]["rate"];
-					}
-				}
 				if ($overtime_float!=0) 
 				{
 					//Legal Holiday Over Time
@@ -2664,9 +2696,9 @@ class Payroll2
 					else if ($compute_type == "hourly") 
 					{
 						$return->daily_rate = 0;
-						$total_day_income = $time_spent * $hourly_rate;
+						$total_day_income = $target_float * $hourly_rate;
 						$return->_breakdown_addition["Special Holiday Rest Day"]["time"] = ""; 
-						$return->_breakdown_addition["Special Holiday Rest Day"]["rate"] = $total_day_income + ($time_spent * ($hourly_rate * (($special_param['payroll_overtime_rest_day'])-1)));
+						$return->_breakdown_addition["Special Holiday Rest Day"]["rate"] = $total_day_income + ($target_float * ($hourly_rate * (($special_param['payroll_overtime_rest_day'])-1)));
 						$return->_breakdown_addition["Special Holiday Rest Day"]["hour"] = "";
 						
 						$total_day_income 	=  $return->daily_rate + $return->_breakdown_addition["Special Holiday Rest Day"]["rate"]; 
@@ -2727,9 +2759,9 @@ class Payroll2
 					}
 					else if ($compute_type == "hourly")
 					{
-						$return->daily_rate = $time_spent * $hourly_rate;
+						$return->daily_rate = $target_float * $hourly_rate;
 						$return->_breakdown_addition["Special Holiday"]["time"] = ""; 
-						$return->_breakdown_addition["Special Holiday"]["rate"] = $time_spent * ($hourly_rate * (($special_param['payroll_overtime_regular']) - 1));
+						$return->_breakdown_addition["Special Holiday"]["rate"] = $target_float * ($hourly_rate * (($special_param['payroll_overtime_regular']) - 1));
 						$return->_breakdown_addition["Special Holiday"]["hour"] = "";
 						
 						$total_day_income 	= $return->daily_rate + $return->_breakdown_addition["Special Holiday"]["rate"];
@@ -2804,10 +2836,23 @@ class Payroll2
 			}
 		}
 		
+		if(($_time['day_type'] == 'rest_day') && $time_spent == 0 || ($_time['day_type'] == 'extra_day') && $time_spent == 0)
+		{
+			$_time["is_absent"] = false;
+			$return->daily_rate = 0;
+			$total_day_income = 0;
+
+		}
+
 		//deducted if absent
-		if($_time["is_absent"] == true && $compute_type != "hourly")
+		if($_time["is_absent"] == true)
 		{
 			$absent_deduction = $daily_rate;
+
+			if($compute_type == "hourly")
+			{
+				$absent_deduction = $hourly_rate * $target_float;
+			}
 
 			$total_day_income 	  = $total_day_income - $absent_deduction;
 			$absent_float 		  = 1;
@@ -2818,7 +2863,6 @@ class Payroll2
 			$return->_breakdown_deduction["absent"]["rate"] = $absent_deduction; 
 			$return->_breakdown_deduction["absent"]["hour"] = "";	
 		}
-
 		elseif($_time["is_absent"] == false && ($_time['day_type'] != 'rest_day'))
 		{
 			/*Start Undertime Deduction Computation*/
@@ -2826,10 +2870,10 @@ class Payroll2
 			{
 				$undertime_rate = Self::compute_undertime_deduction($_time['undertime'], $group->payroll_under_time_category, $undertime_float, $daily_rate, $hourly_rate, $hourly_rate_employee_salary, $additional_percentage, $group);
 				
-				if ($compute_type == "hourly") 
-				{
-					$undertime_rate = 0;
-				}
+				// if ($compute_type == "hourly") 
+				// {
+				// 	$undertime_rate = 0;
+				// }
 
 				$return->_breakdown_deduction["undertime"]["rate"] = $undertime_rate;
 				$return->_breakdown_deduction["undertime"]["time"] = $_time['undertime'];
@@ -2845,10 +2889,10 @@ class Payroll2
 			{
 				$late_rate = Self::compute_late_deduction($_time['late'], $group->payroll_late_category, $late_float, $daily_rate, $hourly_rate, $hourly_rate_employee_salary, $additional_percentage, $group);
 				
-				if ($compute_type == "hourly") 
-				{
-					$late_rate = 0;
-				}
+				// if ($compute_type == "hourly") 
+				// {
+				// 	$late_rate = 0;
+				// }
 
 				$return->_breakdown_deduction["late"]["rate"] = $late_rate;
 				$return->_breakdown_deduction["late"]["time"] = $_time['late']; 
@@ -3855,6 +3899,67 @@ class Payroll2
 		return $return;
 	}
 
+	public static function cutoff_compute_13th_month_pay($employee_id, $data)
+	{
+		extract($data);
+		$group = Tbl_payroll_employee_contract::Group()->where('tbl_payroll_employee_contract.payroll_employee_id', $employee_id)->first();
+		$payroll_13th_month_basis = Tbl_payroll_13th_month_basis::where('payroll_group_id',$group['payroll_group_id'])->first();
+		$payroll_13th_month_pay = 0;
+
+		if ($payroll_13th_month_basis != null) 
+		{
+			if ($payroll_13th_month_basis['payroll_group_13month_basis'] == "Net Basic Pay") 
+			{
+				$payroll_13th_month_pay += $cutoff_breakdown->basic_pay_total;
+			}
+			else if($payroll_13th_month_basis['payroll_group_13month_basis'] == "Gross Basic Pay")
+			{
+				$payroll_13th_month_pay += $cutoff_breakdown->gross_basic_pay;
+			}
+			foreach ($cutoff_breakdown->_breakdown as $key => $breakdown) 
+			{
+				if ($breakdown['label'] == 'COLA' && $payroll_13th_month_basis["payroll_group_13th_month_addition_cola"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'late' && $payroll_13th_month_basis["payroll_group_13th_month_addition_late"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'undertime' && $payroll_13th_month_basis["payroll_group_13th_month_addition_undertime"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'absent' && $payroll_13th_month_basis["payroll_group_13th_month_addition_absent"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'Special Holiday' && $payroll_13th_month_basis["payroll_group_13th_month_addition_special_holiday"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'Legal Holiday' && $payroll_13th_month_basis["payroll_group_13th_month_addition_regular_holiday"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'Legal Holiday' && $payroll_13th_month_basis["payroll_group_13th_month_addition_regular_holiday"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'allowance' && $payroll_13th_month_basis["payroll_group_13th_month_addition_allowance"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+				if ($breakdown['label'] == 'allowance_de_minimis' && $payroll_13th_month_basis["payroll_group_13th_month_addition_de_minimis_benefit"] == 1) 
+				{
+					$payroll_13th_month_pay += $breakdown['amount'];
+				}
+			}
+		}
+		
+		return $payroll_13th_month_pay;
+	}
+
 	public static function cutoff_breakdown_compute_time($return, $data)
 	{
 		$show_time_breakdown = array('target_hours','time_spent', 'undertime', 'overtime','late','night_differential','leave_hours');
@@ -4021,10 +4126,11 @@ class Payroll2
 		$tax_declared = $salary->payroll_employee_salary_taxable;
 		$payroll_period_company_id = $date_query->payroll_period_company_id;
 		$payroll_company_id = $date_query->payroll_company_id;
-
-
+		
+		// dd($tax_reference);
 		if($tax_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
 		{
+
 			$tax = Payroll::tax_contribution($shop_id, $tax_declared, $employee->payroll_employee_tax_status, "Monthly");	
 			$tax_description = payroll_currency($tax_declared) . " declared TAX Salary (" . $employee->payroll_employee_tax_status . ")";
 
@@ -4190,7 +4296,7 @@ class Payroll2
 		$return->taxable_salary_total = $return->gross_pay_total;
 		$return->_taxable_salary_breakdown = array();
 
-	
+		
 		foreach($return->_breakdown as $breakdown)
 		{
 			if($breakdown["add.taxable_salary"] == true)
@@ -4413,12 +4519,14 @@ class Payroll2
 				}
 			}
 		}
-
+		
 		/* PHILHEALTH COMPUTATION */	
 		if($philhealth_reference == "declared") //IF REFERENCE IS DECLARED (check tax table for monthly and just divide by two IF every period)
 		{
-			$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_declared);
+			// $philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_declared);
+			$philhealth_contribution = Payroll2::philhealth_contribution_update_2018($philhealth_declared);
 			$philhealth_description = payroll_currency($philhealth_declared) . " declared PHILHEALTH Salary";
+
 
 			if($philhealth_period == "Every Period") //DIVIDE CONTRIBUTION IF EVERY PERIOD
 			{
@@ -4492,7 +4600,8 @@ class Payroll2
 				if(code_to_word($period_count) == "1st Period")
 				{
 					$philhealth_description .= "<br> 1st Period of the Month. No need to refer to previous cutoff.";
-					$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
+					// $philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
+					$philhealth_contribution = Payroll2::philhealth_contribution_update_2018($philhealth_reference_amount);
 				}
 				else
 				{
@@ -4511,8 +4620,6 @@ class Payroll2
 					// 	$last_cutoff->phihealth_salary;
 					// }
 
-
-
 					$last_cutoff 		= Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->first();
 					$_period_approved 	= Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
 
@@ -4530,7 +4637,8 @@ class Payroll2
 						$philhealth_description .= "<br> Using previous cutoff as reference, previous PHILHEALTH Salary used is " . payroll_currency($last_cutoff->phihealth_salary) . " (" . payroll_currency($total_previous_cutoff_philhealth_ee) . ")";
 						$philhealth_reference_amount = $philhealth_reference_amount + $last_cutoff->phihealth_salary;
 						$philhealth_description .= "<br> Adding previous cutoff reference the output is " . payroll_currency($philhealth_reference_amount);
-						$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
+						// $philhealth_contribution = Payroll::philhealth_contribution($shop_id, $philhealth_reference_amount);
+						$philhealth_contribution = Payroll2::philhealth_contribution_update_2018($philhealth_reference_amount);
 						$philhealth_description .= "<br> New PHILHEALTH Bracket falls to " . payroll_currency($philhealth_contribution["ee"]);
 						$philhealth_description .= "<br> NEW BRACKET (" . payroll_currency($philhealth_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($total_previous_cutoff_philhealth_ee) . ")";
 						$philhealth_contribution["ee"] = $philhealth_contribution["ee"] - $total_previous_cutoff_philhealth_ee;
@@ -4569,7 +4677,7 @@ class Payroll2
 							}
 						}
 
-						$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $sss_reference_amount);
+						$philhealth_contribution = Payroll2::philhealth_contribution_update_2018($sss_reference_amount);
 					}
 				}
 				else
@@ -6529,527 +6637,6 @@ class Payroll2
 	}
 
 
-	public static function get_grand_total_whole_year($data)
-	{
-		$data["total_basic"] 						= 0;
-		$data["total_gross"] 						= 0;
-		$data["total_net"] 							= 0;
-		$data["total_er"] 							= 0;
-		$data["total_ee"] 							= 0;
-		$data["total_ec"] 							= 0;
-		$data["total_tax"] 							= 0;
-		$data["total_grand"] 						= 0; 
-		$data["total_sss_ee"] 						= 0;
-		$data["total_sss_er"] 						= 0;
-		$data["total_sss_ec"] 						= 0;
-		$data["total_philhealth_ee"] 				= 0;
-		$data["total_philhealth_er"] 				= 0;
-		$data["total_pagibig_ee"] 					= 0;
-		$data["total_pagibig_er"] 					= 0;
-		$data["_other_deduction"] 					= 0;
-		$data["_addition"] 							= 0;
-		$data["_deduction"] 						= 0;
-		$data["total_deduction"] 					= 0;
-		$data["total_deduction_of_all_employee"] 	= 0;
-
-
-		$data["deduction_total"] 					= 0;
-		$data["cola_total"] 						= 0;
-		$data["sss_ee_total"] 						= 0;
-		$data["sss_er_total"] 						= 0;
-		$data["sss_ec_total"] 						= 0;
-		$data["hdmf_ee_total"] 						= 0;
-		$data["hdmf_er_total"] 						= 0;
-		$data["philhealth_ee_total"] 				= 0;
-		$data["philhealth_er_total"] 				= 0;
-		$data["witholding_tax_total"] 				= 0;
-		$data["adjustment_deduction_total"] 		= 0;
-		$data["adjustment_allowance_total"] 		= 0;
-		$data["allowance_total"] 					= 0;
-		$data["cash_bond_total"] 					= 0;
-		$data["cash_advance_total"]					= 0;
-		$data["hdmf_loan_total"]					= 0;
-		$data["sss_loan_total"]						= 0;
-		$data["other_loans_total"]					= 0;
-
-		$data["overtime_total"] 		 			= 0;
-		$data["special_holiday_total"] 				= 0;
-		$data["regular_holiday_total"] 				= 0;
-		$data["leave_pay_total"] 	     			= 0;
-		$data["late_total"] 			 			= 0;
-		$data["undertime_total"] 		 			= 0;
-		$data["absent_total"] 		 				= 0;
-		$data["nightdiff_total"] 		 			= 0;
-		$data["restday_total"] 		 				= 0;
-
-		return $data;
-	}
-
-	public static function get_total_per_period($data)
-	{
-
-		// dd($data);
-		$total_basic = 0;
-		$total_gross = 0;
-		$total_net = 0;
-		$total_tax = 0;
-
-		$g_total_er = 0;
-		$g_total_ee = 0;
-		$g_total_ec = 0;
-
-		$total_sss_ee = 0;
-		$total_sss_er = 0;
-		$total_sss_ec = 0;
-		$total_philhealth_ee = 0;
-		$total_philhealth_er = 0;
-		$total_pagibig_ee = 0;
-		$total_pagibig_er = 0;
-		$total_deduction = 0;
-
-		$total_deduction_employee = 0;
-
-		$_other_deduction = null;
-		$_addition 		  = null;
-		$_deduction 	  = null;
-
-		$deduction_total 					= 0;
-		$cola_total 						= 0;
-		$sss_ee_total 						= 0;
-		$sss_er_total 						= 0;
-		$sss_ec_total 						= 0;
-		$hdmf_ee_total 						= 0;
-		$hdmf_er_total 						= 0;
-		$philhealth_ee_total 				= 0;
-		$philhealth_er_total 				= 0;
-		$witholding_tax_total 				= 0;
-		$adjustment_deduction_total 		= 0;
-		$adjustment_allowance_total 		= 0;
-		$allowance_total 					= 0;
-		$cash_bond_total 					= 0;
-		$cash_advance_total					= 0;
-		$hdmf_loan_total					= 0;
-		$sss_loan_total						= 0;
-		$other_loans_total					= 0;
-
-		$overtime_total 		 			= 0;
-		$special_holiday_total 				= 0;
-		$regular_holiday_total 				= 0;
-		$leave_pay_total 	     			= 0;
-		$late_total 			 			= 0;
-		$undertime_total 		 			= 0;
-		$absent_total 		 				= 0;
-		$nightdiff_total 		 			= 0;
-		$restday_total 		 				= 0;
-
-		
-
-		$count = 0;
-
-		foreach($data["_period"] as $key => $employee)
-		{
-
-			$total_basic 	+= $employee->net_basic_pay;
-			$total_gross 	+= $employee->gross_pay;
-			$total_net 		+= $employee->net_pay;
-			$total_tax 		+= $employee->tax_ee;
-
-
-			$total_er = $employee->sss_er + $employee->philhealth_er +  $employee->pagibig_er;
-			$total_ee = $employee->sss_ee + $employee->philhealth_ee +  $employee->pagibig_ee;
-			$total_ec = $employee->sss_ec;
-
-			$total_sss_ee 			+= $employee->sss_ee;
-			$total_sss_er 			+= $employee->sss_er;
-			$total_sss_ec 			+= $employee->sss_ec;
-			$total_philhealth_ee 	+= $employee->philhealth_er;
-			$total_philhealth_er 	+= $employee->philhealth_er;
-			$total_pagibig_ee 		+= $employee->pagibig_ee;
-			$total_pagibig_er 		+= $employee->pagibig_er;
-
-			// $total_deduction_employee += $employee["total_deduction"];
-
-			$data["_period"][$key] = $employee;
-			$data["_period"][$key]->total_er = $total_er;
-			$data["_period"][$key]->total_ee = $total_ee;
-			$data["_period"][$key]->total_ec = $total_ec;
-
-
-
-			$g_total_ec += $total_ec;
-			$g_total_er += $total_er;
-			$g_total_ee += $total_ee;
-
-			$total_deduction += ($total_ee);
-
-			if(isset($employee->cutoff_breakdown))
-			{
-
-				$_duction_break_down = unserialize($employee->cutoff_breakdown)->_breakdown;
-				
-			
-				$deduction 				= 0;
-				$cola 					= 0;
-				$sss_ee 				= 0;
-				$sss_er 				= 0;
-				$sss_ec 				= 0;
-				$hdmf_ee 				= 0;
-				$hdmf_er 				= 0;
-				$philhealth_ee 			= 0;
-				$philhealth_er 			= 0;
-				$witholding_tax 		= 0;
-				$adjustment_deduction 	= 0;
-				$adjustment_allowance 	= 0;
-				$allowance 				= 0;
-				$cash_bond 				= 0;
-				$cash_advance			= 0;
-				$hdmf_loan				= 0;
-				$sss_loan				= 0;
-				$other_loans			= 0;
-
-				
-				
-
-				foreach($_duction_break_down as $breakdown)
-				{
-					if($breakdown["deduct.net_pay"] == true)
-					{
-						$total_deduction_employee += $breakdown["amount"];
-						$deduction += $breakdown["amount"];
-					}
-					if($breakdown["deduct.gross_pay"] == true)
-					{
-						$total_deduction_employee += $breakdown["amount"];
-						$deduction += $breakdown["amount"];
-					}
-					if ($breakdown["label"] == "SSS EE" || $breakdown["label"] == "PHILHEALTH EE" || $breakdown["label"] == "PAGIBIG EE" ) 
-					{
-						$total_deduction_employee += $breakdown["amount"];
-						$deduction += $breakdown["amount"];
-					}
-					if ($breakdown["label"] == "COLA") 
-					{
-						$cola += $breakdown["amount"];
-					}
-					if($breakdown["label"] == "SSS EE")
-					{
-						$sss_ee += $breakdown["amount"];
-					}
-					if($breakdown["label"] == "SSS ER")
-					{
-						$sss_er += $breakdown["amount"];
-					}
-					if($breakdown["label"] == "SSS EC")
-					{
-						$sss_ec += $breakdown["amount"];
-					}
-					if($breakdown["label"] == "PAGIBIG EE")
-					{
-						$hdmf_ee += $breakdown["amount"];
-					}
-					if($breakdown["label"] == "PAGIBIG ER")
-					{
-						$hdmf_er += $breakdown["amount"];
-					}
-					if($breakdown["label"] == "PHILHEALTH EE")
-					{
-						$philhealth_ee += $breakdown["amount"];
-					}
-					if($breakdown["label"] == "PHILHEALTH ER")
-					{
-						$philhealth_er += $breakdown["amount"];
-					}
-					if ($breakdown["label"] == "Witholding Tax") 
-					{
-						$witholding_tax += $breakdown["amount"];
-					}
-					
-					if ($breakdown["type"] == "adjustment") 
-					{
-						if ($breakdown["deduct.net_pay"] == true) 
-						{
-							$adjustment_deduction += $breakdown["amount"];
-						}
-						else
-						{
-							$adjustment_allowance += $breakdown["amount"];
-						}
-					}
-					if (isset($breakdown["record_type"])) 
-					{
-						if ($breakdown["record_type"] == "allowance") 
-						{
-							$allowance = $breakdown["amount"];
-						}
-						if ($breakdown["record_type"] == "Cash Bond") 
-						{
-							$cash_bond = $breakdown["amount"];
-						}
-						if ($breakdown["record_type"] == "Cash Advance") 
-						{
-							$cash_advance = $breakdown["amount"];
-						}
-						if ($breakdown["record_type"] == "SSS Loan") 
-						{
-							$sss_loan = $breakdown["amount"];
-						}
-						if ($breakdown["record_type"] == "HDMF Loan") 
-						{
-							$hdmf_loan = $breakdown["amount"];
-						}
-						if ($breakdown["record_type"] == "Others") 
-						{
-							$other_loans = $breakdown["amount"];	
-						}
-					}
-				}
-
-				$data["_period"][$key]->total_deduction_employee 	= $deduction;
-				$data["_period"][$key]->cola 						= $cola;
-				$data["_period"][$key]->sss_ee 						= $sss_ee;
-				$data["_period"][$key]->sss_er 						= $sss_er;
-				$data["_period"][$key]->sss_ec 						= $sss_ec;
-				$data["_period"][$key]->hdmf_ee 					= $hdmf_ee;
-				$data["_period"][$key]->hdmf_er 					= $hdmf_er;
-				$data["_period"][$key]->philhealth_ee 				= $philhealth_ee;
-				$data["_period"][$key]->philhealth_er 				= $philhealth_er;
-				$data["_period"][$key]->witholding_tax 				= $witholding_tax;
-				$data["_period"][$key]->adjustment_deduction 		= $adjustment_deduction;
-				$data["_period"][$key]->adjustment_allowance 		= $adjustment_allowance;
-				$data["_period"][$key]->allowance 					= $allowance;
-				$data["_period"][$key]->cash_bond					= $cash_bond;
-				$data["_period"][$key]->cash_advance				= $cash_advance;
-				$data["_period"][$key]->sss_loan					= $sss_loan;
-				$data["_period"][$key]->hdmf_loan					= $hdmf_loan;
-				$data["_period"][$key]->other_loans					= $other_loans;
-
-				$deduction_total				+= $deduction;
-				$cola_total						+= $cola;
-				$sss_ee_total					+= $sss_ee;
-				$sss_er_total					+= $sss_er;
-				$sss_ec_total					+= $sss_ec;
-				$hdmf_ee_total					+= $hdmf_ee;
-				$hdmf_er_total					+= $hdmf_er;
-				$philhealth_ee_total			+= $philhealth_ee;
-				$philhealth_er_total			+= $philhealth_er;
-				$witholding_tax_total			+= $witholding_tax;
-				$adjustment_deduction_total		+= $adjustment_deduction;
-				$adjustment_allowance_total		+= $adjustment_allowance;
-				$allowance_total				+= $allowance;
-				$cash_bond_total				+= $cash_bond;
-				$cash_advance_total				+= $cash_advance;
-				$hdmf_loan_total				+= $sss_loan;
-				$sss_loan_total					+= $hdmf_loan;
-				$other_loans_total				+= $other_loans;
-
-			}
-
-			// dd(unserialize($employee->cutoff_input));
-			if (isset($employee->cutoff_input)) 
-			{
-				$_cutoff_input_breakdown = unserialize($employee->cutoff_input);
-				
-				$overtime 		 = 0;
-				$special_holiday = 0;
-				$regular_holiday = 0;
-				$leave_pay 	     = 0;
-				$late 			 = 0;
-				$undertime 		 = 0;
-				$absent 		 = 0;
-				$nightdiff 		 = 0;
-				$restday 		 = 0;
-
-				$ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
-				$nd_category = array('Legal Holiday Rest Day ND','Legal Holiday ND','Special Holiday Rest Day ND','Special Holiday ND','Rest Day ND','Night Differential');
-				// $rd_category = array('Rest Day','Legal Holiday Rest Day','Special Holiday Rest Day');
-				foreach ($_cutoff_input_breakdown as $value) 
-				{
-					if (isset($value->compute->_breakdown_addition)) 
-					{
-						foreach ($value->compute->_breakdown_addition as $lbl => $values) 
-						{
-							if (in_array($lbl, $ot_category)) 
-							{
-								$overtime += $values['rate'];
-							}
-							if ($lbl == 'Legal Holiday' || $lbl == 'Legal Holiday Rest Day') 
-							{
-								$regular_holiday += $values['rate'];
-							}
-							if ($lbl == 'Special Holiday' || $lbl == 'Special Holiday Rest Day') 
-							{
-								$special_holiday += $values['rate'];
-							}
-							if ($lbl == 'Leave Pay') 
-							{
-								$leave_pay += $values['rate'];
-							}
-							if ($lbl == 'Rest Day') 
-							{
-								$restday += $values['rate'];
-							}
-							if (in_array($lbl, $nd_category)) 
-							{
-								$nightdiff += $values['rate'];
-							}
-						}
-					}
-
-					if (isset($value->compute->_breakdown_deduction)) 
-					{
-						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
-						{
-							if ($value->time_output["leave_hours"] == '00:00:00') 
-							{
-								if ($lbl == 'late') 
-								{
-									$late += $values['rate'];
-								}
-								if ($lbl == 'absent') 
-								{
-									$absent += $values['rate'];
-								}
-								if ($lbl == 'undertime') 
-								{
-									$undertime += $values['rate'];
-								}
-								$deduction += $values['rate'];
-							}
-						}
-					}
-				}
-
-				$data["_period"][$key]->overtime = $overtime;
-				$data["_period"][$key]->regular_holiday = $regular_holiday;
-				$data["_period"][$key]->special_holiday = $special_holiday;
-				$data["_period"][$key]->leave_pay = $leave_pay;
-				$data["_period"][$key]->absent = $absent;
-				$data["_period"][$key]->late = $late;
-				$data["_period"][$key]->undertime = $undertime;
-				$data["_period"][$key]->nightdiff = $nightdiff;
-				$data["_period"][$key]->restday = $restday;
-
-				$overtime_total 		 		+=	$overtime;
-				$special_holiday_total 			+=	$regular_holiday;
-				$regular_holiday_total 			+=	$special_holiday;
-				$leave_pay_total 	     		+=	$leave_pay;
-				$late_total 			 		+=	$late;
-				$undertime_total 		 		+=	$undertime;
-				$absent_total 		 			+=	$absent;
-				$nightdiff_total 		 		+=	$nightdiff;
-				$restday_total 		 			+=	$restday;
-			}
-
-			if (isset($employee["cutoff_breakdown"]->_breakdown )) 
-			{
-				# code...
-				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
-				{
-					if($breakdown["deduct.net_pay"] == true)
-					{
-						if(isset($_other_deduction[$breakdown["label"]]))
-						{
-							$_other_deduction[$breakdown["label"]] += $breakdown["amount"];
-							$total_deduction += $breakdown["amount"];
-						}
-						else
-						{
-							$_other_deduction[$breakdown["label"]] = $breakdown["amount"];
-							$total_deduction += $breakdown["amount"];
-						}
-					}
-				}
-
-				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
-				{	
-					if($breakdown["add.gross_pay"] == true)
-					{
-						if(isset($_addition[$breakdown["label"]]))
-						{
-							$_addition[$breakdown["label"]] += $breakdown["amount"];
-						}
-						else
-						{
-							$_addition[$breakdown["label"]] = $breakdown["amount"];
-						}
-					}
-				}
-
-				foreach($employee["cutoff_breakdown"]->_breakdown as $breakdown)
-				{
-
-					if($breakdown["type"] == "deductions")
-					{
-						if(isset($_deduction[$breakdown["label"]]))
-						{
-							$_deduction[$breakdown["label"]] += $breakdown["amount"];
-						}
-						else
-						{
-							$_deduction[$breakdown["label"]] = $breakdown["amount"];
-						}
-					}
-				}
-			}
-		}
-
-		$data["total_basic"] 						+= $total_basic;
-		$data["total_gross"] 						+= $total_gross;
-		$data["total_net"] 							+= $total_net;
-		$data["total_er"] 							+= $g_total_er;
-		$data["total_ee"] 							+= $g_total_ee;
-		$data["total_ec"] 							+= $g_total_ec;
-		$data["total_tax"] 							+= $total_tax;
-		$data["total_grand"] 						+= $total_net + $g_total_er + $g_total_ee + $g_total_ec + $total_tax;
-		$data["total_sss_ee"] 						+= $total_sss_ee;
-		$data["total_sss_er"] 						+= $total_sss_er;
-		$data["total_sss_ec"] 						+= $total_sss_ec;
-		$data["total_philhealth_ee"] 				+= $total_philhealth_ee;
-		$data["total_philhealth_er"] 				+= $total_philhealth_er;
-		$data["total_pagibig_ee"] 					+= $total_pagibig_ee;
-		$data["total_pagibig_er"] 					+= $total_pagibig_er;
-		$data["_other_deduction"] 					+= $_other_deduction;
-		$data["_addition"] 							+= $_addition;
-		$data["_deduction"] 						+= $_deduction;
-		$data["total_deduction"] 					+= $total_deduction;
-		$data["total_deduction_of_all_employee"] 	+= $total_deduction_employee;
-
-		$data["deduction_total"] 					+= $deduction_total;
-		$data["cola_total"] 						+= $cola_total;
-		$data["sss_ee_total"] 						+= $sss_ee_total;
-		$data["sss_er_total"] 						+= $sss_er_total;
-		$data["sss_ec_total"] 						+= $sss_ec_total;
-		$data["hdmf_ee_total"] 						+= $hdmf_ee_total;
-		$data["hdmf_er_total"] 						+= $hdmf_er_total;
-		$data["philhealth_ee_total"] 				+= $philhealth_ee_total;
-		$data["philhealth_er_total"] 				+= $philhealth_er_total;
-		$data["witholding_tax_total"] 				+= $witholding_tax_total;
-		$data["adjustment_deduction_total"] 		+= $adjustment_deduction_total;
-		$data["adjustment_allowance_total"] 		+= $adjustment_allowance_total;
-		$data["allowance_total"] 					+= $allowance_total;
-		$data["cash_bond_total"] 					+= $cash_bond_total;
-		$data["cash_advance_total"]					+= $cash_advance_total;
-		$data["hdmf_loan_total"]					+= $hdmf_loan_total;
-		$data["sss_loan_total"]						+= $sss_loan_total;
-		$data["other_loans_total"]					+= $other_loans_total;
-
-		$data["overtime_total"] 		 			+= $overtime_total;
-		$data["special_holiday_total"] 				+= $special_holiday_total;
-		$data["regular_holiday_total"] 				+= $regular_holiday_total;
-		$data["leave_pay_total"] 	     			+= $leave_pay_total;
-		$data["late_total"] 			 			+= $late_total;
-		$data["undertime_total"] 		 			+= $undertime_total;
-		$data["absent_total"] 		 				+= $absent_total;
-		$data["nightdiff_total"] 		 			+= $nightdiff_total;
-		$data["restday_total"] 		 				+= $restday_total;
-		
-		
-		return $data;
-	}
-
-
-
-
 	public static function get_total_payroll_register($data)
 	{
 		$test = array();
@@ -7108,6 +6695,7 @@ class Payroll2
 		$absent_total 		 				= 0;
 		$nightdiff_total 		 			= 0;
 		$restday_total 		 				= 0;
+		$rendered_days_total				= 0;
 
 		$total_adjustment_allowance					= 0;
 		$total_adjustment_bonus						= 0;
@@ -7479,6 +7067,7 @@ class Payroll2
 				$absent 		 = 0;
 				$nightdiff 		 = 0;
 				$restday 		 = 0;
+				$rendered_days   = 0;
 
 				$ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
 				$nd_category = array('Legal Holiday Rest Day ND','Legal Holiday ND','Special Holiday Rest Day ND','Special Holiday ND','Rest Day ND','Night Differential');
@@ -7517,6 +7106,13 @@ class Payroll2
 						}
 					}
 
+					if(isset($value->compute->rendered_days))
+					{
+					
+							$rendered_days  		+= Payroll2::payroll_number_format($value->compute->rendered_days,2);
+						
+					}
+
 					if (isset($value->compute->_breakdown_deduction)) 
 					{
 						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
@@ -7552,16 +7148,18 @@ class Payroll2
 				$data["_employee"][$key]->undertime 		= $undertime;
 				$data["_employee"][$key]->nightdiff 		= $nightdiff;
 				$data["_employee"][$key]->restday 			= $restday;
+				$data["_employee"][$key]->rendered_days     = $rendered_days;
 
 				$overtime_total 		 		+=	Payroll2::payroll_number_format($overtime,2);
-				$special_holiday_total 			+=	Payroll2::payroll_number_format($regular_holiday,2);
-				$regular_holiday_total 			+=	Payroll2::payroll_number_format($special_holiday,2);
+				$special_holiday_total 			+=	Payroll2::payroll_number_format($special_holiday,2);
+				$regular_holiday_total 			+=	Payroll2::payroll_number_format($regular_holiday,2);
 				$leave_pay_total 	     		+=	Payroll2::payroll_number_format($leave_pay,2);
 				$late_total 			 		+=	Payroll2::payroll_number_format($late,2);
 				$undertime_total 		 		+=	Payroll2::payroll_number_format($undertime,2);
 				$absent_total 		 			+=	Payroll2::payroll_number_format($absent,2);
 				$nightdiff_total 		 		+=	Payroll2::payroll_number_format($nightdiff,2);
 				$restday_total 		 			+=	Payroll2::payroll_number_format($restday,2);
+				$rendered_days_total	        +=	Payroll2::payroll_number_format($rendered_days,2);
 			}
 
 			if (isset($employee["cutoff_breakdown"]->_breakdown)) 
@@ -7687,7 +7285,7 @@ class Payroll2
 		$data["absent_total"] 		 				= $absent_total;
 		$data["nightdiff_total"] 		 			= $nightdiff_total;
 		$data["restday_total"] 		 				= $restday_total;
-
+		$data["rendered_days_total"]				= $rendered_days_total;
 
 		$data["total_adjustment_allowance"]				= $total_adjustment_allowance;	
 		$data["total_adjustment_bonus"]					= $total_adjustment_bonus;		
@@ -7808,4 +7406,45 @@ class Payroll2
 		return $_chart_of_account_insert;
 	}
 
+
+	public static function philhealth_contribution_update_2018($rate)
+	{
+		$data['ee'] = 0;
+		$data['er'] = 0;
+		if($rate > 0)
+		{
+			if ($rate <= 10000) 
+			{
+				$data['ee'] = 137.50;
+				$data['er'] = 137.50;
+			}
+			else if($rate > 10000 && $rate < 40000)
+			{
+				$philhealth_contri = $rate * 0.0275;
+
+				$data['ee'] = @($philhealth_contri/2);
+				$data['er'] = @($philhealth_contri/2);
+			}
+			else if($rate >= 40000)
+			{
+				$data['ee'] = 550.00;
+				$data['er'] = 550.00;
+			}
+		}
+
+		return $data;
+	}
+
+	public static function date_has_year($date)
+	{
+		$has_year = false;
+		$date = explode("-", $date);
+		
+		if (isset($date[2])) 
+		{
+			$has_year = true;
+		}
+
+		return $has_year;
+	}
 }

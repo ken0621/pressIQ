@@ -69,71 +69,79 @@ class ShopProductContentController extends Shop
 
             $data["page"]        = "Product Content";
             $data["product"]     = Ecom_Product::getProduct($id, $this->shop_info->shop_id);
-            $data["category"]    = Tbl_ec_product::category()->where("eprod_category_id", $data["product"]["eprod_category_id"])->first();
-            $data["breadcrumbs"] = Ecom_Product::getProductBreadcrumbs($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
-            $data["_variant"]    = Ecom_Product::getProductOption($id, ",");
-            $data["_related"]    = Ecom_Product::getAllProductByCategory($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
-            $data["wishlist"]    = $this->wishlist_exist($id);
-            
-            if ($this->shop_theme == "3xcell") 
+
+            if ($data["product"]) 
             {
-                $get_cat = DB::table("tbl_category")->where("type_shop", $this->shop_info->shop_id)->where("type_name", "Business Packages")->where("archived", 0)->first();
-                if (isset($get_cat->type_id)) 
+                $data["category"]    = Tbl_ec_product::category()->where("eprod_category_id", $data["product"]["eprod_category_id"])->first();
+                $data["breadcrumbs"] = Ecom_Product::getProductBreadcrumbs($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
+                $data["_variant"]    = Ecom_Product::getProductOption($id, ",");
+                $data["_related"]    = Ecom_Product::getAllProductByCategory($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
+                $data["wishlist"]    = $this->wishlist_exist($id);
+
+                if ($this->shop_theme == "3xcell") 
                 {
-                    $data["_package"] = Ecom_Product::getAllProductByCategory($get_cat->type_id, $this->shop_info->shop_id);
-                }
-                else
-                {
-                    $data["_package"] = [];
-                }
-            }
-
-            foreach ($data["_related"] as $key => $value) 
-            {
-                if ($value["eprod_id"] == $data["product"]["eprod_id"]) 
-                {
-                    unset($data["_related"][$key]);
-                }
-            }
-
-            foreach ($data["product"]["variant"] as $keys => $values) 
-            {
-                // Convert to timestamp
-                $start_ts = strtotime($values['item_discount_date_start']);
-                $end_ts = strtotime($values['item_discount_date_end']);
-                $user_ts = strtotime(date("Y-m-d H:i:s"));
-
-                $result = (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
-
-                if ($result)
-                {
-                    $data["product"]["variant"][$keys]["discounted"] = true;
-                    $data["product"]["variant"][$keys]["discounted_price"] = $values["item_discount_value"];
-
-                    if (isset($data["product"]["variant"][$keys]["mlm_discount"])) 
+                    $get_cat = DB::table("tbl_category")->where("type_shop", $this->shop_info->shop_id)->where("type_name", "Business Packages")->where("archived", 0)->first();
+                    if (isset($get_cat->type_id)) 
                     {
-                        foreach ($data["product"]["variant"][$keys]["mlm_discount"] as $key0 => $value0) 
-                        {
-                            if ($value0["discount_type"] == 0) 
-                            {
-                                $data["product"]["variant"][$keys]["mlm_discount"][$key0]["discounted_amount"] = $values["item_discount_value"] - $value0['discount_value'];
-                            }
-                            else
-                            {
-                               $data["product"]["variant"][$keys]["mlm_discount"][$key0]["discounted_amount"] = $values["item_discount_value"] - ($value0['discount_value'] / 100) * $values["item_discount_value"];
-                            }                    
-                        }
+                        $data["_package"] = Ecom_Product::getAllProductByCategory($get_cat->type_id, $this->shop_info->shop_id);
+                    }
+                    else
+                    {
+                        $data["_package"] = [];
                     }
                 }
-                else
+
+                foreach ($data["_related"] as $key => $value) 
                 {
-                    $data["product"]["variant"][$keys]["discounted"] = false;
+                    if ($value["eprod_id"] == $data["product"]["eprod_id"]) 
+                    {
+                        unset($data["_related"][$key]);
+                    }
                 }
 
-                $data["product"]["variant"][$keys]["variant_image"] = Ecom_Product::getVariantImage($values["evariant_id"])->toArray();
+                foreach ($data["product"]["variant"] as $keys => $values) 
+                {
+                    // Convert to timestamp
+                    $start_ts = strtotime($values['item_discount_date_start']);
+                    $end_ts = strtotime($values['item_discount_date_end']);
+                    $user_ts = strtotime(date("Y-m-d H:i:s"));
+
+                    $result = (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
+
+                    if ($result)
+                    {
+                        $data["product"]["variant"][$keys]["discounted"] = true;
+                        $data["product"]["variant"][$keys]["discounted_price"] = $values["item_discount_value"];
+
+                        if (isset($data["product"]["variant"][$keys]["mlm_discount"])) 
+                        {
+                            foreach ($data["product"]["variant"][$keys]["mlm_discount"] as $key0 => $value0) 
+                            {
+                                if ($value0["discount_type"] == 0) 
+                                {
+                                    $data["product"]["variant"][$keys]["mlm_discount"][$key0]["discounted_amount"] = $values["item_discount_value"] - $value0['discount_value'];
+                                }
+                                else
+                                {
+                                   $data["product"]["variant"][$keys]["mlm_discount"][$key0]["discounted_amount"] = $values["item_discount_value"] - ($value0['discount_value'] / 100) * $values["item_discount_value"];
+                                }                    
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $data["product"]["variant"][$keys]["discounted"] = false;
+                    }
+
+                    $data["product"]["variant"][$keys]["variant_image"] = Ecom_Product::getVariantImage($values["evariant_id"])->toArray();
+                }
+                
+                return view("product_content", $data);
             }
-            
-            return view("product_content", $data);
+            else
+            {
+                return Redirect::to("/product");
+            }
         }
     }
 

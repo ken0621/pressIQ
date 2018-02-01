@@ -13,8 +13,10 @@ use App\Models\Tbl_option_value;
 use App\Models\Tbl_ec_variant_image;
 use App\Models\Tbl_collection_item;
 use App\Models\Tbl_warehouse;
+use App\Models\Tbl_mlm_slot;
 
 use App\Globals\Mlm_discount;
+use App\Globals\MLM2;
 
 use Request;
 use Session;
@@ -639,5 +641,33 @@ class Ecom_Product
 		return $_product;	
 	}
 	
+	public static function getMembershipPrice($shop_id, $customer_id, $item_id, $product_price)
+	{
+		$_slot = Tbl_mlm_slot::where("tbl_mlm_slot.slot_owner", $customer_id)
+							 ->where("tbl_mlm_slot.shop_id", $shop_id)
+							 ->leftJoin('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership')
+							 ->get();
 
+		foreach($_slot as $key => $value)
+		{
+			$discount       = Mlm_discount::get_discount_single($shop_id, $item_id, $value->slot_membership);
+			$discount_value = $discount['value'];
+
+			if($discount['type'] == 1) $discount_value = ($discount['value'] / 100) * $product_price;
+
+			$_slot[$key]->discounted_amount = $product_price - $discount_value;
+		}
+		
+		$slot = $_slot->toArray();
+		$slot = array_column($slot, 'discounted_amount');
+		
+		if ($slot) 
+		{
+			return min($slot);
+		}
+		else
+		{
+			return $product_price;
+		}
+	}
 }

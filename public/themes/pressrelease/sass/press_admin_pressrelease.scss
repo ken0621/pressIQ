@@ -24,21 +24,43 @@
 			table
 			{
 				font-family: arial, sans-serif;
-				border-collapse: collapse;
-				width: 100%;
+                border-collapse: collapse;
+                width: 100%;
+                display:block;
+                height: 600px;
+                overflow-y: scroll;
+                text-align: center;
+                background-color: #fff;
 			}
 
 			th
 			{
 				border: 1px solid #dddddd;
 				text-align: center;
-				padding: 8px;
+				padding-top: 12px;
+			    padding-bottom: 12px;
+			    background-color: #4CAF50;
+			    color: white;
 			}
 			td
 			{
 				border: 1px solid #dddddd;
 				text-align: center;
 				padding: 10px;
+				max-width: 213px;
+			    overflow: hidden;
+			    text-overflow: ellipsis;
+			    white-space: nowrap;
+			}
+			tr:nth-child(odd)
+			{
+				background-color: #f2f2f2;
+			}
+			button
+			{
+			    display: inline-block;
+			    vertical-align: middle;
+			    width: 75px;
 			}
 		}
 	}

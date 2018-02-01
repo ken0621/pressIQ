@@ -64,28 +64,38 @@
                         font-family: arial, sans-serif;
                         border-collapse: collapse;
                         width: 100%;
+                        display:block;
+                        height: 600px;
+                        overflow-y: scroll;
+                        text-align: center;
+                        background-color: #FFFFFF;
                     }
 
                     th
                     {
                         border: 1px solid #dddddd;
                         text-align: center;
-                        padding: 8px;
+                        padding-top: 12px;
+                        padding-bottom: 12px;
+                        background-color: #4CAF50;
+                        color: white;
                     }
                     td
                     {
                         border: 1px solid #dddddd;
                         text-align: center;
                         padding: 10px;
+                        vertical-align: middle;
                     }
-
-                    a
+                    tr:nth-child(odd)
                     {
-                        background-color: #316df9;
-                        color: #fff;
-                        font-size: 12px;
-                        padding: 8px 8px;
-                        text-decoration: none;
+                        background-color: #f2f2f2;
+                    }
+                    button
+                    {
+                        display: inline-block;
+                        vertical-align: middle;
+                        width: 90px;
                     }
                 }
             }
@@ -150,4 +160,3 @@
         }
     }
 }
-

@@ -66,7 +66,7 @@
                                     @foreach($_list as $key => $list)
                                         <tr>
                                             <td class="text-center">{{$key+1}}</td>
-                                            <td class="text-center">{{ucwords($list->first_name.' '.$list->middle_name.' '.$list->last_name)}}</td>
+                                            <td class="text-center">{{ucwords($list->agent_code.'-'.$list->first_name.' '.$list->middle_name.' '.$list->last_name)}}</td>
                                             <td class="text-center">{{currency('P ',$list->orverall_comm,2)}}</td>
                                             <td class="text-center">{{currency('P ',$list->released_comm,2)}}</td>
                                             <td class="text-center">{{currency('P ',$list->for_releasing_comm,2)}}</td>

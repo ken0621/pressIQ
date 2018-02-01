@@ -22,6 +22,7 @@ use App\Models\Tbl_payroll_department;
 use App\Models\Tbl_payroll_approver_employee;
 use App\Models\Tbl_payroll_approver_group;
 use App\Models\Tbl_payroll_approver_group_employee;
+use App\Models\Tbl_payroll_employee_basic;
 
 class PayrollAdminDashboard extends Member
 {
@@ -129,7 +130,7 @@ class PayrollAdminDashboard extends Member
 		$update['payroll_approver_employee_level'] = Request::input('approver_level');
 		Tbl_payroll_approver_employee::where('payroll_approver_employee_id',Request::input('approver_id'))->update($update);
 		$response['response_status']  	= 'success';
-		$response['call_function']		= 'submit_done';
+		$response['call_function']		= 'reload_page';
 		$response['function_name'] 		= 'payroll_employee_approver.reload';
 		
 		return json_encode($response);
@@ -376,6 +377,31 @@ class PayrollAdminDashboard extends Member
 			
 			return view('member.modal.confirm', $data);
 		}
+	}
+
+	//access
+
+	public function access_level()
+	{
+
+		$data['employee_info']	= Tbl_payroll_employee_basic::select('payroll_employee_email','payroll_employee_tin')->where('shop_id',Self::shop_id())->get();
+			
+		return view('member.payroll2.access_level',$data);
+	}
+
+	public function add_access_group()
+	{
+
+		$data['_company']        = Tbl_payroll_company::selcompany($this->user_info->shop_id)->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+		$data['_department']     = Tbl_payroll_department::sel($this->user_info->shop_id)->orderBy('payroll_department_name')->get();
+
+		return view('member.payroll2.create_access_group',$data);
+	}
+
+	public function save_access_group()
+	{
+		return view('member.payroll2.create_access_group');
 	}
 
 }

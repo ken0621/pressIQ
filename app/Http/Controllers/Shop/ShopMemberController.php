@@ -30,9 +30,11 @@ use App\Globals\Mail_global;
 use App\Globals\Transaction;
 use App\Globals\Warehouse2;
 use App\Globals\Ecom_Product;
-use App\Globals\Abs\AbsMain;
+use App\Globals\abs\AbsMain;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_recaptcha_setting;
+use App\Models\Tbl_recaptcha_pool_amount;
 
 use App\Models\Tbl_image;
 // use App\Models\Tbl_mlm_slot_points_log;
@@ -63,10 +65,12 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_vmoney_settings;
 use App\Models\Tbl_slot_notification;
 use App\Models\Tbl_warehouse_inventory_record_log;
+use App\Models\Tbl_tour_wallet_slot;
+use App\Models\Tbl_tour_wallet;
 
 use App\Models\Tbl_press_release_recipient;
-use App\Tbl_pressiq_press_releases;
-use App\Tbl_pressiq_user;
+use App\Models\Tbl_pressiq_press_releases;
+use App\Models\Tbl_pressiq_user;
 
 use App\Models\Tbl_item_redeemable_points;
 use App\Models\Tbl_item_redeemable_request;
@@ -99,12 +103,14 @@ use App\Models\Tbl_item;
 use App\Tbl_item_redeemable;
 //for image upload
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class ShopMemberController extends Shop
 {
     public function getIndex()
     {
         $data["page"] = "Dashboard";
+        $data['shop_id'] = $this->shop_info->shop_id;
         $data["mode"] = session("get_success_mode");
         $data["zero_currency"] = Currency::format(0);
         session()->forget("get_success_mode");
@@ -132,9 +138,18 @@ class ShopMemberController extends Shop
 
                 foreach($_slot as $slot)
                 {
-                    if($slot->slot_membership == 4)
+                    // 4 = V.I.P Platinum && 65 = V.I.P Platinum (FS)
+                    if($slot->slot_membership == 4 || $slot->slot_membership == 65 || $slot->slot_membership == 3)
                     {
                         $data["travel_and_tours"] = true;
+                        if($slot->slot_membership == 3) 
+                        {
+                            $data['link'] = '#';
+                        }
+                        else
+                        {
+                            $data['link'] = 'http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx';
+                        }
                     }
                 }
             }
@@ -178,22 +193,43 @@ class ShopMemberController extends Shop
                     return Self::load_view_for_members('member.privilage_card_holder_dashboard',$data);
                 }                   
             }
-        }
+            //total points
+            $slots = Tbl_mlm_slot::where('slot_owner',Self::$customer_info->customer_id)->get();
+            $total_points = 0;
+            foreach($slots as $s)
+            {
+                $total_points += $this->redeem_points_sum($s->slot_id);
+            }
+            $data['total_points'] = currency("",$total_points)." POINT(S)";
 
-        // for shift only
-        if($this->shop_info->shop_id == 54)
+            // for shift only
+            if($this->shop_info->shop_id == 54)
+            {
+                $slot_id = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id);
+                $data['reward_point_redemption'] = Tbl_mlm_slot_points_log::Slot()->where('tbl_mlm_slot.slot_owner',Self::$customer_info->customer_id)->where("points_log_complan","PURCHASE_GC")->sum('points_log_points');
+            }
+            // dd($slot_id." ; ".$data['reward_point_redemption']);
+            // dd($data['wallet']);
+            $data["krops_gc"] = Tbl_mlm_slot_points_log::Slot()->where('points_log_type',"GC")->where('slot_owner',Self::$customer_info->customer_id)->sum('points_log_points');
+            return Self::load_view_for_members("member.dashboard", $data);
+        }
+        else
         {
-            $slot_id = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id);
-            $data['reward_point_redemption'] = Tbl_mlm_slot_points_log::Slot()->where('tbl_mlm_slot.slot_owner',Self::$customer_info->customer_id)->where("points_log_complan","PURCHASE_GC")->sum('points_log_points');
+            return Redirect::to('/members/login');
         }
-        // dd($slot_id." ; ".$data['reward_point_redemption']);
 
-        return Self::load_view_for_members("member.dashboard", $data);
     }
     public function getDirectReferrals()
     {
-        $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,5);
-        return view('member.newest_direct_referrals',$data);
+        if (Self::$customer_info) 
+        {
+            $data["_direct"]            = MLM2::customer_direct($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,5);
+            return view('member.newest_direct_referrals',$data);
+        }
+        else
+        {
+            return Redirect::to('/members/login');
+        }
     }
     public function getKit()
     {
@@ -233,6 +269,12 @@ class ShopMemberController extends Shop
     }
 
     /*--------------------------------------------------------------------------Press Release*/
+    // public function press_email()
+    // {
+    //     $data["pr"]='$pr';
+    //     $data["page"] = "Email";
+    //     return view("emails.press_email", $data);
+    // }
     public function logout()
     {
         Session::flush();
@@ -339,13 +381,13 @@ class ShopMemberController extends Shop
     
     public function send_pr()
     {
-
+        $pr_info["pr_type"]         =request('pr_type');
         $pr_info["pr_headline"]     =request('pr_headline');
         $pr_info["pr_content"]      =request('pr_content');
         $pr_info["pr_boiler_content"]=request('pr_boiler_content');
         $pr_info["pr_from"]         =session('user_email');
         $pr_info["pr_to"]           =request('pr_to');
-        $pr_info["pr_status"]       ="sent";
+        $pr_info["pr_status"]       ="Sent";
         $pr_info["pr_date_sent"]    =Carbon::now();
         $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
         $pr_info["pr_receiver_name"]=request('pr_receiver_name');
@@ -353,6 +395,7 @@ class ShopMemberController extends Shop
         $pr_info["pr_co_img"]       =session('user_company_image');
         
         //dd(session('user_company_image'));
+        $pr_rules["pr_type"]       =['required'];
         $pr_rules["pr_headline"]   =['required'];
         $pr_rules["pr_content"]    =['required'];
         $pr_rules["pr_boiler_content"] =['required'];
@@ -390,6 +433,7 @@ class ShopMemberController extends Shop
                     DB::table('tbl_pressiq_press_releases')
                         ->where('pr_id', session('pr_edit'))
                         ->update([
+                            'pr_type'         =>request('pr_type'),
                             'pr_headline'     =>request('pr_headline'),
                             'pr_content'      =>request('pr_content'),
                             'pr_boiler_content'=>request('pr_boiler_content'),
@@ -398,17 +442,22 @@ class ShopMemberController extends Shop
                             'pr_status'       =>"sent",
                             'pr_date_sent'    =>$date,
                             'pr_sender_name'  =>session('user_first_name').' '.session('user_last_name'),
-                            'pr_receiver_name'=>request('pr_receiver_name')
+                            'pr_receiver_name'=>request('pr_receiver_name'),
+                            'pr_co_name'      =>session('user_company_name'),
+                            'pr_co_img'       =>session('user_company_image'),
+
+
                             ]);
                     Session::forget('pr_edit');
+                     Session::flash('email_sent', 'Email Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
 
                 }
                 else
                 {
                     $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info);
+                     Session::flash('email_sent', 'Press Release Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
- 
                 }
                 
             }
@@ -422,47 +471,96 @@ class ShopMemberController extends Shop
       $search_key = $request->search_key;
       $data['_recipient'] = Tbl_press_release_recipient::where('name','like','%'.$search_key.'%')
                             ->Orwhere('company_name','like','%'.$search_key.'%')
-                            ->Orwhere('position','like','%'.$search_key.'%')
+                            ->Orwhere('position','like','%'.$search_key.'   %')
                             ->get();
       return view("press_user.search_recipient", $data);
-      
     }
-
 
     public function send($pr_info)
     {
-        $to=explode(",", $pr_info['pr_to']);
+        $to  = explode(",", $pr_info['pr_to']);
+        $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
 
-        foreach ($to as $pr_info['to']) 
+        foreach ($to as $pr_info['pr_to']) 
         {
             Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
             {
-                $message->from($pr_info["pr_from"], $pr_info["pr_sender_name"]);
-                $message->to($pr_info["to"]);
+                $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
+                $message->to($pr_info['pr_to']);
+                $message->subject($pr_info["pr_headline"]);
             });
         }
     }
+   
+    public function send_contact_us()
+    {
+        $contactus_info["contactus_first_name"]         =request('first_name');
+        $contactus_info["contactus_last_name"]          =request('contactus_last_name');
+        $contactus_info["contactus_phone_number"]       =request('contactus_phone_number');
+        $contactus_info["contactus_subject"]            =request('contactus_subject');
+        $contactus_info["contactus_email"]              =request('contactus_email');
+        $contactus_info["contactus_message"]            =request('contactus_message');
+        $contactus_info["contactus_to"]                 =request('contactus_to');
+
+        $contactus_info["explode_email"] = explode("@", $contactus_info['contactus_email']);
+        
+        Mail::send('emails.Contact_us',$contactus_info, function($message) use ($contactus_info)
+        {
+            $message->from($contactus_info["explode_email"][0] . '@press-iq.com',$contactus_info['contactus_email']);
+            $message->to("oliverbacsal@gmail.com");
+            $message->subject($contactus_info['contactus_subject']);
+           
+        });
+        Session::flash('message_concern', 'Message Successfully Sent!');
+        return Redirect::back();
+    }
 
     public function press_release_save_as_draft(Request $request)
-    {   
+    {  
+        $pr_info["pr_type"]         =$request->pr_type; 
         $pr_info["pr_headline"]     =$request->pr_headline;
         $pr_info["pr_content"]      =$request->pr_content;
         $pr_info["pr_boiler_content"]=$request->pr_boiler_content;
         $pr_info["pr_from"]         =session('user_email');
         $pr_info["pr_to"]           =$request->pr_to;
-        $pr_info["pr_status"]       ="draft";
+        $pr_info["pr_status"]       ="Draft";
         $pr_info["pr_date_sent"]    =Carbon::now();
         $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
         $pr_info["pr_receiver_name"]=request('pr_receiver_name');
         $pr_info["pr_co_name"]      =session('user_company_name');
         $pr_info["pr_co_img"]       =session('user_company_image');
+        $pr_info["pr_type"]         =$request->pr_type;
 
-        
-        $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info); 
+        if(Session::has('pr_edit'))
+        {
+            $date=Carbon::now();
+            DB::table('tbl_pressiq_press_releases')
+                ->where('pr_id', session('pr_edit'))
+                ->update([
+                    'pr_type'         =>request('pr_type'),
+                    'pr_headline'     =>request('pr_headline'),
+                    'pr_content'      =>request('pr_content'),
+                    'pr_boiler_content'=>request('pr_boiler_content'),
+                    'pr_from'         =>session('user_email'),
+                    'pr_to'           =>request('pr_to'),
+                    'pr_status'       =>"draft",
+                    'pr_date_sent'    =>$date,
+                    'pr_sender_name'  =>session('user_first_name').' '.session('user_last_name'),
+                    'pr_receiver_name'=>request('pr_receiver_name'),
+                    'pr_co_name'      =>session('user_company_name'),
+                    'pr_co_img'       =>session('user_company_image'),
+                    ]);
+            Session::forget('pr_edit');
+        }
+        else
+        {
+            $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info);
+        }
+         
         $data["page"] = "Press Release - My Press Release";
-        Session::forget('pr_edit');
         return redirect::to("/pressuser/drafts");
     }
+
     public function pressuser_my_pressrelease()
     {
         if(Session::exists('user_email'))
@@ -474,7 +572,7 @@ class ShopMemberController extends Shop
                     ->where('pr_from', session('user_email'))
                     ->where('pr_status','sent')
                     ->orderByRaw('pr_date_sent DESC')
-                    ->get();
+                    ->paginate(5);
                 $data["page"] = "Press Release - My Press Release";
                 $data["pr"]=$pr;
                 return view("press_user.press_user_my_pressrelease",$data);
@@ -499,7 +597,7 @@ class ShopMemberController extends Shop
            {
                 $data['drafts'] = DB::table('tbl_pressiq_press_releases')
                                 ->where('pr_from', session('user_email'))
-                                ->where('pr_status','draft')
+                                ->where('pr_status','Draft')
                                 ->orderByRaw('pr_date_sent DESC')
                                 ->get();
                 $data["page"] = "Drafts";
@@ -525,7 +623,7 @@ class ShopMemberController extends Shop
                 $pr = DB::table('tbl_pressiq_press_releases')
                     ->where('pr_id', $pid)
                     ->where('pr_from', session('user_email'))
-                    ->get();
+                    ->paginate(5);
                 $data["page"] = "Press Release - View";
                 $data["pr"]=$pr;
 
@@ -533,7 +631,7 @@ class ShopMemberController extends Shop
                     ->where('pr_id','!=', $pid)
                     ->where('pr_from', session('user_email'))
                     ->orderByRaw('pr_date_sent DESC')
-                    ->get();
+                    ->paginate(5);
                 $data["page"] = "Press Release - View";
                 $data["opr"]=$pr;
 
@@ -552,32 +650,165 @@ class ShopMemberController extends Shop
 
     public function press_release_analytics()
     {
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://mandrillapp.com/api/1.0/users/info.json?key=cKQiemfNNB-5xm98HhcNzw",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_HTTPHEADER => array(
-                "cache-control: no-cache",
-                "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
-            ) ,
-        ));
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
 
-        if ($err)
+        if (Session::exists('user_email')) 
         {
-            echo "cURL Error #:" . $err;
+           
+            $explode_email = explode("@", Session::get('user_email'));
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://mandrillapp.com/api/1.0/senders/info.json?key=UWTLQzFotM-rRUyOJqlvjw&address=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "cache-control: no-cache",
+                    "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+                ) ,
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if ($err)
+            {
+                echo "cURL Error #:" . $err;
+            }
+            else
+            {
+                $share_analytics = json_decode($response);
+                Session::put('share_analytics', $share_analytics);
+                $data["page"] = "Analytics";
+                return view("press_user.press_user_analytics",$data);
+            }
         }
         else
         {
-            dd(json_decode($response));
+             return Redirect::to("/"); 
         }
+    }
+
+    public function press_release_analytics_campaign()
+    {
+         if (Session::exists('user_email')) 
+         {
+            $explode_email = explode("@", Session::get('user_email'));
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "cache-control: no-cache",
+                    "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+                ) ,
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if ($err)
+            {
+                echo "cURL Error #:" . $err;
+            }
+            else
+            {
+                
+                $analytics_view = json_decode($response);
+                $new_analytic_view = [];
+                foreach ($analytics_view as $key => $value) 
+                {
+                    if ($value->sender == $explode_email[0] . '@press-iq.com') 
+                    {
+                        $new_analytic_view[$value->subject] = $value;
+                    }
+                }
+                $analytics_view = $new_analytic_view;
+                $data["analytics_view"] = $analytics_view;
+                $data["page"] = "Campaign Detail";
+                return view("press_user.press_user_analytics_view",$data);
+            }
+        }
+         else
+        {
+           return Redirect::to("/"); 
+        }
+    }
+
+    public function press_release_analytics_view_all()
+    {
+        if (Session::exists('user_email')) 
+         {
+            $explode_email = explode("@", Session::get('user_email'));
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "cache-control: no-cache",
+                    "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+                ) ,
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if ($err)
+            {
+                echo "cURL Error #:" . $err;
+            }
+            else
+            {
+                $analytics_view = json_decode($response);
+                foreach ($analytics_view as $key => $value) 
+                {
+                    if ($value->sender != $explode_email[0] . '@press-iq.com') 
+                    {
+                        unset($analytics_view[$key]);
+                    }
+
+                    if ($value->subject != Crypt::decrypt(Request2::input("subject"))) 
+                    {
+                        unset($analytics_view[$key]);
+                    }
+                }
+
+                $data["analytics_view"] = $analytics_view;
+                $data["page"] = "Analytics Details";
+                return view("press_user.press_user_analytics_view_all",$data); 
+            }
+        }
+         else
+        {
+           return Redirect::to("/"); 
+        }  
+    }
+
+    /* Tracking Press Release */
+    public function press_release_track_open()
+    {
+        dd(header('Content-Type: image/gif'));
+        //THIS RETURNS THE IMAGE
+        header('Content-Type: image/gif');
+        readfile(public_path() . '/email-tracker/tracking.gif');
+
+        //THIS IS THE SCRIPT FOR THE ACTUAL TRACKING
+        // $date = date('Y-m-d H:i:s', $_SERVER['REQUEST_TIME']);
+        // $txt = $date.",". $_SERVER['REMOTE_ADDR'];
+        // $myfile = file_put_contents('log.txt', $txt.PHP_EOL , FILE_APPEND);
+        exit; 
     }
 
     public function press_user_manage_user()
@@ -609,24 +840,102 @@ class ShopMemberController extends Shop
     }
      public function pressadmin_dashboard()
     {
-        if(Session::exists('user_email'))
-        {
-           $level=session('pr_user_level');
-           if($level!="1")
-           {
-                return Redirect::to("/pressuser/dashboard");
-           }
-           else
-           {
+        if (Session::exists('user_email')) 
+         {
+            $explode_email = explode("@", Session::get('user_email'));
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "cache-control: no-cache",
+                    "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+                ) ,
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if ($err)
+            {
+                echo "cURL Error #:" . $err;
+            }
+            else
+            {
+                $analytics_view = json_decode($response);
+                $new_analytic_view = [];
+                foreach ($analytics_view as $key => $value) 
+                {
+                    if ($value->sender != $explode_email[0] . '@press-iq.com') 
+                    {
+                        $new_analytic_view[$value->subject] = $value;
+                    }
+                }
+                $analytics_view = $new_analytic_view;
+                $data["analytics_view"] = $analytics_view;
                 $data["page"] = "Press Release - Dashboard";
-                return view("press_admin.press_admin_dashboard", $data);
-           }
+                return view("press_admin.press_admin_dashboard",$data);
+            }
         }
-        else
+         else
         {
-            return Redirect::to("/"); 
+           return Redirect::to("/"); 
         }
     }
+
+     public function pressadmin_dashboard_view()   
+    {
+        if (Session::exists('user_email')) 
+         {
+            $explode_email = explode("@", Session::get('user_email'));
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "cache-control: no-cache",
+                    "postman-token: c2fb288c-3f82-02af-4779-e0f682f5f8a8"
+                ) ,
+            ));
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if ($err)
+            {
+                echo "cURL Error #:" . $err;
+            }
+            else
+            {
+                $analytics_view = json_decode($response);
+                foreach ($analytics_view as $key => $value) 
+                {
+                    if ($value->subject != Crypt::decrypt(Request2::input("subject"))) 
+                    {
+                        unset($analytics_view[$key]);
+                    }
+                }
+                $data["analytics_view"] = $analytics_view;
+                $data["page"] = "Press Release - Details";
+                return view("press_admin.press_admin_dashboard_view",$data); 
+            }
+        }
+         else
+        {
+           return Redirect::to("/"); 
+        }
+    }
+
     public function pressadmin_media_contacts()
     {
 
@@ -653,48 +962,32 @@ class ShopMemberController extends Shop
         {   
             return Redirect::to("/"); 
         }
-        // if (request()->isMethod("post"))
-        // { 
-        //     $value["contact_name"]          =request('contact_name');
-        //     $rules["contact_name"]          =['required'];
-        //     $value["country"]               =request('country');
-        //     $rules["country"]               =['required'];
-        //     $value["contact_email"]         =request('contact_email');
-        //     $rules["contact_email"]         =['required','email','unique:tbl_pressiq_media_contacts,contact_email'];
-        //     $value["contact_website"]       =request('contact_website');
-        //     $rules["contact_website"]       =['required'];
-        //     $value["contact_description"]   =request('contact_description');
-        //     $rules["contact_description"]   =['required'];
-        //     $validator = Validator::make($value, $rules);
-
-        //     if ($validator->fails()) 
-        //     {
-        //         return Redirect::to("/pressadmin/mediacontacts")->with('message', $validator->errors()->first())->withInput();
-        //     }
-        //     else
-        //     {
-        //         $contact_info["contact_name"]=request('contact_name');
-        //         $contact_info["country"]=request('country');
-        //         $contact_info["contact_email"]=request('contact_email');
-        //         $contact_info["contact_website"]=request('contact_website');
-        //         $contact_info["contact_description"]=request('contact_description');
-        //         $contact_id = tbl_pressiq_media_contacts::insertGetId($contact_info); 
-        //         $data["page"] = "Press Release - Media Contacts";
-        //         $contacts = DB::table('tbl_pressiq_media_contacts')->get();
-        //         $data["contacts"]=$contacts;
-        //         return view("press_admin.press_admin_media_contacts",$data);                
-        //     }
-        // }
-        // else
-        // {
-        //     $data["page"] = "Press Release - Media Contacts";
-        //     $contacts = DB::table('tbl_pressiq_media_contacts')->get();
-        //     $data["contacts"]=$contacts;
-        //     return view("press_admin.press_admin_media_contacts",$data);
-        // }
+      
     }
-    public function pressadmin_pressreleases()
+
+    public function mediacontacts_search(Request $request)
+    {  
+      $search_media = $request->search_media;
+      $data["_media_contacts"] = Tbl_press_release_recipient::where('name','like','%'.$search_media.'%')
+                                 ->Orwhere('company_name','like','%'.$search_media.'%')
+                                 ->Orwhere('country','like','%'.$search_media.'%')
+                                 ->Orwhere('research_email_address','like','%'.$search_media.'%')
+                                 ->get();
+      return view("press_admin.search_press_admin_media_contacts", $data);
+    }
+
+    public function manage_user()
     {
+        // dd(session("edit_user"));
+        $data['_user'] = Tbl_pressiq_user::where('user_level',2)->get();
+        $data['_admin'] = Tbl_pressiq_user::where('user_level',1)->get();
+        $data['_user_edit'] = Tbl_pressiq_user::where('user_id',session('edit_user'))->get();
+        $data['_admin_edit'] = Tbl_pressiq_user::where('user_id',session('edit_admin'))->get();
+        
+        
+        $data['_edit'] = Tbl_pressiq_user::where('user_id',session('u_edit'))->get();
+        
+
         if(Session::exists('user_email'))
         {
            $level=session('pr_user_level');
@@ -705,20 +998,120 @@ class ShopMemberController extends Shop
            else
            {
                 $data["page"] = "Press Release - Press Release";
-                return view("press_admin.press_admin_pressrelease", $data);
+                return view("press_admin.press_admin_manage_user", $data);
            }
         }
         else
         {
-            return Redirect::to("/"); 
+            return Redirect::to("/");   
         }
+    }         
+
+    public function manage_user_search(Request $request)
+    {   
+      $search_user = $request->search_user;
+      $data["_user"] = Tbl_pressiq_user::where('user_level',2)
+                        ->where('user_first_name','like','%'.$search_user.'%')
+                        ->Orwhere('user_last_name','like','%'.$search_user.'%')
+                        ->Orwhere('user_email','like','%'.$search_user.'%')
+                        ->Orwhere('user_company_name','like','%'.$search_user.'%')
+                        ->get();
+      return view("press_admin.search_press_admin_manage_user", $data);
     }
 
+    public function manage_user_add_admin(Request $request)
+    {
+      $data["user_first_name"]                 = $request->user_first_name;
+      $data["user_last_name"]                  = $request->user_last_name;
+      $data["user_email"]                      = $request->user_email;
+      $data["user_password"]                   = Crypt::encrypt(request('user_password'));
+      $data["user_level"]                      = "1";
+      Tbl_pressiq_user::insert($data);
+      Session::flash('success_admin', 'New Admin Successfully Added!');
+      return  redirect::back();
+    }
+
+    public function pressadmin_manage_user_edit()
+    {
+        DB::table('tbl_pressiq_user')
+                        ->where('user_id', session('edit_user'))
+                        ->update([
+                            'user_first_name'     =>request('first_name'),
+                            'user_last_name'      =>request('last_name'),
+                            'user_email'          =>request('email'),
+                            'user_company_name'   =>request('company_name'),
+                            ]);
+        Session::forget('edit_user');
+        Session::flash('success_user', 'User Successfully Updated!');
+        return redirect()->back();
+    }
+
+    public function pressadmin_manage_force_login($id)
+    {
+
+        session::flush();
+        $_user_data = DB::table('tbl_pressiq_user')->where('user_id',$id)->get();
+        
+        foreach ($_user_data as $user_data) {
+            # code...
+        }
+        Session::put('user_email', $user_data->user_email);
+        Session::put('user_first_name',$user_data->user_first_name);
+        Session::put('user_last_name',$user_data->user_last_name);
+        Session::put('user_company_name',$user_data->user_company_name);
+        Session::put('user_company_image',$user_data->user_company_image);
+        Session::put('pr_user_level',$user_data->user_level);
+        Session::put('pr_user_id',$user_data->user_id);
+
+        return Redirect::to("/signin"); 
+
+    }
+
+    public function pressadmin_manage_admin_edit()
+    {
+        DB::table('tbl_pressiq_user')
+                        ->where('user_id', session('edit_admin'))
+                        ->update([
+                            'user_first_name'     =>request('first_name'),
+                            'user_last_name'      =>request('last_name'),
+                            'user_email'          =>request('email'),
+                            'user_company_name'   =>request('company_name')
+                            ]);
+        Session::forget('edit_admin');
+         Session::flash('success_admin', 'Admin Successfully Updated!');
+        return redirect()->back();
+    }
+    public function edit_user($id)
+    {
+        Session::put('edit_user',$id);
+        
+        return redirect()->back();
+    }
+    public function edit_admin($id)
+    {
+        Session::put('edit_admin',$id);
+        
+        return redirect()->back();
+    }
+
+    public function manage_user_delete_admin($id)
+    {
+      Tbl_pressiq_user::where('user_id',$id)->delete();
+      Session::flash('delete_admin', "Admin Already Deleted!");
+      return  redirect::back();
+    }
+
+    public function manage_user_delete_user($id)
+    {
+      Tbl_pressiq_user::where('user_id',$id)->delete();
+      Session::flash('delete_user', "User Already Deleted!");
+      return  redirect::back();
+    }
+   
     public function pressadmin_email()
     {   
 
         $data['_email'] = Tbl_pressiq_press_releases::paginate(5);
-
 
         if(Session::exists('user_email'))
         {
@@ -766,17 +1159,12 @@ class ShopMemberController extends Shop
     }
     public function pressadmin_email_save(Request $request)
     {   
-        $pr_info["pr_headline"]     =$request->pr_headline;
-        $pr_info["pr_content"]      =$request->pr_content;
-        $pr_info["pr_boiler_content"]=$request->pr_boiler_content;
-
-        
         DB::table('tbl_pressiq_press_releases')
                         ->where('pr_id', session('e_edit'))
                         ->update([
                             'pr_headline'     =>request('pr_headline'),
                             'pr_content'      =>request('pr_content'),
-                            'pr_boiler_content'=>request('pr_boiler_content'),
+                            'pr_boiler_content'=>request('pr_boiler_content')
                             ]);
         Session::forget('e_edit');
         return redirect::to("/pressadmin/email");
@@ -840,7 +1228,7 @@ class ShopMemberController extends Shop
     public function pressreleases_edit_recipient($id)
     {
         Session::put('r_edit',$id);
-        return Redirect::to("/pressadmin/mediacontacts");
+        return Redirect::back();
     }
 
     public function pressuser_choose_recipient(Request $request)
@@ -1087,15 +1475,22 @@ class ShopMemberController extends Shop
     }
     public function getSlotInfo()
     {
-        $slot_id            = Crypt::decrypt(request("slot_no"));
-        $key                = request("key");
-        $data["slot_info"]  = $slot_info = Tbl_mlm_slot::where("slot_id", $slot_id)->customer()->first();
-
-        if(md5($slot_info->slot_id . $slot_info->slot_no) == $key)
+        try 
         {
-            return Self::load_view_for_members('member.slot_info', $data);   
-        }
-        else
+            $slot_id            = Crypt::decrypt(request("slot_no"));
+            $key                = request("key");
+            $data["slot_info"]  = $slot_info = Tbl_mlm_slot::where("slot_id", $slot_id)->customer()->first();
+
+            if(md5($slot_info->slot_id . $slot_info->slot_no) == $key)
+            {
+                return Self::load_view_for_members('member.slot_info', $data);   
+            }
+            else
+            {
+                return "ERROR OCCURRED";
+            }
+        } 
+        catch (DecryptException $e) 
         {
             return "ERROR OCCURRED";
         }
@@ -1103,8 +1498,16 @@ class ShopMemberController extends Shop
     public function getAutologin()
     {
         $data["force_login"] = true;
-        $data["password"] = Crypt::decrypt(request()->password);
-        return view("member.autologin", $data);
+
+        try 
+        {
+            $data["password"] = Crypt::decrypt(request()->password);
+            return view("member.autologin", $data);
+        }
+        catch (DecryptException $e) 
+        {
+            return Redirect::back();
+        }
     }
     public function request_payout_allow()
     {
@@ -1272,6 +1675,17 @@ class ShopMemberController extends Shop
                 }
             }
 
+            // Method Airline Wallet
+            if ($method == "airline") 
+            {
+                $tour_wallet = Tbl_tour_wallet_slot::where("slot_id", $slot->slot_id)->value("tour_wallet_account_id");
+
+                if (!$tour_wallet || $tour_wallet == "" ) 
+                {
+                    $return .= "<div>Please set your Airline Wallet Account ID for <b>" . $slot->slot_no . "</b> in payout settings.</div>";
+                }
+            }
+
             $request_amount = $request_wallet[$key];
 
             if ($request_amount != 0) 
@@ -1377,7 +1791,7 @@ class ShopMemberController extends Shop
                         $remarks    = "Request by Customer";
                         $other      = 0;
                         $date       = date("m/d/Y");
-                        $status = "PENDING";
+                        $status     = "PENDING";
 
                         /* V-MONEY */
                         if ($method == "vmoney") 
@@ -1453,6 +1867,99 @@ class ShopMemberController extends Shop
                                 }
                             }
                         }
+                        elseif($method == "airline")
+                        {
+                            $wallet_amount = $take_home;
+
+                            $tour = Tbl_tour_wallet_slot::where('slot_id', $slot_id)
+                                                        ->leftJoin('tbl_tour_wallet', 'tbl_tour_wallet.tour_wallet_id', '=', 'tbl_tour_wallet_slot.tour_wallet_id')
+                                                        ->first();
+
+                            $host = Tbl_tour_wallet::where('tour_wallet_shop', $this->shop_info->shop_id)
+                                                   ->where('tour_wallet_main', 1)
+                                                   ->first();
+                            
+                            $base_uri = $this->shop_info->shop_wallet_tours_uri;
+
+                            $airline_result            = AbsMain::transfer_wallet($base_uri, $host->tour_Wallet_a_account_id, $host->tour_wallet_a_username, $host->tour_wallet_a_base_password, $tour->tour_Wallet_a_account_id, $wallet_amount);
+                            $airline_result['message'] = 'Wallet Transfer Success';
+
+                            if($airline_result['status'] == 1)
+                            {
+                                $wallet_nega                              = $wallet_amount * (-1);
+
+                                $log['shop_id']                           = $this->shop_info->shop_id;
+                                $log['wallet_log_slot']                   = $slot_id;
+                                $log['wallet_log_slot_sponsor']           = $slot_id;
+                                $log['wallet_log_details']                = 'You have transferred ' . $wallet_amount . ' To your tours wallet. ' . $wallet_amount . ' is deducted to your wallet.' ;
+                                $log['wallet_log_amount']                 = $wallet_nega;
+                                $log['wallet_log_plan']                   = 'TOURS_WALLET';
+                                $log['wallet_log_status']                 = 'released';
+                                $log['wallet_log_claimbale_on']           = Carbon::now();
+
+                                $insert['tour_wallet_logs_wallet_amount'] = $wallet_amount;
+                                $insert['tour_wallet_logs_date']          = Carbon::now(); 
+                                $insert['tour_wallet_logs_tour_id']       = $tour->tour_wallet_id; 
+                                $insert['tour_wallet_logs_account_id']    = $tour->tour_Wallet_a_account_id;
+                                $insert['tour_wallet_logs_customer_id']   = Self::$customer_info->customer_id;
+                                $insert['tour_wallet_logs_accepted']      = 1;
+                                $insert['tour_wallet_logs_points']        = 0;
+
+                                // Get Balance
+                                $host_update = AbsMain::get_balance($base_uri, $host->tour_Wallet_a_account_id, $host->tour_wallet_a_username, $host->tour_wallet_a_base_password);
+                                
+                                if($host_update['status'] == 1)
+                                {
+                                    $update['tour_wallet_a_current_balance'] = $host_update['result'];
+
+                                    Tbl_tour_wallet::where('tour_wallet_shop', $this->shop_info->shop_id)
+                                                   ->where('tour_wallet_main', 1)
+                                                   ->update($update);
+                                }
+
+                                $update['tour_wallet_a_current_balance'] = $tour->tour_wallet_a_current_balance + $wallet_amount;
+                                
+                                Tbl_tour_wallet::where('tour_wallet_customer_id', Self::$customer_info->customer_id)
+                                               ->where('tour_wallet_main', 0)
+                                               ->update($update);
+
+                                Mlm_slot_log::slot_array($log);
+
+                                $tour_wallet_convertion = $host->tour_wallet_convertion;
+
+                                if($tour_wallet_convertion != 0)
+                                {
+                                    $points                            = ($wallet_amount/100) * $tour_wallet_convertion;
+                                    $insert['tour_wallet_logs_points'] = $points;
+                                    $l                                 = "You have earned " . $points . " Repurchase Points. From  tours wallet."; 
+                                    $log['shop_id']                    = $this->shop_info->shop_id;
+                                    $log['wallet_log_slot']            = $slot_id;
+                                    $log['wallet_log_slot_sponsor']    = $slot_id;
+                                    $log['wallet_log_details']         = $l ;
+                                    $log['wallet_log_amount']          = 0;
+                                    $log['wallet_log_plan']            = 'TOURS_WALLET_POINTS';
+                                    $log['wallet_log_status']          = 'released';
+                                    $log['wallet_log_claimbale_on']    = Carbon::now();
+
+                                    Mlm_slot_log::slot_array($log);
+
+                                    $array['points_log_complan']        = "REPURCHASE_POINTS";
+                                    $array['points_log_level']          = 0;
+                                    $array['points_log_slot']           = $slot_id;
+                                    $array['points_log_Sponsor']        = $slot_id;
+                                    $array['points_log_date_claimed']   = Carbon::now();
+                                    $array['points_log_converted']      = 0;
+                                    $array['points_log_converted_date'] = Carbon::now();
+                                    $array['points_log_type']           = 'PV';
+                                    $array['points_log_from']           = 'Wallet Tours';
+                                    $array['points_log_points']         = $points;
+
+                                    Mlm_slot_log::slot_log_points_array($array);
+                                }
+
+                                DB::table('tbl_tour_wallet_logs')->insert($insert);
+                            }
+                        }
                         else
                         {
                             $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
@@ -1480,13 +1987,45 @@ class ShopMemberController extends Shop
     }
     public function getPayoutSetting()
     {
-        $data["page"] = "Payout";
-        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->coinsph()->money_remittance()->bank()->vmoney()->airline()->get();
-        $data["_method"] = unserialize($this->shop_info->shop_payout_method);
+        if (Self::$customer_info) 
+        {
+            $data["page"] = "Payout";
+            $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->coinsph()->money_remittance()->bank()->vmoney()->airline()->get();
+            $data["_method"] = unserialize($this->shop_info->shop_payout_method);
 
-        $data["_bank"] = Tbl_payout_bank::shop($this->shop_info->shop_id)->get();
-        $data["tin_number"] = Self::$customer_info->tin_number;
-        return view("member2.payout_settings", $data);
+            // Philtech
+            if ($this->shop_theme == "philtech") 
+            {
+                foreach ($data["_slot"] as $key => $value) 
+                {
+                    $membership_name = DB::table("tbl_membership")->where("membership_id", $value->slot_membership)->value("membership_name");
+                    
+                    if ($membership_name == "V.I.P Gold") 
+                    {
+                        $data["_airline_slot"][$key] = $value;
+                    }
+                }
+
+                if (!isset($data["_airline_slot"])) 
+                {
+                    foreach ($data["_method"] as $key => $value) 
+                    {
+                        if ($value == "airline") 
+                        {
+                            unset($data["_method"][$key]);
+                        }
+                    }
+                }
+            }
+
+            $data["_bank"] = Tbl_payout_bank::shop($this->shop_info->shop_id)->get();
+            $data["tin_number"] = Self::$customer_info->tin_number;
+            return view("member2.payout_settings", $data);
+        }
+        else
+        {
+            echo "Please login first.";
+        }
     }
     public function postPayoutSetting()
     {
@@ -1502,22 +2041,33 @@ class ShopMemberController extends Shop
         $json["message"] = "";
 
         /* UPDATE  METHOD */
-        foreach(request("airline") as $key => $value)
+        if (request("customer_payout_method") == "airline") 
         {
-            $slot_info = Tbl_mlm_slot::where("slot_no", $value)->where("shop_id", $this->shop_info->shop_id)->first();
-
-            if ($slot_info) 
+            if (request("airline")) 
             {
-                if ($customer) 
+                foreach(request("airline") as $key => $value)
                 {
-                    $airline_result = AbsMain::update_info($customer->customer_id, $slot_info->slot_id, request("tour_wallet_account_id")[$key], $this->shop_info->shop_id); 
-                    
-                    if ($airline_result["status"] != 1) 
+                    $slot_info = Tbl_mlm_slot::where("slot_no", $value)->where("shop_id", $this->shop_info->shop_id)->first();
+
+                    if ($slot_info) 
                     {
-                        $json["status"] = "error";
-                        $json["message"] = "Your Airline Ticketing Account ID is incorrect.";
+                        if ($customer) 
+                        {
+                            $airline_result = AbsMain::update_info($customer->customer_id, $slot_info->slot_id, request("tour_wallet_account_id")[$key], $this->shop_info->shop_id); 
+                            
+                            if ($airline_result["status"] != 1) 
+                            {
+                                $json["status"] = "error";
+                                $json["message"] = "Your Airline Ticketing Account ID is incorrect.";
+                            }
+                        }
                     }
                 }
+            }
+            else
+            {
+                $json["status"] = "error";
+                $json["message"] = "Your Airline Ticketing Account ID Field is empty.";
             }
         }
 
@@ -1919,6 +2469,8 @@ class ShopMemberController extends Shop
         unset($insert["b_year"]);
         unset($insert["b_day"]);
 
+        // dd($insert["birthday"]);
+
         if(Customer::register($this->shop_info->shop_id, $insert))
         {
             Self::store_login_session($insert["email"], $raw_password);
@@ -2009,28 +2561,35 @@ class ShopMemberController extends Shop
     /* LOGIN AND REGISTRATION - END */
     public function getProfile()
     {
-        $data["page"]                = "Profile";
-        $data["mlm"]                 = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
-        $data["profile"]             = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
-        $data["profile_address"]     = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
-        $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
-        $data["_country"]            = Tbl_country::get();
-        $data["_locale"]             = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
-        $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
-
-        $data['beneficiary'] = null;
-        if(Self::$customer_info)
+        if (Self::$customer_info) 
         {
-            $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
-            $data["wallet"]             = $data["customer_summary"]["_wallet"];
+            $data["page"]                = "Profile";
+            $data["mlm"]                 = isset(Self::$customer_info->ismlm) ? Self::$customer_info->ismlm : 0;
+            $data["profile"]             = Tbl_customer::shop(Self::$customer_info->shop_id)->where("tbl_customer.customer_id", Self::$customer_info->customer_id)->first();
+            $data["profile_address"]     = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
+            $data["profile_info"]        = Tbl_customer_other_info::where("customer_id", Self::$customer_info->customer_id)->first();
+            $data["_country"]            = Tbl_country::get();
+            $data["_locale"]             = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
+            $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
 
-            $data['beneficiary'] = CustomerBeneficiary::first(Self::$customer_info->customer_id);
+            $data['beneficiary'] = null;
+            if(Self::$customer_info)
+            {
+                $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
+                $data["wallet"]             = $data["customer_summary"]["_wallet"];
+
+                $data['beneficiary'] = CustomerBeneficiary::first(Self::$customer_info->customer_id);
+            }
+
+
+            // $data["allowed_change_pass"] = true;
+
+            return (Self::load_view_for_members("member.profile", $data));
         }
-
-
-        // $data["allowed_change_pass"] = true;
-
-        return (Self::load_view_for_members("member.profile", $data));
+        else
+        {
+            return Redirect::to("/members/login");
+        }
     }
     public function postProfileUpdateInfo(Request $request)
     {
@@ -2046,6 +2605,7 @@ class ShopMemberController extends Shop
         // $validate['customer_city'] = 'required';
         // $validate['customer_zipcode'] = 'required';
         $validate['customer_street'] = 'required';
+        $validate['contact'] = 'required';
 
         $validator = Validator::make($form, $validate);
         
@@ -2081,6 +2641,7 @@ class ShopMemberController extends Shop
             $insert_customer["birthday"]    = $birthday;
             $insert_customer["country_id"]  = $request->country_id;
             $insert_customer["updated_at"]  = Carbon::now();
+            $insert_customer['contact']     = $request->contact;
 
             Tbl_customer::where("customer_id", Self::$customer_info->customer_id)
                         ->shop(Self::$customer_info->shop_id)
@@ -2271,31 +2832,45 @@ class ShopMemberController extends Shop
     }
     public function getGenealogy(Request $request)
     {
-        $data["page"] = "Genealogy";
-        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
-        $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
-        $data['slot_no'] = 0;
-        $data['mode'] = 'sponsor';
-        
-        if($slot)
+        if (isset(Self::$customer_info->customer_id)) 
         {
-            $data['slot_no'] = $slot->slot_no;
-            $data['mode'] = $request->mode;
-        }
+            $data["page"] = "Genealogy";
+            $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+            $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
+            $data['slot_no'] = 0;
+            $data['mode'] = 'sponsor';
+            
+            if($slot)
+            {
+                $data['slot_no'] = $slot->slot_no;
+                $data['mode'] = $request->mode;
+            }
 
-        return (Self::load_view_for_members("member.genealogy", $data));
+            return (Self::load_view_for_members("member.genealogy", $data));
+        }
+        else
+        {
+            return Redirect::to("/members/login");
+        }
     }
     public function getGenealogyTree(Request $request)
     {
-        $slot_no  = $request->slot_no;
-        $shop_id  = $this->shop_info->shop_id;
-        $mode = $request->mode;
-        $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_no',$slot_no)->where('shop_id',$shop_id)->first();
-
-        if($check)
+        if (isset(Self::$customer_info->customer_id)) 
         {
-            $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode);
-            return Self::load_view_for_members('member.genealogy_tree', $data);            
+            $slot_no  = $request->slot_no;
+            $shop_id  = $this->shop_info->shop_id;
+            $mode = $request->mode;
+            $check = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->where('slot_no',$slot_no)->where('shop_id',$shop_id)->first();
+
+            if($check)
+            {
+                $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode,Self::$customer_info->customer_id);
+                return Self::load_view_for_members('member.genealogy_tree', $data);            
+            }
+            else
+            {
+                die('Invalid slot!');
+            }
         }
         else
         {
@@ -2306,6 +2881,73 @@ class ShopMemberController extends Shop
     {
         $data = MemberSlotGenealogy::downline($request->x, $request->mode);
         return $data;
+    }
+    public function getAvailableSponsor()
+    {
+        $shop_id = request('shop_id');
+        $sponsor = request('sponsor');
+        $slot = Tbl_mlm_slot::where('shop_id',$shop_id)->where('slot_id',$sponsor)->first();
+        if($slot)
+        {
+            return 'true';
+        }
+        else
+        {
+            return 'false';
+        }
+    }
+    public function postCreateSlot(Request $request)
+    {
+        $data['page'] = "Create Slot";
+        //patrick
+        $codes = Tbl_transaction_list::CodeVaultTransaction()
+                            ->selectRaw('tbl_warehouse_inventory_record_log.mlm_pin,tbl_warehouse_inventory_record_log.mlm_activation,membership_id,tbl_warehouse_inventory_record_log.record_log_id')
+                            ->where('tbl_transaction.transaction_id',$request->codevault)
+                            ->first();
+        $response = 'error';
+        // $shop_id, $customer_id, $membership_id, $sponsor, $slot_no = null, $slot_type = "PS"
+        $shop_id        = $this->shop_info->shop_id;
+        $customer_id    = Self::$customer_info->customer_id;
+        $membership     = $codes->membership_id;
+        $sponsor        = $request->sponsor;
+        $slot_no        = Self::generate_slot_no_based_on_name(Self::$customer_info->first_name, Self::$customer_info->last_name);
+        if($request->owner == 'new')
+        {
+            $customer['shop_id']           = $shop_id;
+            $customer['country_id']        = $request->country;
+            $customer['first_name']        = $request->first_name;
+            $customer['middle_name']       = $request->middle_name;
+            $customer['last_name']         = $request->last_name;
+            $customer['email']             = $request->email;
+            $customer['password']          = Crypt::encrypt($request->password);
+            $customer['Iswalkin']          = 0;
+            $customer['created_date']      = Carbon::now();
+            $customer['ismlm']             = 1;
+            $customer['mlm_username']      = $request->username;
+            $customer['contact']           = $request->contact;
+
+            $customer_id = Tbl_customer::insertGetId($customer);
+            $new_customer_info = Tbl_customer::where('customer_id',$customer_id)->first();
+            $slot_no     = Self::generate_slot_no_based_on_name($new_customer_info->first_name, $new_customer_info->last_name);
+        }
+
+        $slot_id        = MLM2::create_slot($shop_id,$customer_id,$membership,$sponsor,$slot_no);
+        // dd($slot_id);
+
+        if($slot_id)
+        {
+            $update['slot_placement']   = $request->placement;
+            $update['slot_position']    = $request->position;
+
+            Tbl_mlm_slot::where('slot_id',$slot_id)->update($update);
+
+            MLM2::entry($shop_id,$slot_id);
+            $used['item_in_use'] = 'used';
+            Tbl_warehouse_inventory_record_log::where('record_log_id',$codes->record_log_id)->update($used);
+            $response = 'success';
+        }
+
+        return Redirect::back();
     }
     public function getNetwork()
     {
@@ -2344,14 +2986,24 @@ class ShopMemberController extends Shop
         $sort_by = 0;
         $data['page'] = "Redeemable";
         $data['_redeemable'] = Tbl_item_redeemable::where("archived",0)->whereColumn("quantity",">","number_of_redeem")->get();
+
         $slot_info           = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+        $data['slot'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+
         $data["_points"]     = $this->redeem_points_sum($slot_info->slot_id);
         // dd($data);
         return (Self::load_view_for_members("member.redeemable",$data));
     }
+    public function getSlotPoints()
+    {
+        $slot = request('slot_no');
+        $slot_info           = Tbl_mlm_slot::where("slot_no", $slot)->membership()->first();
+        return  currency('',$this->redeem_points_sum($slot_info->slot_id));
+    }
     public function postRedeemItem(Request $request)
     {
-        $slot_info          = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
+
+        $slot_info          = Tbl_mlm_slot::where("slot_no", $request->slot_no)->membership()->first();
         $item_redeemable_id = $request->item_id;
         $redeemable_item    = Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->first();
         if($redeemable_item)
@@ -2377,6 +3029,7 @@ class ShopMemberController extends Shop
                     // you redeem <item> for <cost>. Please wait for admin's approval.
                     $insert_report['log'] = 'You redeemed '.$redeemable_item->item_name.' for '.currency("",$redeemable_item->redeemable_points)." POINTS. Please wait for admin's approval.";
                     $insert_report['date_created'] = Carbon::now();
+                    $insert_report['slot_owner'] = Self::$customer_info->customer_id;
                     Tbl_item_redeemable_report::insert($insert_report);
                     Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->increment('number_of_redeem');
 
@@ -2418,8 +3071,8 @@ class ShopMemberController extends Shop
     {
         $sort_by = 0;
         $data['page'] = "Redeem History";
-        $slot_info = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
-        $data['redeem_history'] = Tbl_item_redeemable_report::where('slot_id',$slot_info->slot_id)->paginate(10);
+        $data['redeem_history'] = Tbl_item_redeemable_report::Slot()->where('tbl_item_redeemable_report.slot_owner',Self::$customer_info->customer_id)->paginate(10);
+        // dd($data['redeem_history']);
         return (Self::load_view_for_members("member.redeem_history",$data));
     }
     public function getCodevault()
@@ -2430,7 +3083,8 @@ class ShopMemberController extends Shop
         $data['customer_id'] = Self::$customer_info->customer_id;
 
         $q = $query->where("tbl_transaction.transaction_reference_id",Self::$customer_info->customer_id);
-        $data['_codes'] = $q->where("transaction_reference_table","tbl_customer")->where("item_in_use","unused")->where("item_type_id",5)->where("tbl_transaction.shop_id",$this->shop_info->shop_id)->get();
+        $data['_codes'] = $q->where("transaction_reference_table","tbl_customer")->where("item_in_use","unused")->where("item_type_id",5)->where("tbl_transaction.shop_id",$this->shop_info->shop_id)->paginate(10);
+        // dd($data['_codes']);
         return (Self::load_view_for_members("member.code-vault",$data));
     }
     public function getUsecode()
@@ -2440,23 +3094,86 @@ class ShopMemberController extends Shop
         $data['activation'] = request("activation");
         return view("member.use_code",$data);
     }
-    public function getReport()
+    public function getCaptcha()
     {
-        $data["page"]               = "Report";
-
-        if(request("sort_by"))
+        // unitywealth100
+        if($this->shop_info->shop_id == 90)
         {
-            $sort_by = request("sort_by");
+            $data['page'] = "Captcha";
+            $data['slot'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+            return view('member.captcha',$data);
+        }
+        
+    }
+    public function postSubmitcaptcha(Request $request)
+    {
+        $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first();
+        if($point)
+        {
+            $points = $point->point;
         }
         else
         {
-            $sort_by = 0;
+            $point = 0;
+        }
+        $insert['shop_id']                  = $this->shop_info->shop_id;
+        $insert['wallet_log_slot']          = Tbl_mlm_slot::where('slot_no',$request->slot_no)->first()->slot_id;
+        $insert['wallet_log_date_created']  = Carbon::now();
+        $insert['wallet_log_amount']        = $point;
+        $insert['wallet_log_plan']          = "RECAPTCHA";
+        $insert['wallet_log_claimbale_on']  = Carbon::now();
+        $insert['encashment_process_type']  = 0;
+
+        $pool_amount        = Tbl_recaptcha_pool_amount::where('shop_id',$this->shop_info->shop_id)->sum('amount');
+        $acquired_points    = Tbl_mlm_slot_wallet_log::where('wallet_log_plan','RECAPTCHA')
+                                ->where('shop_id',$this->shop_info->shop_id)
+                                ->sum('wallet_log_amount');
+        $remaining_points   = $pool_amount-$acquired_points;
+        if($remaining_points>=$point)
+        {
+            $query = Tbl_mlm_slot_wallet_log::insert($insert);
+
+            if($query)
+            {
+                $response = 'success';
+            }
+            else
+            {
+                $response = 'error';
+            }
+        }
+        else
+        {
+            $response = 'no_points';
         }
 
-        $data["_rewards"]           = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,$sort_by);
-        $data["_codes"]             = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
         
-        return (Self::load_view_for_members("member.report", $data));
+        return Redirect::back()->with('response',$response);
+    }
+    public function getReport()
+    {
+        if (isset($this->shop_info->shop_id) && isset(Self::$customer_info->customer_id)) 
+        {
+            $data["page"]               = "Report";
+
+            if(request("sort_by"))
+            {
+                $sort_by = request("sort_by");
+            }
+            else
+            {
+                $sort_by = 0;
+            }
+
+            $data["_rewards"]           = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 0,$sort_by);
+            $data["_codes"]             = MLM2::check_purchased_code($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            
+            return (Self::load_view_for_members("member.report", $data));
+        }
+        else
+        {
+            return Redirect::to("/members/login");
+        }
     }
     public function getReportPoints()
     {
@@ -2530,11 +3247,18 @@ class ShopMemberController extends Shop
     }
     public function getWalletEncashment()
     {
-        $data["page"]           = "Wallet Encashment";
-        $data["_encashment"]    = MLM2::customer_payout($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
-        $total_payout           = MLM2::customer_total_payout(Self::$customer_info->customer_id);
-        $data["total_payout"]   = Currency::format($total_payout);
-        return (Self::load_view_for_members("member.wallet_encashment", $data));
+        if (isset($this->shop_info->shop_id) && isset(Self::$customer_info->customer_id)) 
+        {
+            $data["page"]           = "Wallet Encashment";
+            $data["_encashment"]    = MLM2::customer_payout($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
+            $total_payout           = MLM2::customer_total_payout(Self::$customer_info->customer_id);
+            $data["total_payout"]   = Currency::format($total_payout);
+            return (Self::load_view_for_members("member.wallet_encashment", $data));
+        }
+        else
+        {
+            return Redirect::to("/members/login");
+        }
     }
     public function getWalletTransfer()
     {
@@ -2862,6 +3586,12 @@ class ShopMemberController extends Shop
     {
         $data["page"] = "Slot";
         return (Self::load_view_for_members("member.slot", $data));
+    }
+    public function getSlots()
+    {
+        $data['page'] = "YOUR SLOT(S)";
+        $data['slots'] = Tbl_mlm_slot::where('slot_owner',Self::$customer_info->customer_id)->get();
+        return view('member.userslots',$data);
     }
     public function getEonCard()
     {
@@ -3397,26 +4127,33 @@ class ShopMemberController extends Shop
     }
     public function getEnterPlacement()
     {
-        $data["page"] = "Enter Code";
-        $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
-        
-
-        $slot_id            = Crypt::decrypt(request("slot_no"));
-        $key                = request("key");
-        $data["slot_info"]  = $slot_info = Tbl_mlm_slot::where("slot_id", $slot_id)->customer()->first();
-
-        if($slot_info->slot_owner == Self::$customer_info->customer_id)
+        if (Self::$customer_info) 
         {
-            $data["iamowner"] = true;
-        }
-        else
-        {
-            $data["iamowner"] = false;
-        }
+            $data["page"] = "Enter Code";
+            $data["message"] = "Enter <b>Slot Code</b> of your <b>Sponsor</b>";
+            
 
-        if(md5($slot_info->slot_id . $slot_info->slot_no) == $key)
-        {
-            return Self::load_view_for_members('member2.enter_placement', $data);
+            $slot_id            = Crypt::decrypt(request("slot_no"));
+            $key                = request("key");
+            $data["slot_info"]  = $slot_info = Tbl_mlm_slot::where("slot_id", $slot_id)->customer()->first();
+
+            if($slot_info->slot_owner == Self::$customer_info->customer_id)
+            {
+                $data["iamowner"] = true;
+            }
+            else
+            {
+                $data["iamowner"] = false;
+            }
+
+            if(md5($slot_info->slot_id . $slot_info->slot_no) == $key)
+            {
+                return Self::load_view_for_members('member2.enter_placement', $data);
+            }
+            else
+            {
+                return "ERROR OCCURRED";
+            }
         }
         else
         {

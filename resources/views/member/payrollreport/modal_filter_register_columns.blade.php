@@ -9,7 +9,7 @@
     </div>
     <div class="modal-body form-horizontal">
         <div class="form-group">
-         @foreach($columns as $column)
+         @foreach($columnn as $column)
                  <div class="checkbox">
                   <label><input type="checkbox" name="name" value="1" {{$column->name == 1 ? 'checked' : 'unchecked'}}>Name</label>
                 </div>
@@ -138,5 +138,12 @@
         <button class="btn btn-custom-primary btn-submit" type="submit">Save</button>
     </div>
 </form>
+<script>
+         function reload(data)
+        {
+            data.element.modal("hide");
+            location.reload();
+        }
+</script>
 {{-- <script type="text/javascript" src="/assets/js/ajax_offline.js"></script> --}}
 

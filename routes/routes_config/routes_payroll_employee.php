@@ -10,13 +10,31 @@ Route::any('employee_profile', 'Member\PayrollEmployee\EmployeeController@employ
 Route::any('edit_employee_profile', 'Member\PayrollEmployee\EmployeeController@edit_employee_profile');
 Route::any('update_employee_profile', 'Member\PayrollEmployee\EmployeeController@update_employee_profile');
 
-Route::any('employee_leave_management', 'Member\PayrollEmployee\EmployeeController@employee_leave_management');
-Route::any('employee_leave_application', 'Member\PayrollEmployee\EmployeeController@employee_leave_application');
-Route::any('employee_summary_of_leave', 'Member\PayrollEmployee\EmployeeController@employee_summary_of_leave');
+/*START LEAVE MANAGEMENT*/
+Route::any('employee_leave_management', 'Member\PayrollEmployee\LeaveController@employee_leave_management');
+Route::any('employee_leave_application', 'Member\PayrollEmployee\LeaveController@employee_leave_application');
+Route::any('employee_summary_of_leave', 'Member\PayrollEmployee\LeaveController@employee_summary_of_leave');
+Route::any('create_employee_leave', 'Member\PayrollEmployee\LeaveController@create_employee_leave');
+Route::any('/leave/save_leave', 'Member\PayrollEmployee\LeaveController@save_leave');
+
+Route::any('/leave/ajax_load_pending_leave', 'Member\PayrollEmployee\LeaveController@ajax_load_pending_leave');
+Route::any('/leave/ajax_load_approved_leave', 'Member\PayrollEmployee\LeaveController@ajax_load_approved_leave');
+Route::any('/leave/ajax_load_rejected_leave', 'Member\PayrollEmployee\LeaveController@ajax_load_rejected_leave');
+Route::any('/leave/ajax_load_canceled_leave', 'Member\PayrollEmployee\LeaveController@ajax_load_canceled_leave');
+
+Route::any('employee_request_leave_view/{request_id}', 'Member\PayrollEmployee\LeaveController@employee_request_leave_view');
+Route::any('employee_request_leave_cancel/{request_id}', 'Member\PayrollEmployee\LeaveController@employee_request_leave_cancel');
+
+Route::any('authorized_access_leave', 'Member\PayrollEmployee\LeaveController@authorized_access_leave');
+Route::any('authorized_access_leave/view_leave_request/{request_id}', 'Member\PayrollEmployee\LeaveController@view_leave_request');
+Route::any('authorized_access_leave/approve_leave_request/{request_id}', 'Member\PayrollEmployee\LeaveController@approve_leave_request');
+Route::any('authorized_access_leave/reject_leave_request/{request_id}', 'Member\PayrollEmployee\LeaveController@reject_leave_request');
+
+Route::any('/get_leave_hours', 'Member\PayrollEmployee\LeaveController@get_leave_hours');
+/*END LEAVE MANAGEMENT*/
+
 Route::any('employee_official_business', 'Member\PayrollEmployee\EmployeeController@employee_official_business');
 Route::any('company_details', 'Member\PayrollEmployee\EmployeeController@company_details');
-Route::any('authorized_access_leave', 'Member\PayrollEmployee\EmployeeController@authorized_access_leave');
-
 
 /*Start overtime request and management*/
 Route::any('employee_overtime_management', 'Member\PayrollEmployee\EmployeeController@employee_overtime_management');
@@ -46,13 +64,17 @@ Route::any('/modal_rfp_save', 'Member\PayrollEmployee\RequestForPaymentControlle
 Route::any('/modal_rfp_save', 'Member\PayrollEmployee\RequestForPaymentController@modal_rfp_save');
 Route::any('/rfp_application_view/{id}', 'Member\PayrollEmployee\RequestForPaymentController@rfp_application_view');
 Route::any('/rfp_application_cancel/{id}', 'Member\PayrollEmployee\RequestForPaymentController@rfp_application_cancel');
+
+Route::any('/authorized_access_request_for_refund', 'Member\PayrollEmployee\RequestForPaymentController@authorized_access_request_for_refund');
+Route::any('/authorized_access_request_for_refund_table', 'Member\PayrollEmployee\RequestForPaymentController@authorized_access_request_for_refund_table');
+Route::any('rfp_application_approve/{request_id}', 'Member\PayrollEmployee\RequestForPaymentController@rfp_application_approve');
+Route::any('rfp_application_reject/{request_id}', 'Member\PayrollEmployee\RequestForPaymentController@rfp_application_reject');
 /*End Request for Payment*/
 
 Route::any('employee_official_business_management', 'Member\PayrollEmployee\EmployeeController@employee_official_business_management');
 Route::any('employee_time_keeping', 'Member\PayrollEmployee\EmployeeController@employee_time_keeping');
 
 
-Route::any('create_employee_leave', 'Member\PayrollEmployee\EmployeeController@create_employee_leave');
 Route::any('create_employee_overtime', 'Member\PayrollEmployee\EmployeeController@create_employee_overtime');
 Route::any('create_employee_official_business', 'Member\PayrollEmployee\EmployeeController@create_employee_official_business');
 Route::any('create_employee_approver', 'Member\PayrollEmployee\EmployeeController@create_employee_approver');

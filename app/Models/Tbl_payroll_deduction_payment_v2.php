@@ -55,7 +55,8 @@ class Tbl_payroll_deduction_payment_v2 extends Model
           ->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_deduction_payment_v2.payroll_employee_id')
           ->select(DB::raw('IFNULL(sum(tbl_payroll_deduction_payment_v2.payroll_payment_amount),0) as total_payment, IFNULL(count(tbl_payroll_deduction_payment_v2.deduction_name),0) as number_of_payment , tbl_payroll_deduction_v2.* , tbl_payroll_employee_basic.*'))
           ->groupBy('tbl_payroll_deduction_payment_v2.deduction_name','tbl_payroll_deduction_v2.payroll_deduction_id')
-          ->orderBy('tbl_payroll_employee_basic.payroll_employee_id','asc');
+          ->orderBy('tbl_payroll_employee_basic.payroll_employee_company_id','asc')
+          ->orderBy('tbl_payroll_employee_basic.payroll_employee_id','desc');
           if ($shop_id!=0) 
           {
           	$query->where('tbl_payroll_deduction_v2.shop_id',$shop_id);

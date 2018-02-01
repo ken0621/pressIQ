@@ -7,7 +7,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	//audit_trail_transaction
 	Route::any('/payroll_api','Member\PayrollApiController@index');
 
-	// /reports/payroll_ledger
 	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
 	Route::any('/reports/government_forms_sss/{id}','Member\PayrollReportController@government_forms_sss');
 	Route::any('/reports/government_forms_philhealth/{id}','Member\PayrollReportController@government_forms_philhealth');
@@ -22,10 +21,13 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	
 	/*START loan summary report*/
 	Route::any('/reports/loan_summary','Member\PayrollReportController@loan_summary');
-	Route::any('/reports/table_loan_summary/{deduction_type}','Member\PayrollReportController@table_loan_summary');
+	Route::any('/reports/table_loan_summary/{deduction_type}/{company}','Member\PayrollReportController@table_loan_summary');
 	Route::any('/reports/modal_loan_summary_report/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@modal_loan_summary');
 	Route::any('/reports/export_loan_summary_report_to_excel/{employee_id}/{payroll_deduction_id}','Member\PayrollReportController@export_loan_summary_report_to_excel');
 	Route::any('/reports/table_company_loan_summary','Member\PayrollReportController@table_company_loan_summary');
+
+	Route::any('/reports/loan_summary/loan_summary_report_excel/{company_id}/{deduction_type}','Member\PayrollReportController@loan_summary_report_excel');
+
 	/*END loan summary report*/
 
 	/*START payroll ledger*/
@@ -82,6 +84,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* EMPLOYEE START */
 	Route::any('/employee_list','Member\PayrollController@employee_list');
 
+	/* export to pdf */
+	Route::any('/employee_list/export_to_pdf_employee','Member\PayrollController@export_to_pdf_employee');
 	/* import from excel start */
 	Route::any('/employee_list/modal_import_employee','Member\PayrollController@modal_import_employee');
 	Route::any('/employee_list/modal_import_employee/get_201_template','Member\PayrollController@get_201_template');
@@ -131,6 +135,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/company_timesheet_approve/approve_timesheet','Member\PayrollTimeSheet2Controller@approve_timesheets');
 	Route::any('/company_timesheet2/{company_id}','Member\PayrollTimeSheet2Controller@index');
 	Route::any('/company_timesheet2/table/{company_id}','Member\PayrollTimeSheet2Controller@index_table');
+	Route::any('/company_timesheet2/{company_id}/{employee_id}','Member\PayrollTimeSheet2Controller@timesheet');
 	Route::any('/company_timesheet2/{company_id}/{employee_id}','Member\PayrollTimeSheet2Controller@timesheet');
 	Route::any('/company_timesheet2_pdf/{company_id}/{employee_id}','Member\PayrollTimeSheet2Controller@timesheet_pdf');
 	Route::any('/company_timesheet_day_summary/info/{time_sheet_id}','Member\PayrollTimeSheet2Controller@day_summary_info');
@@ -390,109 +395,74 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* LEAVE V2 START */
 	Route::any('/leave/v2',"Member\PayrollController@leaveV2");
 	Route::any('/leave/v2/modal_create_leave_type',"Member\PayrollController@modal_create_leave_type");
-
 	Route::any('/leave/v2/modal_create_leave_tempv2',"Member\PayrollController@modal_create_leave_tempv2");
-
 	Route::any('/leave/v2/modal_leave_tag_employeev2/{leave_temp_id}',"Member\PayrollController@modal_leave_tag_employeev2");
-
 	Route::any('/leave/v2/set_leave_tag_employeev2',"Member\PayrollController@set_leave_employee_tagv2");
-
 	Route::any('/leave/v2/remove_leave_tag_employeev2',"Member\PayrollController@remove_leave_tag_employeev2");
-
 	Route::any('/leave/v2/get_leave_tag_employeev2',"Member\PayrollController@get_leave_tag_employeev2");
-
 	Route::any('/leave/v2/reload_leave_employeev2',"Member\PayrollController@reload_leave_employeev2");
-
 	Route::any('/leave/v2/modal_save_leave_temp_v2',"Member\PayrollController@modal_save_leave_temp_v2");
 	//scheduling leave
 	Route::any('/leave_schedule/v2/save_schedule_leave_tagv2','Member\PayrollController@save_schedule_leave_tagv2');
-
 	Route::any('/leave_schedule/v2/leave_schedule_tag_employeev2/{leave_temp_id}/{leave_pay}','Member\PayrollController@leave_schedule_tag_employeev2');
-	
 	Route::any('/leave_schedule/v2/session_tag_leavev2','Member\PayrollController@session_tag_leavev2');
-
 	Route::any('/leave_schedule/v2/ajax_schedule_leave_tag_employeev2','Member\PayrollController@ajax_schedule_leave_tag_employeev2');	
-
 	Route::any('/leave_schedule/v2/unset_session_leave_tagv2','Member\PayrollController@unset_session_leave_tagv2')
 	;
-
 	Route::any('/leave_schedule/v2/get_session_leave_tagv2','Member\PayrollController@get_session_leave_tagv2');
-
 	Route::any('/leave_schedule/v2/modal_leave_scheduling',"Member\PayrollController@modal_leave_scheduling");
-
 	Route::any('/leave/v2/modal_leave_action/{payroll_leave_employee_id}/{action}/{remaining_leave}',"Member\PayrollController@modal_leave_action");
-
 	Route::any('/leave/v2/reset_leave_schedulev2',"Member\PayrollController@reset_leave_schedulev2");
-	
 	Route::any('/leave/v2/reset_and_accumulate_leave_schedulev2',"Member\PayrollController@reset_and_accumulate_leave_schedulev2");
-
 	Route::any('/leave/v2/convert_to_cash_leave_schedulev2',
 		"Member\PayrollController@convert_to_cash_leave_schedulev2");
-
 	Route::any('/leave/v2/reset_leave_schedule_history',"Member\PayrollController@reset_leave_schedule_history");
-
 	Route::any('/leave/v2/archived_leave_tempv2',
 		"Member\PayrollController@archived_leave_tempv2");
-
+	Route::any('/leave/v2/restore_leave_tempv2',
+		"Member\PayrollController@restore_leave_tempv2");
 	Route::any('/leave/v2/archived_leave_history',
 		"Member\PayrollController@archived_leave_history");
-	
-
+	Route::any('/leave/v2/archived_whole_leave_tempv2',
+		"Member\PayrollController@archived_whole_leave_tempv2");
+	Route::any('/leave/v2/restore_whole_leave_tempv2',
+		"Member\PayrollController@restore_whole_leave_tempv2");
 	//end schedule
-
 	//reporting leave
 	Route::any('/reports/leavev2_reports',
 		"Member\PayrollController@leavev2_reports");
-
 	Route::any('/leave/v2/modal_monthly_leave_report',
 		"Member\PayrollController@modal_monthly_leave_report");
-
-	Route::any('/leave/v2/monthly_leave_report_excel/{month}',
+	Route::any('/leave/v2/monthly_leave_report_excel/{date_start}/{date_end}/{company}',
 		"Member\PayrollController@monthly_leave_report_excel");
-
 	Route::any('/leave/v2/monthly_leave_report_filter',
 		"Member\PayrollController@monthly_leave_report_filter");
-
 	Route::any('/leave/v2/modal_remaining_leave_report',
 		"Member\PayrollController@modal_remaining_leave_report");
-
-	Route::any('/leave/v2/remaining_leave_report_excel',
+	Route::any('/leave/v2/remaining_leave_report_excel/{date_start}/{date_end}/{company}',
 		"Member\PayrollController@remaining_leave_report_excel");
-
-
 	Route::any('/leave/v2/modal_pay_leave_report',
 		"Member\PayrollController@modal_pay_leave_report");
-
-	Route::any('/leave/v2/pay_leave_report_excel',
+	Route::any('/leave/v2/pay_leave_report_excel/{date_start}/{date_end}/{company}',
 		"Member\PayrollController@pay_leave_report_excel");
-
 	Route::any('/leave/v2/modal_withoutpay_leave_report',
 		"Member\PayrollController@modal_withoutpay_leave_report");
-
-	Route::any('/leave/v2/withoutpay_leave_report_excel',
+	Route::any('/leave/v2/withoutpay_leave_report_excel/{date_start}/{date_end}/{company}',
 		"Member\PayrollController@withoutpay_leave_report_excel");
-
 	Route::any('/leave/v2/modal_leave_action_report',
 		"Member\PayrollController@modal_leave_action_report");
-
-	Route::any('/leave/v2/leave_action_report_excel',
+	Route::any('/leave/v2/leave_action_report_excel/{date_start}/{date_end}/{company}',
 		"Member\PayrollController@leave_action_report_excel");
-
-	Route::any('/leave/v2/leave_action_report_excel',
-			"Member\PayrollController@leave_action_report_excel");
+	Route::any('/leave/v2/modal_leave_annual_report',
+		"Member\PayrollController@modal_leave_annual_report");
 	//end reporting
 
 	Route::any('/leave/v2/modal_view_leave_employee/{payroll_leave_temp_id}/',"Member\PayrollController@modal_view_leave_employee");
-
 	Route::any('/leave/v2/modal_edit_leave_tempv2/{payroll_leave_temp_id}',
 		"Member\PayrollController@modal_edit_leave_tempv2");
-
-
 	Route::any('/leave/v2/update_leave_tempv2',"Member\PayrollController@update_leave_tempv2");
-
 	Route::any('/leave/v2/modal_leave_history',
 		"Member\PayrollController@modal_leave_history");
-
 	Route::any('/leave/v2/modal_save_leave_type',
 		"Member\PayrollController@modal_save_leave_type");
 
@@ -761,6 +731,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_admin_dashboard/modal_edit_group_approver/{approver_group_id}','Member\PayrollAdminDashboard@modal_edit_group_approver');
 	Route::any('payroll_admin_dashboard/save_edit_group_approver','Member\PayrollAdminDashboard@save_edit_group_approver');
 	Route::any('payroll_admin_dashboard/modal_archive_group_approver/{approver_group_id}','Member\PayrollAdminDashboard@modal_archive_group_approver');
+
+	//access
+	Route::any('payroll_admin_dashboard/access_level','Member\PayrollAdminDashboard@access_level');
+	Route::any('payroll_admin_dashboard/add_access_group','Member\PayrollAdminDashboard@add_access_group');
+	Route::any('payroll_admin_dashboard/save_access_group','Member\PayrollAdminDashboard@save_access_group');
 	/*END Admin dashboard*/
 	
 });

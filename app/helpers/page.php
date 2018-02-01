@@ -666,8 +666,22 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Still Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Patrick Manarang";
 
+        $code = "mlm-recaptcha";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Recaptcha";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/recaptcha";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Still Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Patrick Manarang";
 
 
+    // $code = "mlm-recaptcha";
+    // $nav[$page]['submenu'][$code]['label'] = "Recaptcha";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/recaptcha";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "still developing";
+    // $nav[$page]['submenu'][$code]['developer'] = "Patrick Manarang";
 
 
     /* ACCOUNTING*/
@@ -843,7 +857,7 @@ function page_list($pis = 0)
     $nav[$page]['submenu'][$code]['label'] = "Payroll Configuration";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_configuration";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','Branch_Location','Department','Job_Title','Holiday','Holiday_v2','Holiday_Default','Holiday Employee','Allowances','Allowances V2','Deductions','Deductions V2','Leave','Leave V2','Payroll_Group', 'Shift_Template','Journal_Tags','Payslip','Tax_Period','Tax_Table','SSS_Table','Philhealth_Table','Pagibig/HDMF'];
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','Branch_Location','Department','Job_Title','Holiday','Holiday v2','Holiday_Default','Holiday Employee','Allowances','Allowances V2','Deductions','Deductions V2','Leave','Leave V2','Payroll_Group', 'Shift_Template','Journal_Tags','Payslip','Tax_Period','Tax_Table','SSS_Table','Philhealth_Table','Pagibig/HDMF'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
     
@@ -1016,6 +1030,15 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label']         = "Group Approver";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code']          = $code;
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url']           = $path . $page . "/payroll_admin_dashboard/group_approver";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']        = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']     = "Everyone";
+
+
+        $code = "access-level";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']         = "Access level";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']          = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']           = $path . $page . "/payroll_admin_dashboard/access_level";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']        = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']     = "Everyone";
@@ -1415,13 +1438,13 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 
          /* -- VENDOR => IMPORT V2 */
-        $code = "vendor-bad-order-v2";
+        /*$code = "vendor-bad-order-v2";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Bad Order";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
         $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "transaction". "/bad_order";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
-        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";*/
 
     /* CUSTOMERS */
     $page = "customer";  

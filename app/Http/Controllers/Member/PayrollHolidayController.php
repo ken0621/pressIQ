@@ -147,6 +147,7 @@ class PayrollHolidayController extends Member
 
      public function modal_create_holiday()
      {
+          Session::forget('employee_tag');
           $data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();
           return view('member.payroll.payroll_holiday.modal_create_holiday', $data);
      }
@@ -218,15 +219,22 @@ class PayrollHolidayController extends Member
 
           $return['status'] = 'success';
           $return['function_name'] = 'payrollconfiguration.reload_holiday_v2';
+          Session::forget('employee_tag');
+          
           return json_encode($return);
      }
      public function tag_employee($company_id = 0)
      {
+        $parameter['date']                  = date('Y-m-d');
+        $parameter['company_id']            = $company_id;
+        $parameter['employement_status']    = 0;
+        $parameter['shop_id']               = Self::shop_id();
+
         $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_company_id',$company_id)->first();
 
         $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
 
-        $data['_employee'] = Tbl_payroll_employee_basic::where('payroll_employee_company_id',$company_id)->get();
+        $data['_employee'] = Tbl_payroll_employee_basic::selemployee($parameter)->get();
         $data['action']          = '/member/payroll/holiday/tag_employee/submit';
 
         $get_all = Session::get('employee_tag');
@@ -274,7 +282,6 @@ class PayrollHolidayController extends Member
         $company_id = Request::input('company_id');
         $all_employee = Request::input('employee_tag');
 
-
         $return['company_id'] = 0;
 
         if(count($all_employee) > 0)
@@ -297,6 +304,7 @@ class PayrollHolidayController extends Member
             $return['status'] = "error";
             $return['status_message'] = "Please Select atleast one Employee";
         }
+
         return json_encode($return);
      }
      public function archive_holiday($archive, $id)
@@ -331,8 +339,10 @@ class PayrollHolidayController extends Member
      public function modal_edit_holiday($id)
      {
           // $data['']
+
           $_company = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();
           $company_check = array();
+
           foreach($_company as $company)
           {
                $count = Tbl_payroll_holiday_company::company($company->payroll_company_id, $id)->count();
@@ -341,25 +351,28 @@ class PayrollHolidayController extends Member
                {
                     $status = 'checked';
                }
-               $temp['payroll_company_id']   = $company->payroll_company_id;
-               $temp['payroll_company_name']      = $company->payroll_company_name;
+               $temp['payroll_company_id']             = $company->payroll_company_id;
+               $temp['payroll_company_name']           = $company->payroll_company_name;
                $temp['status']                         = $status;
+
                array_push($company_check, $temp);
           }
+
           $data['holiday_id'] = $id;
           $data['_company'] = $company_check;
           $data['holiday'] = Tbl_payroll_holiday::where('payroll_holiday_id',$id)->first();
+
           return view('member.payroll.payroll_holiday.modal_edit_holiday', $data);
      }
 
      public function modal_update_holiday()
      {
           $payroll_holiday_id                     = Request::input('payroll_holiday_id');
-          $update['payroll_holiday_name']    = Request::input('payroll_holiday_name');
-          $update['payroll_holiday_date']    = date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
-          $update['payroll_holiday_category'] = Request::input('payroll_holiday_category');
-          $_company                                    = Request::input('company');
-
+          $update['payroll_holiday_name']         = Request::input('payroll_holiday_name');
+          $update['payroll_holiday_date']         = date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
+          $update['payroll_holiday_category']     = Request::input('payroll_holiday_category');
+          $_company                               = Request::input('company');
+          
           Tbl_payroll_holiday::where('payroll_holiday_id',$payroll_holiday_id)->update($update);
 
           Tbl_payroll_holiday_company::where('payroll_holiday_id',$payroll_holiday_id)->delete();

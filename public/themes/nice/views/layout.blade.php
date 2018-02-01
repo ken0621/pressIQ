@@ -158,6 +158,7 @@
                     @endif
                 </div>
             </div>
+            
             <div class="header-container">
                 <div class="container">
                     <div class="row clearfix">
@@ -248,12 +249,14 @@
                     </div>
                 </div>
             </footer>
+
             <div class="container">
                 <div class="bottom">                           
                     <div class="ftr-title">© Nicenterprises All Right Reserved</div>
                     <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
                 </div>
             </div>
+            
         </div>
         
     @include("frontend.gfoot")

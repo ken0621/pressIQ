@@ -5,27 +5,6 @@
     <input type="hidden" class="token" name="_token" value="{{csrf_token()}}" >
     <input type="hidden" class="button-action" name="button_action" value="">
 
-    <button class="drawer-toggle" type="button"> <i class="fa fa-angle-double-left"></i></button>
-
-    <div class="drawer drawer-default">
-        <div class="drawer-brand">Purchase Order</div>
-        <nav class="drawer-nav">
-            <div class="clearfix purchase-order-container">
-                @include('member.load_ajax_data.load_purchase_order')
-            </div>   
-        </nav>
-    </div>
-
-<!--<div class="panel panel-default panel-block panel-title-block purchase-order hidden">
-        <div class="panel-heading">
-             <div class="form-group">
-                 <div class="col-md-12">
-                                       
-                 </div>
-             </div>  
-        </div>
-    </div>
- -->
 <div class="drawer-overlay">
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
@@ -95,7 +74,7 @@
                                             <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$bill->bill_vendor_email or ''}}"/>
                                         </div>
                                         <div class="col-sm-4 text-right open-transaction" style="display: none;">
-                                            <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/enter_bills/load-transaction"><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
+                                            <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/enter_bills/load-transaction?vendor_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
                                         </div>
                                     </div>
                                 </div>
@@ -191,46 +170,7 @@
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="tbody-item">
-                                                    @if(isset($bill))
-                                                        @foreach($_bill_item_line as $item)
-                                                        <tr class="tr-draggable tr-id-{{$item->itemline_ref_id}}">
-                                                            <td class="invoice-number-td text-right">1</td>
-                                                            <td>
-
-                                                                <input type="hidden" class="poline_id" name="itemline_ref_name[]" value="{{$item->itemline_ref_name}}">
-                                                                <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]" value="{{$item->itemline_ref_id}}">
-
-                                                                <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
-                                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $item->itemline_item_id])
-                                                                </select>
-                                                            </td>
-                                                            <td>
-                                                                <textarea class="textarea-expand txt-desc" name="item_description[]">{{$item->itemline_description}}</textarea>
-                                                            </td>
-                                                            <td>
-                                                                <select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" />
-                                                                    @if($item->itemline_um)
-                                                                        @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $item->multi_um_id, 'selected_um_id' => $item->itemline_um])
-                                                                    @else
-                                                                        <option class="hidden" value="" />
-                                                                    @endif
-                                                                </select>
-                                                            </td>
-                                                            <td><input class="text-center number-input txt-qty compute" type="text" value="{{$item->itemline_qty}}" name="item_qty[]"/></td>
-                                                            <td><input class="text-right number-input txt-rate compute" type="text" value="{{$item->itemline_rate}}" name="item_rate[]"/></td>
-                                                            <td><input class="text-right number-input txt-amount" type="text" value="{{$item->item_amount}}" name="item_amount[]"/></td>
-                                                            @if(isset($serial)) 
-                                                            <td>
-                                                                <textarea class="txt-serial-number" name="serial_number[]">{{$item->serial_number}}</textarea>
-                                                            </td>
-                                                            @endif
-                                                            <td  tr_id="{{$item->itemline_ref_id}}" linked_in="{{$item->itemline_ref_name}}" class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                                        </tr>
-                                                        @endforeach
-                                                    @endif
-
-                                                <tbody class="draggable tbody-item po-tbl">
+                                                <tbody class="draggable">
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
@@ -335,11 +275,10 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script>
 
 <script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/enter_bills.js"></script>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 
     $("#acct-a").click(function()
     {
@@ -356,7 +295,7 @@ $(document).ready(function() {
     desktopEvent:'click'
   });
 });
-</script>
+</script> -->
 
 @endsection
 

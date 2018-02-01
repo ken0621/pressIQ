@@ -10,6 +10,7 @@ use App\Globals\Item;
 use App\Globals\Invoice;
 use App\Globals\SalesAgent;
 use App\Globals\CommissionCalculator;
+use App\Globals\Accounting;
 use App\Globals\ReceivePayment;
 use App\Globals\AccountingTransaction;
 use Session;
@@ -139,9 +140,9 @@ class CommissionCalculatorController extends Member
                             {
                                 $coa = explode('·', $data['account']);
                                 $account_id = 0;
-                                if(isset($coa[1]))
+                                if($data['account'])
                                 {
-                                    $account_id = AccountingTransaction::check_coa_exist($this->user_info->shop_id, str_replace(' ', '',$coa[0]), str_replace(' ', '',$coa[1]));
+                                    $account_id = AccountingTransaction::check_coa_exist($this->user_info->shop_id, 0000000, $data['account']);
                                 }
                                 else
                                 {
@@ -183,12 +184,12 @@ class CommissionCalculatorController extends Member
                                         {
                                             $error_message = "The total contract price is not equal on the Amount";
                                         }
+                                        $agent_id = $sales_rep->employee_id;
                                     }
                                     else
                                     {
                                         $error_message = "Sales Rep not Found";
                                     }
-                                    $agent_id = $sales_rep->employee_id;
                                 }
                                               
                                 if(!$error_message && $comm_data)
@@ -251,10 +252,11 @@ class CommissionCalculatorController extends Member
                         if(!$check_rp && $customer_id && $invoice_id)
                         {
                             $insert_data['customer_id'] = $customer_id;
-                            $insert_data['date'] = $data['date'];
+                            $insert_data['date'] = datepicker_input($data['date']);
                             $insert_data['total_payment_amount'] = str_replace("-", '', $data['amount']);
                             $insert_data['memo'] = "Payment Imported";
                             $insert_data['transaction_refnum'] = $data['num'];
+                            $insert_data['ar_account'] = Accounting::get_default_coa("accounting-cash-in-bank");
 
                             $insert_item[0]['ref_name'] = "invoice";
                             $insert_item[0]['ref_id'] = $invoice_id;

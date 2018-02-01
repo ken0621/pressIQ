@@ -3007,14 +3007,14 @@ class Payroll
 	/* GET TAX VALUE */
 	public static function tax_contribution($shop_id = 0, $rate = 0, $tax_category = '', $payroll_tax_period = '')
 	{
-
+		// $tax_category = "Z"; //static base for now
+		
 		$tax 		= Tbl_payroll_tax_reference::sel($shop_id, $tax_category, $payroll_tax_period)->first();
 		$exemption 	= Tbl_payroll_tax_reference::sel($shop_id, 'Excemption', $payroll_tax_period)->first();
 		$status 	= Tbl_payroll_tax_reference::sel($shop_id, 'Status', $payroll_tax_period)->first();
 		$tax_index 	= '';
 		$tax_contribution = 0;
-
-
+		// dd($tax);
 		// if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
 		if($tax != null)
 		{
@@ -3055,19 +3055,14 @@ class Payroll
 				$tax_index = 'taxt_sixth_range';
 			}
 
-
-			if($rate >= $tax->tax_seventh_range && $rate)
-			{
-				$tax_index = 'tax_seventh_range';
-			}
-
 			// dd($tax_index);
 			if($tax_index != '')
 			{
 				$exemption_num = $exemption->$tax_index;
 				$status_num = $status->$tax_index;
 				// dd($status_num);
-				//dd("((" . $rate . " - " . $tax->$tax_index . ") * (" . $status_num . " / 100" . ")) " . " + " . $exemption_num . ")");
+				// dd("((" . $rate . " - " . $tax->$tax_index . ") * (" . $status_num . " / 100" . ")) " . " + " . $exemption_num . ")");
+				
 				$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
 			}
 		}

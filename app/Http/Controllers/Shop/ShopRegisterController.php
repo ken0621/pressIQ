@@ -12,7 +12,7 @@ use Image;
 use Session;
 use Validator;
 use Carbon\Carbon;
-use App\Tbl_pressiq_user;
+use App\Models\Tbl_pressiq_user;
 
 class ShopRegisterController extends Shop
 {
@@ -42,6 +42,8 @@ class ShopRegisterController extends Shop
                 $rules["password"] = ['required','min:5','confirmed'];
                 $value["user_company_name"] = request("user_company_name");
                 $rules["user_company_name"] = ['required'];
+                $value["user_company_image"] = request("user_company_image");
+                $rules["user_company_image"] = ['required'];
                 $validator = Validator::make($value, $rules);
 
                 if ($validator->fails()) 

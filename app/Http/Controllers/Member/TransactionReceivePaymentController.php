@@ -16,6 +16,7 @@ use App\Globals\Transaction;
 use App\Globals\UnitMeasurement;
 use App\Globals\TransactionReceivePayment;
 use App\Globals\TransactionCreditMemo;
+use App\Globals\AccountingTransaction;
 
 use Session;
 use Carbon\Carbon;
@@ -28,10 +29,17 @@ class TransactionReceivePaymentController extends Member
 		$data['page'] = "Receive Payment";
 		return view('member.accounting_transaction.customer.receive_payment.receive_payment_list',$data);
 	}
+	public function getLoadReceivePayment(Request $request)
+	{
+		$data['_receive_payment'] = TransactionReceivePayment::get($this->user_info->shop_id, 10, $request->search_keyword);
+		//dd($data['_receive_payment']);
+		return view('member.accounting_transaction.customer.receive_payment.receive_payment_table',$data);		
+	}
 	public function getCreate() 
 	{
 		$data['page'] = "Receive Payment";
         $data["_customer"]       = Customer::getAllCustomer();
+        $data["transaction_refnum"]  = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'receive_payment');
         $data['_payment_method'] = Payment::get_payment_method($this->user_info->shop_id);
         $data['_account']       = Accounting::getAllAccount('all','',['Bank']);
         $data['action'] 		= "/member/transaction/receive_payment/create-receive-payment";

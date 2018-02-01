@@ -14,20 +14,22 @@
                     </div>
                 </div>
             </div>
-            <table>
-                <tr>
-                    <th>Press Release Title</th>
-                    <th>Publish Date</th>
-                    <th>Status</th>
-                </tr>
-                @foreach($pr as $prs)
-                <tr>
-                    <td>{{$prs->pr_headline}}</td>
-                    <td>{{$prs->pr_date_sent}}</td>
-                    <td>{{$prs->pr_status}}</td>
-                </tr>
-                @endforeach
-            </table>
+           <div class="table-container">
+              <table>
+                  <tr>
+                      <th>Press Release Title</th>
+                      <th>Publish Date</th>
+                      <th>Status</th>
+                  </tr>
+                  @foreach($pr as $prs)
+                  <tr>
+                      <td>{{$prs->pr_headline}}</td>
+                      <td>{{$prs->pr_date_sent}}</td>
+                      <td>{{$prs->pr_status}}</td>
+                  </tr>
+                  @endforeach
+              </table> 
+           </div>
         </div>
     </div>
 </div>

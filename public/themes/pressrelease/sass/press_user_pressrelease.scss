@@ -1,7 +1,7 @@
 .background-container
 {
 	padding: 30px 0px;
-	min-height: 820px;
+	min-height: 900px;
 	
 	.pressview
 	{
@@ -340,11 +340,12 @@
 {
 	.modal-content
 	{
+		height: 595px;
 		.modal-body
 		{
 			overflow: hidden;
 			overflow-y: scroll;
-			height: 480px;
+			height: 525px;
 			#preview_headline
 			{
 				text-align: center;
@@ -382,9 +383,9 @@
 			.logo-holder
 			{
 				text-align: center;
-				box-shadow: 0px 12px 25px -15px rgba(0,0,0,0.2);
+				// box-shadow: 0px 12px 25px -15px rgba(0,0,0,0.2);
 				padding: 15px 20px;
-				border: 1px solid #ededed;
+				// border: 1px solid #ededed;
 				width: 100%;
 				img
 				{
@@ -394,7 +395,7 @@
 		}
 		.modal-footer
 		{
-
+			padding: 15px 0px 0px 0px;
 		}
 	}
 }

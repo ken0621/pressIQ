@@ -942,7 +942,7 @@ AdvancedRoute::controller('/member/report', 'Member\ReportControllerV2');
 //reports end
 
 /* Customer */
-Route::get('/member/customer','Customer\CustomerController@index');
+Route::get('/member/customer','Member\CustomerController@index');
 Route::get('/member/customer/bulk_archive','Member\CustomerController@bulk_archive');
 Route::post('/member/customer/bulk_archive','Member\CustomerController@bulk_archive_post');
 Route::get('/member/customer/list','Member\CustomerController@index');
@@ -1058,6 +1058,9 @@ Route::get('/member/merchant/commission-report/getpercentage','Member\MerchantCo
 Route::post('/member/merchant/commission-report-pass','Member\MerchantController@submit_report_setting');
 Route::get('/member/merchant/commission-report-pass','Member\MerchantController@password');
 Route::get('/member/merchant/commission_report/table', 'Member\MerchantController@table');
+Route::any('/member/merchant/commission_report/export','Member\MerchantController@export');
+Route::get('/member/merchant/commission_report/import','Member\MerchantController@import');
+Route::post('/member/merchant/commission_report/import','Member\MerchantController@import_submit');
 // end
 
 /*  / Merchant - Ewallet*/

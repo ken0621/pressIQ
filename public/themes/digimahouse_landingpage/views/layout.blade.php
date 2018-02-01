@@ -95,7 +95,6 @@
                                 <span></span>
                                 <span></span>
                             </div> --}}
-
                             <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
                         </div>
                     </div>

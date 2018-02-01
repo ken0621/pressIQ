@@ -54,8 +54,17 @@ class ShopProductController extends Shop
         {
             $max_price = array_column($product, 'max_price');
             $min_price = array_column($product, 'min_price');
-            $data['max_price'] = max($max_price);
-            $data['min_price'] = min($min_price);
+
+            if ($max_price && $min_price) 
+            {
+                $data['max_price'] = max($max_price);
+                $data['min_price'] = min($min_price);
+            }
+            else
+            {
+                $data['max_price'] = 0;
+                $data['min_price'] = 0;
+            } 
         }
         else
         {
@@ -292,5 +301,12 @@ class ShopProductController extends Shop
         $itemsForCurrentPage = array_slice($items, $offSet, $perPage, true);
 
         return new LengthAwarePaginator($itemsForCurrentPage, count($items), $perPage,Paginator::resolveCurrentPage(), array('path' => Paginator::resolveCurrentPath()));
+    }
+
+    // P4ward Product Red Rice Scrub -> Carlo
+    public function product2()
+    {
+        $data["page"] = "Product 2";
+        return view("product_2", $data);
     }
 }

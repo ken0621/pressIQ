@@ -44,7 +44,15 @@ class Shop extends Controller
 
         if(hasSubdomain())
         {
-			$url = $_SERVER['HTTP_HOST'];
+            if (isset($_SERVER['HTTP_HOST'])) 
+            {
+                $url = $_SERVER['HTTP_HOST'];
+            }
+            else
+            {
+                $url = $_SERVER['SERVER_NAME'];
+            }
+            
 			$host = explode('.', $url);
 			$subdomains = array_slice($host, 0, count($host) - 2 );
 			$subdomain = $subdomains[0];
@@ -142,7 +150,16 @@ class Shop extends Controller
             {  
                 /* FOR NEW VERSION MEMBER'S AREA */
                 $account                = session("mlm_member");
-                $check_account          = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
+
+                if (isset($account["email"])) 
+                {
+                    $check_account      = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
+                }
+                else
+                {
+                    $check_account      = null;
+                }
+                
                 Self::$customer_info    = $check_account;
                 $mlm_member             = false;
                 $privilage_card_holder  = false;

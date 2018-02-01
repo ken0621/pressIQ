@@ -5,8 +5,7 @@
     <input type="hidden" class="token" name="_token" value="{{csrf_token()}}" >
     <input type="hidden" class="button-action" name="button_action" value="">
     <input type="hidden" name="wc_id" value="{{ $wc->wc_id or ''}}">
-
-    <button class="drawer-toggle" type="button"> <i class="fa fa-angle-double-left"></i></button>
+    
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
             <div>

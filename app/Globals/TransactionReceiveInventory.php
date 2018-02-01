@@ -92,7 +92,7 @@ class TransactionReceiveInventory
 
 
             /*INSERT ENTER BILL HERE*/
-            $bill = TransactionEnterBills::postInsert($receive_inventory_id, $shop_id, $insert, $insert_item);
+            TransactionEnterBills::postInsert($receive_inventory_id, $shop_id, $insert, $insert_item);
 
             $return = Self::insertLine($shop_id, $receive_inventory_id, $insert_item);
             $return = $receive_inventory_id;

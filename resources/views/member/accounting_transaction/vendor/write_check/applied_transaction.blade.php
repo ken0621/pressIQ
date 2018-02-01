@@ -4,8 +4,8 @@
     <tr class="tr-draggable">
         <td class="invoice-number-td text-right">1</td>
         <td>
-        <input type="hidden" class="poline_id" name="item_ref_name[]" value="purchase_order">
-        <input type="hidden" class="itemline_po_id" name="item_ref_id[]" value="{{$items['po_id']}}">
+        <input type="hidden" name="item_ref_name[]" value="purchase_order">
+        <input type="hidden" name="item_ref_id[]" value="{{$items['po_id']}}">
             <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
                 @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $items['item_id']])
             </select>

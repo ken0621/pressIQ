@@ -249,7 +249,7 @@ class TransactionEnterBillsController extends Member
                     $type = Item::get_item_type($poline_value->poline_item_id);
                     if($type == 1 || $type == 4 || $type == 5 )
                     {
-                        $return[$key.'i'.$poline_key]['poline_po_id'] = $poline_value->poline_po_id;
+                        $return[$key.'i'.$poline_key]['po_id'] = $poline_value->poline_po_id;
                         $return[$key.'i'.$poline_key]['item_id'] = $poline_value->poline_item_id;
                         $return[$key.'i'.$poline_key]['item_description'] = $poline_value->poline_description;
                         $return[$key.'i'.$poline_key]['item_um'] = $poline_value->poline_um;

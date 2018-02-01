@@ -197,10 +197,10 @@ class TransactionPayBills
 		        	Self::updateAppliedAmount($itemline["pbline_reference_id"], $shop_id);
 		        }
 			}
-			else
+			/*else
 	    	{
 	    		Self::updateAppliedAmount($value['pbline_reference_id'], $shop_id);   
-	    	}
+	    	}*/
         }
         
         $return = AccountingTransaction::entry_data($entry, $insert_item);

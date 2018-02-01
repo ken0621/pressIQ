@@ -1,5 +1,6 @@
 var write_check = new write_check();
 var global_tr_html = $(".div-script tbody").html();
+var global_tr_html_acct = $(".acct-div-script tbody").html();
 var item_selected = ''; 
 
 function write_check()
@@ -130,6 +131,22 @@ function write_check()
 		    width 		: "100%",
 		    placeholder : 'Account'
 		});
+		$(".draggable.tbody-acct .tr-draggable:last td select.select-coa").globalDropList(
+        {            
+		    link 		: '/member/accounting/chart_of_account/popup/add',
+		    link_size 	: 'md',
+		    width 		: "100%",
+		    placeholder : 'Account',
+            onChangeValue : function()
+            {
+            	action_load_coa_info($(this));
+            }
+        });
+	}
+	function action_load_coa_info($this)
+	{
+		$parent = $this.closest(".tr-draggable");
+		$parent.find(".acct-desc").html($this.find("option:selected").attr("acct-desc")).change();		
 	}
 	function action_load_open_transaction($vendor_id)
 	{
@@ -430,15 +447,25 @@ function write_check()
 
 	function event_click_last_row()
 	{
-		$(document).on("click", "tbody.draggable tr:last td:not(.remove-tr)", function(){
+		$(document).on("click", "tbody.draggable.tbody-item tr:last td:not(.remove-tr)", function(){
 			event_click_last_row_op();
+		});
+		$(document).on("click", "tbody.draggable.tbody-acct tr:last td:not(.acct-remove-tr)", function(){
+			event_click_last_row_op_acct();
 		});
 	}
 
 	/*INSERTING ANOTHER ROW WHEN CLICKING LAST ROW*/
 	function event_click_last_row_op()
 	{
-		$("tbody.draggable").append(global_tr_html);
+		$("tbody.draggable.tbody-item").append(global_tr_html);
+		action_reassign_number();
+		action_load_initialize_select();
+		action_date_picker();
+	}
+	function event_click_last_row_op_acct()
+	{
+		$("tbody.draggable.tbody-acct").append(global_tr_html_acct);
 		action_reassign_number();
 		action_load_initialize_select();
 		action_date_picker();
@@ -524,8 +551,23 @@ function write_check()
 			  });
 		});
 	}
+	function load_applied_transaction()
+	{
+		$('.applied-transaction-list').load('/member/transaction/write_check/load-applied-transaction', function()
+		{
+			console.log("success");
+			action_reassign_number();
+			action_load_initialize_select();
+			action_date_picker();
+	    	action_compute();
 
-
+			$('.remarks-wc').html($('.po-remarks').val());
+		});
+	}
+	this.load_applied_transaction = function()
+	{
+		load_applied_transaction();
+	}
 }
 
 /*AFTER ADDING VENDOR*/
@@ -561,6 +603,15 @@ function success_write_check(data)
 	}
 }
 
+function success_apply_transaction(data)
+{
+    if(data.status == "success")
+    {
+    	data.element.modal("toggle");
+		write_check.load_applied_transaction();
+    }
+} 
+//
 function add_po_to_bill(po_id)
 {
 	$(".po-tbl").load('/member/vendor/load_added_item/'+po_id, function()

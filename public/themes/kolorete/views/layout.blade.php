@@ -161,7 +161,9 @@
                         </div>
                         <div class="col-md-4">
                             <div class="image-logo-holder">
-                                <img src="/themes/{{ $shop_theme }}/img/header-logo.jpg">
+                                <a href="/#home">
+                                    <img src="/themes/{{ $shop_theme }}/img/header-logo.jpg">
+                                </a>
                             </div>
                         </div>
                         <div class="col-md-4">

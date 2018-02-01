@@ -90,12 +90,14 @@ class TransactionReceiveInventory
             /*INSERT RI HERE*/
             $receive_inventory_id = Tbl_receive_inventory::insertGetId($ins);
 
-
             /*INSERT ENTER BILL HERE*/
             $bill = TransactionEnterBills::postInsert($receive_inventory_id, $shop_id, $insert, $insert_item);
 
-            $return = Self::insertLine($shop_id, $receive_inventory_id, $insert_item);
-            $return = $receive_inventory_id;
+            if($bill)
+            {
+                Self::insertLine($shop_id, $receive_inventory_id, $insert_item);
+                $return = $receive_inventory_id;
+            }
 
         }
         else

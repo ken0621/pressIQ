@@ -153,6 +153,7 @@ class Member extends Controller
 			View::share('carbon_now', Carbon::now()->format('Y-m-d'));
 			/* Seeding */
 			Seed_manual::auto_seed();
+			Seed_manual::insert_default_landing_cost($this->user_info->shop_id);
 
 			/* Set Email Configuration */
 			Settings::set_mail_setting($this->user_info->shop_id);

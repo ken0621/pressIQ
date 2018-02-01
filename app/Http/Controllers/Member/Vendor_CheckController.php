@@ -78,7 +78,7 @@ class Vendor_CheckController extends Member
     public function check_list()
     {
         $data["_check"] = Tbl_write_check::where("wc_shop_id",$this->user_info->shop_id)->get();
-        
+        //dd($data["_check"]);
         foreach ($data["_check"] as $key => $value) 
         {
             $v_data = Tbl_vendor::where("vendor_id",$value->wc_reference_id)->first();

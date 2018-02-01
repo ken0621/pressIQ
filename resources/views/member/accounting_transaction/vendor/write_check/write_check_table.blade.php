@@ -5,6 +5,7 @@
             <th class="text-center">REFERENCE NUMBER</th>
             <th class="text-center">TRANSACTION DATE</th>
             <th class="text-center" width="200px">TOTAL PRICE</th>
+            <th class="text-center" width="200px">CATEGORY</th>
             <th class="text-center" width="200px"></th>
         </tr>
     </thead>
@@ -26,6 +27,11 @@
                     <td class="text-center">{{$wc->transaction_refnum == "" ? $wc->wc_id : $wc->transaction_refnum}}</td>
                     <td class="text-center">{{date('F d, Y',strtotime($wc->date_created))}}</td>
                     <td class="text-center">{{currency('PHP',$wc->wc_total_amount)}}</td>
+                    @if($wc->wc_ref_id != 0 && $wc->wc_ref_name == 'paybill')
+                        <td class="text-center">Bill Payment (Check)</td>
+                    @else
+                        <td class="text-center">Check</td>
+                    @endif
                     <td class="text-center">
                         <div class="btn-group">
                             <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

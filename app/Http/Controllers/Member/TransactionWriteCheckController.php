@@ -4,22 +4,13 @@ namespace App\Http\Controllers\Member;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
-use App\Models\Tbl_customer;
-use App\Models\Tbl_warehousea;
-use App\Models\Tbl_customer_invoice;
-use App\Models\Tbl_manual_invoice;
-use App\Models\Tbl_customer_invoice_line;
-use App\Models\Tbl_item_bundle;
-use App\Models\Tbl_item;
-use App\Models\Tbl_warehouse;
-use App\Models\Tbl_user;
-use App\Models\Tbl_bill_po;
-use App\Models\Tbl_vendor;
 use App\Models\Tbl_terms;
+use App\Models\Tbl_customer
+;
 
+use App\Globals\Warehouse2;
 use App\Globals\Vendor;
 use App\Globals\WriteCheck;
-use App\Globals\AuditTrail;
 use App\Globals\Accounting;
 use App\Globals\Purchase_Order;
 use App\Globals\Billing;
@@ -29,15 +20,9 @@ use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\TransactionPurchaseOrder;
 use App\Globals\AccountingTransaction;
+use App\Globals\TransactionEnterBills;
 
 use App\Globals\TransactionWriteCheck;
-use App\Models\Tbl_purchase_order;
-use App\Models\Tbl_purchase_order_line;
-use App\Models\Tbl_bill;
-use App\Models\Tbl_bill_account_line;
-use App\Models\Tbl_bill_item_line;
-use App\Models\Tbl_write_check;
-use App\Models\Tbl_write_check_line;
 use Carbon\Carbon;
 use Session;
 class TransactionWriteCheckController extends Member
@@ -56,7 +41,6 @@ class TransactionWriteCheckController extends Member
     {
         $data['page'] = 'Create Write Check';
 
-        Session::forget("po_item");
         $data["pis"]    	= Purchasing_inventory_system::check();
         $data["_vendor"]    = Vendor::getAllVendor('active');
         $data["_name"]      = Tbl_customer::unionVendor(WriteCheck::getShopId())->get();
@@ -65,6 +49,7 @@ class TransactionWriteCheckController extends Member
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["transaction_refnum"] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'write_check');
 
+        Session::forget('applied_transaction');
         $data['action']     = '/member/transaction/write_check/create-write-check';
 
         $wc_id = $request->id;
@@ -72,6 +57,7 @@ class TransactionWriteCheckController extends Member
         {
             $data['wc']      = TransactionWriteCheck::info($this->user_info->shop_id, $wc_id);
             $data['_wcline'] = TransactionWriteCheck::info_item($wc_id);
+            $data["_wc_acct_line"] = TransactionWriteCheck::acc_line($wc_id);
             $data['action']  = '/member/transaction/write_check/update-write-check';
         }
 
@@ -96,9 +82,9 @@ class TransactionWriteCheckController extends Member
         {
             if($value)
             {
-                /*$insert_item[$key]['itemline_ref_id'] = $value;
-                $insert_item[$key]['itemline_ref_name'] = $request->itemline_ref_name[$key];*/
                 $insert_item[$key]['item_id']           = $value;
+                $insert_item[$key]['item_ref_name']     = $request->item_ref_name[$key];
+                $insert_item[$key]['item_ref_id']       = $request->item_ref_id[$key];
                 $insert_item[$key]['item_description']  = $request->item_description[$key];
                 $insert_item[$key]['item_um']           = $request->item_um[$key];
                 $insert_item[$key]['item_qty']          = str_replace(',', '', $request->item_qty[$key]);
@@ -107,12 +93,17 @@ class TransactionWriteCheckController extends Member
                 $insert_item[$key]['item_discount']     = 0;
             }
         }
+
         $return = null;
         $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
         $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
         if(!$validate)
         {
             $validate = TransactionWriteCheck::postInsert($this->user_info->shop_id, $insert, $insert_item);
+            if(Session::get('applied_transaction') > 0)
+            {
+                TransactionWriteCheck::checkPOQty($validate, Session::get("applied_transaction"));
+            }
         }
         if(is_numeric($validate))
         {
@@ -133,7 +124,6 @@ class TransactionWriteCheckController extends Member
     {
         $btn_action = $request->button_action;
         $write_check_id = $request->wc_id;
-        //die(var_dump($write_check_id));
 
         $insert['transaction_refnumber']   = $request->transaction_refnumber;
         $insert['vendor_id']               = $request->wc_ref_id;
@@ -149,9 +139,9 @@ class TransactionWriteCheckController extends Member
         {
             if($value)
             {            
-                /*$insert_item[$key]['itemline_ref_id'] = $value;
-                $insert_item[$key]['itemline_ref_name'] = $request->itemline_ref_name[$key];*/
                 $insert_item[$key]['item_id']           = $value;
+                $insert_item[$key]['item_ref_id']       = $request->item_ref_id[$key];
+                $insert_item[$key]['item_ref_name']     = $request->item_ref_name[$key];
                 $insert_item[$key]['item_description']  = $request->item_description[$key];
                 $insert_item[$key]['item_um']           = $request->item_um[$key];
                 $insert_item[$key]['item_qty']          = str_replace(',', '', $request->item_qty[$key]);
@@ -185,14 +175,66 @@ class TransactionWriteCheckController extends Member
     public function getCountTransaction(Request $request)
     {
         $vendor_id = $request->vendor_id;
-        return TransactionWriteCheck::countTransaction($this->user_info->shop_id, $vendor_id);
+        return TransactionPurchaseOrder::countOpenPOTransaction($this->user_info->shop_id, $vendor_id);
     }
     public function getLoadTransaction(Request $request)
     {
-        $data['_po']    = TransactionPurchaseOrder::getClosePO($this->user_info->shop_id, $request->vendor);
+        $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
         $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
 
+        $data['_applied'] = Session::get('applied_transaction');
+        $data['action']   = '/member/transaction/write_check/apply-transaction';
         return view('member.accounting_transaction.vendor.write_check.load_transaction', $data);
+    }
+    public function postApplyTransaction(Request $request)
+    {
+        $apply_transaction = $request->_apply_transaction;
+        Session::put("applied_transaction", $apply_transaction);
+
+        $return['status'] = 'success';
+        $return['call_function'] = 'success_apply_transaction';
+
+        return json_encode($return);
+    }
+    public function getLoadAppliedTransaction()
+    {
+        $applied_transaction = Session::get('applied_transaction');
+
+        if(count($applied_transaction) > 0)
+        {
+            foreach ($applied_transaction as $key => $value)
+            {
+                $_applied_poline = TransactionPurchaseOrder::info_item($key);
+                $info = TransactionPurchaseOrder::info($this->user_info->shop_id,$key);
+
+                $remarks = null;
+                foreach ($_applied_poline as $poline_key => $poline_value) 
+                {
+                    $type = Item::get_item_type($poline_value->poline_item_id);
+                    if($type == 1 || $type == 4 || $type == 5 )
+                    {
+                        $return[$key.'i'.$poline_key]['po_id'] = $poline_value->poline_po_id;
+                        $return[$key.'i'.$poline_key]['item_id'] = $poline_value->poline_item_id;
+                        $return[$key.'i'.$poline_key]['item_description'] = $poline_value->poline_description;
+                        $return[$key.'i'.$poline_key]['item_um'] = $poline_value->poline_um;
+                        $return[$key.'i'.$poline_key]['item_qty'] = $poline_value->poline_qty;
+                        $return[$key.'i'.$poline_key]['item_rate'] = $poline_value->poline_rate;
+                        $return[$key.'i'.$poline_key]['item_amount'] = $poline_value->poline_amount;
+                    }
+                }    
+                if($info)
+                {
+                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : 'PO#'.$info->po_id.', ';
+                }
+            }
+        }
+
+        $data['_po']     = $return;
+        $data['remarks'] = $remarks;
+        $data['_um']     = UnitMeasurement::load_um_multi();
+        $data['_item']   = Item::get_all_category_item();
+        return view('member.accounting_transaction.vendor.write_check.applied_transaction', $data);
+
     }
 
 }

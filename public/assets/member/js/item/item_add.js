@@ -233,3 +233,11 @@ function submit_selected_image_done(data)
         $('.image-put').attr("src", image_path);
     }
 }
+function success_landing_cost(data)
+{
+	if(data.status == 'success')
+	{
+		data.element.modal("toggle");
+		$(".item-cost").val(data.total_amount).change();
+	}
+}

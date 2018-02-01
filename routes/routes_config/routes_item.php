@@ -14,6 +14,8 @@ Route::group(array('prefix' => '/member/item/'), function()
 	Route::any('/v2/restore','Member\ItemControllerV2@restore');
 
 	Route::any('/v2/cost','Member\ItemControllerV2@cost');
+	Route::any('/v2/create_cost','Member\ItemControllerV2@create_cost');
+	
 	Route::any('/v2/price_level','Member\ItemControllerV2@price_level');
 
 	Route::any('/v2/columns','Member\ItemControllerV2@columns');

@@ -1,10 +1,10 @@
 <div class="modal-header">
-	<button type="button" class="close" data-dismiss="modal">×</button>
-	<h4 class="modal-title">Open Transaction - {{ $vendor->vendor_company}}</h4>
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h4 class="modal-title">Open Transaction - {{ $vendor->vendor_company}}</h4>
 </div>
 <form class="global-submit" action="/member/transaction/enter_bills/apply-transaction" method="post">
     <div class="modal-body">
-    	<div class="row">
+        <div class="row">
             <div class="clearfix modal-body"> 
                 <div class="form-group">
                     <div class="col-md-12">
@@ -12,9 +12,9 @@
                     </div> 
                     <div class="col-md-12">
                         @if(count($_po) > 0)
-                        <table class="table table-condensed table-bordered {{$total_amount = 0}}">
+                        <table class="table table-condensed table-bordered {{ $total_amount = 0 }}">
                             <thead>
-                                <tr>
+                                <tr >
                                     <th></th>
                                     <th class="text-center">Reference Number</th>
                                     <th class="text-center">Amount</th>
@@ -22,11 +22,10 @@
                             </thead>
                             <tbody>
                                 @foreach($_po as $po)
-                                <tr class="{{$total_amount += $po->po_overall_price}}">
-                                    <td class="text-center">
-                                        <input type="checkbox" name="_apply_transaction[{{$po->po_id}}]" class="td-check-po" value="purchase_order" data-content="{{$po->po_overall_price}}" {{isset($_applied[$po->po_id]) ? 'checked' : ''}}></td>
+                                <tr class="{{$total_amount += $po->po_balance}}">
+                                    <td class="text-center"><input type="checkbox" name="_apply_transaction[{{$po->po_id}}]" class="td-check-po" value="purchase_order" data-content="{{$po->po_balance}}" {{isset($_applied[$po->po_id]) ? 'checked' : ''}}></td>
                                     <td class="text-center">{{$po->transaction_refnum != "" ? $po->transaction_refnum : $po->po_id}}</td>
-                                    <td class="text-right">{{currency('PHP',$po->po_overall_price)}}</td>
+                                    <td class="text-right">{{currency('PHP',$po->po_balance)}}</td>
                                 </tr>
                                 @endforeach
                                 <tr>
@@ -45,15 +44,14 @@
                     </div>
                 </div>
             </div>
-    	</div>
+        </div>
     </div>
     <div class="modal-footer">
-    	<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-    	<button type="submit" class="btn btn-primary btn-custom-primary" type="button">Add</button>
+        <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
+        <button class="btn btn-primary btn-custom-primary" type="submit">Add</button>
     </div>
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 </form>
-
 <script type="text/javascript">
     $(document).ready(function()
     {

@@ -1,11 +1,13 @@
 <?php
 namespace App\Globals;
-
+use App\Models\Tbl_write_check_account_line;
+use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_write_check_line;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_write_check;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_vendor;
+use App\Models\Tbl_bill;
 
 use App\Globals\AccountingTransaction;
 use Carbon\Carbon;
@@ -21,7 +23,7 @@ class TransactionWriteCheck
 {
 	public static function countTransaction($shop_id, $vendor_id)
 	{
-		return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed','!=', '0')->count();
+		return Tbl_bill::where('bill_shop_id',$shop_id)->where('bill_vendor_id', $vendor_id)->where('bill_is_paid', 0)->count();
 	}
     public static function info($shop_id, $wc_id)
     {
@@ -30,6 +32,10 @@ class TransactionWriteCheck
     public static function info_item($wc_id)
     {
         return Tbl_write_check_line::um()->where("wcline_wc_id", $wc_id)->get();       
+    }
+    public static function acc_line($wc_id)
+    {
+        return Tbl_write_check_account_line::where("accline_wc_id", $wc_id)->get();       
     }
 	public static function get($shop_id, $paginate = null, $search_keyword = null)
 	{
@@ -187,15 +193,21 @@ class TransactionWriteCheck
 	public static function insertLine($write_check_id, $insert_item, $entry)
     {
         $itemline = null;
-        foreach ($insert_item as $key => $value) 
-        {   
-            $itemline[$key]['wcline_wc_id']       = $write_check_id;
-            $itemline[$key]['wcline_item_id']     = $value['item_id'];
-            $itemline[$key]['wcline_description'] = $value['item_description'];
-            $itemline[$key]['wcline_um']          = $value['item_um'];
-            $itemline[$key]['wcline_qty']         = $value['item_qty'];
-            $itemline[$key]['wcline_rate']        = $value['item_rate'];
-            $itemline[$key]['wcline_amount']      = $value['item_amount'];
+        if($insert_item > 0)
+        {
+            foreach ($insert_item as $key => $value) 
+            {   
+                $itemline[$key]['wcline_wc_id']       = $write_check_id;
+                $itemline[$key]['wcline_item_id']     = $value['item_id'];
+                $itemline[$key]['wcline_ref_id']      = $value['item_ref_id'] != NULL ? $value['item_ref_id'] : 0;
+                $itemline[$key]['wcline_ref_name']    = $value['item_ref_name'] != NULL ? $value['item_ref_name'] : '';
+                $itemline[$key]['wcline_description'] = $value['item_description'];
+                $itemline[$key]['wcline_um']          = $value['item_um'];
+                $itemline[$key]['wcline_qty']         = $value['item_qty'];
+                $itemline[$key]['wcline_rate']        = $value['item_rate'];
+                $itemline[$key]['wcline_amount']      = $value['item_amount'];
+            }
+                
         }
         if(count($itemline) > 0)
         {
@@ -204,6 +216,42 @@ class TransactionWriteCheck
         }
 
         return $return;
+    }
+    public static function checkPoQty($wc_id = null, $po_data = array())
+    {
+        if($wc_id != null)
+        {
+            if(count($po_data) > 0)
+            {
+                foreach ($po_data as $key => $value)
+                { 
+                    Self::checkPolineQty($key, $wc_id);
+                }   
+            }
+        }
+    }
+    public static function checkPolineQty($po_id, $wc_id)
+    {
+        $poline = Tbl_purchase_order_line::where('poline_po_id', $po_id)->get();
+
+        $ctr = 0;
+        foreach ($poline as $key => $value)
+        {
+            $wcline = Tbl_write_check_line::where('wcline_wc_id', $wc_id)->where('wcline_item_id', $value->poline_item_id)->where('wcline_ref_name', 'purchase_order')->where('wcline_ref_id',$po_id)->first();
+            
+            $update['poline_qty'] = $value->poline_qty - $wcline->wcline_qty;       
+            Tbl_purchase_order_line::where('poline_id', $value->poline_id)->update($update);    
+
+            if($update['poline_qty'] <= 0)
+            {
+                $ctr++;
+            }
+        }
+        if($ctr >= count($poline))
+        {
+            $updates["po_is_billed"] = $wc_id;
+            Tbl_purchase_order::where("po_id",$po_id)->update($updates);
+        }
     }
 
 }

@@ -1950,6 +1950,15 @@ function page_list($pis = 0)
     $nav[$page]['icon'] = "trello";
     $nav[$page]['type']     = "menu";
 
+    /* -- MAINTENACE => landing-cost */
+    $code = "maintenance-landing-cost";
+    $nav[$page]['submenu'][$code]['label'] = "Landing Cost"; 
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/landing_cost";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
     /* -- MAINTENACE => Payment Method */
     $code = "maintenance-payment-method";
     $nav[$page]['submenu'][$code]['label'] = "Payment Method"; 

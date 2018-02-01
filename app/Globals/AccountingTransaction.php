@@ -137,7 +137,7 @@ class AccountingTransaction
 	}
 	public static function updateTransaction($shop_id, $acctg_trans_id, $trans_item = array(), $transaction_type)
 	{
-		
+		 
 	}
 	public static function vendorValidation($insert, $insert_item, $transaction_type = '')
 	{
@@ -255,6 +255,7 @@ class AccountingTransaction
 		if($transaction_type == 'received_inventory')
 		{
 			$get = Tbl_receive_inventory::where('ri_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->first();
+			//die(var_dump($get));
 		}
 		if($transaction_type == 'enter_bills')
 		{
@@ -311,7 +312,8 @@ class AccountingTransaction
                 $entry_data[$key]['vatable']            = 0;
                 $entry_data[$key]['discount']           = $discount;
                 $entry_data[$key]['entry_amount']       = $value['item_amount'];
-                $entry_data[$key]['entry_description']  = $value['item_description'];                    
+                $entry_data[$key]['entry_description']  = $value['item_description'];
+                                   
             }
             else
             {
@@ -331,7 +333,7 @@ class AccountingTransaction
                 }
             }
 		}
-
+		//die(var_dump($entry_data)); 
         $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
         return $inv_journal;
 	}
@@ -474,6 +476,7 @@ class AccountingTransaction
 	public static function refill_inventory($shop_id, $warehouse_id , $item_info, $ref_name = '', $ref_id = 0, $remarks = '')
 	{
 		$return = null;
+
 		if(count($item_info) > 0)
 		{
 			$_item = null;
@@ -516,6 +519,7 @@ class AccountingTransaction
 				}
 			}
 		}
+
 		return $return;
 	}
 	public static function inventory_refill_update($shop_id, $warehouse_id,  $item_info, $ref_name, $ref_id)

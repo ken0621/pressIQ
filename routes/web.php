@@ -949,6 +949,9 @@ AdvancedRoute::controller('/member/report', 'Member\ReportControllerV2');
 
 //reports end
 
+/*LANDING COST MAINTENANCE */
+AdvancedRoute::controller('/member/maintenance/landing_cost','Member\LandingCostController');
+
 /* Customer */
 Route::get('/member/customer','Member\CustomerController@index');
 Route::get('/member/customer/bulk_archive','Member\CustomerController@bulk_archive');

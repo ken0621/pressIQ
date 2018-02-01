@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Member;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\Models\Tbl_bill_account_line;
 use App\Models\Tbl_terms;
 
 use App\Globals\Vendor;
@@ -70,6 +70,7 @@ class TransactionEnterBillsController extends Member
         {
             $data['eb'] = TransactionEnterBills::info($this->user_info->shop_id, $eb_id);
             $data['_ebline'] = TransactionEnterBills::info_item($eb_id);
+            $data["_bill_account_line"] = Tbl_bill_account_line::where("accline_bill_id",$eb_id)->get();
             $data['action']     = '/member/transaction/enter_bills/update-enter-bills';
         }
         return view('member.accounting_transaction.vendor.enter_bills.enter_bills', $data);
@@ -99,15 +100,14 @@ class TransactionEnterBillsController extends Member
                 $insert_acct[$key_account]['account_amount']  = $request->account_amount[$key_account];
             }
         }
-
         $insert_item = null;
         foreach ($request->item_id as $key => $value) 
         {
             if($value)
             {
                 $insert_item[$key]['item_id']          = $value;
-                $insert_item[$key]['item_ref_name']    = $request->itemline_ref_name[$key];
-                $insert_item[$key]['item_ref_id']      = $request->itemline_ref_id[$key];
+                $insert_item[$key]['item_ref_name']    = $request->item_ref_name[$key];
+                $insert_item[$key]['item_ref_id']      = $request->item_ref_id[$key];
                 $insert_item[$key]['item_servicedate'] = $request->item_servicedate[$key];
                 $insert_item[$key]['item_description'] = $request->item_description[$key];
                 $insert_item[$key]['item_um']          = $request->item_um[$key];
@@ -117,6 +117,7 @@ class TransactionEnterBillsController extends Member
                 $insert_item[$key]['item_discount']    = 0;
             }
         }
+
                
         $return = null;
         $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
@@ -138,7 +139,6 @@ class TransactionEnterBillsController extends Member
             $return['status'] = 'error';
             $return['status_message'] = $validate;
         }
-
         return json_encode($return);
     }
     public function postUpdateEnterBills(Request $request)
@@ -157,12 +157,25 @@ class TransactionEnterBillsController extends Member
         $insert['vendor_memo']              = $request->vendor_memo;
         $insert['bill_ri_id']               = null;
 
+        $insert_acct = null;
+        foreach($request->expense_account as $key_account => $value_account)
+        {
+            if($value_account)
+            {
+                $insert_acct[$key_account]['account_id']    = $value_account;
+                $insert_acct[$key_account]['account_desc']  = $request->account_desc[$key_account];
+                $insert_acct[$key_account]['account_amount']  = $request->account_amount[$key_account];
+            }
+        }
+
         $insert_item = null;
         foreach ($request->item_id as $key => $value) 
         {
             if($value)
             {
                 $insert_item[$key]['item_id']          = $value;
+                $insert_item[$key]['item_ref_name']    = $request->item_ref_name[$key];
+                $insert_item[$key]['item_ref_id']      = $request->item_ref_id[$key];
                 $insert_item[$key]['item_servicedate'] = $request->item_servicedate[$key];
                 $insert_item[$key]['item_description'] = $request->item_description[$key];
                 $insert_item[$key]['item_um']          = $request->item_um[$key];
@@ -172,12 +185,13 @@ class TransactionEnterBillsController extends Member
                 $insert_item[$key]['item_discount']    = 0;
             }
         }
+
         $return = null;
         $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
         $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
         if(!$validate)
         {
-            $validate = TransactionEnterBills::postUpdate($bill_id, null, $this->user_info->shop_id, $insert, $insert_item);
+            $validate = TransactionEnterBills::postUpdate($bill_id, null, $this->user_info->shop_id, $insert, $insert_item, $insert_acct);
         }
         if(is_numeric($validate))
         {
@@ -235,7 +249,7 @@ class TransactionEnterBillsController extends Member
                     $type = Item::get_item_type($poline_value->poline_item_id);
                     if($type == 1 || $type == 4 || $type == 5 )
                     {
-                        $return[$key.'i'.$poline_key]['poline_po_id'] = $poline_value->poline_po_id;
+                        $return[$key.'i'.$poline_key]['po_id'] = $poline_value->poline_po_id;
                         $return[$key.'i'.$poline_key]['item_id'] = $poline_value->poline_item_id;
                         $return[$key.'i'.$poline_key]['item_description'] = $poline_value->poline_description;
                         $return[$key.'i'.$poline_key]['item_um'] = $poline_value->poline_um;

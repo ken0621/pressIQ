@@ -1,7 +1,9 @@
 <div class="form-horizontal">
 	<div class="form-group">
 		<div class="col-md-12">
-			<h4>Payslip<button class="btn btn-custom-primary pull-right popup" size="lg" link="/member/payroll/custom_payslip/modal_create_payslip">Create Payslip</button></h4>
+			<h4>Payslip<button class="btn btn-custom-primary pull-right popup" size="lg" link="/member/payroll/custom_payslip/modal_create_payslip">Create Payslip</button>
+
+				<button class="btn btn-custom-primary pull-right popup" size="sm" link="/member/payroll/custom_payslip/modal_view_payslip_option" style="margin-right: 10px;"><i class="fa fa-cog"></i>&nbsp;Options</button></h4>
 		</div>
 	</div>
 	<ul class="nav nav-tabs">

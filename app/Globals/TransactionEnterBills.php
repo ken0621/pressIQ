@@ -76,7 +76,7 @@ class TransactionEnterBills
 
         return $data;
     }
-	public static function postInsert($ri_id, $shop_id, $insert, $insert_item, $insert_acct ='')
+	public static function postInsert($ri_id, $shop_id, $insert, $insert_item, $insert_acct = '')
 	{
     	$val = AccountingTransaction::vendorValidation($insert, $insert_item, 'enter_bills');
     
@@ -204,11 +204,12 @@ class TransactionEnterBills
         return $return;
     }
 
-    public static function insertLine($enter_bills_id, $insert_item, $entry, $insert_acct = 0)
+
+    public static function insertLine($enter_bills_id, $insert_item, $entry, $insert_acct = '')
     {
-        if($insert_acct !=0)
+        $acct_line = null;
+        if(count($insert_acct) > 0)
         {
-            $acct_line = null;
             foreach ($insert_acct as $key_acct => $value_acct)
             {
                 $acct_line[$key_acct]['accline_bill_id']     = $enter_bills_id;
@@ -217,6 +218,7 @@ class TransactionEnterBills
                 $acct_line[$key_acct]['accline_amount']      = $value_acct['account_amount'];
             }
             Tbl_bill_account_line::insert($acct_line);
+
         }
 
         $itemline = null;

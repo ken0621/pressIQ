@@ -60,7 +60,9 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 
 
 
-	Route::any('/signin', 'Shop\ShopLoginController@signin'); //ROMMEL C.
+	Route::any('/signin', 'Shop\ShopLoginController@signin');
+	Route::any('/forgot/password', 'Shop\ShopLoginController@forgot_password'); //ROMMEL C.
+	Route::any('/forgot/password/send', 'Shop\ShopLoginController@forgot_password_send');
 	Route::any('/logout', 'Shop\ShopMemberController@logout');
 	Route::any('/thank_you','Shop\ShopLoginController@thank_you');//PRESS RELEASE
 	Route::post('/contactus', 'Shop\ShopContactController@contact_us');
@@ -84,8 +86,10 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/pressuser/pressrelease/edit_draft/{pid}','Shop\ShopMemberController@pressuser_edit_draft');
 	Route::any('/pressuser/pressrelease/draft','Shop\ShopMemberController@press_release_save_as_draft');
 	Route::any('/pressuser/drafts','Shop\ShopMemberController@press_user_drafts');
-	Route::any('/pressuser/image_upload', 'Shop\ShopMemberController@pressreleases_image_upload');//PRESS RELEASE
 	Route::any('/pressuser/manage_user','Shop\ShopMemberController@press_user_manage_user');
+	Route::any('/pressuser/image_upload', 'Shop\ShopMemberController@pressreleases_image_upload');//PRESS RELEASE
+	Route::any('/pressuser/manage_user','Shop\ShopMemberController@press_user_manage_user'); 
+	Route::any('/pressuser/manage_user/update','Shop\ShopMemberController@press_user_manage_user_update');
 	Route::get('/pressadmin', 'Shop\ShopMemberController@pressadmin'); //PRESS RELEASE
 	Route::get('/pressadmin/dashboard', 'Shop\ShopMemberController@pressadmin_dashboard'); //PRESS RELEASE
 	Route::get('/pressadmin/dashboard/view', 'Shop\ShopMemberController@pressadmin_dashboard_view'); //PRESS RELEASE

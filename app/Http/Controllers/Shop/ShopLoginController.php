@@ -7,6 +7,7 @@ use Request;
 use View;
 use Session;
 use DB;
+use Mail;
 
 use App\Models\Tbl_customer;
 use App\Models\Tbl_shop;
@@ -103,7 +104,31 @@ class ShopLoginController extends Shop
         return view("press_user.thank_you", $data);
     }
 
-    
+     public function forgot_password()
+    {
+        
+        $data["page"] = "Forgot Password";
+        return view("forgot_password", $data);
+    }
+
+     public function forgot_password_send()
+    {
+        $password_info["user_email"]              =request('user_email');
+        $password_info["subject"]                 ="Forgot Password";
+
+        $password_info["explode_email"] = explode("@", $password_info['user_email']);
+        
+        Mail::send('emails.forgot_password',$password_info, function($message) use ($password_info)
+        {
+            $message->from($password_info["explode_email"][0] . '@press-iq.com',$password_info['user_email']);
+            $message->to('marketing@press-iq.com');  
+            $message->subject($password_info['subject']);
+           
+        });
+       Session::flash('forgot_password', 'Forgot Password request successfully sent!');
+        return Redirect::back();
+    }
+
     public function submit()
     {
     	$email = Request::input('email');

@@ -31,6 +31,8 @@
 				   {{-- <li class="{{ Request::segment(2) == "media_contacts" ? "active" : "" }}"><a href="/pressuser/media_contacts">Media Contacts</a></li> --}}<!-- add link -->
 
 				   <li class="{{ Request::segment(2) == "drafts" ? "active" : "" }}"><a href="/pressuser/drafts">Drafts</a></li><!-- add link -->
+
+				   <li class="{{ Request::segment(2) == "Manage User" ? "active" : "" }}"><a href="/pressuser/manage_user">Manage User</a></li><!-- add link -->
 				</ul>
     		</div>
     		<div class="tab-content">

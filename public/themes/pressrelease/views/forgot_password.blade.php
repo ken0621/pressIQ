@@ -3,32 +3,25 @@
 <div class="content">
 	<div class="background-container" style="background-image: url('/themes/{{ $shop_theme }}/img/home-banner.jpg')">
 		<div class="container">
-			<div class="row clearfix">
+			<div class="row clearfix">	
 				<div class="col-md-12">
 			    	<div class="background-border">
+			    		@if (session('forgot_password'))
+	                        <div class="alert alert-success">
+	                            {{ session('forgot_password') }}
+	                        </div>
+                    	@endif
 				   		<div class="signin-container">
-				   			<div class="title-container">Login</div>
+				   			<div class="title-container">Enter your Email</div>
+
 				   			<form method="post">
-				    				{{csrf_field()}}
+				    			{{csrf_field()}}	
 				    			<div class="border"></div>
 				    			<div class="register-form">
-				    				<input type="text" name="user_email" id="user_email" placeholder="Username">
+				    				<input type="email" name="user_email" id="user_email" placeholder="Username / Email" required>
 				    			</div>
-				    			<div class="register-form">
-				    				<input type="password" name="user_password" id="user_password" placeholder="Password">
-				    			</div>
-				    			@if(session()->has('message'))
-								<span class="register-form" style="color: red;">
-									 <strong>Error!</strong> {{ session('message') }}<br>
-								</span>
-								<div class="forgot-password"><a href="">Forgot Password?</a></div> 
 				    			<div class="button-container">
-				    			<button type="submit" href="">Login</button>
-								@else
-				    			<div class="forgot-password"><a href="/forgot/password">Forgot Password?</a></div> 
-				    			<div class="button-container">
-				    			<button type="submit" href="">Login</button>
-				    			@endif
+				    			<button type="submit" formaction="/forgot/password/send">Send Instruction</button>
 				    		</form>
 				    	</div>
 			    	</div>

@@ -73,7 +73,7 @@
                 @endif
 
                 <div class="button-container">
-                    <button type="submit">Add User</button>
+                    <button type="submit">Submit</button>
                 </div>
                 </form>  
             </div>
@@ -193,17 +193,17 @@
                    <div class="title-container">Add Admin Account</div>
                      <form method="post" action="">
                        {{csrf_field()}}
-                       <div class="title">First Name: </div>
-                       <input type="text" id="user_first_name" name="user_first_name" class="form-control" required>
+                      <div class="title"></div>
+                       <input type="text" id="user_first_name" name="user_first_name" class="form-control" placeholder="First Name" required>
 
-                       <div class="title">Last Name: </div>
-                       <input type="text"  id="user_last_name" name="user_last_name" class="form-control" required>
+                       <div class="title"></div>
+                       <input type="text"  id="user_last_name" name="user_last_name" class="form-control" placeholder="Last Name" required>
 
-                       <div class="title">Username: </div>
-                       <input type="email" id="user_email" name="user_email" class="form-control" required>
+                       <div class="title"> </div>
+                       <input type="email" id="user_email" name="user_email" class="form-control" placeholder="Email" required>
 
-                       <div class="title">Password: </div>
-                       <input type="Password" id="user_password" name="user_password" class="form-control" required>
+                       <div class="title"></div>
+                       <input type="Password" id="user_password" name="user_password" class="form-control" placeholder="Password" required>
 
                        <div class="button-container">
                            <button type="submit" id="admin_submit_button" name="admin_submit_button" formaction="/pressadmin/manage_user/add_admin">Submit</button>

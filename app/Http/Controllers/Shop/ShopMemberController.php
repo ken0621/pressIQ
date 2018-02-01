@@ -71,6 +71,7 @@ use App\Models\Tbl_tour_wallet;
 use App\Models\Tbl_press_release_recipient;
 use App\Models\Tbl_pressiq_press_releases;
 use App\Models\Tbl_pressiq_user;
+use App\Models\Tbl_pressiq_demo;
 
 use App\Models\Tbl_item_redeemable_points;
 use App\Models\Tbl_item_redeemable_request;
@@ -343,8 +344,7 @@ class ShopMemberController extends Shop
     }
 
     public function pressuser_pressrelease()
-    {
-        // $data['_user']                 = Tbl_pressiq_user::where('user_id',session('user_id'))->first();
+    {  
         $data['_country']              = Tbl_press_release_recipient::distinct()->get(['country']);
         $data['_industry_type']        = Tbl_press_release_recipient::distinct()->get(['industry_type']);
         $data['_title_of_journalist']  = Tbl_press_release_recipient::distinct()->get(['title_of_journalist']);
@@ -507,12 +507,32 @@ class ShopMemberController extends Shop
         Mail::send('emails.Contact_us',$contactus_info, function($message) use ($contactus_info)
         {
             $message->from($contactus_info["explode_email"][0] . '@press-iq.com',$contactus_info['contactus_email']);
-            $message->to("oliverbacsal@gmail.com");
+            $message->to("marketing@press-iq.com");  
             $message->subject($contactus_info['contactus_subject']);
            
         });
         Session::flash('message_concern', 'Message Successfully Sent!');
         return Redirect::back();
+    }
+
+    public function send_demo()     
+    {
+        $demo_info["demo_name"]             =request('name');
+        $demo_info["demo_company"]          =request('company');
+        $demo_info["demo_email"]            =request('email');
+        $demo_info["demo_phone_number"]     =request('number');
+        $demo_info["demo_message"]          =request('message');
+    
+        $demo_info["explode_email"] = explode("@", $demo_info['demo_email']);
+
+        Mail::send('emails.demo_request',$demo_info, function($message) use ($demo_info)
+        {
+           $message->from($demo_info["explode_email"][0] . '@press-iq.com',$demo_info['demo_email']);
+           $message->to("marketing@press-iq.com");  
+           
+        });
+        Session::flash('Demo_message', 'Demo Request Successfully Sent!');
+        return Redirect::back();  
     }
 
     public function press_release_save_as_draft(Request $request)
@@ -811,11 +831,53 @@ class ShopMemberController extends Shop
         exit; 
     }
 
-    public function press_user_manage_user()
+    public function pressuser_media_contacts()   
     {
-      
-        $data["page"] = "Manage User";
-        return view("press_user.press_user_manage_user", $data);
+        $data['user_media_contacts'] = Tbl_press_release_recipient::where('user_id',session('pr_user_id'))->get();
+
+        if(Session::exists('user_email'))
+        {
+           $level=session('pr_user_level');
+           if($level!="1")
+           {
+                $data["page"] = "Media Contacts";
+                return view("press_user.press_user_media_contacts", $data);
+            }
+            else
+           {
+                $data["page"] = "Media Contacts";
+                return view("press_user.press_user_media_contacts", $data);
+           }
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }
+    }  
+
+    public function pressuser_media_contacts_add(Request $request)
+    {
+      $data["name"]                      = $request->name;
+      $data["position"]                  = $request->position;
+      $data["company_name"]              = $request->company_name;
+      $data["country"]                   = $request->country;
+      $data["research_email_address"]    = $request->contact_email;
+      $data["website"]                   = $request->contact_website;
+      $data["media_type"]                = $request->media_type;
+      $data["industry_type"]             = $request->industry_type;
+      $data["title_of_journalist"]       = $request->title_journalist;
+      $data["description"]               = $request->description;
+      $data["user_id"]                   = session('pr_user_id');
+      Tbl_press_release_recipient::insert($data);
+      Session::flash('success_user', 'Recipient Successfully Added!');
+      return redirect::back();
+    }
+
+    public function pressuser_media_contacts_delete($id)
+    {
+      Tbl_press_release_recipient::where('recipient_id',$id)->delete();
+       Session::flash('delete_user', 'Recipient Successfully Deleted!');
+      return  redirect::back();
     }
 
      public function pressadmin()
@@ -3099,9 +3161,38 @@ class ShopMemberController extends Shop
         // unitywealth100
         if($this->shop_info->shop_id == 90)
         {
-            $data['page'] = "Captcha";
-            $data['slot'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
-            return view('member.captcha',$data);
+            $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first();
+            if($point)
+            {
+                $explode_schedule = explode("-", $point->schedule);
+
+                if (isset($explode_schedule[0]) && isset($explode_schedule[1])) 
+                {
+                    $current_time = date('h:i A');
+                    $sunrise      = $explode_schedule[0];
+                    $sunset       = $explode_schedule[1];
+                    $date1        = \DateTime::createFromFormat('H:i a', $current_time);
+                    $date2        = \DateTime::createFromFormat('H:i a', $sunrise);
+                    $date3        = \DateTime::createFromFormat('H:i a', $sunset);
+
+                    if ($date1 > $date2 && $date1 < $date3)
+                    {
+                        // Allow
+                    }
+                    else
+                    {
+                        dd('You can only access this module every ' . str_replace("-", " to ", $point->schedule));
+                    }
+                }
+
+                $data['page'] = "Captcha";
+                $data['slot'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+                return view('member.captcha',$data);
+            }
+            else
+            {
+                dd("Some error occurred. Please contact the administrator.");
+            }
         }
         
     }
@@ -3110,7 +3201,7 @@ class ShopMemberController extends Shop
         $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first();
         if($point)
         {
-            $points = $point->point;
+            $point = $point->point;
         }
         else
         {
@@ -3131,15 +3222,46 @@ class ShopMemberController extends Shop
         $remaining_points   = $pool_amount-$acquired_points;
         if($remaining_points>=$point)
         {
-            $query = Tbl_mlm_slot_wallet_log::insert($insert);
-
-            if($query)
+            if (Session::get("captcha_limit")) 
             {
-                $response = 'success';
+                $timeFirst  = strtotime(Session::get("captcha_limit"));
+                $timeSecond = strtotime(date('Y-m-d H:i:s'));
+                $differenceInSeconds = $timeSecond - $timeFirst;
+
+                if ($differenceInSeconds >= 20) 
+                {
+                    $query = Tbl_mlm_slot_wallet_log::insert($insert);
+
+                    if($query)
+                    {
+                        $response = 'success';
+
+                        Session::put("captcha_limit", date('Y-m-d H:i:s'));
+                    }
+                    else
+                    {
+                        $response = 'error';
+                    }
+                }
+                else
+                {
+                    $response = 'error';
+                }
             }
             else
             {
-                $response = 'error';
+                $query = Tbl_mlm_slot_wallet_log::insert($insert);
+
+                if($query)
+                {
+                    $response = 'success';
+
+                    Session::put("captcha_limit", date('Y-m-d H:i:s'));
+                }
+                else
+                {
+                    $response = 'error';
+                }
             }
         }
         else
@@ -4481,7 +4603,7 @@ class ShopMemberController extends Shop
         $consume['name'] = 'customer_product_code';
         $consume['id'] =Self::$customer_info->customer_id;
         $val = Warehouse2::consume_product_codes($shop_id, $mlm_pin, $mlm_activation, $consume);
-
+        
         if(is_numeric($val))
         {
             MLM2::purchase($shop_id, $slot_id, $val);

@@ -747,7 +747,6 @@ class PayrollController extends Member
           // die(var_dump(Request::all()));
           $_data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
           $first = $_data[0]; 
-          die(var_dump($_data));
           /* check index exist */
           
           if(isset($first['company']) && isset($first['first_name']) && isset($first['department']) && isset($first['start_date']))
@@ -761,6 +760,7 @@ class PayrollController extends Member
                                                                ->where('payroll_employee_first_name',Self::nullableToString($data['first_name']))
                                                                ->where('payroll_employee_middle_name', Self::nullableToString($data['middle_name']))
                                                                ->where('payroll_employee_last_name',Self::nullableToString($data['last_name']))
+                                                               ->where('shop_id',Self::shop_id())
                                                                ->count();
                     
                     if($count_employee == 0)
@@ -1765,9 +1765,11 @@ class PayrollController extends Member
           $get_id = Tbl_payroll_employee_salary::insertGetId($insert);
           AuditTrail::record_logs("CREATED: Employee Salary","Inserting Employee Salary with employee ID #".$get_id,$get_id,"","");
           
-          $return['status'] = 'success';
+
+          $response['call_function'] = 'reload';
+          $response['status'] = 'success';
 		
-		return json_encode($return);
+		return json_encode($response);
 	}
 
 	public function modal_employee_update()
@@ -5269,12 +5271,78 @@ class PayrollController extends Member
 
      public function modal_create_payroll_group()
      {
+          Session::put('payroll_group_tag_employee', array());
           $data['_overtime_rate']  = Tbl_payroll_over_time_rate_default::get();
           $data['_day']            = Payroll::restday_checked(); 
           $data['_period']         = Tbl_payroll_tax_period::check(Self::shop_id())->get();
           $data['_shift_code']     = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->get();
 
+          $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+          $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+
           return view('member.payroll.modal.modal_create_payroll_group', $data);
+     }
+
+     public function modal_tag_payroll_group_employee()
+     {
+          $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+          $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+
+          $data['deduction_id']    =    0;
+
+          $data['action']               ='/member/payroll/payroll_group/set_tag_payroll_group_employee';
+          return view('member.payroll.modal.modal_deduction_tag_employee', $data);
+     }
+
+     public function set_tag_payroll_group_employee()
+     {
+          $employee_tag = Request::input('employee_tag');
+
+          $array = array();
+          if(Session::has('payroll_group_tag_employee'))
+          {
+               $array = Session::get('payroll_group_tag_employee');
+          }
+
+
+          if(isset($employee_tag)){
+               foreach($employee_tag as $tag)
+               {
+                    array_push($array, $tag);
+               }    
+          }
+
+          Session::put('payroll_group_tag_employee',$array);
+          $return['status']             = 'success';
+          $return['function_name']      = 'payroll_group.load_tag_employee';
+          
+          return json_encode($return);
+     }
+
+     public function get_payroll_tag_employee()
+     {
+          $employee = [0 => 0];
+          if(Session::has('payroll_group_tag_employee'))
+          {
+               $employee = Session::get('payroll_group_tag_employee');
+          }
+          $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
+
+          $data['new_record'] = $emp;
+
+          return json_encode($data);
+     }
+
+     public function remove_payroll_tag_employee()
+     {
+           $content = Request::input('content');
+          $array     = Session::get('payroll_group_tag_employee');
+          if(($key = array_search($content, $array)) !== false) {
+              unset($array[$key]);
+          }
+          Session::put('payroll_group_tag_employee',$array);
      }
 
      public function modal_save_payroll_group()
@@ -5368,6 +5436,21 @@ class PayrollController extends Member
           $insert['pagibig_reference']            = Request::input('pagibig_reference');
          
           $group_id = Tbl_payroll_group::insertGetId($insert);
+
+          if(!empty(Request::input('employee_tag')))
+          {
+               foreach(Request::input('employee_tag') as $tag)
+               {
+                    $checkcontract = Tbl_payroll_employee_contract::selemployee($tag)->first();
+
+                    if(count($checkcontract) > 0)
+                    {
+                         $update['payroll_group_id'] = $group_id;
+                         Tbl_payroll_employee_contract::where('payroll_employee_id',$tag)->update($update);
+                    }
+               }
+          }
+
           
           $insert_13th_month = array();
 
@@ -5453,6 +5536,7 @@ class PayrollController extends Member
           }
           
 
+
           // $_restday                                                = array();
           // $_extraday                                               = array();
           // if(Request::has('restday'))
@@ -5496,7 +5580,11 @@ class PayrollController extends Member
           // {
           //   Tbl_payroll_group_rest_day::insert($insert_extra_day);
           // }
-
+          // $_selected_employee = Request::input('selected_employee');
+          // foreach ($_selected_employee as $key => $selected_employee) 
+          // {
+        
+          // }
 
           $data['_data']           = array();
           $data['selected']   = $group_id;
@@ -7216,10 +7304,72 @@ class PayrollController extends Member
      {
           $data = Self::shift_sorting($id);
 
+          Session::put('payroll_shift_tag_employee', array());
           return view('member.payroll.modal.modal_view_shift_template', $data);
      }
+
+     public function modal_tag_shift_employee()
+     {
+          $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+          $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+
+          $data['deduction_id']    =    0;
+
+          $data['action']               ='/member/payroll/shift_template/set_tag_shift_employee';
+          return view('member.payroll.modal.modal_deduction_tag_employee', $data);
+     }
      
+     public function set_tag_shift_employee()
+     {
+
+          $employee_tag = Request::input('employee_tag');
+
+          $array = array();
+          if(Session::has('payroll_shift_tag_employee'))
+          {
+               $array = Session::get('payroll_shift_tag_employee');
+          }
+
+          if(isset($employee_tag)){
+               foreach($employee_tag as $tag)
+               {
+                    array_push($array, $tag);
+               }    
+          }
+
+          Session::put('payroll_shift_tag_employee',$array);
+          $return['status']             = 'success';
+          $return['function_name']      = 'shifting.load_tag_employee';
+          
+          return json_encode($return);
      
+     }
+
+     public function get_shift_tag_employee()
+     {
+           $employee = [0 => 0];
+          if(Session::has('payroll_shift_tag_employee'))
+          {
+               $employee = Session::get('payroll_shift_tag_employee');
+          }
+          $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
+
+          $data['new_record'] = $emp;
+
+          return json_encode($data);
+     }
+
+     public function remove_shift_tag_employee()
+     {
+           $content = Request::input('content');
+          $array     = Session::get('payroll_shift_tag_employee');
+          if(($key = array_search($content, $array)) !== false) {
+              unset($array[$key]);
+          }
+          Session::put('payroll_shift_tag_employee',$array);
+     }
+
      public function shift_sorting($id = 0)
      {
           $data['shift_code'] = Tbl_payroll_shift_code::where('shift_code_id', $id)->first();
@@ -7243,6 +7393,15 @@ class PayrollController extends Member
 
           if($shift_code)
           {
+
+               if(!empty(Request::input('employee_tag')))
+               {
+                    foreach(Request::input('employee_tag') as $tag)
+                    {
+                         $update['shift_code_id'] = $shift_code_id;
+                         Tbl_payroll_employee_basic::where('payroll_employee_id',$tag)->update($update);
+                    }
+               }
                /* UPDATE SHIFT CODE */
                $update_code['shift_code_name']    = Request::input('shift_code_name');
                $old_data = AuditTrail::get_table_data("tbl_payroll_shift_code","shift_code_id",$shift_code_id);

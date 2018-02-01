@@ -8,16 +8,25 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_api','Member\PayrollApiController@index');
 
 	Route::any('/reports/government_forms','Member\PayrollReportController@government_forms');
-	Route::any('/reports/government_forms_sss/{id}','Member\PayrollReportController@government_forms_sss');
-	Route::any('/reports/government_forms_philhealth/{id}','Member\PayrollReportController@government_forms_philhealth');
-	Route::any('/reports/government_forms_hdmf/{id}','Member\PayrollReportController@government_forms_hdmf');
-	Route::any('/reports/government_forms_hdmf_iframe/{id}/{id2}','Member\PayrollReportController@government_forms_hdmf_iframe');
+	Route::any('/reports/government_forms_year_filter','Member\PayrollReportController@government_forms_year_filter');
+	Route::any('/reports/government_forms_sss/{id}/{year}','Member\PayrollReportController@government_forms_sss');
+	Route::any('/reports/government_forms_philhealth/{id}/{year}','Member\PayrollReportController@government_forms_philhealth');
+	Route::any('/reports/government_forms_hdmf/{id}/{year}','Member\PayrollReportController@government_forms_hdmf');
+	Route::any('/reports/government_forms_hdmf_iframe/{id}/{id2}/{year}','Member\PayrollReportController@government_forms_hdmf_iframe');
 	Route::any('/reports/government_forms_hdmf_filter','Member\PayrollReportController@government_forms_hdmf_filter');
 	Route::any('/reports/government_forms_sss_filter','Member\PayrollReportController@government_forms_sss_filter');
 	Route::any('/reports/government_forms_philhealth_filter','Member\PayrollReportController@government_forms_philhealth_filter');
-	Route::any('/reports/government_forms_hdmf_export_excel/{id}/{id2}','Member\PayrollReportController@government_forms_hdmf_export_excel');
-	Route::any('/reports/government_forms_sss_export_excel/{id}/{id2}','Member\PayrollReportController@government_forms_sss_export_excel');
-	Route::any('/reports/government_forms_philhealth_export_excel/{id}/{id2}','Member\PayrollReportController@government_forms_philhealth_export_excel');
+	Route::any('/reports/government_forms_hdmf_export_excel/{id}/{id2}/{year}','Member\PayrollReportController@government_forms_hdmf_export_excel');
+	Route::any('/reports/government_forms_sss_export_excel/{id}/{id2}/{year}','Member\PayrollReportController@government_forms_sss_export_excel');
+	Route::any('/reports/government_forms_philhealth_export_excel/{id}/{id2}/{year}','Member\PayrollReportController@government_forms_philhealth_export_excel');
+
+
+	/* BIR REPORT */
+	Route::any('/reports/bir_forms','Member\PayrollReportController@bir_form');
+	Route::any('/reports/view_bir_forms/{year}/{month}/{company}','Member\PayrollReportController@view_bir_forms');
+	Route::any('/reports/bir_forms_filter','Member\PayrollReportController@bir_forms_filter');
+	Route::any('/reports/bir_export_excel/{year}/{month}/{company}','Member\PayrollReportController@bir_export_excel');
+	/* END BIR REPORT */
 	
 	/*START loan summary report*/
 	Route::any('/reports/loan_summary','Member\PayrollReportController@loan_summary');
@@ -476,6 +485,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_group/modal_update_payroll_group',"Member\PayrollController@modal_update_payroll_group");
 	Route::any('/payroll_group/confirm_archived_payroll_group/{archived}/{group_id}',"Member\PayrollController@confirm_archived_payroll_group");
 	Route::any('/payroll_group/archived_payroll_group',"Member\PayrollController@archived_payroll_group");
+
+    Route::any('/payroll_group/modal_tag_payroll_group_employee',"Member\PayrollController@modal_tag_payroll_group_employee");
+    Route::any('/payroll_group/get_payroll_tag_employee',"Member\PayrollController@get_payroll_tag_employee");
+    Route::any('/payroll_group/set_tag_payroll_group_employee',"Member\PayrollController@set_tag_payroll_group_employee");
+    Route::any('/payroll_group/remove_payroll_tag_employee',"Member\PayrollController@remove_payroll_tag_employee");
 	/* PAYROLL GROUP END */
 
 	/* PAYROLL JOURNAL SETTINGS START */
@@ -543,6 +557,12 @@ Route::group(array('prefix' => '/member/payroll'), function()
      Route::any('/shift_template/modal_update_shift_template',"Member\PayrollController@modal_update_shift_template");
      Route::any('/shift_template/modal_archive_shift_template/{archived}/{id}',"Member\PayrollController@modal_archive_shift_template");
      Route::any('/shift_template/archive_shift_template',"Member\PayrollController@archive_shift_template");
+
+     
+     Route::any('/shift_template/modal_tag_shift_employee',"Member\PayrollController@modal_tag_shift_employee");
+    Route::any('/shift_template/get_shift_tag_employee',"Member\PayrollController@get_shift_tag_employee");
+    Route::any('/shift_template/set_tag_shift_employee',"Member\PayrollController@set_tag_shift_employee");
+    Route::any('/shift_template/remove_shift_tag_employee',"Member\PayrollController@remove_shift_tag_employee");
      /* SHIFT TEMPLATE END */
 
      /* SHIFT TEMPLATE IMPORT START */

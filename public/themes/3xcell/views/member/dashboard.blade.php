@@ -129,6 +129,21 @@
 				</div>
 			</div>
 		</div>
+		<div class="col-md-12">
+			<div class="title">Replicated Link</div>
+			<div class="sub-container">
+					@foreach($_slot as $slot)
+					<div class="holder">
+						<div class="row clearfix">
+							<div class="col-sm-12 text-center">
+								<div class="label2">{{ $slot->slot_no }}</div>
+								<div> <a href="javascript:" onclick="action_load_link_to_modal('/members/lead?slot_no={{ urlencode($slot->slot_no) }}','md')"> VIEW LEAD LINK</a></b></div>
+							</div>
+						</div>
+					</div>
+					@endforeach
+			</div>
+		</div>
 		<div class="row clearfix">
 			<div class="col-md-6">
 				<div class="square-container">

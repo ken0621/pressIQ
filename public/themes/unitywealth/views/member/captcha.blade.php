@@ -31,6 +31,7 @@
 				  	<div class="g-recaptcha" data-sitekey="6Let6UAUAAAAAD0MvJH0Tl_Bej1YkE1oaD0mIE-j"></div>
 				  	<div style="margin-top: 10px;">
 				  		<button class="btn btn-primary btn-custom-primary submit-captcha" type="submit">Submit</button>
+				  		<span class="count-holder"></span>
 				  	</div>
 				</div>
 			</form>	
@@ -49,6 +50,29 @@
     toastr.error("Error");
     @elseif(Session::get("response")=='no_points')
     toastr.error("No More Wallet Available");
+    @endif
+
+    @if(Session::get("response"))
+    $(".submit-captcha").attr("disabled", true);
+    $(".submit-captcha").prop("disabled", true);
+
+	var counter = 21;
+	var myInterval = setInterval(function () 
+	{
+		--counter;
+		// to stop the counter
+		
+		$(".count-holder").text(counter);
+
+		if (counter == 0) 
+		{
+			clearInterval(myInterval);
+			$(".count-holder").remove();
+			$(".submit-captcha").removeAttr("disabled");
+    		$(".submit-captcha").removeProp("disabled");
+		}
+	}, 1000);
+
     @endif
 </script>
 @endsection

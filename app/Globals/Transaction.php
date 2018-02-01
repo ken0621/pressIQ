@@ -608,7 +608,15 @@ class Transaction
             {
                 if($transaction_type == 'proof')
                 {
-                    $data->where('transaction_type', $transaction_type)->where('payment_status','pending');
+                    if($shop_id == 47)
+                    {
+                        $data->where('transaction_type', $transaction_type)->where('payment_status','pending');
+                        $data->groupBy("tbl_transaction_list.transaction_id");
+                    }
+                    else
+                    {
+                        $data->where('transaction_type', $transaction_type)->where('payment_status','pending');
+                    }
                 }
                 elseif($transaction_type == 'reject')
                 {
@@ -751,7 +759,7 @@ class Transaction
 
         //patrick
         $emails = array();
-        if($transaction_type == 'proof')
+        if($transaction_type == 'proof' && $shop_id != 47)
         {
             foreach ($data as $key => $value) 
             {

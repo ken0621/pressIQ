@@ -49,17 +49,17 @@
           </span>
         </div>
       </div>
+    </form>
       <div class="col-md-3 pull-right">
         <div class="input-group stylish-input-group pull-right">
-          <input type="text" class="form-control pull-right" value="{{ Request::input('search') }}" name="search" placeholder="Search" >
+          <input type="text" class="form-control pull-right search" value="{{ Request::input('search') }}" name="search" placeholder="Search" >
           <span class="input-group-addon">
-            <button type="submit">
+            <button type="button">
               <i class="fa fa-search" aria-hidden="true"></i>
             </button>  
           </span>
         </div>
       </div>
-    </form>
   </div>
   <br>        
   <table class="table table-bordered table-condensed body_distribute">
@@ -299,7 +299,7 @@
       $(".submit_btn_distribute").removeAttr("disabled");
     });
   });
-  $('.search').on('keydown',function()
+  $('.search').on('keydown',function(e)
   {
     var keyCode = e.keyCode || e.which;
     if (keyCode === 13) 
@@ -308,7 +308,7 @@
       // e.preventDefault();
       // return false;
 
-      var link = '/member/mlm/stairstep/distribution?search='+$('.search').val();
+      var link = '/member/mlm/stairstep/distribution?search='+$('.search').val()+"&start="+$(".start_picker").val()+"&end="+$(".end_picker").val();
       window.location.href= link;
       console.log(link);
       // $('.body_distribute').load(link,function()

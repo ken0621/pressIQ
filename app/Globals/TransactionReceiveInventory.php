@@ -27,6 +27,14 @@ class TransactionReceiveInventory
         //die(var_dump($count));
         return $count;
 	}
+    public static function info($shop_id, $ri_id)
+    {
+        return Tbl_receive_inventory::vendor()->where("ri_shop_id", $shop_id)->where("ri_id", $ri_id)->first();
+    }
+    public static function info_item($ri_id)
+    {
+        return Tbl_receive_inventory_line::um()->item()->where("riline_ri_id", $ri_id)->get();        
+    }
     
     public static function get($shop_id, $paginate = null, $search_keyword = null)
     {
@@ -59,7 +67,7 @@ class TransactionReceiveInventory
     }
 	public static function postInsert($shop_id, $insert, $insert_item)
 	{
-        $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        $val = AccountingTransaction::vendorValidation($insert, $insert_item, 'receive_inventory');
         if(!$val)
         {
     		$ins['ri_shop_id']          = $shop_id;
@@ -68,8 +76,8 @@ class TransactionReceiveInventory
             $ins['ri_mailing_address']  = $insert['vendor_address'];
             $ins['ri_vendor_email']     = $insert['vendor_email'];
             $ins['ri_terms_id']         = $insert['vendor_terms'];
-            $ins['ri_date']         	= $insert['transaction_date'];
-            $ins['ri_due_date']         = $insert['transaction_duedate'];
+            $ins['ri_date']         	= date("Y-m-d", strtotime($insert['transaction_date']));
+            $ins['ri_due_date']         = date("Y-m-d", strtotime($insert['transaction_duedate']));
             $ins['ri_memo']             = $insert['vendor_memo'];
             $ins['date_created']		= Carbon::now();
             $ins['inventory_only']		= 1;
@@ -82,17 +90,54 @@ class TransactionReceiveInventory
             /*INSERT RI HERE*/
             $receive_inventory_id = Tbl_receive_inventory::insertGetId($ins);
 
+
             /*INSERT ENTER BILL HERE*/
             $bill = TransactionEnterBills::postInsert($receive_inventory_id, $shop_id, $insert, $insert_item);
 
-            /* Transaction Journal */
-            /*$entry["reference_module"]  = "receive-inventory";
-            $entry["reference_id"]      = $receive_inventory_id;
-            $entry["name_id"]           = $insert['vendor_id'];
-            $entry["total"]             = collect($insert_item)->sum('itemline_amount');
-            $entry["vatable"]           = '';
-            $entry["discount"]          = '';
-            $entry["ewt"]               = '';*/
+            $return = Self::insertLine($shop_id, $receive_inventory_id, $insert_item);
+            $return = $receive_inventory_id;
+
+        }
+        else
+        {
+            $return = $val;
+        }
+        return $return;
+	}
+
+    public static function postUpdate($receive_inventory_id, $shop_id, $insert, $insert_item)
+    {
+        $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        if(!$val)
+        {
+            $update['ri_shop_id']          = $shop_id;
+            $update['transaction_refnum']  = $insert['transaction_refnumber'];
+            $update['ri_vendor_id']        = $insert['vendor_id'];
+            $update['ri_mailing_address']  = $insert['vendor_address'];
+            $update['ri_vendor_email']     = $insert['vendor_email'];
+            $update['ri_terms_id']         = $insert['vendor_terms'];
+            $update['ri_date']             = date("Y-m-d", strtotime($insert['transaction_date']));
+            $update['ri_due_date']         = date("Y-m-d", strtotime($insert['transaction_duedate']));
+            $update['ri_memo']             = $insert['vendor_memo'];
+            $update['date_created']        = Carbon::now();
+            $update['inventory_only']      = 1;
+
+            /* TOTAL */
+            $total = collect($insert_item)->sum('item_amount');
+            $update['ri_total_amount'] = $total;
+
+        
+            /*INSERT RI HERE*/
+            Tbl_receive_inventory::where('ri_id',$receive_inventory_id)->update($update);
+            Tbl_receive_inventory_line::where('riline_ri_id', $receive_inventory_id)->delete();
+
+            /*INSERT ENTER BILL HERE*/
+            $bill = Tbl_bill::where('bill_ri_id', $receive_inventory_id)->first();
+            
+            if($bill)
+            {
+                TransactionEnterBills::postUpdate($bill->bill_id, $receive_inventory_id, $shop_id, $insert, $insert_item);
+            }
 
             $return = Self::insertLine($shop_id, $receive_inventory_id, $insert_item);
             $return = $receive_inventory_id;
@@ -102,7 +147,7 @@ class TransactionReceiveInventory
             $return = $val;
         }
         return $return;
-	}
+    }
 
     public static function insertLine($shop_id, $receive_inventory_id, $insert_item)
     {
@@ -111,8 +156,8 @@ class TransactionReceiveInventory
         {   
             $itemline[$key]['riline_ri_id']        = $receive_inventory_id;
             $itemline[$key]['riline_item_id']      = $value['item_id'];
-            //$itemline[$key]['riline_ref_name']      = $value['reference_name'];
-            //$itemline[$key]['riline_ref_id']        = $value['reference_id'];
+            $itemline[$key]['riline_ref_name']     = $value['item_ref_name'];
+            $itemline[$key]['riline_ref_id']       = $value['item_ref_id'];
             $itemline[$key]['riline_description']  = $value['item_description'];
             $itemline[$key]['riline_um']           = $value['item_um'];
             $itemline[$key]['riline_qty']          = $value['item_qty'];
@@ -123,9 +168,7 @@ class TransactionReceiveInventory
         if(count($itemline) > 0)
         {
             $return = Tbl_receive_inventory_line::insert($itemline);   
-            Tbl_bill::where('bill_shop_id', $shop_id)->where('bill_ri_id', $receive_inventory_id)->first();
         }
-
         return $return;
     }
 }

@@ -86,6 +86,7 @@ class Tbl_payroll_leave_schedulev2 extends Model
                               ->join('tbl_payroll_leave_tempv2', 'tbl_payroll_leave_employee_v2.payroll_leave_temp_id', '=', 'tbl_payroll_leave_tempv2.payroll_leave_temp_id')
                               ->where('tbl_payroll_leave_employee_v2.payroll_employee_id', '=', $payroll_employee_id)
                               ->where('tbl_payroll_leave_schedulev2.payroll_schedule_leave', $date)
+                              ->where('tbl_payroll_leave_schedulev2.payroll_leave_schedule_archived', 0)
                               ->orderBy('tbl_payroll_leave_schedulev2.payroll_leave_schedule_id', 'desc');
         return $query;
 	}

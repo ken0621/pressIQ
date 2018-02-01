@@ -99,6 +99,11 @@ class DebitMemoController extends Member
     }
     public function db_pdf($db_id)
     {
+        $date = date("F j, Y, g:i a");
+        $first_name         = $this->user_info->user_first_name;
+        $last_name         = $this->user_info->user_last_name;
+        $footer ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+
         $data["debit_memo_id"] = $db_id;
         $data["db"] = Tbl_debit_memo::vendor()->where("db_id",$db_id)->first();
         $data["_db_item"] = Tbl_debit_memo_line::replace_dbitem()->db_item()->where("dbline_db_id",$db_id)->get();
@@ -122,10 +127,12 @@ class DebitMemoController extends Member
         }
 
       $pdf = view('member.vendor.debit_memo.debit_memo_pdf', $data);
-      return Pdf_global::show_pdf($pdf);
+      return Pdf_global::show_pdf($pdf, null, $footer);
     }
     public function create_submit()
     {
+        $btn_action = Request::input("action_button");
+
         $vendor_info[] = null;
         $vendor_info["db_vendor_id"] = Request::input("db_vendor_id");
         $vendor_info["db_vendor_email"] = Request::input("db_vendor_email");
@@ -308,7 +315,27 @@ class DebitMemoController extends Member
                     }
 
                     $data["status"] = "success-debit-memo";
-                    $data["redirect_to"] = "/member/vendor/debit_memo?id=".$db_id;        
+                    //dd($data["status"]);
+                    //$data["redirect_to"] = "/member/vendor/debit_memo?id=".$db_id;
+                    
+
+                    if($btn_action == 'save-and-edit')
+                    {
+                        $data["redirect_to"] = '/member/vendor/debit_memo?id='.$db_id;
+                    } 
+                    elseif($btn_action == 'save-and-close')
+                    {
+                        $data["redirect_to"] = '/member/vendor/debit_memo/list';
+                    }
+                    elseif($btn_action == 'save-and-new')
+                    {
+                        $data["redirect_to"] = '/member/vendor/debit_memo';
+                    }       
+                    elseif($btn_action == 'save-and-print')
+                    {
+                        $data["redirect_to"] = '/member/vendor/debit_memo/db_pdf/'.$db_id;
+                    } 
+
                     if($vendor_info["type"] == 1)
                     {
 
@@ -326,6 +353,7 @@ class DebitMemoController extends Member
     }
     public function update_submit()
     {
+        $btn_action = Request::input('action_button');
         $db_id = Request::input("debit_memo_id");
         $serial_number = Request::input("serial_number");
 
@@ -501,7 +529,24 @@ class DebitMemoController extends Member
                 }
                 
                 $data["status"] = "success-debit-memo";
-                $data["redirect_to"] = "/member/vendor/debit_memo?id=".$db_id;
+                //$data["redirect_to"] = "/member/vendor/debit_memo?id=".$db_id;
+                if($btn_action == 'save-and-edit')
+                {
+                    $data["redirect_to"] = '/member/vendor/debit_memo?id='.$db_id;
+                } 
+                elseif($btn_action == 'save-and-close')
+                {
+                    $data["redirect_to"] = '/member/vendor/debit_memo/list';
+                }
+                elseif($btn_action == 'save-and-new')
+                {
+                    $data["redirect_to"] = '/member/vendor/debit_memo';
+                }       
+                elseif($btn_action == 'save-and-print')
+                {
+                    $data["redirect_to"] = '/member/vendor/debit_memo/db_pdf/'.$db_id;
+                } 
+                
             }
             else
             {

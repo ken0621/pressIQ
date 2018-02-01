@@ -10,14 +10,37 @@
 						<div class="col-xs-12">
 							<div class="grid-1">
 								<div class="single-slide">
-									<div>
-										<img src="/themes/{{ $shop_theme }}/img/slide/slide5.jpg">
+									@if(loop_content_condition($shop_theme_info, "home", "home_slider"))
+									    @foreach(loop_content_get($shop_theme_info, "home", "home_slider") as $slider)
+									    <img src="{{ $slider }}">
+									    @endforeach
+									@else
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide1.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide2.jpg">
+									@endif
+									{{-- <div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide11.jpg">
 									</div>
 									<div>
-										<img src="/themes/{{ $shop_theme }}/img/slide/slide4.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide12.jpg">
 									</div>
 									<div>
-										<img src="/themes/{{ $shop_theme }}/img/slide/slide3.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide13.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide14.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide7.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide8.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide9.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide10.jpg">
 									</div>
 									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide1.jpg">
@@ -25,6 +48,9 @@
 									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide2.jpg">
 									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide6.jpg">
+									</div> --}}
 								</div>
 							</div>
 						</div>
@@ -205,14 +231,37 @@
 						<div class="col-xs-8">
 							<div class="grid-1">
 								<div class="single-slide">
-									<div>
-										<img src="/themes/{{ $shop_theme }}/img/slide/slide5.jpg">
+									@if(loop_content_condition($shop_theme_info, "home", "home_slider"))
+									    @foreach(loop_content_get($shop_theme_info, "home", "home_slider") as $slider)
+									    <img src="{{ $slider }}">
+									    @endforeach
+									@else
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide1.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide2.jpg">
+									@endif
+									{{-- <div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide11.jpg">
 									</div>
 									<div>
-										<img src="/themes/{{ $shop_theme }}/img/slide/slide4.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide12.jpg">
 									</div>
 									<div>
-										<img src="/themes/{{ $shop_theme }}/img/slide/slide3.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide13.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide14.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide7.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide8.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide9.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide10.jpg">
 									</div>
 									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide1.jpg">
@@ -220,6 +269,9 @@
 									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide2.jpg">
 									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide6.jpg">
+									</div> --}}
 								</div>
 							</div>
 						</div>

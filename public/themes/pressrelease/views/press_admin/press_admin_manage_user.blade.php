@@ -79,13 +79,13 @@
                            <td>{{$_user_account->user_email}}</td>
                            <td>{{$_user_account->user_company_name}}</td>
                            <td>
-                            <a id="edit" href="/pressadmin/edit_user/{{$_user_account->user_id}}"><button type="button"  class="btn btn-warning center"><i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button></a>
+                            <a id="edit" href="/pressadmin/edit_user/{{$_user_account->user_id}}"><button type="button"  class="btn btn-warning center"><i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>  Edit</button></a>
 
                             <a href="/pressadmin/delete_user/{{$_user_account->user_id}}"><button type="button" class="btn btn-danger center">
-                            <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button></a>
+                            <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>  Delete</button></a>
 
                             <a href="/pressadmin/manage_force_login/{{$_user_account->user_id}}"><button type="button" class="btn btn-success center">
-                            <i class="fa fa-vcard-o" name="recipient_id" aria-hidden="true"></i>Force Login</button></a>
+                            <i class="fa fa-vcard-o" name="recipient_id" aria-hidden="true"></i>  Force Login</button></a>
                            </td>
                         </tr>
                         @endforeach
@@ -110,10 +110,10 @@
                            <td>{{$_admin_account->user_email}}</td>
                            <td>
                             <a href="/pressadmin/edit_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-warning center">
-                            <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button>
+                            <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>  Edit</button>
 
                             <a href="/pressadmin/manage_user/delete_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-danger center">
-                            <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button>
+                            <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>  Delete</button>
                            </td>
                         </tr>
                         @endforeach

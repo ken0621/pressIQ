@@ -1156,7 +1156,7 @@ class Payroll2
 		$output_ctr = 0;
 		$_output = null;
 
-		
+		dd();
 		if ($_time != null) 
 		{
 			$_time = Payroll2::sort_by_time($_time);

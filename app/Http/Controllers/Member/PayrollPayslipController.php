@@ -14,6 +14,7 @@ use App\Models\Tbl_payroll_time_keeping_approved_performance;
 use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_payslip;
 use App\Models\Tbl_payroll_record;
+use App\Models\Tbl_payroll_payslip_option;
 use PDF2;
 use App\Globals\Pdf_global;
 
@@ -94,8 +95,30 @@ class PayrollPayslipController extends Member
 		}
 		else
 		{
-			$pdf = view('member.payroll.payroll_payslipv1', $data);
-	        return Pdf_global::show_pdf($pdf);
+
+			$data['option'] = Tbl_payroll_payslip_option::select('*')->where('shop_id',Self::shop_id())->get();
+	          if(count($data['option']) == 0)
+	          {
+	                    $insert['per_page']       = 0;           
+	                    $insert['shop_id']        = Self::shop_id();
+	                    Tbl_payroll_payslip_option::insert($insert);
+	          }
+             $data['option'] = Tbl_payroll_payslip_option::select('*')->where('shop_id',Self::shop_id())->get();
+
+             if($data['option'][0]['per_page'] == 1)
+             {
+				$format["title"] = "A4";
+				$format["format"] = "A4";
+				$format["default_font"] = "sans-serif";
+
+				$pdf = PDF2::loadView('member.payroll.payroll_payslipv1', $data, [], $format);
+				return $pdf->stream('document.pdf');
+             }
+             else
+             {
+					$pdf = view('member.payroll.payroll_payslipv1', $data);
+			        return Pdf_global::show_pdf($pdf);
+             }
     	}
     }
 }

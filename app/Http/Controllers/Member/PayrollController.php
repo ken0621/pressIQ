@@ -1765,9 +1765,11 @@ class PayrollController extends Member
           $get_id = Tbl_payroll_employee_salary::insertGetId($insert);
           AuditTrail::record_logs("CREATED: Employee Salary","Inserting Employee Salary with employee ID #".$get_id,$get_id,"","");
           
-          $return['status'] = 'success';
+
+          $response['call_function'] = 'reload';
+          $response['status'] = 'success';
 		
-		return json_encode($return);
+		return json_encode($response);
 	}
 
 	public function modal_employee_update()

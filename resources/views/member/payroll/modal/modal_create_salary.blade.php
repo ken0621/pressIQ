@@ -125,13 +125,11 @@
 <script type="text/javascript">
 	check_deduction_contribution_new_action();
 	check_custom_compute_pop_action();
-	function submit_done(data)
-	{
-		
-		data.element.modal("toggle");
-		executeFunctionByName(data.function_name, window);
-		
-	}
+		function reload(data)
+		{
+			data.element.modal("hide");
+			location.reload();
+		}
 
 	$(".deduction-check-period-new").unbind("change");
 	$(".deduction-check-period-new").bind("change", function()

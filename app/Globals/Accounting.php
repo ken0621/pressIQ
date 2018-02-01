@@ -655,7 +655,9 @@ class Accounting
 		$journal_line["created_at"]				= Carbon::now();
 		$journal_line['jline_warehouse_id'] 	= Accounting::getWarehouse($line["item_id"], $line["je_id"]);
 		$jline_id = Tbl_journal_entry_line::insertGetId($journal_line);
+		
 	}
+
 
 	/**
 	 * Check if the has warehouse is an inventory type

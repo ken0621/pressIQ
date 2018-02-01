@@ -17,6 +17,7 @@ use App\Models\Tbl_bill_po;
 use App\Models\Tbl_vendor;
 use App\Models\Tbl_terms;
 
+use App\Globals\Warehouse2;
 use App\Globals\Vendor;
 use App\Globals\WriteCheck;
 use App\Globals\AuditTrail;
@@ -96,9 +97,10 @@ class TransactionWriteCheckController extends Member
         {
             if($value)
             {
-                /*$insert_item[$key]['itemline_ref_id'] = $value;
-                $insert_item[$key]['itemline_ref_name'] = $request->itemline_ref_name[$key];*/
+               
                 $insert_item[$key]['item_id']           = $value;
+                 /*$insert_item[$key]['itemline_ref_id'] = $value;
+                $insert_item[$key]['itemline_ref_name'] = $request->itemline_ref_name[$key];*/
                 $insert_item[$key]['item_description']  = $request->item_description[$key];
                 $insert_item[$key]['item_um']           = $request->item_um[$key];
                 $insert_item[$key]['item_qty']          = str_replace(',', '', $request->item_qty[$key]);
@@ -133,7 +135,6 @@ class TransactionWriteCheckController extends Member
     {
         $btn_action = $request->button_action;
         $write_check_id = $request->wc_id;
-        //die(var_dump($write_check_id));
 
         $insert['transaction_refnumber']   = $request->transaction_refnumber;
         $insert['vendor_id']               = $request->wc_ref_id;
@@ -191,6 +192,7 @@ class TransactionWriteCheckController extends Member
     {
         $data['_po']    = TransactionPurchaseOrder::getClosePO($this->user_info->shop_id, $request->vendor);
         $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
+        $data['_applied'] = Session::get('applied_transaction');
 
         return view('member.accounting_transaction.vendor.write_check.load_transaction', $data);
     }

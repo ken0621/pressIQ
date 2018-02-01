@@ -46,12 +46,16 @@
                                                     <td><input type="text" class="form-control" name="cost_name[]" value="{{$cost->default_cost_name}}" /></td>
                                                     <td><textarea class="form-control textarea-expand" name="cost_description[]">{{$cost->default_cost_description}}</textarea></td>
                                                     <td>
+                                                        @if($key != 0)
                                                         <select class="form-control" name="cost_type[]">
                                                             <option value="fixed" {{$cost->default_cost_type == 'fixed' ? 'selected' : ''}}>Fixed</option>
                                                             <option value="percentage" {{$cost->default_cost_type == 'percentage' ? 'selected' : ''}}>Percentage</option>
                                                         </select>
+                                                        @else
+                                                        <select class="hidden form-control" name="cost_type[]"></select>
+                                                        @endif
                                                     </td>
-                                                    <td class="text-center {{$key != 0 ? 'remove-tr' : ''}} cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                    <td class="text-center {{$key != 0 ? 'remove-tr' : ''}} cursor-pointer"><i class="fa fa-trash-o {{$key != 0 ? '' : 'hidden'}}" aria-hidden="true"></i></td>
                                                 </tr>
                                                 @endforeach
                                             @endif

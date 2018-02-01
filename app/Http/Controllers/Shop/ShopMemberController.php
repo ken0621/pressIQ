@@ -701,6 +701,7 @@ class ShopMemberController extends Shop
             }
             else
             {
+               
                 $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
                 $path ="";
                 if($request->hasFile('user_company_image'))
@@ -727,8 +728,10 @@ class ShopMemberController extends Shop
                                         'user_password'       =>Crypt::encrypt(request('user_password')),
                                         'user_company_image'  =>$path_prefix.$path,
                                         ]);
-                Session::flash('success_update_user', 'User Successfully Updated!');            
-                return redirect::back();
+                Session::flush('');
+                Session::flash('update_user_profile');
+                return Redirect::to("/signin");           
+               
             }       
         }
         else

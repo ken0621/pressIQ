@@ -3,11 +3,6 @@
 <div class="background-container">
     <div class="pressview">
        <div class="drafts-holder-container">
-        @if (Session::has('success_update_user'))
-              <div class="alert alert-success">
-                 <center>{{ Session::get('success_update_user') }}</center>
-              </div>
-            @endif  
          <div class="title-container">User Details</div>
             <div class="title-container">
 

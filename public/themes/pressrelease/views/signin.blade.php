@@ -3,6 +3,11 @@
 <div class="content">
 	<div class="background-container" style="background-image: url('/themes/{{ $shop_theme }}/img/home-banner.jpg')">
 		<div class="container">
+			@if (session('update_user_profile'))
+             <script type="text/javascript">
+               alert('Account Successfully Updated! You need to Login again')
+             </script>
+        	@endif
 			<div class="row clearfix">
 				<div class="col-md-12">
 			    	<div class="background-border">
@@ -37,6 +42,7 @@
 		</div>
 	</div>
 </div>
+
 @endsection
 
 @section("css")

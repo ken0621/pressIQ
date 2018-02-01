@@ -200,12 +200,13 @@ class TransactionEnterBills
         return $return;
     }
 
-    public static function insertLine($enter_bills_id, $insert_item, $entry, $insert_acct = 0)
+
+    public static function insertLine($enter_bills_id, $insert_item, $entry, $insert_acct = '')
     {
-        if($insert_acct !=0)
+        $acct_line = null;
+        if(count($insert_acct) > 0)
         {
             $acct_line = null;
-
             foreach ($insert_acct as $key_acct => $value_acct)
             {
                 $acct_line[$key_acct]['accline_bill_id']     = $enter_bills_id;

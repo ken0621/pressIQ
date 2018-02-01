@@ -73,10 +73,7 @@
         if(data.status == 'success')
         {
             toastr.success('Success receiving items');
-            setInterval(function()
-            {
-                location.href = '/member/item/warehouse/rr';
-            },2000);
+            location.href = '/member/item/warehouse/rr';
         }
     }
 </script>

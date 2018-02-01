@@ -1092,6 +1092,32 @@ class Payroll2
 
 		return $return;
 	}
+
+	public static function sort_by_time($_time)
+	{
+		$count = 0;
+
+
+		$n = count($_time);
+        for ($i = 0; $i < $n-1; $i++)
+        {
+            for ($j = 0; $j < $n-$i-1; $j++)
+            {
+                if (Payroll2::convert_time_in_minutes($_time[$j]->time_in) > Payroll2::convert_time_in_minutes($_time[$j+1]->time_in))
+                {
+
+                    // swap temp and arr[i]
+                    $temp = $_time[$j];
+                    $_time[$j] = $_time[$j+1];
+                    $_time[$j+1] = $temp;
+                   
+                }
+            }
+        }
+		
+		 
+		return $_time;
+	}
 	
 
 
@@ -1129,8 +1155,13 @@ class Payroll2
 	{
 		$output_ctr = 0;
 		$_output = null;
-		
 
+		
+		if ($_time != null) 
+		{
+			$_time = Payroll2::sort_by_time($_time);
+		}
+		
 		if ($_time == null) 
 		{
 			
@@ -1345,6 +1376,8 @@ class Payroll2
 				$count_time++;
 			}
 		}
+
+
 		return $_output;
 	}
 

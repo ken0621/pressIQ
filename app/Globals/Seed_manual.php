@@ -883,6 +883,19 @@ class Seed_manual
             }
         }
     }
+
+    public static function insert_default_landing_cost($shop_id)
+    {
+        if(!DB::table('tbl_item_default_landing_cost')->where("shop_id",$shop_id)->first())
+        {
+            $insert['shop_id'] = $shop_id;
+            $insert['default_cost_name'] = 'Purchase Cost';
+            $insert['default_cost_description'] = 'Original price of item upon purchase';
+            $insert['default_cost_type'] = 'fixed';
+            $insert['default_cost_created'] = Carbon::now();
+            DB::table('tbl_item_default_landing_cost')->insert($insert);
+        }
+    }
     public static function put_transaction_reference_number($shop_id)
     {
         if(!DB::table('tbl_transaction_ref_number')->where("shop_id",$shop_id)->first())

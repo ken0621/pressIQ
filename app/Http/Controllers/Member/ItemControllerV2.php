@@ -7,6 +7,7 @@ use App\Globals\Accounting;
 use App\Globals\Warehouse2;
 use App\Globals\Columns;
 use App\Globals\Utilities;
+use App\Globals\LandingCost;
 use Request;
 use Session;
 
@@ -240,7 +241,50 @@ class ItemControllerV2 extends Member
 	public function cost()
 	{
 		$data["page"]		= "Item Cost";
-		return view("member.itemv2.cost");
+		$data["_landing_cost"] = LandingCost::get($this->user_info->shop_id);
+		if(count(session('landing_cost')) > 0)
+		{
+			$data["_created_cost"] = session('landing_cost');
+		}
+		elseif(Request::input('d'))
+		{
+			$data['_created_cost'] = LandingCost::get_cost($this->user_info->shop_id, Request::input('d'));
+		}
+
+		$data["action"] = "/member/item/v2/create_cost";
+		return view("member.itemv2.cost", $data);
+	}
+	public function create_cost()
+	{
+		$cost_name   = Request::input("cost_name");
+		$cost_type   = Request::input("cost_type");
+		$cost_rate   = Request::input("cost_rate");
+		$cost_amount = Request::input("cost_amount");
+
+		$data = null;
+		$return = null;
+		$total_amount = 0;
+		foreach ($cost_name as $key => $value)
+		{
+			if($value)
+			{
+				$data[$key]['landing_cost_name']    = $value;
+				$data[$key]['landing_cost_shop_id'] = $this->user_info->shop_id;
+				$data[$key]['landing_cost_type']    = $cost_type[$key];
+				$data[$key]['landing_cost_rate'] 	= $cost_rate[$key];
+				$data[$key]['landing_cost_amount']  = str_replace(',', '', $cost_amount[$key]);
+				$total_amount += $data[$key]['landing_cost_amount'];
+			}
+		}
+		if(count($data) > 0)
+		{
+			session(['landing_cost' => $data]);
+			$return['status'] = "success";
+			$return['call_function'] = "success_landing_cost";
+			$return['total_amount'] = $total_amount;
+		}
+
+		return json_encode($return);
 	}
 	public function price_level()
 	{

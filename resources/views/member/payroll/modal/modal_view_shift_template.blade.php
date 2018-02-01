@@ -91,11 +91,31 @@
 							@endif
 						@endforeach
 					</tbody>
+
+
 				</table>
 			</div>
 		</div>
+
+		<div class="form-group">
+			<div class="col-md-12">
+				<table class="table table-bordered table-condensed">
+					<thead>
+						<tr>
+							<th>Employee Name</th>
+						</tr>
+					</thead>
+					<tbody class="tbl-tag">
+						
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+
 	</div>
 	<div class="modal-footer">
+		<span><a href="#" class="btn btn-custom-primary popup" link="/member/payroll/shift_template/modal_tag_shift_employee">Tag Employee</a></span>
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
 		<button class="btn btn-primary btn-custom-primary" type="submit">Submit</button>
 	</div>

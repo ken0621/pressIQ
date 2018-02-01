@@ -31,6 +31,7 @@ use Session;
 use DB;
 use Carbon\carbon;
 use App\Globals\Merchant;
+use App\Globals\LandingCost;
 use App\Globals\Warehouse2;
 use Validator;
 use stdClass;
@@ -195,7 +196,13 @@ class Item
                 $return['item_id']       = $item_id;
                 $return['status']        = 'success';
                 $return['message']       = 'Item successfully created.';
-                $return['call_function'] = 'success_item';       
+                $return['call_function'] = 'success_item';
+
+            
+                if(count(session('landing_cost')) > 0)
+                {
+                    LandingCost::insert_cost_item($item_id, $shop_id, session('landing_cost'));
+                }
             }
         }
 
@@ -239,6 +246,10 @@ class Item
             $return['message']       = 'Item successfully updated.';
             $return['call_function'] = 'success_item';
 
+            if(count(session('landing_cost')) > 0)
+            {
+                LandingCost::insert_cost_item($item_id, $shop_id, session('landing_cost'));
+            }
         }
 
         return $return;

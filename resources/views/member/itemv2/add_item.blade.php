@@ -166,8 +166,8 @@
                                 <div class="col-md-6 for-non-service">
                                     <label for="basic-input"> Cost *</label>
                                     <div class="input-group">
-                                      <input  type="text" class="form-control text-right" placeholder="0.00" value="{{ get_request_old($item_info, 'item_cost') }}" aria-describedby="basic-addon1" name="item_cost">
-                                      <span onclick="action_load_link_to_modal('/member/item/v2/cost', 'lg')" style="background-color: #eee; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-calculator"></i></span>
+                                      <input  type="text" class="form-control text-right item-cost" placeholder="0.00" value="{{ get_request_old($item_info, 'item_cost') }}" aria-describedby="basic-addon1" name="item_cost">
+                                      <span size="lg" link="/member/item/v2/cost?d={{get_request_old($item_info, 'item_id')}}" style="background-color: #eee; cursor: pointer;" class="input-group-addon popup" id="basic-addon1"><i class="fa fa-calculator"></i></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6 expense-account">

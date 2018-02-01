@@ -58,7 +58,7 @@
 			<td colspan="2" style="text-align: left;font-weight: bold">SUBTOTAL</td>
 			<td style="text-align: right; font-weight: bold">{{currency('PHP', $po->po_subtotal_price)}}</td>
 		</tr>
-		<tr>
+		<!-- <tr>
 			<td colspan="1"></td>
 			<td colspan="2" style="text-align: left;font-weight: bold">EWT</td>
 			<td style="text-align: right; font-weight: bold">{{currency('PHP', $po->ewt)}}</td>
@@ -72,7 +72,7 @@
 			<td colspan="1"></td>
 			<td colspan="2" style="text-align: left;font-weight: bold">VAT</td>
 			<td style="text-align: right; font-weight: bold">{{currency('PHP', $po->taxable)}}</td>
-		</tr>
+		</tr> -->
 		
 	</tbody>
 </table>

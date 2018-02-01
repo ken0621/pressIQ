@@ -17,6 +17,7 @@
                 </thead>
                 
                 <tbody>
+                    @if(isset($contri_info["_employee_contribution"]))
                     @foreach($contri_info["_employee_contribution"] as $key => $contribution)
                     <tr>
                         <td class="text-center">{{ $contribution->count }}</td>
@@ -31,6 +32,7 @@
                         <td class="text-center" style="color: #76B6EC; font-weight: bold;">{{ payroll_currency($contribution->total_philhealth_ee_er) }}</td>
                     </tr>
                     @endforeach
+                    @endif
                 </tbody>
                   <tfoot>
                     <tr>
@@ -45,5 +47,5 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-        &nbsp;<a href="/member/payroll/reports/government_forms_philhealth_export_excel/{{$month}}/{{$company_id1}}"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
+        &nbsp;<a href="/member/payroll/reports/government_forms_philhealth_export_excel/{{$month}}/{{$company_id1}}/{{$year}}"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
     </div>

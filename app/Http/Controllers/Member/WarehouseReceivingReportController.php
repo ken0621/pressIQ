@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Globals\Warehouse2;
 use App\Globals\WarehouseTransfer;
+use App\Globals\AccountingTransaction;
 use App\Globals\Pdf_global;
 
 use Session;
@@ -61,6 +62,8 @@ class WarehouseReceivingReportController extends Member
 
             $data['wis'] = WarehouseTransfer::get_wis_data($wis_id);
             $data['wis_item'] = WarehouseTransfer::get_wis_item($wis_id);
+
+            $data['transaction_ref_number'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'receiving_report');
             
             return view('member.warehousev2.rr.rr_receive_inventory',$data);
         }

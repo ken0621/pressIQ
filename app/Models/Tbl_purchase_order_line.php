@@ -19,4 +19,8 @@ class Tbl_purchase_order_line extends Model
     {
         return $query->leftjoin("tbl_item", "poline_item_id", "=", "tbl_item.item_id");
     }
+    public static function scopePO($query)
+    {
+        return $query->join("tbl_purchase_order", "poline_po_id", "=", "tbl_purchase_order.po_id");
+    }
 }

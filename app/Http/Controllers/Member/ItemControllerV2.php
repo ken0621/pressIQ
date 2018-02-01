@@ -56,11 +56,11 @@ class ItemControllerV2 extends Member
 		$default[]	  		= ["Price", "display_price", true];
 		$default[]	  		= ["Cost", "display_cost", true];
 		$default[]	  		= ["Markup", "display_markup", true];
-		$default[]	  		= ["Inventory", "inventory_count", true];
+		$default[]	  		= ["Inventory", "inventorylog", true];
 		$default[]	  		= ["U/M", "multi_abbrev", true];
 
 		$data["_item"]	    	= Columns::filterColumns($this->user_info->shop_id, $this->user_info->user_id, "item", $data["_item"], $default);
-		
+		// dd($data['_item']);
 		return view("member.itemv2.list_item_table", $data);
 	}
 	public function get_item()

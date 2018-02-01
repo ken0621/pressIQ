@@ -625,8 +625,6 @@ function success_create_customer_wis(data)
 {
 	if(data.status == 'success')
 	{
-		/*toastr.success('Success');
-		location.href = '/member/customer/wis';*/
 		toastr.success("Success");
        	location.href = data.redirect_to;
 	}

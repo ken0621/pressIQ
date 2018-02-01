@@ -249,6 +249,7 @@ class PayrollTimeSheet2Controller extends Member
 		
 		if(Request::input("time-in"))
 		{
+			$add = 0;
 			foreach(Request::input("time-in") as $key => $time_in)
 			{
 				$time_out = Request::input("time-out")[$key];

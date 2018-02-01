@@ -152,5 +152,15 @@
 			"default":"/themes/p4ward/img/p4ward_image_partner.jpg",
 			"size":"3"
 		}
+	},
+	"terms_and_condition":
+	{
+		"terms_condition" :
+		{
+			"label":"Terms and Condition",
+			"type":"tinymce",
+			"default":"",
+			"size":"12"
+		}
 	}
 }

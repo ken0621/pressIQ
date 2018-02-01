@@ -55,8 +55,8 @@
             </select>
         </div>
         <div class="col-sm-2 pull-right">
-        	<label>Amount Received</label>
-        	<input type="text" class="input-sm form-control amount-received" value="{{$rcvpayment->rp_total_amount or (isset($cm_data) ? $cm_data->cm_amount : '' )}}">
+            <label>Amount Received</label>
+            <input type="text" class="input-sm form-control amount-received" value="{{$rcvpayment->rp_total_amount or (isset($cm_data) ? $cm_data->cm_amount : '' )}}">
         </div>
     </div>
    <!--  <div class="row clearfix">

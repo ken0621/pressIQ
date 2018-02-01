@@ -260,6 +260,10 @@ class ShopMemberController extends Shop
     }
     public function getVideos()
     {
+        if($this->shop_info->shop_id == 90)
+        {
+            dd('this page is not available');
+        }
         $data = [];
         return Self::load_view_for_members('member.videos', $data);
     }

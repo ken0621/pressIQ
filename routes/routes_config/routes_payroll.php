@@ -517,6 +517,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/custom_payslip/archive_payslip',"Member\PayrollController@archive_payslip");
 	Route::any('/custom_payslip/modal_update_payslip',"Member\PayrollController@modal_update_payslip");
 	Route::any('/custom_payslip/payslip_use_change',"Member\PayrollController@payslip_use_change");
+	Route::any('/custom_payslip/modal_view_payslip_option',"Member\PayrollController@modal_view_payslip_option");
+	Route::any('/custom_payslip/save_payslip_options',"Member\PayrollController@save_payslip_options");
 	/* PAYROLL CUSTOM PAYSLIP END */
 
 	/* PAYROLL PERIOD START */

@@ -100,9 +100,9 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="content-container"><p>Subject:New Password Request </p></div>
-				<div class="content-container"><p>Email / Username: {{$user_email}} </p></div>
-				<div class="content-container"><p>Hello Admin! Please Force Login this Account to Set New Password Details then give the Details Back</p></div>
+				<div class="content-container"><p>Subject:  Password Request </p></div>
+				<div class="content-container"><p>Email/Username:   {{$user_email}} </p></div>
+				<div class="content-container"><p>Hello Admin! Please Force Login this Account to Set New Password details then give the Details Back</p></div>
 			</div>
 		</div>
 	</div>

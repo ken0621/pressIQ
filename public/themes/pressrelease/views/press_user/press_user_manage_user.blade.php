@@ -2,12 +2,20 @@
 @section("pressview")
 <div class="background-container">
     <div class="pressview">
-       <div class="drafts-holder-container">
        <div class="manage-user-container">
-         <div class="title-container">User Details</div>
-
+         <div class="title-container">Profile Account</div>
+         @if(session()->has('message'))
+              <div class="details">
+              <span style="color: red;">
+                <strong>Error!</strong> {{ session('message') }}<br>
+              </span>
+              </div>
+              @endif
             <form method="post" enctype="multipart/form-data">
-              {{csrf_field()}}
+              {{csrf_field()}}     
+              <div class="title">Company Logo:</div>
+              <img src="{{$manage_user->user_company_image}}" width="250" height="150" class="img-thumbnail" alt="">
+
               <div class="title">First Name:</div>
               <input type="text" id="user_first_name" name="user_first_name" class="form-control" value="{{$manage_user->user_first_name}}" >
               
@@ -24,23 +32,16 @@
               <input type="Password" id="user_password" name="user_password" class="form-control"  >
 
               <div class="title">Confirm Password:</div>
-              <input type="Password" id="user_password_confirmation" name="user_password_confirmation" class="form-control"  v>
+              <input type="Password" id="user_password_confirmation" name="user_password_confirmation" class="form-control" >
+
               
+              <div class="title">Change Company Logo:</div>
               <input type="file" name="user_company_image" id="user_company_image" accept=".png, .jpg, .jpeg" style="margin-top: 10px; background-color: inherit;">
 
               <div class="button-container">
-                <button type="Submit" formaction="/pressuser/manage_user/update">Update</button>
+                <button type="Submit" formaction="/pressuser/manage_user/update">Update Account</button>
               </div>
-            
             </form>
-
-              @if(session()->has('message'))
-              <div class="details">
-              <span style="color: red;">
-                <strong>Error!</strong> {{ session('message') }}<br>
-              </span>
-              </div>
-              @endif
         </div>
     </div>
 </div>

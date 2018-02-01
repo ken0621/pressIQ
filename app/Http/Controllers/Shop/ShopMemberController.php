@@ -2948,7 +2948,7 @@ class ShopMemberController extends Shop
     {
         $shop_id = request('shop_id');
         $sponsor = request('sponsor');
-        $slot = Tbl_mlm_slot::where('shop_id',$shop_id)->where('slot_id',$sponsor)->first();
+        $slot = Tbl_mlm_slot::where('shop_id',$shop_id)->where('slot_no',$sponsor)->first();
         if($slot)
         {
             return 'true';
@@ -2971,7 +2971,8 @@ class ShopMemberController extends Shop
         $shop_id        = $this->shop_info->shop_id;
         $customer_id    = Self::$customer_info->customer_id;
         $membership     = $codes->membership_id;
-        $sponsor        = $request->sponsor;
+        $sponsor_id     = Tbl_mlm_slot::where('slot_no',$request->sponsor)->first()->slot_id;
+        $sponsor        = $sponsor_id;
         $slot_no        = Self::generate_slot_no_based_on_name(Self::$customer_info->first_name, Self::$customer_info->last_name);
         if($request->owner == 'new')
         {

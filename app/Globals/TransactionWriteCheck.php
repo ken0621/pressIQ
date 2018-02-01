@@ -94,7 +94,7 @@ class TransactionWriteCheck
 		return $data;
 	}
 
-	public static function postInsert($shop_id, $insert, $insert_item, $insert_acct = '')
+	public static function postInsert($shop_id, $insert, $insert_item, $insert_acct = array())
 	{
 		$val = AccountingTransaction::vendorValidation($insert, $insert_item, 'write_check');
 		if(!$val)
@@ -140,7 +140,7 @@ class TransactionWriteCheck
 
         return $return;
 	}
-    public static function postUpdate($write_check_id, $shop_id, $insert, $insert_item, $insert_acct = '')
+    public static function postUpdate($write_check_id, $shop_id, $insert, $insert_item, $insert_acct = array())
     {
         $val = AccountingTransaction::vendorValidation($insert, $insert_item);
         if(!$val)
@@ -167,13 +167,15 @@ class TransactionWriteCheck
             $entry["reference_module"]  = "write-check";
             $entry["reference_id"]      = $write_check_id;
             $entry["name_id"]           = $insert['vendor_id'];
-            $entry["name_reference"]    = $insert['wc_reference_name'];
+            //$entry["name_reference"]    = $insert['wc_reference_name'];
             $entry["total"]             = $total;
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
             $entry["ewt"]               = '';
 
             Tbl_write_check_line::where('wcline_wc_id', $write_check_id)->delete();
+            Tbl_write_check_account_line::where('accline_wc_id', $write_check_id)->delete();
+
             $return = Self::insertLine($write_check_id, $insert_item, $entry, $insert_acct);
             $return = $write_check_id;
 
@@ -198,18 +200,21 @@ class TransactionWriteCheck
             $acct_line = null;
             foreach ($insert_acct as $key_acct => $value_acct)
             {
-                $acct_line[$key_acct]['accline_wc_id']       = $write_check_id;
-                $acct_line[$key_acct]['accline_coa_id']      = $value_acct['account_id'];
-                $acct_line[$key_acct]['accline_description'] = $value_acct['account_desc'];
-                $acct_line[$key_acct]['accline_amount']      = $value_acct['account_amount'];
+                if($value_acct)
+                {
+                    $acct_line[$key_acct]['accline_wc_id']       = $write_check_id;
+                    $acct_line[$key_acct]['accline_coa_id']      = $value_acct['account_id'];
+                    $acct_line[$key_acct]['accline_description'] = $value_acct['account_desc'];
+                    $acct_line[$key_acct]['accline_amount']      = $value_acct['account_amount'];
 
-                Tbl_write_check_account_line::insert($acct_line);
+                    Tbl_write_check_account_line::insert($acct_line);
 
-                $entry_data['a'.$key_acct]['account_id']        = $value_acct['account_id'];
-                $entry_data['a'.$key_acct]['entry_description'] = $value_acct['account_desc'];
-                $entry_data['a'.$key_acct]['entry_amount']      = $value_acct['account_amount'];
-                $entry_data['a'.$key_acct]['vatable']           = 0;
-                $entry_data['a'.$key_acct]['discount']          = 0;
+                    $entry_data['a'.$key_acct]['account_id']        = $value_acct['account_id'];
+                    $entry_data['a'.$key_acct]['entry_description'] = $value_acct['account_desc'];
+                    $entry_data['a'.$key_acct]['entry_amount']      = $value_acct['account_amount'];
+                    $entry_data['a'.$key_acct]['vatable']           = 0;
+                    $entry_data['a'.$key_acct]['discount']          = 0;
+                }
             }  
         }
 

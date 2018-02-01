@@ -83,7 +83,7 @@ class TransactionPayBills
 	        $pay_bill_id = Tbl_pay_bill::insertGetId($ins);
 	               
 	        /* Transaction Journal */
-	        $entry["reference_module"]  = "pay-bill";
+	        $entry["reference_module"]  = "bill-payment";
 	        $entry["reference_id"]      = $pay_bill_id;
 	        $entry["name_id"]           = $insert['vendor_id'];
 	        $entry["total"]             = $total;
@@ -128,7 +128,7 @@ class TransactionPayBills
 	        Tbl_pay_bill::where('paybill_id', $pay_bill_id)->update($ins);
 	               
 	        /* Transaction Journal */
-	        $entry["reference_module"]  = "pay-bill";
+	        $entry["reference_module"]  = "bill-payment";
 	        $entry["reference_id"]      = $pay_bill_id;
 	        $entry["name_id"]           = $insert['vendor_id'];
 	        $entry["total"]             = $total;
@@ -197,10 +197,6 @@ class TransactionPayBills
 		        	Self::updateAppliedAmount($itemline["pbline_reference_id"], $shop_id);
 		        }
 			}
-			/*else
-	    	{
-	    		Self::updateAppliedAmount($value['pbline_reference_id'], $shop_id);   
-	    	}*/
         }
         
         $return = AccountingTransaction::entry_data($entry, $insert_item);

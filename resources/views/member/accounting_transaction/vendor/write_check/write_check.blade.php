@@ -56,7 +56,7 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-4">
                                             <label>Reference Number</label>
-                                            <input type="text" class="form-control" name="transaction_refnumber" value="{{ isset($wc->transaction_refnum) ? $wc->transaction_refnum : $transaction_refnum }}">
+                                            <input type="text" class="form-control" name="transaction_refnumber" value="{{ isset($wc->transaction_refnumber) ? $wc->transaction_refnumber : $transaction_refnum }}">
                                         </div>
                                     </div>
                                 </div>

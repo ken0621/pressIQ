@@ -32,29 +32,29 @@
 
         <div class="press-release-content">
 
-           <div id="new_user_account" class="tabcontent add-media-container">
+           <div id="new_user_account" class="tabcontent user-media-container">
                <div class="title-container">Add New User</div>
 
                <form method="post" action="/pressadmin/add_user" enctype="multipart/form-data">
                 {{csrf_field()}}
                 
                 <div class="register-form">
-                <input type="text" name="user_first_name" id="user_first_name" placeholder="First Name" >
+                <input class="form-control" type="text" name="user_first_name" id="user_first_name" placeholder="First Name" >
                 </div>
                 <div class="register-form">
-                  <input type="text" name="user_last_name" id="user_last_name" placeholder="Last Name" >
+                  <input class="form-control" type="text" name="user_last_name" id="user_last_name" placeholder="Last Name" >
                 </div>
                 <div class="register-form">
-                  <input type="email" name="user_email" id="user_email" placeholder="Email" >
+                  <input class="form-control" type="email" name="user_email" id="user_email" placeholder="Email" >
                 </div>
                 <div class="register-form">
-                  <input type="password" name="user_password" id="user_password" placeholder="Password" >
+                  <input class="form-control" type="password" name="user_password" id="user_password" placeholder="Password" >
                 </div>
                 <div class="register-form">
-                  <input type="password" name="user_password_confirmation" id="user_password_confirmation" placeholder="Confirm Password">
+                  <input class="form-control" type="password" name="user_password_confirmation" id="user_password_confirmation" placeholder="Confirm Password">
                 </div>
                 <div class="register-form">
-                  <input type="text" name="user_company_name" id="user_company_name" placeholder="Company" >
+                  <input class="form-control" type="text" name="user_company_name" id="user_company_name" placeholder="Company" >
                 </div>
                 <div class="register-form">
                   <input type="file" name="user_company_image" id="user_company_image" accept=".png, .jpg, .jpeg" >

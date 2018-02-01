@@ -201,10 +201,9 @@ class TransactionEnterBills
     }
 
 
-    public static function insertLine($enter_bills_id, $insert_item, $entry, $insert_acct = '')
+    public static function insertLine($enter_bills_id, $insert_item, $entry, $insert_acct = 0)
     {
-        $acct_line = null;
-        if(count($insert_acct) > 0)
+        if($insert_acct != 0)
         {
             $acct_line = null;
             foreach ($insert_acct as $key_acct => $value_acct)
@@ -275,7 +274,7 @@ class TransactionEnterBills
         if(count($entry_data) > 0)
         {
             Tbl_bill_item_line::insert($itemline);
-            $bill_journal = Accounting::postJournalEntry($entry, $entry_data);        
+            Accounting::postJournalEntry($entry, $entry_data);        
             $return = $enter_bills_id;    
         }
         

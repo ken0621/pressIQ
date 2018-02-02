@@ -227,9 +227,9 @@
                                                                 @endif
                                                             </td>
                                                             <td>
-                                                                <select class="1111 droplist-um select-um {{isset($ebline->itemline_um) ? 'has-value' : ''}}" name="item_um[]">
-                                                                    @if($ebline->itemline_um)
-                                                                        @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $ebline->multi_um_id, 'selected_um_id' => $ebline->itemline_um])
+                                                                <select class="1111 droplist-um select-um {{isset($item->itemline_um) ? 'has-value' : ''}}" name="item_um[]">
+                                                                    @if($item->itemline_um)
+                                                                        @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $item->multi_um_id, 'selected_um_id' => $item->itemline_um])
                                                                     @else
                                                                         <option class="hidden" value="" />
                                                                     @endif

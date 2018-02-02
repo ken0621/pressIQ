@@ -91,7 +91,7 @@ class TransactionReceiveInventory
             $receive_inventory_id = Tbl_receive_inventory::insertGetId($ins);
 
             /*INSERT ENTER BILL HERE*/
-            TransactionEnterBills::postInsert($receive_inventory_id, $shop_id, $insert, $insert_item);
+            $bill = TransactionEnterBills::postInsert($receive_inventory_id, $shop_id, $insert, $insert_item);
 
             if($bill)
             {

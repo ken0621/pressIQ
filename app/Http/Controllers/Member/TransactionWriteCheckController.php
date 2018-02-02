@@ -75,7 +75,7 @@ class TransactionWriteCheckController extends Member
         $insert['wc_mailing_address']      = $request->wc_mailing_address;
         $insert['wc_payment_date']         = $request->wc_payment_date;
         $insert['wc_memo']                 = $request->wc_memo;
-        $insert['wc_total_amount']         = $request->wc_total_amount;
+        $insert['vendor_total']            = $request->wc_total_amount;
         
         $insert_acct = null;
         foreach($request->expense_account as $key_account => $value_account)
@@ -143,7 +143,7 @@ class TransactionWriteCheckController extends Member
         $insert['wc_mailing_address']      = $request->wc_mailing_address;
         $insert['wc_payment_date']         = $request->wc_payment_date;
         $insert['wc_memo']                 = $request->wc_memo;
-        $insert['wc_total_amount']         = $request->wc_total_amount;
+        $insert['vendor_total']             = $request->wc_total_amount;
         
         $insert_item = null;
         foreach($request->item_id as $key => $value)

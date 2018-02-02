@@ -30,14 +30,14 @@
                         </ul>
                     </div>
                 </div>
-                @if(isset($bill))
+                @if(isset($eb))
                 <div class="pull-right">
                     <div class="dropdown">
                         <button class="btn btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown">More
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <!-- <li class="dropdown-header">Dropdown header 1</li> -->
-                            <li><a href="/member/accounting/journal/entry/bill/{{$bills->bill_id}}">Transaction Journal</a></li>
+                            <li><a href="/member/accounting/journal/entry/bill/{{$eb->bill_id}}">Transaction Journal</a></li>
                             <!-- <li class="divider"></li> -->
                             <!-- <li class="dropdown-header">Dropdown header 2</li> -->
                             <li><a href="#">Void</a></li>
@@ -48,6 +48,7 @@
             </div>
         </div>
     </div>
+
     <div class="panel panel-default panel-block panel-title-block panel-gray">  
         <div class="tab-content">
             <div class="row">

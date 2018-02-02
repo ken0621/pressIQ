@@ -110,6 +110,7 @@ class TransactionEnterBills
             /* Transaction Journal */
             $entry["reference_module"]  = "bill";
             $entry["reference_id"]      = $enter_bills_id;
+            $entry["name_reference"]    ='vendor';
             $entry["name_id"]           = $insert['vendor_id'];
             $entry["total"]             = $total;
             $entry["vatable"]           = '';

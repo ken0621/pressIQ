@@ -57,7 +57,7 @@ class TransactionPurchaseOrderController extends Member
 
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
-        $data["serial"] = ItemSerial::check_setting();
+        $data["serial"]     = ItemSerial::check_setting();
 
         return view('member.accounting_transaction.vendor.purchase_order.po_load_item_session',$data);
     }
@@ -67,7 +67,6 @@ class TransactionPurchaseOrderController extends Member
 
         $data["po"] = TransactionPurchaseOrder::info($this->user_info->shop_id, $po_id);
         $data["_poline"]       = TransactionPurchaseOrder::info_item($po_id);
-        //dd($data);
         foreach($data["_poline"] as $key => $value) 
         {
             $qty = UnitMeasurement::um_qty($value->poline_um);
@@ -125,7 +124,6 @@ class TransactionPurchaseOrderController extends Member
         $insert['vendor_subtotal']       = $request->vendor_subtotal;
         $insert['vendor_total']          = $request->vendor_total;
 
-        //die(var_dump($insert));
         $insert_item = null;
         foreach ($request->item_id as $key => $value) 
         {
@@ -143,7 +141,6 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_taxable']     = $request->item_taxable[$key];
             }
         }
-        //die(var_dump($insert_item));
 
         $validate = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
 

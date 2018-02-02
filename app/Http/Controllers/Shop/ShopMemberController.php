@@ -2946,18 +2946,25 @@ class ShopMemberController extends Shop
     }
     public function getNetwork()
     {
-        $data["page"] = "Network List";
-        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
-
-        if(request()->input("slot_no") == "")
+        if (Self::$customer_info) 
         {
-            $slot_no = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->value("slot_no");
-            return Redirect::to("/members/network?slot_no=" . $slot_no);
+            $data["page"] = "Network List";
+            $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+
+            if(request()->input("slot_no") == "")
+            {
+                $slot_no = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->value("slot_no");
+                return Redirect::to("/members/network?slot_no=" . $slot_no);
+            }
+            else
+            {
+                $data["_tree_level"] = MLM2::get_sponsor_network_tree($this->shop_info->shop_id, request()->input("slot_no"));
+                return (Self::load_view_for_members("member.network", $data));
+            }
         }
         else
         {
-            $data["_tree_level"] = MLM2::get_sponsor_network_tree($this->shop_info->shop_id, request()->input("slot_no"));
-            return (Self::load_view_for_members("member.network", $data));
+            return Redirect::to("/members/login");
         }
     }
     public function getNetworkSlot()

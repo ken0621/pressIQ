@@ -90,9 +90,45 @@ class AccountingTransaction
 		$trans_data['acctg_transaction_id'] = $acctg_trans_id;
 		$trans_data['date_created'] = Carbon::now();
 		Tbl_acctg_transaction_list::insert($trans_data);
+		return $acctg_trans_id;
 	}
-
 	public static function postTransaction($shop_id, $transaction_data, $attached_transaction_data = array())
+	{
+		$check = Self::check_transaction($shop_id, $transaction_data['transaction_ref_name'], $transaction_data['transaction_ref_id']);
+		if(!$check)
+		{
+			$acctg_trans_id = Self::insertTransaction($shop_id, $transaction_data);
+		}
+		else
+		{
+			$acctg_trans_id = $check;
+		}
+		
+		if(is_numeric($acctg_trans_id))
+		{
+			Self::attached_transaction($acctg_trans_id, $attached_transaction_data);			
+		}
+		return $acctg_trans_id
+	}
+	public static function attached_transaction($acctg_trans_id, $attached_transaction_data = array())
+	{
+		$date =  Carbon::now();
+		if(count($attached_transaction_data) > 0)
+		{
+			$list = null;
+			foreach ($attached_transaction_data as $key => $value) 
+			{
+				$list[$key] = $value;
+				$list[$key]['acctg_transaction_id'] = $acctg_trans_id;
+				$list[$key]['date_created'] = $date;
+			}
+			if(count($list) > 0)
+			{
+				Self::insertTransactionList($shop_id, $list);
+			}
+		}
+	}
+	public static function postTransaction1($shop_id, $transaction_data, $attached_transaction_data = array())
 	{
 		$check = Self::check_transaction($shop_id, $attached_transaction_data['transaction_ref_name'], $attached_transaction_data['transaction_ref_id']);
 		if(!$check)
@@ -115,7 +151,7 @@ class AccountingTransaction
 	{
 		Tbl_acctg_transaction_list::insert($transaction_data);
 	}
-	public static function check_transaction1($shop_id, $transaction_name, $transaction_id)
+	public static function check_transaction($shop_id, $transaction_name = '', $transaction_id = 0)
 	{
 		$check = Tbl_acctg_transaction_list::acctgTransaction()->where("shop_id", $shop_id)->where("transaction_ref_name", $transaction_name)
 											->where("transaction_ref_id", $transaction_id)->first();

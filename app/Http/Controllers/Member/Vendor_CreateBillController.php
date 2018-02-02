@@ -112,6 +112,7 @@ class Vendor_CreateBillController extends Member
                $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$data["bill"]->bill_vendor_id)->where("po_is_billed",0)->get();
                $data["_bill_item_line"] = Tbl_bill_item_line::um()->where("itemline_bill_id",$id)->get();
                $data["_bill_account_line"] = Tbl_bill_account_line::where("accline_bill_id",$id)->get();
+               
 
                $type = "bill";
                if($data["bill"]->inventory_only == 1)

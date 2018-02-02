@@ -1700,7 +1700,7 @@ class ShopMemberController extends Shop
         $return = "";
         $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
         $payout_setting = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
-        $minimum = doubleval($payout_setting->enchasment_settings_minimum);
+        $minimum = doubleval(isset($payout_setting->enchasment_settings_minimum) ? $payout_setting->enchasment_settings_minimum : 0);
 
         if($this->shop_info->shop_id != 60) //no neet to setup for JCA - temporary only
         {

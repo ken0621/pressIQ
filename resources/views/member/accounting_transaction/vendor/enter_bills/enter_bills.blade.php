@@ -36,10 +36,7 @@
                         <button class="btn btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown">More
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                            <!-- <li class="dropdown-header">Dropdown header 1</li> -->
                             <li><a href="/member/accounting/journal/entry/bill/{{$eb->bill_id}}">Transaction Journal</a></li>
-                            <!-- <li class="divider"></li> -->
-                            <!-- <li class="dropdown-header">Dropdown header 2</li> -->
                             <li><a href="#">Void</a></li>
                         </ul>
                     </div>

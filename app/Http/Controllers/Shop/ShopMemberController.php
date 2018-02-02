@@ -3249,50 +3249,57 @@ class ShopMemberController extends Shop
     }
     public function getLeadList()
     {
-        $data["page"]       = "Lead List";
-        $shop_id            = $this->shop_info->shop_id;
-        $_slot              = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
-        
-        $query              = Tbl_customer::where("shop_id", $shop_id);
-
-        if(count($_slot) > 0)
+        if (Self::$customer_info) 
         {
-            $query->where(function($q) use ($_slot)
-            {
-                foreach($_slot as $slot)
-                {
-                    $q->orWhere("customer_lead", $slot->slot_id);
-                }
-            });
-        }
-        else
-        {
-            $query->where("customer_lead", "-1");
-        }
-
-
-
-        $_lead      = $query->get();
-
-        foreach($_lead as $key => $lead)
-        {
-            $slot_owned = Tbl_mlm_slot::where("slot_owner", $lead->customer_id)->first();
+            $data["page"]       = "Lead List";
+            $shop_id            = $this->shop_info->shop_id;
+            $_slot              = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
             
-            if($slot_owned)
+            $query              = Tbl_customer::where("shop_id", $shop_id);
+
+            if(count($_slot) > 0)
             {
-                $_lead[$key]->slot_owned = $slot_owned->slot_no;
+                $query->where(function($q) use ($_slot)
+                {
+                    foreach($_slot as $slot)
+                    {
+                        $q->orWhere("customer_lead", $slot->slot_id);
+                    }
+                });
             }
             else
             {
-                $_lead[$key]->slot_owned = "NONE";
+                $query->where("customer_lead", "-1");
             }
 
-            $_lead[$key]->date_created = date("F d, Y", strtotime($lead->created_at)) . "<br>" . date("h:i A", strtotime($lead->created_at));
+
+
+            $_lead      = $query->get();
+
+            foreach($_lead as $key => $lead)
+            {
+                $slot_owned = Tbl_mlm_slot::where("slot_owner", $lead->customer_id)->first();
+                
+                if($slot_owned)
+                {
+                    $_lead[$key]->slot_owned = $slot_owned->slot_no;
+                }
+                else
+                {
+                    $_lead[$key]->slot_owned = "NONE";
+                }
+
+                $_lead[$key]->date_created = date("F d, Y", strtotime($lead->created_at)) . "<br>" . date("h:i A", strtotime($lead->created_at));
+            }
+
+            $data["_lead"] = $_lead;
+
+            return (Self::load_view_for_members("member.lead", $data)); 
         }
-
-        $data["_lead"] = $_lead;
-
-        return (Self::load_view_for_members("member.lead", $data)); 
+        else
+        {
+            return Redirect::to("/members/login");
+        }
     }
     public function getWalletLogs()
     {

@@ -91,13 +91,10 @@ class AccountingTransaction
 		$trans_data['date_created'] = Carbon::now();
 		Tbl_acctg_transaction_list::insert($trans_data);
 	}
-	 /* $transaction_data['transaction_ref_name']
-	 	$transaction_data['transaction_ref_id']
-			
-	 */
-	public static function postTransaction($shop_id, $transaction_data)
+
+	public static function postTransaction($shop_id, $transaction_data, $attached_transaction_data = array())
 	{
-		$check = Self::check_transaction($shop_id, $transaction_data['transaction_ref_name'], $transaction_data['transaction_ref_id']);
+		$check = Self::check_transaction($shop_id, $attached_transaction_data['transaction_ref_name'], $attached_transaction_data['transaction_ref_id']);
 		if(!$check)
 		{
 			Self::insertTransaction($shop_id, $transaction_data);
@@ -109,12 +106,16 @@ class AccountingTransaction
 
 			Self::insertTransactionList($shop_id, $transaction_data);
 		}
-	}	
+	}
+	 /* $transaction_data['transaction_ref_name']
+	 	$transaction_data['transaction_ref_id']
+			
+	 */
 	public static function insertTransactionList($shop_id, $transaction_data)
 	{
 		Tbl_acctg_transaction_list::insert($transaction_data);
 	}
-	public static function check_transaction($shop_id, $transaction_name, $transaction_id)
+	public static function check_transaction1($shop_id, $transaction_name, $transaction_id)
 	{
 		$check = Tbl_acctg_transaction_list::acctgTransaction()->where("shop_id", $shop_id)->where("transaction_ref_name", $transaction_name)
 											->where("transaction_ref_id", $transaction_id)->first();

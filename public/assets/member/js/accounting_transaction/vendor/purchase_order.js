@@ -202,6 +202,7 @@ function purchase_order()
 			}
 			$(this).find(".txt-rate").val(action_add_comma(rate.toFixed(2)));
 
+
 		});
 		
 		/* action_compute EWT */
@@ -240,6 +241,12 @@ function purchase_order()
 			tax = total_taxable * (12 / 100);
 		}
 		total += tax;
+		/*if(tax_selection == 0)
+		{
+			$('input[type=checkbox]').each(function (){
+				$(this).attr("checked", false);
+			});
+		}*/
 
 		$(".sub-total").html(action_add_comma(subtotal.toFixed(2)));
 		$(".subtotal-amount-input").val(action_add_comma(subtotal.toFixed(2)));

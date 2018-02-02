@@ -80,26 +80,51 @@ class AccountingTransaction
 			itemline_item_amount double	
 		]
 	  */
-	public static function insertTransaction($shop_id, $trans_data = array(), $trans_item = array())
+	public static function insertTransaction($shop_id, $trans_data = array())
 	{
 		$insert_trans['shop_id'] = $shop_id;
-		$insert_trans['transaction_number'] = "TR00001"; // MUST BE AUTO GENERATED
+		$insert_trans['transaction_number'] = Self::get_ref_num($shop_id, 'accounting_transaction'); // MUST BE AUTO GENERATED
 
 		$acctg_trans_id = Tbl_acctg_transaction::insertGetId($insert_trans);
 
 		$trans_data['acctg_transaction_id'] = $acctg_trans_id;
 		$trans_data['date_created'] = Carbon::now();
 		Tbl_acctg_transaction_list::insert($trans_data);
-
-		Self::insertItemline($acctg_trans_id, $trans_item);
 	}
-	public static function postTransaction($shop_id, $transaction_data, $transaction_item)
+	 /* $transaction_data['transaction_ref_name']
+	 	$transaction_data['transaction_ref_id']
+			
+	 */
+	public static function postTransaction($shop_id, $transaction_data)
 	{
 		$check = Self::check_transaction($shop_id, $transaction_data['transaction_ref_name'], $transaction_data['transaction_ref_id']);
 		if(!$check)
 		{
-			Self::insertTransaction($shop_id, $transaction_data, $transaction_item);
+			Self::insertTransaction($shop_id, $transaction_data);
 		}
+		else
+		{
+			$transaction_data['date_created'] = Carbon::now();
+			$transaction_data['acctg_transaction_id'] = $check;
+
+			Self::insertTransactionList($shop_id, $transaction_data);
+		}
+	}	
+	public static function insertTransactionList($shop_id, $transaction_data)
+	{
+		Tbl_acctg_transaction_list::insert($transaction_data);
+	}
+	public static function check_transaction($shop_id, $transaction_name, $transaction_id)
+	{
+		$check = Tbl_acctg_transaction_list::acctgTransaction()->where("shop_id", $shop_id)->where("transaction_ref_name", $transaction_name)
+											->where("transaction_ref_id", $transaction_id)->first();
+		
+		$return = null;
+		if($check)
+		{
+			$return = $check->acctg_transaction_id;
+		}
+		return $return;
 	}
 	public static function insertItemline($acctg_trans_id, $trans_item)
 	{
@@ -122,18 +147,6 @@ class AccountingTransaction
 				Tbl_acctg_transaction_item::insert($ins);
 			}
 		}
-	}
-	public static function check_transaction($shop_id, $transaction_name, $transaction_id)
-	{
-		$check = Tbl_acctg_transaction_list::acctgTransaction()->where("shop_id", $shop_id)->where("transaction_ref_name", $transaction_name)
-											->where("transaction_ref_id", $transaction_id)->first();
-		
-		$return = null;
-		if($check)
-		{
-			$return = $check->acctg_transaction_id;
-		}
-		return $return;
 	}
 	public static function updateTransaction($shop_id, $acctg_trans_id, $trans_item = array(), $transaction_type)
 	{
@@ -212,6 +225,7 @@ class AccountingTransaction
 	{
 		$return = null;
 		$get = null;
+
 		if($transaction_type == 'sales_invoice')
 		{
 			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('transaction_refnum', $transaction_refnum)->where('is_sales_receipt',0)->first();
@@ -386,6 +400,14 @@ class AccountingTransaction
 	{
 		$return = 1;
 		$get = null;
+		if($transaction_type == 'accounting_transaction')
+		{
+			$get = Tbl_acctg_transaction::where('shop_id', $shop_id)->first();
+			if($get)
+			{
+				$get->transaction_refnum = $get->transaction_number;
+			}
+		}
 		if($transaction_type == 'sales_invoice')
 		{
 			$get = Tbl_customer_invoice::where('inv_shop_id', $shop_id)->where('is_sales_receipt',0)->orderBy('inv_id','DESC')->first();

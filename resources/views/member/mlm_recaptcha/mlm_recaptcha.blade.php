@@ -24,19 +24,19 @@
         <li class="cursor-pointer change-tab approve-tab" mode="approved"><a class="cursor-pointer"><i class="fa fa-trash"></i> Archived</a></li>
     </ul> --}}
     <div class="search-filter-box">
-        <div class="col-md-3" style="padding: 10px">
+        <div class="col-md-4" style="padding: 10px">
             {{-- <select class="form-control">
                 <option value="0">Filter Sample 001</option>
             </select> --}}
               <div class="pool-amount"><label>Total Pool Amount <b>:</b> </label><font color="red"> PHP 5000.00</font></div>
         </div>
-        <div class="col-md-3" style="padding: 10px">
+        <div class="col-md-4" style="padding: 10px">
             {{-- <select class="form-control">
                 <option value="0">Filter Sample 002</option>
             </select> --}}
               <div class="points-per-submit"><label>Acquired points per submit <b>:</b> </label><font color="red"> PHP 0.50</font></div>
         </div>
-        <div class="col-md-2" style="padding: 10px">
+        {{-- <div class="col-md-2" style="padding: 10px"> --}}
         </div>
         <div class="col-md-4" style="padding: 10px">
             {{-- <div class="input-group">

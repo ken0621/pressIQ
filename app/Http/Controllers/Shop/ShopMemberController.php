@@ -2449,15 +2449,7 @@ class ShopMemberController extends Shop
             $dummy["password"] = ucfirst(randomPassword());
             $data["dummy"] = $dummy;
         }
-        if($this->shop_info->shop_id == 90)
-        {
-            return Redirect::to('/members/login');
-        }
-        else
-        {
-            return Self::load_view_for_members("member.register", $data, false);
-        }
-        
+        return Self::load_view_for_members("member.register", $data, false);
     }
 
     public function getRegisterSubmit()
@@ -3144,7 +3136,7 @@ class ShopMemberController extends Shop
         $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first();
         if($point)
         {
-            $point = mt_rand($point->point*10,$point->max*10)/10;
+            $point = mt_rand($point->point*1000,$point->max*1000)/1000;
             // dd($point);
         }
         else
@@ -3158,7 +3150,13 @@ class ShopMemberController extends Shop
         $insert['wallet_log_plan']          = "RECAPTCHA";
         $insert['wallet_log_claimbale_on']  = Carbon::now();
         $insert['encashment_process_type']  = 0;
-        $insert['wallet_log_details']       = "You earned ".currency('PHP',$point)." from Recaptcha submit";
+        //patrick place value
+        $place_value = 2;
+        if($point<0.01)
+        {
+            $place_value = 3;
+        }
+        $insert['wallet_log_details']       = "You earned PHP ".number_format($point,$place_value)." from Recaptcha submit";
 
         $pool_amount        = Tbl_recaptcha_pool_amount::where('shop_id',$this->shop_info->shop_id)->sum('amount');
         $acquired_points    = Tbl_mlm_slot_wallet_log::where('wallet_log_plan','RECAPTCHA')

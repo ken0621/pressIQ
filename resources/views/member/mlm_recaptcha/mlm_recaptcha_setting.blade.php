@@ -28,7 +28,7 @@
             <div class="col-md-12">
                 <label for="basic-input">Schedule</label>
                 <div id="datetimepickerDate" class="input-group timerange">
-                    <input class="form-control" type="text" name="schedule">
+                    <input class="form-control" type="text" name="schedule" value="{{$schedule}}">
                     <span class="input-group-addon" style="">
                         <i aria-hidden="true" class="fa fa-calendar"></i>
                     </span>
@@ -51,6 +51,10 @@
     function point_error(data)
     {
         toastr.error('Minimum amount is greater than the Maximum');
+    }
+    function less_than_minimum(data)
+    {
+        toastr.error('Minimum amount must be greater than or equal to 0.001');
     }
 </script>
 

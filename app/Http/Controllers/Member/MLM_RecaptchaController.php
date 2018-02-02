@@ -32,14 +32,17 @@ class MLM_RecaptchaController extends Member
     	$setting_points 	= Tbl_recaptcha_setting::where('shop_id',$this->user_info->shop_id)->first();
         if($setting_points)
         {
-            $data['point'] = $setting_points->point;
-            $data['max']   = $setting_points->max;
+            $data['point']      = $setting_points->point;
+            $data['max']        = $setting_points->max;
+            $data['schedule']   = $setting_points->schedule;
         }
     	else
         {
-            $data['point'] = 0;
-            $data['max']   = 0;
+            $data['point']      = 0;
+            $data['max']        = 0;
+            $data['schedule']   = '';
         }
+        // dd($data);
     	return view('member.mlm_recaptcha.mlm_recaptcha_setting',$data);
     }
     public function submit_setting(Request $request)
@@ -48,6 +51,10 @@ class MLM_RecaptchaController extends Member
         if($request->point > $request->max)
         {
             $response['call_function'] = 'point_error';
+        }
+        else if($request->point < 0.001)
+        {
+            $response['call_function'] = 'less_than_minimum';
         }
         else
         {
@@ -126,7 +133,7 @@ class MLM_RecaptchaController extends Member
     {
     	if($query =Tbl_recaptcha_setting::where('shop_id',$this->user_info->shop_id)->first())
         {
-             return currency('PHP',$query->point)." to ".currency('PHP',$query->max);
+             return 'PHP '.number_format($query->point,3)." to PHP ".number_format($query->max,3);
         }
         else
         {

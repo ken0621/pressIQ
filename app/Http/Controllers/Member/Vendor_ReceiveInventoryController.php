@@ -212,10 +212,13 @@ class Vendor_ReceiveInventoryController extends Member
                     $item_refill[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
                     $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];   
                     
-                    // $serial_number[$key]
-                    $item_serial[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
-                    $item_serial[$key]["item_id"] = Request::input('itemline_item_id')[$key];
-                    $item_serial[$key]["serials"] = $serial_number[$key];
+                    if($serial_number[$key])
+                    {
+                        // $serial_number[$key]
+                        $item_serial[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
+                        $item_serial[$key]["item_id"] = Request::input('itemline_item_id')[$key];
+                        $item_serial[$key]["serials"] = $serial_number[$key];
+                    }
                 }
             }
         }

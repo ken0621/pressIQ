@@ -859,6 +859,16 @@ function submit_done_item(data)
     });
     data.element.modal("hide");
 }
+function success_update_customer(data)
+{
+	$(".droplist-customer").load("/member/customer/load_customer", function()
+    {                
+         $(".droplist-customer").globalDropList("reload");
+         $(".droplist-customer").val(data.id).change();    
+         toastr.success("Success");  
+    });    
+	    data.element.modal("hide");
+}
 
 function submit_done(data)
 {

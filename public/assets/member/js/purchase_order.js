@@ -542,6 +542,20 @@ function submit_done_item(data)
     data.element.modal("hide");
 }
 
+function success_vendor(data)
+{
+    if(data.status == 'success')
+    {
+          toastr.success("Success");
+	    $(".droplist-vendor").load("/member/vendor/load_vendor", function()
+	    {                
+	         $(".droplist-vendor").globalDropList("reload");
+	         $(".droplist-vendor").val(data.vendor_id).change();          
+	    });
+    	data.element.modal("hide");
+    }
+
+}
 function submit_done(data)
 {
 	if(data.type == 'vendor')

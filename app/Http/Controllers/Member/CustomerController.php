@@ -366,7 +366,8 @@ class CustomerController extends Member
         return json_encode($return);
 	}
 	
-	public function createcustomer(){
+	public function createcustomer()
+    {
 	    // return $_POST;
 	    $shop_id = $this->checkuser('user_shop');
 	    $title = Request::input('title');

@@ -705,11 +705,18 @@ class Payroll2
 			$access = Utilities::checkAccess('payroll-timekeeping','salary_rates');
 			
 			//DISPLAY TOTAL AMOUNT IN TIMESHEET 
-			if($access == 1) 
+			try 
 			{
-				$return->value_html = Payroll2::timesheet_daily_income_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
-			}
-			else
+				if($access == 1) 
+				{
+					$return->value_html = Payroll2::timesheet_daily_income_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
+				}
+				else
+				{
+					$return->value_html = Payroll2::timesheet_daily_target_hours_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->time_output, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
+				}
+			} 
+			catch (\Exception $e) 
 			{
 				$return->value_html = Payroll2::timesheet_daily_target_hours_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->time_output, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
 			}

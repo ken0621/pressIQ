@@ -613,7 +613,7 @@ class ReportsController extends Member
                                                         ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
                                                         ->get();
             $data['_vendor'][$key]->balance        = collect($data['_vendor'][$key]->vendor_journal)->sum('amount');
-        }   
+        }
 
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
         if($report_type && !$load_view)

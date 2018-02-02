@@ -12,8 +12,8 @@ class Tbl_journal_entry_line extends Model
 
     public function scopeAccount($query)
     {
-    	return $query->join("tbl_chart_of_account", "account_id", "=", "jline_account_id")
-    				 ->join("tbl_chart_account_type", "chart_type_id", "=", "account_type_id");
+    	return $query->leftjoin("tbl_chart_of_account", "account_id", "=", "jline_account_id")
+    				 ->leftjoin("tbl_chart_account_type", "chart_type_id", "=", "account_type_id");
     }
     /* Dependent on Account() */
     public function scopeCustomerOnly($query)

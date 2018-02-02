@@ -47,7 +47,14 @@
                                     <td>{{$rr->received_qty}} pc(s)</td>
                                     <td>{{$rr->wis_number}}</td>
                                     <td class="text-center">
-                                        <a href="/member/item/warehouse/rr/print/{{$rr->rr_id}}">Print</a>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Action <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-custom">
+                                                <li> <a href="/member/item/warehouse/rr/print/{{$rr->rr_id}}">Print</a></li>
+                                            </ul>
+                                        </div>
                                     </td>
                                 </tr>
                                 @endforeach

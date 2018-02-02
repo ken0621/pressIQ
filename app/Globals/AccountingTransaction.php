@@ -102,8 +102,9 @@ class AccountingTransaction
 		else
 		{
 			$acctg_trans_id = $check;
+			Tbl_acctg_transaction_list::where("acctg_transaction_id", $acctg_trans_id)->delete();
 		}
-		
+
 		if(is_numeric($acctg_trans_id))
 		{
 			Self::attached_transaction($acctg_trans_id, $attached_transaction_data);			

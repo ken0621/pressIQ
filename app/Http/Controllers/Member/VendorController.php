@@ -195,13 +195,13 @@ class VendorController extends Member
     public function postAdd()
     {
         $insert_vendor["vendor_shop_id"]        = $this->getShopId();
-        $insert_vendor["vendor_title_name"]     = Request::input("vendor_title_name");
-        $insert_vendor["vendor_first_name"]     = Request::input("vendor_first_name");
-        $insert_vendor["vendor_middle_name"]    = Request::input("vendor_middle_name");
-        $insert_vendor["vendor_last_name"]      = Request::input("vendor_last_name");
-        $insert_vendor["vendor_suffix_name"]    = Request::input("vendor_suffix_name");
+        $insert_vendor["vendor_title_name"]     = strtoupper(Request::input("vendor_title_name"));
+        $insert_vendor["vendor_first_name"]     = strtoupper(Request::input("vendor_first_name"));
+        $insert_vendor["vendor_middle_name"]    = strtoupper(Request::input("vendor_middle_name"));
+        $insert_vendor["vendor_last_name"]      = strtoupper(Request::input("vendor_last_name"));
+        $insert_vendor["vendor_suffix_name"]    = strtoupper(Request::input("vendor_suffix_name"));
         $insert_vendor["vendor_email"]          = Request::input("vendor_email");
-        $insert_vendor["vendor_company"]        = Request::input("vendor_company");
+        $insert_vendor["vendor_company"]        = strtoupper(Request::input("vendor_company"));
         $insert_vendor["created_date"]          = Carbon::now();
 
         $vendor_id = Tbl_vendor::insertGetId($insert_vendor);
@@ -273,13 +273,13 @@ class VendorController extends Member
         $old_vendor_data = Tbl_vendor::info()->where("vendor_id",$vendor_id)->first()->toArray();
 
         // dd(Request::input());
-        $update_vendor["vendor_title_name"]     = Request::input("vendor_title_name");
-        $update_vendor["vendor_first_name"]     = Request::input("vendor_first_name");
-        $update_vendor["vendor_middle_name"]    = Request::input("vendor_middle_name");
-        $update_vendor["vendor_last_name"]      = Request::input("vendor_last_name");
-        $update_vendor["vendor_suffix_name"]    = Request::input("vendor_suffix_name");
+        $update_vendor["vendor_title_name"]     = strtoupper(Request::input("vendor_title_name"));
+        $update_vendor["vendor_first_name"]     = strtoupper(Request::input("vendor_first_name"));
+        $update_vendor["vendor_middle_name"]    = strtoupper(Request::input("vendor_middle_name"));
+        $update_vendor["vendor_last_name"]      = strtoupper(Request::input("vendor_last_name"));
+        $update_vendor["vendor_suffix_name"]    = strtoupper(Request::input("vendor_suffix_name"));
         $update_vendor["vendor_email"]          = Request::input("vendor_email");
-        $update_vendor["vendor_company"]        = Request::input("vendor_company");
+        $update_vendor["vendor_company"]        = strtoupper(Request::input("vendor_company"));
 
         Tbl_vendor::where("vendor_id", $vendor_id)->update($update_vendor);
 

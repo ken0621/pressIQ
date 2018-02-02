@@ -178,7 +178,8 @@ class Customer_InvoiceController extends Member
         $product_consume = [];
         $item_serial = [];
 
-        $check_single = [];
+        $check_single = []; 
+        $check_bundle = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
@@ -214,22 +215,24 @@ class Customer_InvoiceController extends Member
                         $item_serial[$key]["item_id"] = Request::input('invline_item_id')[$key];
                         $item_serial[$key]["serials"] = $serial_number[$key];                        
                     }
+
+                    $check_bundle[$key] = $item_info;
                 }
             }
         }
         //START if bundle inventory_consume arcy
-        $check_bundle = [];
+       
         foreach ($_itemline as $keyitem => $value_item) 
         {
             $item_bundle_info = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitem])->where("item_type_id",4)->first();
             if($item_bundle_info)
             {
                 $bundle = Tbl_item_bundle::where("bundle_bundle_id",Request::input("invline_item_id")[$keyitem])->get();
-                $check_bundle[$keyitem] = $bundle;
-                foreach ($check_bundle[$keyitem] as $key0 => $value0) 
-                {
-                    $check_bundle[$keyitem][$key0]->bundle_quantity = str_replace(",", "", Request::input('invline_qty')[$keyitem]);
-                }
+                // $check_bundle[$keyitem] = $bundle;
+                // foreach ($check_bundle[$keyitem] as $key0 => $value0) 
+                // {
+                //     $check_bundle[$keyitem][$key0]->bundle_quantity = str_replace(",", "", Request::input('invline_qty')[$keyitem]);
+                // }
                 foreach ($bundle as $key_bundle => $value_bundle) 
                 {
                     $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$keyitem]);
@@ -550,23 +553,24 @@ class Customer_InvoiceController extends Member
                         $item_serial[$key]["item_id"] = Request::input('invline_item_id')[$key];
                         $item_serial[$key]["serials"] = $serial_number[$key];                        
                     }
+                    $check_bundle[$key] = $item_info;
                 }
             }
         }
 
         //START if bundle inventory_consume arcy
-        $check_bundle = [];
+        // $check_bundle = [];
         foreach ($_itemline as $keyitem => $value_item) 
         {
             $item_bundle_info = Tbl_item::where("item_id", Request::input("invline_item_id")[$keyitem])->where("item_type_id",4)->first();
             if($item_bundle_info)
             {
                 $bundle = Tbl_item_bundle::where("bundle_bundle_id", Request::input("invline_item_id")[$keyitem])->get();
-                $check_bundle[$keyitem] = $bundle;
-                foreach ($check_bundle[$keyitem] as $key0 => $value0) 
-                {
-                    $check_bundle[$keyitem][$key0]->bundle_quantity = str_replace(",", "", Request::input('invline_qty')[$keyitem]);
-                }
+                // $check_bundle[$keyitem] = $bundle;
+                // foreach ($check_bundle[$keyitem] as $key0 => $value0) 
+                // {
+                //     $check_bundle[$keyitem][$key0]->bundle_quantity = str_replace(",", "", Request::input('invline_qty')[$keyitem]);
+                // }
                 foreach ($bundle as $key_bundle => $value_bundle) 
                 {
                     $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$keyitem]);
@@ -768,7 +772,7 @@ class Customer_InvoiceController extends Member
 
                 if($json["status"] == "success")
                 {
-                    $json["status"]         = "success-invoice";
+                    $json["call_function"]         = "success_invoice";
                     $json["invoice_id"]     = $inv_id;
                     $json["redirect"]           = "/member/customer/invoice_list";
 

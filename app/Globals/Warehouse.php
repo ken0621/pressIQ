@@ -38,7 +38,6 @@ class Warehouse
 
         $item = [];
         $bundle_data = [];
-
         foreach($bundle as $key => $value) 
         {
             //onhand = current
@@ -1329,9 +1328,8 @@ class Warehouse
             {
                 if ($ctr == 0) 
                 {
-                    $count_on_hand = Warehouse::select_item_warehouse_per_bundle($warehouse_id, 0, '', $value_items->bundle_item_id);
+                    $count_on_hand = Warehouse::select_item_warehouse_per_bundle($warehouse_id, 0, '', $value_items['item_id']);
                     
-                    die(var_dump($count_on_hand));
                     if (isset($count_on_hand[0]["bundle_actual_stocks"])) 
                     {
                         $count_on_hand = $count_on_hand[0]["bundle_actual_stocks"];
@@ -1340,7 +1338,7 @@ class Warehouse
                     {
                         $count_on_hand = 0;
                     }
-                    if($value_items->bundle_quantity > 0 && $count_on_hand > 0 && $count_on_hand >= $value_items->bundle_quantity)
+                    if($value_items['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value_items['quantity'])
                     {
                         // Allowed
                     }

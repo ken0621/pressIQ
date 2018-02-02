@@ -869,7 +869,6 @@ function success_update_customer(data)
     });    
 	    data.element.modal("hide");
 }
-
 function submit_done(data)
 {
 	if(data.status == "success-invoice")

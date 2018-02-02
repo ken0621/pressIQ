@@ -20,6 +20,8 @@ use App\Models\Tbl_mlm_plan_setting;
 use App\Models\Tbl_mlm_cashback_convert_history;
 use App\Models\Rel_cashback_convert_history;
 use App\Models\Tbl_mlm_encashment_settings;
+use App\Models\Tbl_price_level;
+use App\Models\Tbl_price_level_item;
 use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Mlm_complan_manager_cd;
@@ -1394,7 +1396,7 @@ class MLM2
 			$data["STAIRSTEP_GROUP"]			= isset($item_points->STAIRSTEP_GROUP) ? $item_points->STAIRSTEP_GROUP : 0;
 			$data["RANK"]						= isset($item_points->RANK) ? $item_points->RANK : 0;
 			$data["RANK_GROUP"]					= isset($item_points->RANK_GROUP) ? $item_points->RANK_GROUP : 0;
-			$data["price"]						= isset($item->item_price) ? $item->item_price : 0;
+			$data["price"]						= MLM2::get_item_price($item,$slot_id,$shop_id);
 			$data["RANK_REPURCHASE_CASHBACK"]   = MLM2::rank_cashback_points($shop_id,$slot_id,$item_id);
 			return $data;
         }
@@ -1403,6 +1405,49 @@ class MLM2
         	return null;
         }
 	}
+	
+	public static function get_item_price($item,$slot_id,$shop_id)
+	{
+           if($slot_id)
+	       {
+	       	 $slot = Tbl_mlm_slot::where("shop_id",$shop_id)->where('slot_id',$slot_id)->first();
+	       }
+	       
+		   if($slot)
+		   {
+			   $bonus       = isset($item->item_price) ? $item->item_price : 0;
+	           $membership  = Tbl_membership::where("membership_id",$slot->slot_membership)->first();
+	           if($membership && $bonus != 0)
+	           {
+				   $price_level = Tbl_price_level::where("price_level_id",$membership->membership_price_level)->first();
+				   if($price_level)
+				   {
+			           if($price_level->price_level_type == "per-item")
+			           {
+			               $price_level_item = Tbl_price_level_item::where("price_level_id",$price_level->price_level_id)->where("item_id",$item->item_id)->first();
+			               if($price_level_item)
+			               {
+			                 $bonus = $price_level_item->custom_price;   
+			               }
+			           }
+			           else if($price_level->price_level_type == "fixed-percentage")
+			           {
+			               $bonus =  $item->item_price - ($item->item_price * ($price_level->fixed_percentage_value/100));
+			           }
+				   }
+	           }
+		   }
+		   
+		   /* DIVIDED BY 1.12 */
+		   if($bonus != 0)
+		   {
+			 $bonus = $bonus / 1.12;
+			 $bonus = number_format($bonus,2);
+		   }
+           
+           return $bonus;
+	}
+	
 	public static function check_sponsor_have_placement($shop_id,$slot_id)
 	{
 		$setting = Tbl_mlm_plan_setting::where("shop_id",$shop_id)->first();

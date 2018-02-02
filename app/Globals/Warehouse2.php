@@ -906,6 +906,7 @@ class Warehouse2
     }
     public static function check_lead_bonus($consume,$val)
     {
+        
         if(isset($consume["id"]) && $val)
         {
             $transaction_list = Tbl_transaction_list::where("transaction_list_id",$consume["id"])->first();
@@ -969,6 +970,21 @@ class Warehouse2
                                            }
                                        }
                                    }
+                                }
+                                else
+                                {
+                                    $check_if_owner_has_slot = Tbl_mlm_slot::where("slot_owner",$customer->customer_id)->first();
+                                    if($check_if_owner_has_slot)
+                                    {
+                                       $item = Tbl_item::where("item_id",$val)->first();
+                                       if($item)
+                                       {
+                                           if($item->item_type_id == 1)
+                                           {
+                                              MLM2::purchase($check_if_owner_has_slot->shop_id, $check_if_owner_has_slot->slot_id, $item->item_id);
+                                           }
+                                       }
+                                    }
                                 }
                             }
                             else

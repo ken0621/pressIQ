@@ -602,7 +602,7 @@ class Customer_InvoiceController extends Member
             }           
         }
         //END if bundle inventory_consume arcy
-        $check_stock = $this->check_stock($check_single, $check_bundle);
+        $check_stock = $this->check_stock($check_single, $check_bundle);  
 
         if ($check_stock) 
         {

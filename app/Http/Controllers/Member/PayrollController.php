@@ -87,6 +87,7 @@ use App\Models\Tbl_payroll_leave_schedulev2;
 use App\Models\Tbl_payroll_leave_history;
 use App\Models\Tbl_payroll_leave_report;
 use App\Models\Tbl_payroll_13th_month_basis;
+use App\Models\Tbl_payroll_payslip_option;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -6071,6 +6072,31 @@ class PayrollController extends Member
      {
           $data['_paper'] = Tbl_payroll_paper_sizes::getpaper(Self::shop_id())->orderBy('paper_size_name')->get();
           return view('member.payroll.modal.modal_create_paper_size', $data);
+     }
+
+     public function modal_view_payslip_option()
+     {
+
+          $data['option'] = Tbl_payroll_payslip_option::select('*')->where('shop_id',Self::shop_id())->get();
+          if(count($data['option']) == 0)
+          {
+                    $insert['per_page']       = 0;           
+                    $insert['shop_id']        = Self::shop_id();
+                    Tbl_payroll_payslip_option::insert($insert);
+          }
+          $data['option'] = Tbl_payroll_payslip_option::select('*')->where('shop_id',Self::shop_id())->get();
+          return view('member.payroll.modal.modal_view_payslip_option',$data);
+     }
+
+     public function save_payslip_options()
+     {
+          $update['per_page']   = Request::input('per_page');
+          Tbl_payroll_payslip_option::where('shop_id', Self::shop_id())->update($update);  
+            
+          $return['status']   = 'success';
+          $return['function_name'] = 'payrollconfiguration.reload_custom_payslip';
+
+          return collect($return)->toJson();         
      }
 
      public function modal_save_paper_size()

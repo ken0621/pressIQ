@@ -148,7 +148,7 @@
                 </div> -->
                 <div class="right-container">
                     <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/login'">LOGIN</span>
-                    <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span>
+                    {{-- <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span> --}}
                 </div>
                 @endif
             </div>

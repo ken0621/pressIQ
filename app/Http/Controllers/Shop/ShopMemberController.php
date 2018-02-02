@@ -2449,8 +2449,15 @@ class ShopMemberController extends Shop
             $dummy["password"] = ucfirst(randomPassword());
             $data["dummy"] = $dummy;
         }
+        if($this->shop_info->shop_id == 90)
+        {
+            return Redirect::to('/members/login');
+        }
+        else
+        {
+            return Self::load_view_for_members("member.register", $data, false);
+        }
         
-        return Self::load_view_for_members("member.register", $data, false);
     }
 
     public function getRegisterSubmit()

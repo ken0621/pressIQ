@@ -127,7 +127,7 @@
                                                                 </select>
                                                             </td>
                                                             <td><textarea class="textarea-expand acct-desc" name="account_desc[]">{{$accline->accline_description}}</textarea></td>
-                                                            <td><input type="text"  name="account_amount[]" class="form-control text-right number-input input-sm acct-amount compute" value="{{currency('',$accline->accline_amount)}}"></td>
+                                                            <td><input type="text" class="form-control text-right number-input input-sm acct-amount compute" value="{{currency('',$accline->accline_amount)}}" name="account_amount[]"></td>
                                                             <td class="text-center acct-remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                         </tr>
                                                         @endforeach

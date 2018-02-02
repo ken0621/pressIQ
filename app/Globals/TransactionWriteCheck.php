@@ -223,7 +223,7 @@ class TransactionWriteCheck
         {
             foreach ($insert_item as $key => $value) 
             {   
-                die(var_dump($value['item_ref_id']));
+                //die(var_dump($value['item_ref_id']));
                 $itemline[$key]['wcline_wc_id']       = $write_check_id;
                 $itemline[$key]['wcline_item_id']     = $value['item_id'];
                 $itemline[$key]['wcline_ref_id']      = $value['item_ref_id'] != NULL ? $value['item_ref_id'] : 0;

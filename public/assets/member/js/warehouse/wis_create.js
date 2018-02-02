@@ -380,9 +380,6 @@ function success_create_wis(data)
 	if(data.status == 'success')
 	{
 		toastr.success('Success');
-		setInterval(function()
-		{
-			location.href = '/member/item/warehouse/wis';
-		},2000);
+		location.href = '/member/item/warehouse/wis';
 	}
 }

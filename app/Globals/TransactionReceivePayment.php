@@ -66,6 +66,13 @@ class TransactionReceivePayment
 		$val = AccountingTransaction::customer_validation($insert, $insert_item , 'receive_payment');
 		if(!$val)
 		{
+			if(!$insert['rp_ar_account'])
+			{
+				$val = 'Select where to deposit payment';
+			}
+		}
+		if(!$val)
+		{
 			$ins["rp_shop_id"]           = $shop_id;
 	        $ins["rp_customer_id"]       = $insert['customer_id']; 
 	        $ins["transaction_refnum"]   = $insert['transaction_refnum'];
@@ -107,6 +114,13 @@ class TransactionReceivePayment
 	public static function postUpdate($rp_id, $shop_id, $insert, $insert_item = array())
 	{
 		$val = AccountingTransaction::customer_validation($insert, $insert_item);
+		if(!$val)
+		{
+			if(!$insert['rp_ar_account'])
+			{
+				$val = 'Select where to deposit payment';
+			}
+		}
 		if(!$val)
 		{
 			$ins["rp_shop_id"]           = $shop_id;

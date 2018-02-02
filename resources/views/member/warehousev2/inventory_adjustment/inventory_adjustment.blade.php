@@ -78,8 +78,8 @@
                                             <th class="text-center" style="width: 100px;">Actual Qty</th>
                                             <th class="text-center" style="width: 100px;">New Qty</th>
                                             <th class="text-center" style="width: 100px;">Difference</th>
-                                            <th class="text-center" style="width: 150px;">Rate</th>
-                                            <th class="text-center" style="width: 200px;">Amount</th>
+                                            <th class="text-center hidden" style="width: 150px;">Rate</th>
+                                            <th class="text-center hidden" style="width: 200px;">Amount</th>
                                             <!-- <th style="width: 100px;">Discount</th>
                                             <th style="width: 100px;">Remark</th> 
                                             <th style="width: 100px;">Amount</th>
@@ -113,8 +113,8 @@
                                                     <td><input class="text-center txt-qty compute"  readonly="true" type="text" name="item_actual_qty[]" value="{{$adjline->itemline_actual_qty}}" /></td>
                                                     <td><input class="text-center txt-new-quantity compute" type="text" name="item_new_qty[]" value="{{$adjline->itemline_new_qty}}"/></td>
                                                     <td><input class="text-center number-input txt-difference"  readonly="true" type="text" name="item_diff_qty[]"/></td>
-                                                    <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]" value="{{$adjline->itemline_rate}}" /></td>
-                                                    <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{$adjline->itemline_amount}}" /></td>
+                                                    <td class="hidden"><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]" value="{{$adjline->itemline_rate}}" /></td>
+                                                    <td  class="hidden"><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{$adjline->itemline_amount}}" /></td>
                                                     <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                 </tr>
                                             @endforeach
@@ -134,8 +134,8 @@
                                             <td><input class="text-center txt-qty compute"  readonly="true" type="text" name="item_actual_qty[]"/></td>
                                             <td><input class="text-center txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
                                             <td><input class="text-center number-input txt-difference" type="text" name="item_diff_qty[]"/></td>
-                                            <td><input class="text-right number-input txt-rate compute"  readonly="true" type="text" name="item_rate[]"/></td>
-                                            <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
+                                            <td class="hidden"><input class="text-right number-input txt-rate compute"  readonly="true" type="text" name="item_rate[]"/></td>
+                                            <td class="hidden"><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                         </tr>
                                         <tr class="tr-draggable">
@@ -153,8 +153,8 @@
                                             <td><input class="text-center txt-qty compute" readonly="true" type="text" name="item_actual_qty[]"/></td>
                                             <td><input class="text-center txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
                                             <td><input class="text-center number-input txt-difference"  readonly="true" type="text" name="item_diff_qty[]"/></td>
-                                            <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
-                                            <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
+                                            <td class="hidden"><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+                                            <td class="hidden"><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                         </tr>
                                     </tbody>
@@ -182,7 +182,7 @@
                                     PHP&nbsp;<span class="sub-total">0.00</span>
                                 </div>
                             </div>  -->
-                            <div class="row">
+                            <div class="row hidden">
                                 <div class="col-md-7 text-right digima-table-label">
                                   Total
                                 </div>
@@ -215,8 +215,8 @@
             <td><input class="text-center txt-qty compute" readonly="true" type="text" name="item_actual_qty[]"/></td>
             <td><input class="text-center txt-new-quantity compute" type="text" name="item_new_qty[]"/></td>
             <td><input class="text-center number-input txt-difference" readonly="true" type="text" name="item_diff_qty[]"/></td>
-            <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
-            <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
+            <td class="hidden"><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
+            <td class="hidden"><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>
     </table>

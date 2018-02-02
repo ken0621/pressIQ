@@ -19,6 +19,30 @@ class InventoryAdjustment
 	{
 		return Tbl_inventory_adjustment::where('adj_shop_id', $shop_id)->where('inventory_adjustment_id', $adj_id)->first();
 	}
+
+	public static function get($shop_id, $paginate = null, $search_keyword = null)
+	{
+		$data = Tbl_inventory_adjustment::warehouse()->where('adj_shop_id', $shop_id);
+		if($search_keyword)
+		{
+			$data->where(function($q) use ($search_keyword)
+            {
+                $q->orWhere("transaction_refnum", "LIKE", "%$search_keyword%");
+                $q->orWhere("warehouse_name", "LIKE", "%$search_keyword%");
+            });
+		}
+		
+		if($paginate)
+		{
+			$data = $data->paginate($paginate);
+		}
+		else
+		{
+			$data = $data->get();
+		}
+
+		return $data;
+	}
 	public static function info_item($adj_id)
 	{
 		return Tbl_inventory_adjustment_line::um()->where('itemline_ia_id', $adj_id)->get();

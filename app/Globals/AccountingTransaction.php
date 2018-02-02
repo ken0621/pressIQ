@@ -92,6 +92,19 @@ class AccountingTransaction
 		Tbl_acctg_transaction_list::insert($trans_data);
 		return $acctg_trans_id;
 	}
+	 /* 
+	 	<-- PARAMS -->
+	 	$transaction_data['transaction_ref_name'] - Reference Name
+	 	$transaction_data['transaction_ref_id'] - Reference ID
+	 	$transaction_data['transaction_list_number'] - Reference Number
+	 	$transaction_data['transaction_date'] - Date
+
+	 	$attached_transaction_data[0]['transaction_ref_name'] - Reference Name
+	 	$attached_transaction_data[0]['transaction_ref_id'] - Reference ID
+	 	$attached_transaction_data[0]['transaction_list_number'] - Reference Number
+	 	$attached_transaction_data[0]['transaction_date'] - Date
+			
+	 */
 	public static function postTransaction($shop_id, $transaction_data, $attached_transaction_data = array())
 	{
 		$check = Self::check_transaction($shop_id, $transaction_data['transaction_ref_name'], $transaction_data['transaction_ref_id']);
@@ -109,7 +122,7 @@ class AccountingTransaction
 		{
 			Self::attached_transaction($acctg_trans_id, $attached_transaction_data);			
 		}
-		return $acctg_trans_id
+		return $acctg_trans_id;
 	}
 	public static function attached_transaction($acctg_trans_id, $attached_transaction_data = array())
 	{

@@ -38,9 +38,14 @@ class WarehouseInventoryAdjustmentController extends Member
     {
         $data['page'] = "Inventory Adjustment";
        
-        return view('member.warehousev2.invtentory_adjustment.inventory_adjustment_list',$data);
+        return view('member.warehousev2.inventory_adjustment.inventory_adjustment_list',$data);
     }
 
+    public function getLoadInventoryAdjustment(Request $request)
+    {
+        $data['_inventory_adjustment'] = InventoryAdjustment::get($this->user_info->shop_id, 10, $request->search_keyword);
+        return view('member.warehousev2.inventory_adjustment.inventory_adjustment_table',$data);      
+    }
     public function getCreate(Request $request)
     {
         $data['page']       = "Inventory Adjustment";
@@ -57,7 +62,7 @@ class WarehouseInventoryAdjustmentController extends Member
             $data['_adj_line'] = InventoryAdjustment::info_item($request->id);
         }
 
-        return view('member.warehousev2.invtentory_adjustment.inventory_adjustment',$data);
+        return view('member.warehousev2.inventory_adjustment.inventory_adjustment',$data);
     }
     public function postCreateSubmit(Request $request)
     {

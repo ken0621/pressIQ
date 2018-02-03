@@ -20,6 +20,7 @@ function enter_bills()
 		event_taxable_check_change();
 		event_accept_number_only();
 		event_click_last_row();
+		action_acct_reassign_number();
 	}
 	function action_load_initialize_select()
 	{
@@ -91,8 +92,7 @@ function enter_bills()
     		}
 
     	});
-
-    	
+ 	
         //$('.droplist-um:not(.has-value)').globalDropList("disabled");
 
         $(".draggable .tr-draggable:last td select.select-um").globalDropList(
@@ -106,6 +106,18 @@ function enter_bills()
     		}
 
         });
+
+		$(".drop-down-coa").globalDropList(
+		{
+		    link 		: '/member/accounting/chart_of_account/popup/add',
+		    link_size 	: 'md',
+		    width 		: "100%",
+		    placeholder : 'Account',
+            onChangeValue : function()
+            {
+            	action_load_coa_info($(this));
+            }
+		});
 
 		$(".draggable.tbody-acct .tr-draggable:last td select.select-coa").globalDropList(
         {            
@@ -147,6 +159,12 @@ function enter_bills()
 		var subtotal = 0;
 		var total_taxable = 0;
 
+		var acct_amount = 0;
+		$(".acct-amount").each(function()
+		{
+			acct_amount += parseFloat(action_return_to_number($(this).val()));
+			//alert(acct_amount);
+		});
 		$(".tr-draggable").each(function()
 		{
 			/* GET ALL DATA */
@@ -262,8 +280,8 @@ function enter_bills()
 		$(".ewt-total").html(action_add_comma(ewt_value.toFixed(2)));
 		$(".discount-total").html(action_add_comma(discount_total.toFixed(2)));
 		$(".tax-total").html(action_add_comma(tax.toFixed(2)));
-		$(".total-amount").html(action_add_comma(subtotal.toFixed(2)));
-		$(".total-amount-input").val(subtotal.toFixed(2));
+		$(".total-amount").html(action_add_comma((subtotal + acct_amount).toFixed(2)));
+		$(".total-amount-input").val((subtotal + acct_amount).toFixed(2));
 
 	}
 

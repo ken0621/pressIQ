@@ -10,6 +10,7 @@ use App\Models\Tbl_purchase_order_line;
 use App\Globals\AccountingTransaction;
 use App\Globals\Warehouse2;
 use Carbon\Carbon;
+use Validator;
 use DB;
 
 /**
@@ -81,7 +82,7 @@ class TransactionEnterBills
         $val = null;
         if(!$ri_id)
         {
-    	   $val = AccountingTransaction::vendorValidation($insert, $insert_item, 'enter_bills');
+    	   $val = Self::enterBillValidation($insert, $insert_item, $shop_id, 'enter_bills');
         }            
 
         if(!$val)
@@ -104,6 +105,8 @@ class TransactionEnterBills
 
             $ins['bill_total_amount'] = $total;
             
+            $total_acct = collect($insert_acct)->sum('account_amount');
+
             /*INSERT RI HERE*/
             $enter_bills_id = Tbl_bill::insertGetId($ins);
             
@@ -112,7 +115,7 @@ class TransactionEnterBills
             $entry["reference_id"]      = $enter_bills_id;
             $entry["name_reference"]    ='vendor';
             $entry["name_id"]           = $insert['vendor_id'];
-            $entry["total"]             = $total;
+            $entry["total"]             = $total + $total_acct;
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
             $entry["ewt"]               = '';
@@ -144,7 +147,7 @@ class TransactionEnterBills
         $val = null;
         if(!$ri_id)
         {
-            $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+            $val = Self::enterBillValidation($insert, $insert_item, $shop_id);
         }
     
         if(!$val)
@@ -167,6 +170,8 @@ class TransactionEnterBills
 
             $update['bill_total_amount'] = $total;
             
+            $total_acct = collect($insert_acct)->sum('account_amount');
+            
             /*INSERT RI HERE*/
             Tbl_bill::where('bill_id', $enter_bills_id)->update($update);
             
@@ -174,12 +179,14 @@ class TransactionEnterBills
             $entry["reference_module"]  = "bill";
             $entry["reference_id"]      = $enter_bills_id;
             $entry["name_id"]           = $insert['vendor_id'];
-            $entry["total"]             = $total;
+            $entry["total"]             = $total + $total_acct;
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
             $entry["ewt"]               = '';
 
             Tbl_bill_item_line::where("itemline_bill_id", $enter_bills_id)->delete();
+
+
             Tbl_bill_account_line::where("accline_bill_id", $enter_bills_id)->delete();
 
             $return = Self::insertLine($enter_bills_id, $insert_item, $entry, $insert_acct);
@@ -221,15 +228,15 @@ class TransactionEnterBills
                 $acct_line[$key_acct]['accline_description'] = $value_acct['account_desc'];
                 $acct_line[$key_acct]['accline_amount']      = $value_acct['account_amount'];
 
-                Tbl_bill_account_line::insert($acct_line);
-
                 $entry_data['a'.$key_acct]['account_id']        = $value_acct['account_id'];
                 $entry_data['a'.$key_acct]['entry_description'] = $value_acct['account_desc'];
                 $entry_data['a'.$key_acct]['entry_amount']      = $value_acct['account_amount'];
                 $entry_data['a'.$key_acct]['vatable']           = 0;
                 $entry_data['a'.$key_acct]['discount']          = 0;
             }  
+            Tbl_bill_account_line::insert($acct_line);
         }
+
 
         if(count($insert_item) > 0)
         {
@@ -277,11 +284,11 @@ class TransactionEnterBills
                 }
 
             }
-        }
 
+            Tbl_bill_item_line::insert($itemline);
+        }
         if(count($entry_data) > 0)
         {
-            Tbl_bill_item_line::insert($itemline);
             Accounting::postJournalEntry($entry, $entry_data);        
         }
         $return = $enter_bills_id;
@@ -323,5 +330,32 @@ class TransactionEnterBills
             $updates["po_is_billed"] = $eb_id;
             Tbl_purchase_order::where("po_id",$po_id)->update($updates);
         }
+    }
+    public static function enterBillValidation($insert, $insert_item, $shop_id, $transaction_type = '')
+    {
+        $return = null;
+        if(!$insert['vendor_id'])
+        {
+            $return .= '<li style="list-style:none">Please Select Vendor.</li>';          
+        }
+
+
+        if($transaction_type)
+        {
+            $return .= AccountingTransaction::check_transaction_ref_number($shop_id, $insert['transaction_refnumber'], $transaction_type);
+        }
+
+        $rules['transaction_refnumber'] = 'required';
+        $rules['vendor_email']          = 'email';
+
+        $validator = Validator::make($insert, $rules);
+        if($validator->fails())
+        {
+            foreach ($validator->messages()->all('<li style="list-style:none">:message</li><br>') as $keys => $message)
+            {
+                $return .= $message;
+            }
+        }
+        return $return;
     }
 }

@@ -26,7 +26,7 @@
                                         <img src="/themes/{{ $shop_theme }}/img/card-img.png">
                                         <span>
                                             <div class="text-1">KROPS</div>
-                                            <div class="text-2">1 KRO = $1.36</div>
+                                            <div class="text-2">{{ get_content($shop_theme_info, "home", "home_kro_value") }}</div>
                                         </span>
                                     </div>
                                     <div class="border"></div>

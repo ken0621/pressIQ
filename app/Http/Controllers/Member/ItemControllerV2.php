@@ -242,6 +242,7 @@ class ItemControllerV2 extends Member
 	{
 		$data["page"]		= "Item Cost";
 		$data["_landing_cost"] = LandingCost::get($this->user_info->shop_id);
+		$data['_created_cost'] = null;
 		if(count(session('landing_cost')) > 0)
 		{
 			$data["_created_cost"] = session('landing_cost');

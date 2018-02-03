@@ -94,6 +94,7 @@ class TransactionPayBills
 
 	        $return = Self::insertLine($pay_bill_id, $shop_id, $insert_item, $entry);
 
+	        $wc = WriteCheck::create_check_from_paybill($pay_bill_id);
 	        /*$wc = WriteCheck::create_check_from_paybill($pay_bill_id);
 	        if($wc)
 	        {
@@ -150,8 +151,8 @@ class TransactionPayBills
 
 	        $return = $pay_bill_id;
 
-	        //WriteCheck::delete_bill_in_check($pay_bill_id);
- 			//WriteCheck::update_check_from_paybill($pay_bill_id);
+	        WriteCheck::delete_bill_in_check($pay_bill_id);
+ 			WriteCheck::update_check_from_paybill($pay_bill_id);
 		}
 		else
 		{

@@ -115,7 +115,7 @@ function bill()
 	{
 		$("tbody.draggable.tbody-acct").append(global_acct_tr_html);
 		action_acct_reassign_number();
-		action_trigger_select_plukgin();
+		action_trigger_select_plugin();
 	}
 
 	function action_date_picker()

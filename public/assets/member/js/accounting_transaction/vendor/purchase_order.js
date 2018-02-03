@@ -12,6 +12,7 @@ function purchase_order()
 		action_compute();
 		action_date_picker();
 		action_reassign_number();
+		//action_tax();
 
 		event_remove_tr();
 		event_compute_class_change();
@@ -242,14 +243,13 @@ function purchase_order()
 		if(tax_selection == 1){
 			tax = total_taxable * (12 / 100);
 		}
-		total += tax;
-		/*if(tax_selection == 0)
+		if(tax == 0)
 		{
 			$('input[type=checkbox]').each(function (){
 				$(this).attr("checked", false);
 			});
-		}*/
-
+		}
+		total += tax;
 
 		$(".sub-total").html(action_add_comma(subtotal.toFixed(2)));
 		$(".subtotal-amount-input").val(action_add_comma(subtotal.toFixed(2)));
@@ -436,27 +436,6 @@ function purchase_order()
 			}
 		});
 	}
-
-	/*function action_taxt()
-	{
-		$(document).on('click','.taxable-check', function()
-        {
-        	alert(123);
-        	$('.taxable-check').prop('checked', this.checked); 
-
-            var count = $('input:checkbox:checked').length;
-            
-            if(count > 0)
-            {
-                
-            }
-            else
-            {
-                
-            }
-           
-        });
-	}*/
 
 	function event_accept_number_only()//
 	{

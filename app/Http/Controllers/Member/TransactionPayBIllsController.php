@@ -78,17 +78,10 @@ class TransactionPayBillsController extends Member
         $insert["transaction_refnumber"]     = $request->transaction_refnumber;
         $insert["paybill_ap_id"]             = $request->paybill_ap_id != "" ? $request->paybill_ap_id : 0;
         $insert["paybill_date"]              = $request->paybill_date;
-        $insert["vendor_total"]              = $request->paybill_total_amount;
+        $insert["vendor_total"]              = str_replace(',', '',$request->paybill_total_amount);
         $insert["paybill_payment_method"]    = $request->paybill_payment_method;
         $insert["paybill_ref_num"]           = $request->paybill_ref_num;
         $insert["paybill_memo"]              = $request->vendor_memo;
-
-        $insert["wc_reference_name"]         = 'vendor';
-        $insert["vendor_email"]              = '';
-        $insert["wc_mailing_address"]        = '';
-        $insert["wc_payment_date"]           = $request->paybill_date;
-        $insert["wc_memo"]                   = $request->vendor_memo;
-
 
         $insert_item = null;
         $ctr_bill = 0;
@@ -149,7 +142,7 @@ class TransactionPayBillsController extends Member
         $insert["transaction_refnumber"]     = $request->transaction_refnumber;
         $insert["paybill_ap_id"]             = $request->paybill_ap_id != "" ? $request->paybill_ap_id : 0;
         $insert["paybill_date"]              = $request->paybill_date;
-        $insert["vendor_total"]      = $request->paybill_total_amount;
+        $insert["vendor_total"]              = str_replace(',', '',$request->paybill_total_amount);
         $insert["paybill_payment_method"]    = $request->paybill_payment_method;
         $insert["paybill_ref_num"]           = $request->paybill_ref_num;
         $insert["paybill_memo"]              = $request->vendor_memo;

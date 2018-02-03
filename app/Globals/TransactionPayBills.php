@@ -92,15 +92,14 @@ class TransactionPayBills
 	        $entry["discount"]          = '';
 	        $entry["ewt"]               = '';
 
-	        //die(var_dump($insert_item));
+	        $return = Self::insertLine($pay_bill_id, $shop_id, $insert_item, $entry);
 
-	        $wc = TransactionWriteCheck::postInsert($shop_id, $insert, $insert_item);
+	        /*$wc = WriteCheck::create_check_from_paybill($pay_bill_id);
 	        if($wc)
 	        {
 	        	$return = Self::insertLine($pay_bill_id, $shop_id, $insert_item, $entry);
-	        }
+	        }*/
      
-
 	        $return = $pay_bill_id;
 
 
@@ -146,8 +145,6 @@ class TransactionPayBills
 	        $entry["ewt"]               = '';
 
 			Tbl_pay_bill_line::where('pbline_pb_id', $pay_bill_id)->delete();
-
-			//TransactionWriteCheck::info_item()
 
 	        $return = Self::insertLine($pay_bill_id, $shop_id, $insert_item, $entry);
 

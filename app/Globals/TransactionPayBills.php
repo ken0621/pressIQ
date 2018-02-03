@@ -94,7 +94,7 @@ class TransactionPayBills
 
 	        //die(var_dump($insert_item));
 
-	        $wc = TransactionWriteCheck::postInsert($shop_id, $insert, $insert_item);
+	        $wc = WriteCheck::update_check_from_paybill($pay_bill_id);
 	        if($wc)
 	        {
 	        	$return = Self::insertLine($pay_bill_id, $shop_id, $insert_item, $entry);
@@ -147,14 +147,12 @@ class TransactionPayBills
 
 			Tbl_pay_bill_line::where('pbline_pb_id', $pay_bill_id)->delete();
 
-			//TransactionWriteCheck::info_item()
-
 	        $return = Self::insertLine($pay_bill_id, $shop_id, $insert_item, $entry);
 
 	        $return = $pay_bill_id;
 
-	        //WriteCheck::delete_bill_in_check($pay_bill_id);
- 			//WriteCheck::update_check_from_paybill($pay_bill_id);
+	        WriteCheck::delete_bill_in_check($pay_bill_id);
+ 			WriteCheck::update_check_from_paybill($pay_bill_id);
 		}
 		else
 		{

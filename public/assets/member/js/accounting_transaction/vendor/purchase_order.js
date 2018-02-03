@@ -243,6 +243,12 @@ function purchase_order()
 		if(tax_selection == 1){
 			tax = total_taxable * (12 / 100);
 		}
+		if(tax == 0)
+		{
+			$('input[type=checkbox]').each(function (){
+				$(this).attr("checked", false);
+			});
+		}
 		total += tax;
 
 		$(".sub-total").html(action_add_comma(subtotal.toFixed(2)));
@@ -430,19 +436,6 @@ function purchase_order()
 			}
 		});
 	}
-
-	/*function action_tax()
-	{
-		var tax = $(".tax_selection option:selected").val();
-		alert(tax);
-		if(tax == 0)
-		{
-			$('input[type=checkbox]').each(function (){
-				$(this).attr("checked", false);
-			});
-		}
-
-	*/}
 
 	function event_accept_number_only()//
 	{

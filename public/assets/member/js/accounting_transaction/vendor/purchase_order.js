@@ -103,6 +103,7 @@ function purchase_order()
 
         }).globalDropList('disabled');
 	}
+
 	function action_load_pdf($po_id)
 	{
 		if($po_id)
@@ -200,7 +201,9 @@ function purchase_order()
 			{
 				total_taxable += parseFloat(total_per_tr);
 			}
+
 			$(this).find(".txt-rate").val(action_add_comma(rate.toFixed(2)));
+
 
 		});
 		
@@ -240,6 +243,13 @@ function purchase_order()
 			tax = total_taxable * (12 / 100);
 		}
 		total += tax;
+		/*if(tax_selection == 0)
+		{
+			$('input[type=checkbox]').each(function (){
+				$(this).attr("checked", false);
+			});
+		}*/
+
 
 		$(".sub-total").html(action_add_comma(subtotal.toFixed(2)));
 		$(".subtotal-amount-input").val(action_add_comma(subtotal.toFixed(2)));
@@ -414,6 +424,7 @@ function purchase_order()
 	{
 		$(document).on("click", ".remove-tr", function(e){
 			var len = $(".tbody-item .remove-tr").length;
+
 			if($(".tbody-item .remove-tr").length > 1)
 			{
 				$(this).parent().remove();
@@ -425,6 +436,27 @@ function purchase_order()
 			}
 		});
 	}
+
+	/*function action_taxt()
+	{
+		$(document).on('click','.taxable-check', function()
+        {
+        	alert(123);
+        	$('.taxable-check').prop('checked', this.checked); 
+
+            var count = $('input:checkbox:checked').length;
+            
+            if(count > 0)
+            {
+                
+            }
+            else
+            {
+                
+            }
+           
+        });
+	}*/
 
 	function event_accept_number_only()//
 	{

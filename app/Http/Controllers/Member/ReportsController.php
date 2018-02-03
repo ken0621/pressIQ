@@ -603,7 +603,7 @@ class ReportsController extends Member
         $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 
         $data['_vendor'] = Tbl_vendor::balanceJournal()->where("vendor_shop_id", $this->user_info->shop_id)->where("archived", 0)->orderBy('vendor_first_name', 'ASC')->get();
-
+        //dd($data['_vendor']);
         foreach($data['_vendor'] as $key=>$vendor)
         {
             $data['_vendor'][$key]->vendor_journal = Tbl_journal_entry_line::journal()->customerOrVendor()->account()->vendorOnly()
@@ -613,7 +613,7 @@ class ReportsController extends Member
                                                         ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
                                                         ->get();
             $data['_vendor'][$key]->balance        = collect($data['_vendor'][$key]->vendor_journal)->sum('amount');
-        }   
+        }
 
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
         if($report_type && !$load_view)

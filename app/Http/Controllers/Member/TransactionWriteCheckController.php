@@ -75,8 +75,19 @@ class TransactionWriteCheckController extends Member
         $insert['wc_mailing_address']      = $request->wc_mailing_address;
         $insert['wc_payment_date']         = $request->wc_payment_date;
         $insert['wc_memo']                 = $request->wc_memo;
-        $insert['wc_total_amount']         = $request->wc_total_amount;
+        $insert['vendor_total']            = $request->wc_total_amount;
         
+        $insert_acct = null;
+        foreach($request->expense_account as $key_account => $value_account)
+        {
+            if($value_account)
+            {
+                $insert_acct[$key_account]['account_id']    = $value_account;
+                $insert_acct[$key_account]['account_desc']  = $request->account_desc[$key_account];
+                $insert_acct[$key_account]['account_amount']= $request->account_amount[$key_account];
+            }
+        }
+
         $insert_item = null;
         foreach($request->item_id as $key => $value)
         {
@@ -99,7 +110,7 @@ class TransactionWriteCheckController extends Member
         $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
         if(!$validate)
         {
-            $validate = TransactionWriteCheck::postInsert($this->user_info->shop_id, $insert, $insert_item);
+            $validate = TransactionWriteCheck::postInsert($this->user_info->shop_id, $insert, $insert_item, $insert_acct);
             if(Session::get('applied_transaction') > 0)
             {
                 TransactionWriteCheck::checkPOQty($validate, Session::get("applied_transaction"));
@@ -132,7 +143,7 @@ class TransactionWriteCheckController extends Member
         $insert['wc_mailing_address']      = $request->wc_mailing_address;
         $insert['wc_payment_date']         = $request->wc_payment_date;
         $insert['wc_memo']                 = $request->wc_memo;
-        $insert['wc_total_amount']         = $request->wc_total_amount;
+        $insert['vendor_total']             = $request->wc_total_amount;
         
         $insert_item = null;
         foreach($request->item_id as $key => $value)

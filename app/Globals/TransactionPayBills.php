@@ -81,9 +81,10 @@ class TransactionPayBills
 
 	        /*INSERT PB HERE*/
 	        $pay_bill_id = Tbl_pay_bill::insertGetId($ins);
+	        
 	               
 	        /* Transaction Journal */
-	        $entry["reference_module"]  = "pay-bill";
+	        $entry["reference_module"]  = "bill-payment";
 	        $entry["reference_id"]      = $pay_bill_id;
 	        $entry["name_id"]           = $insert['vendor_id'];
 	        $entry["total"]             = $total;
@@ -92,9 +93,17 @@ class TransactionPayBills
 	        $entry["ewt"]               = '';
 
 	        $return = Self::insertLine($pay_bill_id, $shop_id, $insert_item, $entry);
+
+	        $wc = WriteCheck::create_check_from_paybill($pay_bill_id);
+	        /*$wc = WriteCheck::create_check_from_paybill($pay_bill_id);
+	        if($wc)
+	        {
+	        	$return = Self::insertLine($pay_bill_id, $shop_id, $insert_item, $entry);
+	        }*/
+     
 	        $return = $pay_bill_id;
 
-	        WriteCheck::create_check_from_paybill($pay_bill_id);
+
 
 		}
 		else
@@ -128,7 +137,7 @@ class TransactionPayBills
 	        Tbl_pay_bill::where('paybill_id', $pay_bill_id)->update($ins);
 	               
 	        /* Transaction Journal */
-	        $entry["reference_module"]  = "pay-bill";
+	        $entry["reference_module"]  = "bill-payment";
 	        $entry["reference_id"]      = $pay_bill_id;
 	        $entry["name_id"]           = $insert['vendor_id'];
 	        $entry["total"]             = $total;
@@ -179,31 +188,44 @@ class TransactionPayBills
 
 	public static function insertLine($pay_bill_id, $shop_id, $insert_item, $entry)
     {
+    	$data  = Tbl_pay_bill::where('paybill_id', $pay_bill_id)->get();
 
-        $itemline = null;
-        foreach ($insert_item as $key => $value) 
-        {   
-        	if($value["line_is_checked"] == 1)
-        	{
-	        	$itemline["pbline_pb_id"]            = $pay_bill_id;
-	            $itemline["pbline_reference_name"]   = $value['pbline_reference_name'];
-	            $itemline["pbline_reference_id"]     = $value['pbline_reference_id'];
-	            $itemline["pbline_amount"]           = $value['item_amount'];
+    	$entry_data = null;
+    	foreach ($data as $key => $value)
+	    {
+	    	$entry_data['a'.$key]['account_id']        = $value->paybill_ap_id;
+            $entry_data['a'.$key]['entry_description'] = 0;
+            $entry_data['a'.$key]['entry_amount']      = $value->paybill_total_amount;
+            $entry_data['a'.$key]['vatable']           = 0;
+            $entry_data['a'.$key]['discount']          = 0;
+	    	
+	    }
+    	
+    	if(count($insert_item) > 0)
+    	{
+    		$itemline = null;
+	        foreach ($insert_item as $key => $value) 
+	        {   
+	        	if($value["line_is_checked"] == 1)
+	        	{
+		        	$itemline["pbline_pb_id"]            = $pay_bill_id;
+		            $itemline["pbline_reference_name"]   = $value['pbline_reference_name'];
+		            $itemline["pbline_reference_id"]     = $value['pbline_reference_id'];
+		            $itemline["pbline_amount"]           = $value['item_amount'];
 
-	            Tbl_pay_bill_line::insert($itemline);
+		            Tbl_pay_bill_line::insert($itemline);
 
-		        if($itemline["pbline_reference_name"] == 'bill')
-		        {
-		        	Self::updateAppliedAmount($itemline["pbline_reference_id"], $shop_id);
-		        }
-			}
-			/*else
-	    	{
-	    		Self::updateAppliedAmount($value['pbline_reference_id'], $shop_id);   
-	    	}*/
-        }
+			        if($itemline["pbline_reference_name"] == 'bill')
+			        {
+			        	Self::updateAppliedAmount($itemline["pbline_reference_id"], $shop_id);
+			        }
+				}
+	        }
+	    }
+
+	    Accounting::postJournalEntry($entry, $entry_data);
         
-        $return = AccountingTransaction::entry_data($entry, $insert_item);
+        $return = $pay_bill_id;
 
         return $return;
     }

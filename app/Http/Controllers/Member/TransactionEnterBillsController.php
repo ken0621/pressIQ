@@ -58,7 +58,7 @@ class TransactionEnterBillsController extends Member
         $data["_vendor"]    = Vendor::getAllVendor('active');
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
         $data['_item']      = Item::get_all_category_item();
-        $data['_account']   = Accounting::getAllAccount();
+        $data['_account']   = Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["transaction_refnum"] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'enter_bills');
         $data['action']     = '/member/transaction/enter_bills/create-enter-bills';

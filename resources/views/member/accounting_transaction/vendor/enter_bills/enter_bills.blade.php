@@ -30,16 +30,13 @@
                         </ul>
                     </div>
                 </div>
-                @if(isset($bill))
+                @if(isset($eb))
                 <div class="pull-right">
                     <div class="dropdown">
                         <button class="btn btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown">More
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
-                            <!-- <li class="dropdown-header">Dropdown header 1</li> -->
-                            <li><a href="/member/accounting/journal/entry/bill/{{$bills->bill_id}}">Transaction Journal</a></li>
-                            <!-- <li class="divider"></li> -->
-                            <!-- <li class="dropdown-header">Dropdown header 2</li> -->
+                            <li><a href="/member/accounting/journal/entry/bill/{{$eb->bill_id}}">Transaction Journal</a></li>
                             <li><a href="#">Void</a></li>
                         </ul>
                     </div>
@@ -48,6 +45,7 @@
             </div>
         </div>
     </div>
+
     <div class="panel panel-default panel-block panel-title-block panel-gray">  
         <div class="tab-content">
             <div class="row">
@@ -129,7 +127,7 @@
                                                                 </select>
                                                             </td>
                                                             <td><textarea class="textarea-expand acct-desc" name="account_desc[]">{{$accline->accline_description}}</textarea></td>
-                                                            <td><input type="text"  name="account_amount[]" class="form-control text-right number-input input-sm acct-amount compute" value="{{currency('',$accline->accline_amount)}}"></td>
+                                                            <td><input type="text" class="form-control text-right number-input input-sm acct-amount compute" value="{{currency('',$accline->accline_amount)}}" name="account_amount[]"></td>
                                                             <td class="text-center acct-remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                         </tr>
                                                         @endforeach

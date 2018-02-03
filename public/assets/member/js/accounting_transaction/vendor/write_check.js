@@ -19,6 +19,7 @@ function write_check()
 		event_taxable_check_change();
 		event_accept_number_only();
 		event_click_last_row();
+		event_remove_tr_acct()
 	}
 	function action_load_initialize_select()
 	{
@@ -122,14 +123,6 @@ function write_check()
 		    link_size 	: 'lg',
 		    width 		: "100%",
 		    placeholder : 'Payment Method'
-		});
-
-		$(".drop-down-coa").globalDropList(
-		{
-		    link 		: '/member/accounting/chart_of_account/popup/add',
-		    link_size 	: 'md',
-		    width 		: "100%",
-		    placeholder : 'Account'
 		});
 		$(".draggable.tbody-acct .tr-draggable:last td select.select-coa").globalDropList(
         {            
@@ -444,6 +437,14 @@ function write_check()
 			num++;
 		});
 	}
+	function action_reassign_number_acct()
+	{
+		var num = 1;
+		$(".acct-number-td").each(function(){
+			$(this).html(num);
+			num++;
+		});
+	}
 
 	function event_click_last_row()
 	{
@@ -466,7 +467,7 @@ function write_check()
 	function event_click_last_row_op_acct()
 	{
 		$("tbody.draggable.tbody-acct").append(global_tr_html_acct);
-		action_reassign_number();
+		action_reassign_number_acct();
 		action_load_initialize_select();
 		action_date_picker();
 	}
@@ -474,44 +475,22 @@ function write_check()
 	/*REMOVING ROW*/
 	function event_remove_tr()
 	{
-		//cycy
 		$(document).on("click", ".remove-tr", function(e){
-			if($(".tbody-item .remove-tr").length > 1)
-			{
-				if($(this).attr("tr_id") != 0 && $(this).attr("tr_id") != null)
-				{					
-					var id = $(this).attr("tr_id");
-					console.log($(this).attr("linked_in"));
-					if($(this).attr("linked_in") != 'no')
-					{						
-						$(".tr-id-"+id).remove();
-					}
-					else
-					{
-						$(".po-tbl").load("/member/vendor/po_remove/"+id, function()
-						{
-							// console.log("success-removing");
-							iniatilize_select();
-							$(".tbody-item .select-um").globalDropList("enabled");
-							$(".po-"+id).removeClass("hidden");
-							$(".drawer-toggle").trigger("click");
-							action_reassign_number();
-							action_compute();
-							var count = $(".tbody-item .trcount").length;
-							console.log(count);
-							if(count == 0)
-							{
-								$(".bill-data").removeClass("hidden");
-							}
-						});
-					}
-				}
-				else
-				{
-					$(this).parent().remove();
-				}
+			if($(".tbody-item .remove-tr").length > 1){
 
+				$(this).parent().remove();
 				action_reassign_number();
+				action_compute();
+			}			
+		});
+	}
+	function event_remove_tr_acct()
+	{
+		$(document).on("click", ".acct-remove-tr", function(e){
+			if($(".tbody-acct .acct-remove-tr").length > 1){
+
+				$(this).parent().remove();
+				action_reassign_number_acct();
 				action_compute();
 			}			
 		});

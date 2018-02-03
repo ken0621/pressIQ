@@ -227,7 +227,7 @@ class Customer
 		{
 			$shop_id = Tablet_global::getShopId();
 		}
-		$customer = Tbl_customer::selectRaw("*, tbl_customer.customer_id as customer_id")->info()->where("tbl_customer.archived", 0)->where("tbl_customer.shop_id", $shop_id)->groupBy("tbl_customer.customer_id")->orderBy("tbl_customer.customer_id","DESC");
+		$customer = Tbl_customer::selectRaw("*, tbl_customer.customer_id as customer_id")->info()->where("tbl_customer.archived", 0)->where("tbl_customer.shop_id", $shop_id)->groupBy("tbl_customer.customer_id")->orderBy("tbl_customer.first_name","ASC")->orderBy("tbl_customer.company","ASC");
 		// if(CommissionCalculator::check_settings($shop_id) == 1)
 		// {
 		// 	$customer = $customer->selectRaw('*, tbl_employee.first_name as salesrep_fname, tbl_employee.middle_name as salesrep_mname,tbl_employee.last_name as salesrep_lname')->commission()->salesrep();

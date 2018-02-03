@@ -173,7 +173,7 @@ class ShopAboutController extends Shop
 
     public function terms_and_conditions()
     {
-        $data["page"] = "terms_and_conditions";
+        $data["page"] = "Terms and Condition";
         return view("terms_and_conditions", $data);
     }
 

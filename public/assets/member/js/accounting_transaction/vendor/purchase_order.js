@@ -488,15 +488,16 @@ function success_vendor(data)
 }
 
 /*AFTER ADDING ITEM*/
+
 function success_item(data)
 {
-	$('.droplist-item').load("/member/item/load_item_category", function()
-	{
-		$(this).globalDropList("reload");
+	console.log(item_selected);
+    item_selected.load("/member/item/load_item_category", function()
+    {
+        $(this).globalDropList("reload");
 		$(this).val(data.item_id).change();
-
-		data.element.modal("hide");
-	});
+    });
+    data.element.modal("hide");
 }
 
 function success_purchase_order(data)

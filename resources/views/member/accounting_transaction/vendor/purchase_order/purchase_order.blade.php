@@ -113,7 +113,7 @@
                                                     <td>                                                                            
                                                         <select class="form-control select-item droplist-item input-sm pull-left {{$poline->poline_item_id}}" name="item_id[]" required>
                                                             @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $poline->poline_item_id])
-                                                        </select>
+                                                        </select>                                                                       
                                                     </td>
                                                     <td>
                                                         <textarea class="textarea-expand txt-desc" name="item_description[]">{{$poline->poline_description}}</textarea>

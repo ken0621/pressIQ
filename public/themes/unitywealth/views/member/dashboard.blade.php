@@ -60,9 +60,9 @@
 	                    </div>
 	                    <div class="btn-container">
 	                        <button class="btn-buy-a-kit" type="button">Activate My Account</button>
-	                        <!-- <br> -->
-	                        <!-- <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
-	                        <a href="#" id="btn-enter-a-code"><button style="margin-top: 0;" onclick="action_load_link_to_modal('members/enter-code')" class="btn-enter-a-code">ENTER A CODE</button></a> -->
+	                        <br>
+	                        <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br>
+	                        <a href="#" id="btn-enter-a-code"><button style="margin-top: 0;" onclick="action_load_link_to_modal('members/enter-code')" class="btn-enter-a-code">ENTER A CODE</button></a>
 	                    </div>
 	                </div>
 	            </div>

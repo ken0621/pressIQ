@@ -92,15 +92,15 @@ class TransactionPayBills
 	        $entry["discount"]          = '';
 	        $entry["ewt"]               = '';
 
-	        //die(var_dump($insert_item));
+	        $return = Self::insertLine($pay_bill_id, $shop_id, $insert_item, $entry);
 
-	        $wc = WriteCheck::update_check_from_paybill($pay_bill_id);
+	        $wc = WriteCheck::create_check_from_paybill($pay_bill_id);
+	        /*$wc = WriteCheck::create_check_from_paybill($pay_bill_id);
 	        if($wc)
 	        {
 	        	$return = Self::insertLine($pay_bill_id, $shop_id, $insert_item, $entry);
-	        }
+	        }*/
      
-
 	        $return = $pay_bill_id;
 
 

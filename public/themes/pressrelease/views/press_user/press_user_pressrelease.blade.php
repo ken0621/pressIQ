@@ -6,7 +6,7 @@
    <div class="pressview">
       <div class="dashboard-container">
           @if (session('message'))
-            <div class="alert alert-danger">
+            <div class="alert alert-success">
                 {{ session('message') }}
             </div>
           @endif
@@ -95,7 +95,10 @@
                     <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
                     </div>
                      
-                    <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
+                    <input type="hidden" class="hidden_number" id="hidden_number" name="hidden_number" readonly>
+                    <input type="hidden"  id="recipient_name" name="recipient_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
+                    <input type="hidden"  id="recipient_name_only" name="recipient_name_only" class="form-control"  multiple readonly>
+
                     <span class="button"><button class="tablinks" type="button" onclick="openCity(event, 'create_release')" id="defaultOpen"><a>&laquo; Back to Release</a></button></span>
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
@@ -158,9 +161,11 @@
                     </select>
 
                     <div class="title">Send To:
-                    <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
+                    <span class="result-container" style="font-size:15px"><span id="results_number" name="results_number" style="font-size:15px"></span></span>
                     </div>
-                    <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
+                    <input type="hidden" class="hidden_number" id="hidden_number" name="hidden_number" readonly>
+                    <input type="hidden" id="recipient_name" name="recipient_name"  class="form-control" multiple readonly> 
+                    <input type="hidden" id="recipient_name_only" name="recipient_name_only"  class="form-control" multiple readonly>           
 
                     <span class="button"><button class="tablinks" type="button" onclick="openCity(event, 'create_release')" id="defaultOpen"><a>&laquo; Back to Release</a></button></span>
                     
@@ -184,8 +189,8 @@
                   <div class="title">Send To:</div>
                   <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
                   <a href="javascript:" id="pop_chosen_recipient_btn">  VIEW</a>
-                  <div class="button-container">
 
+                  <div class="button-container">
                     <button class="tablinks" type="button" onclick="openCity(event, 'choose_recipient')" id="defaultOpen">&laquo; Back</button>
                     <button class="preview-button" type="button"  id="prev_btn_send">Preview</button>
                     <button type="submit" formaction="/pressuser/pressrelease/pr">Send &raquo;</button>

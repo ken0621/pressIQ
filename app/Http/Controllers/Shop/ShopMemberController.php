@@ -390,10 +390,11 @@ class ShopMemberController extends Shop
         $pr_info["pr_status"]       ="Sent";
         $pr_info["pr_date_sent"]    =Carbon::now();
         $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
-        $pr_info["pr_receiver_name"]=request('pr_receiver_name');
+        $pr_info["pr_receiver_name"]=request('recipient_name_only');     
         $pr_info["pr_co_name"]      =session('user_company_name');
         $pr_info["pr_co_img"]       =session('user_company_image');
-        
+        $pr_info["pr_send_limit"]   =request('hidden_number');
+
         //dd(session('user_company_image'));
         $pr_rules["pr_type"]       =['required'];
         $pr_rules["pr_headline"]   =['required'];
@@ -433,23 +434,22 @@ class ShopMemberController extends Shop
                     DB::table('tbl_pressiq_press_releases')
                         ->where('pr_id', session('pr_edit'))
                         ->update([
-                            'pr_type'         =>request('pr_type'),
-                            'pr_headline'     =>request('pr_headline'),
-                            'pr_content'      =>request('pr_content'),
+                            'pr_type'          =>request('pr_type'),
+                            'pr_headline'      =>request('pr_headline'),
+                            'pr_content'       =>request('pr_content'),
                             'pr_boiler_content'=>request('pr_boiler_content'),
-                            'pr_from'         =>session('user_email'),
-                            'pr_to'           =>request('pr_to'),
-                            'pr_status'       =>"sent",
-                            'pr_date_sent'    =>$date,
-                            'pr_sender_name'  =>session('user_first_name').' '.session('user_last_name'),
-                            'pr_receiver_name'=>request('pr_receiver_name'),
-                            'pr_co_name'      =>session('user_company_name'),
-                            'pr_co_img'       =>session('user_company_image'),
-
-
+                            'pr_from'          =>session('user_email'),
+                            'pr_to'            =>request('pr_to'),
+                            'pr_status'        =>"Sent",
+                            'pr_date_sent'     =>$date,
+                            'pr_sender_name'   =>session('user_first_name').' '.session('user_last_name'),
+                            'pr_receiver_name' =>request('recipient_name_only'),
+                            'pr_co_name'       =>session('user_company_name'),
+                            'pr_co_img'        =>session('user_company_image'),
+                            'pr_send_limit'    =>request('hidden_number'),
                             ]);
                     Session::forget('pr_edit');
-                     Session::flash('email_sent', 'Email Successfully Sent!');
+                    Session::flash('email_sent', 'Email Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
 
                 }
@@ -566,7 +566,7 @@ class ShopMemberController extends Shop
         $pr_info["pr_status"]       ="Draft";
         $pr_info["pr_date_sent"]    =Carbon::now();
         $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
-        $pr_info["pr_receiver_name"]=request('pr_receiver_name');
+        $pr_info["pr_receiver_name"]=request('recipient_name');
         $pr_info["pr_co_name"]      =session('user_company_name');
         $pr_info["pr_co_img"]       =session('user_company_image');
         $pr_info["pr_type"]         =$request->pr_type;
@@ -586,7 +586,7 @@ class ShopMemberController extends Shop
                     'pr_status'       =>"draft",
                     'pr_date_sent'    =>$date,
                     'pr_sender_name'  =>session('user_first_name').' '.session('user_last_name'),
-                    'pr_receiver_name'=>request('pr_receiver_name'),
+                    'pr_receiver_name'=>request('recipient_name'),
                     'pr_co_name'      =>session('user_company_name'),
                     'pr_co_img'       =>session('user_company_image'),
                     ]);
@@ -1299,7 +1299,7 @@ class ShopMemberController extends Shop
                             'user_company_name'   =>request('company_name')
                             ]);
         Session::forget('edit_admin');
-         Session::flash('success_admin', 'Admin Successfully Updated!');
+        Session::flash('success_admin', 'Admin Successfully Updated!');
         return redirect()->back();
     }
     public function edit_user($id)
@@ -1448,10 +1448,10 @@ class ShopMemberController extends Shop
     }
     public function pressreleases_edit_recipient($id)
     {
-        Session::put('r_edit',$id);
+        Session::put('r_edit',$id);  
         return Redirect::back();
     }
-
+  
     public function pressuser_choose_recipient(Request $request)
     {
         $filter["country"]             = $request->choose_country;
@@ -1462,7 +1462,7 @@ class ShopMemberController extends Shop
         
         if($filter["country"]=="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["title_of_journalist"]=="")
         {
-            dd("Select a filter data");
+            dd("Select a filter data");           
         }
         if ($filter["country"]!="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["title_of_journalist"]=="")
         {

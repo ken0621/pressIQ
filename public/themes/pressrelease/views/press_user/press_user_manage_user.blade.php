@@ -14,7 +14,7 @@
             <form method="post" enctype="multipart/form-data">
               {{csrf_field()}}     
               <div class="title">Company Logo:</div>
-              <img src="{{$manage_user->user_company_image}}" width="250" height="150" class="img-thumbnail" alt="">
+              <img src="{{$manage_user->user_company_image}}" style="object-fit:contain; width:300px; height: 300px" class="img-thumbnail" alt="">
 
               <div class="title">First Name:</div>
               <input type="text" id="user_first_name" name="user_first_name" class="form-control" value="{{$manage_user->user_first_name}}" >

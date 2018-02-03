@@ -66,8 +66,10 @@ $(document).ready(function(){
 
   		});
 	   		$('#results_number').text(ctr+"  Chosen Recipients");
+	   		$('#hidden_number').val(ctr);
 	   		$('#results_number_sendto').text(ctr+"  Chosen Recipients");
 	    	$('#recipient_name').text(name_array);
+	    	$('#recipient_name_only').val(name_array);
 	    	$('#recipient_email').val(email_array);
 	    	$("#global_modal").modal('hide');
 	    	 

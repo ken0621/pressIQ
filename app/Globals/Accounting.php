@@ -298,6 +298,7 @@ class Accounting
 			elseif($main_account == 'cash-p') $main_account_id = $account_cash;
 
 			$line_data["entry_amount"]	= $entry["total"];
+			//die(var_dump($line_data["entry_amount"]));
 			$line_data["entry_type"] 	= Accounting::$newNormalBalance($main_account_id);
 			$line_data["account_id"] 	= $main_account_id;
 			Accounting::insertJournalLine($line_data);

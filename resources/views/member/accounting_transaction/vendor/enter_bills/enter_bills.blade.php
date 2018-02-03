@@ -280,7 +280,7 @@
         <tr class="tr-draggable">
             <td class="acct-number-td text-right">1</td>
             <td >                                           
-                <select name="expense_account[]" class="form-control drop-down-coa select-coa input-sm" >
+                <select name="expense_account[]" class="form-control select-coa input-sm" >
                     @include("member.load_ajax_data.load_chart_account", ['add_search' => ""])
                 </select>
             </td>

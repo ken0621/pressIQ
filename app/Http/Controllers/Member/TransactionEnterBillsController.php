@@ -121,11 +121,16 @@ class TransactionEnterBillsController extends Member
                
         $return = null;
         $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+
         $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
         if(!$validate)
         {
             $validate = TransactionEnterBills::postInsert(null, $this->user_info->shop_id, $insert, $insert_item, $insert_acct);
             TransactionEnterBills::checkPoQty($validate, Session::get('applied_transaction'));
+        }
+        else
+        {
+            $validate = TransactionEnterBills::postInsert(null, $this->user_info->shop_id, $insert, $insert_item, $insert_acct);
         }
         if(is_numeric($validate))
         {
@@ -188,8 +193,14 @@ class TransactionEnterBillsController extends Member
 
         $return = null;
         $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+
         $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
+
         if(!$validate)
+        {
+            $validate = TransactionEnterBills::postUpdate($bill_id, null, $this->user_info->shop_id, $insert, $insert_item, $insert_acct);
+        }
+        else
         {
             $validate = TransactionEnterBills::postUpdate($bill_id, null, $this->user_info->shop_id, $insert, $insert_item, $insert_acct);
         }

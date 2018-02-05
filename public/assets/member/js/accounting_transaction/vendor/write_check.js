@@ -166,6 +166,12 @@ function write_check()
 	{
 		var subtotal = 0;
 		var total_taxable = 0;
+		var acct_amount = 0;
+		$(".acct-amount").each(function()
+		{
+			acct_amount += parseFloat(action_return_to_number($(this).val()));
+			//alert(acct_amount);
+		});
 
 		$(".tr-draggable").each(function()
 		{
@@ -282,8 +288,8 @@ function write_check()
 		$(".ewt-total").html(action_add_comma(ewt_value.toFixed(2)));
 		$(".discount-total").html(action_add_comma(discount_total.toFixed(2)));
 		$(".tax-total").html(action_add_comma(tax.toFixed(2)));
-		$(".total-amount").html(action_add_comma(subtotal.toFixed(2)));
-		$(".total-amount-input").val(subtotal.toFixed(2));
+		$(".total-amount").html(action_add_comma((subtotal + acct_amount).toFixed(2)));
+		$(".total-amount-input").val((subtotal + acct_amount).toFixed(2));
 
 	}
 

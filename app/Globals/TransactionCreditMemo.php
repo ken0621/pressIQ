@@ -26,10 +26,10 @@ class TransactionCreditMemo
 	}
 	public static function info_item($credit_memo_id)
 	{
-		return Tbl_credit_memo_line::um()->where("cmline_cm_id", $credit_memo_id)->get();		
+		$data = Tbl_credit_memo_line::cm_item()->um()->where("cmline_cm_id", $credit_memo_id)->get();
+
+		return $data;
 	}
-
-
 	public static function postUpdate($cm_id, $shop_id, $insert, $insert_item = array())
 	{
 		$val = AccountingTransaction::customer_validation($insert, $insert_item, 'credit_memo');

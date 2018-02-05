@@ -535,7 +535,7 @@ class ShopMemberController extends Shop
            
         });
         Session::flash('Demo_message', 'Demo Request Successfully Sent!');
-        return Redirect('/about/#requestdemo');
+        return Redirect('/#requestdemo');
     }
 
     public function send_newsletter()

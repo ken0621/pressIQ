@@ -27,6 +27,7 @@ use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_manufacturer;
 use App\Models\Tbl_item_type;
 use App\Models\Tbl_membership;
+use App\Models\Tbl_item_token;
 use Session;
 use DB;
 use Carbon\carbon;
@@ -123,7 +124,7 @@ class Item
         return $return;
 
     }
-    public static function create($shop_id, $item_type, $insert)
+    public static function create($shop_id, $item_type, $insert,$token = null)
     {
         $return['item_id'] = 0;
         $return['status'] = null;
@@ -192,6 +193,15 @@ class Item
                     $return = Warehouse2::refill($shop_id, $warehouse_id, $item_id, $insert['item_quantity'], 'Initial Quantity from Item',$source);
                 }
 
+                // patrick
+                if($shop_id == 87)
+                {
+                    $insert_token['item_id']    = $item_id;
+                    $insert_token['token_id']   = $token['token_id'];
+                    $insert_token['amount']     = $token['amount'];
+                    Tbl_item_token::insert($insert_token);
+                }
+
                 $return['item_id']       = $item_id;
                 $return['status']        = 'success';
                 $return['message']       = 'Item successfully created.';
@@ -201,7 +211,7 @@ class Item
 
         return $return;
     }
-    public static function modify($shop_id, $item_id, $update)
+    public static function modify($shop_id, $item_id, $update, $token = null)
     {
         $return['item_id'] = $item_id;
         $return['status'] = null;
@@ -233,6 +243,21 @@ class Item
             $update['updated_at'] = Carbon::now();
 
             Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
+
+            //patrick
+            $check = Tbl_item_token::where('item_id',$item_id)->first();
+            if($check)
+            {
+                Tbl_item_token::where('item_id',$item_id)->update($token);
+            }
+            else
+            {
+                $insert['item_id']      = $item_id;
+                $insert['token_id']     = $token['token_id'];
+                $insert['amount']       = $token['amount'];
+                Tbl_item_token::insert($insert);
+            }
+            
 
             $return['item_id']       = $item_id;
             $return['status']        = 'success';

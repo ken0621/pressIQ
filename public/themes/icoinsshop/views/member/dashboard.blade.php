@@ -98,6 +98,25 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="square-containr">
+					<div class="title"> Tokens</div>
+					<div class="sub-container">
+						<div class="chart-legend" style="max-height: auto;">
+							{{-- <div class="holder">
+								<div class="color fifth-pgc"></div>
+								<div class="name"><span>5th Pair GC</span> <div class="name fifth-pgc-text">{{ $points->display_binary }}</div></div>
+							</div> --}}
+							@for($x=0;$x<count($tokens_titles);$x++)
+							<div class="holder">
+								<div class="color fifth-pgc"></div>
+								<div class="name"><span>{{ $tokens_titless[$x] }}</span> <div class="name fifth-pgc-text">{{ $token_amounts[$x]." TOKEN(S)" }}</div></div>
+							</div>
+							@endfor
+						</div>
+					</div>
+				</div>
+
 			</div>
 
 

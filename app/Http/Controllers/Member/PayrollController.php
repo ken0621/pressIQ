@@ -260,7 +260,6 @@ class PayrollController extends Member
 		
           // $data['_separated']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $separated_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
 
-
           $data['_separated'] = DB::select('select * from `tbl_payroll_employee_contract` inner join `tbl_payroll_employee_basic` 
           on `tbl_payroll_employee_basic`.`payroll_employee_id` = `tbl_payroll_employee_contract`.`payroll_employee_id` 
           left join `tbl_payroll_department` on `tbl_payroll_department`.`payroll_department_id` = `tbl_payroll_employee_contract`.`payroll_department_id` 
@@ -271,6 +270,7 @@ class PayrollController extends Member
           and `payroll_employee_contract_status` in (8, 9) and `tbl_payroll_employee_basic`.`shop_id` = '.Self::shop_id().' 
           and `tbl_payroll_employee_contract`.`payroll_employee_contract_archived` = 0 
           order by `tbl_payroll_employee_basic`.`payroll_employee_last_name` asc');
+
 
 
           /*ORIGINAL QUERY*/

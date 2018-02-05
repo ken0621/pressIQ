@@ -8,12 +8,13 @@
                 <span class="title-caption-red">Smart</span><span class="title-caption-black"> and</span><span class="title-caption-blue"> cost effective</span><span class="title-caption-black"> press release distribution platform</span>
             </div>
              <div class="button-container smoth-scroll" href="#requestdemo">
-                <a class="smoth-scroll" href="/about/#requestdemo">REQUEST A DEMO</a>
+                <a class="smoth-scroll" href="#requestdemo">REQUEST A DEMO</a>
             </div>
         </div>
     </div>
 
-  {{--   <div class="wrapper-1">
+
+    <div class="wrapper-1">
         <div class="container">
             <div class="title-container">Create great Press Releases</div>
             <div class="subtitle-container">Distribute your content to the right people in the right place.</div>
@@ -94,7 +95,7 @@
             </div>
             </form>
         </div>
-    </div> --}}
+    </div>
 
     {{-- <div class="wrapper-3">
         <div class="container">

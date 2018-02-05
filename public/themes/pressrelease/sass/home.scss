@@ -131,188 +131,189 @@ body{
 	}
 }
 
-// .wrapper-1
-// {
-// 	padding-top: 30px;
-// 	padding-bottom: 70px;
-// 	.title-container
-// 	{
-// 		text-align: center;
-// 		font-size: 40px;
-// 		color: #404040;
-// 		font-family: 'Open Sans';
-// 		@media screen and (max-width: 425px)
-// 		{
-// 			font-size: 30px;
-// 		}
-// 	}
-// 	.subtitle-container
-// 	{
-// 		padding-top: 10px;
-// 		text-align: center;
-// 		font-size: 30px;
-// 		color: #9b9b9b;
-// 		font-family: 'Open Sans';
-// 		@media screen and (max-width: 425px)
-// 		{
-// 			font-size: 20px;
-// 		}
-// 	}
-// 	.border-container
-// 	{
-// 		border-bottom: 1px solid #e1e1e1;
-// 		padding-top: 50px;
-// 		@media screen and (max-width: 425px)
-// 		{
-// 			padding-top: 30px;
-// 		}
-// 	}
-// 	.image-holder
-// 	{
-// 		padding-top: 80px;
-// 		margin: auto;
-// 		width: 80%;
-// 		img
-// 		{
-// 			width: 100%;
-// 		}
+.wrapper-1
+{
+	padding-top: 30px;
+	padding-bottom: 70px;
+	.title-container
+	{
+		text-align: center;
+		font-size: 40px;
+		color: #404040;
+		font-family: 'Open Sans';
+		@media screen and (max-width: 425px)
+		{
+			font-size: 30px;
+		}
+	}
+	.subtitle-container
+	{
+		padding-top: 10px;
+		text-align: center;
+		font-size: 30px;
+		color: #9b9b9b;
+		font-family: 'Open Sans';
+		@media screen and (max-width: 425px)
+		{
+			font-size: 20px;
+		}
+	}
+	.border-container
+	{
+		border-bottom: 1px solid #e1e1e1;
+		padding-top: 50px;
+		@media screen and (max-width: 425px)
+		{
+			padding-top: 30px;
+		}
+	}
+	.image-holder
+	{
+		padding-top: 80px;
+		margin: auto;
+		width: 80%;
+		img
+		{
+			width: 100%;
+		}
 
-// 		@media screen and (max-width: 1024px)
-// 		{
-// 			width: 90%;
-// 			padding-top: 120px;
-// 		}
-// 		@media screen and (max-width: 768px)
-// 		{
-// 			width: 70%;
-// 			padding-top: 60px;
-// 		}
-// 		@media screen and (max-width: 425px)
-// 		{
-// 			padding-top: 35px;
-// 		}
-// 	}
-// 	.caption-container
-// 	{
-// 		font-size: 27px;
-// 		padding-top: 50px;
-// 		padding-right: 50px;
-// 		@media screen and (max-width: 425px)
-// 		{
-// 			text-align: center;
-// 			padding-right: 0px;
-// 			font-size: 30px;
-// 		}
-// 		@media screen and (max-width: 375px)
-// 		{
-// 			font-size: 25px;
-// 		}
-// 		@media screen and (max-width: 320px)
-// 		{
-// 			font-size: 22px;
-// 		}
-// 		.caption-black
-// 		{
-// 			color: #404040;
-// 		}
-// 		.caption-red
-// 		{
-// 			color: #c51f33;
-// 		}
-// 	}
-// 	.details-container
-// 	{
-// 		padding-top: 30px;
-// 		font-size: 20px;
-// 		@media screen and (max-width: 425px)
-// 		{
-// 			font-size: 18px;
-// 		}
-// 		.details-blue
-// 		{
-// 			color: #316df9;
-// 		}
-// 		.details-black
-// 		{
-// 			color: #aaaaaa;
-// 		}
-// 	}
-// }
+		@media screen and (max-width: 1024px)
+		{
+			width: 90%;
+			padding-top: 120px;
+		}
+		@media screen and (max-width: 768px)
+		{
+			width: 70%;
+			padding-top: 60px;
+		}
+		@media screen and (max-width: 425px)
+		{
+			padding-top: 35px;
+		}
+	}
+	.caption-container
+	{
+		font-size: 27px;
+		padding-top: 50px;
+		padding-right: 50px;
+		@media screen and (max-width: 425px)
+		{
+			text-align: center;
+			padding-right: 0px;
+			font-size: 30px;
+		}
+		@media screen and (max-width: 375px)
+		{
+			font-size: 25px;
+		}
+		@media screen and (max-width: 320px)
+		{
+			font-size: 22px;
+		}
+		.caption-black
+		{
+			color: #404040;
+		}
+		.caption-red
+		{
+			color: #c51f33;
+		}
+	}
+	.details-container
+	{
+		padding-top: 30px;
+		font-size: 20px;
+		@media screen and (max-width: 425px)
+		{
+			font-size: 18px;
+		}
+		.details-blue
+		{
+			color: #316df9;
+		}
+		.details-black
+		{
+			color: #aaaaaa;
+		}
+	}
+}
 
-// .wrapper-2
-// {
-// 	padding-top: 60px;
-// 	position: relative;
-// 	width: 100%;
-// 	background-position: center;
-// 	background-attachment: fixed;
-// 	background-repeat: no-repeat;
-// 	background-size: cover;
-// 	.title-container
-// 	{
-// 		.title
-// 		{
-// 			padding-top: 50px;
-// 			color: #fff;
-// 			font-size: 35px;
-// 			padding-right: 10px;
-// 			@media screen and (max-width: 375px)
-// 		    {
-// 		    	font-size: 30px;
-// 		    }
-// 		}
-// 	}
-// 	.form-group
-// 	{
-// 		padding-top: 20px;
-// 		.title
-// 		{
-// 			color: #fff;
-// 			font-size: 20px;
-// 		}
-// 		input
-// 		{
-// 			color: #fff;
-// 			height: 50px;
-// 			font-size: 20px;	
-// 			background-color: inherit;
-// 		}
-// 		.text-message
-// 		{
-// 			max-width: 100%;
-// 			min-width: 100%;
-// 			min-height: 250px;
-// 			max-height: 250px;
-// 			font-size: 20px;
-// 			background-color: inherit;
-// 			color: #fff;
-// 			margin-bottom: 50px;
-// 		}
-// 	}
-// 	.button-container
-// 	{
-// 		padding-top: 40px;
-// 		padding-bottom: 40px;
-// 		padding-left: 15px;
-// 		@media screen and (max-width: 425px)
-// 		{
-// 			padding-top: 0px;
-// 			text-align: center;
-// 		}
-// 		a
-// 		{
-// 			background-color: #80a7ff;
-// 			color: #fff;
-// 			font-size: 15px;
-// 			padding: 15px 70px;
-// 			text-decoration: none;
-// 		}
-// 		a:hover
-// 		{
-// 			background-color: #4e83f9;
-// 		}
-// 	}
-// }
+.wrapper-2
+{
+	padding-top: 60px;
+	position: relative;
+	width: 100%;
+	background-position: center;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-size: cover;
+	.title-container
+	{
+		.title
+		{
+			padding-top: 50px;
+			color: #fff;
+			font-size: 35px;
+			padding-right: 10px;
+			@media screen and (max-width: 375px)
+		    {
+		    	font-size: 30px;
+		    }
+		}
+	}
+	.form-group
+	{
+		padding-top: 20px;
+		.title
+		{
+			color: #fff;
+			font-size: 20px;
+		}
+		input
+		{
+			color: #fff;
+			height: 50px;
+			font-size: 20px;	
+			background-color: inherit;
+		}
+		.text-message
+		{
+			max-width: 100%;
+			min-width: 100%;
+			min-height: 250px;
+			max-height: 250px;
+			font-size: 20px;
+			background-color: inherit;
+			color: #fff;
+			margin-bottom: 50px;
+		}
+	}
+	.button-container
+	{
+		padding-top: 40px;
+		padding-bottom: 40px;
+		padding-left: 15px;
+		@media screen and (max-width: 425px)
+		{
+			padding-top: 0px;
+			text-align: center;
+		}
+		button
+		{
+			background-color: #80a7ff;
+			color: #fff;
+			font-size: 15px;
+			padding: 15px 70px;
+			text-decoration: none;
+			border: none;
+		}
+		button:hover
+		{
+			background-color: #4e83f9;
+		}
+	}
+}
 
 // .wrapper-3
 // {

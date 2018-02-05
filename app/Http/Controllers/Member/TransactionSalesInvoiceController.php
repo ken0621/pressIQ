@@ -259,7 +259,7 @@ class TransactionSalesInvoiceController extends Member
 
         return view('member.accounting_transaction.customer.sales_invoice.applied_transaction', $data);
     }
-	public function getPrint(Request $request)
+	public function getPrint(Request $request, $id)
 	{
 		dd("Under Maintenance");
 	}

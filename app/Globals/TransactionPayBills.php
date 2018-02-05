@@ -5,7 +5,7 @@ use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_pay_bill_line;
 use App\Models\Tbl_pay_bill;
 use App\Models\Tbl_bill;
-
+use App\Models\Tbl_write_check_account_line;
 use App\Globals\AccountingTransaction;
 use App\Globals\WriteCheck;
 use Carbon\Carbon;
@@ -152,6 +152,7 @@ class TransactionPayBills
 	        $return = $pay_bill_id;
 
 	        WriteCheck::delete_bill_in_check($pay_bill_id);
+	        WriteCheck::delete_check_acct($pay_bill_id);
  			WriteCheck::update_check_from_paybill($pay_bill_id);
 		}
 		else

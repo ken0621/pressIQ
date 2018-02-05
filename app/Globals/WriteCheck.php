@@ -88,6 +88,12 @@ class WriteCheck
         $wc_data = Tbl_write_check::where("wc_ref_name","paybill")->where("wc_ref_id",$paybill_id)->first();
         Tbl_write_check_line::where("wcline_wc_id",$wc_data->wc_id)->delete();
     }
+
+    public static function delete_check_acct($paybill_id)
+    {
+        $wc_data = Tbl_write_check::where("wc_ref_name","paybill")->where("wc_ref_id",$paybill_id)->first();
+        Tbl_write_check_account_line::where("accline_wc_id",$wc_data->wc_id)->delete();
+    }
     public static function update_check_from_paybill($paybill_id)
     {
         $pb_data = Tbl_pay_bill::where("paybill_id",$paybill_id)->first();

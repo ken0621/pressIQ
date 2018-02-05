@@ -223,7 +223,18 @@ class TransactionPurchaseOrderController extends Member
         $data['_so'] = TransactionSalesOrder::getAllOpenSO($this->user_info->shop_id);
         $data['_pr'] = TransactionPurchaseRequisition::getAllOpenPR($this->user_info->shop_id);
         
-       
+        $data['_applied'] = Session::get('applied_transaction');
+        $data['action']   = '/member/transaction/purchase_order/apply-transaction';
         return view('member.accounting_transaction.vendor.purchase_order.load_transaction', $data);
+    }
+    public function postApplyTransaction(Request $request)
+    {
+        $apply_transaction = $request->_apply_transaction;
+        Session::put("applied_transaction", $apply_transaction);
+
+        $return['status'] = 'success';
+        $return['call_function'] = 'success_apply_transaction';
+
+        return json_encode($return);
     }
 }

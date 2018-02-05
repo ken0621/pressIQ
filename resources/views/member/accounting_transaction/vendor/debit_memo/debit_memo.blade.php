@@ -95,6 +95,7 @@
                                             <th width="10"></th>
                                         </tr>
                                     </thead>
+                                    <tbody class="applied-transaction-list"></tbody>
                                     <tbody class="draggable tbody-item">     
                                         @if(isset($dm))
                                             @foreach($_dmline as $dmline)

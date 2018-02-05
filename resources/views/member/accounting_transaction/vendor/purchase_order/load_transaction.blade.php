@@ -52,7 +52,7 @@
                         <tbody>
                             @foreach($_pr as $pr)
                             <tr>
-                                <td class="text-center"><input type="checkbox" name=""></td>
+                                <td class="text-center td-check-po "><input type="checkbox" name=""></td>
                                 <td class="text-center">{{$pr->transaction_refnum != "" ? $pr->transaction_refnum : $pr->requisition_slip_id}}</td>
                                 <td class="text-center">{{$pr->vendor_company}}</td>
                                 <td class="text-right">{{currency('PHP',$pr->rs_item_amount)}}</td>
@@ -72,3 +72,28 @@
 	<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
 	<button class="btn btn-primary btn-custom-primary" type="button">Add</button>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function()
+    {
+        $('body').on('click','.td-check-po', function()
+        {
+            $(this).prop('checked', this.checked); 
+            compute();
+        });
+
+        compute();
+        function compute()
+        {
+            var total_po_amount = 0;
+            $('.td-check-po').each(function(a, b)
+            {
+                if($(b).is( ":checked" ))
+                {
+                    total_po_amount += parseFloat($(b).attr('data-content'));
+                }
+            });
+            $('.total-apply-bill').html('PHP '+total_po_amount.toFixed(2));
+        }   
+    }); 
+</script>

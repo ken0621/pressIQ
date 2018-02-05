@@ -468,6 +468,23 @@ function debit_memo()
 			  });
 		});
 	}
+	function load_applied_transaction()
+	{
+		$('.applied-transaction-list').load('/member/transaction/debit_memo/load-applied-transaction', function()
+		{
+			console.log("success");
+			action_reassign_number();
+			action_load_initialize_select();
+			action_date_picker();
+	    	action_compute();
+
+			$('.remarks-eb').html($('.po-remarks').val());
+		});
+	}
+	this.load_applied_transaction = function()
+	{
+		load_applied_transaction();
+	}
 
 
 }
@@ -505,3 +522,12 @@ function success_debit_memo(data)
 		location.href = data.status_redirect;
 	}
 }
+
+function success_apply_transaction(data)
+{
+    if(data.status == "success")
+    {
+    	data.element.modal("toggle");
+		debit_memo.load_applied_transaction();
+    }
+} 

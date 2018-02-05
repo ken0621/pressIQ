@@ -207,9 +207,7 @@
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
                                                         </td>
-                                                        <td>
-                                                            <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
-                                                        </td>
+                                                        <td><textarea class="textarea-expand txt-desc" name="item_description[]"></textarea></td>
                                                         <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
                                                         <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>

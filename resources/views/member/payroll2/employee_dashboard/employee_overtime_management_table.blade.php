@@ -30,6 +30,9 @@
                       <ul class="dropdown-menu" role="menu" aria-labelledby="menu-drop-down">
                         <li style="padding-left: 10px;" role="presentation" class="popup" link='/employee_request_overtime_view/{{$overtime_request->payroll_request_overtime_id}}' size='lg'><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-search" aria-hidden="true"></i> &nbsp; View</a></li>
                         <li style="padding-left: 10px;" role="presentation" class="popup" link='/employee_request_overtime_cancel/{{$overtime_request->payroll_request_overtime_id}}' size='sm'><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-ban" aria-hidden="true"></i> &nbsp; Cancel</a></li>
+                        <li>
+                            &nbsp;&nbsp;<a role="form" target="_blank" tabindex="-1" href="/employee_request_overtime_export_pdf/{{$overtime_request->payroll_request_overtime_id}}"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;View PDF Form</a>
+                        </li>
                       </ul>
                     </div>
                 </td>

@@ -356,6 +356,10 @@ class LeaveController extends PayrollMember
 
 	public function employee_request_leave_export_pdf($request_id)
 	{
+			$parameter['date']					= date('Y-m-d');
+			$parameter['company_id']			= 0;
+			$parameter['employement_status']	= 0;
+			$parameter['shop_id'] 				= $this->employee_info->shop_id;
 			$leave_temp_id_sick = Tbl_payroll_leave_tempv2::where('shop_id',Self::employee_shop_id())->where('payroll_leave_temp_name','Sick Leave')->value('payroll_leave_temp_id');
 			$payroll_employee_id = Self::employee_id();
 
@@ -390,6 +394,9 @@ class LeaveController extends PayrollMember
 
 			$leaveemployeeid = Tbl_payroll_leave_employeev2::where('payroll_employee_id',$payroll_employee_id)->where('payroll_leave_temp_id',$leave_temp_id_sick)->value('payroll_leave_employee_id');
 
+			$data["employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->where('tbl_payroll_employee_basic.payroll_employee_id',$this->employee_info->payroll_employee_id)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->first();
+
+			$data['department'] = $data["employee"]['payroll_department_name'];
 
 			if(count($data['sickleave']) == 0)
 			{
@@ -402,6 +409,7 @@ class LeaveController extends PayrollMember
 			}
 
 			$data['leave_info'] = Tbl_payroll_request_leave::join('tbl_payroll_employee_basic','tbl_payroll_request_leave.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->select('tbl_payroll_request_leave.*','tbl_payroll_employee_basic.payroll_employee_display_name')->where('tbl_payroll_request_leave.payroll_request_leave_id',$request_id)->get();
+
 			$data['leave_reliever'] = Tbl_payroll_request_leave::join('tbl_payroll_employee_basic','tbl_payroll_request_leave.payroll_request_leave_id_reliever','=','tbl_payroll_employee_basic.payroll_employee_id')->select('tbl_payroll_employee_basic.payroll_employee_display_name')->where('tbl_payroll_request_leave.payroll_request_leave_id',$request_id)->get();
 
 			$format["format"] = "A4";

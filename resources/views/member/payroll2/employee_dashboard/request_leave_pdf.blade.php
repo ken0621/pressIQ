@@ -46,7 +46,7 @@
                     <td colspan="2">Date filed:&nbsp;&nbsp;&nbsp;<span style="font-weight: bold;">{{$leave_info[0]->payroll_request_leave_date_filed}}</span></td>
               </tr>
                <tr>
-                    <td colspan="3">Department:</td>
+                    <td colspan="3">Department:&nbsp;&nbsp;&nbsp;<span style="font-weight: bold;">{{$department}}</span></td>
                     <td colspan="2">Date received by HR:</td>
               </tr>
               <tr>

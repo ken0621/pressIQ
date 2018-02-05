@@ -11,9 +11,11 @@
 					sales-info="{{$item['item_sales_information']}}" purchase-info="{{$item['item_purchasing_information']}}" 
 					price="{{$item['item_price'] or isset($item['sir_item_price'])}}" cost="{{$item['item_cost']}}" 
 					has-um="{{$item['item_measurement_id']}}"
-					@foreach($item['item_inventory'] as $inventory)
-					{{" warehouse_".$inventory->warehouse_id."=".$inventory->qty_on_hand." "}}
-					@endforeach 
+					@if(isset($item['item_inventory']))
+						@foreach($item['item_inventory'] as $inventory)
+						{{" warehouse_".$inventory->warehouse_id."=".$inventory->qty_on_hand." "}}
+						@endforeach 
+					@endif
 					{{ isset($item_id) ?  $item_id == $item['item_id'] ? 'selected' : '' : '' }} > {{$item['item_name']}}</option>
 		@endforeach
 	@endif

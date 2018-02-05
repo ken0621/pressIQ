@@ -79,7 +79,6 @@ class PayrollReportController extends Member
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 		$data["year"] = $year;
 		$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
-
 		return view("member.payrollreport.government_forms_hdmf", $data);
 	}
 	public function government_forms_sss($month,$year)
@@ -238,7 +237,6 @@ class PayrollReportController extends Member
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
-
 			return view("member.payrollreport.government_forms_sss_filter", $data);
 		}
 	}

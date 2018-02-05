@@ -223,7 +223,7 @@ class ShopMemberController extends Shop
             {
                 $tokens_title = Tbl_token_list::where('token_id',$title->token_log_id)->first()->token_name;
                 $token_amount = Tbl_item_token_log::where('token_log_slot_owner',Self::$customer_info->customer_id)->where('token_id',$title->token_log_id)->sum('amount');
-                array_push($tokens_titles, $tokens_title);
+                array_push($tokens_titless, $tokens_title);
                 array_push($token_amounts, $token_amount);
             }
             $data['tokens_titless'] = $tokens_titles;

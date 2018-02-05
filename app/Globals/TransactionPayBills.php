@@ -1,6 +1,7 @@
 <?php
 namespace App\Globals;
 
+use App\Models\Tbl_bill_account_line;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_pay_bill_line;
 use App\Models\Tbl_pay_bill;
@@ -31,6 +32,13 @@ class TransactionPayBills
 
         return  Tbl_bill::appliedPayment($shop_id)->byVendor($shop_id, $vendor_id)->payBill($paybill_id, $bill_in_paybill)->orderBy("bill_id")->get()->toArray();
     }
+    public static function getAllBillByVendor($shop_id, $vendor_id)
+    {
+        $data =  Tbl_bill::appliedPayment($shop_id)->byVendor($shop_id, $vendor_id)->where("bill_is_paid", 0)->where('inventory_only',0)->get()->toArray();
+        
+        return $data;
+    }
+
 	public static function get($shop_id, $paginate = null, $search_keyword = null)
 	{
 		$data = Tbl_pay_bill::vendor()->where('paybill_shop_id', $shop_id);

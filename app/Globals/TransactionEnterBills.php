@@ -102,10 +102,10 @@ class TransactionEnterBills
 
              /* TOTAL */
             $total = collect($insert_item)->sum('item_amount');
-
-            $ins['bill_total_amount'] = $total;
             
             $total_acct = collect($insert_acct)->sum('account_amount');
+            
+            $ins['bill_total_amount'] = $total + $total_acct;
 
             /*INSERT RI HERE*/
             $enter_bills_id = Tbl_bill::insertGetId($ins);
@@ -115,7 +115,7 @@ class TransactionEnterBills
             $entry["reference_id"]      = $enter_bills_id;
             $entry["name_reference"]    ='vendor';
             $entry["name_id"]           = $insert['vendor_id'];
-            $entry["total"]             = $total + $total_acct;
+            $entry["total"]             = $ins['bill_total_amount'];
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
             $entry["ewt"]               = '';
@@ -167,10 +167,10 @@ class TransactionEnterBills
 
              /* TOTAL */
             $total = collect($insert_item)->sum('item_amount');
-
-            $update['bill_total_amount'] = $total;
             
             $total_acct = collect($insert_acct)->sum('account_amount');
+
+            $update['bill_total_amount'] = $total + $total_acct;
             
             /*INSERT RI HERE*/
             Tbl_bill::where('bill_id', $enter_bills_id)->update($update);
@@ -179,7 +179,7 @@ class TransactionEnterBills
             $entry["reference_module"]  = "bill";
             $entry["reference_id"]      = $enter_bills_id;
             $entry["name_id"]           = $insert['vendor_id'];
-            $entry["total"]             = $total + $total_acct;
+            $entry["total"]             = $update['bill_total_amount'];
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
             $entry["ewt"]               = '';

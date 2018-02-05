@@ -66,7 +66,7 @@ class TransactionPayBillsController extends Member
 
     public function getLoadVendorPayBill($vendor_id)
     {
-        $data["_bill"] = Billing::getAllBillByVendor($vendor_id);
+        $data["_bill"] = TransactionPayBills::getAllBillByVendor($this->user_info->shop_id, $vendor_id);
         return view('member.accounting_transaction.vendor.pay_bills.load_pay_bills', $data);
     }
 

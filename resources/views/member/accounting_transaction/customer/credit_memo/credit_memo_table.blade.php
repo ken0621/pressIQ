@@ -26,7 +26,7 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-custom">
                                 <li><a href="/member/transaction/credit_memo/create?id={{$cm->cm_id}}">Edit Credit Memo</a></li>
-                                <li><a href="javascript">Print</a></li>
+                                <li><a href="/member/transaction/credit_memo/print?id={{$cm->cm_id}}">Print</a></li>
                             </ul>
                         </div>
                     </td>

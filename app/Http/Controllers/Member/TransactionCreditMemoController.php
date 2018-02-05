@@ -150,4 +150,16 @@ class TransactionCreditMemoController extends Member
 
 		return json_encode($return);
 	}
+	public function getPrint(Request $request)
+	{
+		$id = $request->id;
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data['cm'] = TransactionCreditMemo::info($this->user_info->shop_id, $id);
+        $data["transaction_type"] = "CREDIT MEMO";
+        $data["_cmline"] = TransactionCreditMemo::info_item($id);
+
+        $pdf = view('member.accounting_transaction.customer.credit_memo.cm_print', $data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
+	}
 }

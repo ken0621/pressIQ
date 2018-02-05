@@ -254,9 +254,16 @@ class TransactionSalesReceiptController extends Member
 
         return view('member.accounting_transaction.customer.sales_receipt.applied_transaction', $data);
     }
-	
 	public function getPrint(Request $request)
 	{
-		dd("Under Maintenance");
+		$id = $request->id;
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data['sr'] = TransactionSalesReceipt::info($this->user_info->shop_id, $id);
+        $data["transaction_type"] = "SALES RECEIPT";
+        $data["sr_item"] = TransactionSalesReceipt::info_item($id);
+
+        $pdf = view('member.accounting_transaction.customer.sales_receipt.sr_print', $data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
 	}
 }

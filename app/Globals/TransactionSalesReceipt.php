@@ -72,7 +72,15 @@ class TransactionSalesReceipt
 	}
 	public static function info_item($sales_receipt_id)
 	{
-		return Tbl_customer_invoice_line::um()->where("invline_inv_id", $sales_receipt_id)->get();		
+		$data = Tbl_customer_invoice_line::invoice_item()->um()->where("invline_inv_id", $sales_receipt_id)->get();
+		foreach($data as $key => $value) 
+        {
+            $qty = UnitMeasurement::um_qty($value->invline_um);
+
+            $total_qty = $value->invline_qty * $qty;
+            $data[$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->invline_um);
+        }
+        return $data;
 	}
 
 	public static function postUpdate($sales_receipt_id, $shop_id, $insert, $insert_item = array())

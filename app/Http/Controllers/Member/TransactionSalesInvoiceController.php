@@ -261,6 +261,14 @@ class TransactionSalesInvoiceController extends Member
     }
 	public function getPrint(Request $request)
 	{
-		dd("Under Maintenance");
+		$id = $request->id;
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data['invoice'] = TransactionSalesInvoice::info($this->user_info->shop_id, $id);
+        $data["transaction_type"] = "SALES INVOICE";
+        $data["invoice_item"] = TransactionSalesInvoice::info_item($id);
+
+        $pdf = view('member.accounting_transaction.customer.sales_invoice.si_print', $data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
 	}
 }

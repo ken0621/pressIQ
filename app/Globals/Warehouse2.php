@@ -1089,8 +1089,15 @@ class Warehouse2
                 $data = $data->where('record_consume_ref_name','!=', 'transaction_list');
             }
         }
+        $return = $data->get();
+        foreach ($return as $key => $value) 
+        {
+            $return[$key] = $value;
+            $return[$key]->date_created = Self::get_previous_data($value->record_log_id)['record_log_date_updated'];
+        }
+        
+        return $return;
 
-        return $data->get();
     }
     public static function load_warehouse_list($shop_id, $user_id, $parent = 0, $margin_left = 0)
     {
@@ -1143,6 +1150,18 @@ class Warehouse2
                     $return .= Self::load_all_warehouse_select($shop_id, $user_id, $value->warehouse_id, $warehouse_id_selected);
                 } 
             }
+        }
+        return $return;
+    }
+    public static function get_previous_data($record_log_id)
+    {
+        $return = null;
+        $data = Tbl_warehouse_inventory_record_log::where('record_log_id', $record_log_id)->value('record_log_history');
+        if($data)
+        {
+            $value = unserialize($data);
+            $return = end($value);
+            unset($return['record_log_id']);
         }
         return $return;
     }

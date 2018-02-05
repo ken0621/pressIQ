@@ -226,7 +226,7 @@ class ShopMemberController extends Shop
                 array_push($tokens_titless, $tokens_title);
                 array_push($token_amounts, $token_amount);
             }
-            $data['tokens_titless'] = $tokens_titles;
+            $data['tokens_titless'] = $tokens_titless;
             $data['token_amounts'] = $token_amounts;
             return Self::load_view_for_members("member.dashboard", $data);
         }

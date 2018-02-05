@@ -315,7 +315,7 @@ class ShopMemberController extends Shop
                 $data['pr']     = DB::table('tbl_pressiq_press_releases')
                                     ->where('pr_from', session('user_email'))
                                     ->orderByRaw('pr_date_sent DESC')
-                                    ->get();
+                                    ->paginate(13);
                 $data["page"] = "Press Release - Dashboard";
                 return view("press_user.press_user_dashboard", $data);
            }
@@ -396,11 +396,11 @@ class ShopMemberController extends Shop
         $pr_info["pr_send_limit"]   =request('hidden_number');
 
         //dd(session('user_company_image'));
-        $pr_rules["pr_type"]       =['required'];
-        $pr_rules["pr_headline"]   =['required'];
-        $pr_rules["pr_content"]    =['required'];
+        $pr_rules["pr_type"]           =['required'];
+        $pr_rules["pr_headline"]       =['required'];
+        $pr_rules["pr_content"]        =['required'];
         $pr_rules["pr_boiler_content"] =['required'];
-        $pr_rules["pr_to"]         =['required'];
+        $pr_rules["pr_to"]             =['required'];
         
         $validator = Validator::make($pr_info, $pr_rules);
 
@@ -434,20 +434,20 @@ class ShopMemberController extends Shop
                     DB::table('tbl_pressiq_press_releases')
                         ->where('pr_id', session('pr_edit'))
                         ->update([
-                            'pr_type'          =>request('pr_type'),
-                            'pr_headline'      =>request('pr_headline'),
-                            'pr_content'       =>request('pr_content'),
-                            'pr_boiler_content'=>request('pr_boiler_content'),
-                            'pr_from'          =>session('user_email'),
-                            'pr_to'            =>request('pr_to'),
-                            'pr_status'        =>"Sent",
-                            'pr_date_sent'     =>$date,
-                            'pr_sender_name'   =>session('user_first_name').' '.session('user_last_name'),
-                            'pr_receiver_name' =>request('recipient_name_only'),
-                            'pr_co_name'       =>session('user_company_name'),
-                            'pr_co_img'        =>session('user_company_image'),
-                            'pr_send_limit'    =>request('hidden_number'),
-                            ]);
+                        'pr_type'          =>request('pr_type'),
+                        'pr_headline'      =>request('pr_headline'),
+                        'pr_content'       =>request('pr_content'),
+                        'pr_boiler_content'=>request('pr_boiler_content'),
+                        'pr_from'          =>session('user_email'),
+                        'pr_to'            =>request('pr_to'),
+                        'pr_status'        =>"Sent",
+                        'pr_date_sent'     =>$date,
+                        'pr_sender_name'   =>session('user_first_name').' '.session('user_last_name'),
+                        'pr_receiver_name' =>request('recipient_name_only'),
+                        'pr_co_name'       =>session('user_company_name'),
+                        'pr_co_img'        =>session('user_company_image'),
+                        'pr_send_limit'    =>request('hidden_number'),
+                        ]);
                     Session::forget('pr_edit');
                     Session::flash('email_sent', 'Email Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");

@@ -6,7 +6,7 @@
    <div class="pressview">
       <div class="dashboard-container">
           @if (session('message'))
-            <div class="alert alert-success">
+            <div class="alert alert-danger">
                 {{ session('message') }}
             </div>
           @endif

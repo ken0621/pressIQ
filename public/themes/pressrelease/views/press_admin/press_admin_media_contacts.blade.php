@@ -103,19 +103,19 @@
                 <form method="post" action="/pressadmin/pressreleases_addrecipient">
                     {{csrf_field()}}
                     <div class="title">Contact Name: *</div>
-                    <input type="text" id="name" name="name" class="form-control" required>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Enter the name of the media contact" required>
 
                     <div class="title">Position: *</div>
-                    <input type="text"  id="position" name="position" class="form-control" required>
+                    <input type="text"  id="position" name="position" class="form-control"  placeholder="Enter the position of the media contact" required>
 
                     <div class="title">Company Name: *</div>
-                    <input type="text" id="company_name" name="company_name" class="form-control" required>
+                    <input type="text" id="company_name" name="company_name" class="form-control" placeholder="Enter the company name of the media contact" required>
 
                     <div class="title">Country: *</div>
-                    <input type="text" id="country" name="country" class="form-control" required>
+                    <input type="text" id="country" name="country" class="form-control" placeholder="Enter one country only" required>
 
                     <div class="title">Email: *</div>
-                    <input type="email" id="contact_email" name="contact_email" class="form-control" required>
+                    <input type="email" id="contact_email" name="contact_email" class="form-control" placeholder="Enter one email address only" required>
 
                     <div class="title">Website: *</div>
                     <input type="text"  id="contact_website" name="contact_website" class="form-control">

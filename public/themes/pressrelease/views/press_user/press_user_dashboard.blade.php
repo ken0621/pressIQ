@@ -10,7 +10,7 @@
                 </div>
                 <div class="pull-right">
                     <div class="button-container">
-                        <span class="create-button" ><a href="/pressuser/pressrelease">Create a Press Release</a>
+                      <span class="create-button" ><a href="/pressuser/pressrelease">Create a Press Release</a>
                     </div>
                 </div>
             </div>
@@ -29,6 +29,7 @@
                   </tr>
                   @endforeach
               </table> 
+              {!! $pr->render() !!}
            </div>
         </div>
     </div>

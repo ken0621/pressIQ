@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    {{-- <div class="wrapper-1">
+  {{--   <div class="wrapper-1">
         <div class="container">
             <div class="title-container">Create great Press Releases</div>
             <div class="subtitle-container">Distribute your content to the right people in the right place.</div>

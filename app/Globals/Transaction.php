@@ -735,6 +735,7 @@ class Transaction
         session()->forget('get_transaction_filter_customer_id');
         session()->forget('get_transaction_customer_details');
         session()->forget('get_transaction_date');
+        session()->forget('get_transaction_customer_details_v2');
         session()->forget('get_transaction_payment_method');
         session()->forget('get_transaction_slot_id');
 

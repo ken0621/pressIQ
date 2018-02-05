@@ -667,4 +667,17 @@ class AccountingTransaction
 		}
 		return $return;
 	}
+	public static function get_refuser($user_info)
+	{
+		$date = date("F j, Y, g:i a");
+		$return = $date;
+		if($user_info)
+		{
+	        $first_name         = $user_info->user_first_name;
+	        $last_name         = $user_info->user_last_name;
+	        $return  = 'Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+		}
+
+		return $return;
+	}
 }

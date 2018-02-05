@@ -30,7 +30,15 @@ class TransactionEstimateQuotation
 	}
 	public static function info_item($eq_id)
 	{
-		return Tbl_customer_estimate_line::um()->where("estline_est_id", $eq_id)->get();		
+		$data = Tbl_customer_estimate_line::estimate_item()->um()->where("estline_est_id", $eq_id)->get();		
+		foreach($data as $key => $value) 
+        {
+            $qty = UnitMeasurement::um_qty($value->estline_um);
+
+            $total_qty = $value->estline_qty * $qty;
+            $data[$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->estline_um);
+        }
+        return $data;
 	}
 
 	public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)

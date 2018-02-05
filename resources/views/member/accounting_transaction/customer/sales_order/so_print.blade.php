@@ -17,18 +17,16 @@
 <div class="form-group">
 	<div class="col-md-6 text-left" style="float: left; width: 50%">
 		<strong>ADDRESS</strong><br>
-		<span>{{$estimate->title_name." ".$estimate->first_name." ".$estimate->middle_name." ".$estimate->last_name." ".$estimate->suffix_name}}</span>
+		<span>{{$so->title_name." ".$so->first_name." ".$so->middle_name." ".$so->last_name." ".$so->suffix_name}}</span>
 	</div>
 	<div class="col-md-6 text-right" style="float: right; width: 50%">
 		<div class="col-md-6 text-right" style="float: left; width: 50%">
 			<strong>{{ucwords($transaction_type)}} NO.</strong><br>
 			<strong>DATE.</strong><br>
-			<strong>EXPIRATION DATE</strong><br>
 		</div>
 		<div class="col-md-6 text-left" style="float: left; width: 50%">
-			<span>{{$estimate->transaction_refnum != '' ? $estimate->transaction_refnum : sprintf("%'.04d\n", $estimate->est_id)}}</span><br>
-			<span>{{date('m/d/Y',strtotime($estimate->est_date))}}</span><br>
-			<span>{{date('m/d/Y',strtotime($estimate->est_exp_date))}}</span><br>
+			<span>{{$so->transaction_refnum != '' ? $so->transaction_refnum : sprintf("%'.04d\n", $so->est_id)}}</span><br>
+			<span>{{date('m/d/Y',strtotime($so->est_date))}}</span><br>
 		</div>
 	</div>
 </div>
@@ -40,12 +38,12 @@
 		<th width="15%">PRICE</th>
 		<th width="5%">DISCOUNT</th>
 		<th width="15%">AMOUNT</th>
-		<th width="15%">Taxable</th>
+		<th width="5%">Taxable</th>
 	</tr>
 		<input type="hidden" name="{{$total = 0}}" class="{{$taxable_item = 0}}" >
 	<tbody>
-	@if($estimate_item)		
-		@foreach($estimate_item as $item)
+	@if($so_item)		
+		@foreach($so_item as $item)
 			<tr >
 				<td>{{$item->item_name}}</td>
 				<td style="text-align: center;">{{$item->qty}}</td>
@@ -59,23 +57,23 @@
 		<tr>
 			<td colspan="2"></td>
 			<td colspan="2" style="text-align: left;font-weight: bold">SUBTOTAL</td>
-			<td style="text-align: right; font-weight: bold">{{currency('PHP', $estimate->est_subtotal_price)}}</td>
+			<td style="text-align: right; font-weight: bold">{{currency('PHP', $so->est_subtotal_price)}}</td>
 		</tr>
-		@if($estimate->ewt != 0)
+		@if($so->ewt != 0)
 		<tr>
 			<td colspan="2"></td>
-			<td colspan="2" style="text-align: left;font-weight: bold">EWT ({{$estimate->ewt * 100}} %)</td>
-			<td style="text-align: right; font-weight: bold">{{currency('PHP',$estimate->ewt *  $estimate->est_subtotal_price)}}</td>
+			<td colspan="2" style="text-align: left;font-weight: bold">EWT ({{$so->ewt * 100}} %)</td>
+			<td style="text-align: right; font-weight: bold">{{currency('PHP',$so->ewt *  $so->est_subtotal_price)}}</td>
 		</tr>
 		@endif
-		@if($estimate->est_discount_value != 0)
+		@if($so->est_discount_value != 0)
 		<tr>
 			<td colspan="2"></td>
-			<td colspan="2" style="text-align: left;font-weight: bold">Discount {{$estimate->est_discount_type == 'percent' ? $estimate->est_discount_type."%" : '' }}</td>
-			<td style="text-align: right; font-weight: bold">{{$estimate->est_discount_type == 'value' ? currency("PHP",$estimate->est_discount_value) : currency("PHP",($estimate->est_discount_value/100) * $estimate->est_subtotal_price) }}</td>
+			<td colspan="2" style="text-align: left;font-weight: bold">Discount {{$so->est_discount_type == 'percent' ? $so->est_discount_type."%" : '' }}</td>
+			<td style="text-align: right; font-weight: bold">{{$so->est_discount_type == 'value' ? currency("PHP",$so->est_discount_value) : currency("PHP",($so->est_discount_value/100) * $so->est_subtotal_price) }}</td>
 		</tr>
 		@endif
-		@if($estimate->taxable != 0)
+		@if($so->taxable != 0)
 		<tr>
 			<td colspan="2" ></td>
 			<td colspan="2" style="text-align: left;font-weight: bold">Vat (12%)</td>
@@ -85,26 +83,14 @@
 		<tr class="{{$cm_total = 0}}">
 			<td colspan="2"></td>
 			<td colspan="2" style="text-align: left;font-weight: bold">TOTAL</td>
-			<td style="text-align: right; font-weight: bold">{{currency("PHP",$estimate->est_overall_price)}}</td>
+			<td style="text-align: right; font-weight: bold">{{currency("PHP",$so->est_overall_price)}}</td>
 		</tr>
 
 	</tbody>
 </table>
 	<div class="row pull-right" style="margin-right: 10px">
-		<h3><strong>TOTAL</strong> {{currency('PHP',$estimate->est_overall_price)}}</h3>
+		<h3><strong>TOTAL</strong> {{currency('PHP',$so->est_overall_price)}}</h3>
 	</div>
-	@if($estimate->is_sales_order == 0)
-	<table width="100%">
-		<tr>
-			<td>
-				Accepted By: <label>{{$estimate->est_accepted_by}}</label>
-			</td>
-			<td>
-				Accepted Date: <label>{{strtotime($estimate->est_accepted_date) == '' ? '' : dateFormat($estimate->est_accepted_date)}}</label>
-			</td>
-		</tr>
-	</table>
-	@endif
 </body>
 <style type="text/css">
 	table

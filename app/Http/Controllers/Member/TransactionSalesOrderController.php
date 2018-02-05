@@ -220,7 +220,14 @@ class TransactionSalesOrderController extends Member
 	
 	public function getPrint(Request $request)
 	{
-		dd("Under Maintenance");
+		$id = $request->id;
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data['so'] = TransactionSalesOrder::info($this->user_info->shop_id, $id);
+        $data["transaction_type"] = "SALES ORDER";
+        $data["so_item"] = TransactionSalesOrder::info_item($id);
+
+        $pdf = view('member.accounting_transaction.customer.sales_order.so_print', $data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
 	}
-	
 }

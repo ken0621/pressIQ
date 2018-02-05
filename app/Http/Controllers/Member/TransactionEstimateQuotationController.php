@@ -14,7 +14,6 @@ use App\Globals\Transaction;
 use App\Globals\UnitMeasurement;
 use App\Globals\TransactionEstimateQuotation;
 use App\Globals\AccountingTransaction;
-use App\Globals\Pdf_global;
 
 use Session;
 use Carbon\Carbon;
@@ -146,25 +145,16 @@ class TransactionEstimateQuotationController extends Member
 		return json_encode($return);
 	}
 
-	public function getPrint(Request $request, $id)
+	public function getPrint(Request $request)
 	{
-		$date = date("F j, Y, g:i a");
-        $first_name         = $this->user_info->user_first_name;
-        $last_name         = $this->user_info->user_last_name;
-        $footer ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+		$id = $request->id;
+        $footer = AccountingTransaction::get_refuser($this->user_info);
 
-        $data['estimate'] = Tbl_customer_estimate::customer()->where("est_id",$est_id)->where("est_shop_id",$this->user_info->shop_id)->first();
+        $data['estimate'] = TransactionEstimateQuotation::info($this->user_info->shop_id, $id);
         $data["transaction_type"] = "ESTIMATE";
-        $data["estimate_item"] = Tbl_customer_estimate_line::estimate_item()->where("estline_est_id",$est_id)->get();
-        foreach($data["estimate_item"] as $key => $value) 
-        {
-            $qty = UnitMeasurement::um_qty($value->estline_um);
+        $data["estimate_item"] = TransactionEstimateQuotation::info_item($id);
 
-            $total_qty = $value->estline_qty * $qty;
-            $data["estimate_item"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->estline_um);
-        }
-
-       $pdf = view('member.customer.estimate.estimate_pdf', $data);
-       return Pdf_global::show_pdf($pdf, null, $footer);
+        $pdf = view('member.accounting_transaction.customer.estimate_quotation.eq_print', $data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
 	}
 }

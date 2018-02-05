@@ -24,6 +24,8 @@ Route::any('/leave/ajax_load_canceled_leave', 'Member\PayrollEmployee\LeaveContr
 
 Route::any('employee_request_leave_view/{request_id}', 'Member\PayrollEmployee\LeaveController@employee_request_leave_view');
 Route::any('employee_request_leave_cancel/{request_id}', 'Member\PayrollEmployee\LeaveController@employee_request_leave_cancel');
+Route::any('employee_request_leave_export_pdf/{request_id}', 'Member\PayrollEmployee\LeaveController@employee_request_leave_export_pdf');
+
 
 Route::any('authorized_access_leave', 'Member\PayrollEmployee\LeaveController@authorized_access_leave');
 Route::any('authorized_access_leave/view_leave_request/{request_id}', 'Member\PayrollEmployee\LeaveController@view_leave_request');

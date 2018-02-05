@@ -1000,7 +1000,7 @@ class Item
 
         return $_category;
     } 
-    public static function get_all_category_item($type = array(1,2,3,4) , $for_tablet = false)
+    public static function get_all_category_item($type = array(1,2,3,4), $for_tablet = false, $get_inventory = false)
     {
         $shop_id = Item::getShopId(); 
         if($for_tablet == true)
@@ -1041,15 +1041,18 @@ class Item
                 {
                     $_category[$key]['item_list'][$key1]['inventory_count'] = Warehouse2::get_item_qty(Warehouse2::get_current_warehouse($shop_id), $item_list['item_id']);
                 }
-
-                $_category[$key]['item_list'][$key1]['item_inventory'] = Self::item_inventory_report($shop_id, $item_list['item_id']);
+                $_category[$key]['item_list'][$key1]['item_inventory'] = null;
+                if($get_inventory)
+                {
+                    $_category[$key]['item_list'][$key1]['item_inventory'] = Self::item_inventory_report($shop_id, $item_list['item_id']);
+                }
             }
             $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
         }
 
         return $_category;
     }
-    public static function get_item_per_sub($category_id, $type = array())
+    public static function get_item_per_sub($category_id, $type = array(), $get_inventory = false)
     {
         $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->get()->toArray();
         foreach($_category as $key =>$category)
@@ -1076,9 +1079,13 @@ class Item
                 }
                 $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
 
-                $_category[$key]['item_list'][$key1]['item_inventory'] = Self::item_inventory_report($category['type_shop'], $item_list['item_id']);
+                $_category[$key]['item_list'][$key1]['item_inventory'] = null;
+                if($get_inventory)
+                {
+                    $_category[$key]['item_list'][$key1]['item_inventory'] = Self::item_inventory_report($category['type_shop'], $item_list['item_id']);
+                }
             }
-            $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
+            $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type, $get_inventory);
         }
 
         return $_category;

@@ -354,6 +354,62 @@ class LeaveController extends PayrollMember
 
 	}
 
+	public function employee_request_leave_export_pdf($request_id)
+	{
+			$leave_temp_id_sick = Tbl_payroll_leave_tempv2::where('shop_id',Self::employee_shop_id())->where('payroll_leave_temp_name','Sick Leave')->value('payroll_leave_temp_id');
+			$payroll_employee_id = Self::employee_id();
+
+			$leavesick = Tbl_payroll_leave_employeev2::where('payroll_employee_id',$payroll_employee_id)->where('payroll_leave_temp_id',$leave_temp_id_sick)->get();
+
+			$leaveemployeeidsick = Tbl_payroll_leave_employeev2::where('payroll_employee_id',$payroll_employee_id)->where('payroll_leave_temp_id',$leave_temp_id_sick)->value('payroll_leave_employee_id');
+
+			$data['sickleave'] = Tbl_payroll_request_leave::join('tbl_payroll_leave_employee_v2','tbl_payroll_request_leave.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
+             ->select(DB::raw('tbl_payroll_leave_employee_v2.payroll_leave_temp_hours, sum(tbl_payroll_request_leave.consume) as total_leave_consume, (tbl_payroll_leave_employee_v2.payroll_leave_temp_hours - sum(tbl_payroll_request_leave.consume)) as remaining_leave'))
+             ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
+			 ->where('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id)
+			 ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id', $leaveemployeeidsick)
+			 ->where('tbl_payroll_request_leave.payroll_leave_employee_id', $leaveemployeeidsick)
+			 ->where('tbl_payroll_request_leave.archived',0)->where('payroll_request_leave_status','approved')->get();
+
+
+			 $leave_temp_id_vacation = Tbl_payroll_leave_tempv2::where('shop_id',Self::employee_shop_id())->where('payroll_leave_temp_name','Vacation Leave')->value('payroll_leave_temp_id');
+
+			 $leavecation = Tbl_payroll_leave_employeev2::where('payroll_employee_id',$payroll_employee_id)->where('payroll_leave_temp_id',$leave_temp_id_vacation)->get();
+
+			 $leavevacation = Tbl_payroll_leave_employeev2::where('payroll_employee_id',$payroll_employee_id)->where('payroll_leave_temp_id',$leave_temp_id_vacation)->value('payroll_leave_employee_id');
+
+
+			 $data['vacationleave'] = Tbl_payroll_request_leave::join('tbl_payroll_leave_employee_v2','tbl_payroll_request_leave.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
+             ->select(DB::raw('tbl_payroll_leave_employee_v2.payroll_leave_temp_hours, sum(tbl_payroll_request_leave.consume) as total_leave_consume, (tbl_payroll_leave_employee_v2.payroll_leave_temp_hours - sum(tbl_payroll_request_leave.consume)) as remaining_leave'))
+             ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
+			 ->where('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id)
+			 ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id', $leavevacation)
+			 ->where('tbl_payroll_request_leave.payroll_leave_employee_id', $leavevacation)
+			 ->where('tbl_payroll_request_leave.archived',0)->where('payroll_request_leave_status','approved')->get();
+
+
+			$leaveemployeeid = Tbl_payroll_leave_employeev2::where('payroll_employee_id',$payroll_employee_id)->where('payroll_leave_temp_id',$leave_temp_id_sick)->value('payroll_leave_employee_id');
+
+
+			if(count($data['sickleave']) == 0)
+			{
+			 	$data['sickleave'] = $leavesick;
+			}
+
+			if(count($data['vacationleave']) == 0)
+			{
+				$data['vacationleave'] = $leavecation;
+			}
+
+			$data['leave_info'] = Tbl_payroll_request_leave::join('tbl_payroll_employee_basic','tbl_payroll_request_leave.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->select('tbl_payroll_request_leave.*','tbl_payroll_employee_basic.payroll_employee_display_name')->where('tbl_payroll_request_leave.payroll_request_leave_id',$request_id)->get();
+			$data['leave_reliever'] = Tbl_payroll_request_leave::join('tbl_payroll_employee_basic','tbl_payroll_request_leave.payroll_request_leave_id_reliever','=','tbl_payroll_employee_basic.payroll_employee_id')->select('tbl_payroll_employee_basic.payroll_employee_display_name')->where('tbl_payroll_request_leave.payroll_request_leave_id',$request_id)->get();
+
+			$format["format"] = "A4";
+			$format["default_font"] = "sans-serif";
+			$pdf = PDF2::loadView('member.payroll2.employee_dashboard.request_leave_pdf',$data, [], $format);
+			return $pdf->stream('document.pdf');
+	}
+
 	public static function get_group_approver_grouped_by_level($shop_id , $approver_group_id, $approver_group_type)
 	{
 		$_approver_group = collect(Tbl_payroll_approver_group::EmployeeApproverInfo($shop_id, $approver_group_id, $approver_group_type)->get())->groupBy('payroll_approver_group_level');

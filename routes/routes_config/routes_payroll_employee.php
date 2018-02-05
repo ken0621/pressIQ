@@ -52,6 +52,8 @@ Route::any('authorized_access_over_time', 'Member\PayrollEmployee\EmployeeContro
 Route::any('authorized_access_over_time/view_overtime_request/{request_id}', 'Member\PayrollEmployee\EmployeeController@view_overtime_request');
 Route::any('authorized_access_over_time/approve_overtime_request/{request_id}', 'Member\PayrollEmployee\EmployeeController@approve_overtime_request');
 Route::any('authorized_access_over_time/reject_overtime_request/{request_id}', 'Member\PayrollEmployee\EmployeeController@reject_overtime_request');
+
+Route::any('employee_request_overtime_export_pdf/{request_id}', 'Member\PayrollEmployee\EmployeeController@employee_request_overtime_export_pdf');
 /*End overtime request and management*/
 Route::any('authorized_access_official_business', 'Member\PayrollEmployee\EmployeeController@authorized_access_official_business');
 

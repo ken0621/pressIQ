@@ -30,7 +30,7 @@ use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_employment_status;
 use App\Models\Tbl_payroll_employee_salary;
 use App\Models\Tbl_payroll_register_column;
-
+use App\Models\Tbl_payroll_manpower_report;
 
 use App\Models\Tbl_payroll_leave_temp;
 use App\Models\Tbl_payroll_leave_schedule;
@@ -979,6 +979,31 @@ class PayrollReportController extends Member
 		return view('member.payrollreport.payroll_employee_summary_report', $data);
 	}
 
+  	public function manpower_report()
+    {
+    	  $data["_company"] = Payroll::company_heirarchy(Self::shop_id());
+    	  $data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id') ->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
+			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
+			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->get();
+          return view("member.payrollreport.manpower_report",$data);
+    }
+
+    public function manpower_report_export_excel()
+    {
+    	$data['company'] = Tbl_payroll_company::where('shop_id',Self::shop_id())->where('payroll_parent_company_id',0)->value('payroll_company_name');
+    	$data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id') ->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
+			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
+			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->get();
+
+    	Excel::create("Manpower Report",function($excel) use ($data)
+		{
+			$excel->sheet('clients',function($sheet) use ($data)
+			{
+				$sheet->loadView('member.payrollreport.manpower_report_excel',$data);
+			});
+		})->download('xls'); 
+
+    }
 	/* start bir report */
 
 	public function bir_form()

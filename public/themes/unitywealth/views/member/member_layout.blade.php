@@ -20,8 +20,8 @@
 							<img class="img-upload" src="{{ $profile_image }}">
 						</div>
 						<div class="text">
-							<div class="name">{{ $customer->first_name }} {{ $customer->last_name }}</div>
-							<div class="sub"><i>{{ $customer->email }}</i></div>
+							<div class="name">{{ isset($customer->first_name) ? $customer->first_name : "" }} {{ isset($customer->last_name) ? $customer->last_name : "" }}</div>
+							<div class="sub"><i>{{ isset($customer->email) ? $customer->email : "" }}</i></div>
 							<div class="sub hidden"><b>PHP 0.00</b></div>
 						</div>
 					</div>

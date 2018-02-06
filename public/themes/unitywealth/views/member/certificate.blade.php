@@ -2,7 +2,7 @@
 @section("member_content")
 <div class="products">
 	<div class="img-container">
-		<div class="cert-member-name">{{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }}</div>
+		<div class="cert-member-name">{{ isset($customer->first_name) ? $customer->first_name : "" }} {{ isset($customer->middle_name) ? $customer->middle_name : "" }} {{ isset($customer->last_name) ? $customer->last_name : "" }}</div>
 		<img src="/themes/{{ $shop_theme }}/img/certificate.jpg">
 	</div>
 </div>

@@ -3108,7 +3108,7 @@ class ShopMemberController extends Shop
     public function getCaptcha()
     {
         // unitywealth100
-        if($this->shop_info->shop_id == 90)
+        if($this->shop_info->shop_id == 90 && Self::$customer_info)
         {
             $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first();
             if($point)
@@ -3143,49 +3143,74 @@ class ShopMemberController extends Shop
                 dd("Some error occurred. Please contact the administrator.");
             }
         }
-        
+        else
+        {
+            return Redirect::to("/members");
+        }
     }
     public function postSubmitcaptcha(Request $request)
     {
-        $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first();
-        if($point)
+        if (isset($request->slot_no)) 
         {
-            $point = mt_rand($point->point*1000,$point->max*1000)/1000;
-            // dd($point);
-        }
-        else
-        {
-            $point = 0;
-        }
-        $insert['shop_id']                  = $this->shop_info->shop_id;
-        $insert['wallet_log_slot']          = Tbl_mlm_slot::where('slot_no',$request->slot_no)->first()->slot_id;
-        $insert['wallet_log_date_created']  = Carbon::now();
-        $insert['wallet_log_amount']        = $point;
-        $insert['wallet_log_plan']          = "RECAPTCHA";
-        $insert['wallet_log_claimbale_on']  = Carbon::now();
-        $insert['encashment_process_type']  = 0;
-        //patrick place value
-        $place_value = 2;
-        if($point<0.01)
-        {
-            $place_value = 3;
-        }
-        $insert['wallet_log_details']       = "You earned PHP ".number_format($point,$place_value)." from Recaptcha submit";
-
-        $pool_amount        = Tbl_recaptcha_pool_amount::where('shop_id',$this->shop_info->shop_id)->sum('amount');
-        $acquired_points    = Tbl_mlm_slot_wallet_log::where('wallet_log_plan','RECAPTCHA')
-                                ->where('shop_id',$this->shop_info->shop_id)
-                                ->sum('wallet_log_amount');
-        $remaining_points   = $pool_amount-$acquired_points;
-        if($remaining_points>=$point && $point!=0)
-        {
-            if (Session::get("captcha_limit")) 
+            $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first();
+            if($point)
             {
-                $timeFirst  = strtotime(Session::get("captcha_limit"));
-                $timeSecond = strtotime(date('Y-m-d H:i:s'));
-                $differenceInSeconds = $timeSecond - $timeFirst;
+                $point = mt_rand($point->point*1000,$point->max*1000)/1000;
+                // dd($point);
+            }
+            else
+            {
+                $point = 0;
+            }
+            $insert['shop_id']                  = $this->shop_info->shop_id;
+            $insert['wallet_log_slot']          = Tbl_mlm_slot::where('slot_no',$request->slot_no)->first()->slot_id;
+            $insert['wallet_log_date_created']  = Carbon::now();
+            $insert['wallet_log_amount']        = $point;
+            $insert['wallet_log_plan']          = "RECAPTCHA";
+            $insert['wallet_log_claimbale_on']  = Carbon::now();
+            $insert['encashment_process_type']  = 0;
+            //patrick place value
+            $place_value = 2;
+            if($point<0.01)
+            {
+                $place_value = 3;
+            }
+            $insert['wallet_log_details']       = "You earned PHP ".number_format($point,$place_value)." from Recaptcha submit";
 
-                if ($differenceInSeconds >= 20) 
+            $pool_amount        = Tbl_recaptcha_pool_amount::where('shop_id',$this->shop_info->shop_id)->sum('amount');
+            $acquired_points    = Tbl_mlm_slot_wallet_log::where('wallet_log_plan','RECAPTCHA')
+                                    ->where('shop_id',$this->shop_info->shop_id)
+                                    ->sum('wallet_log_amount');
+            $remaining_points   = $pool_amount-$acquired_points;
+            if($remaining_points>=$point && $point!=0)
+            {
+                if (Session::get("captcha_limit")) 
+                {
+                    $timeFirst  = strtotime(Session::get("captcha_limit"));
+                    $timeSecond = strtotime(date('Y-m-d H:i:s'));
+                    $differenceInSeconds = $timeSecond - $timeFirst;
+
+                    if ($differenceInSeconds >= 20) 
+                    {
+                        $query = Tbl_mlm_slot_wallet_log::insert($insert);
+
+                        if($query)
+                        {
+                            $response = 'success';
+
+                            Session::put("captcha_limit", date('Y-m-d H:i:s'));
+                        }
+                        else
+                        {
+                            $response = 'error';
+                        }
+                    }
+                    else
+                    {
+                        $response = 'error';
+                    }
+                }
+                else
                 {
                     $query = Tbl_mlm_slot_wallet_log::insert($insert);
 
@@ -3200,34 +3225,21 @@ class ShopMemberController extends Shop
                         $response = 'error';
                     }
                 }
-                else
-                {
-                    $response = 'error';
-                }
             }
             else
             {
-                $query = Tbl_mlm_slot_wallet_log::insert($insert);
-
-                if($query)
-                {
-                    $response = 'success';
-
-                    Session::put("captcha_limit", date('Y-m-d H:i:s'));
-                }
-                else
-                {
-                    $response = 'error';
-                }
+                $response = 'no_points';
             }
+
+            
+            return Redirect::back()->with('response',$response);
         }
         else
         {
-            $response = 'no_points';
-        }
+            $response = 'error';
 
-        
-        return Redirect::back()->with('response',$response);
+            return Redirect::back()->with('response',$response);
+        }
     }
     public function getReport()
     {

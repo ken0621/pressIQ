@@ -23,18 +23,20 @@
     <div class="form-group">
         <div class="col-md-6 text-left" style="float: left; width: 50%">
             <strong>SHIP TO</strong><br>
-            <span>{{$wis->title_name." ".$wis->first_name." ".$wis->middle_name." ".$wis->last_name." ".$wis->suffix_name}}</span><br>
+            <span>{{$wis->company != '' ? $wis->company : ($wis->title_name." ".$wis->first_name." ".$wis->middle_name." ".$wis->last_name." ".$wis->suffix_name)}}</span><br>
             <strong>ADDRESS</strong>
             <p>{!! $wis->destination_customer_address !!}</p>
         </div>
         <div class="col-md-6 text-right" style="float: right; width: 50%">
             <div class="col-md-6 text-right" style="float: left; width: 50%">
-                <strong>NO.</strong><br>
-                <strong>DATE.</strong><br>
+                <strong>NO :</strong><br>
+                <strong>DATE :</strong><br>
+                <strong>FROM :</strong><br>
             </div>
             <div class="col-md-6 text-left" style="float: left; width: 50%">
                 <span>{{$wis->transaction_refnum != '' ? $wis->transaction_refnum : sprintf("%'.04d\n", $wis->new_inv_id)}}</span><br>
                 <span>{{date('m/d/Y',strtotime($wis->cust_delivery_date))}}</span><br>
+                <span>{{$wis->warehouse_name}}</span><br>
             </div>
         </div>
     </div>

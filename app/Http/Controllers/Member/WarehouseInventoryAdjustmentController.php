@@ -130,7 +130,13 @@ class WarehouseInventoryAdjustmentController extends Member
     }
     public function getPrint(Request $request)
     {
-        dd('Under Maintenance');
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data['adj'] = InventoryAdjustment::info($this->user_info->shop_id, $request->id);
+        $data['_adj_line'] = InventoryAdjustment::info_item($request->id);
+
+        $pdf = view('member.warehousev2.inventory_adjustment.adj_print', $data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
     }
     public function postUpdateSubmit(Request $request)
     {

@@ -281,7 +281,7 @@ class CustomerWIS
     }
     public static function get_customer_wis_data($cust_wis_id)
     {
-        return Tbl_customer_wis::customerinfo()->where('cust_wis_shop_id',WarehouseTransfer::getShopId())->where('cust_wis_id',$cust_wis_id)->first();
+        return Tbl_customer_wis::warehouse()->customerinfo()->where('cust_wis_shop_id',WarehouseTransfer::getShopId())->where('cust_wis_id',$cust_wis_id)->first();
     }
 
     public static function update_customer_wis($shop_id, $cust_wis_id, $update)

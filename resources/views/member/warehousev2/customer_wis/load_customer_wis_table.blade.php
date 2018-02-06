@@ -5,24 +5,20 @@
             <table class="table table-bordered table-condensed">
                 <thead>
                     <tr>
-                        <th class="text-center">#</th>
                         <th class="text-center">SLIP NO.</th>
-                        <th class="text-center">CUSTOMER NAME</th>
+                        <th class="text-center">CUSTOMER</th>
                         <th class="text-center">DELIVERY DATE</th>
                         <th class="text-center">TOTAL ISSUED INVENTORY</th>
-                        @if($status == 'pending' || $status == 'confirm')
                         <th></th>
-                        @endif
                     </tr>
                 </thead>
                 <tbody>
                     @if(count($_cust_wis) > 0)
                         @foreach($_cust_wis as $wis)
                         <tr>
-                            <td class="text-center">{{$wis->cust_wis_id}}</td>
                             <td class="text-center">{{$wis->transaction_refnum}}</td>
-                            <td class="text-center">{{$wis->title_name}} {{$wis->first_name}} {{$wis->middle_name}} {{$wis->last_name}}</td>
-                            <td class="text-center">{{$wis->cust_delivery_date}}</td>
+                            <td class="text-center">{{$wis->company != '' ? $wis->company : ($wis->title_name.' '.$wis->first_name.' '.$wis->middle_name.' '.$wis->last_name)}}</td>
+                            <td class="text-center">{{date('F d, Y',strtotime($wis->cust_delivery_date))}}</td>
                             <td class="text-center">{{$wis->issued_qty}} pc(s)</td>
                             <td class="text-center">
                                 <div class="btn-group">

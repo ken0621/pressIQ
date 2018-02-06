@@ -5869,7 +5869,7 @@ class PayrollController extends Member
           $update['payroll_group_archived'] = Request::input('archived');
           $old_data = AuditTrail::get_table_data("tbl_payroll_group","payroll_group_id",$payroll_group_id);
           Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->update($update);
-          AuditTrail::record_logs('Updating Payroll Group', 'Updating Payroll Group temp with ID #'.$payroll_group_id." To archive value=".Request::input('archived'), $id, "" ,serialize($old_data));
+          // AuditTrail::record_logs('Updating Payroll Group', 'Updating Payroll Group temp with ID #'.$payroll_group_id." To archive value=".Request::input('archived'), $id, "" ,serialize($old_data));
           $return['status'] = 'success';
           $return['function_name'] = 'payrollconfiguration.reload_payroll_group';
           return json_encode($return);

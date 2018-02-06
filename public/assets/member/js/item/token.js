@@ -45,6 +45,7 @@ function token()
 				$('.tokens-holder').html(data);
 				$('.token-type').removeAttr('disabled');
 				console.log(data);
+				event_new_token();
 			}
 		});
 	}

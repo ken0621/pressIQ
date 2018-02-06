@@ -215,19 +215,18 @@ class ShopMemberController extends Shop
             // dd($slot_id." ; ".$data['reward_point_redemption']);
             // dd($data['wallet']);
             $data["krops_gc"] = Tbl_mlm_slot_points_log::Slot()->where('points_log_type',"GC")->where('slot_owner',Self::$customer_info->customer_id)->sum('points_log_points');
-            $data['tokens_titles'] = Tbl_item_token_log::where('token_log_slot_owner',Self::$customer_info->customer_id)->distinct('token_id')->get();
-            $tokens_titless = array();
+            $token_list_titles = Tbl_token_list::get();
+            $token_titles = array();
             $token_amounts = array();
-            // dd($data['tokens_titles']);
-            foreach($data['tokens_titles'] as $title)
+            foreach($token_list_titles as $title)
             {
-                $tokens_title = Tbl_token_list::where('token_id',$title->token_log_id)->first()->token_name;
-                $token_amount = Tbl_item_token_log::where('token_log_slot_owner',Self::$customer_info->customer_id)->where('token_id',$title->token_log_id)->sum('amount');
-                array_push($tokens_titless, $tokens_title);
-                array_push($token_amounts, $token_amount);
+                array_push($token_titles, $title->token_name);
+                $total_token = Tbl_item_token_log::where('token_log_slot_owner',Self::$customer_info->customer_id)->where('token_id',$title->token_id)->sum('amount');
+                array_push($token_amounts, $total_token);
             }
-            $data['tokens_titless'] = $tokens_titless;
-            $data['token_amounts'] = $token_amounts;
+            $data['token_titles']   = $token_titles;
+            $data['token_amounts']  = $token_amounts;
+            
             return Self::load_view_for_members("member.dashboard", $data);
         }
         else

@@ -91,10 +91,10 @@
 								<div class="color fifth-pgc"></div>
 								<div class="name"><span>5th Pair GC</span> <div class="name fifth-pgc-text">{{ $points->display_binary }}</div></div>
 							</div> --}}
-							<div class="holder">
+							{{-- <div class="holder">
 								<div class="color fifth-pgc"></div>
 								<div class="name"><span>KROPS GC</span> <div class="name fifth-pgc-text">{{isset($krops_gc) ? currency('',$krops_gc)." POINT(S)" : '0.00 POINT(S)' }}</div></div>
-							</div>
+							</div> --}}
 						</div>
 					</div>
 				</div>
@@ -107,10 +107,10 @@
 								<div class="color fifth-pgc"></div>
 								<div class="name"><span>5th Pair GC</span> <div class="name fifth-pgc-text">{{ $points->display_binary }}</div></div>
 							</div> --}}
-							@for($x=0;$x<count($tokens_titles);$x++)
+							@for($x=0;$x<count($token_titles);$x++)
 							<div class="holder">
 								<div class="color fifth-pgc"></div>
-								<div class="name"><span>{{ $tokens_titless[$x] }}</span> <div class="name fifth-pgc-text">{{ $token_amounts[$x]." TOKEN(S)" }}</div></div>
+								<div class="name"><span>{{ $token_titles[$x] }}</span> <div class="name fifth-pgc-text">{{ $token_amounts[$x]." TOKEN(S)" }}</div></div>
 							</div>
 							@endfor
 						</div>

@@ -195,12 +195,6 @@ class ShopAboutController extends Shop
         return view("member.certificate", $data);
     }
 
-    public function announcement()
-    {
-        $data["page"] = "Announcement";
-        return view("announcement", $data);
-    }
-
 
 
 }

@@ -123,8 +123,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/pressuser/choose_recipient', 'Shop\ShopMemberController@pressuser_choose_recipient');
 	// Route::get('/pressrelease/view','Shop\ShopMemberController@press_email');//PRESS RELEASE
 
-	Route::get('/announcement', 'Shop\ShopAboutController@announcement'); //Alternative
-
 	
 	
 	Route::get('/blog', 'Shop\ShopBlogController@index');

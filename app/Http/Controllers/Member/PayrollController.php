@@ -88,6 +88,8 @@ use App\Models\Tbl_payroll_leave_history;
 use App\Models\Tbl_payroll_leave_report;
 use App\Models\Tbl_payroll_13th_month_basis;
 use App\Models\Tbl_payroll_payslip_option;
+use App\Models\Tbl_payroll_manpower_report;
+
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -1502,15 +1504,28 @@ class PayrollController extends Member
           $update['payroll_jobtitle_id']                         = Request::input('payroll_jobtitle_id');
           $update['payroll_employee_contract_date_hired'] = date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_hired')));
           $payroll_employee_contract_date_end                    = '';
+
           if(Request::input('payroll_employee_contract_date_end') != '')
           {
                $payroll_employee_contract_date_end     = date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_end')));
           }
-
           $update['payroll_employee_contract_date_end']     = $payroll_employee_contract_date_end;
           $update['payroll_group_id']                       = Request::input('payroll_group_id');
           $update['payroll_employee_contract_status']  = Request::input('payroll_employee_contract_status');
           Tbl_payroll_employee_contract::where('payroll_employee_contract_id', $payroll_employee_contract_id)->update($update);
+
+          $payroll_employee_id = Tbl_payroll_employee_contract::where('payroll_employee_contract_id', $payroll_employee_contract_id)->value('payroll_employee_id');
+         
+          $status = Tbl_payroll_employment_status::where('payroll_employment_status_id',Request::input('payroll_employee_contract_status'))->value('employment_status');
+          if($status == 'Resigned')
+          {
+               $insert['payroll_employee_id'] = $payroll_employee_id;
+               $insert['date_filed']          = date('Y-m-d');
+               $insert['employment_status']   = $status;
+               $insert['shop_id']             = Self::shop_id();
+               Tbl_payroll_manpower_report::insert($insert);
+          }
+
           AuditTrail::record_logs("EDITED: Payroll Employee Contract","Updating employee Contract with Employee Contract ID #".$payroll_employee_contract_id,$payroll_employee_contract_id,"","");
 
           $return['status']             = 'success';

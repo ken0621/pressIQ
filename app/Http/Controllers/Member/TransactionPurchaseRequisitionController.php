@@ -37,7 +37,6 @@ class TransactionPurchaseRequisitionController extends Member
 		$data['page'] = 'Purchase Requisition';
 		$data['_list'] = RequisitionSlip::get($this->user_info->shop_id);
 		$data['_pr']   = TransactionPurchaseRequisition::getAllOpenPR($this->user_info->shop_id);
-		//dd($data['_pr']);//dd($data['_list']);
 		return view('member.accounting_transaction.vendor.purchase_requisition.requisition_slip', $data);
 	}
 	public function getLoadRequisitionSlip(Request $request)
@@ -46,13 +45,22 @@ class TransactionPurchaseRequisitionController extends Member
 		//dd($data['_requisition_slip']);
 		return view('member.accounting_transaction.vendor.purchase_requisition.requisition_slip_table', $data);		
 	}
-	public function getCreate()
+	public function getCreate(Request $request)
 	{
 		$data['page'] = 'Create Purchase Requisition';
         $data['_item']  = Item::get_all_category_item([1,4,5]);
         $data["_vendor"] = Vendor::getAllVendor('active');
         $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'purchase_requisition');
-        //dd($data['transaction_refnum']);
+
+        $data['action'] = '/member/transaction/purchase_requisition/create-submit';
+
+        $pr_id = $request->id;
+        if($pr_id)
+        {
+        	$data['pr'] = RequisitionSlip::get_slip($this->user_info->shop_id, $pr_id);
+        	$data['_prline'] = RequisitionSlip::get_slip_item($pr_id);
+            $data['action'] = '/member/transaction/purchase_requisition/update-submit';
+        }
         $data['count_transaction'] = TransactionPurchaseRequisition::countTransaction($this->user_info->shop_id);
 		return view('member.accounting_transaction.vendor.purchase_requisition.create_requisition_slip', $data);
 	}
@@ -63,7 +71,7 @@ class TransactionPurchaseRequisitionController extends Member
 	}
 	public function postUpdateSubmit(Request $request)
 	{
-		$return = RequisitionSlip::create($this->user_info->shop_id, $this->user_info->user_id, $request);
+		$return = RequisitionSlip::update($this->user_info->shop_id, $this->user_info->user_id, $request);
 		return json_encode($return);
 	}
 	public function getPrint(Request $request, $slip_id = 0)
@@ -75,10 +83,32 @@ class TransactionPurchaseRequisitionController extends Member
         $pdf = view('member.accounting_transaction.vendor.purchase_requisition.print_requisition_slip', $data);
         return Pdf_global::show_pdf($pdf,null, $data['rs']->requisition_slip_number);
 	}
-	public function getConfirm(Request $request, $slip_id = 0)
-	{
-		dd(123);
-	}
+	public function getConfirm(Request $request, $slip_id)
+    {
+        $data['pr'] = RequisitionSlip::get_slip($this->user_info->shop_id, $slip_id);
+
+        return view('member.accounting_transaction.vendor.purchase_requisition.pr_confirm', $data);
+    }
+    public function postConfirmSubmit(Request $request)
+    {
+        $pr_id = $request->id;
+
+        $pr_status = $request->status;
+        if($pr_status == 'confirm')
+        {
+            $update['requisition_slip_status'] = 'closed';
+        }
+        $return = RequisitionSlip::update_status($this->user_info->shop_id, $pr_id, $update);
+
+        $data = null;
+        if($return)
+        {
+            $data['status'] = 'success';
+            $data['call_function'] = 'success_confirm'; 
+        }
+
+        return json_encode($data);
+    }
 	public function getLoadTransaction()
 	{
 		$data['_so'] = TransactionSalesOrder::getAllOpenSO($this->user_info->shop_id);
@@ -98,7 +128,7 @@ class TransactionPurchaseRequisitionController extends Member
 
         return json_encode($return);
     }
-     public function getLoadAppliedTransaction(Request $request)
+    public function getLoadAppliedTransaction(Request $request)
     {
         $_ids = Session::get('applied_transaction_pr');
 

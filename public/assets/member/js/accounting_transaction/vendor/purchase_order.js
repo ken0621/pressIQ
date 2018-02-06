@@ -12,7 +12,6 @@ function purchase_order()
 		action_compute();
 		action_date_picker();
 		action_reassign_number();
-		//action_tax();
 
 		event_remove_tr();
 		event_compute_class_change();
@@ -471,9 +470,47 @@ function purchase_order()
 			  });
 		});
 	}
+	function action_load_open_transaction($vendor_id)
+	{
+		if($vendor_id)
+		{
+			$.ajax({
+				url : '/member/transaction/purchase_order/count-transaction',
+				type : 'get',
+				data : {vendor_id : $vendor_id},
+				success : function(data)
+				{
+					$(".open-transaction").slideDown();
+					$(".popup-link-open-transaction").attr('link','/member/transaction/purchase_order/load-transaction?vendor='+$vendor_id);
+					$(".count-open-transaction").html(data);
+				}
+			});
+		}
+		else
+		{
+			$(".open-transaction").slideUp();
+		}
+	}
 
+	function load_applied_transaction()
+	{
+		$('.applied-transaction-list').load('/member/transaction/purchase_order/load-applied-transaction', function()
+		{
+			console.log("success");
+			action_reassign_number();
+			action_load_initialize_select();
+			action_date_picker();
+	    	action_compute();
 
+			$('.remarks-eb').html($('.po-remarks').val());
+		});
+	}
+	this.load_applied_transaction = function()
+	{
+		load_applied_transaction();
+	}
 }
+
 
 /*AFTER ADDING VENDOR*/
 function success_vendor(data)
@@ -505,5 +542,14 @@ function success_purchase_order(data)
 	{
 		toastr.success(data.status_message);
 		location.href = data.status_redirect;
+	}
+}
+
+function success_apply_transaction(data)
+{
+	if(data.status == 'success')
+	{
+		data.element.modal("toggle");
+		purchase_order.load_applied_transaction();
 	}
 }

@@ -21,7 +21,7 @@ class TransactionPurchaseRequisition
 	}
 	public static function getAllOpenPR($shop_id)
 	{
-		return Tbl_requisition_slip_item::PRInfo('shop_id',$shop_id)->where("requisition_slip_status","open")->get();
+		return Tbl_requisition_slip_item::PRInfo('shop_id',$shop_id)->where("requisition_slip_status","open")->orderBy('rs_vendor_id', 'ASC')->get();
 	}
 	public static function postInsert()
 	{

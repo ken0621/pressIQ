@@ -58,8 +58,8 @@
                             <div class="col-sm-4">
                                 <input type="text" class="form-control input-sm vendor-email" name="vendor_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$po->po_vendor_email or ''}}"/>
                             </div>
-                            <div class="col-sm-4 text-right">
-                                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_order/load-transaction"><i class="fa fa-handshake-o"></i> {{$count_transaction}} Open Transaction</a></h4>
+                            <div class="col-sm-4 text-right open-transaction" style="display: none;">
+                                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_order/load-transaction?vendor_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
                             </div>
                         </div>
                     </div>
@@ -104,6 +104,7 @@
                                             <th width="10"></th>
                                         </tr>
                                     </thead>
+                                    <tbody class="applied-transaction-list"></tbody>
                                     <tbody class="draggable tbody-item">     
                                         @if(isset($po))
                                             @foreach($_poline as $poline)

@@ -1,8 +1,9 @@
 @extends('member.layout')
 @section('content')
 
-<form class="global-submit form-to-submit-add" action="/member/transaction/purchase_requisition/create-submit" method="post">
+<form class="global-submit" role="form" action="{{$action}}" method="POST">
 <input type="hidden" class="button-action" name="button_action" value="">
+<input type="hidden" name="pr_id" value="{{$pr->requisition_slip_id or ''}}">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -51,7 +52,7 @@
             <div class="col-md-6">
                 <label>Requisition Slip Number</label>
                 <div>
-                   <input type="text" class="form-control" name="requisition_slip_number" value="{{$transaction_refnum}}">
+                   <input type="text" class="form-control" name="requisition_slip_number" value="{{ isset($pr->transaction_refnum)? $pr->transaction_refnum : $transaction_refnum}}">
                 </div>
             </div>
             <div class="col-sm-3 text-right"></div>
@@ -63,7 +64,7 @@
             <div class="col-md-6">
                 <label>Remarks</label>
                 <div>
-                    <textarea class="form-control" name="requisition_slip_remarks"></textarea>
+                    <textarea class="form-control" name="requisition_slip_remarks">{{isset($pr->requisition_slip_remarks) ? $pr->requisition_slip_remarks : ''}}</textarea>
                 </div>
             </div>
         </div>
@@ -92,10 +93,33 @@
                         <tbody class="applied-transaction-list">
                         </tbody>
                         <tbody class="draggable tbody-item">
+                            @if(isset($_prline))
+                                @foreach($_prline as $prline)
+                                <tr class="tr-draggable">
+                                    <td class="invoice-number-td text-center">1</td>
+                                    <td><select class="form-control droplist-item input-sm select-item" name="rs_item_id[]" >
+                                            @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id'=>$prline->rs_item_id])
+                                            <option class="hidden" value="" />
+                                        </select>
+                                    </td>
+                                    <td><textarea class="form-control txt-desc" name="rs_item_description[]">{{ $prline->rs_item_description }}</textarea></td>
+                                    <td class="text-center"><input type="text" class="form-control text-center txt-qty compute" name="rs_item_qty[]" value="{{$prline->rs_item_qty}}"></td>
+                                    <td class="text-center"><select class="form-control droplist-item-um select-um" name="rs_item_um[]" value="{{ $prline->rs_item_um}}"></select></td>
+                                    <td class="text-center"><input type="text" class="form-control text-right txt-rate" name="rs_item_rate[]" value="{{$prline->rs_item_rate}}"></td>
+                                    <td class="text-center"><input type="text" class="form-control text-right txt-amount" name="rs_item_amount[]" value="{{$prline->rs_item_amount}}"></td>
+                                    <td class="text-center">
+                                        <select class="form-control droplist-vendor select-vendor" name="rs_vendor_id[]">
+                                            @include('member.load_ajax_data.load_vendor', ['vendor_id' => $prline->vendor_id])
+                                        </select>
+                                    </td>
+                                    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                </tr>
+                                @endforeach
+                            @endif
                             <tr class="tr-draggable">
                                 <td class="invoice-number-td text-center">1</td>
                                 <td>
-                                    <select class="form-control droplist-item input-sm select-item" name="rs_item_id[]" >
+                                    <select class="form-control droplist-item select-item input-sm" name="rs_item_id[]" >
                                         @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                         <option class="hidden" value="" />
                                     </select>
@@ -120,7 +144,7 @@
                                 </td>
                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                             </tr>
-                           <tr class="tr-draggable">
+                            <tr class="tr-draggable">
                                 <td class="invoice-number-td text-center">2</td>
                                 <td>
                                     <select class="form-control droplist-item select-item input-sm" name="rs_item_id[]" >

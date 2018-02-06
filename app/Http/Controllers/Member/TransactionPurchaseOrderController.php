@@ -246,7 +246,7 @@ class TransactionPurchaseOrderController extends Member
     {
         $applied_transaction = Session::get('applied_transaction');
 
-        die(var_dump($applied_transaction));
+        //die(var_dump($applied_transaction));
         $return = null;
         $remarks = null;
         if(count($_ids) > 0)

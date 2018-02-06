@@ -4,6 +4,7 @@ use App\Models\Tbl_shop;
 use App\Models\Tbl_requisition_slip;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_requisition_slip_item;
+use App\Models\Tbl_purchase_order_line;
 use Request;
 use Carbon\Carbon;
 use DB;
@@ -141,19 +142,8 @@ class RequisitionSlip
                     $_item[$key]['rs_item_amount']      = $input->rs_item_amount[$key];
                     $_item[$key]['rs_vendor_id']        = $input->rs_vendor_id[$key];
                 }
+                //$po = Tbl_purchase_order::insert($_po);
             }
-
-            foreach ($input->rs_vendor_id as $key => $value) 
-            {
-                if($value)
-                {
-                    $_po[$key.'i'.$key]['po_vendor_id'] = $value;
-                    $_po[$key.'i'.$key]['transaction_refnum'] = $input->requisition_slip_number;
-                    
-                }
-            }
-            $po = Tbl_purchase_order::insert($_po);
-
             $total_amount = collect($_item)->sum('rs_item_amount'); 
             $insert['total_amount'] = $total_amount;
 
@@ -163,6 +153,43 @@ class RequisitionSlip
             {
                 Tbl_requisition_slip_item::insert($_item);
             }
+
+            $po_line = null;
+            $po = null;
+            foreach ($input->rs_vendor_id as $key => $value)
+            {
+                $po[$value] = $value;
+
+                //$data= Tbl_requisition_slip_item::where('rs_id', $rs_id)->where('rs_vendor_id', $value)->get();
+
+                //$po[$data]['item'] = $input->rs_item_id;
+
+                /*$po[$value] = $value;
+                $ins['po_vendor_id'] = $value;
+                $ins['transaction_refnum'] = $insert['transaction_refnum'];
+                $ins['date_created'] = Carbon::now();
+                die(var_dump($ins));
+                $po_id =Tbl_purchase_order::insertGetId($ins);*/
+                
+                $data_line = Tbl_requisition_slip_item::where('rs_id', $rs_id)->where('rs_vendor_id', $value)->get();
+
+                foreach ($data_line as $key_line => $value_line)
+                {
+                    //die(var_dump($value));
+                    $po_line[$key_line]['poline_po_id']       = $po_id;
+                    $po_line[$key_line]['poline_item_id']     = $value_line->rs_item_id;
+                    $po_line[$key_line]['poline_description'] = $value_line->rs_item_description;
+                    $po_line[$key_line]['poline_orig_qty']    = $value_line->rs_item_qty;
+                    $po_line[$key_line]['poline_qty']         = $value_line->rs_item_qty;
+                    $po_line[$key_line]['poline_rate']        = $value_line->rs_item_rate;
+                    $po_line[$key_line]['poline_amount']      = $value_line->rs_item_amount;
+                } 
+
+                
+                Tbl_purchase_order_line::insert($po_line);
+            }
+            //die(var_dump($data));
+
             $validate = $rs_id;
         }
         

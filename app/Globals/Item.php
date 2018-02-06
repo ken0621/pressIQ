@@ -425,7 +425,6 @@ class Item
             $_item_new[$key] = $item;
             $_item_new[$key]->inventorylog = Self::get_item_inventory($shop_id, $item->item_id, session("get_inventory"));
         }
-
         $return = isset($_item_new) ? $_item_new : null;  
 
         Self::get_clear_session();
@@ -2014,6 +2013,7 @@ class Item
             $offset_qty = $offset->count();
             $current_qty = $current->count();
         }
+
         return $current_qty - $offset_qty;
     }
     public static function item_inventory_report($shop_id, $item_id, $date_from = '', $date_to = '')
@@ -2028,6 +2028,7 @@ class Item
             $return[$key]->warehouse_id = $value->warehouse_id;
             $return[$key]->qty_on_hand = Self::get_item_inventory($shop_id, $item_id, $value->warehouse_id, $date_from, $date_to);
         }
+        // dd($return);
         return $return;
     }
 }

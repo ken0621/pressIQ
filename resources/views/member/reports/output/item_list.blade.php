@@ -33,7 +33,7 @@
                 <td class="text-right" nowrap>{{currency('',$item->item_price)}}</td>
                 <td class="text-right" nowrap>{{currency('',$item->item_cost)}}</td>
                 @foreach($item->item_warehouse as $key=>$item_wh)
-                  <td class="text-center">{{$item_wh->qty_on_hand > 0 ? $item_wh->qty_on_hand : 0}}</td>
+                  <td class="text-center">{{$item_wh->qty_on_hand}}</td>
                 @endforeach
                 @if(count($item->item_warehouse))
                   <td class="text-center" nowrap>{{collect($item->item_warehouse)->sum('qty_on_hand')}}</td>

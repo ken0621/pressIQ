@@ -71,7 +71,7 @@
 <style type="text/css">
     .wrapper.extended.scrollable
     {
-        overflow: hidden;
+        /*overflow: hidden;*/
     }
 </style>
 @endsection

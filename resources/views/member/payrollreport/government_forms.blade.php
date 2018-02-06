@@ -1,5 +1,6 @@
 @extends('member.layout')
 @section('content')
+    <input type="hidden" class="_token" value="{{ csrf_token() }}" />
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -19,14 +20,18 @@
         <div class="form-group">
             <div class="col-md-3">
                 <select class="form-control contribution-month">
-                    <option>2017</option>
+                    @foreach($_year_period as $year)
+                        <option value="{{$year["year_contribution"]}}" {{$year["year_contribution"] == $year_today ? 'selected': 'unselected'}}>{{$year["year_contribution"]}}</option>
+                    @endforeach
                 </select>
             </div>
-            
         </div>
     </div>
 </div>
-
+ <div class="text-center" id="spinningLoaders" style="display:none;">
+    <img src="/assets/images/loader.gif">
+</div>
+<div class="load-filter-datas">
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body form-horizontal">
         <div class="form-group tab-content panel-body employee-container">
@@ -36,7 +41,7 @@
                     <table class="table table-bordered table-condensed">
                         <thead>
                             <tr>
-                                <th>Month Name</th>
+                                <th>Month</th>
                                 <th class="text-center">No. of Processed Period</th>
                                 <th width="100px" class="text-center"></th>
                                 <th width="100px"></th>
@@ -49,9 +54,9 @@
                                 <td>{{ $period["month_name"] }}</td>
                                 <td class="text-center">{{ $period["period_count"] }}</td>
                                 @if($period["period_count"] != 0)
-                                <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/reports/government_forms_sss/{{ $key }}','lg')">SSS</a></td>
-                                <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/reports/government_forms_philhealth/{{ $key }}','lg')">PHILHEALTH</a></td>
-                                <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/reports/government_forms_hdmf/{{ $key }}','lg')">HDMF</a></td>
+                                <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/reports/government_forms_sss/{{ $key }}/{{$year_today}}','lg')">SSS</a></td>
+                                <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/reports/government_forms_philhealth/{{ $key }}/{{$year_today}}','lg')">PHILHEALTH</a></td>
+                                <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/reports/government_forms_hdmf/{{ $key }}/{{$year_today}}','lg')">HDMF</a></td>
                                 @else
                                 <td class="text-center"></td>
                                 <td class="text-center"></td>
@@ -66,5 +71,40 @@
         </div> 
     </div>
 </div>
-@endsection
+</div>
+<script>
+    var ajaxdata = {};
+    $(document).ready(function()
+    {
+        load_government_table_by_year();
 
+    })
+    function load_government_table_by_year()
+    {    
+        $(".contribution-month").on("change", function(e)
+        {
+            var year            = $(this).val();
+            ajaxdata.year       = year;
+            ajaxdata._token     = $("._token").val();
+            $('#spinningLoaders').show();
+            $(".load-filter-datas").hide();
+            setTimeout(function(e){
+            $.ajax(
+            {
+                url:"/member/payroll/reports/government_forms_year_filter",
+                type:"post",
+                data: ajaxdata,
+                
+                success: function(data)
+                {
+                    $('#spinningLoaders').hide();
+                    $(".load-filter-datas").show();
+                    $(".load-filter-datas").html(data);
+                }
+            });
+            }, 700);
+        });
+    }
+</script>
+
+@endsection

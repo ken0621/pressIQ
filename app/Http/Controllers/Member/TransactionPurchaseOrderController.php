@@ -23,6 +23,7 @@ use App\Globals\AuditTrail;
 use App\Globals\Purchase_Order;
 use App\Globals\ItemSerial;
 use App\Models\Tbl_terms;
+use App\Models\Tbl_purchase_order_line;
 
 use Carbon\Carbon;
 use Session;
@@ -41,8 +42,24 @@ class TransactionPurchaseOrderController extends Member
     public function getLoadPurchaseOrder(Request $request)
     {
         $data['_purchase_order'] = TransactionPurchaseOrder::get($this->user_info->shop_id, 10, $request->search_keyword, $request->tab_type);
-        //dd($data['_purchase_order']);
+        
         return view('member.accounting_transaction.vendor.purchase_order.purchase_order_table', $data);
+    }
+    public function getAddItem($po_id)
+    {
+        $po_data = Tbl_purchase_order_line::um()->where("poline_po_id",$po_id)->get();
+        
+        foreach ($po_data as $key => $value) 
+        {
+            Session::push('po_item',collect($value)->toArray());
+        }
+        $data["ctr_item"] = count(Session::get("po_item"));
+
+        $data['_item']      = Item::get_all_category_item();
+        $data['_um']        = UnitMeasurement::load_um_multi();
+        $data["serial"] = ItemSerial::check_setting();
+
+        return view('member.accounting_transaction.vendor.purchase_order.po_load_item_session',$data);
     }
     public function getPrint(Request $request)
     {
@@ -208,7 +225,8 @@ class TransactionPurchaseOrderController extends Member
     {
         $data['_so'] = TransactionSalesOrder::getAllOpenSO($this->user_info->shop_id);
         $data['_pr'] = TransactionPurchaseRequisition::getAllOpenPR($this->user_info->shop_id);
-        //dd($data['_pr']);
+        
+       
         return view('member.accounting_transaction.vendor.purchase_order.load_transaction', $data);
     }
 }

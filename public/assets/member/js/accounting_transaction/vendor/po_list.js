@@ -1,5 +1,6 @@
 var po_list = new po_list();
 var load_table_data = {};
+load_table_data.tab_type = 'open';
 
 function po_list()
 {

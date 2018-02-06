@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Globals\Cart2;
 use App\Globals\WarehouseTransfer;
-use App\Globals\Warehouse2;
+use App\Globals\Warehouse2; 
 use App\Globals\Item;
 use App\Globals\Customer;
 use App\Globals\Transaction;

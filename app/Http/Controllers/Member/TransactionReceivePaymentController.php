@@ -160,4 +160,16 @@ class TransactionReceivePaymentController extends Member
 		$data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
 		return view("member.accounting_transaction.customer.receive_payment.load_transaction",$data);
 	}
+
+	public function getPrint(Request $request)
+	{
+		$id = $request->id;
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data["receive_payment"] = TransactionReceivePayment::info($this->user_info->shop_id, $id);
+        $data["_invoice"] = TransactionReceivePayment::info_item($id);
+
+        $pdf = view('member.accounting_transaction.customer.receive_payment.rp_print', $data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
+	}
 }

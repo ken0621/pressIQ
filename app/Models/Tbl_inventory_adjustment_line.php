@@ -13,4 +13,8 @@ class Tbl_inventory_adjustment_line extends Model
     {
         return $query->leftjoin("tbl_unit_measurement_multi", "multi_id", "=", "itemline_item_um");
     }
+    public function scopeItem($query)
+    {
+        return $query->leftjoin("tbl_item", "itemline_item_id", "=", "item_id");
+    }
 }

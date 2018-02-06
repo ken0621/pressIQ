@@ -14,4 +14,8 @@ class Tbl_customer_wis_item_line extends Model
     {
         return $query->leftjoin("tbl_unit_measurement_multi", "multi_id", "=", "itemline_um");
     }
+    public function scopeItem($query)
+    {
+        return $query->leftjoin("tbl_item", "item_id", "=", "itemline_item_id");    	
+    }
 }

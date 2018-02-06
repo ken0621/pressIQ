@@ -26,7 +26,7 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-custom">
                                 <li><a href="/member/transaction/receive_payment/create?id={{$rp->rp_id}}">Edit Receive Payment</a></li>
-                                <li><a href="javascript">Print</a></li>
+                                <li><a href="/member/transaction/receive_payment/print?id={{$rp->rp_id}}">Print</a></li>
                             </ul>
                         </div>
                     </td>

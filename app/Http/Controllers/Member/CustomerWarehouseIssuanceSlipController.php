@@ -269,18 +269,13 @@ class CustomerWarehouseIssuanceSlipController extends Member
     }
     public function getPrint(Request $request, $wis_id)
     {
-        $data['wis'] = CustomerWIS::get_customer_wis_data($wis_id);
-        $customer_id = $data['wis']->destination_customer_id;
-        
-        $data['wis_item'] = CustomerWIS::print_customer_wis_item($wis_id);
-        $data['user'] = $this->user_info;
-        $data['owner'] = WarehouseTransfer::get_warehouse_data($data['wis']->cust_wis_from_warehouse);
-        $data['customer'] = CustomerWIS::get_customer($this->user_info->shop_id)->where('customer_id',$customer_id);
-        //dd($data['customer']);
-        
-        //return view('member.warehousev2.customer_wis.customer_wis_print', $data);
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data['wis'] = CustomerWIS::get_customer_wis_data($wis_id);        
+        $data['wis_item'] = CustomerWIS::customer_wis_itemline($wis_id);
+
         $pdf = view('member.warehousev2.customer_wis.customer_wis_print', $data);
-        return Pdf_global::show_pdf($pdf,null,$data['wis']->cust_wis_number);
+        return Pdf_global::show_pdf($pdf,null,$footer);
     }
     public function getCountTransaction(Request $request)
     {

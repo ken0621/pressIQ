@@ -17,7 +17,7 @@
 	<div class="form-group">
 		<div class="col-md-6 text-left" style="float: left; width: 50%">
 			<strong>BILL TO</strong><br>
-			<span>{{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</span>
+			<span>{{$invoice->company != '' ? $invoice->company : $invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</span>
 		</div>
 		<div class="col-md-6 text-right" style="float: right; width: 50%">
 			<div class="col-md-6 text-right" style="float: left; width: 50%">

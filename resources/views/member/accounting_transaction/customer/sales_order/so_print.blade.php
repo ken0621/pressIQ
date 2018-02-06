@@ -17,7 +17,7 @@
 <div class="form-group">
 	<div class="col-md-6 text-left" style="float: left; width: 50%">
 		<strong>ADDRESS</strong><br>
-		<span>{{$so->title_name." ".$so->first_name." ".$so->middle_name." ".$so->last_name." ".$so->suffix_name}}</span>
+		<span>{{$so->company != '' ? $so->company : $so->title_name." ".$so->first_name." ".$so->middle_name." ".$so->last_name." ".$so->suffix_name}}</span>
 	</div>
 	<div class="col-md-6 text-right" style="float: right; width: 50%">
 		<div class="col-md-6 text-right" style="float: left; width: 50%">

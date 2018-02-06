@@ -17,9 +17,13 @@ class Tbl_customer_wis extends Model
         return $query;
     }
 
-   public function scopeCustomerInfo($query)
+    public function scopeCustomerInfo($query)
     {
         $query->join("tbl_customer","tbl_customer.customer_id", "=", "tbl_customer_wis.destination_customer_id");
         return $query;
+    }
+    public function scopeWarehouse($query)
+    {
+        $query->leftjoin("tbl_warehouse",'warehouse_id','=','cust_wis_from_warehouse');
     }
 }

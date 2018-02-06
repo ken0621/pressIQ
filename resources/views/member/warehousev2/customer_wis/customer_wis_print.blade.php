@@ -1,21 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style type="text/css">
+        body
+        {
+            font-size: 13px;
+            font-family: 'Titillium Web',sans-serif;
+        }
+    </style>
+</head>
 <body>
-<div  class="text-center">
-	<h2>{{strtoupper($owner->shop_key)}}</h2>
-	<h3>{{strtoupper($owner->warehouse_name)}}</h3>
-	<div>{{ucwords($owner->warehouse_address)}}</div>
-    <div>Warehouse Issuance Slip</div>
-</div>
-<table  style="width: 100%">
-    <tr>
-        @foreach ($customer as $cust)
-        <td>Deliver To: <h4>{{$cust->title_name}} {{$cust->first_name}} {{$cust->middle_name}} {{$cust->last_name}}</h4></td>
-        @endforeach
-    </tr>
-    <tr>
-        <td>{{date('F d, Y h:i:s A',strtotime($wis->created_at))}}</td>
-        <td class="text-right"><h4>{{strtoupper($wis->transaction_refnum)}}</td></h4>
-    </tr>
-</table>
+    <div class="form-group">
+        <h2>
+            @if($wis->cust_wis_status == 'pending')
+            Warehouse Issuance Slip
+            @else
+            Delivery Report
+            @endif
+        </h2>      
+    </div>
+    <div class="form-group">
+        <div class="col-md-6 text-left" style="float: left; width: 50%">
+            <strong>SHIP TO</strong><br>
+            <span>{{$wis->title_name." ".$wis->first_name." ".$wis->middle_name." ".$wis->last_name." ".$wis->suffix_name}}</span><br>
+            <strong>ADDRESS</strong>
+            <p>{!! $wis->destination_customer_address !!}</p>
+        </div>
+        <div class="col-md-6 text-right" style="float: right; width: 50%">
+            <div class="col-md-6 text-right" style="float: left; width: 50%">
+                <strong>NO.</strong><br>
+                <strong>DATE.</strong><br>
+            </div>
+            <div class="col-md-6 text-left" style="float: left; width: 50%">
+                <span>{{$wis->transaction_refnum != '' ? $wis->transaction_refnum : sprintf("%'.04d\n", $wis->new_inv_id)}}</span><br>
+                <span>{{date('m/d/Y',strtotime($wis->cust_delivery_date))}}</span><br>
+            </div>
+        </div>
+    </div>
+</body>
+
+<body>
+
 <br>
 <table style="width: 100%;">
     <thead style="font-weight: bold;">
@@ -31,7 +57,7 @@
             <tr>
                 <td>{{$item->item_name}}</td>
                 <td>{{$item->item_sku}}</td>
-                <td>{{$item->wis_item_quantity}} pc(s)</td>
+                <td>{{$item->qty}}</td>
             </tr>
             @endforeach
         @else
@@ -48,30 +74,14 @@
 <br>
 <div>
     <p>
-       <b>REMARKS : <br>{!! $wis->cust_wis_remarks !!}
+       <b>REMARKS : <br>{!! $wis->cust_wis_remarks != '' ? $wis->cust_wis_remarks : 'none' !!}
     </p>
 </div>
 <br>
 <br>
 <br>
 <br>
-<table class="text-center" style="width: 100%;">
-    <tr>
-        <td style="width: 33%"></td>
-        <td style="width: 33%"></td>
-        <td style="width: 33%">{{strtoupper($user->user_first_name." ".$user->user_last_name)}}</td>
-    </tr>
-    <tr>
-        <td class="text-center"><div style="border-bottom: 1px solid #000;width: 90%"></div></td>
-        <td class="text-center"><div style="border-bottom: 1px solid #000;width: 90%"></div></td>
-        <td class="text-center"><div style="border-bottom: 1px solid #000;width: 90%"></div></td>
-    </tr>
-    <tr>
-        <td style="width: 33%">Approved By:</td>
-        <td style="width: 33%">Checked By:</td>
-        <td style="width: 33%">Printed By:</td>
-    </tr>
-</table>
+
 </body>
 
 <style type="text/css">

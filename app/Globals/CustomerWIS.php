@@ -281,7 +281,7 @@ class CustomerWIS
     }
     public static function get_customer_wis_data($cust_wis_id)
     {
-        return Tbl_customer_wis::where('cust_wis_shop_id',WarehouseTransfer::getShopId())->where('cust_wis_id',$cust_wis_id)->first();
+        return Tbl_customer_wis::customerinfo()->where('cust_wis_shop_id',WarehouseTransfer::getShopId())->where('cust_wis_id',$cust_wis_id)->first();
     }
 
     public static function update_customer_wis($shop_id, $cust_wis_id, $update)
@@ -302,6 +302,18 @@ class CustomerWIS
     public static function print_customer_wis_item($wis_id)
     {
         return Tbl_customer_wis_item::InventoryItem()->where('cust_wis_id',$wis_id)->groupBy('record_item_id')->get();
+    }
+    public static function customer_wis_itemline($wis_id)
+    {
+        $data = Tbl_customer_wis_item_line::item()->um()->where('itemline_wis_id',$wis_id)->get();
+
+        foreach($data as $key => $value) 
+        {
+            $qty = UnitMeasurement::um_qty($value->itemline_um);
+            $total_qty = $value->itemline_qty * $qty;
+            $data[$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->itemline_um);
+        }
+        return $data;
     }
     public static function countTransaction($shop_id, $customer_id)
     {

@@ -180,7 +180,7 @@
         <div class="row clearfix">
             <div class="col-sm-6">
                 <label>Memo</label>
-                <textarea class="form-control input-sm textarea-expand remarks-pr" name="vendor_memo" ></textarea>
+                <textarea class="form-control input-sm textarea-expand remarks-pr" name="vendor_memo" >{{isset($pr->requisition_slip_memo)? $pr->requisition_slip_memo : ''}}</textarea>
             </div>
             <div class="col-sm-6">                      
                 <div class="row">

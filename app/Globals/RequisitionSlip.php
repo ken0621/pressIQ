@@ -2,6 +2,7 @@
 namespace App\Globals;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_requisition_slip;
+use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_requisition_slip_item;
 use Request;
 use Carbon\Carbon;
@@ -16,10 +17,14 @@ use Validator;
 
 class RequisitionSlip
 {
+    /*public static function get_vendor_per_item($pr_id)
+    {
+        $data = Tbl_requisition_slip::where('requisition_slip_id',$pr_id)->get();
+        dd($data);
+    }*/
     public static function get($shop_id, $status = null, $paginate = null, $search_keyword = null)
     {
-        $data = Tbl_requisition_slip_item::PRInfo()->where('shop_id', $shop_id);
-        
+        $data = Tbl_requisition_slip::where('shop_id', $shop_id);
         if($search_keyword)
         {
             $data->where(function($q) use ($search_keyword)
@@ -123,8 +128,6 @@ class RequisitionSlip
         if(!$validate)
         {
         	$rs_id = Tbl_requisition_slip::insertGetId($insert);
-
-
             foreach ($input->rs_item_id as $key => $value) 
             {
                 if($value)
@@ -139,6 +142,23 @@ class RequisitionSlip
                     $_item[$key]['rs_vendor_id']        = $input->rs_vendor_id[$key];
                 }
             }
+
+            foreach ($input->rs_vendor_id as $key => $value) 
+            {
+                if($value)
+                {
+                    $_po[$key.'i'.$key]['po_vendor_id'] = $value;
+                    $_po[$key.'i'.$key]['transaction_refnum'] = $input->requisition_slip_number;
+                    
+                }
+            }
+            $po = Tbl_purchase_order::insert($_po);
+
+            $total_amount = collect($_item)->sum('rs_item_amount'); 
+            $insert['total_amount'] = $total_amount;
+
+            Tbl_requisition_slip::where('requisition_slip_id', $rs_id)->update($insert);
+
             if(count($_item) > 0)
             {
                 Tbl_requisition_slip_item::insert($_item);
@@ -185,11 +205,11 @@ class RequisitionSlip
         $validate = null;
         $insert['shop_id']                  = $shop_id;
         $insert['user_id']                  = $user_id;
-        $insert['requisition_slip_number']  = $input->requisition_slip_number;
+        $insert['transaction_refnum']  = $input->requisition_slip_number;
         $insert['requisition_slip_remarks'] = $input->requisition_slip_remarks;
         $insert['requisition_slip_date_created'] = Carbon::now();
 
-        $rule["requisition_slip_number"] = "required";
+        $rule["transaction_refnum"] = "required";
         $rule["requisition_slip_remarks"] = "required";
 
         $validator = Validator::make($insert, $rule);
@@ -201,6 +221,7 @@ class RequisitionSlip
             }
         }
         $_item = null;
+        $_po = null;
         $ctr = 0;
         foreach ($input->rs_item_id as $key1 => $value) 
         {
@@ -242,8 +263,16 @@ class RequisitionSlip
                     $_item[$key]['rs_item_rate']        = $input->rs_item_rate[$key];
                     $_item[$key]['rs_item_amount']      = $input->rs_item_amount[$key];
                     $_item[$key]['rs_vendor_id']        = $input->rs_vendor_id[$key];
+
                 }
             }
+            
+
+            $total_amount = collect($_item)->sum('rs_item_amount'); 
+            $insert['total_amount'] = $total_amount;
+
+            Tbl_requisition_slip::where('requisition_slip_id', $pr_id)->update($insert);
+
             if(count($_item) > 0)
             {
                 Tbl_requisition_slip_item::insert($_item);

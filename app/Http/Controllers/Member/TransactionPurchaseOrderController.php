@@ -17,6 +17,7 @@ use App\Globals\TransactionPurchaseRequisition;
 use App\Globals\AccountingTransaction;
 use App\Globals\TransactionSalesOrder;
 use App\Globals\TransactionDebitMemo;
+use App\Globals\RequisitionSlip;
 
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
@@ -81,7 +82,7 @@ class TransactionPurchaseOrderController extends Member
     public function getCountTransaction(Request $request)
     {
         $vendor_id = $request->vendor_id;
-        return RequesitionSlip::countTransaction($this->user_info->shop_id, $vendor_id);
+        return RequisitionSlip::countTransaction($this->user_info->shop_id, $vendor_id);
     }
     public function getCreate(Request $request)
     {
@@ -225,7 +226,7 @@ class TransactionPurchaseOrderController extends Member
     public function getLoadTransaction(Request $request)
     {
         $data['_so'] = TransactionSalesOrder::getAllOpenSO($this->user_info->shop_id);
-        $data['_pr'] = TransactionPurchaseRequisition::getAllOpenPR($this->user_info->shop_id);
+        $data['_pr'] = TransactionPurchaseRequisition::getPR($this->user_info->shop_id);
         
         $data['_applied'] = Session::get('applied_transaction');
         $data['action']   = '/member/transaction/purchase_order/apply-transaction';

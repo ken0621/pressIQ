@@ -82,7 +82,7 @@ class TransactionPurchaseOrderController extends Member
     }
     public function getCreate(Request $request)
     {
-        Session::forget("applied_transaction");
+        
         $shop_id            = $this->user_info->shop_id;
         $data["page"]       = "Create Purchase order";
         $data["_vendor"]    = Vendor::getAllVendor('active');
@@ -93,10 +93,12 @@ class TransactionPurchaseOrderController extends Member
         $data['count_so'] = TransactionSalesOrder::getCountAllOpenSO($this->user_info->shop_id);
 
         $data['action']     = "/member/transaction/purchase_order/create-purchase-order";
+
         $data["vendor_id"]       = $request->vendor_id;
         $data["terms_id"]       = $request->vendor_terms;
-        
         $po_id = $request->id;
+        
+        Session::forget("applied_transaction");
         if($po_id)
         {
             $data["po"]            = TransactionPurchaseOrder::info($this->user_info->shop_id, $po_id);

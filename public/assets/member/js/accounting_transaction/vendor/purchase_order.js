@@ -243,12 +243,12 @@ function purchase_order()
 		if(tax_selection == 1){
 			tax = total_taxable * (12 / 100);
 		}
-		if(tax == 0)
+		/*if(tax == 0)
 		{
 			$('input[type=checkbox]').each(function (){
 				$(this).attr("checked", false);
 			});
-		}
+		}*/
 		total += tax;
 
 		$(".sub-total").html(action_add_comma(subtotal.toFixed(2)));

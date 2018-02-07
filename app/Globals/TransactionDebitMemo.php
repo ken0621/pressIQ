@@ -101,7 +101,7 @@ class TransactionDebitMemo
             $entry["reference_module"]  = "debit-memo";
             $entry["reference_id"]      = $dm_id;
             $entry["name_id"]           = $insert['vendor_id'];
-            $entry["total"]             = collect($insert_item)->sum('itemline_amount');
+            $entry["total"]             = $total;
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
             $entry["ewt"]               = '';

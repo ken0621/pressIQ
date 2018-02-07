@@ -41,6 +41,8 @@ class TransactionDebitMemoController extends Member
         $data['action']     ='/member/transaction/debit_memo/create-debit-memo';
 
         $dm_id = $request->id;
+        
+        Session::forget("applied_transaction");
         if($dm_id)
         {
             $data['dm']      = TransactionDebitMemo::info($this->user_info->shop_id, $dm_id);

@@ -426,6 +426,7 @@ function debit_memo()
 			{
 				$(this).parent().remove();
 				action_reassign_number();
+				action_compute();
 			}
 			else
 			{

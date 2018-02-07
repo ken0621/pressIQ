@@ -95,11 +95,15 @@
 
 
 
-
+            @if(count($_request_payment_sub_info) > 1)
+            <div class="amount" style="width:350px;background-color:#D8D8D8;margin-right:-2px;float:right;margin-top:-220px;">
+            <h6 style="margin:0px;text-align: center;"><strong>AMOUNT</strong></h6>
+            </div>
+            @else
             <div class="amount" style="width:350px;background-color:#D8D8D8;margin-right:-2px;float:right;margin-top:-190px;">
             <h6 style="margin:0px;text-align: center;"><strong>AMOUNT</strong></h6>
             </div>
-
+            @endif
             <div class="payment" style="padding-top:100px;width:348px;background-color:white;float:right;margin-top: -65px;margin-right:-348px;padding-bottom: 80px;">
 
               @foreach($_request_payment_sub_info as $amount)

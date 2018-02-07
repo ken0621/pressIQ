@@ -240,6 +240,17 @@ class TransactionSalesInvoiceController extends Member
                     $return[$key.'i'.$key_item]['item_discount_type'] = $value_item->estline_discount_type;
                     $return[$key.'i'.$key_item]['item_remarks'] = $value_item->estline_discount_remark;
                     $return[$key.'i'.$key_item]['taxable'] = $value_item->taxable;
+
+                    $refname = "estimate_quotation";
+                    if($info)
+                    {
+                    	if($info->is_sales_order == 1)
+                		{
+                			$refname = "sales_order";
+                		}
+                    }
+                    $return[$key.'i'.$key_item]['refname'] = $refname;
+                    $return[$key.'i'.$key_item]['refid'] = $key;
                 }
                 if($info)
                 {
@@ -252,7 +263,7 @@ class TransactionSalesInvoiceController extends Member
                 }
             }
         }
-        $data['_item']  = Item::get_all_category_item([1,4,5]);
+        $data['_item']  = Item::get_all_category_item();
         $data['_transactions'] = $return;
         $data['remarks'] = $remarks;
         $data['_um']        = UnitMeasurement::load_um_multi();

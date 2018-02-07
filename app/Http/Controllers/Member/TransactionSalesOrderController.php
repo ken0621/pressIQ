@@ -198,6 +198,9 @@ class TransactionSalesOrderController extends Member
                     $return[$key.'i'.$key_item]['item_discount_type'] = $value_item->estline_discount_type;
                     $return[$key.'i'.$key_item]['item_remarks'] = $value_item->estline_discount_remark;
                     $return[$key.'i'.$key_item]['taxable'] = $value_item->taxable;
+
+                    $return[$key.'i'.$key_item]['refname'] = "estimate_quotation";
+                    $return[$key.'i'.$key_item]['refid'] = $key;
                 }
                 if($info)
                 {

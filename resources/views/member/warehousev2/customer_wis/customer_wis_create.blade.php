@@ -105,7 +105,11 @@
                                         <td><input class="form-control number-input txt-qty text-center compute" type="text" name="item_qty[]" value="{{ $wisline->itemline_qty}}" /></td>
                                         <td><input class="text-right number-input txt-rate" type="text" name="item_rate[]" value="{{ $wisline->itemline_rate}}" /></td>
                                         <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{ $wisline->itemline_amount}}" /></td>
-                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                        <td class="text-center remove-tr cursor-pointer">
+                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                            <input type="hidden" name="item_refname[]" value="{{$wisline->itemline_refname}}">
+                                            <input type="hidden" name="item_refid[]" value="{{$wisline->itemline_refid}}">
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endif
@@ -122,7 +126,11 @@
                                 <td><input class="form-control number-input txt-qty text-center compute" type="text" name="item_qty[]"/></td>
                                 <td><input class="text-right number-input txt-rate" type="text" name="item_rate[]"/></td>
                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
-                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                <td class="text-center remove-tr cursor-pointer">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    <input type="hidden" name="item_refname[]">
+                                    <input type="hidden" name="item_refid[]">
+                                </td>
                             </tr>
                             <tr class="tr-draggable">
                                 <td class="invoice-number-td text-center">2</td>
@@ -137,7 +145,11 @@
                                 <td><input class="form-control number-input txt-qty text-center compute" type="text" name="item_qty[]"/></td>
                                 <td><input class="text-right number-input txt-rate" type="text" name="item_rate[]"/></td>
                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
-                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                <td class="text-center remove-tr cursor-pointer">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    <input type="hidden" name="item_refname[]">
+                                    <input type="hidden" name="item_refid[]">
+                                </td>
                             </tr>
                         </tbody>
                     </table>                    
@@ -185,7 +197,11 @@
             <td><input class="form-control number-input txt-qty text-center compute" type="text" name="item_quantity[]"/></td>
             <td><input class="text-right number-input txt-rate" type="text" name="item_rate[]"/></td>
             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
-            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+            <td class="text-center remove-tr cursor-pointer">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                <input type="hidden" name="item_refname[]">
+                <input type="hidden" name="item_refid[]">
+            </td>
         </tr>
     </table>
 </div>

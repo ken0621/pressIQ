@@ -336,6 +336,19 @@ class CustomerWarehouseIssuanceSlipController extends Member
                         $return[$key.'i'.$key_item]['item_qty'] = $value_item->invline_qty;
                         $return[$key.'i'.$key_item]['item_rate'] = $value_item->item_cost;
                         $return[$key.'i'.$key_item]['item_amount'] = $value_item->invline_amount;
+
+                        $refname = "sales_invoice";
+                        if($info)
+                        {
+                            if($info->is_sales_receipt == 1)
+                            {
+                                $refname = "sales_receipt";
+                            }
+                        }
+
+                        $return[$key.'i'.$key_item]['refname'] = $refname;
+                        $return[$key.'i'.$key_item]['refid'] = $key;
+
                     }
                 }
                 if($info)

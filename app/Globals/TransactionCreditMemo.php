@@ -125,6 +125,25 @@ class TransactionCreditMemo
 
         return $return; 
 	}
+	public static function insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction = array())
+    {
+    	$get_transaction = Tbl_credit_memo::where("cm_shop_id", $shop_id)->where("cm_id", $transaction_id)->first();
+    	$transaction_data = null;
+    	if($get_transaction)
+    	{
+    		$transaction_data['transaction_ref_name'] = "credit_memo";
+		 	$transaction_data['transaction_ref_id'] = $transaction_id;
+		 	$transaction_data['transaction_list_number'] = $get_transaction->transaction_refnum;
+		 	$transaction_data['transaction_date'] = $get_transaction->cm_date;
+
+		 	$attached_transaction_data = null;
+    	}
+
+    	if($transaction_data)
+		{
+			AccountingTransaction::postTransaction($shop_id, $transaction_data, $attached_transaction_data);
+		}
+    }
 	public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
 	{
 		$data = Tbl_credit_memo::customer()->where('cm_shop_id', $shop_id);

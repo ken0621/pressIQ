@@ -115,6 +115,8 @@ class CustomerWarehouseIssuanceSlipController extends Member
                 $insert_item[$key]['item_rate'] = str_replace(',', '', $request->item_rate[$key]);
                 $insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_discount'] = 0;
+                $insert_item[$key]['item_refname'] = $request->item_refname[$key];
+                $insert_item[$key]['item_refid'] = $request->item_refid[$key];
 
                 $_item[$key] = null;
                 $_item[$key]['item_id'] = $value;
@@ -125,7 +127,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
         }
 
         $val = CustomerWIS::customer_create_wis($shop_id, $remarks, $ins_wis, $_item, $insert_item);
-               CustomerWIS::applied_transaction($shop_id);
+               CustomerWIS::applied_transaction($shop_id, $val);
         $data = null;
         if(is_numeric($val))
         {
@@ -196,6 +198,8 @@ class CustomerWarehouseIssuanceSlipController extends Member
                 $insert_item[$key]['item_rate'] = str_replace(',', '', $request->item_rate[$key]);
                 $insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_discount'] = 0;
+                $insert_item[$key]['item_refname'] = $request->item_refname[$key];
+                $insert_item[$key]['item_refid'] = $request->item_refid[$key];
 
                 $_item[$key] = null;
                 $_item[$key]['item_id'] = $value;
@@ -336,6 +340,19 @@ class CustomerWarehouseIssuanceSlipController extends Member
                         $return[$key.'i'.$key_item]['item_qty'] = $value_item->invline_qty;
                         $return[$key.'i'.$key_item]['item_rate'] = $value_item->item_cost;
                         $return[$key.'i'.$key_item]['item_amount'] = $value_item->invline_amount;
+
+                        $refname = "sales_invoice";
+                        if($info)
+                        {
+                            if($info->is_sales_receipt == 1)
+                            {
+                                $refname = "sales_receipt";
+                            }
+                        }
+
+                        $return[$key.'i'.$key_item]['refname'] = $refname;
+                        $return[$key.'i'.$key_item]['refid'] = $key;
+
                     }
                 }
                 if($info)

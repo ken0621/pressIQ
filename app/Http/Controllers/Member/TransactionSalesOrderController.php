@@ -77,11 +77,14 @@ class TransactionSalesOrderController extends Member
 				$insert_item[$key]['item_remarks'] = $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
 				$insert_item[$key]['item_taxable'] = isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
+
+				$insert_item[$key]['item_refname'] 		= $request->item_refname[$key];
+				$insert_item[$key]['item_refid'] 		= $request->item_refid[$key];
 			}
 		}
 		$return = null;
 		$validate = TransactionSalesOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
-		TransactionSalesOrder::applied_transaction($this->user_info->shop_id);
+		TransactionSalesOrder::applied_transaction($this->user_info->shop_id, $validate);
 		if(is_numeric($validate))
 		{
 			$return['status'] = 'success';
@@ -126,6 +129,9 @@ class TransactionSalesOrderController extends Member
 				$insert_item[$key]['item_remarks'] = $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
 				$insert_item[$key]['item_taxable'] = isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
+				
+				$insert_item[$key]['item_refname'] 		= $request->item_refname[$key];
+				$insert_item[$key]['item_refid'] 		= $request->item_refid[$key];
 			}
 		}
 		$return = null;
@@ -198,6 +204,9 @@ class TransactionSalesOrderController extends Member
                     $return[$key.'i'.$key_item]['item_discount_type'] = $value_item->estline_discount_type;
                     $return[$key.'i'.$key_item]['item_remarks'] = $value_item->estline_discount_remark;
                     $return[$key.'i'.$key_item]['taxable'] = $value_item->taxable;
+
+                    $return[$key.'i'.$key_item]['refname'] = "estimate_quotation";
+                    $return[$key.'i'.$key_item]['refid'] = $key;
                 }
                 if($info)
                 {

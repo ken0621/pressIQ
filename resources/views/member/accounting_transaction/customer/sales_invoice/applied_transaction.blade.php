@@ -30,7 +30,11 @@
         <td class="text-center">
             <input type="checkbox" name="item_taxable[]" class="taxable-check compute" {{$transaction['taxable'] == 1 ? 'checked' : ''}} value="1">
         </td>
-        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+        <td class="text-center remove-tr cursor-pointer">
+            <i class="fa fa-trash-o" aria-hidden="true"></i>
+            <input type="hidden" name="item_refname[]" value="{{$transaction['refname']}}" >
+            <input type="hidden" name="item_refid[]" value="{{$transaction['refid']}}" >
+        </td>
     </tr>
     @endforeach
 @endif

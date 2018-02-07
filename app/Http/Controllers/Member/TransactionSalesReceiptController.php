@@ -86,6 +86,9 @@ class TransactionSalesReceiptController extends Member
 				$insert_item[$key]['item_remarks'] 		= $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] 		= str_replace(',', '', $request->item_amount[$key]);
 				$insert_item[$key]['item_taxable'] 		= isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
+
+				$insert_item[$key]['item_refname'] 		= $request->item_refname[$key];
+				$insert_item[$key]['item_refid'] 		= $request->item_refid[$key];
 			}
 		}
 		$return = null;
@@ -99,7 +102,7 @@ class TransactionSalesReceiptController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesReceipt::postInsert($this->user_info->shop_id, $insert, $insert_item);
-			TransactionSalesReceipt::applied_transaction($this->user_info->shop_id);
+			TransactionSalesReceipt::applied_transaction($this->user_info->shop_id, $validate);
 		}
 
 		if(is_numeric($validate))
@@ -151,6 +154,9 @@ class TransactionSalesReceiptController extends Member
 				$insert_item[$key]['item_remarks'] 		= $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] 		= str_replace(',', '', $request->item_amount[$key]);
 				$insert_item[$key]['item_taxable'] 		= isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
+				
+				$insert_item[$key]['item_refname'] 		= $request->item_refname[$key];
+				$insert_item[$key]['item_refid'] 		= $request->item_refid[$key];
 			}
 		}
 		$return = null;
@@ -235,6 +241,17 @@ class TransactionSalesReceiptController extends Member
                     $return[$key.'i'.$key_item]['item_discount_type'] = $value_item->estline_discount_type;
                     $return[$key.'i'.$key_item]['item_remarks'] = $value_item->estline_discount_remark;
                     $return[$key.'i'.$key_item]['taxable'] = $value_item->taxable;
+
+                    $refname = "estimate_quotation";
+                    if($info)
+                    {
+                    	if($info->is_sales_order == 1)
+                		{
+                			$refname = "sales_order";
+                		}
+                    }
+                    $return[$key.'i'.$key_item]['refname'] = $refname;
+                    $return[$key.'i'.$key_item]['refid'] = $key;
                 }
                 if($info)
                 {
@@ -247,7 +264,7 @@ class TransactionSalesReceiptController extends Member
                 }
             }
         }
-        $data['_item']  = Item::get_all_category_item([1,4,5]);
+        $data['_item']  = Item::get_all_category_item();
         $data['_transactions'] = $return;
         $data['remarks'] = $remarks;
         $data['_um']        = UnitMeasurement::load_um_multi();

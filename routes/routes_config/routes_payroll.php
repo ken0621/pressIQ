@@ -22,7 +22,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/*manpowereport*/
 	Route::any('/reports/manpower_report',"Member\PayrollReportController@manpower_report");
-	Route::any('/reports/manpower_report_export_excel',"Member\PayrollReportController@manpower_report_export_excel");
+	Route::any('/reports/manpower_report_filter',"Member\PayrollReportController@manpower_report_filter");
+	Route::any('/reports/manpower_report_export_excel/{company_id}',"Member\PayrollReportController@manpower_report_export_excel");
 	/*endmanpower*/
 
 	/* BIR REPORT */
@@ -494,6 +495,14 @@ Route::group(array('prefix' => '/member/payroll'), function()
     Route::any('/payroll_group/get_payroll_tag_employee',"Member\PayrollController@get_payroll_tag_employee");
     Route::any('/payroll_group/set_tag_payroll_group_employee',"Member\PayrollController@set_tag_payroll_group_employee");
     Route::any('/payroll_group/remove_payroll_tag_employee',"Member\PayrollController@remove_payroll_tag_employee");
+
+	Route::any('/leave/v2/remove_employee_payroll_group_tag',"Member\PayrollController@remove_employee_payroll_group_tag");
+	Route::any('/payroll_group/load_payroll_employee_tag',"Member\PayrollController@load_payroll_employee_tag");
+	Route::any('/payroll_group/modal_payroll_tag_edit',"Member\PayrollController@modal_payroll_tag_edit");
+	Route::any('/payroll_group/set_tag_payroll_group_employee_edit',"Member\PayrollController@set_tag_payroll_group_employee_edit");
+	Route::any('/payroll_group/get_payroll_tag_employee_edit',"Member\PayrollController@get_payroll_tag_employee_edit");
+
+	
 	/* PAYROLL GROUP END */
 
 	/* PAYROLL JOURNAL SETTINGS START */

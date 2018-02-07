@@ -902,52 +902,52 @@ class Seed_manual
         {
             $date = Carbon::now();
 
-            $insert = null;
-            $ins = null;
+            $insert = [];
+            $ins = [];
             $insert['um_type_name'] = 'Count'; 
             $insert['um_type_abbrev'] = '';
             $insert['created_at'] = $date;
             $insert['shop_id'] = $shop_id;
 
-            $parent_id = DB::table('tbl_unit_measurement_type')->insertGetId();
+            $parent_id = DB::table('tbl_unit_measurement_type')->insertGetId($insert);
 
             $ins[0]['um_type_name'] = "Each";
             $ins[0]['um_type_abbrev'] = "ea";
             $ins[0]['created_at'] = $date;
             $ins[0]['shop_id'] = $shop_id;
-            $ins[0]['um_tpye_parent_id'] = $parent_id;
+            $ins[0]['um_type_parent_id'] = $parent_id;
 
             $ins[1]['um_type_name'] = "Box";
             $ins[1]['um_type_abbrev'] = "bx";
             $ins[1]['created_at'] = $date;
             $ins[1]['shop_id'] = $shop_id;
-            $ins[1]['um_tpye_parent_id'] = $parent_id;
+            $ins[1]['um_type_parent_id'] = $parent_id;
 
             $ins[2]['um_type_name'] = "Case";
             $ins[2]['um_type_abbrev'] = "cs";
             $ins[2]['created_at'] = $date;
             $ins[2]['shop_id'] = $shop_id;
-            $ins[2]['um_tpye_parent_id'] = $parent_id;
+            $ins[2]['um_type_parent_id'] = $parent_id;
 
             $ins[3]['um_type_name'] = "Dozen";
             $ins[3]['um_type_abbrev'] = "dz";
             $ins[3]['created_at'] = $date;
             $ins[3]['shop_id'] = $shop_id;
-            $ins[3]['um_tpye_parent_id'] = $parent_id;
+            $ins[3]['um_type_parent_id'] = $parent_id;
 
             $ins[4]['um_type_name'] = "Package";
             $ins[4]['um_type_abbrev'] = "pkg";
             $ins[4]['created_at'] = $date;
             $ins[4]['shop_id'] = $shop_id;
-            $ins[4]['um_tpye_parent_id'] = $parent_id;
+            $ins[4]['um_type_parent_id'] = $parent_id;
 
             $ins[5]['um_type_name'] = "Pair";
             $ins[5]['um_type_abbrev'] = "pr";
             $ins[5]['created_at'] = $date;
             $ins[5]['shop_id'] = $shop_id;
-            $ins[5]['um_tpye_parent_id'] = $parent_id;
+            $ins[5]['um_type_parent_id'] = $parent_id;
 
-            DB::table('tbl_unit_measurement_type')->insertGetId($ins);
+            DB::table('tbl_unit_measurement_type')->insert($ins);
 
             $insert = null;
             $ins = null;
@@ -962,27 +962,152 @@ class Seed_manual
             $ins[0]['um_type_abbrev'] = "in";
             $ins[0]['created_at'] = $date;
             $ins[0]['shop_id'] = $shop_id;
-            $ins[0]['um_tpye_parent_id'] = $parent_id;
+            $ins[0]['um_type_parent_id'] = $parent_id;
 
             $ins[1]['um_type_name'] = "Foot";
             $ins[1]['um_type_abbrev'] = "ft";
             $ins[1]['created_at'] = $date;
             $ins[1]['shop_id'] = $shop_id;
-            $ins[1]['um_tpye_parent_id'] = $parent_id;
+            $ins[1]['um_type_parent_id'] = $parent_id;
 
             $ins[2]['um_type_name'] = "Yard";
             $ins[2]['um_type_abbrev'] = "yd";
             $ins[2]['created_at'] = $date;
             $ins[2]['shop_id'] = $shop_id;
-            $ins[2]['um_tpye_parent_id'] = $parent_id;
+            $ins[2]['um_type_parent_id'] = $parent_id;
 
             $ins[3]['um_type_name'] = "Meter";
             $ins[3]['um_type_abbrev'] = "m";
             $ins[3]['created_at'] = $date;
             $ins[3]['shop_id'] = $shop_id;
-            $ins[3]['um_tpye_parent_id'] = $parent_id;
+            $ins[3]['um_type_parent_id'] = $parent_id;
 
-            DB::table('tbl_unit_measurement_type')->insertGetId($ins);
+            DB::table('tbl_unit_measurement_type')->insert($ins);
+
+
+            $insert = null;
+            $ins = null;
+            $insert['um_type_name'] = 'Weight'; 
+            $insert['um_type_abbrev'] = '';
+            $insert['created_at'] = $date;
+            $insert['shop_id'] = $shop_id;
+
+            $parent_id = DB::table('tbl_unit_measurement_type')->insertGetId($insert);
+
+            $ins[0]['um_type_name'] = "Ounce";
+            $ins[0]['um_type_abbrev'] = "oz";
+            $ins[0]['created_at'] = $date;
+            $ins[0]['shop_id'] = $shop_id;
+            $ins[0]['um_type_parent_id'] = $parent_id;
+
+            $ins[1]['um_type_name'] = "Pound";
+            $ins[1]['um_type_abbrev'] = "lb";
+            $ins[1]['created_at'] = $date;
+            $ins[1]['shop_id'] = $shop_id;
+            $ins[1]['um_type_parent_id'] = $parent_id;
+
+            $ins[2]['um_type_name'] = "Kilogram";
+            $ins[2]['um_type_abbrev'] = "kg";
+            $ins[2]['created_at'] = $date;
+            $ins[2]['shop_id'] = $shop_id;
+            $ins[2]['um_type_parent_id'] = $parent_id;
+
+            DB::table('tbl_unit_measurement_type')->insert($ins);
+
+            $insert = null;
+            $ins = null;
+            $insert['um_type_name'] = 'Volume'; 
+            $insert['um_type_abbrev'] = '';
+            $insert['created_at'] = $date;
+            $insert['shop_id'] = $shop_id;
+
+            $parent_id = DB::table('tbl_unit_measurement_type')->insertGetId($insert);
+
+            $ins[0]['um_type_name'] = "Quart";
+            $ins[0]['um_type_abbrev'] = "qt";
+            $ins[0]['created_at'] = $date;
+            $ins[0]['shop_id'] = $shop_id;
+            $ins[0]['um_type_parent_id'] = $parent_id;
+
+            $ins[1]['um_type_name'] = "Gallon";
+            $ins[1]['um_type_abbrev'] = "gal";
+            $ins[1]['created_at'] = $date;
+            $ins[1]['shop_id'] = $shop_id;
+            $ins[1]['um_type_parent_id'] = $parent_id;
+
+            $ins[2]['um_type_name'] = "Cubic Yard";
+            $ins[2]['um_type_abbrev'] = "yds³";
+            $ins[2]['created_at'] = $date;
+            $ins[2]['shop_id'] = $shop_id;
+            $ins[2]['um_type_parent_id'] = $parent_id;
+
+            $ins[3]['um_type_name'] = "Liter";
+            $ins[3]['um_type_abbrev'] = "L";
+            $ins[3]['created_at'] = $date;
+            $ins[3]['shop_id'] = $shop_id;
+            $ins[3]['um_type_parent_id'] = $parent_id;
+
+            DB::table('tbl_unit_measurement_type')->insert($ins);
+
+
+            $insert = null;
+            $ins = null;
+            $insert['um_type_name'] = 'Area'; 
+            $insert['um_type_abbrev'] = '';
+            $insert['created_at'] = $date;
+            $insert['shop_id'] = $shop_id;
+
+            $parent_id = DB::table('tbl_unit_measurement_type')->insertGetId($insert);
+
+            $ins[0]['um_type_name'] = "Square Foot";
+            $ins[0]['um_type_abbrev'] = "ft²";
+            $ins[0]['created_at'] = $date;
+            $ins[0]['shop_id'] = $shop_id;
+            $ins[0]['um_type_parent_id'] = $parent_id;
+
+            $ins[1]['um_type_name'] = "Acre";
+            $ins[1]['um_type_abbrev'] = "ac";
+            $ins[1]['created_at'] = $date;
+            $ins[1]['shop_id'] = $shop_id;
+            $ins[1]['um_type_parent_id'] = $parent_id;
+
+            $ins[2]['um_type_name'] = "Square Meter";
+            $ins[2]['um_type_abbrev'] = "m²";
+            $ins[2]['created_at'] = $date;
+            $ins[2]['shop_id'] = $shop_id;
+            $ins[2]['um_type_parent_id'] = $parent_id;
+
+            DB::table('tbl_unit_measurement_type')->insert($ins);
+
+
+            $insert = null;
+            $ins = null;
+            $insert['um_type_name'] = 'Time'; 
+            $insert['um_type_abbrev'] = '';
+            $insert['created_at'] = $date;
+            $insert['shop_id'] = $shop_id;
+
+            $parent_id = DB::table('tbl_unit_measurement_type')->insertGetId($insert);
+
+            $ins[0]['um_type_name'] = "Minute";
+            $ins[0]['um_type_abbrev'] = "min";
+            $ins[0]['created_at'] = $date;
+            $ins[0]['shop_id'] = $shop_id;
+            $ins[0]['um_type_parent_id'] = $parent_id;
+
+            $ins[1]['um_type_name'] = "Hour";
+            $ins[1]['um_type_abbrev'] = "hr";
+            $ins[1]['created_at'] = $date;
+            $ins[1]['shop_id'] = $shop_id;
+            $ins[1]['um_type_parent_id'] = $parent_id;
+
+            $ins[2]['um_type_name'] = "Day";
+            $ins[2]['um_type_abbrev'] = "d";
+            $ins[2]['created_at'] = $date;
+            $ins[2]['shop_id'] = $shop_id;
+            $ins[2]['um_type_parent_id'] = $parent_id;
+            
+            DB::table('tbl_unit_measurement_type')->insert($ins);
         }
     }
     public static function put_transaction_reference_number($shop_id)

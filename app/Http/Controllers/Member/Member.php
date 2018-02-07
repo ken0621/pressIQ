@@ -154,6 +154,7 @@ class Member extends Controller
 			/* Seeding */
 			Seed_manual::auto_seed();
 			Seed_manual::insert_default_landing_cost($this->user_info->shop_id);
+			Seed_manual::insert_umtypes($this->user_info->shop_id);
 
 			/* Set Email Configuration */
 			Settings::set_mail_setting($this->user_info->shop_id);

@@ -1,10 +1,64 @@
-  var set_name = "";
-  var name = "";
-  var base = "";
-  $("#base_abbreviation").keyup(function()
-  {
-    $(".abb").html($(this).val());
-  });
+var unit_measurement = new unit_measurement();
+var global_tr_html = $(".div-script tbody").html();
+var set_name = "";
+var name = "";
+var base = "";
+
+function unit_measurement()
+{
+    init();
+
+    function init()
+    {
+        event_click_last_row();
+        event_remove_tr();
+        action_reassign_number();
+    }
+
+    function event_click_last_row()
+    {
+        $(document).on("click", "tbody.draggable tr:last td:not(.remove-tr)", function(){
+            event_click_last_row_op();
+        });
+    }
+
+    function event_click_last_row_op()
+    {
+        $("tbody.draggable").append(global_tr_html);
+        action_reassign_number();
+    }
+
+    function action_reassign_number()
+    {
+        var num = 1;
+        $(".invoice-number-td").each(function(){
+            $(this).html(num);
+            num++;
+        });
+    }
+
+    function event_remove_tr()
+    {
+        $(document).on("click", ".remove-tr", function(e){
+            var len = $(".tbody-item .remove-tr").length;
+            if($(".tbody-item .remove-tr").length > 1)
+            {
+                $(this).parent().remove();
+                action_reassign_number();
+            }
+            else
+            {
+                console.log("success");
+            }
+        });
+    }
+
+}
+
+$("#base_abbreviation").keyup(function()
+{
+$(".abb").html($(this).val());
+});
 function chooseType(type_id)
 {
     $(".base-child-types").addClass("hidden");
@@ -20,6 +74,7 @@ function chooseType(type_id)
 
     name = $(".type"+type_id).attr("data-content");
     console.log(name);
+    $(".child-types").html(" ");
 
     $(".loading-sub").removeClass("hidden");
     $(".child-div").removeClass("hidden");

@@ -14,6 +14,8 @@
 							<th class="text-center">Code</th>
 							<!-- <th class="text-right">Discrepancy</th> -->
 							<th class="text-center">Activation</th>
+							<th class="text-center">Date Created</th>
+							<th class="text-center">Date Used</th>
 							@if($warehouse_data->main_warehouse == 3)
 							<th>Control Number</th>
 							@endif
@@ -28,6 +30,8 @@
 							<td>{{$code->item_name}}</td>
 							<td class="text-center">{{$code->mlm_pin}}</td>
 							<td class="text-center">{{$code->mlm_activation}}</td>
+							<td class="text-center">{{date('F d, Y',strtotime($code->date_created))}}</td>
+							<td class="text-center">{{date('F d, Y',strtotime($code->record_log_date_updated))}}</td>
 							@if($warehouse_data->main_warehouse == 3)
 							<td>{{str_pad($code->ctrl_number, 9, '0', STR_PAD_LEFT)}}</td>
 							@endif

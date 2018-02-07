@@ -65,14 +65,14 @@
 				<div class="per-slide-container row clearfix">
 					<div class="col-md-6">
 						<div class="bp-container">
-							<img src="/themes/{{ $shop_theme }}/img/bp-2.jpg">
+							<img src="/themes/{{ $shop_theme }}/img/bp-2-2.jpg">
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="caption-container">
-							<h1>THE BROWN SPEAKER</h1>
-							<h2>UNLEASH THE NATIVE BASS!</h2>
-							<p>Brown proudly designed a unique style of speakers that mirrors the culture of a true filipino.</p>
+							<h1>INDOOR/OUTDOOR SUPER BASS</h1>
+							<h2>BLUETOOTH SPEAKERS</h2>
+							<p>Brown proudly designed a unique style of speakers that mirrors the culture of a true filipino. </p>
 							<!-- <div class="button-brown">SHOP NOW</div> -->
 						</div>
 					</div>

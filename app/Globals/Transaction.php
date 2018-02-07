@@ -653,6 +653,10 @@ class Transaction
             $data->leftJoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
             $data->groupBy("tbl_customer.customer_id");
         }
+        else
+        {
+            $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
+        }
         if($paginate)
         {
             $data = $data->paginate($paginate);
@@ -735,6 +739,7 @@ class Transaction
         session()->forget('get_transaction_filter_customer_id');
         session()->forget('get_transaction_customer_details');
         session()->forget('get_transaction_date');
+        session()->forget('get_transaction_customer_details_v2');
         session()->forget('get_transaction_payment_method');
         session()->forget('get_transaction_slot_id');
 

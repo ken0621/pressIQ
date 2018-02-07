@@ -4809,7 +4809,16 @@ class PayrollController extends Member
                $data['action']     = '/member/payroll/leave/v2/remove_employee_payroll_group_tag';
                $data['id']         = $payroll_leave_employee_id;
                $data['remaining_leave'] = $remaining_leave;
-     }
+          }
+          else if($action == 'remove_shift_tag')
+          {
+               $action = 'remove this employee from tagging?';
+               $data['title']      = 'Do you really want to '.$action.'';
+               $data['html']       = '';
+               $data['action']     = '/member/payroll/leave/v2/remove_employee_shift_group_tag';
+               $data['id']         = $payroll_leave_employee_id;
+               $data['remaining_leave'] = $remaining_leave;  
+          }
 
           return view('member.payroll.modal.modal_leave_reset_confirm',$data);
 
@@ -6770,9 +6779,34 @@ class PayrollController extends Member
      public function modal_create_shift_template()
      {
           $data['_day'] = Payroll::restday_checked();
+          Session::put('payroll_add_shift_tag_employee', array());
           return view('member.payroll.modal.modal_create_shift_template', $data);
      }
 
+     public function remove_employee_shift_group_tag()
+     {
+         $payroll_employee_id = Request::input('id');
+         $shift_code_id       = Request::input('remaining_leave');
+ 
+         $update['shift_code_id'] = null;
+         Tbl_payroll_employee_basic::where('payroll_employee_id',$payroll_employee_id)->where('shift_code_id',$shift_code_id)->update($update);
+
+          $return['status']             = 'success';
+          $return['function_name']      = 'shifting.load_edit_tag_employee';
+          
+          return json_encode($return);
+
+     }
+
+     public function load_shift_employee_tag()
+     {
+          $shift_id = Request::input('shift_id');
+          $emp = Tbl_payroll_employee_basic::where('shop_id',Self::shop_id())->where('shift_code_id',$shift_id)->get();
+          
+          $data['new_record'] = $emp;
+
+          return json_encode($data);
+     }
 
      public function modal_save_shift_template()
      {
@@ -6783,6 +6817,17 @@ class PayrollController extends Member
           $insert_code['shop_id']            = Self::shop_id();
 
           $shift_code_id = Tbl_payroll_shift_code::insertGetId($insert_code);
+
+          if(!empty(Request::input('employee_tag')))
+          {
+               foreach(Request::input('employee_tag') as $tag)
+               {
+                    
+                    $update['shift_code_id'] = $shift_code_id;
+                    Tbl_payroll_employee_basic::where('payroll_employee_id',$tag)->update($update);
+                   
+               }
+          }
 
           AuditTrail::record_logs("CREATED: Shift Template","Shift Template Code Name : ".Request::input('shift_code_name'),"","","");
           $insert_shift = array();
@@ -7479,9 +7524,9 @@ class PayrollController extends Member
 
      public function modal_view_shift_template($id)
      {
-          $data = Self::shift_sorting($id);
-
           Session::put('payroll_shift_tag_employee', array());
+          $data = Self::shift_sorting($id);
+          $data['employee']   = Tbl_payroll_employee_basic::where('shop_id',Self::shop_id())->where('shift_code_id',$id)->get();
           return view('member.payroll.modal.modal_view_shift_template', $data);
      }
 
@@ -7496,7 +7541,43 @@ class PayrollController extends Member
           $data['action']               ='/member/payroll/shift_template/set_tag_shift_employee';
           return view('member.payroll.modal.modal_deduction_tag_employee', $data);
      }
-     
+
+     public function modal_tag_add_shift_employee()
+     {
+           $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+          $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+
+          $data['deduction_id']    =    0;
+
+          $data['action']               ='/member/payroll/shift_template/set_add_tag_shift_employee';
+          return view('member.payroll.modal.modal_deduction_tag_employee', $data);
+     }
+
+     public function set_add_tag_shift_employee()
+     {
+          $employee_tag = Request::input('employee_tag');
+
+          $array = array();
+          if(Session::has('payroll_add_shift_tag_employee'))
+          {
+               $array = Session::get('payroll_add_shift_tag_employee');
+          }
+
+          if(isset($employee_tag)){
+               foreach($employee_tag as $tag)
+               {
+                    array_push($array, $tag);
+               }    
+          }
+
+          Session::put('payroll_add_shift_tag_employee',$array);
+          $return['status']             = 'success';
+          $return['function_name']      = 'shifting.load_add_tag_employee';
+          
+          return json_encode($return);
+     }
+
      public function set_tag_shift_employee()
      {
 
@@ -7523,16 +7604,60 @@ class PayrollController extends Member
      
      }
 
+     public function get_shift_add_tag_employee()
+     {
+           $employee = [0 => 0];
+          if(Session::has('payroll_add_shift_tag_employee'))
+          {
+               $employee = Session::get('payroll_add_shift_tag_employee');
+          }
+          $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
+
+          $data['new_record'] = $emp;
+
+          return json_encode($data);
+     }
+
      public function get_shift_tag_employee()
      {
+          $shift_id = Request::input('shift_id');
+
            $employee = [0 => 0];
           if(Session::has('payroll_shift_tag_employee'))
           {
                $employee = Session::get('payroll_shift_tag_employee');
           }
-          $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
+          $empsession = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
 
+          $empdata    = Tbl_payroll_employee_basic::where('shop_id',Self::shop_id())->where('shift_code_id',$shift_id)->get();
+          
+          $emp = array();
+          foreach($empsession as $empses)
+          {
+               $temp['payroll_employee_id']            = $empses->payroll_employee_id;
+               $temp['payroll_employee_display_name']  = $empses->payroll_employee_display_name;
+
+               $checkemp = Tbl_payroll_employee_basic::where('payroll_employee_id',$empses->payroll_employee_id)->first();
+               if($checkemp['shift_code_id'] != $shift_id)
+               {
+                    array_push($emp,$temp);
+               }
+
+               $update['shift_code_id'] = $shift_id;
+               Tbl_payroll_employee_basic::where('payroll_employee_id',$empses->payroll_employee_id)->update($update);
+
+          }
+
+          foreach($empdata as $empdat)
+          {
+               $temp2['payroll_employee_id']            = $empdat->payroll_employee_id;
+               $temp2['payroll_employee_display_name']  = $empdat->payroll_employee_display_name;
+               array_push($emp,$temp2);
+          }
+
+          $data['shift_id']   = $shift_id;
           $data['new_record'] = $emp;
+
 
           return json_encode($data);
      }

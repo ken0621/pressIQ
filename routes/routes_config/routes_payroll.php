@@ -573,8 +573,17 @@ Route::group(array('prefix' => '/member/payroll'), function()
      Route::any('/shift_template/modal_archive_shift_template/{archived}/{id}',"Member\PayrollController@modal_archive_shift_template");
      Route::any('/shift_template/archive_shift_template',"Member\PayrollController@archive_shift_template");
 
-     
-     Route::any('/shift_template/modal_tag_shift_employee',"Member\PayrollController@modal_tag_shift_employee");
+
+
+	Route::any('/shift_template/modal_tag_add_shift_employee',"Member\PayrollController@modal_tag_add_shift_employee");
+	Route::any('/shift_template/set_add_tag_shift_employee',"Member\PayrollController@set_add_tag_shift_employee");
+	Route::any('/shift_template/get_shift_add_tag_employee',"Member\PayrollController@get_shift_add_tag_employee");
+
+	Route::any('/shift_template/modal_tag_shift_employee',"Member\PayrollController@modal_tag_shift_employee");
+    Route::any('/shift_template/load_shift_employee_tag',"Member\PayrollController@load_shift_employee_tag");
+    Route::any('/leave/v2/remove_employee_shift_group_tag',"Member\PayrollController@remove_employee_shift_group_tag");
+
+    Route::any('/shift_template/modal_tag_shift_employee',"Member\PayrollController@modal_tag_shift_employee");
     Route::any('/shift_template/get_shift_tag_employee',"Member\PayrollController@get_shift_tag_employee");
     Route::any('/shift_template/set_tag_shift_employee',"Member\PayrollController@set_tag_shift_employee");
     Route::any('/shift_template/remove_shift_tag_employee',"Member\PayrollController@remove_shift_tag_employee");

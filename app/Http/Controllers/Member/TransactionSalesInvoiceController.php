@@ -102,7 +102,7 @@ class TransactionSalesInvoiceController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesInvoice::postInsert($this->user_info->shop_id, $insert, $insert_item);
-			TransactionSalesInvoice::applied_transaction($this->user_info->shop_id);
+			TransactionSalesInvoice::applied_transaction($this->user_info->shop_id, $validate);
 		}
 		if(is_numeric($validate))
 		{

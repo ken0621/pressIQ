@@ -125,7 +125,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
         }
 
         $val = CustomerWIS::customer_create_wis($shop_id, $remarks, $ins_wis, $_item, $insert_item);
-               CustomerWIS::applied_transaction($shop_id);
+               CustomerWIS::applied_transaction($shop_id, $val);
         $data = null;
         if(is_numeric($val))
         {

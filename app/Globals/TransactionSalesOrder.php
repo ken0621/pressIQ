@@ -198,7 +198,7 @@ class TransactionSalesOrder
 		return $return;
 	}
 
-    public static function applied_transaction($shop_id)
+    public static function applied_transaction($shop_id, $transaction_id = 0)
     {
         $applied_transaction = Session::get('applied_transaction_so');
         if(count($applied_transaction) > 0)
@@ -209,6 +209,40 @@ class TransactionSalesOrder
                 Tbl_customer_estimate::where("est_id", $key)->where('est_shop_id', $shop_id)->update($update);
             }
         }
-    }
 
+        Self::insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction);
+    }
+    public static function insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction = array())
+    {
+    	$get_transaction = Tbl_customer_estimate::where("est_shop_id", $shop_id)->where("est_id", $transaction_id)->first();
+    	$transaction_data = null;
+    	if($get_transaction)
+    	{
+    		$transaction_data['transaction_ref_name'] = "sales_order";
+		 	$transaction_data['transaction_ref_id'] = $transaction_id;
+		 	$transaction_data['transaction_list_number'] = $get_transaction->transaction_refnum;
+		 	$transaction_data['transaction_date'] = $get_transaction->est_date;
+
+		 	$attached_transaction_data = null;
+		 	if(count($applied_transaction) > 0)
+		 	{
+			 	foreach ($applied_transaction as $key => $value) 
+			 	{
+			 		$get_data = Tbl_customer_estimate::where("est_shop_id", $shop_id)->where("est_id", $key)->first();
+			 		if($get_data)
+			 		{
+				 		$attached_transaction_data[$key]['transaction_ref_name'] = "estimate_qoutation";
+					 	$attached_transaction_data[$key]['transaction_ref_id'] = $key;
+					 	$attached_transaction_data[$key]['transaction_list_number'] = $get_data->transaction_refnum;
+					 	$attached_transaction_data[$key]['transaction_date'] = $get_data->est_date;
+			 		}
+			 	}
+		 	}
+    	}
+
+    	if($transaction_data)
+		{
+			AccountingTransaction::postTransaction($shop_id, $transaction_data, $attached_transaction_data);
+		}
+    }
 }

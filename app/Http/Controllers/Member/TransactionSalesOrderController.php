@@ -81,7 +81,7 @@ class TransactionSalesOrderController extends Member
 		}
 		$return = null;
 		$validate = TransactionSalesOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
-		TransactionSalesOrder::applied_transaction($this->user_info->shop_id);
+		TransactionSalesOrder::applied_transaction($this->user_info->shop_id, $validate);
 		if(is_numeric($validate))
 		{
 			$return['status'] = 'success';

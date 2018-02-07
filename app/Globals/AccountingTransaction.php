@@ -84,12 +84,49 @@ class AccountingTransaction
 	{
 		$insert_trans['shop_id'] = $shop_id;
 		$insert_trans['transaction_number'] = Self::get_ref_num($shop_id, 'accounting_transaction'); // MUST BE AUTO GENERATED
+		$insert_trans['transaction_user_id'] = Self::getUserid();
+		$insert_trans['transaction_created_at'] = Carbon::now();
 
 		$acctg_trans_id = Tbl_acctg_transaction::insertGetId($insert_trans);
 
 		$trans_data['acctg_transaction_id'] = $acctg_trans_id;
 		$trans_data['date_created'] = Carbon::now();
 		Tbl_acctg_transaction_list::insert($trans_data);
+		return $acctg_trans_id;
+	}
+
+	public static function updateTransaction($acctg_trans_id, $trans_data = array())
+	{
+		$trans_data['acctg_transaction_id'] = $acctg_trans_id;
+		$trans_data['date_created'] = Carbon::now();
+
+		Tbl_acctg_transaction_list::insert($trans_data);
+
+		$get = Tbl_acctg_transaction::where("acctg_transaction_id", $acctg_trans_id)->first();
+
+		if($get)
+		{
+			$datenow = $get->transaction_created_at;
+			if($get->acctg_transaction_history)
+			{
+                $serialize = unserialize($get_data->acctg_transaction_history);
+				$serialize[$datenow] = collect($get)->toArray();
+
+                $update['acctg_transaction_history'] = serialize($serialize);
+                Tbl_acctg_transaction::where("acctg_transaction_id", $acctg_transaction_id)->update($update);
+			}
+			else
+			{
+				$serialize[$datenow] = collect($get)->toArray();
+                $update['acctg_transaction_history'] = serialize($serialize);
+                Tbl_acctg_transaction::where("acctg_transaction_id", $acctg_transaction_id)->update($update);
+			}
+		}
+
+		$update_trans['transaction_user_id'] = Self::getUserid();
+		$update_trans['transaction_created_at'] = Carbon::now();
+		Tbl_acctg_transaction::where("acctg_transaction_id", $acctg_trans_id)->update($update_trans);
+
 		return $acctg_trans_id;
 	}
 	 /* 
@@ -105,6 +142,17 @@ class AccountingTransaction
 	 	$attached_transaction_data[0]['transaction_date'] - Date
 			
 	 */
+
+    public static function getUserid()
+    {
+        $user_id = 0;
+        $user_data = Tbl_user::where("user_email", session('user_email'))->shop()->value('user_id');
+        if($user_data)
+        {
+            $user_id = $user_data;
+        }
+        return $user_id;
+    }
 	public static function postTransaction($shop_id, $transaction_data, $attached_transaction_data = array())
 	{
 		$check = Self::check_transaction($shop_id, $transaction_data['transaction_ref_name'], $transaction_data['transaction_ref_id']);
@@ -115,7 +163,8 @@ class AccountingTransaction
 		else
 		{
 			$acctg_trans_id = $check;
-			Tbl_acctg_transaction_list::where("acctg_transaction_id", $acctg_trans_id)->delete();
+			// Tbl_acctg_transaction_list::where("acctg_transaction_id", $acctg_trans_id)->delete();
+			Self::updateTransaction($acctg_trans_id, $transaction_data);
 		}
 
 		if(is_numeric($acctg_trans_id))
@@ -138,37 +187,18 @@ class AccountingTransaction
 			}
 			if(count($list) > 0)
 			{
-				Self::insertTransactionList($shop_id, $list);
+				Self::insertTransactionList($list);
 			}
 		}
 	}
-	public static function postTransaction1($shop_id, $transaction_data, $attached_transaction_data = array())
-	{
-		$check = Self::check_transaction($shop_id, $attached_transaction_data['transaction_ref_name'], $attached_transaction_data['transaction_ref_id']);
-		if(!$check)
-		{
-			Self::insertTransaction($shop_id, $transaction_data);
-		}
-		else
-		{
-			$transaction_data['date_created'] = Carbon::now();
-			$transaction_data['acctg_transaction_id'] = $check;
-
-			Self::insertTransactionList($shop_id, $transaction_data);
-		}
-	}
-	 /* $transaction_data['transaction_ref_name']
-	 	$transaction_data['transaction_ref_id']
-			
-	 */
-	public static function insertTransactionList($shop_id, $transaction_data)
+	public static function insertTransactionList($transaction_data)
 	{
 		Tbl_acctg_transaction_list::insert($transaction_data);
 	}
 	public static function check_transaction($shop_id, $transaction_name = '', $transaction_id = 0)
 	{
 		$check = Tbl_acctg_transaction_list::acctgTransaction()->where("shop_id", $shop_id)->where("transaction_ref_name", $transaction_name)
-											->where("transaction_ref_id", $transaction_id)->first();
+											->where("transaction_ref_id", $transaction_id)->orderBy("acctg_transaction_list_id","ASC")->first();
 		
 		$return = null;
 		if($check)
@@ -198,10 +228,6 @@ class AccountingTransaction
 				Tbl_acctg_transaction_item::insert($ins);
 			}
 		}
-	}
-	public static function updateTransaction($shop_id, $acctg_trans_id, $trans_item = array(), $transaction_type)
-	{
-		 
 	}
 	public static function vendorValidation($insert, $insert_item, $transaction_type = '')
 	{
@@ -453,7 +479,7 @@ class AccountingTransaction
 		$get = null;
 		if($transaction_type == 'accounting_transaction')
 		{
-			$get = Tbl_acctg_transaction::where('shop_id', $shop_id)->first();
+			$get = Tbl_acctg_transaction::where('shop_id', $shop_id)->orderBy("acctg_transaction_id", "DESC")->first();
 			if($get)
 			{
 				$get->transaction_refnum = $get->transaction_number;

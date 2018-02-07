@@ -99,7 +99,7 @@ class TransactionSalesReceiptController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesReceipt::postInsert($this->user_info->shop_id, $insert, $insert_item);
-			TransactionSalesReceipt::applied_transaction($this->user_info->shop_id);
+			TransactionSalesReceipt::applied_transaction($this->user_info->shop_id, $validate);
 		}
 
 		if(is_numeric($validate))

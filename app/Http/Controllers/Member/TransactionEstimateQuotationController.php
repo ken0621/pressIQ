@@ -80,6 +80,7 @@ class TransactionEstimateQuotationController extends Member
 		}
 		$return = null;
 		$validate = TransactionEstimateQuotation::postInsert($this->user_info->shop_id, $insert, $insert_item);
+			TransactionEstimateQuotation::insert_acctg_transaction($this->user_info->shop_id, $validate);
 		if(is_numeric($validate))
 		{
 			$return['status'] = 'success';

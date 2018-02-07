@@ -299,6 +299,8 @@ class CustomerWIS
             $itemline[$key]['itemline_um']          = $value['item_um'];
             $itemline[$key]['itemline_rate']        = $value['item_rate'];
             $itemline[$key]['itemline_amount']      = $value['item_amount'];
+            $itemline[$key]['itemline_refname']     = $value['item_refname'];
+            $itemline[$key]['itemline_refid']       = $value['item_refid'];
         }
         if(count($itemline) > 0)
         {

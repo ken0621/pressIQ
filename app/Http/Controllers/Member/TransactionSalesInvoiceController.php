@@ -88,6 +88,9 @@ class TransactionSalesInvoiceController extends Member
 				$insert_item[$key]['item_remarks'] 		= $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] 		= str_replace(',', '', $request->item_amount[$key]);
 				$insert_item[$key]['item_taxable'] 		= isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
+
+				$insert_item[$key]['item_refname'] 		= $request->item_refname[$key];
+				$insert_item[$key]['item_refid'] 		= $request->item_refid[$key];
 			}
 		}
 
@@ -155,6 +158,9 @@ class TransactionSalesInvoiceController extends Member
 				$insert_item[$key]['item_remarks'] 		= $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] 		= str_replace(',', '', $request->item_amount[$key]);
 				$insert_item[$key]['item_taxable'] 		= isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
+				
+				$insert_item[$key]['item_refname'] 		= $request->item_refname[$key];
+				$insert_item[$key]['item_refid'] 		= $request->item_refid[$key];
 			}
 		}
 		$return = null;

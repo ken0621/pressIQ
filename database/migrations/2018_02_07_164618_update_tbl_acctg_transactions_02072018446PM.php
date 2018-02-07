@@ -14,16 +14,16 @@ class UpdateTblAcctgTransactions02072018446PM extends Migration
     public function up()
     {
         Schema::table('tbl_customer_estimate_line', function (Blueprint $table) {
-            $table->string("estline_refname");
+            $table->string("estline_refname")->nullable();
             $table->integer("estline_refid")->default(0);
         });
         Schema::table('tbl_customer_invoice_line', function (Blueprint $table) {
-            $table->string("invline_refname");
+            $table->string("invline_refname")->nullable();
             $table->integer("invline_refid")->default(0);
         });
         Schema::table('tbl_customer_wis_item_line', function (Blueprint $table) {
-            $table->string("itemline_refname");
-            $table->integer("itemine_refid")->default(0);
+            $table->string("itemline_refname")->nullable();
+            $table->integer("itemline_refid")->default(0);
         });
     }
 

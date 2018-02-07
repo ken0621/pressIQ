@@ -264,6 +264,9 @@ class TransactionSalesReceipt
 			$itemline[$key]['taxable'] 					= $value['item_taxable'] != null ? $value['item_taxable'] : 0;
 			$itemline[$key]['invline_amount'] 			= $value['item_amount'];
 			$itemline[$key]['date_created'] 			= Carbon::now();
+
+			$itemline[$key]['invline_refname'] 			= $value['item_refname'];
+			$itemline[$key]['invline_refid'] 			= $value['item_refid'];
 		}
 		if(count($itemline) > 0)
 		{

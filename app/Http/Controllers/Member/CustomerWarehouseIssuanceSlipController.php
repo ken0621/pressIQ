@@ -115,6 +115,8 @@ class CustomerWarehouseIssuanceSlipController extends Member
                 $insert_item[$key]['item_rate'] = str_replace(',', '', $request->item_rate[$key]);
                 $insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_discount'] = 0;
+                $insert_item[$key]['item_refname'] = $request->item_refname[$key];
+                $insert_item[$key]['item_refid'] = $request->item_refid[$key];
 
                 $_item[$key] = null;
                 $_item[$key]['item_id'] = $value;
@@ -196,6 +198,8 @@ class CustomerWarehouseIssuanceSlipController extends Member
                 $insert_item[$key]['item_rate'] = str_replace(',', '', $request->item_rate[$key]);
                 $insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_discount'] = 0;
+                $insert_item[$key]['item_refname'] = $request->item_refname[$key];
+                $insert_item[$key]['item_refid'] = $request->item_refid[$key];
 
                 $_item[$key] = null;
                 $_item[$key]['item_id'] = $value;

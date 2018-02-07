@@ -188,6 +188,9 @@ class TransactionSalesOrder
 			$itemline[$key]['taxable'] 					= $value['item_taxable'] != null ? $value['item_taxable'] : 0;
 			$itemline[$key]['estline_amount'] 			= $value['item_amount'];
 			$itemline[$key]['date_created'] 			= Carbon::now();
+
+			$itemline[$key]['estline_refname'] 			= $value['item_refname'];
+			$itemline[$key]['estline_refid'] 			= $value['item_refid'];
 		}
 		if(count($itemline) > 0)
 		{

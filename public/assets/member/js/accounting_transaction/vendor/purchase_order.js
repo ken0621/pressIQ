@@ -9,7 +9,6 @@ function purchase_order()
 	function init()
 	{
 		action_load_initialize_select();
-		action_compute();
 		action_date_picker();
 		action_reassign_number();
 
@@ -18,6 +17,7 @@ function purchase_order()
 		event_taxable_check_change();
 		event_accept_number_only();
 		event_click_last_row();
+		action_compute();
 	}
 	function action_load_initialize_select()
 	{
@@ -30,7 +30,7 @@ function purchase_order()
 			{
 				$(".vendor-email").val($(this).find("option:selected").attr("email"));
 				$('textarea[name="vendor_address"]').val($(this).find("option:selected").attr("billing-address"));
-				action_load_open_transaction($(this).val());
+
 			}
 		});
 
@@ -471,44 +471,22 @@ function purchase_order()
 			  });
 		});
 	}
-	function action_load_open_transaction($vendor_id)
-	{
-		if($vendor_id)
-		{
-			$.ajax({
-				url : '/member/transaction/purchase_order/count-transaction',
-				type : 'get',
-				data : {vendor_id : $vendor_id},
-				success : function(data)
-				{
-					$(".open-transaction").slideDown();
-					$(".popup-link-open-transaction").attr('link','/member/transaction/purchase_order/load-transaction?vendor='+$vendor_id);
-					$(".count-open-transaction").html(data);
-				}
-			});
-		}
-		else
-		{
-			$(".open-transaction").slideUp();
-		}
-	}
-
 	function load_applied_transaction()
 	{
 		$('.applied-transaction-list').load('/member/transaction/purchase_order/load-applied-transaction', function()
 		{
 			console.log("success");
-			action_reassign_number();
 			action_load_initialize_select();
-			action_date_picker();
-	    	action_compute();
+			action_compute();
+			action_reassign_number();
 
-			$('.remarks-eb').html($('.po-remarks').val());
+			$('.remarks-po').html($('.so-remarks').val());
 		});
 	}
 	this.load_applied_transaction = function()
 	{
 		load_applied_transaction();
+		action_compute()
 	}
 }
 

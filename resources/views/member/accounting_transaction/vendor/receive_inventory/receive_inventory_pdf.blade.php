@@ -17,8 +17,8 @@
 <div class="form-group" style="padding-bottom: 50px">
 	<div class="col-md-6 text-left" style="float: left; width: 50%">
 		<strong>Vendor </strong><br>
-		<span>{{$ri->vendor_company}}</span><br>
-		<span>{{$ri->title_name." ".$ri->first_name." ".$ri->middle_name." ".$ri->last_name." ".$ri->suffix_name}}</span>
+		<span>{{ucfirst($ri->vendor_company)}}</span><br>
+		<span>{{ucfirst($ri->title_name)." ".ucfirst($ri->first_name)." ".ucfirst($ri->middle_name)." ".ucfirst($ri->last_name)." ".ucfirst($ri->suffix_name)}}</span>
 	</div>
 	<div class="col-md-6 text-right" style="float: right; width: 50%">
 		<div class="col-md-6 text-right" style="float: left; width: 50%">

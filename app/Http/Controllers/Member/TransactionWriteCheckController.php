@@ -23,6 +23,7 @@ use App\Globals\AccountingTransaction;
 use App\Globals\TransactionEnterBills;
 
 use App\Globals\TransactionWriteCheck;
+use App\Globals\Pdf_global;
 use Carbon\Carbon;
 use Session;
 class TransactionWriteCheckController extends Member
@@ -62,6 +63,18 @@ class TransactionWriteCheckController extends Member
         }
 
         return view('member.accounting_transaction.vendor.write_check.write_check', $data);
+    }
+    public function getPrint(Request $request)
+    {
+        $wc_id = $request->id;         
+       
+        $data['wc']      = TransactionWriteCheck::info($this->user_info->shop_id, $wc_id);
+        $data['_wcline'] = TransactionWriteCheck::info_item($wc_id);
+        $data["_wcline_acc"] = TransactionWriteCheck::acc_line($wc_id);
+
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+        $pdf = view("member.accounting_transaction.vendor.write_check.write_check_pdf",$data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
     }
 
     public function postCreateWriteCheck(Request $request)

@@ -79,8 +79,10 @@ class TransactionPurchaseRequisitionController extends Member
 		$data['_rs_item'] = RequisitionSlip::get_slip_item($slip_id);
         $data['user'] = $this->user_info;
 
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
         $pdf = view('member.accounting_transaction.vendor.purchase_requisition.print_requisition_slip', $data);
-        return Pdf_global::show_pdf($pdf,null, $data['rs']->requisition_slip_number);
+        return Pdf_global::show_pdf($pdf,null, $footer);
 	}
 	public function getConfirm(Request $request, $slip_id)
     {
@@ -99,6 +101,7 @@ class TransactionPurchaseRequisitionController extends Member
         }
         $return = RequisitionSlip::update_status($this->user_info->shop_id, $pr_id, $update);
 
+        //$po = RequisitionSlip::create_po_line($pr_id, 1);
         $data = null;
         if($return)
         {

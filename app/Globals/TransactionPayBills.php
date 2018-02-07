@@ -24,7 +24,11 @@ class TransactionPayBills
 {
 	public static function info($shop_id, $paybill_id)
     {
-        return Tbl_pay_bill::where("paybill_shop_id", $shop_id)->where("paybill_id", $paybill_id)->first();
+        return Tbl_pay_bill::vendor()->where("paybill_shop_id", $shop_id)->where("paybill_id", $paybill_id)->first();
+    }
+    public static function info_line($paybill_id)
+    {
+        return Tbl_pay_bill_line::where("pbline_pb_id", $paybill_id)->get();
     }
     public static function info_item($shop_id, $vendor_id, $paybill_id)
     {

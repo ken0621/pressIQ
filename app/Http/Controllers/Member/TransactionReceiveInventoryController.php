@@ -46,8 +46,9 @@ class TransactionReceiveInventoryController extends Member
         $data["ri"] = TransactionReceiveInventory::info($this->user_info->shop_id,$ri_id);
         $data["_riline"] = TransactionReceiveInventory::info_item($ri_id);
 
+        $footer = AccountingTransaction::get_refuser($this->user_info);
         $pdf = view("member.accounting_transaction.vendor.receive_inventory.receive_inventory_pdf",$data);
-        return Pdf_global::show_pdf($pdf);
+        return Pdf_global::show_pdf($pdf, null, $footer);
     }
     public function getCreate(Request $request)
     {

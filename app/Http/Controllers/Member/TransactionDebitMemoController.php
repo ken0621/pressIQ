@@ -50,7 +50,17 @@ class TransactionDebitMemoController extends Member
     
         return view('member.accounting_transaction.vendor.debit_memo.debit_memo', $data);
     }
+    public function getPrint(Request $request)
+    {
+        $dm_id = $request->id;
 
+        $data["db"] = TransactionDebitMemo::info($this->user_info->shop_id, $dm_id);
+        $data["_dbline"] = TransactionDebitMemo::info_item($dm_id);
+
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+        $pdf = view('member.accounting_transaction.vendor.debit_memo.debit_memo_pdf', $data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
+    }
     public function postCreateDebitMemo(Request $request)
     {
         $btn_action  = $request->button_action;

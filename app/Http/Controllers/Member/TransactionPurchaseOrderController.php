@@ -75,17 +75,14 @@ class TransactionPurchaseOrderController extends Member
             $total_qty = $value->poline_orig_qty * $qty;
             $data["_poline"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->poline_um);
         }
+        $footer = AccountingTransaction::get_refuser($this->user_info);
 
         $pdf = view("member.accounting_transaction.vendor.purchase_order.purchase_order_pdf",$data);
-        return Pdf_global::show_pdf($pdf);
-    }
-    public function getCountTransaction(Request $request)
-    {
-        $vendor_id = $request->vendor_id;
-        return RequisitionSlip::countTransaction($this->user_info->shop_id, $vendor_id);
+        return Pdf_global::show_pdf($pdf, null, $footer);
     }
     public function getCreate(Request $request)
     {
+        Session::forget("applied_transaction");
         $shop_id            = $this->user_info->shop_id;
         $data["page"]       = "Create Purchase order";
         $data["_vendor"]    = Vendor::getAllVendor('active');
@@ -93,11 +90,13 @@ class TransactionPurchaseOrderController extends Member
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'purchase_order');
+        $data['count_so'] = TransactionSalesOrder::getCountAllOpenSO($this->user_info->shop_id);
+
         $data['action']     = "/member/transaction/purchase_order/create-purchase-order";
         $data["vendor_id"]       = $request->vendor_id;
         $data["terms_id"]       = $request->vendor_terms;
+        
         $po_id = $request->id;
-
         if($po_id)
         {
             $data["po"]            = TransactionPurchaseOrder::info($this->user_info->shop_id, $po_id);
@@ -146,6 +145,7 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_taxable']     = $request->item_taxable[$key];
             }
         }
+
 
         $validate = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
 
@@ -204,6 +204,7 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_taxable']     = $request->item_taxable[$key];
             }
         }
+
        
         $validate = TransactionPurchaseOrder::postUpdate($po_id, $this->user_info->shop_id, $insert, $insert_item);
 
@@ -226,7 +227,6 @@ class TransactionPurchaseOrderController extends Member
     public function getLoadTransaction(Request $request)
     {
         $data['_so'] = TransactionSalesOrder::getAllOpenSO($this->user_info->shop_id);
-        $data['_pr'] = TransactionPurchaseRequisition::getPR($this->user_info->shop_id);
         
         $data['_applied'] = Session::get('applied_transaction');
         $data['action']   = '/member/transaction/purchase_order/apply-transaction';
@@ -246,16 +246,15 @@ class TransactionPurchaseOrderController extends Member
     {
         $applied_transaction = Session::get('applied_transaction');
 
-        //die(var_dump($applied_transaction));
         $return = null;
         $remarks = null;
-        if(count($_ids) > 0)
+        if(count($applied_transaction) > 0)
         {
-            foreach ($_ids as $key => $value) 
+            foreach ($applied_transaction as $key => $value) 
             {
-                $get = TransactionSalesInvoice::transaction_data_item($key);
-                $info = TransactionSalesInvoice::transaction_data($this->user_info->shop_id, $key);
-
+                $get = TransactionSalesOrder::info_item($key);
+                $info = TransactionSalesOrder::info($this->user_info->shop_id, $key);
+                //die(var_dump($get));
                 foreach ($get as $key_item => $value_item)
                 {
                     if($value_item->item_type_id == 1 || $value_item->item_type_id == 4 || $value_item->item_type_id == 5)
@@ -276,21 +275,17 @@ class TransactionPurchaseOrderController extends Member
                 }
                 if($info)
                 {
-                    $con = 'SO#';
-                    if($info->is_sales_order == 0)
-                    {
-                        $con = 'EQ#';
-                    }
-                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : $con.$info->est_id.', ';
+                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : 'SO#'.$info->est_id.', ';
                 }
             }
         }
+        //die(var_dump($return));
         $data['_item']  = Item::get_all_category_item([1,4,5]);
         $data['_transactions'] = $return;
         $data['remarks'] = $remarks;
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["_vendor"] = Vendor::getAllVendor('active');
 
-        return view('member.accounting_transaction.vendor.purchase_requisition.applied_transaction', $data);
+        return view('member.accounting_transaction.vendor.purchase_order.applied_transaction', $data);
     }
 }

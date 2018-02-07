@@ -46,8 +46,10 @@ class TransactionEnterBillsController extends Member
         $data['eb'] = TransactionEnterBills::info($this->user_info->shop_id, $eb_id);
         $data['_ebline'] = TransactionEnterBills::info_item($eb_id);
 
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
         $pdf = view('member.accounting_transaction.vendor.enter_bills.enter_bills_pdf', $data);
-        return Pdf_global::show_pdf($pdf);
+        return Pdf_global::show_pdf($pdf, null, $footer);
     }
     public function getCreate(Request $request)
     {

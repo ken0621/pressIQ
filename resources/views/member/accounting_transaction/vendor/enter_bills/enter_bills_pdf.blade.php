@@ -17,7 +17,8 @@
 <div class="form-group">
 	<div class="col-md-6 text-left" style="float: left; width: 50%">
 		<strong>BILL TO</strong><br>
-		<span>{{$eb->vendor_company}}</span>
+		<span>{{ucfirst($eb->vendor_company)}}</span><br>
+		<span>{{ucfirst($eb->title_name)." ".ucfirst($eb->first_name)." ".ucfirst($eb->middle_name)." ".ucfirst($eb->last_name)." ".ucfirst($eb->suffix_name)}}</span>
 	</div>
 	<div class="col-md-6 text-right" style="float: right; width: 50%">
 		<div class="col-md-6 text-right" style="float: left; width: 50%">

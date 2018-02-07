@@ -40,6 +40,19 @@ class TransactionPayBillsController extends Member
         $data['_pay_bills'] = TransactionPayBills::get($this->user_info->shop_id, 10, $request->search_keyword);
         return view('member.accounting_transaction.vendor.pay_bills.pay_bills_table', $data);
     }
+    public function getPrint(Request $request)
+    {
+        $pb_id = $request->id;
+        $data["pb"] = TransactionPayBills::info($this->user_info->shop_id, $pb_id);
+        $data["_pbline"] = TransactionPayBills::info_line($pb_id);
+        
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data['transaction_type'] = "Bill Payment";
+
+        $pdf = view('member.accounting_transaction.vendor.pay_bills.pay_bills_pdf',$data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
+    }
     public function getCreate(Request $request)
     {
         $data['page'] = 'Create Pay Bills';

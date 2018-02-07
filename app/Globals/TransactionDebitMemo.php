@@ -25,11 +25,11 @@ class TransactionDebitMemo
     }
     public static function info($shop_id, $dm_id)
     {
-        return Tbl_debit_memo::where('db_shop_id',$shop_id)->where('db_id', $dm_id)->first();
+        return Tbl_debit_memo::vendor()->where('db_shop_id',$shop_id)->where('db_id', $dm_id)->first();
     }
     public static function info_item($dm_id)
     {
-        return Tbl_debit_memo_line::um()->where('dbline_db_id', $dm_id)->get();
+        return Tbl_debit_memo_line::um()->db_item()->where('dbline_db_id', $dm_id)->get();
     }
 
     public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)

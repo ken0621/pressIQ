@@ -32,7 +32,7 @@ class TransactionWriteCheck
     }
     public static function info_item($wc_id)
     {
-        return Tbl_write_check_line::um()->where("wcline_wc_id", $wc_id)->get();       
+        return Tbl_write_check_line::um()->item()->where("wcline_wc_id", $wc_id)->get();       
     }
     public static function acc_line($wc_id)
     {

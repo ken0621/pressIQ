@@ -86,6 +86,7 @@ class TransactionReceivePaymentController extends Member
 
         $return = null;
 		$validate = TransactionReceivePayment::postInsert($this->user_info->shop_id, $insert, $insert_item);
+		TransactionReceivePayment::applied_transaction($this->user_info->shop_id, $validate);
 		if(is_numeric($validate))
 		{
 			$return['status'] = 'success';

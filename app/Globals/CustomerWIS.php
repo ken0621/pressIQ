@@ -254,12 +254,12 @@ class CustomerWIS
             $entry["total"]             = $overall_price;
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
-            $entry["ewt"]               = '';
+            $entry["ewt"]               = '';  
 
             Warehouse2::update_inventory_consume($shop_id, $warehouse_id, $reference_name, $wis_id);
             Tbl_customer_wis_item::where("cust_wis_id", $wis_id)->delete();
             Tbl_customer_wis_item_line::where("itemline_wis_id", $wis_id)->delete();
-            //Self::insertLine($po_id, $insert_item);
+            //Self::insertLine($po_id, $insert_item); 
 
             $val = Self::insertline($wis_id, $insert_item, $entry);
             if(is_numeric($val))

@@ -185,12 +185,16 @@
                             </div>
                             @if($shop_id == 5)
                             <!-- SHOW ONLY IF BROWN -->
-<!--                             <div class="form-group text-right">
+                             <div class="form-group text-right">
                                 <div class="col-md-12">
                                     <label for="ez_credit_program">This item is a credit points?</label>
-                                    <input type="checkbox" value="yes" id="ez_credit_program" name="ez_credit_program">
+                                    @if(isset($item_info->ez_program_credit))
+                                        <input type="checkbox" value="yes" id="ez_credit_program" name="ez_credit_program" {{ $item_info->ez_program_credit == "1" ? "checked" : "" }}>
+                                    @else
+                                        <input type="checkbox" value="yes" id="ez_credit_program" name="ez_credit_program">
+                                    @endif
                                 </div>
-                            </div> -->
+                            </div>
                             @endif
                         </div>
                     </div>

@@ -126,6 +126,24 @@
 								@endif
 							
 							</div>
+							@if(isset($has_owned_slot))
+							<!-- SLOT OPTION -->
+								@if(count($has_owned_slot) != 0)
+									<div class="payment-option">
+										<div class="top-title">Choose a slot</div>
+										<div class="option">
+											<div class="form-input">
+												<select name="choose_owned_slot" required="required">
+													<option value="" hidden>Select</option>
+													@foreach($has_owned_slot as $slot_owned)
+														<option value="{{ $slot_owned->slot_id }}" {{ $default_slot_owned == $slot_owned->slot_id ? "selected" : "" }}>{{ $slot_owned->slot_no }}</option>
+													@endforeach
+												</select>	
+											</div>
+										</div>
+									</div>
+								@endif
+							@endif
 							<!-- PAYMENT OPTION -->
 							<div class="payment-option">
 								<div class="top-title">How do you want to pay?</div>

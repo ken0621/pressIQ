@@ -966,7 +966,15 @@ class Warehouse2
                                            }
                                            else
                                            {
-                                                MLM2::purchase($check_if_owner_has_slot->shop_id, $check_if_owner_has_slot->slot_id, $item->item_id);
+                                                $check_purchase_slot = Tbl_mlm_slot::where("slot_owner",$customer->customer_id)->where("slot_i",$customer->purchase_target_slot)->first();
+                                                if($check_purchase_slot)
+                                                {
+                                                    MLM2::purchase($check_if_owner_has_slot->shop_id, $check_purchase_slot->slot_id, $item->item_id);
+                                                }
+                                                else
+                                                {
+                                                    MLM2::purchase($check_if_owner_has_slot->shop_id, $check_if_owner_has_slot->slot_id, $item->item_id);
+                                                }
                                            }
                                        }
                                    }
@@ -981,7 +989,15 @@ class Warehouse2
                                        {
                                            if($item->item_type_id == 1)
                                            {
-                                              MLM2::purchase($check_if_owner_has_slot->shop_id, $check_if_owner_has_slot->slot_id, $item->item_id);
+                                                $check_purchase_slot = Tbl_mlm_slot::where("slot_owner",$customer->customer_id)->where("slot_i",$customer->purchase_target_slot)->first();
+                                                if($check_purchase_slot)
+                                                {
+                                                    MLM2::purchase($check_if_owner_has_slot->shop_id, $check_purchase_slot->slot_id, $item->item_id);
+                                                }
+                                                else
+                                                {
+                                                    MLM2::purchase($check_if_owner_has_slot->shop_id, $check_if_owner_has_slot->slot_id, $item->item_id);
+                                                }
                                            }
                                        }
                                     }
@@ -997,7 +1013,15 @@ class Warehouse2
                                    {
                                        if($item->item_type_id == 1)
                                        {
-                                          MLM2::purchase($check_if_owner_has_slot->shop_id, $check_if_owner_has_slot->slot_id, $item->item_id);
+                                            $check_purchase_slot = Tbl_mlm_slot::where("slot_owner",$customer->customer_id)->where("slot_i",$customer->purchase_target_slot)->first();
+                                            if($check_purchase_slot)
+                                            {
+                                                MLM2::purchase($check_if_owner_has_slot->shop_id, $check_purchase_slot->slot_id, $item->item_id);
+                                            }
+                                            else
+                                            {
+                                                MLM2::purchase($check_if_owner_has_slot->shop_id, $check_if_owner_has_slot->slot_id, $item->item_id);
+                                            }
                                        }
                                    }
                                 }

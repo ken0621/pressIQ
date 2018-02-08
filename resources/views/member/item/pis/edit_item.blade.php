@@ -242,6 +242,20 @@
                     <textarea class="form-control input-sm" id="item_purchasing_information" name="item_purchasing_information" placeholder="Description on purchase forms" >{{isset($data['item_purchasing_information']) ? $data['item_purchasing_information'] : ''}}</textarea>
                 </div>        
             </div>
+
+            @if($shop_id == 5)
+            <!-- SHOW ONLY IF BROWN -->
+             <div class="form-group text-right">
+                <div class="col-md-12">
+                    <label for="ez_credit_program">This item is a credit points?</label>
+                    @if(isset($item_info->ez_program_credit))
+                        <input type="checkbox" value="yes" id="ez_credit_program" name="ez_credit_program" {{ $item_info->ez_program_credit == "1" ? "checked" : "" }}>
+                    @else
+                        <input type="checkbox" value="yes" id="ez_credit_program" name="ez_credit_program">
+                    @endif
+                </div>
+            </div>
+            @endif
            <!--  <div class="col-md-12 text-right" style="padding-top:50px">
                 <button type="button" class="btn btn-custom-white back_to_menu">Back</button>
                 <button class="btn btn-custom-primary pull-right">Submit</button>

@@ -2760,6 +2760,23 @@ class ShopMemberController extends Shop
         $data["_payment"]   = $_payment = Payment::get_list($shop_id);
         $data["_locale"]    = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
         $data["cart"]       = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
+        if(isset(Self::$customer_info->customer_id))
+        {
+            $data["has_owned_slot"]     = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+            $data["default_slot_owned"] = 0;
+            if(count($data["has_owned_slot"]) != 0)
+            {
+                if(Self::$customer_info->purchase_target_slot == 0 || Self::$customer_info->purchase_target_slot == null)
+                {
+                    $data["default_slot_owned"] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->first();
+                    if($data["default_slot_owned"])
+                    {
+                        $data["default_slot_owned"] = $data["default_slot_owned"]->slot_id;
+                    }
+                }
+            }
+        }
+        
         
         if(!Self::$customer_info)
         {
@@ -2774,12 +2791,28 @@ class ShopMemberController extends Shop
 
         
     }
-    public function postCheckout()
+    public function postCheckout(Request $request)
     {
         $shop_id  = $this->shop_info->shop_id;
         $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
         $cart = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
         $validate = null;
+        
+        if($request->choose_owned_slot)
+        {
+            $slot_owned_id = $request->choose_owned_slot;
+            
+            if(isset(Self::$customer_info->customer_id))
+            {
+                $check_if_owned = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->where("slot_id",$request->choose_owned_slot)->first();
+                if($check_if_owned)
+                {
+                    $update_owned["purchase_target_slot"] = $request->choose_owned_slot;
+                    Tbl_customer::where("customer_id",Self::$customer_info->customer_id)->update($update_owned);
+                }
+            }
+        }
+        
         if($cart)
         {   
             foreach ($cart["_item"] as $key => $value)

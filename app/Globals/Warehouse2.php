@@ -24,6 +24,8 @@ use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_item_token;
+use App\Models\Tbl_item_token_log;
 
 use App\Globals\Inventory;
 use App\Globals\Item;

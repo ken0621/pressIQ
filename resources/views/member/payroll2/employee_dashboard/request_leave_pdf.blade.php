@@ -31,7 +31,7 @@
 <body>
 <div>
 
- <table class="table table-bordered" style="font-size:12px;">
+ <table class="table table-bordered" style="font-size:12px;border:2px solid black !important;">
             <thead>
               <tr>
                 <th colspan="5" style="text-align: center;">PHILIPPINE ARCHIPELAGO PORTS AND TERMINAL SERVICES, INC.</th>

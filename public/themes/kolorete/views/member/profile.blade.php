@@ -4,20 +4,18 @@
 	<div class="row clearfix row-no-padding">
 		<div class="col-md-4 left match-height load-profile">
 			<div class="load-profile-holder">
-				
 				<div class="profile-main">
 					<div class="img"><img class="img-upload" style="border-radius: 100%;" src="{{ $profile_image }}"></div>
 					<div class="name">{{ $profile->first_name }} {{ $profile->middle_name }} {{ $profile->last_name }}</div>
 					<div class="sub">{{ $profile->email }}</div>
 				</div>
-
 				<div class="profile-status">
 					<table>
 						<tr>
-							{{--  <td class="blue">
+							<td class="blue">
 								<div class="status-number">{{ $customer_summary["display_slot_count"] }}</div>
 								<div class="status-label">Slot Owned</div>
-							</td>  --}}
+							</td>
 							<td class="orange">
 								<div class="status-number">{{ $wallet->display_current_wallet }}</div>
 								<div class="status-label">Current Wallet</div>
@@ -25,15 +23,15 @@
 						</tr>
 					</table>
 				</div>
-	
-				<!-- <div class="profile-lead">
+				@if($mlm == 1)
+				<div class="profile-lead">
 					<a data-toggle="modal" data-target="#leads_modal" href="javascript:">
-						{{-- <img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link --}}
+						<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
 					</a>
-					Modal
+					<!-- Modal -->
 					<div id="leads_modal" class="modal fade leads-modal" role="dialog">
 					   <div class="modal-dialog">
-					      Modal content
+					      <!-- Modal content-->
 					      <div class="modal-content">
 					         <div class="modal-header">
 					            {{-- <button type="button" class="close" data-dismiss="modal">&times;</button> --}}
@@ -50,8 +48,8 @@
 					      </div>
 					   </div>
 					</div>
-				</div> -->
-				
+				</div>
+				@endif
 				<div class="profile-about">
 					<div class="title">About Me</div>
 					<table>
@@ -79,21 +77,21 @@
 			<div class="profile-form">
 				<ul class="nav nav-tabs">
 				   <li class="active"><a data-toggle="tab" href="#basic_info">Basic Info</a></li>
+				   <li><a data-toggle="tab" href="#contact_info">Reward Configuration</a></li>
 				   <li><a data-toggle="tab" href="#profile_picture">Profile Picture</a></li>
 				   @if($allowed_change_pass)
 				   <li><a data-toggle="tab" href="#password">Password</a></li>
 				   @endif
-				   <li><a data-toggle="tab" href="#add_beneficiary">Beneficiary</a></li>
 				</ul>
 				<div class="tab-content">
 				   <div id="basic_info" class="tab-pane fade in active">
 				   		<div class="profile_info_success_message hidden">
-							<div class="alert alert-custom-success">
+							<div class="alert alert-success">
 							  <strong>Success!</strong> Your info has been successfully updated.
 							</div>
 				   		</div>
 				   		<div class="profile_info_failed_message hidden">
-							<div class="alert">
+							<div class="alert alert-danger">
 							  <ul>
 							  	
 							  </ul>
@@ -103,7 +101,7 @@
 					   	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					   		<div class="row clearfix">
 					   			<div class="col-md-6">
-					   				{{--  <div class="form-group">
+					   				{{-- <div class="form-group">
 							   			<label>First Name</label>
 							   			<input type="text" class="form-control" name="first_name" value="{{ $profile->first_name }}">
 							   		</div>
@@ -114,14 +112,14 @@
 							   		<div class="form-group">
 							   			<label>Last Name</label>
 							   			<input type="text" class="form-control" name="last_name" value="{{ $profile->last_name }}">
-							   		</div>  --}}
+							   		</div> --}}
 							   		<div class="form-group">
 							   			<label>Birth Date</label>
 							   			<div style="margin-top: 5px;">
 							   				<div class="date-holder">
 												<select name="b_month" class="form-control">
 													@for($ctr = 1; $ctr <= 12; $ctr++)
-													<option {{ date("mm", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ date("F", strtotime($ctr . "/01/17")) }}</option>
+													<option {{ date("m", strtotime($profile->birthday)) == $ctr ? 'selected' : '' }} value="{{ $ctr }}">{{ date("F", strtotime($ctr . "/01/17")) }}</option>
 													@endfor
 												</select>
 											</div>
@@ -174,7 +172,7 @@
 						   		</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn" type="submit"><i class="fa fa-pencil"></i> Update</button>
+							   			<button class="btn btn-ico-custom" type="submit"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -183,7 +181,7 @@
 				   <!-- CONTACT INFO -->
 				   <div id="contact_info" class="tab-pane fade">
 				   		<div class="contact_info_success_message hidden">
-							<div class="alert alert-custom-success">
+							<div class="alert alert-success">
 							  <strong>Success!</strong> Sponsor Rule has been successfully updated.
 							</div>
 				   		</div>
@@ -201,7 +199,7 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button type="submit" class="submit-button btn"><i class="fa fa-pencil"></i> Update</button>
+							   			<button type="submit" class="submit-button btn btn-ico-custom"><i class="fa fa-pencil"></i> Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
@@ -209,12 +207,12 @@
 				   </div>
 				   <div id="profile_picture" class="tab-pane fade">
 				   	<div class="profile_picture_success_message hidden">
-						<div class="alert alert-custom-success">
+						<div class="alert alert-success">
 						  <strong>Success!</strong> Your profile picture has been successfully updated.
 						</div>
 			   		</div>
 			   		<div class="profile_picture_failed_message hidden">
-						<div class="alert">
+						<div class="alert alert-danger">
 						  <strong>Failed!</strong> Please try again later.
 						</div>
 			   		</div>
@@ -235,12 +233,12 @@
 				   @if($allowed_change_pass)
 				   <div id="password" class="tab-pane fade">
 					   	<div class="profile_password_success_message hidden">
-							<div class="alert alert-custom-success">
+							<div class="alert alert-success">
 							  <strong>Success!</strong> Your password has been successfully updated.
 							</div>
 				   		</div>
 				   		<div class="profile_password_failed_message hidden">
-							<div class="alert">
+							<div class="alert alert-danger">
 							  <ul>
 							  	
 							  </ul>
@@ -265,61 +263,13 @@
 					   			</div>
 						   		<div class="col-md-12">
 						   			<div class="form-group btn-holder">
-							   			<button class="btn" type="submit"><i class="fa fa-pencil"></i>  Update</button>
+							   			<button class="btn btn-ico-custom" type="submit"><i class="fa fa-pencil"></i>  Update</button>
 							   		</div>
 						   		</div>
 					   		</div>
 					   </form>
 				   </div>
 				   @endif
-				   <!-- ADD BENEFICIARY -->
-				   <div id="add_beneficiary" class="tab-pane fade in">
-				   	<div class="beneficiary_success_message hidden">
-				   		<div class="alert alert-custom-success">
-				   			<strong>Success!</strong> Your beneficiary has been successfully added.
-				   		</div>
-				   	</div>
-				   	<div class="beneficiary_info_failed_message hidden">
-				   		<div class="alert">
-				   			<ul>
-
-				   			</ul>
-				   		</div>
-				   	</div>
-				   	<form class="beneficiary-info-form">
-				   		<input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
-				   		<div class="row clearfix">
-				   			<div class="col-md-12">
-				   				<div class="form-group">
-				   					<label>First Name</label>
-				   					<input type="text" class="form-control" name="beneficiary_fname" value="{{$beneficiary->beneficiary_fname or ''}}">
-				   				</div>
-				   				<div class="form-group">
-				   					<label>Middle Name</label>
-				   					<input type="text" class="form-control" name="beneficiary_mname" value="{{$beneficiary->beneficiary_mname or ''}}">
-				   				</div>
-				   				<div class="form-group">
-				   					<label>Last Name</label>
-				   					<input type="text" class="form-control" name="beneficiary_lname" value="{{$beneficiary->beneficiary_lname or ''}}">
-				   				</div>
-				   				<div class="form-group">
-				   					<label>Contact Number</label>
-				   					<input type="text" class="form-control" name="beneficiary_contact_no" value="{{$beneficiary->beneficiary_contact_no or ''}}">
-				   				</div>
-				   				<div class="form-group">
-				   					<label>Email</label>
-				   					<input type="text" class="form-control" name="beneficiary_email" value="{{$beneficiary->beneficiary_email or ''}}">
-				   				</div>
-				   			</div>
-				   			<div class="col-md-12">
-				   				<div class="form-group btn-holder">
-				   					<button class="btn" type="submit"><i class="fa fa-paper-plane-o"></i> Submit</button>
-				   				</div>
-				   			</div>
-				   		</div>
-				   	</form>
-				   </div>
-				   <!-- END ADD BENEFICIARY -->
 				</div>
 			</div>
 		</div>

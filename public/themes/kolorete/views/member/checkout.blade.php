@@ -4,159 +4,145 @@
 	<div class="top-container">
 		<div class="container">
 			<div class="top-container-content">Payment Summary</div>
-			@if(session('error'))
-			<div class="alert alert-danger">
-			  <strong>Error!</strong> {!! session('error') !!}
-			</div>
-			@endif
 		</div>
 	</div>
-
-	<form method="post" class="submitt-asd">
-		{{ csrf_field() }}
-		<div class="bottom-container">
-			<div class="container">
-				<div class="bottom-container-content">
-					<div class="row clearfix">
-						<!-- DELIVERY INFORMATION -->
-						<div class="col-md-8">
-							<div class="delivery-information">
-								<div class="title-container">
-									Fill Up Delivery Information
-								</div>
-								<div class="form-container">
-									<div class="form-label">Province</div>
-									<div class="form-input">
-										<select name="customer_state" class="province-is-empty">
-											<option value="" hidden>Select Province</option>
-											@foreach($_locale as $locale)
-											<option value="{{ $locale->locale_name }}">{{ $locale->locale_name }}</option>
-											@endforeach
-										</select>
-									</div>
-								</div>
-								<div class="form-container">
-									<div class="form-label">Complete Shipping Address</div>
-									<div class="form-input">
-										<textarea class="textarea-is-empty" required name="customer_street" placeholder="Type your complete address here"></textarea>
-									</div>
+	<div class="bottom-container">
+		<div class="container">
+			<div class="bottom-container-content">
+				<div class="row clearfix">
+					<!-- DELIVERY INFORMATION -->
+					<div class="col-md-8">
+						<div class="delivery-information">
+							<div class="title-container">
+								Fill Up Delivery Information
+							</div>
+							<div class="form-container">
+								<div class="form-label">Province</div>
+								<div class="form-input">
+									<select >
+										<option value="" hidden>Select Province</option>
+										<option value="volvo">Abra</option>
+										<option value="saab">Bulacan</option>
+										<option value="opel">Cagayan Province</option>
+										<option value="audi">Davao</option>
+									</select>
 								</div>
 							</div>
-							<!-- FILL UP DONE -->
-							<div class="delivery-information" style="display: none;">
-								<div class="title-container">
-									Delivery Information
-								</div>
-								<!-- BILLING ADDRESS -->
-								<div class="address-container">
-									<div class="address-title">Billing Address:</div>
-									<ul>
-										<li>Mr. Brown</li>
-										<li>2285 Chino Roces Ave</li>
-										<li>Makati City</li>
-										<li>Makati City, 1630</li>
-										<li>Philippines</li>
-									</ul>
-								</div>
-								<!-- SHIPPING ADDRESS -->
-								<div class="address-container">
-									<div class="address-title">Shipping Address:</div>
-									<ul>
-										<li>Mr. Brown</li>
-										<li>2285 Chino Roces Ave</li>
-										<li>Makati City</li>
-										<li>Makati City, 1630</li>
-										<li>Philippines</li>
-									</ul>
+							<div class="form-container">
+								<div class="form-label">Complete Shipping Address</div>
+								<div class="form-input">
+										<textarea placeholder="Type your complete address here"></textarea>
 								</div>
 							</div>
 						</div>
-						<div class="col-md-4">
-							<!-- CART SUMMARY -->
-							<div class="cart-summary">
-								<div class="top-title row-no-padding clearfix">
-									<div class="col-md-4">
-										<div class="per-title" style="border-bottom: 2px solid #63b944;">Product</div>									
-									</div>
-									<div class="col-md-4">
-										<div class="per-title" style="border-bottom: 2px solid #ef5525;">Quantity</div>
-									</div>
-									<div class="col-md-4">
-										<div class="per-title" style="border-bottom: 2px solid #6075f7;">Price</div>
-									</div>
-								</div>
-								@if($cart)
-								
-									@foreach($cart["_item"] as $c)
-									<!-- PER ITEM SUMMARY -->
-									<div class="per-summary-content row-no-padding clearfix">
-										<div class="col-md-4">
-											<div class="per-summary-details">{{ $c->item_name }}</div>
-										</div>
-										<div class="col-md-4">
-											<div class="per-summary-details">{{ $c->quantity }}</div>
-										</div>
-										<div class="col-md-4">
-											<div class="per-summary-details">{{ $c->display_subtotal }}</div>
-										</div>
-									</div>
-									@endforeach
-									
-									<!-- SUMMARY TOTAL CONTAINER -->
-									<div class="total-container row clearfix">
-										<!-- SUBTOTAL -->
-										<!--<div class="col-md-6">-->
-										<!--	<div class="left-detail">Subtotal</div>-->
-										<!--</div>-->
-										<!--<div class="col-md-6">-->
-										<!--	<div class="right-detail">{{ $cart["_total"]->display_total }}</div>-->
-										<!--</div>-->
-										<div class="col-md-6">
-											<div class="left-detail">Shipping Fee</div>
-										</div>
-										<div class="col-md-6">
-											<div class="right-detail">PHP {{ number_format($cart["info"]->shipping_fee, 2) }}</div>
-										</div>
-										<!-- TOTAL -->
-										<div class="col-md-6">
-											<div class="left-detail">Total</div>
-										</div>
-										<div class="col-md-6">
-											<div class="right-detail">{{ $cart["_total"]->display_grand_total }}</div>
-										</div>
-									</div>
-									<!-- SHIPPING FEE -->
-									<div class="shipping-fee">Shipping Fee is included</div>
-								@else
-									<div class="text-center" style="padding: 50px;">CART IS EMPTY</div>
-								@endif
-							
+						<!-- FILL UP DONE -->
+						<div class="delivery-information" style="display: none;">
+							<div class="title-container">
+								Delivery Information
 							</div>
-							<!-- PAYMENT OPTION -->
-							<div class="payment-option">
-								<div class="top-title">How do you want to pay?</div>
-								<div class="option">
-									<div class="form-input">
-										<select name="method" required="required" class="payment-method-is-empty">
-											<option value="" hidden>Select Payment Method</option>
-											@foreach($_payment as $payment)
-												<option value="{{ $payment->link_reference_name }}">{{ $payment->method_name }}</option>
-											@endforeach
-										</select>
-									</div>
+							<!-- BILLING ADDRESS -->
+							<div class="address-container">
+								<div class="address-title">Billing Address:</div>
+								<ul>
+									<li>Mr. Brown</li>
+									<li>2285 Chino Roces Ave</li>
+									<li>Makati City</li>
+									<li>Makati City, 1630</li>
+									<li>Philippines</li>
+								</ul>
+							</div>
+							<!-- SHIPPING ADDRESS -->
+							<div class="address-container">
+								<div class="address-title">Shipping Address:</div>
+								<ul>
+									<li>Mr. Brown</li>
+									<li>2285 Chino Roces Ave</li>
+									<li>Makati City</li>
+									<li>Makati City, 1630</li>
+									<li>Philippines</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<!-- CART SUMMARY -->
+						<div class="cart-summary">
+							<div class="top-title row-no-padding clearfix">
+								<div class="col-md-4">
+									<div class="per-title" style="border-bottom: 2px solid #63b944;">Product</div>									
 								</div>
-								<div class="button-container">
-									<!-- <button type="submit" class="button-proceed" id="proceed">Proceed</button> -->
-									<button type="button" class="button-proceed popup" id="proceed" link="/members/returnpolicy" size="md">Proceed</button>
+								<div class="col-md-4">
+									<div class="per-title" style="border-bottom: 2px solid #ef5525;">Quantity</div>
 								</div>
+								<div class="col-md-4">
+									<div class="per-title" style="border-bottom: 2px solid #6075f7;">Price</div>
+								</div>
+							</div>
+							<!-- PER ITEM SUMMARY -->
+							<div class="per-summary-content row-no-padding clearfix">
+								<div class="col-md-4">
+									<div class="per-summary-details">Brown 1</div>
+								</div>
+								<div class="col-md-4">
+									<div class="per-summary-details">1</div>
+								</div>
+								<div class="col-md-4">
+									<div class="per-summary-details">P 9,500.00</div>
+								</div>
+							</div>
+							<!-- PER ITEM SUMMARY -->
+							<div class="per-summary-content row-no-padding clearfix">
+								<div class="col-md-4">
+									<div class="per-summary-details">Eon Card</div>
+								</div>
+								<div class="col-md-4">
+									<div class="per-summary-details">1</div>
+								</div>
+								<div class="col-md-4">
+									<div class="per-summary-details">Free</div>
+								</div>
+							</div>
+							<!-- SUMMARY TOTAL CONTAINER -->
+							<div class="total-container row clearfix">
+								<!-- SUBTOTAL -->
+								<div class="col-md-6">
+									<div class="left-detail">Subtotal</div>
+								</div>
+								<div class="col-md-6">
+									<div class="right-detail">P 9,500.00</div>
+								</div>
+								<!-- TOTAL -->
+								<div class="col-md-6">
+									<div class="left-detail">Total</div>
+								</div>
+								<div class="col-md-6">
+									<div class="right-detail">P 9,500.00</div>
+								</div>
+							</div>
+							<!-- SHIPPING FEE -->
+							<div class="shipping-fee">Shipping Fee is included</div>
+						</div>
+						<!-- PAYMENT OPTION -->
+						<div class="payment-option">
+							<div class="top-title">How do you want to pay?</div>
+							<div class="option">
+								<div class="form-input">
+									<select >
+										<option value="" hidden>Select Payment Method</option>
+										<option value="volvo">Paymaya</option>
+										<option value="saab">Bank Deposit</option>
+									</select>	
+								</div>
+							</div>
+							<div class="button-container">
+								<div class="button-proceed" id="proceed">Proceed</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</form>
-
+	</div>
 	<!-- POP UP -->
 	<div class="popup-enter-a-code">
       <div id="myModal2" class="modal fade">
@@ -185,11 +171,11 @@
 @section("script")
 
 <script type="text/javascript">
-	// $(document).ready(function(){
- //    $("#proceed").click(function(){
- //      $("#myModal2").modal('show');
- //    });
- //  });
+	$(document).ready(function(){
+    $("#proceed").click(function(){
+      $("#myModal2").modal('show');
+    });
+  });
 </script>
 
 @endsection

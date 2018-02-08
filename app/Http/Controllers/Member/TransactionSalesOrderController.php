@@ -145,8 +145,10 @@ class TransactionSalesOrderController extends Member
 			Session::put('applied_transaction_so',$return_so);
 		}
 		$return = null;
+		
 		$validate = TransactionSalesOrder::postUpdate($sales_order_id, $this->user_info->shop_id, $insert, $insert_item);
-					TransactionSalesOrder::applied_transaction($this->user_info->shop_id, $validate);
+		TransactionSalesOrder::applied_transaction($this->user_info->shop_id, $validate);
+		
 		if(is_numeric($validate))
 		{
 			$return['status'] = 'success';

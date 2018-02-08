@@ -18,11 +18,6 @@ use Validator;
 
 class RequisitionSlip
 {
-    /*public static function get_vendor_per_item($pr_id)
-    {
-        $data = Tbl_requisition_slip::where('requisition_slip_id',$pr_id)->get();
-        dd($data);
-    }*/
     public static function get($shop_id, $status = null, $paginate = null, $search_keyword = null)
     {
         $data = Tbl_requisition_slip::where('shop_id', $shop_id);

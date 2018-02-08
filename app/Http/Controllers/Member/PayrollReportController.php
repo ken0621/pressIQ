@@ -979,6 +979,7 @@ class PayrollReportController extends Member
 		return view('member.payrollreport.payroll_employee_summary_report', $data);
 	}
 
+	/* start man power report */
   	public function manpower_report()
     {
     	  $data["_company"] = Payroll::company_heirarchy(Self::shop_id());
@@ -988,12 +989,26 @@ class PayrollReportController extends Member
           return view("member.payrollreport.manpower_report",$data);
     }
 
-    public function manpower_report_export_excel()
+    public function manpower_report_export_excel($company_id)
     {
-    	$data['company'] = Tbl_payroll_company::where('shop_id',Self::shop_id())->where('payroll_parent_company_id',0)->value('payroll_company_name');
-    	$data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id') ->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
+
+
+		if($company_id == 0)
+		{
+			$data['company'] = 'All Company';
+			 $data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id') ->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
 			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
 			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->get();
+		}
+		else
+		{
+			$data['company'] = Tbl_payroll_company::where('shop_id',Self::shop_id())->where('payroll_company_id',$company_id)->value('payroll_company_name');
+				  $data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
+			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
+			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->where('tbl_payroll_employee_basic.payroll_employee_company_id',$company_id)->get();
+		}
+
+
 
     	Excel::create("Manpower Report",function($excel) use ($data)
 		{
@@ -1004,6 +1019,30 @@ class PayrollReportController extends Member
 		})->download('xls'); 
 
     }
+
+    public function manpower_report_filter()
+    {
+    	$company_id =	Request::input("company_id");
+		if($company_id == 0)
+		{
+			$data['company'] = Tbl_payroll_company::where('shop_id',Self::shop_id())->where('payroll_parent_company_id',0)->value('payroll_company_name');
+			 $data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id') ->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
+			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
+			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->get();
+		}
+		else
+		{    	 
+			$data["_company"] = Payroll::company_heirarchy(Self::shop_id());
+    	    $data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
+			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
+			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->where('tbl_payroll_employee_basic.payroll_employee_company_id',$company_id)->get();
+
+		}
+
+
+          return view("member.payrollreport.manpower_report_filter",$data);
+    }
+
 	/* start bir report */
 
 	public function bir_form()

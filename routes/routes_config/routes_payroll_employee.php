@@ -73,6 +73,8 @@ Route::any('/authorized_access_request_for_refund', 'Member\PayrollEmployee\Requ
 Route::any('/authorized_access_request_for_refund_table', 'Member\PayrollEmployee\RequestForPaymentController@authorized_access_request_for_refund_table');
 Route::any('rfp_application_approve/{request_id}', 'Member\PayrollEmployee\RequestForPaymentController@rfp_application_approve');
 Route::any('rfp_application_reject/{request_id}', 'Member\PayrollEmployee\RequestForPaymentController@rfp_application_reject');
+
+Route::any('employee_request_rfp_export_pdf/{request_id}', 'Member\PayrollEmployee\RequestForPaymentController@employee_request_rfp_export_pdf');
 /*End Request for Payment*/
 
 Route::any('employee_official_business_management', 'Member\PayrollEmployee\EmployeeController@employee_official_business_management');

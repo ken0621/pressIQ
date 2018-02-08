@@ -1,5 +1,6 @@
 @extends('member.layout')
 @section('content')
+ <input type="hidden" class="_token" value="{{ csrf_token() }}" />
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -30,7 +31,7 @@
 
         <div class="form-group">
             <div class="col-md-3 pull-right">
-                      <a href="/member/payroll/reports/manpower_report_export_excel" class="excel_tag"><button type="button" class="btn btn-success pull-right" style="margin-right:20px;"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
+                      <a href="/member/payroll/reports/manpower_report_export_excel/0" class="excel_tag"><button type="button" class="btn btn-success pull-right" style="margin-right:20px;"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
             </div>
         </div>
 
@@ -76,5 +77,35 @@
     </div>
 </div>
 </div>
-@endsection
+<script>
+    var ajaxdata = {};
+        $(".select-company-name").on("change", function(e) 
+        {
+            var href = "/member/payroll/reports/manpower_report_export_excel/"+ $(this).val();
+            $(".excel_tag").attr('href',href);
 
+            var company         = $(this).val();
+            ajaxdata.company_id    = company;
+            ajaxdata._token     = $("._token").val();
+            $('#spinningLoaders').show();
+            $(".load-filter-datas").hide();
+            setTimeout(function(e){
+            $.ajax(
+            {
+                url:"/member/payroll/reports/manpower_report_filter",
+                type:"post",
+                data: ajaxdata,
+                
+                success: function(data)
+                {
+                    $('#spinningLoaders').hide();
+                    $(".load-filter-datas").show();
+                    $(".load-filter-datas").html(data);
+                }
+            });
+            }, 700);
+        });
+    
+</script>
+
+@endsection

@@ -101,7 +101,15 @@
                                             </select>
                                         </td>
                                         <td><textarea class="form-control txt-desc" name="item_description[]">{{$wisline->itemline_description}}</textarea></td>
-                                        <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="{{$wisline->itemline_um}}" /></select></td>
+                                        <td>
+                                            <select class="2222 droplist-um select-um {{isset($wisline->multi_id) ? 'has-value' : ''}}" name="item_um[]">
+                                                @if($wisline->itemline_um)
+                                                    @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $wisline->multi_um_id, 'selected_um_id' => $wisline->itemline_um])
+                                                @else
+                                                    <option class="hidden" value="" />
+                                                @endif
+                                            </select>
+                                        </td>
                                         <td><input class="form-control number-input txt-qty text-center compute" type="text" name="item_qty[]" value="{{ $wisline->itemline_qty}}" /></td>
                                         <td><input class="text-right number-input txt-rate" type="text" name="item_rate[]" value="{{ $wisline->itemline_rate}}" /></td>
                                         <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{ $wisline->itemline_amount}}" /></td>

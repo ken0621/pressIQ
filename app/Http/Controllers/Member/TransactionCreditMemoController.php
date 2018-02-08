@@ -135,6 +135,7 @@ class TransactionCreditMemoController extends Member
 		if(!$validate)
 		{
 			$validate = TransactionCreditMemo::postUpdate($credit_memo_id, $this->user_info->shop_id, $insert, $insert_item);
+			TransactionCreditMemo::insert_acctg_transaction($this->user_info->shop_id, $validate);
 		}
 		if(is_numeric($validate))
 		{

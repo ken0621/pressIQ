@@ -144,6 +144,7 @@ class TransactionSalesInvoiceController extends Member
 		$insert['customer_tax'] 		 = $request->customer_tax;
 
 		$insert_item = null;
+		$return_si = null;
 		foreach ($request->item_id as $key => $value) 
 		{
 			if($value)
@@ -161,13 +162,23 @@ class TransactionSalesInvoiceController extends Member
 				
 				$insert_item[$key]['item_refname'] 		= $request->item_refname[$key];
 				$insert_item[$key]['item_refid'] 		= $request->item_refid[$key];
+
+				if($insert_item[$key]['item_refid'])
+				{
+					$return_si[$insert_item[$key]['item_refid']] = '';
+				}
 			}
 		}
+		if(count($return_si) > 0)
+		{
+			Session::put('applied_transaction_si',$return_si);
+		}
+
 		$return = null;
 
 		$warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
 		$validate = null;
-		if(CustomerWIS::settings($shop_id) == 0)
+		if(CustomerWIS::settings($this->user_info->shop_id) == 0)
 		{
 			$validate = AccountingTransaction::inventory_validation('consume', $this->user_info->shop_id, $warehouse_id, $insert_item);
 		}
@@ -175,7 +186,7 @@ class TransactionSalesInvoiceController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesInvoice::postUpdate($invoice_id, $this->user_info->shop_id, $insert, $insert_item);
-			TransactionSalesInvoice::applied_transaction($this->user_info->shop_id);
+			TransactionSalesInvoice::applied_transaction($this->user_info->shop_id, $validate);
 		}
 		if(is_numeric($validate))
 		{

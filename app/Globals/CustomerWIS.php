@@ -204,14 +204,20 @@ class CustomerWIS
     }
     public static function customer_update_wis($wis_id, $shop_id, $remarks, $ins, $_item = array(), $insert_item = array())
     {
-        $old = Tbl_customer_wis::where("cust_wis_id", $wis_id);
+        $old = Tbl_customer_wis::where("cust_wis_id", $wis_id)->first();
 
 
         $validate = null;
 
-        $warehouse_id = $ins['cust_wis_from_warehouse'];
+        if($old)
+        {
+            $warehouse_id = $old->cust_wis_from_warehouse;
+        }
         // dd($_item);
-
+        if($warehouse_id)
+        {
+            $validate .= "Warehouse unknown.";
+        }
         if(count($_item) <= 0)
         {
             $validate .= "Please Select item.<br>";
@@ -254,10 +260,12 @@ class CustomerWIS
             $entry["total"]             = $overall_price;
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
-            $entry["ewt"]               = '';
+            $entry["ewt"]               = '';  
 
+            Warehouse2::update_inventory_consume($shop_id, null, $reference_name, $wis_id);
+            Tbl_customer_wis_item::where("cust_wis_id", $wis_id)->delete();
             Tbl_customer_wis_item_line::where("itemline_wis_id", $wis_id)->delete();
-            //Self::insertLine($po_id, $insert_item);
+            //Self::insertLine($po_id, $insert_item); 
 
             $val = Self::insertline($wis_id, $insert_item, $entry);
             if(is_numeric($val))
@@ -266,7 +274,7 @@ class CustomerWIS
 
                 if(!$return)
                 {
-                    $get_item = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','customer_wis')->where('record_consume_ref_id',$wis_id)->get();
+                    $get_item = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','customer_wis')->where('record_consume_ref_id',$wis_id)->where("record_warehouse_id", $warehouse_id)->get();
 
                     $ins_customer_item = null;
                     foreach ($get_item as $key_item => $value_item)

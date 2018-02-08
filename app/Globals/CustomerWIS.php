@@ -204,14 +204,20 @@ class CustomerWIS
     }
     public static function customer_update_wis($wis_id, $shop_id, $remarks, $ins, $_item = array(), $insert_item = array())
     {
-        $old = Tbl_customer_wis::where("cust_wis_id", $wis_id);
+        $old = Tbl_customer_wis::where("cust_wis_id", $wis_id)->first();
 
 
         $validate = null;
 
-        $warehouse_id = $ins['cust_wis_from_warehouse'];
+        if($old)
+        {
+            $warehouse_id = $old->cust_wis_from_warehouse;
+        }
         // dd($_item);
-
+        if($warehouse_id)
+        {
+            $validate .= "Warehouse unknown.";
+        }
         if(count($_item) <= 0)
         {
             $validate .= "Please Select item.<br>";

@@ -41,6 +41,7 @@ class RequisitionSlip
         }
 
         if($status != 'all')
+
         {
             $data = $data->where('requisition_slip_status',$status);
         }
@@ -61,7 +62,7 @@ class RequisitionSlip
     }
     public static function get_slip_item($slip_id)
     {
-        return Tbl_requisition_slip_item::vendor()->item()->where('rs_id', $slip_id)->get();
+        return Tbl_requisition_slip_item::vendor()->um()->item()->where('rs_id', $slip_id)->get();
     }
     public static function update_status($shop_id, $slip_id, $update)
     {
@@ -75,24 +76,28 @@ class RequisitionSlip
         $return = $count_so + $count_pr;*/
         return Tbl_requisition_slip_item::PRInfo('shop_id',$shop_id)->where("requisition_slip_status","closed")->count();
     }
-    public static function create_po($pr_id, $vendor_ids = array())
+    public static function create_po($pr_id, $shop_id)
     {
-        $po = null;
-        foreach ($vendor_ids as $key => $value)
+        $pr = Tbl_requisition_slip::where('requisition_slip_id', $pr_id)->first();
+        $prline = Tbl_requisition_slip_item::where('rs_id', $pr_id)->get();
+
+        $vendor = null;
+        foreach ($prline as $value)
         {
-            $po[$value] = $value;
+            $vendor[$value['rs_vendor_id']][] = $value;
+        }
 
-            foreach ($po as $key1 => $value1)
-            {
-                $ins['transaction_refnum'] = Tbl_requisition_slip::where('requisition_slip_id', $pr_id)->value('transaction_refnum');
-                $ins['date_created'] = Carbon::now();
+        $poline = null;
+        foreach ($vendor as $key => $value)
+        {
+            $ins['po_vendor_id'] = $key;
+            $ins['transaction_refnum'] = $pr->transaction_refnum;
+            $ins['po_shop_id'] = $pr->shop_id;
+            $ins['date_created'] = Carbon::now();
+            $po_id = Tbl_purchase_order::insertGetId($ins);
 
-                $po_id =Tbl_purchase_order::insertGetId($ins);
-
-                Self::create_po_line($pr_id, $value, $po_id);
-            }
-        }   
-       die(var_dump($po));
+            Self::create_po_line($pr_id, $key, $po_id);
+        }
     }
     public static function create_po_line($pr_id, $vendor_id, $po_id)
     {
@@ -108,11 +113,16 @@ class RequisitionSlip
             $po_line[$key_line]['poline_qty']         = $value_line->rs_item_qty;
             $po_line[$key_line]['poline_rate']        = $value_line->rs_item_rate;
             $po_line[$key_line]['poline_amount']      = $value_line->rs_item_amount;
+            $po_line[$key_line]['poline_refname']     = 'sales_order';
+            $po_line[$key_line]['poline_refid']       = $pr_id;
         }
-        //die(var_dump($po_line));
-        Tbl_purchase_order_line::insert($po_line); 
+        $return = Tbl_purchase_order_line::insert($po_line); 
 
-        return $vendor_id;
+        $update['po_overall_price'] = collect($po_line)->sum('poline_amount'); 
+
+        Tbl_purchase_order::where('po_id', $po_id)->update($update);
+
+        return $return;
     }
 	public static function create($shop_id, $user_id, $input, $transaction_type ='')
 	{
@@ -180,9 +190,11 @@ class RequisitionSlip
                     $_item[$key]['rs_item_rate']        = $input->rs_item_rate[$key];
                     $_item[$key]['rs_item_amount']      = $input->rs_item_amount[$key];
                     $_item[$key]['rs_vendor_id']        = $input->rs_vendor_id[$key];
+                    $_item[$key]['rs_item_refname']     = $input->item_ref_name[$key];
+                    $_item[$key]['rs_item_refid']       = $input->item_ref_id[$key];
+
                 }
             }
-
             
             $total_amount = collect($_item)->sum('rs_item_amount'); 
             $insert['total_amount'] = $total_amount;
@@ -193,8 +205,7 @@ class RequisitionSlip
             {
                 Tbl_requisition_slip_item::insert($_item);
             }
-            
-            Self::create_po($rs_id, $input->rs_vendor_id);
+        
             $validate = $rs_id;
         }
         
@@ -295,6 +306,8 @@ class RequisitionSlip
                     $_item[$key]['rs_item_rate']        = $input->rs_item_rate[$key];
                     $_item[$key]['rs_item_amount']      = $input->rs_item_amount[$key];
                     $_item[$key]['rs_vendor_id']        = $input->rs_vendor_id[$key];
+                    $_item[$key]['rs_item_refname']     = $input->item_ref_name[$key];
+                    $_item[$key]['rs_item_refid']       = $input->item_ref_id[$key];
 
                 }
             }

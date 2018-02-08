@@ -479,7 +479,7 @@ function debit_memo()
 			action_date_picker();
 	    	action_compute();
 
-			$('.remarks-eb').html($('.po-remarks').val());
+			$('.remarks-dm').html($('.po-remarks').val());
 		});
 	}
 	this.load_applied_transaction = function()

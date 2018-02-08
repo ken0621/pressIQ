@@ -546,7 +546,7 @@ function vendor_requisition_slip()
 			action_initialize_select();
 			action_compute();
 			action_reassign_number();
-			$('.remarks-pr').html($('.pr-remarks').val());
+			$('.remarks-pr').html($('.so-remarks').val());
 		});
 	}
 

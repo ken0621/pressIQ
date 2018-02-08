@@ -128,7 +128,7 @@ class TransactionEnterBillsController extends Member
         if(!$validate)
         {
             $validate = TransactionEnterBills::postInsert(null, $this->user_info->shop_id, $insert, $insert_item, $insert_acct);
-            TransactionEnterBills::checkPoQty($validate, Session::get('applied_transaction'));
+            TransactionEnterBills::appliedTransaction($validate);
         }
         else
         {

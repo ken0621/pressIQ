@@ -1,6 +1,8 @@
 @if(count($_transactions) > 0)
     @foreach($_transactions as $transaction)
      <tr class="tr-draggable">
+        <input type="hidden" name="item_ref_name[]" value="sales_order"></td>
+        <input type="hidden" name="item_ref_id[]" value="$transaction['so_id']"></td>
         <td class="invoice-number-td text-center">1</td>
          <td><input type="text" class="for-datepicker" name="item_servicedate[]"/>{{$transaction['service_date'] != '1970-01-01' ? $transaction['service_date'] : ''}}</td>
         <td>

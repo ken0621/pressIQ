@@ -113,10 +113,7 @@ class TransactionReceiveInventoryController extends Member
         if(!$validate)
         {
             $validate = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
-            if(Session::get('applied_transaction') > 0)
-            {
-                TransactionPurchaseOrder::checkPoQty($validate, Session::get('applied_transaction'));
-            }
+            TransactionReceiveInventory::appliedTransaction($validate);
         }
         if(is_numeric($validate))
         {
@@ -225,7 +222,7 @@ class TransactionReceiveInventoryController extends Member
         return json_encode($return);
 
     }
-    public function getLoadAppliedPoTransaction(Request $request)
+    public function getLoadAppliedTransaction(Request $request)
     {
         $applied_transaction = Session::get('applied_transaction');
 
@@ -242,7 +239,7 @@ class TransactionReceiveInventoryController extends Member
                     $type = Item::get_item_type($poline_value->poline_item_id);
                     if($type == 1 || $type == 4 || $type == 5 )
                     {
-                        $return[$key.'i'.$poline_key]['poline_po_id'] = $poline_value->poline_po_id;
+                        $return[$key.'i'.$poline_key]['po_id'] = $poline_value->poline_po_id;
                         $return[$key.'i'.$poline_key]['item_id'] = $poline_value->poline_item_id;
                         $return[$key.'i'.$poline_key]['item_description'] = $poline_value->poline_description;
                         $return[$key.'i'.$poline_key]['item_um'] = $poline_value->poline_um;
@@ -263,7 +260,7 @@ class TransactionReceiveInventoryController extends Member
         $data['_um']     = UnitMeasurement::load_um_multi();
         $data['_item']   = Item::get_all_category_item();
 
-        return view('member.accounting_transaction.vendor.purchase_order.applied_po_transaction', $data);
+        return view('member.accounting_transaction.vendor.receive_inventory.applied_transaction', $data);
     }
 
 }

@@ -4435,6 +4435,48 @@ class PayrollController extends Member
                $data['remwithpay']      = $remwithpay;
                $data['remwithoutpay']   = $remwithoutpay;   
           }
+          else if($category == 'annual_leave')
+          {
+               $leave_annual = null;
+
+               $payroll_leave_temp_id = Tbl_payroll_leave_tempv2::select('payroll_leave_temp_id')->where('shop_id',Self::shop_id())->get();
+
+               $payroll_employee_id   = Tbl_payroll_leave_employeev2::getemployeeidbytempid($payroll_leave_temp_id,Self::shop_id())->get();
+
+               $datas     = array();                                        
+               foreach($payroll_employee_id as $key => $emp_id)
+               {
+          
+                       for($month=1;$month<=12;$month++)
+                       {
+                              $empdata = Tbl_payroll_leave_schedulev2::getannualleave($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'],$month,$company)->get();
+
+                              foreach($empdata as $key2 => $empdat)
+                              {
+                                  $leavetempname = $emp_id->payroll_employee_id.'-'.$empdat->payroll_leave_temp_name;
+                                  if(!isset($leave_annual[$leavetempname]))
+                                  {
+                                    $leave_annual[$leavetempname]    = new stdClass();
+                                  }
+
+                                   $monthname = DateTime::createFromFormat('!m', $month)->format('F');
+
+                                   $leave_annual[$leavetempname]->$monthname                    = $empdat->total_leave_consume;
+                                   $leave_annual[$leavetempname]->payroll_employee_display_name = $empdat->payroll_employee_display_name;
+                                   $leave_annual[$leavetempname]->payroll_employee_number       = $empdat->payroll_employee_id;
+                                   $leave_annual[$leavetempname]->payroll_leave_name            = $empdat->payroll_leave_temp_name;
+                              }
+
+                              
+                       }
+
+               }
+          
+               $tempmonth = date("Y-m-d");
+               $splitdate = explode("-", $tempmonth);
+               $data['lastyear'] = $splitdate[0] - 1;
+               $data['leave_report'] = $leave_annual;
+          }
 
           $data['date_start']  = $date[0];
           $data['date_end']    = $date[1];
@@ -4696,25 +4738,96 @@ class PayrollController extends Member
 
      public function modal_leave_annual_report()
      {    
+          $leave_annual = null;
+          $data["_company"] = Payroll::company_heirarchy(Self::shop_id());
+          $payroll_leave_temp_id = Tbl_payroll_leave_tempv2::select('payroll_leave_temp_id')->where('shop_id',Self::shop_id())->get();
 
-          $payroll_leave_temp_id = Tbl_payroll_leave_tempv2::select('payroll_leave_temp_id')->get();
+          $payroll_employee_id   = Tbl_payroll_leave_employeev2::getemployeeidbytempid($payroll_leave_temp_id,Self::shop_id())->get();
+                                    
+          foreach($payroll_employee_id as $key => $emp_id)
+          {
+     
+                  for($month=1;$month<=12;$month++)
+                  {
+                         $empdata = Tbl_payroll_leave_schedulev2::getannualleave($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'],$month,0)->get();
+
+                         foreach($empdata as $key2 => $empdat)
+                         {
+                             $leavetempname = $emp_id->payroll_employee_id.'-'.$empdat->payroll_leave_temp_name;
+                             if(!isset($leave_annual[$leavetempname]))
+                             {
+                               $leave_annual[$leavetempname]    = new stdClass();
+                             }
+
+                              $monthname = DateTime::createFromFormat('!m', $month)->format('F');
+
+                              $leave_annual[$leavetempname]->$monthname                    = $empdat->total_leave_consume;
+                              $leave_annual[$leavetempname]->payroll_employee_display_name = $empdat->payroll_employee_display_name;
+                              $leave_annual[$leavetempname]->payroll_employee_number       = $empdat->payroll_employee_id;
+                              $leave_annual[$leavetempname]->payroll_leave_name            = $empdat->payroll_leave_temp_name;
+                         }
+
+                         
+                  }
+
+          }
+     
+          $tempmonth = date("Y-m-d");
+          $splitdate = explode("-", $tempmonth);
+          $data['lastyear'] = $splitdate[0] - 1;
+          $data['leave_report'] = $leave_annual;
+          return view("member.payroll.modal.modal_leave_annual_report",$data);
+     }
+
+     public function leave_annual_export($company)
+     {
+          $leave_annual = null;
+
+          $payroll_leave_temp_id = Tbl_payroll_leave_tempv2::select('payroll_leave_temp_id')->where('shop_id',Self::shop_id())->get();
 
           $payroll_employee_id   = Tbl_payroll_leave_employeev2::getemployeeidbytempid($payroll_leave_temp_id,Self::shop_id())->get();
 
           $datas     = array();                                        
           foreach($payroll_employee_id as $key => $emp_id)
           {
+     
+                  for($month=1;$month<=12;$month++)
+                  {
+                         $empdata = Tbl_payroll_leave_schedulev2::getannualleave($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'],$month,$company)->get();
 
-                       $empdata = Tbl_payroll_leave_schedulev2::getannualleave($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'])->get();
-                       
-               array_push($datas, $empdata);
+                         foreach($empdata as $key2 => $empdat)
+                         {
+                             $leavetempname = $emp_id->payroll_employee_id.'-'.$empdat->payroll_leave_temp_name;
+                             if(!isset($leave_annual[$leavetempname]))
+                             {
+                               $leave_annual[$leavetempname]    = new stdClass();
+                             }
+
+                              $monthname = DateTime::createFromFormat('!m', $month)->format('F');
+
+                              $leave_annual[$leavetempname]->$monthname                    = $empdat->total_leave_consume;
+                              $leave_annual[$leavetempname]->payroll_employee_display_name = $empdat->payroll_employee_display_name;
+                              $leave_annual[$leavetempname]->payroll_employee_number       = $empdat->payroll_employee_id;
+                              $leave_annual[$leavetempname]->payroll_leave_name            = $empdat->payroll_leave_temp_name;
+                         }
+
+                         
+                  }
 
           }
+     
+          $tempmonth = date("Y-m-d");
+          $splitdate = explode("-", $tempmonth);
+          $data['lastyear'] = $splitdate[0] - 1;
+          $data['leave_report'] = $leave_annual;
+          Excel::create("Leave Annual Report : ".$data['lastyear'],function($excel) use ($data)
+          {
+               $excel->sheet('clients',function($sheet) use ($data)
+               {
+                    $sheet->loadView('member.payroll.modal.modal_leave_annual_excel',$data);
+               });
+          })->download('xls');
 
-          dd($datas);
-   
-          $data['leave_report'] = $datas;
-          return view("member.payroll.modal.modal_leave_annual_report",$data);
      }
      //end reporting v2
 

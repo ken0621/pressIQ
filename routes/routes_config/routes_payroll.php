@@ -150,7 +150,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/company_timesheet2/{company_id}','Member\PayrollTimeSheet2Controller@index');
 	Route::any('/company_timesheet2/table/{company_id}','Member\PayrollTimeSheet2Controller@index_table');
 	Route::any('/company_timesheet2/{company_id}/{employee_id}','Member\PayrollTimeSheet2Controller@timesheet');
-	Route::any('/company_timesheet2/{company_id}/{employee_id}','Member\PayrollTimeSheet2Controller@timesheet');
 	Route::any('/company_timesheet2_pdf/{company_id}/{employee_id}','Member\PayrollTimeSheet2Controller@timesheet_pdf');
 	Route::any('/company_timesheet_day_summary/info/{time_sheet_id}','Member\PayrollTimeSheet2Controller@day_summary_info');
 	Route::post('/company_timesheet_day_summary/change','Member\PayrollTimeSheet2Controller@day_summary_change');
@@ -469,6 +468,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 		"Member\PayrollController@leave_action_report_excel");
 	Route::any('/leave/v2/modal_leave_annual_report',
 		"Member\PayrollController@modal_leave_annual_report");
+	Route::any('/leave/v2/leave_annual_export/{company}',
+		"Member\PayrollController@leave_annual_export");
+	
 	//end reporting
 
 	Route::any('/leave/v2/modal_view_leave_employee/{payroll_leave_temp_id}/',"Member\PayrollController@modal_view_leave_employee");

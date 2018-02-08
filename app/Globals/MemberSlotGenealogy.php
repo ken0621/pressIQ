@@ -43,7 +43,7 @@ use App\Globals\Item_code;
 use App\Globals\Mlm_gc;
 
 use App\Models\Tbl_transaction_list;
-
+use App\Models\Tbl_country;
 
 // use App\Globals\Mlm_compute;
 use App\Globals\Mlm_complan_manager_repurchase;
@@ -138,6 +138,7 @@ class MemberSlotGenealogy
                             ->where("tbl_transaction.shop_id",$shop_id)
                             ->get();
         $data['shop_id'] = $shop_id;
+        $data['country'] = Tbl_country::get();
         return $data;
     }
     public static function downline($x = 0, $mode = '')

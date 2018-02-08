@@ -2995,6 +2995,8 @@ class ShopMemberController extends Shop
         }
 
         $slot_id        = MLM2::create_slot($shop_id,$customer_id,$membership,$sponsor,$slot_no);
+        $distributed['distributed'] = 1;
+        Tbl_mlm_slot::where('slot_id',$slot_id)->update($distributed);
         // dd($slot_id);
 
         if($slot_id)

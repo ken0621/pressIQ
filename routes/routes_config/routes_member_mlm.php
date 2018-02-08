@@ -238,6 +238,12 @@ AdvancedRoute::controller("/member/mlm/gcmaintenance","Member\MLM_GCMaintenanceC
 Route::any("/member/mlm/distribute_cashback","Member\MLM_DistributeCashbackController@index");
 Route::any("/member/mlm/distribute_cashback/distribute","Member\MLM_DistributeCashbackController@distribute");
 
+Route::any("/member/mlm/distribute_builder","Member\MLM_DistributeBuilderController@index");
+Route::any("/member/mlm/distribute_builder/distribute","Member\MLM_DistributeBuilderController@distribute");
+
+Route::any("/member/mlm/distribute_leader","Member\MLM_DistributeBuilderController@index_leader");
+Route::any("/member/mlm/distribute_leader/distribute","Member\MLM_DistributeBuilderController@distribute_leader");
+
 /* start MLM Product */
 Route::any('/member/mlm/product', 'Member\MLM_ProductController@index');//luke
 Route::any('/member/mlm/product/point/add', 'Member\MLM_ProductController@add_product_points');

@@ -513,6 +513,22 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+        
+        $code = "mlm-wallet-distribute-builder-points";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Distribute Builder Points";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/distribute_builder";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
+        $code = "mlm-wallet-distribute-leader-points";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Distribute Leader Points";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/distribute_leader";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 
         $code = "mlm-wallet-gc-maintenance";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "GC Maintenance";

@@ -40,6 +40,7 @@ use App\Globals\Tablet_global;
 use App\Globals\Currency;
 use App\Globals\Mlm_slot_log;
 use App\Globals\Mlm_complan_manager;
+use App\Globals\MLM2;
 use Session;
 use DB;
 use Carbon\carbon;
@@ -705,6 +706,20 @@ class Warehouse2
             if($shop_id == 5)
             {
                 Warehouse2::check_item_ez_program($shop_id,$item_id,$consume["id"]);
+                
+                $get_prod_log = Tbl_warehouse_inventory_record_log::where("record_log_id",$id)->first();
+                if($get_prod_log)
+                {   
+                    $type_id_item = Item::get_item_type($item_id);
+                    
+                    if($type_id_item != 5)
+                    {
+                        $update_prod_log["item_in_use"] = "used";
+                        $update_prod_log["record_log_date_updated"] = Carbon::now();
+                        Tbl_warehouse_inventory_record_log::where("record_log_id",$id)->update($update_prod_log);
+                        Warehouse2::check_lead_bonus($consume,$get_prod_log->record_item_id);
+                    }
+                }
             }
         }
 
@@ -869,9 +884,11 @@ class Warehouse2
             {
                 $update['record_log_date_updated']   = Carbon::now();
                 $update['item_in_use']               = $code_used;
-               
+                
                 Warehouse2::insert_item_history($val->record_log_id);
                 Tbl_warehouse_inventory_record_log::where('record_log_id',$val->record_log_id)->update($update);
+                
+                
             }
             else
             {
@@ -886,6 +903,134 @@ class Warehouse2
 
         return $return;
 
+    }
+    public static function check_lead_bonus($consume,$val)
+    {
+        
+        if(isset($consume["id"]) && $val)
+        {
+            $transaction_list = Tbl_transaction_list::where("transaction_list_id",$consume["id"])->first();
+            if($transaction_list)
+            {
+                $transaction = Tbl_transaction::where("transaction_id",$transaction_list->transaction_id)->first();
+                if($transaction)
+                {
+                    if($transaction->transaction_reference_table == "tbl_customer")
+                    {
+                        $customer = Tbl_customer::where("customer_id",$transaction->transaction_reference_id)->first();
+                        if($customer)
+                        {
+                            $lead_slot = Tbl_mlm_slot::where("slot_id",$customer->customer_lead)->first();
+                            if($lead_slot)
+                            {
+                                $membership  = Tbl_membership::where("membership_id",$lead_slot->slot_membership)->first();
+                                $price_level = Tbl_price_level::where("price_level_id",$membership->membership_price_level)->first();
+                                if($price_level)
+                                {
+                                   $item = Tbl_item::where("item_id",$val)->first();
+                                   if($item)
+                                   {
+                                       if($item->item_type_id == 1)
+                                       {
+                                           $bonus = 0;
+                                           if($price_level->price_level_type == "per-item")
+                                           {
+                                               $price_level_item = Tbl_price_level_item::where("price_level_id",$price_level->price_level_id)->where("item_id",$item->item_id)->first();
+                                               if($price_level_item)
+                                               {
+                                                 $bonus = $item->item_price - $price_level_item->custom_price;   
+                                               }
+                                           }
+                                           else if($price_level->price_level_type == "fixed-percentage")
+                                           {
+                                               $bonus = $item->item_price * ($price_level->fixed_percentage_value/100);
+                                           }
+                                           
+                                           $check_if_owner_has_slot = Tbl_mlm_slot::where("slot_owner",$customer->customer_id)->first();
+                                           if(!$check_if_owner_has_slot)
+                                           {
+                                               if($bonus > 0)
+                                               {
+                                                    $amount_given                        = $bonus;
+                                                    $log                                 = number_format($amount_given,2)." Retail Commission from customer ".$customer->first_name." ".$customer->last_name;
+                                                    $arry_log['wallet_log_slot']         = $lead_slot->slot_id;
+                                                    $arry_log['shop_id']                 = $lead_slot->shop_id;
+                                                    $arry_log['wallet_log_slot_sponsor'] = $lead_slot->slot_id;
+                                                    $arry_log['wallet_log_details']      = $log;
+                                                    $arry_log['wallet_log_amount']       = $amount_given;
+                                                    $arry_log['wallet_log_plan']         = "RETAIL_COMMISSION";
+                                                    $arry_log['wallet_log_status']       = "released";   
+                                                    $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('RETAIL_COMMISSION', $lead_slot->shop_id); 
+                                                    Mlm_slot_log::slot_array($arry_log);  
+                                               }
+                                           }
+                                           else
+                                           {
+                                                $check_purchase_slot = Tbl_mlm_slot::where("slot_owner",$customer->customer_id)->where("slot_i",$customer->purchase_target_slot)->first();
+                                                if($check_purchase_slot)
+                                                {
+                                                    MLM2::purchase($check_if_owner_has_slot->shop_id, $check_purchase_slot->slot_id, $item->item_id);
+                                                }
+                                                else
+                                                {
+                                                    MLM2::purchase($check_if_owner_has_slot->shop_id, $check_if_owner_has_slot->slot_id, $item->item_id);
+                                                }
+                                           }
+                                       }
+                                   }
+                                }
+                                else
+                                {
+                                    $check_if_owner_has_slot = Tbl_mlm_slot::where("slot_owner",$customer->customer_id)->first();
+                                    if($check_if_owner_has_slot)
+                                    {
+                                       $item = Tbl_item::where("item_id",$val)->first();
+                                       if($item)
+                                       {
+                                           if($item->item_type_id == 1)
+                                           {
+                                                $check_purchase_slot = Tbl_mlm_slot::where("slot_owner",$customer->customer_id)->where("slot_i",$customer->purchase_target_slot)->first();
+                                                if($check_purchase_slot)
+                                                {
+                                                    MLM2::purchase($check_if_owner_has_slot->shop_id, $check_purchase_slot->slot_id, $item->item_id);
+                                                }
+                                                else
+                                                {
+                                                    MLM2::purchase($check_if_owner_has_slot->shop_id, $check_if_owner_has_slot->slot_id, $item->item_id);
+                                                }
+                                           }
+                                       }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                $check_if_owner_has_slot = Tbl_mlm_slot::where("slot_owner",$customer->customer_id)->first();
+                                if($check_if_owner_has_slot)
+                                {
+                                   $item = Tbl_item::where("item_id",$val)->first();
+                                   if($item)
+                                   {
+                                       if($item->item_type_id == 1)
+                                       {
+                                            $check_purchase_slot = Tbl_mlm_slot::where("slot_owner",$customer->customer_id)->where("slot_i",$customer->purchase_target_slot)->first();
+                                            if($check_purchase_slot)
+                                            {
+                                                MLM2::purchase($check_if_owner_has_slot->shop_id, $check_purchase_slot->slot_id, $item->item_id);
+                                            }
+                                            else
+                                            {
+                                                MLM2::purchase($check_if_owner_has_slot->shop_id, $check_if_owner_has_slot->slot_id, $item->item_id);
+                                            }
+                                       }
+                                   }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     public static function consume_record_log($shop_id, $warehouse_id, $item_id = 0, $recor_log_id = 0, $quantity = 1, $remarks = '', $consume = array(), $inventory_history = '', $code_used = 'used')
     {

@@ -29,6 +29,7 @@
 											</div>
 										</div>
 									</a> --}}
+
 									<div class="col-md-4">
 										<div class="product-holder wow fadeIn" data-wow-delay=".2s" data-wow-duration="2s">
 										    <div class="top">
@@ -46,102 +47,66 @@
 									</div>
 									@endforeach
 								@else
-									<a href="/product/view/test">
-										<div class="col-md-4">
-											<div class="per-item">
-												<div class="image-container">
-													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-												</div>
-												<div class="detail-container">
-													<div class="item-name">
-														3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-													</div>
-													<div class="price-container">PHP 250.00</div>
-													<div class="button-container">SHOP NOW</div>
-												</div>
-											</div>
+									<div class="col-md-4">
+										<div class="product-holder wow fadeIn" data-wow-delay=".2s" data-wow-duration="2s">
+										    <div class="top">
+										        <img src="">
+										    </div>
+										    <div class="bottom">
+										        <div class="product-title">Lorem Ipsum</div>
+										        <div class="price-cont">PHP 0.00</div>
+										        <div class="btn-container">
+										            <a href="javascript:"><button class="btn-more-info">MORE INFO</button></a>
+										            <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
+										        </div>
+										    </div>
 										</div>
-									</a>
-									<a href="/product/view/test">
-										<div class="col-md-4>
-											<div class="per-item">
-												<div class="image-container">
-													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-												</div>
-												<div class="detail-container">
-													<div class="item-name">
-														3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-													</div>
-													<div class="price-container">PHP 250.00</div>
-													<div class="button-container">SHOP NOW</div>
-												</div>
-											</div>
+									</div>
+									<div class="col-md-4">
+										<div class="product-holder wow fadeIn" data-wow-delay=".2s" data-wow-duration="2s">
+										    <div class="top">
+										        <img src="">
+										    </div>
+										    <div class="bottom">
+										        <div class="product-title">Lorem Ipsum</div>
+										        <div class="price-cont">PHP 0.00</div>
+										        <div class="btn-container">
+										            <a href="javascript:"><button class="btn-more-info">MORE INFO</button></a>
+										            <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
+										        </div>
+										    </div>
 										</div>
-									</a>
-									<a href="/product/view/test">
-										<div class="col-md-4">
-											<div class="per-item">
-												<div class="image-container">
-													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-												</div>
-												<div class="detail-container">
-													<div class="item-name">
-														3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-													</div>
-													<div class="price-container">PHP 250.00</div>
-													<div class="button-container">SHOP NOW</div>
-												</div>
-											</div>
+									</div>
+									<div class="col-md-4">
+										<div class="product-holder wow fadeIn" data-wow-delay=".2s" data-wow-duration="2s">
+										    <div class="top">
+										        <img src="">
+										    </div>
+										    <div class="bottom">
+										        <div class="product-title">Lorem Ipsum</div>
+										        <div class="price-cont">PHP 0.00</div>
+										        <div class="btn-container">
+										            <a href="javascript:"><button class="btn-more-info">MORE INFO</button></a>
+										            <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
+										        </div>
+										    </div>
 										</div>
-									</a>
-									<a href="/product/view/test">
-										<div class="col-md-4 col-sm-4 col-xs-6">
-											<div class="per-item">
-												<div class="image-container">
-													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-												</div>
-												<div class="detail-container">
-													<div class="item-name">
-														3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-													</div>
-													<div class="price-container">PHP 250.00</div>
-													<div class="button-container">SHOP NOW</div>
-												</div>
-											</div>
+									</div>
+									<div class="col-md-4">
+										<div class="product-holder wow fadeIn" data-wow-delay=".2s" data-wow-duration="2s">
+										    <div class="top">
+										        <img src="">
+										    </div>
+										    <div class="bottom">
+										        <div class="product-title">Lorem Ipsum</div>
+										        <div class="price-cont">PHP 0.00</div>
+										        <div class="btn-container">
+										            <a href="javascript:"><button class="btn-more-info">MORE INFO</button></a>
+										            <a href="javascript:"><button class="btn-buy-tokens">BUY TOKENS</button></a>
+										        </div>
+										    </div>
 										</div>
-									</a>
-									<a href="/product/view/test">
-										<div class="col-md-4 col-sm-4 col-xs-6">
-											<div class="per-item">
-												<div class="image-container">
-													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-												</div>
-												<div class="detail-container">
-													<div class="item-name">
-														3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-													</div>
-													<div class="price-container">PHP 250.00</div>
-													<div class="button-container">SHOP NOW</div>
-												</div>
-											</div>
-										</div>
-									</a>
-									<a href="/product/view/test">
-										<div class="col-md-4 col-sm-4 col-xs-6">
-											<div class="per-item">
-												<div class="image-container">
-													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-												</div>
-												<div class="detail-container">
-													<div class="item-name">
-														3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-													</div>
-													<div class="price-container">PHP 250.00</div>
-													<div class="button-container">SHOP NOW</div>
-												</div>
-											</div>
-										</div>
-									</a>
+									</div>
 								@endif
 							</div>
 						</div>

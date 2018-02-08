@@ -169,8 +169,7 @@
         <div class="container">
             <div class="wrapper-title wow fadeInDown" data-wow-duration="3s"><span>News</span> and Announcement</div>
             <div class="news-display">
-<<<<<<< HEAD
-                <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft match-height" data-wow-delay=".2s" data-wow-duration="2s">
+                {{-- <div onclick="location.href='/announcement'" class="news-holder wow fadeInLeft match-height" data-wow-delay=".2s" data-wow-duration="2s">
                     <div class="row-no-padding clearfix">
                         <div class="col-md-6 col-xs-6">
                             <div class="img-holder">
@@ -225,8 +224,7 @@
                         <div class="col-md-6 col-xs-6">
                             <div class="caption-holder">
                                 <div class="caption">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                                <div class="date">January 07, 2018</div>
-=======
+                                <div class="date">January 07, 2018</div> --}}
                 @if(count(get_front_news($shop_id)) > 0)
                     @foreach(limit_foreach(get_front_news($shop_id), 3) as $news)
                         <div class="news-holder match-height wow fadeInLeft" data-wow-delay=".2s" data-wow-duration="2s">
@@ -248,7 +246,6 @@
                                         <div class="date">{{ $news->post_date }}</div>
                                     </div>
                                 </div>
->>>>>>> 5e924f193c2a414a9ea8367c3320f802be620138
                             </div>
                         </div>
                     @endforeach

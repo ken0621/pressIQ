@@ -109,7 +109,7 @@ class Tbl_payroll_leave_schedulev2 extends Model
         return $query;
 	}
 
-	public function scopegetannualleave($query, $payroll_employee_id=0, $payroll_leave_employee_id=0)
+	public function scopegetannualleave($query, $payroll_employee_id=0, $payroll_leave_employee_id=0,$month=0,$company=0)
 	{
 			  $tempmonth = date("Y-m-d");
 	          $splitdate = explode("-", $tempmonth);
@@ -120,17 +120,24 @@ class Tbl_payroll_leave_schedulev2 extends Model
              ->join("tbl_payroll_employee_basic","tbl_payroll_leave_employee_v2.payroll_employee_id","=","tbl_payroll_employee_basic.payroll_employee_id")
              ->join("tbl_payroll_leave_tempv2","tbl_payroll_leave_employee_v2.payroll_leave_temp_id","=","tbl_payroll_leave_tempv2.payroll_leave_temp_id")
              ->select(DB::raw('tbl_payroll_leave_schedulev2.payroll_leave_temp_name, tbl_payroll_employee_basic.payroll_employee_id , tbl_payroll_leave_schedulev2.payroll_leave_date_created, tbl_payroll_employee_basic.payroll_employee_display_name, tbl_payroll_leave_employee_v2.payroll_leave_employee_id, tbl_payroll_leave_employee_v2.payroll_leave_temp_hours, sum(tbl_payroll_leave_schedulev2.consume) as total_leave_consume, (tbl_payroll_leave_employee_v2.payroll_leave_temp_hours - sum(tbl_payroll_leave_schedulev2.consume)) as remaining_leave'))
-             ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
-             ->groupBy(DB::raw("month(tbl_payroll_leave_schedulev2.payroll_schedule_leave)"))
+             ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_temp_id') //remove if total 
 			 ->where('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id)
-			 ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id', $payroll_leave_employee_id)
+			 ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id', $payroll_leave_employee_id) //remove if total 
+			 ->whereMonth('tbl_payroll_leave_schedulev2.payroll_schedule_leave',$month)
 			 ->where('tbl_payroll_leave_schedulev2.payroll_leave_schedule_archived',0)
              ->whereYear('tbl_payroll_leave_schedulev2.payroll_schedule_leave', $lastyear);
+
+              if ($company !=0) 
+	          {
+	          	   	$query->where('tbl_payroll_employee_basic.payroll_employee_company_id',$company);
+	          }
 
 
             return $query;                                                     
     
 	}
+
+
 
 	public function scopegetviewleavedata($query, $payroll_employee_id=0, $payroll_leave_employee_id=0,$date = array(),$company = 0, $shop_id = 0)
 	{

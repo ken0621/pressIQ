@@ -6,13 +6,13 @@
 		<button type="button" class="close" data-dismiss="modal">×</button>
 		<h4 class="modal-title">Annual Leave Report</h4>
 	</div>
-        <input type="hidden" id="category" value="monthly_leave">
+        <input type="hidden" id="category" value="annual_leave">
     <div class="panel panel-default panel-block panel-title-block">
         <div class="panel-body form-horizontal">
                 <div class="form-group">
              
 
-{{-- 
+
             <div class="col-md-2">
                 <small>Company</small>
                 <select class="select-company-name form-control" style="width: 300px">    
@@ -24,7 +24,7 @@
                         @endforeach
                       @endforeach
                 </select>
-            </div> --}}
+            </div>
 
             </div>
         </div>
@@ -40,43 +40,50 @@
                             <tr>
                                 <th class="text-center">Employee Number</th>
                                 <th class="text-center">Employee Name</th>
-                                <th class="text-center">Jan 2017</th>
-                                <th class="text-center">Feb 2017</th>
-                                <th class="text-center">Mar 2017</th>
-                                <th class="text-center">Apr 2017</th>
-                                <th class="text-center">May 2017</th>
-                                <th class="text-center">Jun 2017</th>
-                                <th class="text-center">July 2017</th>
-                                <th class="text-center">Aug 2017</th>
-                                <th class="text-center">Sep 2017</th>
-                                <th class="text-center">Oct 2017</th>
-                                <th class="text-center">Nov 2017</th>
-                                <th class="text-center">Dec 2017</th>
+                                <th class="text-center">Leave Name</th>
+                                <th class="text-center">Jan {{$lastyear}}</th>
+                                <th class="text-center">Feb {{$lastyear}}</th>
+                                <th class="text-center">Mar {{$lastyear}}</th>
+                                <th class="text-center">Apr {{$lastyear}}</th>
+                                <th class="text-center">May {{$lastyear}}</th>
+                                <th class="text-center">Jun {{$lastyear}}</th>
+                                <th class="text-center">July {{$lastyear}}</th>
+                                <th class="text-center">Aug {{$lastyear}}</th>
+                                <th class="text-center">Sep {{$lastyear}}</th>
+                                <th class="text-center">Oct {{$lastyear}}</th>
+                                <th class="text-center">Nov {{$lastyear}}</th>
+                                <th class="text-center">Dec {{$lastyear}}</th>
                             </tr>
                         </thead>
                         <tbody>
-                         {{--    @if(isset($leave_report))
-                 			@foreach($leave_report as $leave_data)
-                                @foreach($leave_data as $leave)
-    
+                            @if(isset($leave_report))
+                 			@foreach($leave_report as $annual)
                         	<tr>
-                                <td class="text-center">{{ $leave->payroll_leave_temp_name }}</td>
-                        		<td class="text-center">{{ $leave->payroll_employee_id }}</td>
-                        		<td class="text-center">{{ $leave->payroll_employee_display_name }}</td>
-                        		<td class="text-center">{{ $leave->payroll_schedule_leave }}</td>
-                        		<td class="text-center">{{ $leave->payroll_leave_temp_hours }}</td>
-                        		<td class="text-center">{{ $leave->total_leave_consume }}</td>
+                                <td class="text-center">{{ $annual->payroll_employee_number }}</td>
+                        		<td class="text-center">{{ $annual->payroll_employee_display_name }}</td>
+                        		<td class="text-center">{{ $annual->payroll_leave_name }}</td>
+                        		<td class="text-center">@if(isset($annual->January)){{ $annual->January }}@else 0 @endif</td>
+                        		<td class="text-center">@if(isset($annual->February)){{ $annual->February }}@else 0 @endif</td>
+                        		<td class="text-center">@if(isset($annual->March)){{ $annual->March }}@else 0 @endif</td>
+                                <td class="text-center">@if(isset($annual->April)){{ $annual->April }}@else 0 @endif</td>
+                                <td class="text-center">@if(isset($annual->May)){{ $annual->May }}@else 0 @endif</td>
+                                <td class="text-center">@if(isset($annual->June)){{ $annual->June }}@else 0 @endif</td>
+                                <td class="text-center">@if(isset($annual->July)){{ $annual->July }}@else 0 @endif</td>
+                                <td class="text-center">@if(isset($annual->August)){{ $annual->August }}@else 0 @endif</td>
+                                <td class="text-center">@if(isset($annual->September)){{ $annual->September }}@else 0 @endif</td>
+                                <td class="text-center">@if(isset($annual->October)){{ $annual->October }}@else 0 @endif</td>
+                                <td class="text-center">@if(isset($annual->November)){{ $annual->November }}@else 0 @endif</td>
+                                <td class="text-center">@if(isset($annual->December)){{ $annual->December }}@else 0 @endif</td>
                         	</tr>
-                                 @endforeach
                         	@endforeach
-                            @endif --}}
+                            @endif
                         </tbody>
                     </table>
                 </div>
 	</div>
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-      {{--   &nbsp;<a href="/member/payroll/leave/v2/monthly_leave_report_excel/{{date("Y-m-d")}}/{{date("Y-m-d")}}/0"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a> --}}
+        &nbsp;<a href="/member/payroll/leave/v2/leave_annual_export/0"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
     </div>
     </div>
 </form>

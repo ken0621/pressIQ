@@ -64,7 +64,7 @@
 											</div>
 										</a> --}}
 
-										<div class="col-md-2">
+										<div class="col-md-3">
 											<div class="product-holder">
 												<a class="item-hover" href="/product/view2/{{ $product['eprod_id'] }}" style="text-decoration: none;">
 													<div class="product-image">
@@ -97,15 +97,17 @@
 										</div>
 										@endforeach
 									@else
-										<div class="col-md-2">
+										<div class="col-md-3">
 											<div class="product-holder">
-												<div class="product-image">
-													<img src="/themes/{{ $shop_theme }}/img/product-1.jpg">
-												</div>
-												<div class="details-container">
-													<div class="product-name  match-height">Elite Contact Lens Spartax Gray</div>
-													<div class="product-price">P 360.00</div>
-												</div>
+												<a href="javascript:">
+													<div class="product-image">
+														<img src="/themes/{{ $shop_theme }}/img/product-1.jpg">
+													</div>
+													<div class="details-container">
+														<div class="product-name  match-height">Elite Contact Lens Spartax Gray</div>
+														<div class="product-price">P 360.00</div>
+													</div>
+												</a>
 												<div class="bottom-container">
 													<div class="row-no-padding clearfix">
 														<div class="col-md-6">
@@ -126,15 +128,17 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-3">
 											<div class="product-holder">
-												<div class="product-image">
-													<img src="/themes/{{ $shop_theme }}/img/product-2.jpg">
-												</div>
-												<div class="details-container">
-													<div class="product-name  match-height">Elite Contact Lens Mangge kyo Sharinggan</div>
-													<div class="product-price">P 360.00</div>
-												</div>
+												<a href="javascript:">
+													<div class="product-image">
+														<img src="/themes/{{ $shop_theme }}/img/product-2.jpg">
+													</div>
+													<div class="details-container">
+														<div class="product-name  match-height">Elite Contact Lens Mangge kyo Sharinggan</div>
+														<div class="product-price">P 360.00</div>
+													</div>
+												</a>
 												<div class="bottom-container">
 													<div class="row-no-padding clearfix">
 														<div class="col-md-6">
@@ -155,15 +159,17 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-3">
 											<div class="product-holder">
-												<div class="product-image">
-													<img src="/themes/{{ $shop_theme }}/img/product-3.jpg">
-												</div>
-												<div class="details-container">
-													<div class="product-name  match-height">Elite Contact Lens Hydrocor Gray</div>
-													<div class="product-price">P 240.00</div>
-												</div>
+												<a href="javascript:">
+													<div class="product-image">
+														<img src="/themes/{{ $shop_theme }}/img/product-3.jpg">
+													</div>
+													<div class="details-container">
+														<div class="product-name  match-height">Elite Contact Lens Hydrocor Gray</div>
+														<div class="product-price">P 240.00</div>
+													</div>
+												</a>
 												<div class="bottom-container">
 													<div class="row-no-padding clearfix">
 														<div class="col-md-6">
@@ -184,73 +190,17 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-3">
 											<div class="product-holder">
-												<div class="product-image">
-													<img src="/themes/{{ $shop_theme }}/img/product-4.jpg">
-												</div>
-												<div class="details-container">
-													<div class="product-name  match-height">Verdon Ne Silky Keratin Hair Spa</div>
-													<div class="product-price">P 120.00</div>
-												</div>
-												<div class="bottom-container">
-													<div class="row-no-padding clearfix">
-														<div class="col-md-6">
-															<a href="#">
-																<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
-																	<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
-																</div>
-															</a>
-														</div>
-														<div class="col-md-6">
-															<a href="#">
-																<div class="image-holder">
-																	<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
-																</div>
-															</a>
-														</div>
+												<a href="javascript:">
+													<div class="product-image">
+														<img src="/themes/{{ $shop_theme }}/img/product-4.jpg">
 													</div>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-2">
-											<div class="product-holder">
-												<div class="product-image">
-													<img src="/themes/{{ $shop_theme }}/img/product-1.jpg">
-												</div>
-												<div class="details-container">
-													<div class="product-name  match-height">Elite Contact Lens Spartax Gray</div>
-													<div class="product-price">P 360.00</div>
-												</div>
-												<div class="bottom-container">
-													<div class="row-no-padding clearfix">
-														<div class="col-md-6">
-															<a href="#">
-																<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
-																	<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
-																</div>
-															</a>
-														</div>
-														<div class="col-md-6">
-															<a href="#">
-																<div class="image-holder">
-																	<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
-																</div>
-															</a>
-														</div>
+													<div class="details-container">
+														<div class="product-name  match-height">Verdon Ne Silky Keratin Hair Spa</div>
+														<div class="product-price">P 120.00</div>
 													</div>
-												</div>
-											</div>
-										</div>
-										<div class="col-md-2">
-											<div class="product-holder">
-												<div class="product-image">
-													<img src="/themes/{{ $shop_theme }}/img/product-1.jpg">
-												</div>
-												<div class="details-container">
-													<div class="product-name  match-height">Elite Contact Lens Spartax Gray</div>
-													<div class="product-price">P 360.00</div>
-												</div>
+												</a>
 												<div class="bottom-container">
 													<div class="row-no-padding clearfix">
 														<div class="col-md-6">

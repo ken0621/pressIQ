@@ -9,6 +9,7 @@ use App\Globals\Cart2;
 use App\Globals\WarehouseTransfer;
 use App\Globals\Warehouse2;
 use App\Globals\Item;
+use App\Globals\AccountingTransaction;
 use App\Globals\Transaction;
 use App\Models\Tbl_warehouse_issuance_report;
 
@@ -20,7 +21,7 @@ class WarehouseIssuanceSlipController extends Member
 {
     public function getIndex(Request $request)
     {
-    	$data['page'] = 'WIS';
+    	$data['page'] = 'Warehouse Transfer';
         $data['status'] = isset($request->status) ? $request->status : 'pending';
         $current_warehouse = Warehouse2::get_current_warehouse($this->user_info->shop_id);
         $data['_wis'] = WarehouseTransfer::get_all_wis($this->user_info->shop_id, $data['status'], $current_warehouse);
@@ -38,26 +39,26 @@ class WarehouseIssuanceSlipController extends Member
     public function getCreate()
     {
     	$data['page'] = 'WIS';
-        $data['_item']  = Item::get_all_category_item([1,5]);
+        $data['_item']  = Item::get_all_category_item([1,4,5]);
         $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
 
         
-        $ref_key = 'warehouse_issuance_slip';
+        // $ref_key = 'warehouse_issuance_slip';
         
-        $ref_number = Transaction::get_transaction_reference_number($this->user_info->shop_id,$ref_key)->get();
+        // $ref_number = Transaction::get_transaction_reference_number($this->user_info->shop_id,$ref_key)->get();
         
-        foreach ($ref_number as $key => $value) 
-        {
-            $ref_number[$key]->prefix = $value->prefix;
-            $ref_number[$key]->separator = $value->separator;
-        }
+        // foreach ($ref_number as $key => $value) 
+        // {
+        //     $ref_number[$key]->prefix = $value->prefix;
+        //     $ref_number[$key]->separator = $value->separator;
+        // }
 
-        $prefix = $value->prefix;
-        $separator = $value->separator;
-        $other = date('Y-m-d');
-        $ref_other = str_replace('-','',$other);
+        // $prefix = $value->prefix;
+        // $separator = $value->separator;
+        // $other = date('Y-m-d');
+        // $ref_other = str_replace('-','',$other);
         
-        $data['transaction_ref_number'] = $prefix.$ref_other.$separator;
+        $data['transaction_ref_number'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'warehouse_transfer');
        
     	return view('member.warehousev2.wis.wis_create',$data);
     }

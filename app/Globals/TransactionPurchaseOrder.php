@@ -1,12 +1,14 @@
 <?php
 namespace App\Globals;
 
-
+use App\Models\Tbl_receive_inventory_line;
+use App\Models\Tbl_receive_inventory;
 use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_requisition_slip;
 use App\Models\Tbl_shop;
+use App\Models\Tbl_bill_po;
 use Carbon\Carbon;
 use DB;
 
@@ -83,12 +85,65 @@ class TransactionPurchaseOrder
 
     public static function getOpenPO($shop_id, $vendor_id)
     {
-        return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed', 0)->get();
-    }
+        $data = Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed', 0)->get();
 
+        foreach ($data as $key => $value)
+        {
+            $data[$key]->po_balance = Self::getPOBalance($shop_id, $vendor_id, $value->po_id);
+        }
+        return $data;
+    }
+    public static function getPOBalance($shop_id, $vendor_id, $po_id)
+    {        
+        $data = Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed', 0)->where('po_id', $po_id)->first();
+        $po_line = Tbl_purchase_order_line::where('poline_po_id', $data->po_id)->get();
+        
+        $poline_amount = null;
+        foreach ($po_line as $key => $value)
+        {
+            $balance = $value->poline_qty * $value->poline_rate;
+            $poline_amount += $balance;
+        }
+
+        return $poline_amount;
+    }
+    public static function checkPoQty($ri_id = null, $po_data = array())
+    {
+        if($ri_id != null)
+        {
+            foreach ($po_data as $key => $value)
+            { 
+                Self::checkPolineQty($key, $ri_id);
+            }   
+        }
+    }
+    public static function checkPolineQty($po_id, $ri_id)
+    {
+        $poline = Tbl_purchase_order_line::where('poline_po_id', $po_id)->get();
+
+        $ctr = 0;
+        foreach ($poline as $key => $value)
+        {
+            $receivedline = Tbl_receive_inventory_line::where('riline_ri_id', $ri_id)->where('riline_ref_name', 'purchase_order')->where('riline_item_id', $value->poline_item_id)->where('riline_ref_id',$po_id)->first();
+            
+            $update['poline_qty'] = $value->poline_qty - $receivedline->riline_qty;
+            
+            Tbl_purchase_order_line::where('poline_id', $value->poline_id)->update($update);    
+
+            if($update['poline_qty'] <= 0)
+            {
+                $ctr++;
+            }
+        }
+        if($ctr >= count($poline))
+        {
+            $updates["po_is_billed"] = $ri_id;
+            Tbl_purchase_order::where("po_id",$po_id)->update($updates);
+        }
+    }
     public static function postInsert($shop_id, $insert, $insert_item)
 	{
-        $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        $val = AccountingTransaction::vendorValidation($insert, $insert_item, 'purchase_order');
         if(!$val)
         {
             $ins['po_shop_id']         = $shop_id;
@@ -108,7 +163,6 @@ class TransactionPurchaseOrder
             $ins['taxable']            = $insert['vendor_tax'];
             $ins['date_created']       = Carbon::now();
             
-            //die(var_dump($insert['vendor_ewt']));
              /* SUBTOTAL */
             $subtotal_price = collect($insert_item)->sum('item_amount'); 
 
@@ -172,6 +226,7 @@ class TransactionPurchaseOrder
             $itemline[$key]['poline_description']    = $value['item_description'];
             $itemline[$key]['poline_um']             = $value['item_um'];
             $itemline[$key]['poline_orig_qty']       = $value['item_qty'];
+            $itemline[$key]['poline_qty']            = $value['item_qty'];
             $itemline[$key]['poline_rate']           = $value['item_rate'];
             $itemline[$key]['poline_discount']       = $discount;
             $itemline[$key]['poline_discounttype']   = $discount_type;
@@ -182,7 +237,6 @@ class TransactionPurchaseOrder
             
         }
 
-        //die(var_dump($itemline[$key]['poline_service_date']));
         if(count($itemline) > 0)
         {
             /*INSERTING ITEMS TO DATABASE*/
@@ -254,5 +308,7 @@ class TransactionPurchaseOrder
 
         return $return;
     }
+
+    
 
 }

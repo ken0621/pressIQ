@@ -131,7 +131,6 @@ class Tbl_item extends Model
                      })
                      ->groupBy("item_id");
     }
-
     public function scopeInventorylog($query)
     {
         return $query->leftjoin('tbl_warehouse_inventory_record_log','record_item_id','=','item_id');

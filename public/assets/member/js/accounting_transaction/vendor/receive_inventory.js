@@ -104,7 +104,6 @@ function receive_inventory()
 
         }).globalDropList('disabled');
 	}
-
 	function event_button_action_click()
 	{
 		$(document).on("click","button[type='submit']", function()
@@ -118,7 +117,6 @@ function receive_inventory()
 		$(".purchase-order-container").load("/member/vendor/load_purchase_order/"+vendor_id , function()
 			{
 				$(".purchase-order").removeClass("hidden");
-				// $(".drawer").drawer({openClass: "drawer-open"});
 				$(".drawer-toggle").trigger("click");
 			});
 	}
@@ -430,18 +428,8 @@ function receive_inventory()
 		//cycy
 		$(document).on("click", ".remove-tr", function(e){
 			if($(".tbody-item .remove-tr").length > 1){
-				if($(this).attr("tr_id") != null)
-				{
-					$(".tr-"+$(this).attr("tr_id")).remove();
-			        $(".po-"+$(this).attr("tr_id")).removeClass("hidden");
-			        $(".div_po_id"+$(this).attr("tr_id")).remove();
-					$(".drawer-toggle").trigger("click");
-				}
-				else
-				{
-					$(this).parent().remove();
-				}
 
+				$(this).parent().remove();
 				action_reassign_number();
 				action_compute();
 			}			
@@ -473,17 +461,41 @@ function receive_inventory()
 			    	value = parseFloat(value);
 			    	ret = action_add_comma(value).toLocaleString();
 			    }
-			   	
 			    if(ret == 0){
 			    	ret = '';
 			    }
-
 				return ret;
 			  });
 		});
 	}
+	function load_applied_po_transaction()
+	{
+		$('.applied-po-transaction-list').load('/member/transaction/receive_inventory/load-applied-po-transaction', function()
+		{
+			console.log("success");
+			/*action_compute();
+			event_remove_tr();
+			event_click_last_row_op();*/
 
+			action_reassign_number();
+			action_load_initialize_select();
+			action_date_picker();
+    		action_compute();
 
+			$('.remarks-ri').html($('.po-remarks').val());
+		});
+	}
+/*	this.action_load_received_po = function()
+	{
+		action_compute();
+		event_remove_tr();
+		event_click_last_row_op();
+	}*/
+	this.load_applied_po_transaction = function()
+	{
+		load_applied_po_transaction();
+
+	}
 }
 
 /*AFTER ADDING VENDOR*/
@@ -518,65 +530,12 @@ function success_receive_inventory(data)
 		location.href = data.status_redirect;
 	}
 }
-function add_po_to_bill(po_id)
+
+function success_apply_transaction(data)
 {
-	$(".po-tbl").load('/member/transaction/receive_inventory/add-item/'+po_id, function()
-	{
-		console.log("success");
-		bill.action_compute();
-		bill.iniatilize_select();
-		$(".tbody-item .select-um").globalDropList("enabled");
-
-		$(".po-"+po_id).addClass("hidden");
-	});
-}
-function add_po_to_receive_inventory(po_id)
-{
-	$(".modal-loader").removeClass("hidden");
-	$.ajax({
-		url : "/member/vendor/load_po_item",
-		data : {po_id: po_id},
-		dataType : "json",
-		type : "get",
-		success : function(data)
-		{
-             $(data).each(function (a, b)
-             {				
-	             $("tbody.draggable").prepend(global_tr_html);
-	             receive_inventory.action_trigger_select_plugin_not_last();
-	             var $container = $("tbody.draggable .tr-draggable:first");
-	             // $this.closest(".tr-draggable");
-
-	            $container.addClass("tr-"+b.poline_po_id);
-	            $container.find(".select-item").val(b.poline_item_id).change();
-	            $container.find(".txt-desc").val(b.poline_description);
-	            $container.find(".select-um").load('/member/item/load_one_um/'+b.multi_um_id, function()
-             	{
-             		$container.find(".select-um").globalDropList("reload");
-             		$container.find(".select-um").val(b.poline_um).change();
-             	});
-				$container.find(".poline_id").val(b.poline_id);
-				$container.find(".itemline_po_id").val(po_id);
-	            $container.find(".txt-qty").val(b.poline_qty);
-	            $container.find(".txt-rate").val(b.poline_rate);
-	            $container.find(".txt-amount").val(b.poline_amount);
-	            $container.find(".remove-tr").addClass("remove-tr"+b.poline_po_id);
-	            $container.find(".remove-tr").attr("tr_id", b.poline_po_id);
-             });
-
-	         $(".po-listing").prepend(po_id_list);
-	         var $po_id = $(".po-listing .po_id:first");
-	         $(".po-listing .po_id:first").addClass("div_po_id"+po_id);
-	         $po_id.find(".po-id-input").val(po_id).change();
-
-	        $(".po-"+po_id).addClass("hidden");
-			$(".modal-loader").addClass("hidden");
-
-             receive_inventory.action_reassign_number();
-		},
-		error : function()
-		{
-			alert("Something wen't wrong.");
-		}
-	});
-}
+    if(data.status == "success")
+    {
+    	data.element.modal("toggle");
+		receive_inventory.load_applied_po_transaction();
+    }
+} 

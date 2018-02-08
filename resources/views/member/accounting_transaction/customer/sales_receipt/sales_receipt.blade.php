@@ -95,7 +95,7 @@
                                                 <th width="10"></th>
                                             </tr>
                                         </thead>
-                                        <tbody class="draggable tbody-item applied-transaction-list">
+                                        <tbody class="applied-transaction-list">
                                         </tbody>
                                         <tbody class="draggable tbody-item estimate-tbl">
                                             @if(isset($sales_receipt))

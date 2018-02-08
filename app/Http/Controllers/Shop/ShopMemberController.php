@@ -2964,7 +2964,7 @@ class ShopMemberController extends Shop
         //patrick
         $codes = Tbl_transaction_list::CodeVaultTransaction()
                             ->selectRaw('tbl_warehouse_inventory_record_log.mlm_pin,tbl_warehouse_inventory_record_log.mlm_activation,membership_id,tbl_warehouse_inventory_record_log.record_log_id')
-                            ->where('tbl_transaction.transaction_id',$request->codevault)
+                            ->where('record_log_id',$request->codevault)
                             ->first();
         $response = 'error';
         // $shop_id, $customer_id, $membership_id, $sponsor, $slot_no = null, $slot_type = "PS"

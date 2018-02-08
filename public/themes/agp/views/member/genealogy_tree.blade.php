@@ -44,7 +44,7 @@
                         <label>Membership</label>
                         <select style="width: 100%;" name="codevault" class="code-vault">
                             @foreach($_codes as $code)
-                            <option value="{{$code->transaction_id}}">{{$code->mlm_activation.'('.$code->item_name.')'}}</option>
+                            <option value="{{$code->record_log_id}}">{{$code->mlm_activation.'('.$code->item_name.')'}}</option>
                             @endforeach
                         </select>
                         <input type="hidden" name="no_of_codes" class="no_of_codes" value="{{count($_codes)}}">

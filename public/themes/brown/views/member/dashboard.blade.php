@@ -177,11 +177,11 @@
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Builder Reward</span><span class="value">{{ $wallet->display_complan_builder }}</span></div>
+							<div class="name"><span>Builder Reward</span><span class="value">PHP {{ number_format($wallet->complan_builder + $wallet->complan_builder_distribute_points,2) }}</span></div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>Leader Reward</span><span class="value">{{ $wallet->display_complan_leader }}</span></div>
+							<div class="name"><span>Leader Reward</span><span class="value">PHP {{ number_format($wallet->complan_leader + $wallet->complan_leader_distribute_points,2) }}</span></div>
 						</div>
 					</div>	
 				</div>

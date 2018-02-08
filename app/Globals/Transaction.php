@@ -634,6 +634,7 @@ class Transaction
             $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
             $data->leftJoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_customer.customer_id');
             $data->leftJoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
+            session()->forget('get_transaction_customer_details_v2');
         }
 
         if($search_keyword)
@@ -653,10 +654,7 @@ class Transaction
             $data->leftJoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_customer.customer_id');
             $data->groupBy("tbl_customer.customer_id");
         }
-        else
-        {
-            $data->leftJoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_transaction.transaction_reference_id');
-        }
+        
         if($paginate)
         {
             $data = $data->paginate($paginate);

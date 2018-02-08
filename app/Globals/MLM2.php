@@ -436,6 +436,26 @@ class MLM2
 					
 					$return["_wallet"]->total_points -= $slot_points->points_log_points;
 				}
+				
+				if($wallet_plan == "brown_builder_points")
+				{
+					if($slot_points->points_log_converted == 1)
+					{
+						$return["_points"]->$wallet_plan -= $slot_points->points_log_points;
+					}
+					
+					$return["_wallet"]->total_points -= $slot_points->points_log_points;
+				}
+				
+				if($wallet_plan == "brown_leader_points")
+				{
+					if($slot_points->points_log_converted == 1)
+					{
+						$return["_points"]->$wallet_plan -= $slot_points->points_log_points;
+					}
+					
+					$return["_wallet"]->total_points -= $slot_points->points_log_points;
+				}
 			}
 		}
 

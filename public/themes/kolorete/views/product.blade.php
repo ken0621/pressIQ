@@ -18,31 +18,31 @@
 										<div class="cat-list {{ $category['type_id'] == Request::input('type') ? 'active' : '' }}" onClick="location.href='/product?type={{ $category['type_id'] }}'">{{ $category['type_name'] }}</div>
 									@endforeach
 								@else
-									<div class="cat-list">Beauty Skin Care</div>
-									<div class="cat-list">Food Supplement</div>
-									<div class="cat-list">Healthy Drinks</div>
-									<div class="cat-list">Business Packages</div>
-									<div class="cat-list">Retail Packages</div>
+									<div class="cat-list">Men's Apparel</div>
+									<div class="cat-list">Mobile and Gadget</div>
+									<div class="cat-list">Consumer Electronic</div>
+									<div class="cat-list">Home and Living</div>
+									<div class="cat-list">Men's Accessories</div>
+									<div class="cat-list">Men's Shoes</div>
+									<div class="cat-list">Foods</div>
+									<div class="cat-list">Hobbies and Stationery</div>
+									<div class="cat-list">Women's Apparel</div>
+									<div class="cat-list">Healthy and Beauty</div>
+									<div class="cat-list">Toys, Babies and Kids</div>
+									<div class="cat-list">Bags</div>
 								@endif
 							</div>
 						</div>
-						<!-- PROMO CONTAINER -->
-						{{-- <div class="promo-container">
-							<div class="title-container">Promo</div>
-							<div class="promo-content">
-								<img src="/themes/{{ $shop_theme }}/img/promo-img.png">
-								<div class="learn-more-button">LEARN MORE</div>
-							</div>
-						</div> --}}
 					</div>
 					<div class="product-list-holder col-md-9 col-sm-12 col-xs-12">
 						<div class="prod-list-container">
-							<div class="title-container">{{ $category_name }}<div class="line-bot"></div></div>
+							<div class="title-container">All<div class="line-bot"></div></div>
 							<div class="prod-list row clearfix">
 								<!-- PER ITEM -->
 								@if(count($_product) > 0)
 									@foreach($_product as $product)
-									<a href="/product/view2/{{ $product['eprod_id'] }}">
+
+									{{-- <a href="/product/view2/{{ $product['eprod_id'] }}">
 										<div class="col-md-4 col-sm-4 col-xs-6">
 											<div class="per-item">
 												<div class="image-container">
@@ -57,105 +57,219 @@
 												</div>
 											</div>
 										</div>
-									</a>
+									</a> --}}
+
+									<div class="col-md-2">
+										<div class="product-holder">
+											<a class="item-hover" href="/product/view2/{{ $product['eprod_id'] }}" style="text-decoration: none;">
+												<div class="product-image">
+													<img src="{{ get_product_first_image($product) }}">
+												</div>
+												<div class="details-container">
+													<div class="product-name  match-height">{{ get_product_first_name($product) }}</div>
+													<div class="product-price">{{ get_product_first_price($product) }}</div>
+												</div>
+											</a>
+											<div class="bottom-container">
+												<div class="row-no-padding clearfix">
+													<div class="col-md-6">
+														<a href="/product/view2/{{ $product['eprod_id'] }}">
+															<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+																<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+															</div>
+														</a>
+													</div>
+													<div class="col-md-6">
+														<a href="javascript:" class="product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}>
+															<div class="image-holder">
+																<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+															</div>
+														</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 									@endforeach
 								@else
-									<a href="/product/view/test">
-										<div class="col-md-4 col-sm-4 col-xs-6">
-											<div class="per-item">
-												<div class="image-container">
-													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-												</div>
-												<div class="detail-container">
-													<div class="item-name">
-														3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
+									<div class="product-container">
+										<div class="row clearfix">
+											<div class="col-md-2">
+												<div class="product-holder">
+													<div class="product-image">
+														<img src="/themes/{{ $shop_theme }}/img/product-1.jpg">
 													</div>
-													<div class="price-container">PHP 250.00</div>
-													<div class="button-container">SHOP NOW</div>
+													<div class="details-container">
+														<div class="product-name  match-height">Elite Contact Lens Spartax Gray</div>
+														<div class="product-price">P 360.00</div>
+													</div>
+													<div class="bottom-container">
+														<div class="row-no-padding clearfix">
+															<div class="col-md-6">
+																<a href="#">
+																	<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+																		<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+																	</div>
+																</a>
+															</div>
+															<div class="col-md-6">
+																<a href="#">
+																	<div class="image-holder">
+																		<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+																	</div>
+																</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-2">
+												<div class="product-holder">
+													<div class="product-image">
+														<img src="/themes/{{ $shop_theme }}/img/product-2.jpg">
+													</div>
+													<div class="details-container">
+														<div class="product-name  match-height">Elite Contact Lens Mangge kyo Sharinggan</div>
+														<div class="product-price">P 360.00</div>
+													</div>
+													<div class="bottom-container">
+														<div class="row-no-padding clearfix">
+															<div class="col-md-6">
+																<a href="#">
+																	<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+																		<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+																	</div>
+																</a>
+															</div>
+															<div class="col-md-6">
+																<a href="#">
+																	<div class="image-holder">
+																		<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+																	</div>
+																</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-2">
+												<div class="product-holder">
+													<div class="product-image">
+														<img src="/themes/{{ $shop_theme }}/img/product-3.jpg">
+													</div>
+													<div class="details-container">
+														<div class="product-name  match-height">Elite Contact Lens Hydrocor Gray</div>
+														<div class="product-price">P 240.00</div>
+													</div>
+													<div class="bottom-container">
+														<div class="row-no-padding clearfix">
+															<div class="col-md-6">
+																<a href="#">
+																	<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+																		<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+																	</div>
+																</a>
+															</div>
+															<div class="col-md-6">
+																<a href="#">
+																	<div class="image-holder">
+																		<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+																	</div>
+																</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-2">
+												<div class="product-holder">
+													<div class="product-image">
+														<img src="/themes/{{ $shop_theme }}/img/product-4.jpg">
+													</div>
+													<div class="details-container">
+														<div class="product-name  match-height">Verdon Ne Silky Keratin Hair Spa</div>
+														<div class="product-price">P 120.00</div>
+													</div>
+													<div class="bottom-container">
+														<div class="row-no-padding clearfix">
+															<div class="col-md-6">
+																<a href="#">
+																	<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+																		<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+																	</div>
+																</a>
+															</div>
+															<div class="col-md-6">
+																<a href="#">
+																	<div class="image-holder">
+																		<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+																	</div>
+																</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-2">
+												<div class="product-holder">
+													<div class="product-image">
+														<img src="/themes/{{ $shop_theme }}/img/product-5.jpg">
+													</div>
+													<div class="details-container">
+														<div class="product-name  match-height">Ashley Hair Serum</div>
+														<div class="product-price">P 146.00</div>
+													</div>
+													<div class="bottom-container">
+														<div class="row-no-padding clearfix">
+															<div class="col-md-6">
+																<a href="#">
+																	<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+																		<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+																	</div>
+																</a>
+															</div>
+															<div class="col-md-6">
+																<a href="#">
+																	<div class="image-holder">
+																		<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+																	</div>
+																</a>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-2">
+												<div class="product-holder">
+													<div class="product-image">
+														<img src="/themes/{{ $shop_theme }}/img/product-6.jpg">
+													</div>
+													<div class="details-container">
+														<div class="product-name  match-height">EpSA Organic Shampoo</div>
+														<div class="product-price">P 128.00</div>
+													</div>
+													<div class="bottom-container">
+														<div class="row-no-padding clearfix">
+															<div class="col-md-6">
+																<a href="#">
+																	<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+																		<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+																	</div>
+																</a>
+															</div>
+															<div class="col-md-6">
+																<a href="#">
+																	<div class="image-holder">
+																		<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+																	</div>
+																</a>
+															</div>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
-									</a>
-									<a href="/product/view/test">
-										<div class="col-md-4 col-sm-4 col-xs-6>
-											<div class="per-item">
-												<div class="image-container">
-													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-												</div>
-												<div class="detail-container">
-													<div class="item-name">
-														3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-													</div>
-													<div class="price-container">PHP 250.00</div>
-													<div class="button-container">SHOP NOW</div>
-												</div>
-											</div>
-										</div>
-									</a>
-									<a href="/product/view/test">
-										<div class="col-md-4 col-sm-4 col-xs-6">
-											<div class="per-item">
-												<div class="image-container">
-													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-												</div>
-												<div class="detail-container">
-													<div class="item-name">
-														3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-													</div>
-													<div class="price-container">PHP 250.00</div>
-													<div class="button-container">SHOP NOW</div>
-												</div>
-											</div>
-										</div>
-									</a>
-									<a href="/product/view/test">
-										<div class="col-md-4 col-sm-4 col-xs-6">
-											<div class="per-item">
-												<div class="image-container">
-													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-												</div>
-												<div class="detail-container">
-													<div class="item-name">
-														3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-													</div>
-													<div class="price-container">PHP 250.00</div>
-													<div class="button-container">SHOP NOW</div>
-												</div>
-											</div>
-										</div>
-									</a>
-									<a href="/product/view/test">
-										<div class="col-md-4 col-sm-4 col-xs-6">
-											<div class="per-item">
-												<div class="image-container">
-													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-												</div>
-												<div class="detail-container">
-													<div class="item-name">
-														3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-													</div>
-													<div class="price-container">PHP 250.00</div>
-													<div class="button-container">SHOP NOW</div>
-												</div>
-											</div>
-										</div>
-									</a>
-									<a href="/product/view/test">
-										<div class="col-md-4 col-sm-4 col-xs-6">
-											<div class="per-item">
-												<div class="image-container">
-													<img src="/themes/{{ $shop_theme }}/img/item-sample.png">
-												</div>
-												<div class="detail-container">
-													<div class="item-name">
-														3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
-													</div>
-													<div class="price-container">PHP 250.00</div>
-													<div class="button-container">SHOP NOW</div>
-												</div>
-											</div>
-										</div>
-									</a>
+									</div>
 								@endif
 							</div>
 						</div>
@@ -173,25 +287,11 @@
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/product.css">
 @endsection
 
-@section("js")
+@section("script")
 <script type="text/javascript">
-$(document).ready(function()
-{
-	/*scroll up*/
-	$(window).scroll(function () {
-        if ($(this).scrollTop() > 700) {
-            $('.scroll-up').fadeIn();
-        } else {
-            $('.scroll-up').fadeOut();
-        }
-    });
 
-    $('.scroll-up').click(function () {
-        $("html, body").animate({
-            scrollTop: 0
-        }, 700);
-        return false;
-    });
-});
 </script>
 @endsection
+
+
+

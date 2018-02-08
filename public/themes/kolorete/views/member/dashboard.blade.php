@@ -46,18 +46,22 @@
 								</div>
 								<div class="holder">
 									<div class="color cs"></div>
-									<div class="name"><span>Current Slot(s)</span> <div class="name cs-text">{{ $customer_summary["display_slot_count"] }}</div></div>
+									<div class="name"><span>Current Slot(s)</span> <div class="name cs-text"><a class="hand" onclick="action_load_link_to_modal('/members/slots')">{{ $customer_summary["display_slot_count"] }}</a></div></div>
 								</div>
 								<div class="holder">
 									<div class="color tr"></div>
 									<div class="name"><span>Total Reward</span> <div class="name tr-text">{{ $wallet->display_total_earnings }}</div></div>
+								</div>
+								<div class="holder">
+									<div class="color tr"></div>
+									<div class="name"><span>Total KROPS</span> <div class="name tr-text">0.00 KROP(S)</div></div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div class="square-container">
+				{{-- <div class="square-container">
 					<div class="title">Reward Summary</div>
 					<div class="sub-container">
 						<div class="chart-legend">
@@ -77,32 +81,27 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> --}}
 				
 				<div class="square-containr">
 					<div class="title"> Reward Points</div>
 					<div class="sub-container">
 						<div class="chart-legend" style="max-height: auto;">
-							<div class="holder">
+							{{-- <div class="holder">
 								<div class="color fifth-pgc"></div>
 								<div class="name"><span>5th Pair GC</span> <div class="name fifth-pgc-text">{{ $points->display_binary }}</div></div>
+							</div> --}}
+							<div class="holder">
+								<div class="color fifth-pgc"></div>
+								<div class="name"><span>KROPS GC</span> <div class="name fifth-pgc-text">{{isset($krops_gc) ? currency('',$krops_gc)." POINT(S)" : '0.00 POINT(S)' }}</div></div>
 							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="square-container">
-					<div class="title">Enter Product Code</div>
-					<div class="sub-container">
-						<div class="chart-legend text-center">
-							<button class="btn btn-p4w-custom" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 						</div>
 					</div>
 				</div>
 			</div>
 
 
-			<div class="col-md-6">
+			{{-- <div class="col-md-6">
 
 				<div class="square-container">
 					<div class="title">Binary Points</div>
@@ -129,7 +128,78 @@
 	                    </div>
 					</div>
 				</div>
+			</div> --}}
+
+			<div class="col-md-6">
+				<div class="square-container">
+					<div class="title">Reward Summary</div>
+					<div class="sub-container">
+						<div class="chart-legend">
+							@foreach($_wallet_plan as $plan)
+								<div class="holder">
+
+									<div class="color"></div>
+
+									<div class="name"><span>{{ $plan->label." Bonus" }}</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+
+								</div>
+							@endforeach
+							@if(count($_wallet_plan)<1)
+								<div class="holder">
+
+									<div class="color"></div>
+
+									<div class="name"><span>Unilevel Bonus</span> <div class="name w2hpx">PHP 0.00</div></div>
+
+								</div>
+								<div class="holder">
+
+									<div class="color"></div>
+
+									<div class="name"><span>Direct Pass Up Bonus</span> <div class="name w2hpx">PHP 0.00</div></div>
+
+								</div>
+							@endif
+						</div>
+					</div>
+				</div>
+
+				<div class="square-container">
+					<div class="title">Enter Product Code</div>
+					<div class="sub-container">
+						<div class="chart-legend text-center">
+							<button class="btn btn-ico-custom" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+						</div>
+					</div>
+				</div>
+
 			</div>
+
+			{{-- <div class="square-container col-md-6">
+				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
+				<div class="sub-container">
+					@if(count($_point_plan) > 0)
+					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
+						@foreach($_point_plan as $plan)
+							@if($plan->label == "Repurchase Cashback")
+								<!-- <div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>VIP Cashback</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+								</div> -->
+							@else
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>{{ $plan->label }}</span> <div class="name w2hpx">{{ $points->{ "display_" . $plan->string_plan } }}</div></div>
+								</div>
+							@endif
+						@endforeach
+					</div>
+					@else
+						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
+					@endif
+				</div>
+			</div> --}}
+
 		</div>
 
 		<div class="row clearfix">
@@ -161,9 +231,9 @@
 								<div class="col-md-5">
 									<div class="action" style="text-align: center;">
 										@if($direct->distributed == 1)
-											<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-p4w-custom"><i class="fa fa-star"></i> VIEW INFO</button>
+											<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-ico-custom"><i class="fa fa-star"></i> VIEW INFO</button>
 										@else
-											<button onclick="action_load_link_to_modal('/members/enter-placement?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+											<button onclick="action_load_link_to_modal('/members/enter-placement?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-danger-custom"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 										@endif
 									</div>
 								</div>
@@ -199,7 +269,7 @@
 								</div>
 								@endforeach
 							@else
-								<div class="text-center" style="padding: 20px">You don't have any pyet.</div>
+								<div class="text-center" style="padding: 20px">You don't have any rewards yet.</div>
 							@endif
 						</div>
 					</div>
@@ -214,7 +284,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>Icoinshop</b>.</div>
+	                        <div class="text-caption">You are now officially enrolled to<br><b>Icoinsshop</b>.</div>
 	                    </div>
 	                </div>
 	            </div>
@@ -228,9 +298,9 @@
 <script type="text/javascript" src="/assets/member/js/non_member.js"></script>
 <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
 
-
 <script>
-$(window).on('hashchange', function() {
+$(window).on('hashchange', function() 
+{
     if (window.location.hash) {
         var page = window.location.hash.replace('#', '');
         if (page == Number.NaN || page <= 0) {
@@ -240,14 +310,17 @@ $(window).on('hashchange', function() {
         }
     }
 });
-$(document).ready(function() {
+$(document).ready(function() 
+{
 	getPosts(1);
-    $(document).on('click', '.pagination a', function (e) {
+    $(document).on('click', '.pagination a', function (e) 
+    {
         getPosts($(this).attr('href').split('page=')[1]);
         e.preventDefault();
     });
 });
-function getPosts(page) {
+function getPosts(page) 
+{
     $.ajax(
     {
         url : '/members/direct-referrals?page=' + page,
@@ -347,86 +420,6 @@ $(document).ready(function()
 input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 30px white inset;
 }
-/* PLACEMENT VERIFIER */
-.popup-verify-placement {
-  /*background-color: #EEEEEE;*/
-  font-family: "Arimo", sans-serif; }
-  .popup-verify-placement .modal-sm {
-    width: 100%;
-    max-width: 500px; }
-  .popup-verify-placement .modal-content {
-    /*background-color: #eee;*/ }
-    .popup-verify-placement .modal-content .modal-header {
-      background-color: #E1890B;
-      /*border-top-left-radius: 3px;
-      border-top-right-radius: 3px;*/ }
-      .popup-verify-placement .modal-content .modal-header .close {
-        color: #FFF; }
-      .popup-verify-placement .modal-content .modal-header .modal-title {
-        font-weight: 600;
-        color: #FFF;
-        font-size: 15px; }
-    .popup-verify-placement .modal-content .modal-body {
-      font-weight: 600;
-      margin: 0px 20px 0px 20px; }
-      .popup-verify-placement .modal-content .modal-body .message {
-        text-align: center;
-        margin-bottom: 10px;
-        color: red;
-        font-size: 14px;
-        text-transform: uppercase; }
-      .popup-verify-placement .modal-content .modal-body .input {
-        width: 100%;
-        font-size: 16px;
-        border: none;
-        border: 1px solid #E1890B;
-        margin: 5px 0px;
-        margin-bottom: 15px;
-        padding: 5px;
-        border-radius: 2px; }
-      .popup-verify-placement .modal-content .modal-body label {
-        font-size: 13px;
-        text-align: center !important;
-        margin: 10px 0px;
-        padding: 10px; }
-      .popup-verify-placement .modal-content .modal-body .labeld {
-        color: #E1890B;
-        text-align: center;
-        text-transform: uppercase; }
-      .popup-verify-placement .modal-content .modal-body select {
-        width: 100%;
-        font-size: 16px;
-        border: none;
-        border: 1px solid #E1890B;
-        margin: 5px 0px;
-        margin-bottom: 15px;
-        padding: 5px;
-        border-radius: 2px; }
-      .popup-verify-placement .modal-content .modal-body .btn-container {
-        text-align: center;
-        font-family: "Arimo", sans-serif;
-        font-weight: 600;
-        font-size: 14px;
-        text-transform: uppercase;
-        padding-bottom: 20px; }
-        .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement {
-          color: #fff;
-          background-color: #E1890B;
-          padding: 10px 40px;
-          border: 2px solid #E1890B;
-          border-radius: 2px;
-          opacity: 0.9;
-          -webkit-transition: all 0.2s ease-in-out;
-          -moz-transition: all 0.2s ease-in-out;
-          -o-transition: all 0.2s ease-in-out;
-          transition: all 0.2s ease-in-out;
-          width: 100%;
-          margin-top: 20px;
-          text-transform: uppercase; }
-        .popup-verify-placement .modal-content .modal-body .btn-container .btn-verify-placement:hover {
-          color: #fff;
-          background-color: #E1890B;
-          opacity: 1.0; }
 
 </style>
 @endsection

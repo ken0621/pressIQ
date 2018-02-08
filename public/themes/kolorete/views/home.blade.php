@@ -34,12 +34,226 @@
 					</div>
 					<div class="col-md-3">
 						<div class="button-container">
-							<button>VIEW ALL PRODUCTS</button>
+							<a href="/product" role="button">VIEW ALL PRODUCTS</a>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="product-container">
+				<div class="row clearfix">
+					@if(count($_product) > 0)
+						@foreach($_product as $product)
+						<div class="col-md-2">
+							<div class="product-holder">
+								<a class="item-hover" href="/product/view2/{{ $product['eprod_id'] }}" style="text-decoration: none;">
+									<div class="product-image">
+										<img src="{{ get_product_first_image($product) }}">
+									</div>
+									<div class="details-container">
+										<div class="product-name match-height">{{ get_product_first_name($product) }}</div>
+										<div class="product-price">{{ get_product_first_price($product) }}</div>
+									</div>
+								</a>
+								<div class="bottom-container">
+									<div class="row-no-padding clearfix">
+										<div class="col-md-6">
+											<a href="/product/view2/{{ $product['eprod_id'] }}">
+												<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+													<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+												</div>
+											</a>
+										</div>
+										<div class="col-md-6">
+											<a href="javascript:" class="product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}>
+												<div class="image-holder">
+													<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+												</div>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						@endforeach
+					@else
+						<div class="col-md-2">
+							<div class="product-holder">
+								<div class="product-image">
+									<img src="/themes/{{ $shop_theme }}/img/product-1.jpg">
+								</div>
+								<div class="details-container">
+									<div class="product-name  match-height">Elite Contact Lens Spartax Gray</div>
+									<div class="product-price">P 360.00</div>
+								</div>
+								<div class="bottom-container">
+									<div class="row-no-padding clearfix">
+										<div class="col-md-6">
+											<a href="#">
+												<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+													<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+												</div>
+											</a>
+										</div>
+										<div class="col-md-6">
+											<a href="#">
+												<div class="image-holder">
+													<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+												</div>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="product-holder">
+								<div class="product-image">
+									<img src="/themes/{{ $shop_theme }}/img/product-2.jpg">
+								</div>
+								<div class="details-container">
+									<div class="product-name  match-height">Elite Contact Lens Mangge kyo Sharinggan</div>
+									<div class="product-price">P 360.00</div>
+								</div>
+								<div class="bottom-container">
+									<div class="row-no-padding clearfix">
+										<div class="col-md-6">
+											<a href="#">
+												<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+													<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+												</div>
+											</a>
+										</div>
+										<div class="col-md-6">
+											<a href="#">
+												<div class="image-holder">
+													<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+												</div>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="product-holder">
+								<div class="product-image">
+									<img src="/themes/{{ $shop_theme }}/img/product-3.jpg">
+								</div>
+								<div class="details-container">
+									<div class="product-name  match-height">Elite Contact Lens Hydrocor Gray</div>
+									<div class="product-price">P 240.00</div>
+								</div>
+								<div class="bottom-container">
+									<div class="row-no-padding clearfix">
+										<div class="col-md-6">
+											<a href="#">
+												<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+													<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+												</div>
+											</a>
+										</div>
+										<div class="col-md-6">
+											<a href="#">
+												<div class="image-holder">
+													<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+												</div>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="product-holder">
+								<div class="product-image">
+									<img src="/themes/{{ $shop_theme }}/img/product-4.jpg">
+								</div>
+								<div class="details-container">
+									<div class="product-name  match-height">Verdon Ne Silky Keratin Hair Spa</div>
+									<div class="product-price">P 120.00</div>
+								</div>
+								<div class="bottom-container">
+									<div class="row-no-padding clearfix">
+										<div class="col-md-6">
+											<a href="#">
+												<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+													<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+												</div>
+											</a>
+										</div>
+										<div class="col-md-6">
+											<a href="#">
+												<div class="image-holder">
+													<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+												</div>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="product-holder">
+								<div class="product-image">
+									<img src="/themes/{{ $shop_theme }}/img/product-5.jpg">
+								</div>
+								<div class="details-container">
+									<div class="product-name  match-height">Ashley Hair Serum</div>
+									<div class="product-price">P 146.00</div>
+								</div>
+								<div class="bottom-container">
+									<div class="row-no-padding clearfix">
+										<div class="col-md-6">
+											<a href="#">
+												<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+													<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+												</div>
+											</a>
+										</div>
+										<div class="col-md-6">
+											<a href="#">
+												<div class="image-holder">
+													<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+												</div>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="product-holder">
+								<div class="product-image">
+									<img src="/themes/{{ $shop_theme }}/img/product-6.jpg">
+								</div>
+								<div class="details-container">
+									<div class="product-name  match-height">EpSA Organic Shampoo</div>
+									<div class="product-price">P 128.00</div>
+								</div>
+								<div class="bottom-container">
+									<div class="row-no-padding clearfix">
+										<div class="col-md-6">
+											<a href="#">
+												<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+													<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+												</div>
+											</a>
+										</div>
+										<div class="col-md-6">
+											<a href="#">
+												<div class="image-holder">
+													<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+												</div>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					@endif
+				</div>
+			</div>
+			{{-- <div class="product-container">
 				<div class="row clearfix">
 					<div class="col-md-2">
 						<div class="product-holder">
@@ -216,185 +430,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="product-container">
-				<div class="row clearfix">
-					<div class="col-md-2">
-						<div class="product-holder">
-							<div class="product-image">
-								<img src="/themes/{{ $shop_theme }}/img/product-1.jpg">
-							</div>
-							<div class="details-container">
-								<div class="product-name  match-height">Elite Contact Lens Spartax Gray</div>
-								<div class="product-price">P 360.00</div>
-							</div>
-							<div class="bottom-container">
-								<div class="row-no-padding clearfix">
-									<div class="col-md-6">
-										<a href="#">
-											<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
-												<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
-											</div>
-										</a>
-									</div>
-									<div class="col-md-6">
-										<a href="#">
-											<div class="image-holder">
-												<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
-											</div>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-2">
-						<div class="product-holder">
-							<div class="product-image">
-								<img src="/themes/{{ $shop_theme }}/img/product-2.jpg">
-							</div>
-							<div class="details-container">
-								<div class="product-name  match-height">Elite Contact Lens Mangge kyo Sharinggan</div>
-								<div class="product-price">P 360.00</div>
-							</div>
-							<div class="bottom-container">
-								<div class="row-no-padding clearfix">
-									<div class="col-md-6">
-										<a href="#">
-											<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
-												<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
-											</div>
-										</a>
-									</div>
-									<div class="col-md-6">
-										<a href="#">
-											<div class="image-holder">
-												<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
-											</div>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-2">
-						<div class="product-holder">
-							<div class="product-image">
-								<img src="/themes/{{ $shop_theme }}/img/product-3.jpg">
-							</div>
-							<div class="details-container">
-								<div class="product-name  match-height">Elite Contact Lens Hydrocor Gray</div>
-								<div class="product-price">P 240.00</div>
-							</div>
-							<div class="bottom-container">
-								<div class="row-no-padding clearfix">
-									<div class="col-md-6">
-										<a href="#">
-											<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
-												<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
-											</div>
-										</a>
-									</div>
-									<div class="col-md-6">
-										<a href="#">
-											<div class="image-holder">
-												<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
-											</div>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-2">
-						<div class="product-holder">
-							<div class="product-image">
-								<img src="/themes/{{ $shop_theme }}/img/product-4.jpg">
-							</div>
-							<div class="details-container">
-								<div class="product-name  match-height">Verdon Ne Silky Keratin Hair Spa</div>
-								<div class="product-price">P 120.00</div>
-							</div>
-							<div class="bottom-container">
-								<div class="row-no-padding clearfix">
-									<div class="col-md-6">
-										<a href="#">
-											<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
-												<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
-											</div>
-										</a>
-									</div>
-									<div class="col-md-6">
-										<a href="#">
-											<div class="image-holder">
-												<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
-											</div>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-2">
-						<div class="product-holder">
-							<div class="product-image">
-								<img src="/themes/{{ $shop_theme }}/img/product-5.jpg">
-							</div>
-							<div class="details-container">
-								<div class="product-name  match-height">Ashley Hair Serum</div>
-								<div class="product-price">P 146.00</div>
-							</div>
-							<div class="bottom-container">
-								<div class="row-no-padding clearfix">
-									<div class="col-md-6">
-										<a href="#">
-											<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
-												<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
-											</div>
-										</a>
-									</div>
-									<div class="col-md-6">
-										<a href="#">
-											<div class="image-holder">
-												<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
-											</div>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-2">
-						<div class="product-holder">
-							<div class="product-image">
-								<img src="/themes/{{ $shop_theme }}/img/product-6.jpg">
-							</div>
-							<div class="details-container">
-								<div class="product-name  match-height">EpSA Organic Shampoo</div>
-								<div class="product-price">P 128.00</div>
-							</div>
-							<div class="bottom-container">
-								<div class="row-no-padding clearfix">
-									<div class="col-md-6">
-										<a href="#">
-											<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
-												<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
-											</div>
-										</a>
-									</div>
-									<div class="col-md-6">
-										<a href="#">
-											<div class="image-holder">
-												<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
-											</div>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			</div> --}}
 		</div>
 	</div>
 	

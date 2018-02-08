@@ -256,6 +256,8 @@ class CustomerWIS
             $entry["discount"]          = '';
             $entry["ewt"]               = '';
 
+            Warehouse2::update_inventory_consume($shop_id, $warehouse_id, $reference_name, $wis_id);
+            Tbl_customer_wis_item::where("cust_wis_id", $wis_id)->delete();
             Tbl_customer_wis_item_line::where("itemline_wis_id", $wis_id)->delete();
             //Self::insertLine($po_id, $insert_item);
 
@@ -266,7 +268,7 @@ class CustomerWIS
 
                 if(!$return)
                 {
-                    $get_item = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','customer_wis')->where('record_consume_ref_id',$wis_id)->get();
+                    $get_item = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','customer_wis')->where('record_consume_ref_id',$wis_id)->where("record_warehouse_id", $warehouse_id)->get();
 
                     $ins_customer_item = null;
                     foreach ($get_item as $key_item => $value_item)

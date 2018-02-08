@@ -34,7 +34,7 @@ body
                 .cat-title-container 
                 {
                     padding: 10px 10px 10px 15px;
-                    background-color: #585858;
+                    background-color: #000;
                     border-radius: 5px 5px 0px 0px;
 
                     span 
@@ -177,6 +177,7 @@ body
 
 						    img 
 						    {
+						    	object-fit: cover;
 						        width: 100%;
 						    }
 						}

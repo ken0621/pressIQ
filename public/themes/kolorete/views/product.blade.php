@@ -38,6 +38,7 @@
 						<div class="prod-list-container">
 							<div class="title-container">All<div class="line-bot"></div></div>
 							<div class="prod-list row clearfix">
+								
 								<!-- PER ITEM -->
 								@if(count($_product) > 0)
 									@foreach($_product as $product)
@@ -80,7 +81,7 @@
 														</a>
 													</div>
 													<div class="col-md-6">
-														<a href="javascript:" class="product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}>
+														<a href="javascript:" class="product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}">
 															<div class="image-holder">
 																<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
 															</div>

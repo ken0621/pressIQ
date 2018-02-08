@@ -6,11 +6,21 @@ use App\Globals\Columns;
 use App\Globals\Payment;
 use App\Globals\Settings;
 use App\Globals\Mail_global;
+use App\Globals\MLM2;
+use App\Globals\Mlm_slot_log;
+use App\Globals\Mlm_complan_manager;
 
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_online_pymnt_link;
 use App\Models\Tbl_online_pymnt_method;
 use App\Models\Tbl_transaction;
+use App\Models\Tbl_transaction_item;
+use App\Models\Tbl_price_level;
+use App\Models\Tbl_price_level_item;
+use App\Models\Tbl_customer;
+use App\Models\Tbl_membership;
+use App\Models\Tbl_item;
+use App\Models\Tbl_mlm_slot;
 
 use Excel;
 use DB;
@@ -372,8 +382,20 @@ class ProductOrderController2 extends Member
                         Mail_global::send_email(null, $email_content, $this->user_info->shop_id, $email_address);
                     }
                 }
-            }
 
+                if($this->user_info->shop_id == 47)
+                {
+                    $consume["id"] = $get_transaction_list->transaction_list_id;
+                    $get_list_item = Tbl_transaction_item::where("transaction_list_id",$consume["id"])->get();
+
+                    foreach($get_list_item as $list_item)
+                    {
+                        $list_item_id  = $list_item->item_id;
+                        $this->check_lead_bonus($consume,$list_item_id);
+                    }
+                }
+                
+            }
             $return['status'] = 'success';
             $return['call_function'] = 'success_confirm';            
         }
@@ -384,6 +406,110 @@ class ProductOrderController2 extends Member
         }
 
         return json_encode($return);
+    }
+
+    public function check_lead_bonus($consume,$val)
+    {
+        if(isset($consume["id"]) && $val)
+        {
+            $transaction_list = Tbl_transaction_list::where("transaction_list_id",$consume["id"])->first();
+            if($transaction_list)
+            {
+                $transaction = Tbl_transaction::where("transaction_id",$transaction_list->transaction_id)->first();
+                if($transaction)
+                {
+                    if($transaction->transaction_reference_table == "tbl_customer")
+                    {
+                        $customer = Tbl_customer::where("customer_id",$transaction->transaction_reference_id)->first();
+                        if($customer)
+                        {
+                            $lead_slot = Tbl_mlm_slot::where("slot_id",$customer->customer_lead)->first();
+                            if($lead_slot)
+                            {
+                                $membership  = Tbl_membership::where("membership_id",$lead_slot->slot_membership)->first();
+                                $price_level = Tbl_price_level::where("price_level_id",$membership->membership_price_level)->first();
+                                if($price_level)
+                                {
+                                   $item = Tbl_item::where("item_id",$val)->first();
+                                   if($item)
+                                   {
+                                       if($item->item_type_id == 1)
+                                       {
+                                           $bonus = 0;
+                                           if($price_level->price_level_type == "per-item")
+                                           {
+                                               $price_level_item = Tbl_price_level_item::where("price_level_id",$price_level->price_level_id)->where("item_id",$item->item_id)->first();
+                                               if($price_level_item)
+                                               {
+                                                 $bonus = $item->item_price - $price_level_item->custom_price;   
+                                               }
+                                           }
+                                           else if($price_level->price_level_type == "fixed-percentage")
+                                           {
+                                               $bonus = $item->item_price * ($price_level->fixed_percentage_value/100);
+                                           }
+                                           
+                                           $check_if_owner_has_slot = Tbl_mlm_slot::where("slot_owner",$customer->customer_id)->first();
+                                           if(!$check_if_owner_has_slot)
+                                           {
+                                               if($bonus > 0)
+                                               {
+                                                    $amount_given                        = $bonus;
+                                                    $log                                 = number_format($amount_given,2)." Retail Commission from customer ".$customer->first_name." ".$customer->last_name;
+                                                    $arry_log['wallet_log_slot']         = $lead_slot->slot_id;
+                                                    $arry_log['shop_id']                 = $lead_slot->shop_id;
+                                                    $arry_log['wallet_log_slot_sponsor'] = $lead_slot->slot_id;
+                                                    $arry_log['wallet_log_details']      = $log;
+                                                    $arry_log['wallet_log_amount']       = $amount_given;
+                                                    $arry_log['wallet_log_plan']         = "RETAIL_COMMISSION";
+                                                    $arry_log['wallet_log_status']       = "released";   
+                                                    $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('RETAIL_COMMISSION', $lead_slot->shop_id); 
+                                                    Mlm_slot_log::slot_array($arry_log);  
+                                               }
+                                           }
+                                           else
+                                           {
+                                                MLM2::purchase($check_if_owner_has_slot->shop_id, $check_if_owner_has_slot->slot_id, $item->item_id);
+                                           }
+                                       }
+                                   }
+                                }
+                                else
+                                {
+                                    $check_if_owner_has_slot = Tbl_mlm_slot::where("slot_owner",$customer->customer_id)->first();
+                                    if($check_if_owner_has_slot)
+                                    {
+                                       $item = Tbl_item::where("item_id",$val)->first();
+                                       if($item)
+                                       {
+                                           if($item->item_type_id == 1)
+                                           {
+                                              MLM2::purchase($check_if_owner_has_slot->shop_id, $check_if_owner_has_slot->slot_id, $item->item_id);
+                                           }
+                                       }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                $check_if_owner_has_slot = Tbl_mlm_slot::where("slot_owner",$customer->customer_id)->first();
+                                if($check_if_owner_has_slot)
+                                {
+                                   $item = Tbl_item::where("item_id",$val)->first();
+                                   if($item)
+                                   {
+                                       if($item->item_type_id == 1)
+                                       {
+                                          MLM2::purchase($check_if_owner_has_slot->shop_id, $check_if_owner_has_slot->slot_id, $item->item_id);
+                                       }
+                                   }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public function settings()

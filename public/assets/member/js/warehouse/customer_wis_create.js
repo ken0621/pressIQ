@@ -32,7 +32,26 @@ function customer_wis_create()
 		action_lastclick_row();
 		event_remove_tr();
 		event_compute_class_change();
+		event_button_action_click();
+		action_date_picker();
+		action_compute();
+		event_load_transaction();
+		action_reassign_number();
+		event_load_customer_transaction();
+	}
 
+	function action_date_picker()
+	{
+		$(".draggable .datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
+	}
+
+	function event_button_action_click()
+	{
+		$(document).on("click","button[type='submit']", function()
+		{
+			$(".button-action").val($(this).attr("code"));
+		})
+		action_compute();
 	}
 
 	function action_reassign_number()
@@ -53,6 +72,14 @@ function customer_wis_create()
 				$(this).parent().remove();
 			}
 		});
+	}
+	function event_load_customer_transaction()
+	{
+		$customer_id = $('.droplist-customer').val();
+		if($customer_id)
+		{
+			action_load_open_transaction($customer_id);
+		}
 	}
 	function action_initialize_select()
 	{
@@ -115,7 +142,6 @@ function customer_wis_create()
     		}
 
     	});
-        $('.droplist-um:not(.has-value)').globalDropList("disabled");
 
         $(".draggable .tr-draggable:last td select.select-um").globalDropList(
         {
@@ -127,7 +153,7 @@ function customer_wis_create()
     			action_load_unit_measurement($(this));
     		}
 
-        }).globalDropList('disabled');
+        });
 	}
 
 	function action_load_unit_measurement($this)
@@ -184,7 +210,7 @@ function customer_wis_create()
 		$parent.find(".txt-qty").val(1).change();
 		if($this.find("option:selected").attr("has-um"))
 		{
-			$parent.find(".txt-qty").attr("disabled",true);
+			$parent.find(".txt-qty").attr("disabled",false);
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
 				$parent.find(".txt-qty").removeAttr("disabled");
@@ -250,7 +276,7 @@ function customer_wis_create()
 		/* action_compute TOTAL */
 		var total = 0;
 		total     = subtotal;
-		
+
 		$(".total-amount").html(action_add_comma(total.toFixed(2)));
 		$(".total-amount-input").val(total.toFixed(2));
 	}
@@ -554,6 +580,38 @@ function customer_wis_create()
 	{
 		return '<div style="padding: ' + $padding + 'px; font-size: 20px;" class="text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>';
 	}
+	function load_applied_transaction()
+	{
+		$('.applied-transaction-list').load('/member/customer/wis/load-applied-transaction', function()
+		{
+			console.log("success");
+			action_initialize_select();
+			action_compute();
+			action_reassign_number();
+			$('.remarks-wis').html($('.inv-remarks').val());
+		});
+	}
+	function event_load_transaction()
+	{
+		$trans_id = $(".sales-id").val();
+		console.log($trans_id);
+		if($trans_id)
+		{
+			$.ajax({
+				url : '/member/customer/wis/ajax-apply-transaction',
+				type : 'get',
+				data : {apply_transaction : $trans_id},
+				success : function ()
+				{
+					load_applied_transaction();
+				}
+			});
+		}
+	}
+	this.load_applied_transaction = function()
+	{
+		load_applied_transaction();
+	}
 }
 
 function new_price_level_save_done(data)
@@ -567,8 +625,15 @@ function success_create_customer_wis(data)
 {
 	if(data.status == 'success')
 	{
-		toastr.success('Success');
-		location.href = '/member/customer/wis';
-		
+		toastr.success("Success");
+       	location.href = data.redirect_to;
+	}
+}
+function success_apply_transaction(data)
+{
+	if(data.status == 'success')
+	{
+		data.element.modal("toggle");
+		customer_wis_create.load_applied_transaction();
 	}
 }

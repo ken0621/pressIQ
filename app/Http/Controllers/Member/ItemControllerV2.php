@@ -10,6 +10,10 @@ use App\Globals\Utilities;
 use Request;
 use Session;
 
+
+use App\Models\Tbl_token_list;
+use App\Models\Tbl_item_token;
+
 class ItemControllerV2 extends Member
 {
 	public function list()
@@ -56,11 +60,11 @@ class ItemControllerV2 extends Member
 		$default[]	  		= ["Price", "display_price", true];
 		$default[]	  		= ["Cost", "display_cost", true];
 		$default[]	  		= ["Markup", "display_markup", true];
-		$default[]	  		= ["Inventory", "inventory_count", true];
+		$default[]	  		= ["Inventory", "inventorylog", true];
 		$default[]	  		= ["U/M", "multi_abbrev", true];
 
 		$data["_item"]	    	= Columns::filterColumns($this->user_info->shop_id, $this->user_info->user_id, "item", $data["_item"], $default);
-		
+		// dd($data['_item']);
 		return view("member.itemv2.list_item_table", $data);
 	}
 	public function get_item()
@@ -91,6 +95,19 @@ class ItemControllerV2 extends Member
 			$data["item_button"]	  = "";
 			$data['item_type']		  = Item::get_item_type_modify($data['item_info']->item_type_id);
 			$data['_choose_item']	  = Item::get_choose_item($id);
+			// patrick
+			// for icoinsshop
+			$token_item = Tbl_item_token::Token()->where('item_id',$id)->first();
+			if($token_item)
+			{
+				$data['token_name']	= $token_item->token_name;
+				$data['amount']		= $token_item->amount;
+			}
+			else
+			{
+				$data['token_name']	= '';
+				$data['amount']		= '0';
+			}
 		}
 		else
 		{
@@ -101,6 +118,8 @@ class ItemControllerV2 extends Member
 			$data["item_button"]	  = "disabled";
 			$data['item_type']		  = Item::get_item_type_modify();	
 		}
+		$data['shop_id']	= $this->user_info->shop_id;
+		$data['tokens']		= Tbl_token_list::where('shop_id',$this->user_info->shop_id)->get();
 		return $data;
 	}
 	public function submit_item($from)
@@ -131,6 +150,14 @@ class ItemControllerV2 extends Member
 		
 		$item_type_id = Item::get_item_type_id(Request::input('item_type_id'));
 
+		// patrick
+		// for icoinsshop
+		if($shop_id == 87)
+		{
+			$token['token_id'] 	= Request::input('token_type');
+			$token['amount']	= Request::input('token_amount');
+		}
+
 		if($from == "add")
 		{
 			if($item_type_id <= 3)
@@ -139,7 +166,15 @@ class ItemControllerV2 extends Member
 
 				if(!$validate)
 				{
-					$return = Item::create($shop_id, $item_type_id, $insert);
+					if($shop_id == 87)
+					{
+						$return = Item::create($shop_id, $item_type_id, $insert, $token);
+					}
+					else
+					{
+						$return = Item::create($shop_id, $item_type_id, $insert);
+					}
+					
 				}
 				else
 				{
@@ -170,7 +205,14 @@ class ItemControllerV2 extends Member
 				$validate = Item::create_validation($shop_id, $item_type_id, $insert);
 				if(!$validate)
 				{
-					$return  	  = Item::modify($shop_id, $item_id, $insert);
+					if($shop_id == 87)
+					{
+						$return = Item::modify($shop_id, $item_id, $insert, $token);
+					}
+					else
+					{
+						$return = Item::modify($shop_id, $item_id, $insert);
+					}
 				}
 				else
 				{
@@ -395,5 +437,38 @@ class ItemControllerV2 extends Member
     	}
 
     	return json_encode($return);
+	}
+	public function add_token()
+	{
+		$data['page'] = 'Add Token';
+		return view('member.itemv2.add_token',$data);
+	}
+	public function add_token_submit()
+	{
+		$insert['token_name'] 	= Request::input('token_name');
+		$insert['shop_id']		= $this->user_info->shop_id;
+		if($insert['token_name'] != '')
+		{
+			$query = Tbl_token_list::insert($insert);
+			$response['call_function'] = 'success';
+		}
+		else
+		{
+			$response['call_function'] = 'error_name';
+		}
+		return json_encode($response);
+	}
+	public function get_token_list()
+	{
+		$list = Tbl_token_list::where('shop_id',$this->user_info->shop_id)->get();
+		$data = '<select class="form-control token-type" name="token-type">';
+		$data .= '<option class="hidden">Select Token</option>';
+		foreach($list as $token)
+		{
+			$data .= '<option value="'.$token->token_id.'">'. $token->token_name .'</option>';
+		}
+		$data .= '<option value="add_new">Add New Token</option>';
+		$data .= '</select>';
+		return $data;
 	}
 }

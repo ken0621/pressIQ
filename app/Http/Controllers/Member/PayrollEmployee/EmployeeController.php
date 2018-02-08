@@ -74,6 +74,10 @@ class EmployeeController extends PayrollMember
 		{
 			echo view('member.payroll2.employee_dashboard.authorized_yangming_access');
 		}
+		else if($shop_id['shop_id'] == 76)
+		{
+			echo view('member.payroll2.employee_dashboard.authorized_reprisk_access');
+		}
 		else
 		{
 			echo view('member.payroll2.employee_dashboard.authorized_all_access_menu');
@@ -254,6 +258,35 @@ class EmployeeController extends PayrollMember
 		$data['_group_approver'] = Self::get_group_approver_grouped_by_level(Self::employee_shop_id(),$data['request_info']['payroll_approver_group_id'], 'overtime');
 		
 		return view('member.payroll2.employee_dashboard.modal.modal_view_overtime_request',$data);
+	}
+
+	public function employee_request_overtime_export_pdf($request_id)
+	{
+		$parameter['date']					= date('Y-m-d');
+		$parameter['company_id']			= 0;
+		$parameter['employement_status']	= 0;
+		$parameter['shop_id'] 				= $this->employee_info->shop_id;
+
+		$data['request_info'] = Tbl_payroll_request_overtime::where('payroll_request_overtime_id',$request_id)->EmployeeInfo()->first();
+		$data['approver_group_info'] = Tbl_payroll_approver_group::where('payroll_approver_group_id',$data['request_info']['payroll_approver_group_id'])->first();
+		$data['_group_approver'] = Self::get_group_approver_grouped_by_level(Self::employee_shop_id(),$data['request_info']['payroll_approver_group_id'], 'overtime');
+
+		$data["employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->where('tbl_payroll_employee_basic.payroll_employee_id',$this->employee_info->payroll_employee_id)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->first();
+
+		$approver_info = array();
+		foreach($data['_group_approver'] as $key => $approver)
+		{
+			$data["approver_info"] = Tbl_payroll_employee_basic::selemployee($parameter)->where('tbl_payroll_employee_basic.payroll_employee_id',$approver[0]->payroll_employee_id)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->first();
+			$temp['payroll_employee_display_name'] = $data["approver_info"]["payroll_employee_display_name"];
+			$temp['payroll_jobtitle_name'] = $data["approver_info"]["payroll_jobtitle_name"];
+			array_push($approver_info,$temp);
+		}
+
+		$data["approver_info"]	= $approver_info;
+		$format["format"] = "A4";
+		$format["default_font"] = "sans-serif";
+		$pdf = PDF2::loadView('member.payroll2.employee_dashboard.request_overtime_pdf',$data, [], $format);
+		return $pdf->stream('document.pdf');
 	}
 
 	public function employee_request_overtime_cancel($request_id)

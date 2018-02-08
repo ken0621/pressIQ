@@ -17,7 +17,7 @@ class TransactionPurchaseRequisition
 {
 	public static function countTransaction($shop_id)
 	{
-		return Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_status","accepted")->where('is_sales_order', 1)->count();
+		return Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_status","accepted")->count();
 	}
 	public static function getAllOpenPR($shop_id)
 	{

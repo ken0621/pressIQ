@@ -8,7 +8,7 @@ use App\Globals\Vendor;
 use App\Globals\Billing;
 use App\Globals\Accounting;
 use App\Globals\Invoice;
-use App\Globals\WriteCheck;
+use App\Globals\WriteCheck; 
 use App\Globals\BillPayment;
 use App\Globals\Utilities;
 use App\Globals\Pdf_global;
@@ -38,7 +38,6 @@ class TransactionPayBillsController extends Member
     public function getLoadPayBills(Request $request)
     {
         $data['_pay_bills'] = TransactionPayBills::get($this->user_info->shop_id, 10, $request->search_keyword);
-        //dd($data['_pay_bills']);
         return view('member.accounting_transaction.vendor.pay_bills.pay_bills_table', $data);
     }
     public function getCreate(Request $request)
@@ -50,8 +49,17 @@ class TransactionPayBillsController extends Member
         $data["_vendor"]        = Vendor::getAllVendor('active');
         $data['_account']       = Accounting::getAllAccount('all',null,['Bank']);
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->user_info->shop_id)->get();
+        $data["transaction_refnum"] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'pay_bill');
+        $data['action']         = "/member/transaction/pay_bills/create-pay-bills";
 
-        $data['action']     = "/member/transaction/pay_bills/create-pay-bills";
+        $pb_id = $request->id;
+
+        if($pb_id)
+        {
+            $data['pb']     = TransactionPayBills::info($this->user_info->shop_id, $pb_id);
+            $data["_bill"]  = TransactionPayBills::info_item($this->user_info->shop_id, $data["pb"]->paybill_vendor_id, $data["pb"]->paybill_id);
+            $data['action'] = "/member/transaction/pay_bills/update-pay-bills";
+        }
 
         return view('member.accounting_transaction.vendor.pay_bills.pay_bills', $data);
     }
@@ -59,7 +67,6 @@ class TransactionPayBillsController extends Member
     public function getLoadVendorPayBill($vendor_id)
     {
         $data["_bill"] = Billing::getAllBillByVendor($vendor_id);
-        //dd($data["_bill"]);
         return view('member.accounting_transaction.vendor.pay_bills.load_pay_bills', $data);
     }
 
@@ -73,6 +80,70 @@ class TransactionPayBillsController extends Member
         $insert["paybill_date"]              = $request->paybill_date;
         $insert["paybill_total_amount"]      = $request->paybill_total_amount;
         $insert["paybill_payment_method"]    = $request->paybill_payment_method;
+        $insert["paybill_ref_num"]           = $request->paybill_ref_num;
+        $insert["paybill_memo"]              = $request->vendor_memo;
+
+        
+        $insert_item = null;
+        $ctr_bill = 0;
+
+        foreach($request->line_is_checked as $key => $value)
+        {
+            if($value)
+            {
+                $ctr_bill++;
+            }
+            
+            $insert_item[$key]["line_is_checked"]         = $request->line_is_checked[$key];
+            $insert_item[$key]["pbline_reference_name"]   = $request->pbline_txn_type[$key];
+            $insert_item[$key]["pbline_reference_id"]     = $request->pbline_bill_id[$key];
+            $insert_item[$key]["item_amount"]             = str_replace(',', '',$request->pbline_amount[$key]);
+            $insert_item[$key]["item_discount"]           = 0;
+            $insert_item[$key]["item_id"]                 = 0;
+            $insert_item[$key]["item_qty"]                = 0;
+            $insert_item[$key]["item_description"]        = 0;    
+        }
+        //die(var_dump($request->line_is_checked));
+        
+        if($ctr_bill != 0)
+        {
+            $validate = TransactionPayBills::postInsert($this->user_info->shop_id, $insert, $insert_item);
+
+            $return = null;
+            if(is_numeric($validate))
+            {
+                $return['status'] = 'success';
+                $return['status_message'] = 'Success creating pay Bills.';
+                $return['call_function'] = 'success_pay_bills';
+                $return['status_redirect'] = AccountingTransaction::get_redirect('pay_bills', $validate ,$btn_action);
+            }
+            else
+            {
+                $return['status'] = 'error';
+                $return['status_message'] = $validate;
+            }
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = 'Please Select Item';
+        }
+        return json_encode($return);
+
+    }
+
+    public function postUpdatePayBills(Request $request)
+    {
+        $btn_action  = $request->button_action;
+        $paybill_id  = $request->pb_id;
+
+        $insert["vendor_id"]                 = $request->vendor_id;
+        $insert["transaction_refnumber"]     = $request->transaction_refnumber;
+        $insert["paybill_ap_id"]             = $request->paybill_ap_id != "" ? $request->paybill_ap_id : 0;
+        $insert["paybill_date"]              = $request->paybill_date;
+        $insert["paybill_total_amount"]      = $request->paybill_total_amount;
+        $insert["paybill_payment_method"]    = $request->paybill_payment_method;
+        $insert["paybill_ref_num"]           = $request->paybill_ref_num;
         $insert["paybill_memo"]              = $request->vendor_memo;
 
         $insert_item = null;
@@ -97,12 +168,11 @@ class TransactionPayBillsController extends Member
         
         if($ctr_bill != 0)
         {
-            $validate = TransactionPayBills::postInsert($this->user_info->shop_id, $insert, $insert_item);
+            $validate = TransactionPayBills::postUpdate($paybill_id, $this->user_info->shop_id, $insert, $insert_item);
 
             $return = null;
             if(is_numeric($validate))
             {
-                
                 $return['status'] = 'success';
                 $return['status_message'] = 'Success creating pay Bills.';
                 $return['call_function'] = 'success_pay_bills';
@@ -120,6 +190,5 @@ class TransactionPayBillsController extends Member
             $return['status_message'] = 'Please Select Item';
         }
         return json_encode($return);
-
     }
 }

@@ -613,7 +613,7 @@ class MlmDeveloperController extends Member
             $insert_customer["email"]          = (Request::input("emaail") == "undefined" ? "dummy@gmail.com" : Request::input("email"));
             $insert_customer["ismlm"]          = 1;
             $insert_customer["mlm_username"]   = Request::input("slot_no");
-            $insert_customer["password"]       = Crypt::encrypt(randomPassword());
+            $insert_customer["password"]       = (Request::input("password") == "undefined" ? Crypt::encrypt(randomPassword()) : Crypt::encrypt(Request::input("password")));
             $insert_customer["created_date"]   = $slot_date_created;
             
             $customer_id = Tbl_customer::insertGetId($insert_customer);

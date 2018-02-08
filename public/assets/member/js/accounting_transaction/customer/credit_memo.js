@@ -12,7 +12,9 @@ function credit_memo()
 		action_load_initialize_select();
 		event_click_last_row();
 		event_remove_tr();
+		action_reassign_number();
 		action_compute();
+
 		event_compute_class_change();
 	}
 	function action_compute()

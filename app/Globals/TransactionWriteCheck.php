@@ -1,10 +1,12 @@
 <?php
 namespace App\Globals;
 
+use App\Models\Tbl_write_check_line;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_write_check;
-use App\Models\Tbl_vendor;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_vendor;
+
 use App\Globals\AccountingTransaction;
 use Carbon\Carbon;
 use DB;
@@ -21,6 +23,14 @@ class TransactionWriteCheck
 	{
 		return Tbl_purchase_order::where('po_shop_id',$shop_id)->where('po_vendor_id', $vendor_id)->where('po_is_billed','!=', '0')->count();
 	}
+    public static function info($shop_id, $wc_id)
+    {
+        return Tbl_write_check::vendor()->customer()->where("wc_shop_id", $shop_id)->where("wc_id", $wc_id)->first();
+    }
+    public static function info_item($wc_id)
+    {
+        return Tbl_write_check_line::um()->where("wcline_wc_id", $wc_id)->get();       
+    }
 	public static function get($shop_id, $paginate = null, $search_keyword = null)
 	{
 		$data = Tbl_write_check::vendor()->customer()->where('wc_shop_id', $shop_id);
@@ -67,14 +77,12 @@ class TransactionWriteCheck
             
             if($value->wc_reference_name == "customer")
             {
-            	//dd($value->wc_reference_name);
                 $c_data = Tbl_customer::where("customer_id",$value->wc_reference_id)->first();
                 
                 $name = isset($c_data) ? ($c_data->company != "" ? $c_data->company : $c_data->first_name." ".$c_data->last_name) : "";
             }
 
             $data[$key]->name = $name;
-            //dd($data);
         }
 		
 		return $data;
@@ -82,17 +90,17 @@ class TransactionWriteCheck
 
 	public static function postInsert($shop_id, $insert, $insert_item)
 	{
-		$val = AccountingTransaction::vendorValidation($insert, $insert_item);
+		$val = AccountingTransaction::vendorValidation($insert, $insert_item, 'write_check');
 		if(!$val)
 		{
 			$ins['wc_shop_id']				= $shop_id;
 			$ins['transaction_refnum']		= $insert['transaction_refnumber'];
 			$ins['wc_reference_id']         = $insert['vendor_id'];
 	        $ins['wc_reference_name']       = $insert['wc_reference_name'];
-	        $ins['wc_customer_vendor_email']= $insert['wc_customer_vendor_email'];
+	        $ins['wc_customer_vendor_email']= $insert['vendor_email'];
 	        $ins['wc_mailing_address']      = $insert['wc_mailing_address'];
 	        $ins['wc_cash_account']         = 0;
-	        $ins['wc_payment_date']         = $insert['wc_payment_date'];
+	        $ins['wc_payment_date']         = date('Y-m-d', strtotime($insert['wc_payment_date']));
 	        $ins['wc_memo']                 = $insert['wc_memo'];
 	        $ins['date_created']            = Carbon::now();
 
@@ -115,6 +123,9 @@ class TransactionWriteCheck
 
 	        $return = Self::insertLine($write_check_id, $insert_item, $entry);
 	        $return = $write_check_id;
+
+            $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+            AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'write_check', $write_check_id, 'Refill upon creating WRITE CHECK '.$ins['transaction_refnum']);
 		}
 		else
 		{
@@ -123,6 +134,56 @@ class TransactionWriteCheck
 
         return $return;
 	}
+    public static function postUpdate($write_check_id, $shop_id, $insert, $insert_item)
+    {
+        $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        if(!$val)
+        {
+            $ins['wc_shop_id']              = $shop_id;
+            $ins['transaction_refnum']      = $insert['transaction_refnumber'];
+            $ins['wc_reference_id']         = $insert['vendor_id'];
+            $ins['wc_reference_name']       = $insert['wc_reference_name'];
+            $ins['wc_customer_vendor_email']= $insert['vendor_email'];
+            $ins['wc_mailing_address']      = $insert['wc_mailing_address'];
+            $ins['wc_cash_account']         = 0;
+            $ins['wc_payment_date']         = date('Y-m-d', strtotime($insert['wc_payment_date']));
+            $ins['wc_memo']                 = $insert['wc_memo'];
+            $ins['date_created']            = Carbon::now();
+
+            /*TOTAL*/
+            $total = collect($insert_item)->sum('item_amount');
+            $ins['wc_total_amount'] = $total;
+           
+            /*INSERT CV HERE*/
+            Tbl_write_check::where('wc_id', $write_check_id)->update($ins);
+
+            /* Transaction Journal */
+            $entry["reference_module"]  = "write-check";
+            $entry["reference_id"]      = $write_check_id;
+            $entry["name_id"]           = $insert['vendor_id'];
+            $entry["name_reference"]    = $insert['wc_reference_name'];
+            $entry["total"]             = $total;
+            $entry["vatable"]           = '';
+            $entry["discount"]          = '';
+            $entry["ewt"]               = '';
+
+            Tbl_write_check_line::where('wcline_wc_id', $write_check_id)->delete();
+            $return = Self::insertLine($write_check_id, $insert_item, $entry);
+            $return = $write_check_id;
+
+            
+            $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+            /* UPDATE INVENTORY HERE */
+            AccountingTransaction::inventory_refill_update($shop_id, $warehouse_id, $insert_item, 'write_check', $write_check_id); 
+            AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'write_check', $write_check_id, 'Refill upon creating WRITE CHECK '.$ins['transaction_refnum']);
+        }
+        else
+        {
+            $return = $val;
+        }
+
+        return $return;
+    }
 	public static function insertLine($write_check_id, $insert_item, $entry)
     {
         $itemline = null;
@@ -135,11 +196,10 @@ class TransactionWriteCheck
             $itemline[$key]['wcline_qty']         = $value['item_qty'];
             $itemline[$key]['wcline_rate']        = $value['item_rate'];
             $itemline[$key]['wcline_amount']      = $value['item_amount'];
-
         }
         if(count($itemline) > 0)
         {
-            //Tbl_write_check_line::insert($itemline);
+            Tbl_write_check_line::insert($itemline);
             $return = AccountingTransaction::entry_data($entry, $insert_item);
         }
 

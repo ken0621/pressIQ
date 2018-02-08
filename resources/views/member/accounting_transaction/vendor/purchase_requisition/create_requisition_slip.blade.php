@@ -51,12 +51,12 @@
             <div class="col-md-6">
                 <label>Requisition Slip Number</label>
                 <div>
-                   <input type="text" class="form-control" name="requisition_slip_number" value="RS20180225-0001">
+                   <input type="text" class="form-control" name="requisition_slip_number" value="{{$transaction_refnum}}">
                 </div>
             </div>
             <div class="col-sm-3 text-right"></div>
             <div class="col-sm-3 text-right">
-                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_requisition/load-transaction"><i class="fa fa-handshake-o"></i> {{$count_so}} Open Transaction</a></h4>
+                <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_requisition/load-transaction"><i class="fa fa-handshake-o"></i> {{$count_transaction or ''}} Open Transaction</a></h4>
             </div>
         </div>
         <div class="form-group">
@@ -89,6 +89,8 @@
                                 <th width="50px"></th>
                             </tr>
                         </thead>
+                        <tbody class="applied-transaction-list">
+                        </tbody>
                         <tbody class="draggable tbody-item">
                             <tr class="tr-draggable">
                                 <td class="invoice-number-td text-center">1</td>
@@ -154,7 +156,7 @@
         <div class="row clearfix">
             <div class="col-sm-6">
                 <label>Memo</label>
-                <textarea class="form-control input-sm textarea-expand" name="vendor_memo" ></textarea>
+                <textarea class="form-control input-sm textarea-expand remarks-pr" name="vendor_memo" ></textarea>
             </div>
             <div class="col-sm-6">                      
                 <div class="row">

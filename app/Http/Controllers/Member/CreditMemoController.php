@@ -11,6 +11,8 @@ use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_user;
 use App\Models\Tbl_customer_invoice;
+
+use App\Globals\Pdf_global;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Customer;
@@ -177,8 +179,32 @@ class CreditMemoController extends Member
 
         return view("member.customer.credit_memo.credit_memo_add",$data);
     }
+    public function cm_pdf($cm_id)
+    {
+        $date = date("F j, Y, g:i a");
+        $first_name         = $this->user_info->user_first_name;
+        $last_name         = $this->user_info->user_last_name;
+        $footer ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+
+        $data['cm'] = Tbl_credit_memo::customer()->where("cm_id",$cm_id)->where("cm_shop_id",$this->user_info->shop_id)->first();
+        $data["_cmline"] = Tbl_credit_memo_line::Cm_item()->where("cmline_cm_id",$cm_id)->get();
+        //dd($data);
+        // foreach($data["estimate_item"] as $key => $value) 
+        // {
+        //     $qty = UnitMeasurement::um_qty($value->estline_um);
+
+        //     $total_qty = $value->estline_qty * $qty;
+        //     $data["estimate_item"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->estline_um);
+        // }
+
+       $pdf = view('member.customer.credit_memo.cm_pdf', $data);
+       return Pdf_global::show_pdf($pdf, null, $footer);
+
+    }
     public function create_submit()
     {
+        $btn_action = Request::input("action_button");
+        //die(var_dump($btn_action));
         $use_credit = Request::input("use_credit");
 
         $customer_info[] = null;
@@ -319,12 +345,31 @@ class CreditMemoController extends Member
                     }
                 }
 
+
                 $data["status"] = "success";
-                $data["id"] = $cm_id;       
+                $data["id"] = $cm_id; 
+
                 if($use_credit == "retain_credit")
                 {
                     $data['call_function'] = "success_credit_memo";
-                    $data["redirect_to"] = "/member/customer/credit_memo/list";
+                    //$data["redirect_to"] = "/member/customer/credit_memo/list";
+
+                    if ($btn_action == 'save-and-close')
+                    {
+                        $data['redirect_to'] = '/member/customer/credit_memo/list';
+                    }
+                    elseif ($btn_action == 'save-and-edit')
+                    {
+                        $data['redirect_to'] = '/member/customer/credit_memo?id='.$cm_id;
+                    }
+                    elseif ($btn_action == 'save-and-new')
+                    {
+                        $data['redirect_to'] = '/member/customer/credit_memo';
+                    }
+                    elseif ($btn_action == 'save-and-print')
+                    {
+                        $data['redirect_to'] = '/member/customer/credit_memo/view_pdf/'.$cm_id;
+                    }
                 }
                 elseif($use_credit == "refund")
                 {
@@ -350,6 +395,8 @@ class CreditMemoController extends Member
     public function update_submit()
     {
         $cm_id = Request::input("credit_memo_id");
+
+        $btn_action = Request::input("action_button");
 
         $ctr_items = 0;
         $customer_info[] = null;
@@ -484,7 +531,24 @@ class CreditMemoController extends Member
                 }
 
                 $data["status"] = "success-credit-memo";
-                $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
+                //$data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
+
+                if ($btn_action == 'save-and-close')
+                {
+                    $data['redirect_to'] = '/member/customer/credit_memo/list';
+                }
+                elseif ($btn_action == 'save-and-edit')
+                {
+                    $data['redirect_to'] = '/member/customer/credit_memo?id='.$cm_id;
+                }
+                elseif ($btn_action == 'save-and-new')
+                {
+                    $data['redirect_to'] = '/member/customer/credit_memo';
+                }
+                elseif ($btn_action == 'save-and-print')
+                {
+                    $data['redirect_to'] = '/member/customer/credit_memo/view_pdf/'.$cm_id;
+                }
             }
             else
             {

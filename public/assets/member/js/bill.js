@@ -1,5 +1,6 @@
 var bill = new bill();
 var global_tr_html = $(".div-script tbody").html();
+var global_acct_tr_html = $(".acct-div-script tbody").html();
 var po_id_list = $(".div-script-po").html();
 var item_selected = ''; 
 
@@ -21,6 +22,7 @@ function bill()
 		action_compute();
 		action_date_picker();
 		action_reassign_number();
+		action_acct_reassign_number();
 		event_button_action_click();
 	}
 
@@ -61,6 +63,17 @@ function bill()
 				action_compute();
 			}			
 		});
+
+		//cycy
+		$(document).on("click", ".acct-remove-tr", function(e){
+			if($(".tbody-acct .acct-remove-tr").length > 1)
+			{
+				$(this).parent().remove();
+
+				action_acct_reassign_number();
+				action_compute();
+			}			
+		});
 	}
 
 	this.action_lastclick_row = function()
@@ -70,8 +83,11 @@ function bill()
 
 	function action_lastclick_row()
 	{
-		$(document).on("click", "tbody.draggable tr:last td:not(.remove-tr)", function(){
+		$(document).on("click", "tbody.draggable.tbody-item tr:last td:not(.remove-tr)", function(){
 			action_lastclick_row_op();
+		});
+		$(document).on("click", "tbody.draggable.tbody-acct tr:last td:not(.acct-remove-tr)", function(){
+			action_lastclick_acct_row_op();
 		});
 	}
 
@@ -90,10 +106,16 @@ function bill()
 
 	function action_lastclick_row_op()
 	{
-		$("tbody.draggable").append(global_tr_html);
+		$("tbody.draggable.tbody-item").append(global_tr_html);
 		action_reassign_number();
 		action_trigger_select_plugin();
 		action_date_picker();
+	}
+	function action_lastclick_acct_row_op()
+	{
+		$("tbody.draggable.tbody-acct").append(global_acct_tr_html);
+		action_acct_reassign_number();
+		action_trigger_select_plukgin();
 	}
 
 	function action_date_picker()
@@ -113,6 +135,14 @@ function bill()
 			$(this).html(num);
 			num++;
 		});
+	}
+	function action_acct_reassign_number()
+	{
+		var num = 1;
+		$(".acct-number-td").each(function(){
+			$(this).html(num);
+			num++;
+		});		
 	}
 
 	function event_accept_number_only()
@@ -162,7 +192,11 @@ function bill()
 	{
 		var subtotal = 0;
 		var total_taxable = 0;
-
+		var acct_amount = 0;
+		$(".acct-amount").each(function()
+		{
+			acct_amount += parseFloat(action_return_to_number($(this).val()));
+		});
 		$(".tr-draggable").each(function()
 		{
 			/* GET ALL DATA */
@@ -273,13 +307,14 @@ function bill()
 		}
 		total += tax;
 
+
 		$(".sub-total").html(action_add_comma(subtotal.toFixed(2)));
 		$(".subtotal-amount-input").val(action_add_comma(subtotal.toFixed(2)));
 		$(".ewt-total").html(action_add_comma(ewt_value.toFixed(2)));
 		$(".discount-total").html(action_add_comma(discount_total.toFixed(2)));
 		$(".tax-total").html(action_add_comma(tax.toFixed(2)));
-		$(".total-amount").html(action_add_comma(subtotal.toFixed(2)));
-		$(".total-amount-input").val(subtotal.toFixed(2));
+		$(".total-amount").html(action_add_comma((subtotal + acct_amount).toFixed(2)));
+		$(".total-amount-input").val((subtotal + acct_amount).toFixed(2));
 
 	}
 
@@ -361,6 +396,17 @@ function bill()
             onChangeValue : function()
             {
             	action_load_item_info($(this));
+            }
+        });
+        $(".draggable.tbody-acct .tr-draggable:last td select.select-coa").globalDropList(
+        {            
+		    link 		: '/member/accounting/chart_of_account/popup/add',
+		    link_size 	: 'md',
+		    width 		: "100%",
+		    placeholder : 'Account',
+            onChangeValue : function()
+            {
+            	action_load_coa_info($(this));
             }
         });
         $(".draggable .tr-draggable:last td select.select-um").globalDropList(
@@ -460,7 +506,11 @@ function bill()
 		    link 		: '/member/accounting/chart_of_account/popup/add',
 		    link_size 	: 'md',
 		    width 		: "100%",
-		    placeholder : 'Account'
+		    placeholder : 'Account',
+            onChangeValue : function()
+            {
+            	action_load_coa_info($(this));
+            }
 		});
 	}
 
@@ -486,6 +536,12 @@ function bill()
 				$(".drawer-toggle").trigger("click");
 			}
 		});
+	}
+
+	function action_load_coa_info($this)
+	{
+		$parent = $this.closest(".tr-draggable");
+		$parent.find(".acct-desc").html($this.find("option:selected").attr("acct-desc")).change();		
 	}
 	function action_load_item_info($this)
 	{

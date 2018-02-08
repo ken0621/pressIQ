@@ -12,6 +12,7 @@ use App\Models\Tbl_content;
 use App\Models\Tbl_ec_product;
 use App\Models\Tbl_country;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_recaptcha_setting;
 use App\Globals\Ecom_Product;
 use App\Globals\SocialNetwork;
 use App\Globals\Cart;
@@ -212,6 +213,46 @@ class Shop extends Controller
         Settings::set_mail_setting($this->shop_info->shop_id);
 
         $data['google_app_id'] = SocialNetwork::get_keys($this->shop_info->shop_id, 'googleplus')['app_id'];
+
+        // Unity
+        if ($this->shop_info->shop_id == "90") 
+        {
+            $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first();
+
+            if($point)
+            {
+                $explode_schedule = explode("-", $point->schedule);
+
+                if (isset($explode_schedule[0]) && isset($explode_schedule[1])) 
+                {
+                    $current_time = date('h:i A');
+                    $sunrise      = $explode_schedule[0];
+                    $sunset       = $explode_schedule[1];
+                    $date1        = \DateTime::createFromFormat('H:i a', $current_time);
+                    $date2        = \DateTime::createFromFormat('H:i a', $sunrise);
+                    $date3        = \DateTime::createFromFormat('H:i a', $sunset);
+
+                    if ($date1 > $date2 && $date1 < $date3)
+                    {
+                        $allow_captcha = true;
+                    }
+                    else
+                    {
+                        $allow_captcha = false;
+                    }
+                }
+                else
+                {
+                    $allow_captcha = false;
+                }
+            }
+            else
+            {
+                $allow_captcha = false;
+            }
+
+            View::share("allow_captcha", $allow_captcha);
+        }
 
         View::share("slot_now", Self::$slot_now);
         

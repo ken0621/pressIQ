@@ -23,6 +23,14 @@ class TransactionDebitMemo
     {
         return Tbl_debit_memo::where('db_shop_id',$shop_id)->where('db_vendor_id', $vendor_id)->get();
     }
+    public static function info($shop_id, $dm_id)
+    {
+        return Tbl_debit_memo::where('db_shop_id',$shop_id)->where('db_id', $dm_id)->first();
+    }
+    public static function info_item($dm_id)
+    {
+        return Tbl_debit_memo_line::um()->where('dbline_db_id', $dm_id)->get();
+    }
 
     public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
     {
@@ -78,14 +86,14 @@ class TransactionDebitMemo
 
     public static function postInsert($shop_id, $insert, $insert_item)
     {
-        $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        $val = AccountingTransaction::vendorValidation($insert, $insert_item, 'debit_memo');
         if(!$val)
         {
             $ins['db_shop_id']          = $shop_id;
             $ins['transaction_refnum']  = $insert['transaction_refnumber'];
             $ins['db_vendor_id']        = $insert['vendor_id'];
             $ins['db_vendor_email']     = $insert['vendor_email'];
-            $ins['db_date']             = $insert['transaction_date'];
+            $ins['db_date']             = date('Y-m-d', strtotime($insert['transaction_date']));
             $ins['db_message']          = $insert['vendor_message'];
             $ins['db_memo']             = $insert['vendor_memo'];
             $ins['date_created']        = Carbon::now();
@@ -113,7 +121,47 @@ class TransactionDebitMemo
             $return = $val;
         }  
         return $return;
+    }
 
+    public static function postUpdate($dm_id, $shop_id, $insert, $insert_item)
+    {
+        $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        if(!$val)
+        {
+            $ins['db_shop_id']          = $shop_id;
+            $ins['transaction_refnum']  = $insert['transaction_refnumber'];
+            $ins['db_vendor_id']        = $insert['vendor_id'];
+            $ins['db_vendor_email']     = $insert['vendor_email'];
+            $ins['db_date']             = date('Y-m-d', strtotime($insert['transaction_date']));
+            $ins['db_message']          = $insert['vendor_message'];
+            $ins['db_memo']             = $insert['vendor_memo'];
+            $ins['date_created']        = Carbon::now();
+
+            $total = collect($insert_item)->sum('item_amount');
+            $ins['db_amount'] = $total;
+
+            /* INSERT DM IN DATABASE */
+            Tbl_debit_memo::where('db_id', $dm_id)->update($ins);
+
+            /* Transaction Journal */
+            $entry["reference_module"]  = "debit-memo";
+            $entry["reference_id"]      = $dm_id;
+            $entry["name_id"]           = $insert['vendor_id'];
+            $entry["total"]             = $total;
+            $entry["vatable"]           = '';
+            $entry["discount"]          = '';
+            $entry["ewt"]               = '';
+            
+            Tbl_debit_memo_line::where('dbline_db_id', $dm_id)->delete();
+
+            $return = Self::insertLine($dm_id, $insert_item, $entry);
+            $return = $dm_id;
+        }
+        else
+        {
+            $return = $val;
+        }  
+        return $return;
     }
 
     public static function insertLine($dm_id, $insert_item, $entry)
@@ -132,7 +180,7 @@ class TransactionDebitMemo
         }
         if(count($itemline) > 0)
         {
-            //Tbl_debit_memo_line::insert($itemline);
+            Tbl_debit_memo_line::insert($itemline);
             $return = AccountingTransaction::entry_data($entry, $insert_item);
         }
 

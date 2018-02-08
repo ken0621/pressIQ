@@ -24,7 +24,10 @@ use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_item_token;
+use App\Models\Tbl_item_token_log;
 
+use App\Globals\Inventory;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
@@ -130,7 +133,7 @@ class Warehouse2
                 { 
                     $return .= "The quantity must be a number. <br>";
                 }
-                if($quantity < 0)
+                if($quantity < 1)
                 {
                     $return .= 'The quantity of '.$item_data->item_name.' is less than one. <br>';                
                 }
@@ -373,7 +376,7 @@ class Warehouse2
         }
     }
 
-    public static function refill_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array())
+    public static function refill_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $serial = array())
     {
         $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
@@ -411,29 +414,35 @@ class Warehouse2
 
         return $return;
     }
+    public static function get_offset_qty_v2($warehouse_id, $item_id)
+    {
+        $qty = Tbl_item::recordloginventory($warehouse_id, true)->value('offset_count');
+        return $qty * -1;
+    }
     public static function refill($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '', $update_count = true)
     {
-        $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
-
+        
         $return = null;
 
-        $serial_qty = count($serial);
-        if($serial_qty != 0)
+        if(!session('refill_adjust_inventory'))
         {
-            if($serial_qty != $quantity)
+            if(Inventory::allow_out_of_stock($shop_id) == 1)
             {
-                $return .= "The serial number are not equal from the quantity. <br> ";
+                $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id )->where('record_count_inventory','=',0)->count();
+                $total_refill_qty = $quantity;
+                if($count_offset > 0)
+                {
+                    $total_refill_qty = $quantity - $count_offset;
+                }
+                Self::update_offset_qty($warehouse_id, $item_id, $count_offset, $quantity);
+
+                $quantity = $total_refill_qty;            
             }
         }
-        if($quantity < 0)
-        {
-            $return .= "The quantity is less than 1. <br> ";
-        }
-        if(!$check_warehouse)
-        {
-            $return .= "The warehouse doesn't belong to your account <br>";
-        }
 
+        $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
+
+        $serial_qty = count($serial);
         if(!$return)
         {  
             $insert_slip['warehouse_id']                 = $warehouse_id;
@@ -464,6 +473,10 @@ class Warehouse2
                 {
                     $insert[$ctr_qty]['record_serial_number'] = $serial[$ctr_qty];
                 }
+                if(session('refill_offset_inventory'))
+                {
+                    $insert[$ctr_qty]['record_count_inventory'] = 0;
+                }
                 Tbl_warehouse_inventory_record_log::insert($insert[$ctr_qty]);
             }
 
@@ -487,10 +500,38 @@ class Warehouse2
             {
                 Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, $quantity);
             }
+
+            $store['refill_offset_inventory'] = null;
+            $store['refill_adjust_inventory'] = null;
+            session($store);
         }       
 
         return $return;
     }
+    public static function update_offset_qty($warehouse_id, $item_id, $count_offset, $quantity)
+    {
+        if($count_offset > $quantity)
+        {
+            $update_qty = abs($quantity);
+            for ($ctr_qty = 0; $ctr_qty < $update_qty; $ctr_qty++)
+            {
+                $update['record_count_inventory'] = 1;
+                $record_log_id = Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                                    ->where('record_item_id', $item_id)
+                                                    ->where('record_count_inventory','=',0)->value('record_log_id');
+                Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->update($update);
+
+            }
+        }
+        else if($count_offset - $quantity <= 0)
+        {
+            $update['record_count_inventory'] = 1;
+            Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                                    ->where('record_item_id', $item_id)
+                                                    ->where('record_count_inventory','=',0)->update($update);
+        }
+    }
+
     public static function get_control_number($warehouse_id, $shop_id, $item_type = null)
     {
         $return = 0;
@@ -590,7 +631,7 @@ class Warehouse2
 
         return $validate;
     }
-    public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array())
+    public static function consume_validation($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $serial = array(), $ref_name = null)
     {
         $return = null;
         $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
@@ -616,7 +657,7 @@ class Warehouse2
         { 
             $return .= "The quantity must be a number. <br>";
         }
-        if($quantity < 0)
+        if($quantity < 1)
         {
             $return .= "The quantity is less than 1. <br> ";
         }
@@ -624,13 +665,21 @@ class Warehouse2
         {
             $return .= "The warehouse doesn't belong to your account <br>";
         }
+
         $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
-        if($quantity > $inventory_qty)
+        
+        $settings_qty = 0;
+        if($ref_name != 'customer_wis')
+        {
+            $settings_qty = Inventory::allow_out_of_stock($shop_id);
+        }
+        if($quantity > $inventory_qty && $settings_qty == 0)
         {
             $return .= "The quantity of <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";
         }
         return $return;
     }
+
     public static function consume_update($ref_name, $ref_id, $item_id, $quantity)
     {
         $data = Tbl_warehouse_inventory_record_log::where("record_consume_ref_name",$ref_name)->where("record_consume_ref_id",$ref_id)->get();
@@ -660,6 +709,7 @@ class Warehouse2
         $slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
         $serial_qty = count($serial);
+
         for ($ctr_qty = 0; $ctr_qty < $quantity; $ctr_qty++) 
         {
             $insert['record_shop_id']            = $shop_id;
@@ -671,6 +721,7 @@ class Warehouse2
             $insert['record_consume_ref_id']     = isset($consume['id']) ? $consume['id'] : 0;
             $insert['record_inventory_status']   = 1;
             $insert['record_log_date_updated']   = Carbon::now();
+            $insert['record_count_inventory']    = 1;
 
             $id = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
                                                    ->where("record_item_id",$item_id)
@@ -688,8 +739,30 @@ class Warehouse2
                                                    ->where("item_in_use",'unused')
                                                    ->value('record_log_id');
             }
-            Warehouse2::insert_item_history($id);
-            Tbl_warehouse_inventory_record_log::where('record_log_id',$id)->update($insert);
+            if(session('consume_offset_inventory'))
+            {
+                $id = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
+                                                   ->where("record_item_id",$item_id)
+                                                   ->where("record_count_inventory",0)
+                                                   ->where("item_in_use",'unused')
+                                                   ->value('record_log_id');
+            }
+            if($id)
+            {            
+                Warehouse2::insert_item_history($id);
+                Tbl_warehouse_inventory_record_log::where('record_log_id',$id)->update($insert);
+                session(['consume_offset_inventory' => null]);
+            }
+            else
+            {
+                if(Inventory::allow_out_of_stock($shop_id) == 1)
+                {
+                    $insert['record_count_inventory'] = 0;
+                    $insert['record_source_ref_name'] = $insert['record_consume_ref_name'];
+                    $insert['record_source_ref_id'] = $insert['record_consume_ref_id'];
+                    $id = Tbl_warehouse_inventory_record_log::insertGetId($insert);
+                }
+            }
         }
 
         if(!$inventory_history)
@@ -748,7 +821,7 @@ class Warehouse2
         foreach ($_item as $key => $value)
         {
             $serial = isset($value['serial']) ? $value['serial'] : null;
-            $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
+            $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial, $reference_name);
         }
         if(!$validate)
         {
@@ -764,6 +837,229 @@ class Warehouse2
         }
 
         return $validate;
+    }
+
+    public static function refill_bundling_item($shop_id, $warehouse_id, $item_id, $quantity, $ref_name = '', $ref_id = 0)
+    {
+        $item_list = Item::get_item_in_bundle($item_id);
+        $_item = [];
+        foreach ($item_list as $key => $value) 
+        {
+            $_item[$key]['item_id'] = $value->bundle_item_id;
+            $_item[$key]['quantity'] = $value->bundle_qty * $quantity;
+            $_item[$key]['remarks'] = 'consume item upon assembling item';
+        }
+        $validate_consume = Warehouse2::consume_bulk_src_ref($shop_id, $warehouse_id, 'bundling_item-'.$ref_name.'-'.$ref_id, $item_id, 'Consume Item upon bundling Item#'.$item_id, $_item, $ref_name, $ref_id);
+
+        if(!$validate_consume)
+        {
+            $source['name'] = 'bundling_item-'.$ref_name.'-'.$ref_id;
+            $source['id'] = $item_id;
+            $validate_consume .= Warehouse2::refill($shop_id, $warehouse_id, $item_id, $quantity, 'Refill Item upon bundling Item#'.$item_id, $source);            
+        }
+
+        return $validate_consume;
+    }
+
+    public static function inventory_delete_inventory_refill($shop_id, $warehouse_id, $ref_name, $ref_id, $item_info)
+    {
+        /* DELETE ALL INVENTORY */
+        $get = Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                                 ->where("record_source_ref_name", $ref_name)
+                                                 ->where("record_source_ref_id", $ref_id)
+                                                 ->get();
+        $del = null;
+        foreach ($get as $key => $value) 
+        {
+            if($value->record_consume_ref_name)
+            {
+                $explode = explode('-', $value->record_consume_ref_name);
+                if(isset($explode[2]))
+                {
+                    $del = $value->record_consume_ref_name;
+                }
+            }
+        }
+
+        Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                                 ->where("record_source_ref_name", $ref_name)
+                                                 ->where("record_source_ref_id", $ref_id)
+                                                 ->delete();
+        if($del)
+        {
+            Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                              ->where('record_source_ref_name', $del)
+                                              ->delete();
+        }
+
+    }
+
+    public static function update_inventory_consume($shop_id, $warehouse_id, $ref_name, $ref_id)
+    {
+        $get = Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                                 ->where("record_consume_ref_name", $ref_name)
+                                                 ->where("record_consume_ref_id", $ref_id)
+                                                 ->where("record_count_inventory", 1)
+                                                 ->get();
+        if(count($get) > 0)
+        {
+            foreach ($get as $key => $value) 
+            {
+                Warehouse2::insert_item_history($value->record_log_id);
+
+                $update['record_inventory_status'] = 0;
+                $update['record_consume_ref_name'] = null;    
+                $update['record_consume_ref_id'] = 0;
+
+                Tbl_warehouse_inventory_record_log::where('record_log_id', $value->record_log_id)->update($update);
+            }
+        }
+        Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
+                                                 ->where("record_consume_ref_name", $ref_name)
+                                                 ->where("record_consume_ref_id", $ref_id)
+                                                 ->where("record_count_inventory", 0)
+                                                 ->delete();
+    }
+    public static function consume_bulk_src_ref($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item, $ref_src_name = '', $ref_src_id = 0)
+    {
+        $validate = null;
+        foreach ($_item as $key => $value)
+        {
+            $serial = isset($value['serial']) ? $value['serial'] : null;
+            $validate .= Warehouse2::consume_validation_ref_num($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial, $ref_src_name, $ref_src_id);
+        }
+        if(!$validate)
+        {
+            foreach ($_item as $key => $value) 
+            {                
+                $serial = isset($value['serial']) ? $value['serial'] : null;
+
+                $consume['name'] = $reference_name;
+                $consume['id'] = $reference_id;
+
+                $validate = Warehouse2::consume_src_ref($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $consume, $serial, 'inventory_history_recorded', $ref_src_name, $ref_src_id);
+            }
+        }
+
+        return $validate;
+
+    }
+    public static function consume_src_ref($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $consume = array(), $serial = array(), $inventory_history = '', $ref_src_name = '', $ref_src_id = 0)
+    {
+        $return = null;
+
+        $insert_slip['warehouse_id']                 = $warehouse_id;
+        $insert_slip['inventory_remarks']            = $remarks;
+        $insert_slip['inventory_slip_date']          = Carbon::now();
+        $insert_slip['inventory_slip_shop_id']       = $shop_id;
+        $insert_slip['slip_user_id']                 = Warehouse::getUserid();
+        $insert_slip['inventroy_source_reason']      = isset($consume['name']) ? $consume['name'] : '';
+        $insert_slip['inventory_source_id']          = isset($consume['id']) ? $consume['id'] : 0;
+        $insert_slip['slip_user_id']                 = Warehouse::getUserid();
+        $slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
+
+        $serial_qty = count($serial);
+        for ($ctr_qty = 0; $ctr_qty < $quantity; $ctr_qty++) 
+        {
+            $insert['record_shop_id']            = $shop_id;
+            $insert['record_item_id']            = $item_id;
+            $insert['record_warehouse_id']       = $warehouse_id;
+            $insert['record_item_remarks']       = $remarks;
+            $insert['record_warehouse_slip_id']  = $slip_id;
+            $insert['record_consume_ref_name']   = isset($consume['name']) ? $consume['name'] : '';
+            $insert['record_consume_ref_id']     = isset($consume['id']) ? $consume['id'] : 0;
+            $insert['record_inventory_status']   = 1;
+            $insert['record_log_date_updated']   = Carbon::now();
+
+            $id = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
+                                                   ->where("record_item_id",$item_id)
+                                                   ->where("record_inventory_status",0)
+                                                   ->where("item_in_use",'unused')
+                                                   ->where("record_source_ref_name", $ref_src_name)
+                                                   ->where("record_source_ref_id", $ref_src_id)
+                                                   ->value('record_log_id');
+            if($serial_qty > 0)
+            {
+                $insert['record_serial_number'] = $serial[$ctr_qty];
+
+                $id = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
+                                                   ->where("record_item_id",$item_id)
+                                                   ->where("record_inventory_status",0)
+                                                   ->where("record_serial_number",$serial[$ctr_qty])
+                                                   ->where("item_in_use",'unused')
+                                                   ->where("record_source_ref_name", $ref_src_name)
+                                                   ->where("record_source_ref_id", $ref_src_id)
+                                                   ->value('record_log_id');
+            }
+            Warehouse2::insert_item_history($id);
+            Tbl_warehouse_inventory_record_log::where('record_log_id',$id)->update($insert);
+        }
+
+        if(!$inventory_history)
+        {
+            $inventory_details['history_description'] = "Consume items from ". $insert_slip['inventroy_source_reason']." #".$insert_slip['inventory_source_id'];
+            $inventory_details['history_remarks'] = $remarks;
+            $inventory_details['history_type'] = "WIS";
+            $inventory_details['history_reference'] = $insert_slip['inventroy_source_reason'];
+            $inventory_details['history_reference_id'] = $insert_slip['inventory_source_id'];
+            $inventory_details['history_number'] = Warehouse2::get_history_number($shop_id, $warehouse_id, $inventory_details['history_type']);
+
+            $history_item[0]['item_id'] = $item_id;
+            $history_item[0]['quantity'] = $quantity;
+            $history_item[0]['item_remarks'] = $remarks;
+
+            Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
+        }
+
+        Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, -($quantity));
+
+        return $return;
+    }
+    public static function consume_validation_ref_num($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $serial = array(), $ref_src_name = '', $ref_src_id = 0)
+    {
+        $return = null;
+        $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
+
+        $serial_qty = count($serial);
+        if($serial_qty != 0)
+        {
+            if($serial_qty != $quantity)
+            {
+                $return .= "The serial number are not equal from the quantity. <br> ";
+            }
+
+            foreach ($serial as $key => $value) 
+            {
+                $check_serial = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id)->where('record_serial_number',$value)->first();
+                if(!$check_serial)
+                {
+                    $return .= "The serial number ".$value." does not exist in this warehouse. <br>";
+                }
+            }
+        }
+        if(is_numeric($quantity) == false)
+        { 
+            $return .= "The quantity must be a number. <br>";
+        }
+        if($quantity < 1)
+        {
+            $return .= "The quantity is less than 1. <br> ";
+        }
+        if(!$check_warehouse)
+        {
+            $return .= "The warehouse doesn't belong to your account <br>";
+        }
+        $inventory_qty = Tbl_warehouse_inventory_record_log::where("record_warehouse_id",$warehouse_id)
+                                                   ->where("record_item_id",$item_id)
+                                                   ->where("record_inventory_status",0)
+                                                   ->where("record_source_ref_name", $ref_src_name)
+                                                   ->where("record_source_ref_id", $ref_src_id)
+                                                   ->count();
+        if($quantity > $inventory_qty)
+        {
+            $return .= "The quantity of <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";
+        }
+        return $return;
     }
 
     /* PARAM
@@ -968,6 +1264,157 @@ class Warehouse2
         Tbl_warehouse_inventory_record_log::where('record_log_id',$record_log_id)->update($update);
     }
 
+
+
+    public static function refill_2($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $source = array(), $serial = array(), $inventory_history = '', $update_count = true, $for_out_of_stock = '')
+    {
+
+        $count_offset = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id )->where('record_count_inventory','<',0)->count();
+        $total_refill_qty = $quantity;
+        if($count_offset > 0)
+        {
+            $total_refill_qty = $quantity - $count_offset;
+        }
+        if(!$for_out_of_stock)
+        {
+            Self::update_offset_qty($warehouse_id, $item_id, $count_offset, $quantity);
+        }
+        $quantity = $total_refill_qty;       
+
+        $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
+
+        $return = null;
+
+        $serial_qty = count($serial);
+        if(!$return)
+        {  
+            $insert_slip['warehouse_id']                 = $warehouse_id;
+            $insert_slip['inventory_remarks']            = $remarks;
+            $insert_slip['inventory_slip_date']          = Carbon::now();
+            $insert_slip['inventory_slip_shop_id']       = $shop_id;
+            $insert_slip['inventroy_source_reason']      = isset($source['name']) ? $source['name'] : '';
+            $insert_slip['inventory_source_id']          = isset($source['id']) ? $source['id'] : 0;
+            $insert_slip['slip_user_id']                 = Warehouse2::get_user_login();
+            $slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
+
+            $insert = null;
+            for ($ctr_qty = 0; $ctr_qty < $quantity; $ctr_qty++) 
+            {
+                $insert[$ctr_qty]['record_shop_id']            = $shop_id;
+                $insert[$ctr_qty]['record_item_id']            = $item_id;
+                $insert[$ctr_qty]['record_warehouse_id']       = $warehouse_id;
+                $insert[$ctr_qty]['record_item_remarks']       = $remarks;
+                $insert[$ctr_qty]['record_warehouse_slip_id']  = $slip_id;
+                $insert[$ctr_qty]['record_source_ref_name']    = isset($source['name']) ? $source['name'] : '';
+                $insert[$ctr_qty]['record_source_ref_id']      = isset($source['id']) ? $source['id'] : 0;
+                $insert[$ctr_qty]['record_log_date_updated']   = Carbon::now();
+                $insert[$ctr_qty]['mlm_pin']                   = Warehouse2::get_mlm_pin($shop_id);
+                $insert[$ctr_qty]['mlm_activation']            = Item::get_mlm_activation($shop_id);
+                $insert[$ctr_qty]['ctrl_number']               = Warehouse2::get_control_number($warehouse_id, $shop_id, Item::get_item_type($item_id));
+                if($for_out_of_stock)
+                {
+                    $insert[$ctr_qty]['record_count_inventory'] = -1;
+                }
+
+                if($serial_qty > 0)
+                {
+                    $insert[$ctr_qty]['record_serial_number'] = $serial[$ctr_qty];
+                }
+                Tbl_warehouse_inventory_record_log::insert($insert[$ctr_qty]);
+            }
+
+            if(!$inventory_history)
+            {
+                $inventory_details['history_description'] = "Refill items from ". $insert_slip['inventroy_source_reason']." #".$insert_slip['inventory_source_id'];
+                $inventory_details['history_remarks'] = $remarks;
+                $inventory_details['history_type'] = "RR";
+                $inventory_details['history_reference'] = $insert_slip['inventroy_source_reason'];
+                $inventory_details['history_reference_id'] = $insert_slip['inventory_source_id'];
+                $inventory_details['history_number'] = Warehouse2::get_history_number($shop_id, $warehouse_id, $inventory_details['history_type']);
+
+                $history_item[0]['item_id'] = $item_id;
+                $history_item[0]['quantity'] = $quantity;
+                $history_item[0]['item_remarks'] = $remarks;
+
+                Warehouse2::insert_inventory_history($shop_id, $warehouse_id, $inventory_details, $history_item);
+            }
+
+            if($update_count == true)
+            {
+                Warehouse2::update_inventory_count($warehouse_id, $slip_id, $item_id, $quantity);
+            }
+        }    
+
+        return $return;
+    }
+
+    public static function consume_validation_backup($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $serial = array(), $allow_out_of_stock = false)
+    {
+        $return = null;
+        $check_warehouse = Tbl_warehouse::where('warehouse_id',$warehouse_id)->where('warehouse_shop_id',$shop_id)->first();
+
+        $serial_qty = count($serial);
+        if($serial_qty != 0)
+        {
+            if($serial_qty != $quantity)
+            {
+                $return .= "The serial number are not equal from the quantity. <br> ";
+            }
+
+            foreach ($serial as $key => $value) 
+            {
+                $check_serial = Tbl_warehouse_inventory_record_log::where('record_warehouse_id',$warehouse_id)->where('record_item_id', $item_id)->where('record_serial_number',$value)->first();
+                if(!$check_serial)
+                {
+                    $return .= "The serial number ".$value." does not exist in this warehouse. <br>";
+                }
+            }
+        }
+        if($allow_out_of_stock == false)
+        {
+            if(is_numeric($quantity) == false)
+            { 
+                $return .= "The quantity must be a number. <br>";
+            }
+        }
+        if($quantity < 1)
+        {
+            $return .= "The quantity is less than 1. <br> ";
+        }
+        if(!$check_warehouse)
+        {
+            $return .= "The warehouse doesn't belong to your account <br>";
+        }
+        $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
+        if($quantity > $inventory_qty)
+        {
+            $return .= "The quantity of <b>".Item::info($item_id)->item_name."</b> is not enough to consume. <br>";
+        }
+        if($allow_out_of_stock == true)
+        {
+            Self::inventory_allow_out_of_stock($shop_id, $warehouse_id, $item_id, $quantity);
+            $return = null;
+        }
+        return $return;
+    }
+    public static function inventory_allow_out_of_stock($shop_id, $warehouse_id, $item_id, $quantity = 1)
+    {
+        $v1_qty = Tbl_item::inventory($warehouse_id)->where('tbl_item.item_id', $item_id)->where('tbl_item.shop_id',$shop_id)->value('inventory_count');
+        $v2_qty = Tbl_item::recordloginventory($warehouse_id)->where('tbl_item.item_id', $item_id)->where('tbl_item.shop_id',$shop_id)->value('inventory_count');
+
+        $total_to_refill = $v1_qty - $v2_qty;
+        $source['name'] = 'inventory_v1';
+        $source['id'] = 0;
+        // if($total_to_refill > 0)
+        // {
+        //     Self::refill($shop_id, $warehouse_id, $item_id, $total_to_refill, 'Migrate Inventory v1 to v2', $source, null, null, false);
+        // }
+        if($quantity > $v2_qty)
+        {
+            $total_out_of_stock = $quantity - $v2_qty;
+            Self::refill($shop_id, $warehouse_id, $item_id, $total_out_of_stock, 'Migrate Inventory v1 to v2', $source, null, null, false, 'for_out_of_stock');
+        }
+    }
     public static function get_all_warehousev2()
     {
         return Tbl_warehouse::selectRaw('warehouse_id, warehouse_shop_id')->where('archived',0)->get();        
@@ -1103,5 +1550,93 @@ class Warehouse2
             }
         }
         return $return;
+    }
+    public static function consume_offset_inventory($get)
+    {
+        session(['consume_offset_inventory' => $get]);
+    }
+    public static function refill_offset_inventory($get)
+    {
+        session(['refill_offset_inventory' => $get]);
+    }
+    public static function refill_adjust_inventory($get)
+    {
+        session(['refill_adjust_inventory' => $get]);
+    }
+    public static function adjust_inventory($shop_id, $warehouse_id, $item_id, $quantity, $remarks = '', $ref = array())
+    {
+        /* ZERO OUT ALL THE INVENTORY BY USING CONSUME */
+        $get_current_inventory = Tbl_warehouse_inventory_record_log::where('record_shop_id', $shop_id)
+                                                   ->where("record_warehouse_id", $warehouse_id)
+                                                   ->where("record_item_id", $item_id)
+                                                   ->where('record_inventory_status',0)
+                                                   ->where("record_count_inventory",1)
+                                                   ->count();
+        $get_offset_inventory = Tbl_warehouse_inventory_record_log::where('record_shop_id', $shop_id)
+                                                   ->where("record_warehouse_id", $warehouse_id)
+                                                   ->where("record_item_id", $item_id)
+                                                   ->where('record_count_inventory',0)
+                                                   ->count();
+
+        $t_qty = $get_offset_inventory + $get_current_inventory;
+
+        if($t_qty > 0)
+        {
+            if($get_offset_inventory > 0)
+            {
+                Self::consume_offset_inventory(true);
+            }
+            Self::consume($shop_id, $warehouse_id, $item_id, $t_qty, $remarks, $ref);
+        }
+
+        if($quantity > 0) /*POSITIVE*/
+        {
+            Self::refill_adjust_inventory(true);
+            Self::refill($shop_id, $warehouse_id, $item_id, $quantity, $remarks, $ref);
+        }
+        else /*NEGATIVE*/
+        {
+            Self::refill_offset_inventory(true);
+            Self::refill($shop_id, $warehouse_id, $item_id, abs($quantity), $remarks, $ref);
+        }
+
+    }
+    public static function adjust_inventory_bulk($shop_id, $warehouse_id, $item_info = array(), $remarks = '', $ref = array())
+    {
+        foreach ($item_info as $key => $value) 
+        {
+            Self::adjust_inventory($shop_id, $warehouse_id, $value['item_id'], $value['item_new_qty'], $remarks, $ref);
+        }
+    }
+    public static function adjust_inventory_update_bulk($shop_id, $warehouse_id, $item_info = array(), $remarks = '', $ref = array())
+    {
+        $get_consume = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name', $ref['name'])->where('record_consume_ref_id', $ref['id'])->get();
+        if(count($get_consume))
+        {
+            foreach ($get_consume as $key => $value) 
+            {
+                $update = Self::get_previous_data($value->record_log_id);
+                Tbl_warehouse_inventory_record_log::where('record_log_id', $value->record_log_id)->update($update);
+            }            
+        }
+        Tbl_warehouse_inventory_record_log::where('record_source_ref_name', $ref['name'])->where('record_source_ref_id', $ref['id'])->delete();
+        Self::delete_inventory_history($shop_id, $ref);
+        Self::adjust_inventory_bulk($shop_id, $warehouse_id, $item_info, $remarks, $ref);
+    }
+    public static function get_previous_data($record_log_id)
+    {
+        $return = null;
+        $data = Tbl_warehouse_inventory_record_log::where('record_log_id', $record_log_id)->value('record_log_history');
+        if($data)
+        {
+            $value = unserialize($data);
+            $return = end($value);
+            unset($return['record_log_id']);
+        }
+        return $return;
+    }
+    public static function delete_inventory_history($shop_id, $ref = array())
+    {
+        Tbl_inventory_history::where('shop_id', $shop_id)->where("history_reference", $ref['name'])->where('history_reference_id',$ref['id'])->delete();
     }
 }

@@ -24,6 +24,8 @@ Route::any('/leave/ajax_load_canceled_leave', 'Member\PayrollEmployee\LeaveContr
 
 Route::any('employee_request_leave_view/{request_id}', 'Member\PayrollEmployee\LeaveController@employee_request_leave_view');
 Route::any('employee_request_leave_cancel/{request_id}', 'Member\PayrollEmployee\LeaveController@employee_request_leave_cancel');
+Route::any('employee_request_leave_export_pdf/{request_id}', 'Member\PayrollEmployee\LeaveController@employee_request_leave_export_pdf');
+
 
 Route::any('authorized_access_leave', 'Member\PayrollEmployee\LeaveController@authorized_access_leave');
 Route::any('authorized_access_leave/view_leave_request/{request_id}', 'Member\PayrollEmployee\LeaveController@view_leave_request');
@@ -50,6 +52,8 @@ Route::any('authorized_access_over_time', 'Member\PayrollEmployee\EmployeeContro
 Route::any('authorized_access_over_time/view_overtime_request/{request_id}', 'Member\PayrollEmployee\EmployeeController@view_overtime_request');
 Route::any('authorized_access_over_time/approve_overtime_request/{request_id}', 'Member\PayrollEmployee\EmployeeController@approve_overtime_request');
 Route::any('authorized_access_over_time/reject_overtime_request/{request_id}', 'Member\PayrollEmployee\EmployeeController@reject_overtime_request');
+
+Route::any('employee_request_overtime_export_pdf/{request_id}', 'Member\PayrollEmployee\EmployeeController@employee_request_overtime_export_pdf');
 /*End overtime request and management*/
 Route::any('authorized_access_official_business', 'Member\PayrollEmployee\EmployeeController@authorized_access_official_business');
 
@@ -69,6 +73,8 @@ Route::any('/authorized_access_request_for_refund', 'Member\PayrollEmployee\Requ
 Route::any('/authorized_access_request_for_refund_table', 'Member\PayrollEmployee\RequestForPaymentController@authorized_access_request_for_refund_table');
 Route::any('rfp_application_approve/{request_id}', 'Member\PayrollEmployee\RequestForPaymentController@rfp_application_approve');
 Route::any('rfp_application_reject/{request_id}', 'Member\PayrollEmployee\RequestForPaymentController@rfp_application_reject');
+
+Route::any('employee_request_rfp_export_pdf/{request_id}', 'Member\PayrollEmployee\RequestForPaymentController@employee_request_rfp_export_pdf');
 /*End Request for Payment*/
 
 Route::any('employee_official_business_management', 'Member\PayrollEmployee\EmployeeController@employee_official_business_management');

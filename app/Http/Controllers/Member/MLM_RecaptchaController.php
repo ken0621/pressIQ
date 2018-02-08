@@ -45,13 +45,15 @@ class MLM_RecaptchaController extends Member
     	$setting_points = Tbl_recaptcha_setting::where('shop_id',$this->user_info->shop_id)->first();
     	if(count($setting_points)>0)
     	{
-    		$update['point'] = $request->point;
+            $update['point']    = $request->point;
+            $update['schedule'] = $request->schedule;
     		Tbl_recaptcha_setting::where('shop_id',$this->user_info->shop_id)->update($update);
     	}
     	else
     	{
     		$insert['shop_id'] 	= $this->user_info->shop_id;
-    		$insert['point'] 	= $request->point;;
+    		$insert['point'] 	= $request->point;
+            $insert['schedule'] = $request->schedule;
     		Tbl_recaptcha_setting::insert($insert);
     	}
     	$response['call_function'] = 'success_setting';

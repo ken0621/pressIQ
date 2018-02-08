@@ -80,9 +80,9 @@
 							<a href="/members/eon-card"><div class="nav-holder"><dic class="icon brown-icon-credit-card"></dic> <span>Eon Card</span></div></a>
 						</li> -->
 
-	 					<li class="{{ Request::segment(2) == "buy-credits" ? "active" : "" }}">
-							<a href="/members/buy-credits"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Buy Credits</span></div></a>
-						</li>
+	 				<!--	<li class="{{ Request::segment(2) == "buy-credits" ? "active" : "" }}">-->
+						<!--	<a href="/members/buy-credits"><div class="nav-holder"><div class="icon brown-icon-wallet"></div> <span>Buy Credits</span></div></a>-->
+						<!--</li>-->
 						@else
 						@endif
 

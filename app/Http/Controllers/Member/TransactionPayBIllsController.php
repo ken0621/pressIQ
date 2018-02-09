@@ -115,9 +115,7 @@ class TransactionPayBillsController extends Member
             $insert_item[$key]["item_qty"]                = 0;
             $insert_item[$key]["item_ref_id"]             = $request->pbline_bill_id[$key];
             $insert_item[$key]["item_ref_name"]           = $request->pbline_txn_type[$key];
-
         }
-        
         
         if($ctr_bill != 0)
         {
@@ -143,7 +141,6 @@ class TransactionPayBillsController extends Member
             $return['status_message'] = 'Please Select Item';
         }
         return json_encode($return);
-
     }
 
     public function postUpdatePayBills(Request $request)

@@ -94,7 +94,6 @@ class TransactionPayBills
 	        /*INSERT PB HERE*/
 	        $pay_bill_id = Tbl_pay_bill::insertGetId($ins);
 	        
-	               
 	        /* Transaction Journal */
 	        $entry["reference_module"]  = "bill-payment";
 	        $entry["reference_id"]      = $pay_bill_id;

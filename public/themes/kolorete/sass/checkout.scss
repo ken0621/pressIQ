@@ -158,12 +158,12 @@
 
 				.button-proceed 
 				{
-					border: 0;
+					border: 2px solid #585858;
 					width: 100%;
 					text-align: center;
-					background-color: #5AC036;
+					background-color: rgba(0,0,0,.1);
 					padding: 10px;
-					color: #fff;
+					color: #585858;
 					border-radius: 4px;
 					font-size: 13px;
 					font-weight: 600;
@@ -171,6 +171,8 @@
 					&:hover 
 					{
 						cursor: pointer;
+						background-color: #585858;
+						color: #fff;
 					}
 				}
 			}	

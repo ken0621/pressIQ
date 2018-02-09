@@ -74,6 +74,7 @@ class TransactionController extends Member
         $data['transaction_details'] = unserialize($data["list"]->transaction_details);
         $data['customer_info']       = Transaction::getCustomerInfoTransaction($data['list']->transaction_id);
         $data['customer_address']    = Transaction::getCustomerAddressTransaction($data['list']->transaction_id);
+         $data['_codes']              = Transaction::get_transaction_item_code($transaction_list_id, $this->user_info->shop_id);
         
         /* Item */
         $data['list']->vat           = $data['list']->transaction_subtotal / 1.12 * 0.12;

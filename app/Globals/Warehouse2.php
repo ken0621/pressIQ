@@ -899,6 +899,7 @@ class Warehouse2
         $get = Tbl_warehouse_inventory_record_log::where("record_consume_ref_name", $ref_name)
                                                  ->where("record_consume_ref_id", $ref_id)
                                                  ->where("record_count_inventory", 1);
+
         if($warehouse_id)
         {
             $get = $get->where('record_warehouse_id', $warehouse_id);
@@ -906,15 +907,21 @@ class Warehouse2
         $get = $get->get();
         if(count($get) > 0)
         {
+            $update = null;
             foreach ($get as $key => $value) 
             {
                 Warehouse2::insert_item_history($value->record_log_id);
 
-                $update['record_inventory_status'] = 0;
-                $update['record_consume_ref_name'] = null;    
-                $update['record_consume_ref_id'] = 0;
+                $update[$key]['record_inventory_status'] = 0;
+                $update[$key]['record_consume_ref_name'] = null;    
+                $update[$key]['record_consume_ref_id'] = 0;
 
-                Tbl_warehouse_inventory_record_log::where('record_log_id', $value->record_log_id)->update($update);
+            }
+            if(count($update) > 0)
+            {
+                Tbl_warehouse_inventory_record_log::where("record_consume_ref_name", $ref_name)
+                                                  ->where("record_consume_ref_id", $ref_id)
+                                                  ->update($update);
             }
         }
         $del = Tbl_warehouse_inventory_record_log::where("record_consume_ref_name", $ref_name)

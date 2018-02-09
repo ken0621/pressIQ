@@ -322,14 +322,14 @@ class ItemController extends Member
 
 		$data['status'] = '';
 
-		$item_name	 					= Request::input("item_name");
-		$item_sku						= Request::input("item_sku");
+		$item_name	 					= strtoupper(Request::input("item_name"));
+		$item_sku						= strtoupper(Request::input("item_sku"));
 		$item_category_id				= Request::input("item_category_id");
 		$item_img 						= Request::input("item_img");
 		$item_sales_information 		= Request::input("item_sales_information");
 		$item_date_tracked 				= date("Y-m-d g:i:s",strtotime(Request::input("item_date_tracked")));
 		// $item_purchasing_information 	= Request::input("item_purchasing_information");
-		$item_barcode 					= Request::input("item_barcode");
+		$item_barcode 					= strtoupper(Request::input("item_barcode"));
 		$item_manufacturer_id 			= Request::input("item_manufacturer_id");
 		$packing_size 					= Request::input("packing_size");
 
@@ -1170,14 +1170,14 @@ class ItemController extends Member
 
 		$old = Tbl_item::where("item_id",$item_id)->first()->toArray();
 
-		$item_name	 					= Request::input("item_name");
-		$item_sku						= Request::input("item_sku");
+		$item_name	 					= strtoupper(Request::input("item_name"));
+		$item_sku						= strtoupper(Request::input("item_sku"));
 		$item_category_id				= Request::input("item_category_id");
 		$item_img 						= Request::input("item_img");
 		$item_sales_information 		= Request::input("item_sales_information");
 		$item_date_tracked 				= date("Y-m-d g:i:s",strtotime(Request::input("item_date_tracked")));
 		// $item_purchasing_information 	= Request::input("item_purchasing_information");
-		$item_barcode 					= Request::input("item_barcode");
+		$item_barcode 					= strtoupper(Request::input("item_barcode"));
 		$item_manufacturer_id 			= Request::input("item_manufacturer_id");
 		$packing_size 					= Request::input("packing_size");
 

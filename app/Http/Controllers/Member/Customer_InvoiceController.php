@@ -178,7 +178,8 @@ class Customer_InvoiceController extends Member
         $product_consume = [];
         $item_serial = [];
 
-        $check_single = [];
+        $check_single = []; 
+        $check_bundle = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
@@ -214,22 +215,24 @@ class Customer_InvoiceController extends Member
                         $item_serial[$key]["item_id"] = Request::input('invline_item_id')[$key];
                         $item_serial[$key]["serials"] = $serial_number[$key];                        
                     }
+
+                    $check_bundle[$key] = $item_info;
                 }
             }
         }
         //START if bundle inventory_consume arcy
-        $check_bundle = [];
+       
         foreach ($_itemline as $keyitem => $value_item) 
         {
             $item_bundle_info = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitem])->where("item_type_id",4)->first();
             if($item_bundle_info)
             {
                 $bundle = Tbl_item_bundle::where("bundle_bundle_id",Request::input("invline_item_id")[$keyitem])->get();
-                $check_bundle[$keyitem] = $bundle;
-                foreach ($check_bundle[$keyitem] as $key0 => $value0) 
-                {
-                    $check_bundle[$keyitem][$key0]->bundle_quantity = str_replace(",", "", Request::input('invline_qty')[$keyitem]);
-                }
+                // $check_bundle[$keyitem] = $bundle;
+                // foreach ($check_bundle[$keyitem] as $key0 => $value0) 
+                // {
+                //     $check_bundle[$keyitem][$key0]->bundle_quantity = str_replace(",", "", Request::input('invline_qty')[$keyitem]);
+                // }
                 foreach ($bundle as $key_bundle => $value_bundle) 
                 {
                     $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$keyitem]);
@@ -434,7 +437,16 @@ class Customer_InvoiceController extends Member
                 {
                     $json["status"]         = "success-invoice";
 
-                    if($button_action == "save-and-edit")
+                    /*if($button_action == "save-and-edit")
+                    {
+                        $json["redirect"]    = "/member/customer/invoice_list";
+                    }
+                    elseif($button_action == "save-and-new")
+                    {
+                        $json["redirect"]   = '/member/customer/invoice';
+                    }*/
+
+                    if($button_action == "save-and-close")
                     {
                         $json["redirect"]    = "/member/customer/invoice_list";
                     }
@@ -442,6 +454,16 @@ class Customer_InvoiceController extends Member
                     {
                         $json["redirect"]   = '/member/customer/invoice';
                     }
+                    elseif($button_action == "save-and-edit")
+                    {
+                        $json["redirect"]   = '/member/customer/invoice?id='.$inv_id;
+                    }
+                    elseif($button_action == "save-and-print")
+                    {
+                        $json["redirect"]   = '/member/customer/customer_invoice_pdf/'.$inv_id;
+                    }
+
+
 
                     Request::session()->flash('success', 'Invoice Successfully Created');
                 }
@@ -531,23 +553,24 @@ class Customer_InvoiceController extends Member
                         $item_serial[$key]["item_id"] = Request::input('invline_item_id')[$key];
                         $item_serial[$key]["serials"] = $serial_number[$key];                        
                     }
+                    $check_bundle[$key] = $item_info;
                 }
             }
         }
 
         //START if bundle inventory_consume arcy
-        $check_bundle = [];
+        // $check_bundle = [];
         foreach ($_itemline as $keyitem => $value_item) 
         {
             $item_bundle_info = Tbl_item::where("item_id", Request::input("invline_item_id")[$keyitem])->where("item_type_id",4)->first();
             if($item_bundle_info)
             {
                 $bundle = Tbl_item_bundle::where("bundle_bundle_id", Request::input("invline_item_id")[$keyitem])->get();
-                $check_bundle[$keyitem] = $bundle;
-                foreach ($check_bundle[$keyitem] as $key0 => $value0) 
-                {
-                    $check_bundle[$keyitem][$key0]->bundle_quantity = str_replace(",", "", Request::input('invline_qty')[$keyitem]);
-                }
+                // $check_bundle[$keyitem] = $bundle;
+                // foreach ($check_bundle[$keyitem] as $key0 => $value0) 
+                // {
+                //     $check_bundle[$keyitem][$key0]->bundle_quantity = str_replace(",", "", Request::input('invline_qty')[$keyitem]);
+                // }
                 foreach ($bundle as $key_bundle => $value_bundle) 
                 {
                     $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$keyitem]);
@@ -579,7 +602,7 @@ class Customer_InvoiceController extends Member
             }           
         }
         //END if bundle inventory_consume arcy
-        $check_stock = $this->check_stock($check_single, $check_bundle);
+        $check_stock = $this->check_stock($check_single, $check_bundle);  
 
         if ($check_stock) 
         {
@@ -749,13 +772,25 @@ class Customer_InvoiceController extends Member
 
                 if($json["status"] == "success")
                 {
-                    $json["status"]         = "success-invoice";
+                    $json["call_function"]         = "success_invoice";
                     $json["invoice_id"]     = $inv_id;
                     $json["redirect"]           = "/member/customer/invoice_list";
 
                     if($button_action == "save-and-new")
                     {
                         $json["redirect"]   = '/member/customer/invoice';
+                    }
+                    if($button_action == "save-and-close")
+                    {
+                        $json["redirect"]    = "/member/customer/invoice_list";
+                    }
+                    elseif($button_action == "save-and-edit")
+                    {
+                        $json["redirect"]   = '/member/customer/invoice?id='.$inv_id;
+                    }
+                    elseif($button_action == "save-and-print")
+                    {
+                        $json["redirect"]   = '/member/customer/customer_invoice_pdf/'.$inv_id;
                     }
                     Request::session()->flash('success', 'Invoice Successfully Updated');
                 }
@@ -803,21 +838,30 @@ class Customer_InvoiceController extends Member
             $data['new_inv_id'] = $invoice_data->new_inv_id;
         }
 
-        // $data["invoice_id"] = "INVOICE";
         $data["action_load"] = "/member/customer/customer_invoice_pdf";
         return view("member.customer_invoice.invoice_view",$data);
     }
     public function invoice_view_pdf($inv_id)
     {
+/*<<<<<<< HEAD
         $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
+=======*/
+        $date = date("F j, Y, g:i a");
+        $first_name         = $this->user_info->user_first_name;
+        $last_name         = $this->user_info->user_last_name;
 
+        $footer ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+//>>>>>>> 13887ca6efcd0b6dc45a0494beb6e9c1e0caaa6d
+
+
+        $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
         $data["transaction_type"] = "INVOICE";
         if(Tbl_customer_invoice::where("inv_id",$inv_id)->value("is_sales_receipt") != 0)
         {
             $data["transaction_type"] = "Sales Receipt";            
         }
+
         $data["invoice_item"] = Tbl_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
-        //dd($data["invoice_item"]);
         foreach($data["invoice_item"] as $key => $value) 
         {
             $qty = UnitMeasurement::um_qty($value->invline_um);
@@ -825,6 +869,7 @@ class Customer_InvoiceController extends Member
             $total_qty = $value->invline_qty * $qty;
             $data["invoice_item"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->invline_um);
         }
+
         $data["cm"] = null;
         $data["_cmline"] = null;
         if($data["invoice"] != null)
@@ -840,10 +885,8 @@ class Customer_InvoiceController extends Member
                 $data["_cmline"][$keys]->cm_qty = UnitMeasurement::um_view($total_qtys,$values->item_measurement_id,$values->cmline_um);
             }
         }
-        //dd($data);
-        //return view('member.customer_invoice.invoice_pdf', $data);
         $pdf = view('member.customer_invoice.invoice_pdf', $data);
-        return Pdf_global::show_pdf($pdf);
+        return Pdf_global::show_pdf($pdf, null, $footer);
     }
 
     public function check_stock($check_single, $check_bundle)

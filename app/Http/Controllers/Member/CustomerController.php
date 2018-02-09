@@ -366,16 +366,17 @@ class CustomerController extends Member
         return json_encode($return);
 	}
 	
-	public function createcustomer(){
+	public function createcustomer()
+    {
 	    // return $_POST;
 	    $shop_id = $this->checkuser('user_shop');
-	    $title = Request::input('title');
-        $first_name = Request::input('first_name');
-        $middle_name = Request::input('middle_name');
-        $last_name = Request::input('last_name');
-        $suffix = Request::input('suffix');
+	    $title = strtoupper(Request::input('title'));
+        $first_name = strtoupper(Request::input('first_name'));
+        $middle_name = strtoupper(Request::input('middle_name'));
+        $last_name = strtoupper(Request::input('last_name'));
+        $suffix = strtoupper(Request::input('suffix'));
         $email = Request::input('email');
-        $company = Request::input('company');
+        $company = strtoupper(Request::input('company'));
         $billing_country = Request::input('billing_country');
         $customer_status = Request::input("customer_status");
         $stockist_warehouse_id = Request::input("stockist_warehouse_id");
@@ -731,13 +732,13 @@ class CustomerController extends Member
     {
         $shop_id = $this->checkuser('user_shop');
         $client_id = Request::input('client_id');
-        $title = Request::input('title');
-        $first_name = Request::input('first_name');
-        $middle_name = Request::input('middle_name');
-        $last_name = Request::input('last_name');
-        $suffix = Request::input('suffix');
+        $title = strtoupper(Request::input('title'));
+        $first_name = strtoupper(Request::input('first_name'));
+        $middle_name = strtoupper(Request::input('middle_name'));
+        $last_name = strtoupper(Request::input('last_name'));
+        $suffix = strtoupper(Request::input('suffix'));
         $email = Request::input('email');
-        $company = Request::input('company');
+        $company = strtoupper(Request::input('company'));
         $stockist_warehouse_id = Request::input('stockist_warehouse_id');
         $billing_country = Request::input('billing_country');
         
@@ -989,9 +990,9 @@ class CustomerController extends Member
 	
     public function view_customer_details($id)
     {
-        $data["customer"]       = Tbl_customer::info()->balanceJournal()->where("tbl_customer.customer_id", $id)->first();
-        $data["_transaction"]   = Tbl_customer::transaction($this->checkuser('user_shop'), $id)->get();
-
+        $data["customer"]              = Tbl_customer::info()->balanceJournal()->where("tbl_customer.customer_id", $id)->first();
+        $data["_transaction"]          = Tbl_customer::transaction($this->checkuser('user_shop'), $id)->get();
+        $data["customer"]->customer_id = $id;
         return view('member.customer.customer_details', $data);
     }
 

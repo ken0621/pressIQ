@@ -27,7 +27,7 @@ class Warehouse
 {   
     public static function select_item_warehouse_per_bundle($warehouse_id, $manufacturer_id = 0, $keyword_search = '', $item_bundle_id = null)
     {
-        if ($item_bundle_id) 
+        if($item_bundle_id) 
         {
             $bundle = Tbl_item::category()->where("item_id", $item_bundle_id)->where("shop_id", Warehouse::getShopId())->get();
         }
@@ -38,7 +38,6 @@ class Warehouse
 
         $item = [];
         $bundle_data = [];
-
         foreach($bundle as $key => $value) 
         {
             //onhand = current
@@ -132,7 +131,6 @@ class Warehouse
         //     }
         //     $bundle_data["b".$key_rem]["bundle_current_stocks"] = UnitMeasurement::um_view($value_rem["item_quantity"],$item_details->item_measurement_id,$um);
         // }
-
         return $bundle_data;
 
     }
@@ -1021,7 +1019,7 @@ class Warehouse
                 $success++;
 
                 $inventory_id = Tbl_warehouse_inventory::insertGetId($insert_refill);
-
+                
                 if(count($item_serial) >= 1 && $is_return == null) 
                 {
                     if($item_serial[$key]["item_id"] == $refill_product['product_id'])
@@ -1322,7 +1320,6 @@ class Warehouse
                 } 
             } 
         }
-
         foreach ($product_consume["bundle"] as $key_item => $value_item) 
         {
             $ctr = 0;
@@ -1331,7 +1328,7 @@ class Warehouse
             {
                 if ($ctr == 0) 
                 {
-                    $count_on_hand = Warehouse::select_item_warehouse_per_bundle($warehouse_id, 0, '', $value_items->bundle_item_id);
+                    $count_on_hand = Warehouse::select_item_warehouse_per_bundle($warehouse_id, 0, '', $value_items['item_id']);
                     
                     if (isset($count_on_hand[0]["bundle_actual_stocks"])) 
                     {
@@ -1341,8 +1338,7 @@ class Warehouse
                     {
                         $count_on_hand = 0;
                     }
-
-                    if($value_items->bundle_quantity > 0 && $count_on_hand > 0 && $count_on_hand >= $value_items->bundle_quantity)
+                    if($value_items['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value_items['quantity'])
                     {
                         // Allowed
                     }

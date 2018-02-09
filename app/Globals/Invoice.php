@@ -435,7 +435,7 @@ class Invoice
         }
         $payment_applied = Tbl_customer_invoice::appliedPayment($shop_id)->where("inv_id",$inv_id)->value("amount_applied");
         $data["inv_payment_applied"] = $payment_applied;
-
+        
         Tbl_customer_invoice::where("inv_id", $inv_id)->update($data);
 
         return Invoice::updateIsPaid($inv_id);

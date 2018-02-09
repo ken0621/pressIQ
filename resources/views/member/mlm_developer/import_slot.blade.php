@@ -31,12 +31,13 @@
                             <th class="text-center">SPONSOR</th>
                             <th class="text-center">PLACEMENT</th>
                             <th class="text-center">PACKAGE<br>NUMBER</th>
+                            <th class="text-center">PASSWORD</th>
                             <th width="200px;" class="text-center">STATUS</th>
                         </tr>
                     </thead>
                     <tbody class="import-slot-list">
                         <tr>
-                            <td class="text-center" colspan="9">NO SLOT TO IMPORT YET</td>
+                            <td class="text-center" colspan="10">NO SLOT TO IMPORT YET</td>
                         </tr>
                     </tbody>
                 </table>

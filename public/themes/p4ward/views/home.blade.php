@@ -66,7 +66,7 @@
                     <div class="wow fadeInRight col-md-7">
                         <div class="title">Why Join P4ward</div>
                         <div class="details-container">
-                            {!! get_content($shop_theme_info, "home", "home_history_front") !!}
+                            {!! get_content($shop_theme_info, "home", "home_why_p4ward_context") !!}
                         </div>
                     </div>
                 </di>
@@ -93,7 +93,7 @@
                             <div class="percent-container">{{ get_content($shop_theme_info, "home", "home_percent_of_product_2") }}</div>
                             <div class="product-title-container">{{ get_content($shop_theme_info, "home", "home_p4ward_product_2") }}</div>
                             <div class="product-image"><img src="{{ get_content($shop_theme_info, "home", "home_image_product_2") }}"></div>
-                            <div class="button-container"><a href="#"><button>See Benefits</button></a></div>
+                            <div class="button-container"><a href="/product2"><button>See Benefits</button></a></div>
                         </div>
                     </div>
                 </div>
@@ -293,7 +293,7 @@
             <div class="wrapper-x-title wow fadeInDown" data-wow-delay = ".2s">Network Marketing Without Recruitment</div>
 
             <div class="btn-container wow fadeInDown" data-wow-delay = ".4s">
-                <a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view"><button>Read More &raquo;</button></a>
+                <a href="https://drive.google.com/file/d/0B9TqTDu5OK_3Mm5qdGoyZ2huRFl2ZTd1SS01Q1c3d1EyY1lJ/view" target="_blank"><button>Read More &raquo;</button></a>
             </div>
         </div>
     </div>

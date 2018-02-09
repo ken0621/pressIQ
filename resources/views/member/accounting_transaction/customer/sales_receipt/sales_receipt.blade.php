@@ -3,6 +3,7 @@
 <form class="global-submit" action="{{$action or ''}}" method="post">
     <div class="panel panel-default panel-block panel-title-block">
         <input type="hidden" class="button-action" name="button_action" value="">
+        <input type="hidden" name="sales_receipt_id" value="{{Request::input('id')}}">
         <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}"/>
         <div class="panel-heading">
             <div>
@@ -15,6 +16,9 @@
                 </h1>
                 <div class="dropdown pull-right">
                     <div>
+                        @if(isset($sales_receipt))
+                        <a class="btn btn-custom-white" href="/member/accounting/journal/entry/sales-receipt/{{$sales_receipt->inv_id}}">Transaction Journal</a>
+                        @endif
                         <a class="btn btn-custom-white" href="/member/transaction/credit_memo">Cancel</a>
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
                         <span class="caret"></span></button>
@@ -23,6 +27,7 @@
                           <li><a class="select-action" code="sedit">Save & Edit</a></li>
                           <li><a class="select-action" code="sprint">Save & Print</a></li>
                           <li><a class="select-action" code="snew">Save & New</a></li>
+                          <li><a class="select-action" code="swis">Save & Create WIS</a></li>
                         </ul>
                     </div>
                 </div>
@@ -40,7 +45,7 @@
                             <div class="row clearfix">                        
                                 <div class="col-sm-4">    
                                     <label >Reference Number</label>
-                                    <input type="text" class="form-control input-sm" name="transaction_refnumber" value="{{$transaction_refnum or ''}}">
+                                    <input type="text" class="form-control input-sm" name="transaction_refnumber" value="{{isset($sales_receipt) ? $sales_receipt->transaction_refnum : $transaction_refnum}}">
                                 </div>
                             </div>
                         </div>
@@ -48,11 +53,11 @@
                             <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <select class="form-control droplist-customer input-sm pull-left" name="customer_id" data-placeholder="Select a Customer" required>
-                                        @include('member.load_ajax_data.load_customer', ['customer_id' => isset($inv) ? $inv->inv_customer_id : (isset($c_id) ? $c_id : '') ])
+                                        @include('member.load_ajax_data.load_customer', ['customer_id' => isset($sales_receipt) ? $sales_receipt->inv_customer_id : (isset($c_id) ? $c_id : '') ])
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$inv->inv_customer_email or ''}}"/>
+                                    <input type="text" class="form-control input-sm customer-email" name="customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$sales_receipt->inv_customer_email or ''}}"/>
                                 </div>
                                 <div class="col-sm-4 text-right open-transaction" style="display: none;">
                                     <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/sales_invoice/load_transaction?customer_id="><i class="fa fa-handshake-o"></i> <span class="count-open-transaction">0</span> Open Transaction</a></h4>
@@ -62,11 +67,11 @@
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Billing Address</label>
-                                <textarea class="form-control input-sm textarea-expand customer-billing-address" name="customer_address" placeholder="">{{$inv->inv_customer_billing_address or ''}}</textarea>
+                                <textarea class="form-control input-sm textarea-expand customer-billing-address" name="customer_address" placeholder="">{{$sales_receipt->inv_customer_billing_address or ''}}</textarea>
                             </div>
                             <div class="col-sm-2">
                                 <label>Date</label>
-                                <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{isset($inv) ? dateFormat($inv->inv_date) : date('m/d/y')}}"/>
+                                <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{isset($sales_receipt) ? dateFormat($sales_receipt->inv_date) : date('m/d/y')}}"/>
                             </div>
                         </div>
                         
@@ -90,7 +95,46 @@
                                                 <th width="10"></th>
                                             </tr>
                                         </thead>
+                                        <tbody class="draggable tbody-item applied-transaction-list">
+                                        </tbody>
                                         <tbody class="draggable tbody-item estimate-tbl">
+                                            @if(isset($sales_receipt))
+                                                @foreach($sales_receipt_item as $sr_item)
+                                                <tr class="tr-draggable">
+                                                    <td class="invoice-number-td text-right">
+                                                        1
+                                                    </td>
+                                                    <td><input type="text" class="for-datepicker" name="item_servicedate[]"/>{{$sr_item->invline_service_date != '1970-01-01' ? $sr_item->invline_service_date : ''}}</td>
+                                                    <td>
+                                                        <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
+                                                            @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $sr_item->invline_item_id])
+                                                            <option class="hidden" value="" />
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <textarea class="textarea-expand txt-desc" name="item_description[]">{{$sr_item->invline_description}}</textarea>
+                                                    </td>
+                                                    <td><select class="2222 droplist-um select-um {{isset($sr_item->multi_id) ? 'has-value' : ''}}" name="item_um[]">
+                                                            @if($sr_item->invline_um)
+                                                                @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $sr_item->multi_um_id, 'selected_um_id' => $sr_item->invline_um])
+                                                            @else
+                                                                <option class="hidden" value="" />
+                                                            @endif
+                                                            <option class="hidden" value="" />
+                                                        </select>
+                                                    </td>
+                                                    <td><input class="text-center number-input txt-qty compute" value="{{$sr_item->invline_qty}}" type="text" name="item_qty[]"/></td>
+                                                    <td><input class="text-right number-input txt-rate compute" type="text" value="{{$sr_item->invline_rate}}" name="item_rate[]"/></td>
+                                                    <td><input class="text-right txt-discount compute" type="text" name="item_discount[]"  value="{{$sr_item->invline_discount}}"/></td>
+                                                    <td><textarea class="textarea-expand" type="text" name="item_remarks[]">{{$sr_item->invline_discount_remark}}</textarea></td>
+                                                    <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{$sr_item->invline_amount}}" /></td>
+                                                    <td class="text-center">
+                                                        <input type="checkbox"  name="item_taxable[]" class="taxable-check compute" value="1" {{$sr_item->taxable == 1 ? 'checked' : ''}}>
+                                                    </td>
+                                                    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                </tr>
+                                                @endforeach
+                                            @endif
                                             <tr class="tr-draggable">
                                                 <td class="invoice-number-td text-right">
                                                     1
@@ -112,8 +156,7 @@
                                                 <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
                                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                 <td class="text-center">
-                                                    <input type="hidden" class="item_taxable"  name="item_taxable[] value="" >
-                                                    <input type="checkbox" name="" class="taxable-check compute" value="checked">
+                                                    <input type="checkbox"  name="item_taxable[]" class="taxable-check compute" value="1">
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
@@ -138,8 +181,7 @@
                                                 <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
                                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                 <td class="text-center">
-                                                    <input type="hidden" class="item_taxable" name="item_taxable[]" value="" >
-                                                    <input type="checkbox" name="" class="taxable-check compute" value="checked">
+                                                    <input type="checkbox"  name="item_taxable[]" class="taxable-check compute" value="1">
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
@@ -151,11 +193,11 @@
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Message Displayed on Receipt</label>
-                                <textarea class="form-control input-sm textarea-expand" name="customer_message" placeholder=""></textarea>
+                                <textarea class="form-control input-sm textarea-expand remarks-sr" name="customer_message" placeholder="">{{isset($sales_receipt) ? $sales_receipt->inv_message : ''}}</textarea>
                             </div>
                             <div class="col-sm-3">
                                 <label>Statement Memo</label>
-                                <textarea class="form-control input-sm textarea-expand" name="customer_memo" placeholder=""></textarea>
+                                <textarea class="form-control input-sm textarea-expand" name="customer_memo" placeholder="">{{isset($sales_receipt) ? $sales_receipt->inv_memo : ''}}</textarea>
                             </div>
                             <div class="col-sm-6">
                                 <div class="row">
@@ -176,9 +218,9 @@
                                             <div class="col-sm-3  padding-lr-1">
                                                 <!-- <input class="form-control input-sm text-right ewt_value number-input" type="text" name="ewt"> -->
                                                 <select class="form-control input-sm ewt-value compute" name="customer_ewt">  
-                                                    <option value="0" {{isset($inv) ? $inv->ewt == 0 ? 'selected' : '' : ''}}></option>
-                                                    <option value="0.01" {{isset($inv) ? $inv->ewt == 0.01 ? 'selected' : '' : ''}}>1%</option>
-                                                    <option value="0.02" {{isset($inv) ? $inv->ewt == 0.02 ? 'selected' : '' : ''}}>2%</option>
+                                                    <option value="0" {{isset($sales_receipt) ? $sales_receipt->ewt == 0 ? 'selected' : '' : ''}}></option>
+                                                    <option value="0.01" {{isset($sales_receipt) ? $sales_receipt->ewt == 0.01 ? 'selected' : '' : ''}}>1%</option>
+                                                    <option value="0.02" {{isset($sales_receipt) ? $sales_receipt->ewt == 0.02 ? 'selected' : '' : ''}}>2%</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -192,12 +234,12 @@
                                         <div class="row">
                                             <div class="col-sm-6 col-sm-offset-4  padding-lr-1">
                                                 <select class="form-control input-sm compute discount_selection" name="customer_discounttype">  
-                                                    <option value="percent" {{isset($inv) ? $inv->inv_discount_type == 'percent' ? 'selected' : '' : ''}}>Discount percentage</option>
-                                                    <option value="value" {{isset($inv) ? $inv->inv_discount_type == 'value' ? 'selected' : '' : ''}}>Discount value</option>
+                                                    <option value="percent" {{isset($invsales_receipt) ? $sales_receipt->inv_discount_type == 'percent' ? 'selected' : '' : ''}}>Discount percentage</option>
+                                                    <option value="value" {{isset($sales_receipt) ? $sales_receipt->inv_discount_type == 'value' ? 'selected' : '' : ''}}>Discount value</option>
                                                 </select>
                                             </div>
                                             <div class="col-sm-2  padding-lr-1">
-                                                <input class="form-control input-sm text-right number-input discount_txt compute" type="text" name="customer_discount" value="{{$inv->inv_discount_value or ''}}">
+                                                <input class="form-control input-sm text-right number-input discount_txt compute" type="text" name="customer_discount" value="{{$sales_receipt->inv_discount_value or ''}}">
                                             </div>
                                         </div>
                                     </div>
@@ -210,8 +252,8 @@
                                         <div class="row">
                                             <div class="col-sm-4 col-sm-offset-8  padding-lr-1">
                                                 <select class="form-control input-sm tax_selection compute" name="customer_tax">  
-                                                    <option value="0" {{isset($inv) ? $inv->taxable == 0 ? 'selected' : '' : ''}}>No Tax</option>
-                                                    <option value="1" {{isset($inv) ? $inv->taxable == 1 ? 'selected' : '' : ''}}>Vat (12%)</option>
+                                                    <option value="0" {{isset($sales_receipt) ? $sales_receipt->taxable == 0 ? 'selected' : '' : ''}}>No Tax</option>
+                                                    <option value="1" {{isset($sales_receipt) ? $sales_receipt->taxable == 1 ? 'selected' : '' : ''}}>Vat (12%)</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -220,35 +262,15 @@
                                         PHP&nbsp;<span class="tax-total">0.00</span>
                                     </div>
                                 </div> 
-                                    <div class="row">
-                                        <div class="col-md-7 text-right digima-table-label">
-                                          Total
-                                        </div>
-                                        <div class="col-md-5 text-right digima-table-value total">
-                                            <input type="hidden" name="overall_price" class="total-amount-input" />
-                                            PHP&nbsp;<span class="total-amount">0.00</span>
-                                        </div>
+                                <div class="row">
+                                    <div class="col-md-7 text-right digima-table-label">
+                                      Total
                                     </div>
-                                @if(isset($inv))
-                                    <div class="row">
-                                        <div class="col-md-7 text-right digima-table-label">
-                                            Payment Appplied
-                                        </div>
-                                        <div class="col-md-5 text-right digima-table-value">
-                                            <input type="hidden" name="payment-receive" class="payment-receive-input" />
-                                            PHP&nbsp;<span class="payment-applied">{{$inv->inv_payment_applied}}</span>
-                                        </div>
+                                    <div class="col-md-5 text-right digima-table-value total">
+                                        <input type="hidden" name="overall_price" class="total-amount-input" />
+                                        PHP&nbsp;<span class="total-amount">0.00</span>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-7 text-right digima-table-label total">
-                                            Balance Due
-                                        </div>
-                                        <div class="col-md-5 text-right digima-table-value total">
-                                            <input type="hidden" name="balance-due" class="balance-due-input" />
-                                            PHP&nbsp;<span class="balance-due">0.00</span>
-                                        </div>
-                                    </div>
-                                @endif
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -281,8 +303,7 @@
             <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
             <td class="text-center">
-                <input type="hidden" class="item_taxable" name="item_taxable[]" value="" >
-                <input type="checkbox" name="" class="taxable-check compute" value="checked">
+                <input type="checkbox"  name="item_taxable[]" class="taxable-check compute" value="1">
             </td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>

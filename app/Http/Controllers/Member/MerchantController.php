@@ -39,7 +39,8 @@ use App\Globals\Utilities;
 
 use Crypt;
 use Redirect;
-use Request;
+// use Request;
+use Illuminate\Http\Request;
 use View;
 use Session;
 use DB;
@@ -50,6 +51,7 @@ use DateTime;
 use Illuminate\Http\Request as Request2;
 use Image;
 use File;
+use Excel;
 use App\Globals\Merchant;
 class MerchantController extends Member
 {
@@ -622,8 +624,8 @@ class MerchantController extends Member
 	{
 		$warehouse_id = $this->current_warehouse->warehouse_id;
 		$data['page'] = 'Commission Report Table';
-		$data['table'] = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('record_source_ref_name','rr')->where('item_in_use','used')->paginate(10);
-		$total = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('item_in_use','used')->sum('item_price');
+		$data['table'] = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('record_source_ref_name','rr')->where('item_in_use','used')->where('tbl_warehouse_inventory_record_log.commission_report',0)->paginate(10);
+		$total = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('item_in_use','used')->where('tbl_warehouse_inventory_record_log.commission_report',0)->sum('item_price');
 		
 		$commission = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id);
 		$q = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id)->first();
@@ -640,6 +642,88 @@ class MerchantController extends Member
 		// dd($data['table']);
 		// dd($warehouse_id);
 		return view('member.merchant.commission_report.commission_report_table',$data);
+	}
+	public function export()
+	{
+		$warehouse_id = $this->current_warehouse->warehouse_id;
+		
+		$data['table'] = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('record_source_ref_name','rr')->where('item_in_use','used')->where('tbl_warehouse_inventory_record_log.commission_report',0)->get();
+		$total = Tbl_warehouse_inventory_record_log::ReceivingReport()->where('tbl_warehouse_inventory_record_log.record_warehouse_id',$warehouse_id)->where('item_in_use','used')->where('tbl_warehouse_inventory_record_log.commission_report',0)->sum('item_price');
+		
+		$commission = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id);
+		$q = Tbl_merchant_commission_report_setting::where('merchant_commission_warehouse_id',$warehouse_id)->first();
+		if(count($q)>0)
+		{
+			$commission = $q->merchant_commission_percentage;
+		}
+		else
+		{
+			$commission = 0;
+		}
+
+		$data['totalcommission'] = $total*($commission/100);
+		$data['warehouse_name'] = $this->current_warehouse->warehouse_name;
+
+		Excel::create('Commission Report', function($excel) use ($data)
+        {
+            $excel->sheet('Commission', function($sheet) use ($data)
+            {
+                $sheet->loadView('member.merchant.commission_report.export', $data);
+            });
+        })
+        ->export('xls');
+	}
+	public function import()
+	{
+		$data['page'] = 'Import Excel File';
+		return view('member.merchant.commission_report.import',$data);
+	}
+	public function import_submit(Request $request)
+	{
+		
+		if($request->hasFile('excel_file'))
+		{
+			$file = $request->file('excel_file');
+			// dd($file);
+			// ini_set('memory_limit', '-1');
+			$data = array();
+			$report = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('record_id'));
+			// dd($report);
+			$response = 'success';
+			if(isset($report[0]['record_id']))
+			{
+				// foreach ($report as $r) 
+				// {
+				// 	if($r['pin'] != '' && $r['activation'] != '')
+				// 	{
+				// 		$update['commission_report'] = 1;
+				// 		Tbl_warehouse_inventory_record_log::
+				// 		where('mlm_pin',$r['pin'])
+				// 			->where('mlm_activation',$r['activation'])
+				// 			->update($update);
+				// 	}
+				// }
+
+				$update['commission_report'] = 1;
+				$query = Tbl_warehouse_inventory_record_log::where('record_log_id',$report[0]['record_id']);
+				foreach($report as $r)
+				{
+					$query->orWhere('record_log_id',$r['record_id']);
+				}
+				$query->update($update);
+			}
+			else
+			{
+				$response = 'no_data';
+			}
+		}
+		else
+		{
+			$response = 'error';
+		}
+		
+		return Redirect::back()->with("response",$response);
+		
 	}
 
 }	

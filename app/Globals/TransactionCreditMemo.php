@@ -6,6 +6,7 @@ use App\Models\Tbl_credit_memo_line;
 use Carbon\Carbon;
 use DB;
 use App\Globals\AccountingTransaction;
+use App\Globals\Warehouse2;
 /**
  * 
  *
@@ -18,11 +19,27 @@ class TransactionCreditMemo
 	{
 		return Tbl_credit_memo::where("cm_shop_id", $shop_id)->where("cm_customer_id", $customer_id)->where("cm_type",1)->where("cm_used_ref_name","retain_credit")->where("cm_status",0)->get();
 	}
-	public static function postInsert($shop_id, $insert, $insert_item = array())
+
+	public static function info($shop_id, $credit_memo_id)
+	{
+		return Tbl_credit_memo::customer()->where("cm_shop_id", $shop_id)->where("cm_id", $credit_memo_id)->first();
+	}
+	public static function info_item($credit_memo_id)
+	{
+		return Tbl_credit_memo_line::um()->where("cmline_cm_id", $credit_memo_id)->get();		
+	}
+
+
+	public static function postUpdate($cm_id, $shop_id, $insert, $insert_item = array())
 	{
 		$val = AccountingTransaction::customer_validation($insert, $insert_item);
 		if(!$val)
 		{
+	        /* SUBTOTAL */
+	        $subtotal_price = collect($insert_item)->sum('item_amount');
+	        /* OVERALL TOTAL */
+	        $overall_price  = convertToNumber($subtotal_price); 
+
 			$return  = null; 
 			$ins['cm_shop_id']                  = $shop_id;  
 			$ins['cm_customer_id']              = $insert['customer_id'];  
@@ -32,15 +49,59 @@ class TransactionCreditMemo
 	        $ins['cm_date']                     = date("Y-m-d", strtotime($insert['transaction_date']));
 	        $ins['cm_message']                  = $insert['customer_message'];
 	        $ins['cm_memo']                     = $insert['customer_memo'];
+	        $ins['cm_amount']                   = $overall_price;
 	        $ins['date_created']                = Carbon::now();
 
+	        /* INSERT CREDIT MEMO HERE */
+	        Tbl_credit_memo::where('cm_id', $cm_id)->update($ins);;
+
+	        /* Transaction Journal */
+	        $entry["reference_module"]  = "credit-memo";
+	        $entry["reference_id"]      = $cm_id;
+	        $entry["name_id"]           = $insert['customer_id'];
+	        $entry["total"]             = $overall_price;
+	        $entry["vatable"]           = '';
+	        $entry["discount"]          = '';
+	        $entry["ewt"]               = '';
+
+
+	        Tbl_credit_memo_line::where('cmline_cm_id', $cm_id)->delete();
+	        $return = Self::insertline($cm_id, $insert_item, $entry);
+			$warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+			/* UPDATE INVENTORY HERE */
+			AccountingTransaction::inventory_refill_update($shop_id, $warehouse_id, $insert_item, 'credit_memo', $cm_id); 
+			AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'credit_memo', $cm_id, 'Refill upon creating CREDIT MEMO '.$ins['transaction_refnum']);
+		}
+		else
+		{
+			$return = $val;
+		}		
+
+        return $return; 
+	}	public static function postInsert($shop_id, $insert, $insert_item = array())
+	{
+		$val = AccountingTransaction::customer_validation($insert, $insert_item);
+		if(!$val)
+		{
 	        /* SUBTOTAL */
 	        $subtotal_price = collect($insert_item)->sum('item_amount');
 	        /* OVERALL TOTAL */
 	        $overall_price  = convertToNumber($subtotal_price); 
 
+			$return  = null; 
+			$ins['cm_shop_id']                  = $shop_id;  
+			$ins['cm_customer_id']              = $insert['customer_id'];  
+			$ins['transaction_refnum']	 		= $insert['transaction_refnum'];   
+	        $ins['cm_customer_email']           = $insert['customer_email'];
+	        $ins['cm_customer_billing_address'] = $insert['customer_address'];
+	        $ins['cm_date']                     = date("Y-m-d", strtotime($insert['transaction_date']));
+	        $ins['cm_message']                  = $insert['customer_message'];
+	        $ins['cm_memo']                     = $insert['customer_memo'];
+	        $ins['cm_amount']                   = $overall_price;
+	        $ins['date_created']                = Carbon::now();
+
 	        /* INSERT CREDIT MEMO HERE */
-	        $cm_id = Tbl_credit_memo::insertGetId($ins);;
+	        $cm_id = Tbl_credit_memo::insertGetId($ins);
 
 	        /* Transaction Journal */
 	        $entry["reference_module"]  = "credit-memo";
@@ -52,6 +113,9 @@ class TransactionCreditMemo
 	        $entry["ewt"]               = '';
 
 	        $return = Self::insertline($cm_id, $insert_item, $entry);
+
+			$warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+			AccountingTransaction::refill_inventory($shop_id, $warehouse_id, $insert_item, 'credit_memo', $cm_id, 'Refill upon creating CREDIT MEMO '.$ins['transaction_refnum']);
 		}
 		else
 		{
@@ -121,6 +185,7 @@ class TransactionCreditMemo
 		{
 			Tbl_credit_memo_line::insert($itemline);
 			$return = AccountingTransaction::entry_data($entry, $insert_item);
+			$return = $cm_id;
 		}
 
 		return $return;

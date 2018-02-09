@@ -6,7 +6,7 @@
             <!-- Dashboard -->
             <div class="row clearfix">
                 <div class="col-md-6">
-                    <div class="title-container">ANALYTICS</div>
+                    <div class="title-container">Overall Analytic Results</div>
                 </div>
                 <div class="pull-right">
                     <div class="button-container">
@@ -14,6 +14,7 @@
                     </div>
                 </div>
             </div>
+            <div class="table-container">
               <table style="width:100%;" >
                     <tr>
                       <th style="text-align: center;width: 25%">ACTION</th>
@@ -38,7 +39,7 @@
                     <tr>
                       <td>Unsubscribe</td>
                       <td>{{isset(session('share_analytics')->unsubs) ? session('share_analytics')->unsubs : 0}}</td>
-                    </tr>
+                    </tr> 
                     <tr>
                       <td>Soft Bounce</td>
                       <td>{{isset(session('share_analytics')->soft_bounces) ? session('share_analytics')->soft_bounces : 0}}</td>
@@ -48,6 +49,7 @@
                       <td>{{isset(session('share_analytics')->hard_bounces) ? session('share_analytics')->hard_bounces : 0}}</td>
                     </tr>
               </table>
+            </div>
         </div>
     </div>
 </div>

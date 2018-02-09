@@ -11,19 +11,25 @@
 							<div class="grid-1">
 								<div class="single-slide">
 									<div>
-										<img src="/themes/{{ $shop_theme }}/img/slide/slide5.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide7.jpg">
 									</div>
 									<div>
-										<img src="/themes/{{ $shop_theme }}/img/slide/slide4.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide8.jpg">
 									</div>
 									<div>
-										<img src="/themes/{{ $shop_theme }}/img/slide/slide3.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide9.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide10.jpg">
 									</div>
 									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide1.jpg">
 									</div>
 									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide2.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide6.jpg">
 									</div>
 								</div>
 							</div>
@@ -206,19 +212,25 @@
 							<div class="grid-1">
 								<div class="single-slide">
 									<div>
-										<img src="/themes/{{ $shop_theme }}/img/slide/slide5.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide7.jpg">
 									</div>
 									<div>
-										<img src="/themes/{{ $shop_theme }}/img/slide/slide4.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide8.jpg">
 									</div>
 									<div>
-										<img src="/themes/{{ $shop_theme }}/img/slide/slide3.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide9.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide10.jpg">
 									</div>
 									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide1.jpg">
 									</div>
 									<div>
 										<img src="/themes/{{ $shop_theme }}/img/slide/slide2.jpg">
+									</div>
+									<div>
+										<img src="/themes/{{ $shop_theme }}/img/slide/slide6.jpg">
 									</div>
 								</div>
 							</div>

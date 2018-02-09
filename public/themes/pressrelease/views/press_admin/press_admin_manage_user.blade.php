@@ -9,9 +9,19 @@
                  <center>{{ Session::get('success_admin') }}</center>
               </div>
             @endif  
+            @if (Session::has('success_user'))
+              <div class="alert alert-success">
+                 <center>{{ Session::get('success_user') }}</center>
+              </div>
+            @endif  
             @if (Session::has('delete_admin'))
               <div class="alert alert-danger">
                  <center>{{ Session::get('delete_admin') }}</center>
+              </div>
+            @endif
+            @if (Session::has('delete_user'))
+              <div class="alert alert-danger">
+                 <center>{{ Session::get('delete_user') }}</center>
               </div>
             @endif    
           <div class="tab">
@@ -48,8 +58,13 @@
               </div>
 
               <div class="user-container">
-                <div class="title">User Account</div>
-                  <table  class="table table-bordered" id="showHere_table">
+                 <div class="title">User Account
+                        <div class="search-container pull-right">
+                         <input placeholder="Search" type="text"  name="search_user" id="search_user">
+                         <button  type="button" name="search_button_user" id="search_button_user" class="btn btn-success">Search</button>
+                        </div>
+                  </div>
+                  <table  class="table table-bordered" id="showHere_table_search">
                      <tr>
                          <th style="width: 15%;">First Name</th>
                          <th style="width: 15%;">Last Name</th>
@@ -64,10 +79,13 @@
                            <td>{{$_user_account->user_email}}</td>
                            <td>{{$_user_account->user_company_name}}</td>
                            <td>
-                            <a id="edit" href="/pressadmin/edit_user/{{$_user_account->user_id}}"><button type="button"  class="btn btn-warning center"><i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button></a>
+                            <a id="edit" href="/pressadmin/edit_user/{{$_user_account->user_id}}"><button type="button"  class="btn btn-warning center"><i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>  Edit</button></a>
 
-                            <a href="/pressadmin/manage_force_login/{{$_user_account->user_id}}"><button type="button" class="btn btn-danger center">
-                            <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Force Login</button></a>
+                            <a href="/pressadmin/delete_user/{{$_user_account->user_id}}"><button type="button" class="btn btn-danger center">
+                            <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>  Delete</button></a>
+
+                            <a href="/pressadmin/manage_force_login/{{$_user_account->user_id}}"><button type="button" class="btn btn-success center">
+                            <i class="fa fa-vcard-o" name="recipient_id" aria-hidden="true"></i>  Force Login</button></a>
                            </td>
                         </tr>
                         @endforeach
@@ -92,10 +110,10 @@
                            <td>{{$_admin_account->user_email}}</td>
                            <td>
                             <a href="/pressadmin/edit_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-warning center">
-                            <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>Edit</button>
+                            <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>  Edit</button>
 
                             <a href="/pressadmin/manage_user/delete_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-danger center">
-                            <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button>
+                            <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>  Delete</button>
                            </td>
                         </tr>
                         @endforeach
@@ -158,7 +176,7 @@
 @endsection
 
 @section("script")
-
+<script  src="/assets/js/manage_user.js"></script>
 
 <script>
   $('#edit').click(function()

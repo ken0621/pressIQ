@@ -31,7 +31,6 @@ function pay_bills()
 		initialize_select_plugin();
 		$(".amount-payment").change();
 	}
-
 	function initialize_select_plugin()
 	{
 		$(".drop-down-vendor").globalDropList(

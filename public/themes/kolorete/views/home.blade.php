@@ -40,7 +40,7 @@
 				</div>
 			</div>
 			<div class="product-container">
-				<div class="row clearfix">
+				<div class="row-no-padding clearfix">
 
 					@if(count($_product) > 0)
 
@@ -272,7 +272,7 @@
 
 				</div>
 			</div>
-			<div class="product-container">
+			{{-- <div class="product-container">
 				<div class="row clearfix">
 					<div class="col-md-2">
 						<div class="product-holder">
@@ -461,7 +461,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> --}}
 		</div>
 	</div>
 	

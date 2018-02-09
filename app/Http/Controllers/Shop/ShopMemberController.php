@@ -1687,11 +1687,18 @@ class ShopMemberController extends Shop
     }
     public function getRequestPayout()
     {
-        $this->request_payout_allow();
+        if (Self::$customer_info) 
+        {
+            $this->request_payout_allow();
 
-        $data["page"] = "Request Payout";
-        $data["_slot"] = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
-        return view("member2.request_payout", $data);
+            $data["page"] = "Request Payout";
+            $data["_slot"] = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            return view("member2.request_payout", $data);
+        }
+        else
+        {
+            dd('Some error occurred. Please try to refresh.');
+        }
     }
     public function postRequestPayout()
     {

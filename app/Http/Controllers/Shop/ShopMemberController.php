@@ -3002,9 +3002,13 @@ class ShopMemberController extends Shop
         if($slot_id)
         {
             $update['slot_placement']   = $request->placement;
-            $update['slot_position']    = $request->position;
+            $update['slot_position']    = strtolower($request->position);
 
             Tbl_mlm_slot::where('slot_id',$slot_id)->update($update);
+
+            $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+            Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+            Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
 
             MLM2::entry($shop_id,$slot_id);
             $used['item_in_use'] = 'used';

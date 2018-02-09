@@ -6,7 +6,7 @@
         <!-- <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script> -->
         <script type="text/javascript" src="/assets/external/jquery.minv1.js"></script>
         <script type="text/javascript" src="/assets/slot_genealogy/genealogy/drag.js"></script>
-        {{-- <script type="text/javascript" src="/assets/slot_genealogy/genealogy/genealogy_modal.js"></script> --}}
+        <script type="text/javascript" src="/assets/slot_genealogy/genealogy/genealogy_modal.js"></script>
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/old_genealogy.css" />
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/genealogy_modal.css" />
         <link rel="stylesheet" type="text/css" href="/assets/font-awesome/css/font-awesome.min.css">

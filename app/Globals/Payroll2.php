@@ -5308,14 +5308,14 @@ class Payroll2
 									$standard_gross_pay += $values['rate'];
 									$deduction += $values['rate'];
 								}
-								// if ($data["group"]->payroll_group_salary_computation != "Daily Rate") 
-								// {
-								// 	if ($value->time_output["leave_hours"] == '00:00:00') 
-								// 	{
-								// 		$standard_gross_pay += $values['rate'];
-								// 		$deduction += $values['rate'];
-								// 	}
-								// }
+								if ($data["group"]->payroll_group_salary_computation != "Daily Rate") 
+								{
+									if ($value->time_output["leave_hours"] == '00:00:00') 
+									{
+										$standard_gross_pay += $values['rate'];
+										$deduction += $values['rate'];
+									}
+								}
 							}
 						}
 

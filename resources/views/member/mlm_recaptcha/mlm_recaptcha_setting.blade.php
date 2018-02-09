@@ -42,9 +42,15 @@
     </div>
 </form>
 <script type="text/javascript">
-    function success_setting(data)
+    function setting_update(data)
     {
-        toastr.success('success');
+        toastr.success('Setting updated');
+        recaptcha.action_load_points();
+        data.element.modal('hide');
+    }
+    function setting_update(data)
+    {
+        toastr.success('Setting created');
         recaptcha.action_load_points();
         data.element.modal('hide');
     }

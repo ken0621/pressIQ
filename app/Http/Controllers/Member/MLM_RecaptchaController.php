@@ -64,6 +64,7 @@ class MLM_RecaptchaController extends Member
                 $update['max']      = number_format($setting_points->max,3);
                 $update['schedule'] = $request->schedule;
                 Tbl_recaptcha_setting::where('shop_id',$this->user_info->shop_id)->update($update);
+                $response['call_function'] = 'setting_update';
             }
             else
             {
@@ -72,8 +73,8 @@ class MLM_RecaptchaController extends Member
                 $insert['max']      = $request->max;
                 $insert['schedule'] = $request->schedule;
                 Tbl_recaptcha_setting::insert($insert);
+                $response['call_function'] = 'setting_created';
             }
-            $response['call_function'] = 'success_setting';
         }
     	
     	return json_encode($response);

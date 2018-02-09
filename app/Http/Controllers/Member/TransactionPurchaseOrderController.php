@@ -149,6 +149,7 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_ref_id']      = $request->item_ref_id[$key];
             }
         }
+
         $validate = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
         TransactionPurchaseOrder::applied_transaction($this->user_info->shop_id, $validate);
 

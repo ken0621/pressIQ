@@ -35,7 +35,7 @@
                             @foreach($_employee as $employee)
                             <tr>   
                                 @php $total += number_format((float)$employee->net_pay, 2, '.', ''); @endphp
-                                <td>{{$employee->payroll_employee_id}}</td>
+                                <td>{{$employee->payroll_employee_number}}</td>
                                 <td>{{$employee->payroll_employee_display_name}}</td>
                                 <td>{{substr($employee->payroll_employee_atm_number, 0,3)}}</td>
                                 <td>{{substr($employee->payroll_employee_atm_number,3)}}</td>

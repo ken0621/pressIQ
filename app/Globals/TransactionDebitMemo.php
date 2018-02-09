@@ -2,13 +2,15 @@
 namespace App\Globals;
 
 use App\Models\Tbl_debit_memo;
+use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_debit_memo_line;
 use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_requisition_slip_item;
-
+use App\Models\Tbl_purchase_order_line;
 use App\Globals\AccountingTransaction;
 
 use Carbon\Carbon;
+use Session;
 use DB;
 
 /**
@@ -25,11 +27,11 @@ class TransactionDebitMemo
     }
     public static function info($shop_id, $dm_id)
     {
-        return Tbl_debit_memo::where('db_shop_id',$shop_id)->where('db_id', $dm_id)->first();
+        return Tbl_debit_memo::vendor()->where('db_shop_id',$shop_id)->where('db_id', $dm_id)->first();
     }
     public static function info_item($dm_id)
     {
-        return Tbl_debit_memo_line::um()->where('dbline_db_id', $dm_id)->get();
+        return Tbl_debit_memo_line::um()->db_item()->where('dbline_db_id', $dm_id)->get();
     }
 
     public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
@@ -75,14 +77,7 @@ class TransactionDebitMemo
         return $data;
     }
 
-    public static function countTransaction($shop_id)
-    {
-    	$count_so = Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_status","accepted")->where('is_sales_order', 1)->count();
-        $count_pr = Tbl_requisition_slip_item::PRInfo('shop_id',$shop_id)->where("requisition_slip_status","open")->count();
-        
-        $return = $count_so + $count_pr;
-        return $return;
-    }
+    
 
     public static function postInsert($shop_id, $insert, $insert_item)
     {
@@ -108,7 +103,7 @@ class TransactionDebitMemo
             $entry["reference_module"]  = "debit-memo";
             $entry["reference_id"]      = $dm_id;
             $entry["name_id"]           = $insert['vendor_id'];
-            $entry["total"]             = collect($insert_item)->sum('itemline_amount');
+            $entry["total"]             = $total;
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
             $entry["ewt"]               = '';
@@ -176,6 +171,8 @@ class TransactionDebitMemo
             $itemline[$key]['dbline_qty']          = $value['item_qty'];
             $itemline[$key]['dbline_rate']         = $value['item_rate'];
             $itemline[$key]['dbline_amount']       = $value['item_amount'];
+            $itemline[$key]['dbline_refname']      = $value['item_ref_name'];
+            $itemline[$key]['dbline_refid']        = $value['item_ref_id'];
 
         }
         if(count($itemline) > 0)
@@ -186,6 +183,77 @@ class TransactionDebitMemo
 
         return $return;
     }
+    public static function checkPolineQty($po_id, $dm_id)
+    {
+        $poline = Tbl_purchase_order_line::where('poline_po_id', $po_id)->get();
 
+        $ctr = 0;
+        foreach ($poline as $key => $value)
+        {
+            $dmline = Tbl_debit_memo_line::where('dbline_db_id', $dm_id)->where('dbline_refname', 'purchase_order')->where('dbline_item_id', $value->poline_item_id)->where('dbline_refid',$po_id)->first();
+            
+            $update['poline_qty'] = $value->poline_qty - $dmline->dbline_qty;
+
+            Tbl_purchase_order_line::where('poline_id', $value->poline_id)->update($update);    
+
+            if($update['poline_qty'] <= 0)
+            {
+                $ctr++;
+            }
+        }
+        if($ctr >= count($poline))
+        {
+            $updates["po_is_billed"] = $dm_id;
+            Tbl_purchase_order::where("po_id",$po_id)->update($updates);
+        }
+    }
+    public static function appliedTransaction($shop_id, $dm_id)
+    {
+        if($dm_id != null)
+        {
+            $applied_transaction = Session::get('applied_transaction');
+            if($applied_transaction > 0)
+            {
+                foreach ($applied_transaction as $key => $value)
+                { 
+                    Self::checkPolineQty($key, $dm_id);
+                } 
+            }  
+        }
+        Self::insert_acctg_transaction($shop_id, $dm_id, $applied_transaction);
+    }
+    public static function insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction = array())
+    {
+        $get_transaction = Tbl_debit_memo::where("db_shop_id", $shop_id)->where("db_id", $transaction_id)->first();
+        $transaction_data = null;
+        if($get_transaction)
+        {
+            $transaction_data['transaction_ref_name'] = "debit_memo";
+            $transaction_data['transaction_ref_id'] = $transaction_id;
+            $transaction_data['transaction_list_number'] = $get_transaction->transaction_refnum;
+            $transaction_data['transaction_date'] = $get_transaction->db_date;
+
+            $attached_transaction_data = null;
+            if(count($applied_transaction) > 0)
+            {
+                foreach ($applied_transaction as $key => $value) 
+                {
+                    $get_data = Tbl_purchase_order::where("po_shop_id", $shop_id)->where("po_id", $key)->first();
+                    if($get_data)
+                    {
+                        $attached_transaction_data[$key]['transaction_ref_name'] = "purchase_order";
+                        $attached_transaction_data[$key]['transaction_ref_id'] = $key;
+                        $attached_transaction_data[$key]['transaction_list_number'] = $get_data->transaction_refnum;
+                        $attached_transaction_data[$key]['transaction_date'] = $get_data->po_date;
+                    }
+                }
+            }
+        }
+
+        if($transaction_data)
+        {
+            AccountingTransaction::postTransaction($shop_id, $transaction_data, $attached_transaction_data);
+        }
+    }
    
 }

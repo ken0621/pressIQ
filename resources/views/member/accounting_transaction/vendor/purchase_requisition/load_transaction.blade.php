@@ -56,7 +56,7 @@
                         <tbody>
                             @foreach($_so as $so)
                             <tr>
-                                <td class="text-center"><input type="checkbox" name="apply_transaction[{{$so->est_id}}]"></td>
+                                <td class="text-center"><input type="checkbox" name="_apply_transaction[{{$so->est_id}}]" {{isset($_applied[$so->est_id]) ? 'checked' : ''}}></td>
                                 <td class="text-center">{{$so->transaction_refnum != "" ? $so->transaction_refnum : $so->est_id}}</td>
                                 <td class="text-center">{{$so->company != ""? $so->company : ($so->title_name.' '.$so->first_name.' '.$so->middle_name.' '.$so->last_name)}}</td>
                                 <td class="text-right">{{currency('PHP',$so->est_overall_price)}}</td>

@@ -19,9 +19,9 @@ class TransactionPurchaseRequisition
 	{
 		return Tbl_customer_estimate::where('est_shop_id',$shop_id)->where("est_status","accepted")->count();
 	}
-	public static function getAllOpenPR($shop_id)
+	public static function getPR($shop_id)
 	{
-		return Tbl_requisition_slip_item::PRInfo('shop_id',$shop_id)->where("requisition_slip_status","open")->get();
+		return Tbl_requisition_slip_item::PRInfo('shop_id',$shop_id)->where("requisition_slip_status","closed")->orderBy('rs_vendor_id', 'ASC')->get();
 	}
 	public static function postInsert()
 	{

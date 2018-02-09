@@ -88,6 +88,12 @@ class WriteCheck
         $wc_data = Tbl_write_check::where("wc_ref_name","paybill")->where("wc_ref_id",$paybill_id)->first();
         Tbl_write_check_line::where("wcline_wc_id",$wc_data->wc_id)->delete();
     }
+
+    public static function delete_check_acct($paybill_id)
+    {
+        $wc_data = Tbl_write_check::where("wc_ref_name","paybill")->where("wc_ref_id",$paybill_id)->first();
+        Tbl_write_check_account_line::where("accline_wc_id",$wc_data->wc_id)->delete();
+    }
     public static function update_check_from_paybill($paybill_id)
     {
         $pb_data = Tbl_pay_bill::where("paybill_id",$paybill_id)->first();
@@ -151,7 +157,6 @@ class WriteCheck
 
             $wc_data = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
             AuditTrail::record_logs("Edited","bill_payment_check",$wc_id,"",serialize($wc_data));
-
         }
 
     }
@@ -178,13 +183,17 @@ class WriteCheck
             $insert['wc_ref_id']              = $pb_data->paybill_id;
 
             $wc_id = Tbl_write_check::insertGetId($insert);
-
+            
             $item_info = null;
             foreach ($pbline_data as $key => $value) 
             {
                 if($value->pbline_reference_name == "bill")
                 {
                     $bill_line_data = Tbl_bill_item_line::where("itemline_bill_id",$value->pbline_reference_id)->get();
+
+                    Tbl_write_check_line::where('wcline_ref_id', $value->pbline_reference_id)->delete();
+
+
                     foreach ($bill_line_data as $key1 => $value1)
                     {
                         $item_info["itemline_item_id"] = $value1->itemline_item_id;
@@ -198,14 +207,17 @@ class WriteCheck
 
                         WriteCheck::insert_bill_wc_line($wc_id, $item_info);
                     }
+
                     $bill_line_acct = Tbl_bill_account_line::where("accline_bill_id",$value->pbline_reference_id)->get();
 
+                    
                     foreach ($bill_line_acct as $key => $value2)
                     {
                         $account_info['accline_coa_id'] = $value2->accline_coa_id;
                         $account_info['accline_description'] = $value2->accline_description;
                         $account_info['accline_amount'] = $value2->accline_amount;
 
+                        
                         WriteCheck::insert_bill_wc_acct_line($wc_id, $account_info);
                     }
                 }

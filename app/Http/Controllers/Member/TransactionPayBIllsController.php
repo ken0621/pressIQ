@@ -40,6 +40,19 @@ class TransactionPayBillsController extends Member
         $data['_pay_bills'] = TransactionPayBills::get($this->user_info->shop_id, 10, $request->search_keyword);
         return view('member.accounting_transaction.vendor.pay_bills.pay_bills_table', $data);
     }
+    public function getPrint(Request $request)
+    {
+        $pb_id = $request->id;
+        $data["pb"] = TransactionPayBills::info($this->user_info->shop_id, $pb_id);
+        $data["_pbline"] = TransactionPayBills::info_line($pb_id);
+        
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data['transaction_type'] = "Bill Payment";
+
+        $pdf = view('member.accounting_transaction.vendor.pay_bills.pay_bills_pdf',$data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
+    }
     public function getCreate(Request $request)
     {
         $data['page'] = 'Create Pay Bills';
@@ -66,7 +79,7 @@ class TransactionPayBillsController extends Member
 
     public function getLoadVendorPayBill($vendor_id)
     {
-        $data["_bill"] = Billing::getAllBillByVendor($vendor_id);
+        $data["_bill"] = TransactionPayBills::getAllBillByVendor($this->user_info->shop_id, $vendor_id);
         return view('member.accounting_transaction.vendor.pay_bills.load_pay_bills', $data);
     }
 
@@ -102,13 +115,12 @@ class TransactionPayBillsController extends Member
             $insert_item[$key]["item_qty"]                = 0;
             $insert_item[$key]["item_ref_id"]             = $request->pbline_bill_id[$key];
             $insert_item[$key]["item_ref_name"]           = $request->pbline_txn_type[$key];
-
         }
-        
         
         if($ctr_bill != 0)
         {
             $validate = TransactionPayBills::postInsert($this->user_info->shop_id, $insert, $insert_item);
+            TransactionPayBills::insert_acctg_transaction($this->user_info->shop_id, $validate);
 
             $return = null;
             if(is_numeric($validate))
@@ -130,7 +142,6 @@ class TransactionPayBillsController extends Member
             $return['status_message'] = 'Please Select Item';
         }
         return json_encode($return);
-
     }
 
     public function postUpdatePayBills(Request $request)

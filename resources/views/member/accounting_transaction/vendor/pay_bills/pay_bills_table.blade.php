@@ -25,7 +25,8 @@
                                 Action <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-custom">
-                                <li><a href="javascript">PRINT</a></li>
+                                <li><a href="/member/transaction/pay_bills/create?id={{$pb->paybill_id}}">Edit</a></li>
+                                <li><a href="/member/transaction/pay_bills/print?id={{$pb->paybill_id}}">Print</a></li>
                             </ul>
                         </div>
                     </td>

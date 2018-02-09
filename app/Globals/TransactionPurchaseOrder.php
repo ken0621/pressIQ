@@ -10,6 +10,7 @@ use App\Models\Tbl_requisition_slip;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_bill_po;
 use Carbon\Carbon;
+use Session;
 use DB;
 
 /**
@@ -107,40 +108,6 @@ class TransactionPurchaseOrder
 
         return $poline_amount;
     }
-    public static function checkPoQty($ri_id = null, $po_data = array())
-    {
-        if($ri_id != null)
-        {
-            foreach ($po_data as $key => $value)
-            { 
-                Self::checkPolineQty($key, $ri_id);
-            }   
-        }
-    }
-    public static function checkPolineQty($po_id, $ri_id)
-    {
-        $poline = Tbl_purchase_order_line::where('poline_po_id', $po_id)->get();
-
-        $ctr = 0;
-        foreach ($poline as $key => $value)
-        {
-            $receivedline = Tbl_receive_inventory_line::where('riline_ri_id', $ri_id)->where('riline_ref_name', 'purchase_order')->where('riline_item_id', $value->poline_item_id)->where('riline_ref_id',$po_id)->first();
-            
-            $update['poline_qty'] = $value->poline_qty - $receivedline->riline_qty;
-            
-            Tbl_purchase_order_line::where('poline_id', $value->poline_id)->update($update);    
-
-            if($update['poline_qty'] <= 0)
-            {
-                $ctr++;
-            }
-        }
-        if($ctr >= count($poline))
-        {
-            $updates["po_is_billed"] = $ri_id;
-            Tbl_purchase_order::where("po_id",$po_id)->update($updates);
-        }
-    }
     public static function postInsert($shop_id, $insert, $insert_item)
 	{
         $val = AccountingTransaction::vendorValidation($insert, $insert_item, 'purchase_order');
@@ -200,51 +167,6 @@ class TransactionPurchaseOrder
 
         return $return;
 	}
-
-    public static function insertLine($purchase_order_id, $insert_item)
-    {
-        $return = null;
-
-        $itemline = null;
-        foreach ($insert_item as $key => $value) 
-        {   
-            /* DISCOUNT PER LINE */
-            $discount       = $value['item_discount'];
-            $discount_type  = 'fixed';
-
-
-            if(strpos($discount, '%'))
-            {
-                $discount       = substr($discount, 0, strpos($discount, '%')) / 100;
-                $discount_type  = 'percent';
-            } 
-
-            /*FROM DATABASE*/                        /*FROM CONTROLLER*/
-            $itemline[$key]['poline_po_id']          = $purchase_order_id;
-            $itemline[$key]['poline_service_date']   = $value['item_servicedate']; 
-            $itemline[$key]['poline_item_id']        = $value['item_id'];
-            $itemline[$key]['poline_description']    = $value['item_description'];
-            $itemline[$key]['poline_um']             = $value['item_um'];
-            $itemline[$key]['poline_orig_qty']       = $value['item_qty'];
-            $itemline[$key]['poline_qty']            = $value['item_qty'];
-            $itemline[$key]['poline_rate']           = $value['item_rate'];
-            $itemline[$key]['poline_discount']       = $discount;
-            $itemline[$key]['poline_discounttype']   = $discount_type;
-            $itemline[$key]['poline_discount_remark']= $value['item_remark'];  
-            $itemline[$key]['poline_amount']         = $value['item_amount'];   
-            $itemline[$key]['taxable']               = $value['item_taxable']; 
-            $itemline[$key]['date_created']          = Carbon::now();
-            
-        }
-
-        if(count($itemline) > 0)
-        {
-            /*INSERTING ITEMS TO DATABASE*/
-            $return = Tbl_purchase_order_line::insert($itemline);
-        }
-
-        return $return;
-    }
     public static function postUpdate($po_id, $shop_id, $insert, $insert_item)
     {
         $old = Tbl_purchase_order::where("po_id", $po_id);
@@ -309,6 +231,96 @@ class TransactionPurchaseOrder
         return $return;
     }
 
-    
+    public static function insertLine($purchase_order_id, $insert_item)
+    {
+        $return = null;
+
+        $itemline = null;
+        foreach ($insert_item as $key => $value) 
+        {   
+            /* DISCOUNT PER LINE */
+            $discount       = $value['item_discount'];
+            $discount_type  = 'fixed';
+
+
+            if(strpos($discount, '%'))
+            {
+                $discount       = substr($discount, 0, strpos($discount, '%')) / 100;
+                $discount_type  = 'percent';
+            } 
+
+            /*FROM DATABASE*/                        /*FROM CONTROLLER*/
+            $itemline[$key]['poline_po_id']          = $purchase_order_id;
+            $itemline[$key]['poline_service_date']   = $value['item_servicedate']; 
+            $itemline[$key]['poline_item_id']        = $value['item_id'];
+            $itemline[$key]['poline_description']    = $value['item_description'];
+            $itemline[$key]['poline_um']             = $value['item_um'];
+            $itemline[$key]['poline_orig_qty']       = $value['item_qty'];
+            $itemline[$key]['poline_qty']            = $value['item_qty'];
+            $itemline[$key]['poline_rate']           = $value['item_rate'];
+            $itemline[$key]['poline_discount']       = $discount;
+            $itemline[$key]['poline_discounttype']   = $discount_type;
+            $itemline[$key]['poline_discount_remark']= $value['item_remark'];  
+            $itemline[$key]['poline_amount']         = $value['item_amount'];   
+            $itemline[$key]['taxable']               = $value['item_taxable'];
+            $itemline[$key]['poline_refname']        = $value['item_ref_name'];   
+            $itemline[$key]['poline_refid']          = $value['item_ref_id']; 
+            $itemline[$key]['date_created']          = Carbon::now();
+        }
+        if(count($itemline) > 0)
+        {
+            /*INSERTING ITEMS TO DATABASE*/
+            $return = Tbl_purchase_order_line::insert($itemline);
+        }
+
+        return $return;
+    }
+    public static function applied_transaction($shop_id, $transaction_id = 0)
+    {
+        $applied_transaction = Session::get('applied_transaction');
+        if(count($applied_transaction) > 0)
+        {
+            foreach ($applied_transaction as $key => $value) 
+            {
+                $update['est_status'] = 'closed';
+                Tbl_customer_estimate::where("est_id", $key)->where('est_shop_id', $shop_id)->update($update);
+            }
+        }
+
+        Self::insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction);
+    }
+    public static function insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction = array())
+    {
+        $get_transaction = Tbl_purchase_order::where("po_shop_id", $shop_id)->where("po_id", $transaction_id)->first();
+        $transaction_data = null;
+        if($get_transaction)
+        {
+            $transaction_data['transaction_ref_name'] = "purchase_order";
+            $transaction_data['transaction_ref_id'] = $transaction_id;
+            $transaction_data['transaction_list_number'] = $get_transaction->transaction_refnum;
+            $transaction_data['transaction_date'] = $get_transaction->po_date;
+
+            $attached_transaction_data = null;
+            if(count($applied_transaction) > 0)
+            {
+                foreach ($applied_transaction as $key => $value) 
+                {
+                    $get_data = Tbl_customer_estimate::where("est_shop_id", $shop_id)->where("est_id", $key)->first();
+                    if($get_data)
+                    {
+                        $attached_transaction_data[$key]['transaction_ref_name'] = "sales_order";
+                        $attached_transaction_data[$key]['transaction_ref_id'] = $key;
+                        $attached_transaction_data[$key]['transaction_list_number'] = $get_data->transaction_refnum;
+                        $attached_transaction_data[$key]['transaction_date'] = $get_data->est_date;
+                    }
+                }
+            }
+        }
+
+        if($transaction_data)
+        {
+            AccountingTransaction::postTransaction($shop_id, $transaction_data, $attached_transaction_data);
+        }
+    }
 
 }

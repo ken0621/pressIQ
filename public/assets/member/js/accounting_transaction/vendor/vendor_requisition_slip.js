@@ -32,6 +32,7 @@ function vendor_requisition_slip()
 		action_lastclick_row();
 		event_remove_tr();
 		event_compute_class_change();
+		action_compute();
 
 	}
 	function event_remove_tr()
@@ -545,7 +546,7 @@ function vendor_requisition_slip()
 			action_initialize_select();
 			action_compute();
 			action_reassign_number();
-			$('.remarks-pr').html($('.pr-remarks').val());
+			$('.remarks-pr').html($('.so-remarks').val());
 		});
 	}
 
@@ -554,12 +555,20 @@ function vendor_requisition_slip()
 		load_applied_transaction();
 	}
 }
-function success_create_rs(data)
+/*function success_create_rs(data)
 {
 	if(data.status == 'success')
 	{
 		toastr.success('Success');
 		location.href = '/member/transaction/purchase_requisition';
+	}
+}*/
+function success_create_rs(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success('Success');
+		location.href = data.status_redirect;
 	}
 }
 

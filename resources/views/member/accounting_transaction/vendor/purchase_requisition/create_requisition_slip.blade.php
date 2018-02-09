@@ -1,8 +1,9 @@
 @extends('member.layout')
 @section('content')
 
-<form class="global-submit form-to-submit-add" action="/member/transaction/purchase_requisition/create-submit" method="post">
+<form class="global-submit" role="form" action="{{$action}}" method="POST">
 <input type="hidden" class="button-action" name="button_action" value="">
+<input type="hidden" name="pr_id" value="{{$pr->requisition_slip_id or ''}}">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -26,24 +27,6 @@
         </div>
     </div>
 </div>
-<!-- <div class="panel panel-default panel-block panel-title-block">
-    <div class="panel-body form-horizontal">
-        <div class="form-group">
-            <div class="col-md-12">
-                <div class="input-group pos-search">
-                  <span style="background-color: #eee" class="input-group-addon button-scan" id="basic-addon1">
-                    <i class="fa fa-shopping-cart scan-icon"></i>
-                    <i style="display: none;" class="fa fa-spinner fa-pulse fa-fw scan-load"></i>
-                  </span>
-                  <input type="text" class="form-control event_search_item" placeholder="Enter item name or scan barcode" aria-describedby="basic-addon1">
-                  <div class="pos-search-container"></div>
-                </div>
-            </div>
-        </div>
-       
-    </div>
-</div> -->
-
 <input type="hidden" name="_token" value="{{csrf_token()}}">
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body form-horizontal">
@@ -51,10 +34,11 @@
             <div class="col-md-6">
                 <label>Requisition Slip Number</label>
                 <div>
-                   <input type="text" class="form-control" name="requisition_slip_number" value="{{$transaction_refnum}}">
+                   <input type="text" class="form-control" name="requisition_slip_number" value="{{ isset($pr->transaction_refnum)? $pr->transaction_refnum : $transaction_refnum}}">
                 </div>
             </div>
-            <div class="col-sm-3 text-right"></div>
+            <div class="col-sm-3 text-right"><label>P.O Date</label>
+                            <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{ isset($po)? date('m/d/Y',strtotime($po->po_date)) : date('m/d/Y') }}"/></div>
             <div class="col-sm-3 text-right">
                 <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_requisition/load-transaction"><i class="fa fa-handshake-o"></i> {{$count_transaction or ''}} Open Transaction</a></h4>
             </div>
@@ -63,7 +47,7 @@
             <div class="col-md-6">
                 <label>Remarks</label>
                 <div>
-                    <textarea class="form-control" name="requisition_slip_remarks"></textarea>
+                    <textarea class="form-control" name="requisition_slip_remarks">{{isset($pr->requisition_slip_remarks) ? $pr->requisition_slip_remarks : ''}}</textarea>
                 </div>
             </div>
         </div>
@@ -79,20 +63,55 @@
                         <thead>
                             <tr>
                                 <th style="width: 15px;">#</th>
-                                <th class="text-left" >ITEM SKU</th>
+                                <th class="text-left" width="250px">ITEM SKU</th>
                                 <th class="text-left" >ITEM DESCRIPTION</th>
                                 <th class="text-center" width="100px">QTY</th>
                                 <th class="text-center" width="100px">U/M</th>
                                 <th class="text-center" width="150px">Rate</th>
                                 <th class="text-center" width="150px">Amount</th>
-                                <th class="text-center" width="200px">Vendor</th>
+                                <th class="text-center" width="300px">Vendor</th>
                                 <th width="50px"></th>
                             </tr>
                         </thead>
                         <tbody class="applied-transaction-list">
                         </tbody>
                         <tbody class="draggable tbody-item">
+                            @if(isset($_prline))
+                                @foreach($_prline as $prline)
+                                <tr class="tr-draggable">
+                                    <input type="hidden" name="item_ref_name[]" value="{{$prline->rs_item_refname}}"></td>
+                                            <input type="hidden" name="item_ref_id[]" value="{{$prline->rs_item_refid}}"></td>
+                                    <td class="invoice-number-td text-center">1</td>
+                                    <td>
+                                        <select class="form-control droplist-item input-sm select-item" name="rs_item_id[]" >
+                                            @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $prline->rs_item_id])
+                                            <option class="hidden" value="" />
+                                        </select>
+                                    </td>
+                                    <td><textarea class="textarea-expand txt-desc" name="rs_item_description[]" readonly="true">{{$prline->rs_item_description}}</textarea></td>
+                                    <td><input class="text-center number-input txt-qty compute" type="text" name="rs_item_qty[]" value="{{$prline->rs_item_qty}}" /></td>
+                                    <td><select class="droplist-item-um select-um {{isset($poline->rs_item_um) ? 'has-value' : ''}}" name="rs_item_um[]">
+                                            @if($prline->rs_item_um)
+                                                @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $prline->multi_um_id, 'selected_um_id' => $prline->rs_item_um])
+                                            @else
+                                                <option class="hidden" value="" />
+                                            @endif
+                                        </select>
+                                    </td>
+                                    <td><input class="text-right number-input txt-rate compute" type="text" name="rs_item_rate[]" value="{{$prline->rs_item_rate}}" /></td>
+                                    <td><input class="text-right number-input txt-amount" type="text" name="rs_item_amount[]" value="{{$prline->rs_item_amount}}"/></td>
+                                    <td>
+                                        <select class="droplist-vendor select-vendor" name="rs_vendor_id[]">
+                                            @include('member.load_ajax_data.load_vendor', ['vendor_id' => $prline->vendor_id])
+                                        </select>
+                                    </td>
+                                    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                </tr>
+                                @endforeach
+                            @endif
                             <tr class="tr-draggable">
+                                <input type="hidden" name="item_ref_name[]"></td>
+                                        <input type="hidden" name="item_ref_id[]"></td>
                                 <td class="invoice-number-td text-center">1</td>
                                 <td>
                                     <select class="form-control droplist-item input-sm select-item" name="rs_item_id[]" >
@@ -100,49 +119,35 @@
                                         <option class="hidden" value="" />
                                     </select>
                                 </td>
-                                <td><textarea class="form-control txt-desc" name="rs_item_description[]"></textarea></td>
-                                <td class="text-center">
-                                    <input type="text" class="form-control text-center txt-qty compute" name="rs_item_qty[]">
-                                </td>
-                                <td class="text-center">
-                                    <select class="form-control droplist-item-um select-um" name="rs_item_um[]"></select>
-                                </td>
-                                <td class="text-center">
-                                    <input type="text" class="form-control text-right txt-rate" name="rs_item_rate[]">
-                                </td>
-                                <td class="text-center">
-                                    <input type="text" class="form-control text-right txt-amount" name="rs_item_amount[]" value="0.00">
-                                </td>
-                                <td class="text-center">
-                                    <select class="form-control droplist-vendor select-vendor" name="rs_vendor_id[]">
+                                <td><textarea class="textarea-expand txt-desc" name="rs_item_description[]" readonly="true"></textarea></td>
+                                <td><input class="text-center number-input txt-qty compute" type="text" name="rs_item_qty[]" /></td>
+                                <td><select class="droplist-item-um select-um" name="rs_item_um[]"></select></td>
+                                <td><input class="text-right number-input txt-rate compute" type="text" name="rs_item_rate[]" /></td>
+                                <td><input class="text-right number-input txt-amount" type="text" name="rs_item_amount[]"/></td>
+                                <td>
+                                    <select class="droplist-vendor select-vendor" name="rs_vendor_id[]">
                                         @include('member.load_ajax_data.load_vendor')
                                     </select>
                                 </td>
                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                             </tr>
-                           <tr class="tr-draggable">
+                            <tr class="tr-draggable">
+                                <input type="hidden" name="item_ref_name[]"></td>
+                                        <input type="hidden" name="item_ref_id[]"></td>
                                 <td class="invoice-number-td text-center">2</td>
                                 <td>
-                                    <select class="form-control droplist-item select-item input-sm" name="rs_item_id[]" >
+                                    <select class="form-control droplist-item input-sm select-item" name="rs_item_id[]" >
                                         @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                         <option class="hidden" value="" />
                                     </select>
                                 </td>
-                                <td><textarea class="form-control txt-desc" name="rs_item_description[]"></textarea></td>
-                                <td class="text-center">
-                                    <input type="text" class="form-control text-center txt-qty compute" name="rs_item_qty[]">
-                                </td>
-                                <td class="text-center">
-                                    <select class="form-control droplist-item-um select-um" name="rs_item_um[]"></select>
-                                </td>
-                                <td class="text-center">
-                                    <input type="text" class="form-control text-right txt-rate" name="rs_item_rate[]">
-                                </td>
-                                <td class="text-center">
-                                    <input type="text" class="form-control text-right txt-amount" name="rs_item_amount[]" value="0.00">
-                                </td>
-                                <td class="text-center">
-                                    <select class="form-control droplist-vendor select-vendor" name="rs_vendor_id[]">
+                                <td><textarea class="textarea-expand txt-desc" name="rs_item_description[]" readonly="true"></textarea></td>
+                                <td><input class="text-center number-input txt-qty compute" type="text" name="rs_item_qty[]" /></td>
+                                <td><select class="droplist-item-um select-um" name="rs_item_um[]"></select></td>
+                                <td><input class="text-right number-input txt-rate compute" type="text" name="rs_item_rate[]" /></td>
+                                <td><input class="text-right number-input txt-amount" type="text" name="rs_item_amount[]"/></td>
+                                <td>
+                                    <select class="droplist-vendor select-vendor" name="rs_vendor_id[]">
                                         @include('member.load_ajax_data.load_vendor')
                                     </select>
                                 </td>
@@ -155,8 +160,8 @@
         </div>
         <div class="row clearfix">
             <div class="col-sm-6">
-                <label>Memo</label>
-                <textarea class="form-control input-sm textarea-expand remarks-pr" name="vendor_memo" ></textarea>
+                <label>Remarks</label>
+                <textarea class="form-control input-sm textarea-expand remarks-pr" name="vendor_memo" >{{isset($pr->requisition_slip_memo)? $pr->requisition_slip_memo : ''}}</textarea>
             </div>
             <div class="col-sm-6">                      
                 <div class="row">
@@ -179,28 +184,22 @@
 <div class="div-script">
     <table class="div-item-row-script-item hide">
        <tr class="tr-draggable">
-            <td class="invoice-number-td text-center">1</td>
+            <input type="hidden" name="item_ref_name[]"></td>
+                    <input type="hidden" name="item_ref_id[]"></td>
+            <td class="invoice-number-td text-center">2</td>
             <td>
-                <select class="form-control droplist-item select-item input-sm" name="rs_item_id[]" >
+                <select class="form-control droplist-item input-sm select-item" name="rs_item_id[]" >
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                     <option class="hidden" value="" />
                 </select>
             </td>
-            <td><textarea class="form-control txt-desc" name="rs_item_description[]"></textarea></td>
-            <td class="text-center">
-                <input type="text" class="form-control text-center txt-qty compute" name="rs_item_qty[]">
-            </td>
-            <td class="text-center">
-                <select class="form-control select-um" name="rs_item_um[]"></select>
-            </td>
-            <td class="text-center">
-                <input type="text" class="form-control text-right txt-rate" name="rs_item_rate[]">
-            </td>
-            <td class="text-center">
-                <input type="text" class="form-control text-right txt-amount" name="rs_item_amount[]" value="0.00">
-            </td>
-            <td class="text-center">
-                <select class="form-control select-vendor" name="rs_vendor_id[]">
+            <td><textarea class="textarea-expand txt-desc" name="rs_item_description[]" readonly="true"></textarea></td>
+            <td><input class="text-center number-input txt-qty compute" type="text" name="rs_item_qty[]" /></td>
+            <td><select class="droplist-item-um select-um" name="rs_item_um[]"></select></td>
+            <td><input class="text-right number-input txt-rate compute" type="text" name="rs_item_rate[]" /></td>
+            <td><input class="text-right number-input txt-amount" type="text" name="rs_item_amount[]"/></td>
+            <td>
+                <select class="droplist-vendor select-vendor" name="rs_vendor_id[]">
                     @include('member.load_ajax_data.load_vendor')
                 </select>
             </td>

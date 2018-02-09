@@ -11,6 +11,8 @@ use App\Models\Tbl_bill;
 
 use App\Globals\AccountingTransaction;
 use Carbon\Carbon;
+use Validator;
+use Session;
 use DB;
 
 /**
@@ -31,7 +33,7 @@ class TransactionWriteCheck
     }
     public static function info_item($wc_id)
     {
-        return Tbl_write_check_line::um()->where("wcline_wc_id", $wc_id)->get();       
+        return Tbl_write_check_line::um()->item()->where("wcline_wc_id", $wc_id)->get();       
     }
     public static function acc_line($wc_id)
     {
@@ -96,9 +98,11 @@ class TransactionWriteCheck
 
 	public static function postInsert($shop_id, $insert, $insert_item, $insert_acct = array())
 	{
-		$val = AccountingTransaction::vendorValidation($insert, $insert_item, 'write_check');
+
+		$val = Self::writeCheckValidation($insert, $insert_item, $shop_id, $insert_acct, 'write_check');
 		if(!$val)
 		{
+            
 			$ins['wc_shop_id']				= $shop_id;
 			$ins['transaction_refnum']		= $insert['transaction_refnumber'];
 			$ins['wc_reference_id']         = $insert['vendor_id'];
@@ -112,7 +116,8 @@ class TransactionWriteCheck
 
 	        /*TOTAL*/
 	        $total = collect($insert_item)->sum('item_amount');
-	        $ins['wc_total_amount'] = $total;
+            $total_acct = collect($insert_acct)->sum('account_amount');
+	        $ins['wc_total_amount'] = $total + $total_acct;
 	       
 	        /*INSERT CV HERE*/
 	        $write_check_id = Tbl_write_check::insertGetId($ins);
@@ -122,7 +127,7 @@ class TransactionWriteCheck
 	        $entry["reference_id"]      = $write_check_id;
 	        $entry["name_id"]           = $insert['vendor_id'];
 	        $entry["name_reference"]    = $insert['wc_reference_name'];
-	        $entry["total"]             = $total;
+	        $entry["total"]             = $ins['wc_total_amount'];
 	        $entry["vatable"]           = '';
 	        $entry["discount"]          = '';
 	        $entry["ewt"]               = '';
@@ -142,7 +147,7 @@ class TransactionWriteCheck
 	}
     public static function postUpdate($write_check_id, $shop_id, $insert, $insert_item, $insert_acct = array())
     {
-        $val = AccountingTransaction::vendorValidation($insert, $insert_item);
+        $val = Self::writeCheckValidation($insert, $insert_item, $shop_id, $insert_acct);
         if(!$val)
         {
             $ins['wc_shop_id']              = $shop_id;
@@ -158,7 +163,8 @@ class TransactionWriteCheck
 
             /*TOTAL*/
             $total = collect($insert_item)->sum('item_amount');
-            $ins['wc_total_amount'] = $total;
+            $total_acct = collect($insert_acct)->sum('account_amount');
+            $ins['wc_total_amount'] = $total + $total_acct;
            
             /*INSERT CV HERE*/
             Tbl_write_check::where('wc_id', $write_check_id)->update($ins);
@@ -168,7 +174,7 @@ class TransactionWriteCheck
             $entry["reference_id"]      = $write_check_id;
             $entry["name_id"]           = $insert['vendor_id'];
             //$entry["name_reference"]    = $insert['wc_reference_name'];
-            $entry["total"]             = $total;
+            $entry["total"]             = $ins['wc_total_amount'];
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
             $entry["ewt"]               = '';
@@ -207,15 +213,15 @@ class TransactionWriteCheck
                     $acct_line[$key_acct]['accline_description'] = $value_acct['account_desc'];
                     $acct_line[$key_acct]['accline_amount']      = $value_acct['account_amount'];
 
-                    Tbl_write_check_account_line::insert($acct_line);
-
                     $entry_data['a'.$key_acct]['account_id']        = $value_acct['account_id'];
                     $entry_data['a'.$key_acct]['entry_description'] = $value_acct['account_desc'];
                     $entry_data['a'.$key_acct]['entry_amount']      = $value_acct['account_amount'];
                     $entry_data['a'.$key_acct]['vatable']           = 0;
                     $entry_data['a'.$key_acct]['discount']          = 0;
                 }
-            }  
+            } 
+
+            Tbl_write_check_account_line::insert($acct_line); 
         }
 
         $itemline = null;
@@ -265,29 +271,46 @@ class TransactionWriteCheck
                 }
 
             }
+            
+            Tbl_write_check_line::insert($itemline);
         }
         if(count($entry_data) > 0)
         {
-            Tbl_write_check_line::insert($itemline);
-            Accounting::postJournalEntry($entry, $entry_data); 
+            Accounting::postJournalEntry($entry, $entry_data);        
         }
-
         $return = $write_check_id;
 
         return $return;
     }
-    public static function checkPoQty($wc_id = null, $po_data = array())
+    public static function writeCheckValidation($insert, $insert_item, $shop_id, $insert_acct, $transaction_type = '')
     {
-        if($wc_id != null)
+        $return = null;
+        if(!$insert['vendor_id'])
         {
-            if(count($po_data) > 0)
+            $return .= '<li style="list-style:none">Please Select Vendor.</li>';          
+        }
+        if(count($insert_acct) <= 0 && count($insert_item) <= 0)
+        {
+            $return .= '<li style="list-style:none">Please Select Item or Account.</li>';          
+        }
+        if($transaction_type)
+        {
+            $return .= AccountingTransaction::check_transaction_ref_number($shop_id, $insert['transaction_refnumber'], $transaction_type);
+        }
+
+
+        $rules['transaction_refnumber'] = 'required';
+        $rules['vendor_email']          = 'email';
+
+        $validator = Validator::make($insert, $rules);
+        if($validator->fails())
+        {
+            foreach ($validator->messages()->all('<li style="list-style:none">:message</li><br>') as $keys => $message)
             {
-                foreach ($po_data as $key => $value)
-                { 
-                    Self::checkPolineQty($key, $wc_id);
-                }   
+                $return .= $message;
             }
         }
+        return $return;
     }
     public static function checkPolineQty($po_id, $wc_id)
     {
@@ -312,5 +335,53 @@ class TransactionWriteCheck
             Tbl_purchase_order::where("po_id",$po_id)->update($updates);
         }
     }
+    public static function appliedTransaction($shop_id, $wc_id)
+    {
+        if($wc_id != null)
+        {
+            $applied_transaction = Session::get('applied_transaction');
+            if($applied_transaction > 0)
+            {
+                foreach ($applied_transaction as $key => $value)
+                { 
+                    Self::checkPolineQty($key, $wc_id);
+                } 
+            }  
+        }
+        
+        Self::insert_acctg_transaction($shop_id, $wc_id, $applied_transaction);
+    }
+    public static function insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction = array())
+    {
+        $get_transaction = Tbl_write_check::where("wc_shop_id", $shop_id)->where("wc_id", $transaction_id)->first();
+        $transaction_data = null;
+        if($get_transaction)
+        {
+            $transaction_data['transaction_ref_name'] = "write_check";
+            $transaction_data['transaction_ref_id'] = $transaction_id;
+            $transaction_data['transaction_list_number'] = $get_transaction->transaction_refnum;
+            $transaction_data['transaction_date'] = $get_transaction->wc_payment_date;
 
+            $attached_transaction_data = null;
+            if(count($applied_transaction) > 0)
+            {
+                foreach ($applied_transaction as $key => $value) 
+                {
+                    $get_data = Tbl_purchase_order::where("po_shop_id", $shop_id)->where("po_id", $key)->first();
+                    if($get_data)
+                    {
+                        $attached_transaction_data[$key]['transaction_ref_name'] = "purchase_order";
+                        $attached_transaction_data[$key]['transaction_ref_id'] = $key;
+                        $attached_transaction_data[$key]['transaction_list_number'] = $get_data->transaction_refnum;
+                        $attached_transaction_data[$key]['transaction_date'] = $get_data->po_date;
+                    }
+                }
+            }
+        }
+
+        if($transaction_data)
+        {
+            AccountingTransaction::postTransaction($shop_id, $transaction_data, $attached_transaction_data);
+        }
+    }
 }

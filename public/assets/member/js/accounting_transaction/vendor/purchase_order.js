@@ -9,16 +9,15 @@ function purchase_order()
 	function init()
 	{
 		action_load_initialize_select();
-		action_compute();
 		action_date_picker();
 		action_reassign_number();
-		//action_tax();
 
 		event_remove_tr();
 		event_compute_class_change();
 		event_taxable_check_change();
 		event_accept_number_only();
 		event_click_last_row();
+		action_compute();
 	}
 	function action_load_initialize_select()
 	{
@@ -31,6 +30,7 @@ function purchase_order()
 			{
 				$(".vendor-email").val($(this).find("option:selected").attr("email"));
 				$('textarea[name="vendor_address"]').val($(this).find("option:selected").attr("billing-address"));
+
 			}
 		});
 
@@ -243,12 +243,12 @@ function purchase_order()
 		if(tax_selection == 1){
 			tax = total_taxable * (12 / 100);
 		}
-		if(tax == 0)
+		/*if(tax == 0)
 		{
 			$('input[type=checkbox]').each(function (){
 				$(this).attr("checked", false);
 			});
-		}
+		}*/
 		total += tax;
 
 		$(".sub-total").html(action_add_comma(subtotal.toFixed(2)));
@@ -422,18 +422,26 @@ function purchase_order()
 	/*REMOVING ROW*/
 	function event_remove_tr()
 	{
-		$(document).on("click", ".remove-tr", function(e){
-			var len = $(".tbody-item .remove-tr").length;
+		// $(document).on("click", ".remove-tr", function(e){
+		// 	var len = $(".tbody-item .remove-tr").length;
 
-			if($(".tbody-item .remove-tr").length > 1)
-			{
+		// 	if($(".tbody-item .remove-tr").length > 1)
+		// 	{
+		// 		$(this).parent().remove();
+		// 		action_reassign_number();
+		// 	}
+		// 	else
+		// 	{
+		// 		console.log("success");
+		// 	}
+		// });
+		$(document).on("click", ".remove-tr", function(e){
+			if($(".tbody-item .remove-tr").length > 1){
+
 				$(this).parent().remove();
 				action_reassign_number();
-			}
-			else
-			{
-				console.log("success");
-			}
+				action_compute();
+			}			
 		});
 	}
 
@@ -471,9 +479,24 @@ function purchase_order()
 			  });
 		});
 	}
+	function load_applied_transaction()
+	{
+		$('.applied-transaction-list').load('/member/transaction/purchase_order/load-applied-transaction', function()
+		{
+			console.log("success");
+			action_load_initialize_select();
+			action_compute();
+			action_reassign_number();
 
-
+			$('.remarks-po').html($('.so-remarks').val());
+		});
+	}
+	this.load_applied_transaction = function()
+	{
+		load_applied_transaction();
+	}
 }
+
 
 /*AFTER ADDING VENDOR*/
 function success_vendor(data)
@@ -506,5 +529,14 @@ function success_purchase_order(data)
 	{
 		toastr.success(data.status_message);
 		location.href = data.status_redirect;
+	}
+}
+
+function success_apply_transaction(data)
+{
+	if(data.status == 'success')
+	{
+		data.element.modal("toggle");
+		purchase_order.load_applied_transaction();
 	}
 }

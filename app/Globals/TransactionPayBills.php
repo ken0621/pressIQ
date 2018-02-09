@@ -1,11 +1,12 @@
 <?php
 namespace App\Globals;
 
+use App\Models\Tbl_bill_account_line;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_pay_bill_line;
 use App\Models\Tbl_pay_bill;
 use App\Models\Tbl_bill;
-
+use App\Models\Tbl_write_check_account_line;
 use App\Globals\AccountingTransaction;
 use App\Globals\WriteCheck;
 use Carbon\Carbon;
@@ -23,7 +24,11 @@ class TransactionPayBills
 {
 	public static function info($shop_id, $paybill_id)
     {
-        return Tbl_pay_bill::where("paybill_shop_id", $shop_id)->where("paybill_id", $paybill_id)->first();
+        return Tbl_pay_bill::vendor()->where("paybill_shop_id", $shop_id)->where("paybill_id", $paybill_id)->first();
+    }
+    public static function info_line($paybill_id)
+    {
+        return Tbl_pay_bill_line::where("pbline_pb_id", $paybill_id)->get();
     }
     public static function info_item($shop_id, $vendor_id, $paybill_id)
     {
@@ -31,6 +36,13 @@ class TransactionPayBills
 
         return  Tbl_bill::appliedPayment($shop_id)->byVendor($shop_id, $vendor_id)->payBill($paybill_id, $bill_in_paybill)->orderBy("bill_id")->get()->toArray();
     }
+    public static function getAllBillByVendor($shop_id, $vendor_id)
+    {
+        $data =  Tbl_bill::appliedPayment($shop_id)->byVendor($shop_id, $vendor_id)->where("bill_is_paid", 0)->where('inventory_only',0)->get()->toArray();
+        
+        return $data;
+    }
+
 	public static function get($shop_id, $paginate = null, $search_keyword = null)
 	{
 		$data = Tbl_pay_bill::vendor()->where('paybill_shop_id', $shop_id);
@@ -82,7 +94,6 @@ class TransactionPayBills
 	        /*INSERT PB HERE*/
 	        $pay_bill_id = Tbl_pay_bill::insertGetId($ins);
 	        
-	               
 	        /* Transaction Journal */
 	        $entry["reference_module"]  = "bill-payment";
 	        $entry["reference_id"]      = $pay_bill_id;
@@ -95,16 +106,7 @@ class TransactionPayBills
 	        $return = Self::insertLine($pay_bill_id, $shop_id, $insert_item, $entry);
 
 	        $wc = WriteCheck::create_check_from_paybill($pay_bill_id);
-	        /*$wc = WriteCheck::create_check_from_paybill($pay_bill_id);
-	        if($wc)
-	        {
-	        	$return = Self::insertLine($pay_bill_id, $shop_id, $insert_item, $entry);
-	        }*/
-     
 	        $return = $pay_bill_id;
-
-
-
 		}
 		else
 		{
@@ -152,6 +154,7 @@ class TransactionPayBills
 	        $return = $pay_bill_id;
 
 	        WriteCheck::delete_bill_in_check($pay_bill_id);
+	        WriteCheck::delete_check_acct($pay_bill_id);
  			WriteCheck::update_check_from_paybill($pay_bill_id);
 		}
 		else
@@ -253,6 +256,40 @@ class TransactionPayBills
     	} 	
 
     	Tbl_bill::where('bill_id', $bill_id)->update($update);
+    }
+    public static function insert_acctg_transaction($shop_id, $transaction_id)
+    {
+        $get_transaction = Tbl_pay_bill::where("paybill_shop_id", $shop_id)->where("paybill_id", $transaction_id)->first();
+        
+        $transaction_data = null;
+        if($get_transaction)
+        {
+            $transaction_data['transaction_ref_name'] = "pay_bills";
+            $transaction_data['transaction_ref_id'] = $transaction_id;
+            $transaction_data['transaction_list_number'] = $get_transaction->transaction_refnum;
+            $transaction_data['transaction_date'] = $get_transaction->paybill_date;
+
+            /*$attached_transaction_data = null;
+            if(count($applied_transaction) > 0)
+            {
+                foreach ($applied_transaction as $key => $value) 
+                {
+                    $get_data = Tbl_customer_estimate::where("est_shop_id", $shop_id)->where("est_id", $key)->first();
+                    if($get_data)
+                    {
+                        $attached_transaction_data[$key]['transaction_ref_name'] = "sales_order";
+                        $attached_transaction_data[$key]['transaction_ref_id'] = $key;
+                        $attached_transaction_data[$key]['transaction_list_number'] = $get_data->transaction_refnum;
+                        $attached_transaction_data[$key]['transaction_date'] = $get_data->est_date;
+                    }
+                }
+            }*/
+        }
+
+        if($transaction_data)
+        {
+            AccountingTransaction::postTransaction($shop_id, $transaction_data, null);
+        }
     }
 
 }

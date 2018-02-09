@@ -241,7 +241,6 @@ class AccountingTransaction
             $return .= '<li style="list-style:none">Please Select Vendor.</li>';          
         }
 
-
         if($transaction_type)
         {
         	$return .= Self::check_transaction_ref_number(Self::shop_id(), $insert['transaction_refnumber'], $transaction_type);

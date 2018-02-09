@@ -6,6 +6,7 @@ use App\Globals\AccountingTransaction;
 use App\Globals\TransactionDebitMemo;
 use App\Globals\TransactionPurchaseOrder;
 use App\Globals\Item;
+use App\Globals\Warehouse2;
 use App\Globals\UnitMeasurement;
 use App\Globals\Customer;
 use App\Globals\Vendor;
@@ -16,6 +17,7 @@ use App\Globals\Pdf_global;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\ItemSerial;
 use App\Http\Controllers\Controller;
+use Session;
 
 
 class TransactionDebitMemoController extends Member
@@ -40,6 +42,8 @@ class TransactionDebitMemoController extends Member
         $data['action']     ='/member/transaction/debit_memo/create-debit-memo';
 
         $dm_id = $request->id;
+        
+        Session::forget("applied_transaction");
         if($dm_id)
         {
             $data['dm']      = TransactionDebitMemo::info($this->user_info->shop_id, $dm_id);
@@ -49,7 +53,17 @@ class TransactionDebitMemoController extends Member
     
         return view('member.accounting_transaction.vendor.debit_memo.debit_memo', $data);
     }
+    public function getPrint(Request $request)
+    {
+        $dm_id = $request->id;
 
+        $data["db"] = TransactionDebitMemo::info($this->user_info->shop_id, $dm_id);
+        $data["_dbline"] = TransactionDebitMemo::info_item($dm_id);
+
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+        $pdf = view('member.accounting_transaction.vendor.debit_memo.debit_memo_pdf', $data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
+    }
     public function postCreateDebitMemo(Request $request)
     {
         $btn_action  = $request->button_action;
@@ -74,12 +88,19 @@ class TransactionDebitMemoController extends Member
                 $insert_item[$key]['item_rate']         = str_replace(',', '', $request->item_rate[$key]);
                 $insert_item[$key]['item_discount']     = 0;
                 $insert_item[$key]['item_amount']       = str_replace(',', '', $request->item_amount[$key]);
+                $insert_item[$key]['item_ref_name']     = $request->item_ref_name[$key];
+                $insert_item[$key]['item_ref_id']       = $request->item_ref_id[$key];
             }
         }
 
-        
-        $validate = TransactionDebitMemo::postInsert($this->user_info->shop_id, $insert, $insert_item);
         $return = null;
+        $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+        $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
+        if(!$validate)
+        {
+            $validate = TransactionDebitMemo::postInsert($this->user_info->shop_id, $insert, $insert_item);
+            TransactionDebitMemo::appliedTransaction($this->user_info->shop_id, $validate);
+        }
         if(is_numeric($validate))
         {
             $return['status'] = 'success';
@@ -119,12 +140,21 @@ class TransactionDebitMemoController extends Member
                 $insert_item[$key]['item_rate']         = str_replace(',', '', $request->item_rate[$key]);
                 $insert_item[$key]['item_discount']     = 0;
                 $insert_item[$key]['item_amount']       = str_replace(',', '', $request->item_amount[$key]);
+                $insert_item[$key]['item_ref_name']     =$request->item_ref_name[$key];
+                $insert_item[$key]['item_ref_id']       =$request->item_ref_id[$key];
             }
         }
 
-        
-        $validate = TransactionDebitMemo::postUpdate($debit_memo_id, $this->user_info->shop_id, $insert, $insert_item);
         $return = null;
+        $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+
+        $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
+
+        if(!$validate)
+        {
+            $validate = TransactionDebitMemo::postUpdate($debit_memo_id, $this->user_info->shop_id, $insert, $insert_item);
+        }
+
         if(is_numeric($validate))
         {
             $return['status'] = 'success';
@@ -150,7 +180,60 @@ class TransactionDebitMemoController extends Member
     {
         $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
         $data['vendor'] = Vendor::getVendor($this->user_info->shop_id, $request->vendor);
+
+        $data['_applied'] = Session::get('applied_transaction');
+        $data['action']   = '/member/transaction/enter_bills/apply-transaction';
         return view('member.accounting_transaction.vendor.debit_memo.load_transaction', $data); 
+    }
+    public function postApplyTransaction(Request $request)
+    {
+        $apply_transaction = $request->_apply_transaction;
+        Session::put("applied_transaction", $apply_transaction);
+
+        $return['status'] = 'success';
+        $return['call_function'] = 'success_apply_transaction';
+
+        return json_encode($return);
+    }
+    public function getLoadAppliedTransaction(Request $request)
+    {
+        $applied_transaction = Session::get('applied_transaction');
+
+        if(count($applied_transaction) > 0)
+        {
+            foreach ($applied_transaction as $key => $value)
+            {
+                $_applied_poline = TransactionPurchaseOrder::info_item($key);
+                $info = TransactionPurchaseOrder::info($this->user_info->shop_id,$key);
+
+                $remarks = null;
+                foreach ($_applied_poline as $poline_key => $poline_value) 
+                {
+                    $type = Item::get_item_type($poline_value->poline_item_id);
+                    if($type == 1 || $type == 4 || $type == 5 )
+                    {
+                        $return[$key.'i'.$poline_key]['po_id'] = $poline_value->poline_po_id;
+                        $return[$key.'i'.$poline_key]['item_id'] = $poline_value->poline_item_id;
+                        $return[$key.'i'.$poline_key]['item_description'] = $poline_value->poline_description;
+                        $return[$key.'i'.$poline_key]['item_um'] = $poline_value->poline_um;
+                        $return[$key.'i'.$poline_key]['item_qty'] = $poline_value->poline_qty;
+                        $return[$key.'i'.$poline_key]['item_rate'] = $poline_value->poline_rate;
+                        $return[$key.'i'.$poline_key]['item_amount'] = $poline_value->poline_amount;
+                    }
+                }    
+                if($info)
+                {
+                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : 'PO#'.$info->po_id.', ';
+                }
+            }
+        }
+
+        $data['_po']     = $return;
+        $data['remarks'] = $remarks;
+        $data['_um']     = UnitMeasurement::load_um_multi();
+        $data['_item']   = Item::get_all_category_item();
+
+        return view('member.accounting_transaction.vendor.debit_memo.applied_transaction', $data);
     }
 
 }

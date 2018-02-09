@@ -468,9 +468,9 @@ function receive_inventory()
 			  });
 		});
 	}
-	function load_applied_po_transaction()
+	function load_applied_transaction()
 	{
-		$('.applied-po-transaction-list').load('/member/transaction/receive_inventory/load-applied-po-transaction', function()
+		$('.applied-po-transaction-list').load('/member/transaction/receive_inventory/load-applied-transaction', function()
 		{
 			console.log("success");
 			/*action_compute();
@@ -491,9 +491,9 @@ function receive_inventory()
 		event_remove_tr();
 		event_click_last_row_op();
 	}*/
-	this.load_applied_po_transaction = function()
+	this.load_applied_transaction = function()
 	{
-		load_applied_po_transaction();
+		load_applied_transaction();
 
 	}
 }
@@ -536,6 +536,6 @@ function success_apply_transaction(data)
     if(data.status == "success")
     {
     	data.element.modal("toggle");
-		receive_inventory.load_applied_po_transaction();
+		receive_inventory.load_applied_transaction();
     }
 } 

@@ -23,8 +23,6 @@ class TransactionSalesOrder
 	{
 		return Tbl_customer_estimate::where("is_sales_order",0)->where("est_status","accepted")->where("est_shop_id", $shop_id)->where("est_customer_id",$customer_id)->count();
 	}
-
-
 	public static function info($shop_id, $sales_order_id)
 	{
 		return Tbl_customer_estimate::customer()->where("est_shop_id", $shop_id)->where("est_id", $sales_order_id)->first();
@@ -44,6 +42,10 @@ class TransactionSalesOrder
 	public static function getAllOpenSO($shop_id)
     {
         return Tbl_customer_estimate::customer()->where('est_shop_id',$shop_id)->where("est_status","accepted")->where('is_sales_order', 1)->get();
+    }
+    public static function getCountAllOpenSO($shop_id)
+    {
+        return Tbl_customer_estimate::customer()->where('est_shop_id',$shop_id)->where("est_status","accepted")->where('is_sales_order', 1)->count();
     }
 
 	public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)

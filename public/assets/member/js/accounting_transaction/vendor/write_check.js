@@ -124,6 +124,18 @@ function write_check()
 		    width 		: "100%",
 		    placeholder : 'Payment Method'
 		});
+		$(".drop-down-coa").globalDropList(
+		{
+		    link 		: '/member/accounting/chart_of_account/popup/add',
+		    link_size 	: 'md',
+		    width 		: "100%",
+		    placeholder : 'Account',
+            onChangeValue : function()
+            {
+            	action_load_coa_info($(this));
+            }
+		});
+
 		$(".draggable.tbody-acct .tr-draggable:last td select.select-coa").globalDropList(
         {            
 		    link 		: '/member/accounting/chart_of_account/popup/add',
@@ -166,6 +178,12 @@ function write_check()
 	{
 		var subtotal = 0;
 		var total_taxable = 0;
+		var acct_amount = 0;
+		$(".acct-amount").each(function()
+		{
+			acct_amount += parseFloat(action_return_to_number($(this).val()));
+			//alert(acct_amount);
+		});
 
 		$(".tr-draggable").each(function()
 		{
@@ -282,8 +300,8 @@ function write_check()
 		$(".ewt-total").html(action_add_comma(ewt_value.toFixed(2)));
 		$(".discount-total").html(action_add_comma(discount_total.toFixed(2)));
 		$(".tax-total").html(action_add_comma(tax.toFixed(2)));
-		$(".total-amount").html(action_add_comma(subtotal.toFixed(2)));
-		$(".total-amount-input").val(subtotal.toFixed(2));
+		$(".total-amount").html(action_add_comma((subtotal + acct_amount).toFixed(2)));
+		$(".total-amount-input").val((subtotal + acct_amount).toFixed(2));
 
 	}
 
@@ -390,10 +408,11 @@ function write_check()
 		}
 		else
 		{
-			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("clear");
 		}
     	action_compute();
 	}
+
 	
 
 	//Purpose: Add the specified number of dates to a given date.

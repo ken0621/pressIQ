@@ -2,11 +2,6 @@ var requisition_slip = new requisition_slip()
 var load_table_data = {};
 load_table_data.tab_type = 'open';
 
-var load_item = null;
-var item_search_delay_timer;
-var settings_delay_timer;
-var keysearch = {};
-
 function requisition_slip()
 {
 	init();
@@ -109,3 +104,4 @@ function success_confirm(data)
 		location.reload();
 	}
 }
+

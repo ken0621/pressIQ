@@ -95,6 +95,7 @@
                                             <th width="10"></th>
                                         </tr>
                                     </thead>
+                                    <tbody class="applied-transaction-list"></tbody>
                                     <tbody class="draggable tbody-item">     
                                         @if(isset($dm))
                                             @foreach($_dmline as $dmline)
@@ -126,6 +127,8 @@
                                                     </td>
                                                     @endif
                                                     <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                    <input type="hidden" name="item_ref_name[]" value="{{$dmline->dbline_refname}}">
+                                                    <input type="hidden" name="item_ref_id[]" value="{{$dmline->dbline_refid}}">
                                                 </tr>
                                             @endforeach
                                         @endif                                
@@ -146,6 +149,8 @@
                                             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                             @include("member.load_ajax_data.load_td_serial_number")
                                             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                            <input type="hidden" name="item_ref_name[]">
+                                            <input type="hidden" name="item_ref_id[]">
                                         </tr>
                                         <tr class="tr-draggable">
                                             <td class="invoice-number-td text-right">2</td>
@@ -164,6 +169,8 @@
                                             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                             @include("member.load_ajax_data.load_td_serial_number")
                                             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                            <input type="hidden" name="item_ref_name[]">
+                                            <input type="hidden" name="item_ref_id[]">
                                         </tr>
                                     </tbody>
                                 </table>
@@ -174,7 +181,7 @@
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <label>Vendor Message</label>
-                            <textarea class="form-control input-sm textarea-expand" name="vendor_message" placeholder="">{{ isset($dm->db_message)? $dm->db_message : ''}}</textarea>
+                            <textarea class="form-control input-sm textarea-expand remarks-dm" name="vendor_message" placeholder="">{{ isset($dm->db_message)? $dm->db_message : ''}}</textarea>
                         </div>
                         <div class="col-sm-3">
                             <label>Statement Memo</label>
@@ -233,6 +240,8 @@
             </td> -->
             @include("member.load_ajax_data.load_td_serial_number")
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+            <input type="hidden" name="item_ref_name[]">
+            <input type="hidden" name="item_ref_id[]">
         </tr>
     </table>
 </div>

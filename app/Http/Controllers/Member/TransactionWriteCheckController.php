@@ -23,6 +23,7 @@ use App\Globals\AccountingTransaction;
 use App\Globals\TransactionEnterBills;
 
 use App\Globals\TransactionWriteCheck;
+use App\Globals\Pdf_global;
 use Carbon\Carbon;
 use Session;
 class TransactionWriteCheckController extends Member
@@ -45,7 +46,7 @@ class TransactionWriteCheckController extends Member
         $data["_vendor"]    = Vendor::getAllVendor('active');
         $data["_name"]      = Tbl_customer::unionVendor(WriteCheck::getShopId())->get();
         $data['_item']      = Item::get_all_category_item();
-        $data['_account']   = Accounting::getAllAccount();
+        $data['_account']   = Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["transaction_refnum"] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'write_check');
 
@@ -62,6 +63,18 @@ class TransactionWriteCheckController extends Member
         }
 
         return view('member.accounting_transaction.vendor.write_check.write_check', $data);
+    }
+    public function getPrint(Request $request)
+    {
+        $wc_id = $request->id;         
+       
+        $data['wc']      = TransactionWriteCheck::info($this->user_info->shop_id, $wc_id);
+        $data['_wcline'] = TransactionWriteCheck::info_item($wc_id);
+        $data["_wcline_acc"] = TransactionWriteCheck::acc_line($wc_id);
+
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+        $pdf = view("member.accounting_transaction.vendor.write_check.write_check_pdf",$data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
     }
 
     public function postCreateWriteCheck(Request $request)
@@ -111,10 +124,11 @@ class TransactionWriteCheckController extends Member
         if(!$validate)
         {
             $validate = TransactionWriteCheck::postInsert($this->user_info->shop_id, $insert, $insert_item, $insert_acct);
-            if(Session::get('applied_transaction') > 0)
-            {
-                TransactionWriteCheck::checkPOQty($validate, Session::get("applied_transaction"));
-            }
+            TransactionWriteCheck::appliedTransaction($this->user_info->shop_id, $validate);
+        }
+        else
+        {
+            $validate = TransactionWriteCheck::postInsert($this->user_info->shop_id, $insert, $insert_item, $insert_acct);
         }
         if(is_numeric($validate))
         {
@@ -143,8 +157,19 @@ class TransactionWriteCheckController extends Member
         $insert['wc_mailing_address']      = $request->wc_mailing_address;
         $insert['wc_payment_date']         = $request->wc_payment_date;
         $insert['wc_memo']                 = $request->wc_memo;
-        $insert['vendor_total']             = $request->wc_total_amount;
+        $insert['vendor_total']            = $request->wc_total_amount;
         
+        $insert_acct = null;
+        foreach($request->expense_account as $key_account => $value_account)
+        {
+            if($value_account)
+            {
+                $insert_acct[$key_account]['account_id']    = $value_account;
+                $insert_acct[$key_account]['account_desc']  = $request->account_desc[$key_account];
+                $insert_acct[$key_account]['account_amount']  = $request->account_amount[$key_account];
+            }
+        }
+
         $insert_item = null;
         foreach($request->item_id as $key => $value)
         {
@@ -162,12 +187,19 @@ class TransactionWriteCheckController extends Member
             }
         }
 
+        
         $return = null;
         $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+
         $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
+
         if(!$validate)
         {
-            $validate = TransactionWriteCheck::postUpdate($write_check_id, $this->user_info->shop_id, $insert, $insert_item);
+            $validate = TransactionWriteCheck::postUpdate($write_check_id, $this->user_info->shop_id, $insert, $insert_item, $insert_acct);
+        }
+        else
+        {
+            $validate = TransactionWriteCheck::postUpdate($write_check_id, $this->user_info->shop_id, $insert, $insert_item, $insert_acct);
         }
         if(is_numeric($validate))
         {

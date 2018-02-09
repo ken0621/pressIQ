@@ -17,6 +17,7 @@ use App\Globals\TransactionPurchaseRequisition;
 use App\Globals\AccountingTransaction;
 use App\Globals\TransactionSalesOrder;
 use App\Globals\TransactionDebitMemo;
+use App\Globals\RequisitionSlip;
 
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
@@ -74,12 +75,14 @@ class TransactionPurchaseOrderController extends Member
             $total_qty = $value->poline_orig_qty * $qty;
             $data["_poline"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->poline_um);
         }
+        $footer = AccountingTransaction::get_refuser($this->user_info);
 
         $pdf = view("member.accounting_transaction.vendor.purchase_order.purchase_order_pdf",$data);
-        return Pdf_global::show_pdf($pdf);
+        return Pdf_global::show_pdf($pdf, null, $footer);
     }
     public function getCreate(Request $request)
     {
+        
         $shop_id            = $this->user_info->shop_id;
         $data["page"]       = "Create Purchase order";
         $data["_vendor"]    = Vendor::getAllVendor('active');
@@ -87,12 +90,15 @@ class TransactionPurchaseOrderController extends Member
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'purchase_order');
+        $data['count_so'] = TransactionSalesOrder::getCountAllOpenSO($this->user_info->shop_id);
+
         $data['action']     = "/member/transaction/purchase_order/create-purchase-order";
-        $data['count_transaction'] = TransactionDebitMemo::countTransaction($shop_id);
+
         $data["vendor_id"]       = $request->vendor_id;
         $data["terms_id"]       = $request->vendor_terms;
         $po_id = $request->id;
-
+        
+        Session::forget("applied_transaction");
         if($po_id)
         {
             $data["po"]            = TransactionPurchaseOrder::info($this->user_info->shop_id, $po_id);
@@ -139,10 +145,13 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_remark']      = $request->item_remark[$key];
                 $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_taxable']     = $request->item_taxable[$key];
+                $insert_item[$key]['item_ref_name']    = $request->item_ref_name[$key];
+                $insert_item[$key]['item_ref_id']      = $request->item_ref_id[$key];
             }
         }
 
         $validate = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
+        TransactionPurchaseOrder::applied_transaction($this->user_info->shop_id, $validate);
 
         $return = null;
         if(is_numeric($validate))
@@ -197,8 +206,11 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_remark']      = $request->item_remark[$key];
                 $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_taxable']     = $request->item_taxable[$key];
+                $insert_item[$key]['item_ref_name']    = $request->item_ref_name[$key];
+                $insert_item[$key]['item_ref_id']      = $request->item_ref_id[$key];
             }
         }
+
        
         $validate = TransactionPurchaseOrder::postUpdate($po_id, $this->user_info->shop_id, $insert, $insert_item);
 
@@ -221,9 +233,67 @@ class TransactionPurchaseOrderController extends Member
     public function getLoadTransaction(Request $request)
     {
         $data['_so'] = TransactionSalesOrder::getAllOpenSO($this->user_info->shop_id);
-        $data['_pr'] = TransactionPurchaseRequisition::getAllOpenPR($this->user_info->shop_id);
         
-       
+        $data['_applied'] = Session::get('applied_transaction');
+        $data['action']   = '/member/transaction/purchase_order/apply-transaction';
         return view('member.accounting_transaction.vendor.purchase_order.load_transaction', $data);
+    }
+    public function postApplyTransaction(Request $request)
+    {
+        $apply_transaction = $request->_apply_transaction;
+        Session::put("applied_transaction", $apply_transaction);
+
+        $return['status'] = 'success';
+        $return['call_function'] = 'success_apply_transaction';
+
+        return json_encode($return);
+    }
+    public function getLoadAppliedTransaction(Request $request)
+    {
+        $applied_transaction = Session::get('applied_transaction');
+
+        $return = null;
+        $remarks = null;
+        if(count($applied_transaction) > 0)
+        {
+            foreach ($applied_transaction as $key => $value) 
+            {
+                $get = TransactionSalesOrder::info_item($key);
+                $info = TransactionSalesOrder::info($this->user_info->shop_id, $key);
+                //die(var_dump($get));
+                foreach ($get as $key_item => $value_item)
+                {
+                    if($value_item->item_type_id == 1 || $value_item->item_type_id == 4 || $value_item->item_type_id == 5)
+                    {
+                        $return[$key.'i'.$key_item]['so_id'] = $value_item->estline_est_id;
+                        $return[$key.'i'.$key_item]['service_date'] = $value_item->estline_service_date;
+                        $return[$key.'i'.$key_item]['item_id'] = $value_item->estline_item_id;
+                        $return[$key.'i'.$key_item]['item_description'] = $value_item->estline_description;
+                        $return[$key.'i'.$key_item]['multi_um_id'] = $value_item->multi_um_id;
+                        $return[$key.'i'.$key_item]['item_um'] = $value_item->estline_um;
+                        $return[$key.'i'.$key_item]['item_qty'] = $value_item->estline_qty;
+                        $return[$key.'i'.$key_item]['item_rate'] = $value_item->estline_rate;
+                        $return[$key.'i'.$key_item]['item_amount'] = $value_item->estline_amount;
+                        $return[$key.'i'.$key_item]['item_discount'] = $value_item->estline_discount;
+                        $return[$key.'i'.$key_item]['item_discount_type'] = $value_item->estline_discount_type;
+                        $return[$key.'i'.$key_item]['item_remarks'] = $value_item->estline_discount_remark;
+                        $return[$key.'i'.$key_item]['taxable'] = $value_item->taxable;
+
+                    }
+                }
+                if($info)
+                {
+                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : 'SO#'.$info->est_id.', ';
+                }
+            }
+        }
+        //die(var_dump($return));
+        $data['_item']  = Item::get_all_category_item([1,4,5]);
+        $data['_transactions'] = $return;
+        $data['remarks'] = $remarks;
+        $data['_um']        = UnitMeasurement::load_um_multi();
+        $data["_vendor"] = Vendor::getAllVendor('active');
+
+        return view('member.accounting_transaction.vendor.purchase_order.applied_transaction', $data);
     }
 }

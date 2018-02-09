@@ -13,20 +13,17 @@ $text-dark: #404040;
 {
 	font-family: $content-text;
 	
-	.modal-size 
-	{
-		width: 65%;
-	}
-
 	.modal-content
 	{
 		overflow: hidden;
 		border: 0;
+		border-radius: 0;
+
 		.modal-header
 		{
-			background-color: #006CC5;
-			border-top-left-radius: 3px;
-			border-top-right-radius: 3px;
+			background-color: #585858;
+			// border-top-left-radius: 3px;
+			// border-top-right-radius: 3px;
 			border-bottom: none;
 
 			.close
@@ -182,11 +179,10 @@ $text-dark: #404040;
 
 					padding: 12px 30px;
 					color: #fff;
-					background-color: #48B920;
+					background-color: #585858;
 					border-radius: 2px;
 					border: none;
 				}
-
 			}
 
 			.total

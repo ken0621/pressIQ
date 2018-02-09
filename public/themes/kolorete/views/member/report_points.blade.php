@@ -1,7 +1,7 @@
 @extends("member.member_layout")
 
 @section("member_content")
-	<div class="report-container" style="overflow: hidden;">
+	{{-- <div class="report-container" style="overflow: hidden;">
 		<div class="report-header clearfix">
 			<div class="left">
 				<div class="icon">
@@ -73,12 +73,12 @@
 	          	</div>
 			</div>
 		</div>
-	</div>
+	</div> --}}
 
 @endsection
 
 @section("member_script")
-<script type="text/javascript">
+{{-- <script type="text/javascript">
 	var getUrlParameter = function getUrlParameter(sParam) 
 	{
 	    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
@@ -114,9 +114,9 @@
 	    var url = 'http://' + window.location.hostname + window.location.pathname+string;
 	    window.location.href = url;
 	});
-</script>
+</script> --}}
 @endsection
 
 @section("member_css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/report.css">
+{{-- <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/report.css"> --}}
 @endsection

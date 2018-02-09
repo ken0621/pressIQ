@@ -8076,11 +8076,11 @@ class PayrollController extends Member
                }
           }    
 
-          $data['stataus']         = 'success';
-          $data['function_name']   = 'payrollconfiguration.reload_leave_temp';
+          $response['call_function'] = 'reload';
+          $response['status'] = 'success';
 
-               
-          return collect($data)->toJson();
+          return $response;
+
      }
 
      public function delete_confirm_schedule_leave($id)

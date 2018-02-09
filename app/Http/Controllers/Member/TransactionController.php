@@ -60,6 +60,7 @@ class TransactionController extends Member
     }
     public function transaction_list_table(Request $request)
     {
+        Transaction::get_transaction_customer_details_v2();
         $data['_list'] = Transaction::get_transaction_list($this->user_info->shop_id, $request->transaction_type, $request->search_keyword);
         return view("member.transaction.all_transaction_list_table", $data);
     }

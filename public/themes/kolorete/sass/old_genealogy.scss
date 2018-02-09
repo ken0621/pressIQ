@@ -137,7 +137,7 @@ $bold: 700;
 
 .tree li span
 {
-    background-color: #006CC5;
+    background-color: #585858;
     color: #fff;
     position: relative;
     transition: background-color ease-out 0.5s;  
@@ -145,13 +145,13 @@ $bold: 700;
 
 .tree li span:hover
 {
-    background-color: #006CC5;
+    background-color: #585858;
     color: #fff;
 }
 
 .tree li span.PS
 {
-    background-color:#006CC5;
+    background-color:#585858;
 }
 
 .tree li span.FS
@@ -161,7 +161,7 @@ $bold: 700;
 
 .tree li span.VC
 {
-    background-color: rgba(72,185,32,0.5);
+    background-color: rgba(0,0,0,0.2);
 }
 
 .tree li span.SS
@@ -196,14 +196,14 @@ $bold: 700;
 {
     content: '';
     position: absolute; top: 0; right: 50%;
-    border-top: 1px solid #006CC5;
+    border-top: 1px solid #585858;
     width: 50%; height: 20px;
 }
 
 .tree li::after
 {
     right: auto; left: 50%;
-    border-left: 1px solid #006CC5;
+    border-left: 1px solid #585858;
 }
 
 /*We need to remove left-right connectors from elements without 
@@ -225,7 +225,7 @@ right connector from last child*/
 /*Adding back the vertical connector to the last nodes*/
 .tree li:last-child::before
 {
-    border-right: 1px solid #006CC5;
+    border-right: 1px solid #585858;
     border-radius: 0 5px 0 0;
     -webkit-border-radius: 0 5px 0 0;
     -moz-border-radius: 0 5px 0 0;
@@ -243,7 +243,7 @@ right connector from last child*/
 {
     content: '';
     position: absolute; top: 0; left: 50%;
-    border-left: 1px solid #006CC5;
+    border-left: 1px solid #585858;
     width: 0; height: 20px;
 }
 

@@ -83,22 +83,23 @@
 					</div>
 				</div> --}}
 				
-				<div class="square-containr">
+				{{-- <div class="square-containr">
 					<div class="title"> Reward Points</div>
 					<div class="sub-container">
 						<div class="chart-legend" style="max-height: auto;">
-							{{-- <div class="holder">
+							<div class="holder">
 								<div class="color fifth-pgc"></div>
 								<div class="name"><span>5th Pair GC</span> <div class="name fifth-pgc-text">{{ $points->display_binary }}</div></div>
-							</div> --}}
-							{{-- <div class="holder">
+							</div>
+							<div class="holder">
 								<div class="color fifth-pgc"></div>
 								<div class="name"><span>KROPS GC</span> <div class="name fifth-pgc-text">{{isset($krops_gc) ? currency('',$krops_gc)." POINT(S)" : '0.00 POINT(S)' }}</div></div>
-							</div> --}}
+							</div>
 						</div>
 					</div>
-				</div>
+				</div> --}}
 
+				@if(count($token_titles)>0)
 				<div class="square-containr">
 					<div class="title"> Tokens</div>
 					<div class="sub-container">
@@ -116,6 +117,7 @@
 						</div>
 					</div>
 				</div>
+				@endif
 
 			</div>
 

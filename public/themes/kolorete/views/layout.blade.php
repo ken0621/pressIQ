@@ -73,9 +73,9 @@
                         <span><i class="fa fa-facebook-square" aria-hidden="true"></i></span>
                     </div>
                     <div class="right-container">
-                        <span><a href="/members">Sign Up</a></span>
+                        <span><a href="/members">My Account</a></span>
                         <span class="divider">|</i></span>
-                        <span><a href="/members/logout">Login</a></i></span>
+                        <span><a href="/members/logout">Logout</a></i></span>
                     </div>
                     @else
                     <div class="left-container">
@@ -173,8 +173,8 @@
                             </span>
                             
                             <span class="my-cart">My Cart</span>
-                            <a href="#">
-                            <span><img src="/themes/{{ $shop_theme }}/img/my-cart-logo.png"></span>
+                            <a class="popup" link="/cartv2" size="lg" href="javascript:" style="padding: 0;">
+                                <span><img src="/themes/{{ $shop_theme }}/img/my-cart-logo.png"></span>
                             </a>
                         </div>
                     </div>

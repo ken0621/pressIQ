@@ -5303,19 +5303,19 @@ class Payroll2
 						{
 							foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
 							{
-								if ($value->time_output["leave_hours"] || $lbl == 'late' || $lbl == 'undertime' ) 
+								if ($value->time_output["leave_hours"] != '00:00:00' || $lbl == 'late' || $lbl == 'undertime' ) 
 								{
 									$standard_gross_pay += $values['rate'];
 									$deduction += $values['rate'];
 								}
-								if ($data["group"]->payroll_group_salary_computation != "Daily Rate") 
-								{
-									if ($value->time_output["leave_hours"] == '00:00:00') 
-									{
-										$standard_gross_pay += $values['rate'];
-										$deduction += $values['rate'];
-									}
-								}
+								// if ($data["group"]->payroll_group_salary_computation != "Daily Rate") 
+								// {
+								// 	if ($value->time_output["leave_hours"] == '00:00:00') 
+								// 	{
+								// 		$standard_gross_pay += $values['rate'];
+								// 		$deduction += $values['rate'];
+								// 	}
+								// }
 							}
 						}
 

@@ -8,6 +8,7 @@ use Excel;
 use DB;
 use App\Models\Tbl_payroll_time_keeping_approved;
 use App\Models\Tbl_payroll_period_company;
+use App\Models\Tbl_payroll_bank_convertion;
 
 class PayrollBankingController extends Member
 {
@@ -53,10 +54,12 @@ class PayrollBankingController extends Member
      	$data["payroll_period_company_id"] = $payroll_period_company_id;
      	$data["payroll_period"] = Tbl_payroll_period_company::getcompanydetails($payroll_period_company_id)->first();
         $data["_employee"] = Tbl_payroll_time_keeping_approved::whereIn("employee_id", $employee)->where("payroll_period_company_id", $data["payroll_period_company_id"])->orderBy("net_pay", "desc")->basic()->get();
-        
+
+
         if (Request::input("xls")) 
         {
-            Self::download_xls($data);
+                Self::download_xls($data);
+            
         }
         else
         {
@@ -96,13 +99,30 @@ class PayrollBankingController extends Member
         // S3N
         $filename = strtoupper($company_code) . $upload_month . $upload_day . $upload_year . $batch;
 
-        Excel::create($filename, function($excel) use ($data)
+        $payroll_bank_convertion_id = $data["payroll_period"]->payroll_company_bank;
+        $payroll_bank_name          = Tbl_payroll_bank_convertion::where('payroll_bank_convertion_id',$payroll_bank_convertion_id)->value('bank_name');
+        
+        if($payroll_bank_name == 'Metro Bank Single')
         {
-            $excel->sheet('Data', function($sheet) use ($data)
-            {
-                $sheet->loadView('member.payroll2.bank_template.default', $data);
-            });
-        })->download('xls');
+                    Excel::create($filename, function($excel) use ($data)
+                    {
+                        $excel->sheet('Data', function($sheet) use ($data)
+                        {
+                            $sheet->loadView('member.payroll2.bank_template.metrobanksingle', $data);
+                        });
+                    })->download('xls');
+        }
+        else
+        {
+                    Excel::create($filename, function($excel) use ($data)
+                    {
+                        $excel->sheet('Data', function($sheet) use ($data)
+                        {
+                            $sheet->loadView('member.payroll2.bank_template.default', $data);
+                        });
+                    })->download('xls');
+        }
+
 
         $data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data["payroll_period_company_id"])->orderBy("net_pay", "desc")->basic()->get();
         $data = Self::clean($data);

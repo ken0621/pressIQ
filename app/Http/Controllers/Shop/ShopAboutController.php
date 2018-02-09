@@ -183,6 +183,24 @@ class ShopAboutController extends Shop
         return view("return_policy", $data);
     }
 
+    public function privacy_policy()
+    {
+        $data["page"] = "Privacy Policy";
+        return view("privacy_policy", $data);
+    }
+
+    public function franchise_terms_and_condition()
+    {
+        $data["page"] = "Franchise Terms and Condition";
+        return view("franchise_terms_and_condition", $data);
+    }
+
+    public function general_terms_and_condition()
+    {
+        $data["page"] = "General Terms and Condition";
+        return view("general_terms_and_condition", $data);
+    }
+
     public function products()
     {
         $data["page"] = "products";
@@ -193,12 +211,6 @@ class ShopAboutController extends Shop
     {
         $data["page"] = "certificate";
         return view("member.certificate", $data);
-    }
-
-    public function announcement()
-    {
-        $data["page"] = "Announcement";
-        return view("announcement", $data);
     }
 
 

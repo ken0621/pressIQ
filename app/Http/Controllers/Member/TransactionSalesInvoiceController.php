@@ -88,6 +88,9 @@ class TransactionSalesInvoiceController extends Member
 				$insert_item[$key]['item_remarks'] 		= $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] 		= str_replace(',', '', $request->item_amount[$key]);
 				$insert_item[$key]['item_taxable'] 		= isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
+
+				$insert_item[$key]['item_refname'] 		= $request->item_refname[$key];
+				$insert_item[$key]['item_refid'] 		= $request->item_refid[$key];
 			}
 		}
 
@@ -102,7 +105,7 @@ class TransactionSalesInvoiceController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesInvoice::postInsert($this->user_info->shop_id, $insert, $insert_item);
-			TransactionSalesInvoice::applied_transaction($this->user_info->shop_id);
+			TransactionSalesInvoice::applied_transaction($this->user_info->shop_id, $validate);
 		}
 		if(is_numeric($validate))
 		{
@@ -141,6 +144,7 @@ class TransactionSalesInvoiceController extends Member
 		$insert['customer_tax'] 		 = $request->customer_tax;
 
 		$insert_item = null;
+		$return_si = null;
 		foreach ($request->item_id as $key => $value) 
 		{
 			if($value)
@@ -155,13 +159,26 @@ class TransactionSalesInvoiceController extends Member
 				$insert_item[$key]['item_remarks'] 		= $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] 		= str_replace(',', '', $request->item_amount[$key]);
 				$insert_item[$key]['item_taxable'] 		= isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
+				
+				$insert_item[$key]['item_refname'] 		= $request->item_refname[$key];
+				$insert_item[$key]['item_refid'] 		= $request->item_refid[$key];
+
+				if($insert_item[$key]['item_refid'])
+				{
+					$return_si[$insert_item[$key]['item_refid']] = '';
+				}
 			}
 		}
+		if(count($return_si) > 0)
+		{
+			Session::put('applied_transaction_si',$return_si);
+		}
+
 		$return = null;
 
 		$warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
 		$validate = null;
-		if(CustomerWIS::settings($shop_id) == 0)
+		if(CustomerWIS::settings($this->user_info->shop_id) == 0)
 		{
 			$validate = AccountingTransaction::inventory_validation('consume', $this->user_info->shop_id, $warehouse_id, $insert_item);
 		}
@@ -169,7 +186,7 @@ class TransactionSalesInvoiceController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesInvoice::postUpdate($invoice_id, $this->user_info->shop_id, $insert, $insert_item);
-			TransactionSalesInvoice::applied_transaction($this->user_info->shop_id);
+			TransactionSalesInvoice::applied_transaction($this->user_info->shop_id, $validate);
 		}
 		if(is_numeric($validate))
 		{
@@ -240,6 +257,17 @@ class TransactionSalesInvoiceController extends Member
                     $return[$key.'i'.$key_item]['item_discount_type'] = $value_item->estline_discount_type;
                     $return[$key.'i'.$key_item]['item_remarks'] = $value_item->estline_discount_remark;
                     $return[$key.'i'.$key_item]['taxable'] = $value_item->taxable;
+
+                    $refname = "estimate_quotation";
+                    if($info)
+                    {
+                    	if($info->is_sales_order == 1)
+                		{
+                			$refname = "sales_order";
+                		}
+                    }
+                    $return[$key.'i'.$key_item]['refname'] = $refname;
+                    $return[$key.'i'.$key_item]['refid'] = $key;
                 }
                 if($info)
                 {
@@ -252,7 +280,7 @@ class TransactionSalesInvoiceController extends Member
                 }
             }
         }
-        $data['_item']  = Item::get_all_category_item([1,4,5]);
+        $data['_item']  = Item::get_all_category_item();
         $data['_transactions'] = $return;
         $data['remarks'] = $remarks;
         $data['_um']        = UnitMeasurement::load_um_multi();
@@ -261,6 +289,14 @@ class TransactionSalesInvoiceController extends Member
     }
 	public function getPrint(Request $request)
 	{
-		dd("Under Maintenance");
+		$id = $request->id;
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data['invoice'] = TransactionSalesInvoice::info($this->user_info->shop_id, $id);
+        $data["transaction_type"] = "SALES INVOICE";
+        $data["invoice_item"] = TransactionSalesInvoice::info_item($id);
+
+        $pdf = view('member.accounting_transaction.customer.sales_invoice.si_print', $data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
 	}
 }

@@ -60,6 +60,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $data['_item']  = Item::get_all_category_item([1,4,5]);
         $data["_customer"]  = Customer::getAllCustomer();
         $data['action']     = "/member/customer/wis/create-submit";
+        $data['_um']        = UnitMeasurement::load_um_multi();
         $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'warehouse_issuance_slip');
 
         $data['c_id'] = $request->customer_id;
@@ -115,6 +116,8 @@ class CustomerWarehouseIssuanceSlipController extends Member
                 $insert_item[$key]['item_rate'] = str_replace(',', '', $request->item_rate[$key]);
                 $insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_discount'] = 0;
+                $insert_item[$key]['item_refname'] = $request->item_refname[$key];
+                $insert_item[$key]['item_refid'] = $request->item_refid[$key];
 
                 $_item[$key] = null;
                 $_item[$key]['item_id'] = $value;
@@ -125,7 +128,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
         }
 
         $val = CustomerWIS::customer_create_wis($shop_id, $remarks, $ins_wis, $_item, $insert_item);
-               CustomerWIS::applied_transaction($shop_id);
+               CustomerWIS::applied_transaction($shop_id, $val);
         $data = null;
         if(is_numeric($val))
         {
@@ -182,9 +185,10 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $ins_wis['cust_delivery_date']              = date("Y-m-d", strtotime($request->delivery_date));
         $ins_wis['created_at']                      = Carbon::now();
 
-        //die(var_dump($ins_wis['cust_delivery_date']));
         $_item = null;
         $insert_item = null;
+
+        $return_wis = null;
         foreach ($items as $key => $value) 
         {
             if($value)
@@ -196,16 +200,28 @@ class CustomerWarehouseIssuanceSlipController extends Member
                 $insert_item[$key]['item_rate'] = str_replace(',', '', $request->item_rate[$key]);
                 $insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_discount'] = 0;
+                $insert_item[$key]['item_refname'] = $request->item_refname[$key];
+                $insert_item[$key]['item_refid'] = $request->item_refid[$key];
 
                 $_item[$key] = null;
                 $_item[$key]['item_id'] = $value;
                 $_item[$key]['quantity'] = $request->item_qty[$key] * UnitMeasurement::um_qty($insert_item[$key]['item_um']);
                 $_item[$key]['remarks'] = $request->item_description[$key];
 
+                if($insert_item[$key]['item_refid'])
+                {
+                    $return_wis[$insert_item[$key]['item_refid']] = '';
+                }
             }
+        }
+        if(count($return_wis) > 0)
+        {
+            Session::put('applied_transaction_wis',$return_wis);
         }
 
         $val = CustomerWIS::customer_update_wis($wis_id, $shop_id, $remarks, $ins_wis, $_item, $insert_item);
+               CustomerWIS::applied_transaction($shop_id, $val);
+
         //die(var_dump($val));
         $data = null;
         if(is_numeric($val))
@@ -269,18 +285,13 @@ class CustomerWarehouseIssuanceSlipController extends Member
     }
     public function getPrint(Request $request, $wis_id)
     {
-        $data['wis'] = CustomerWIS::get_customer_wis_data($wis_id);
-        $customer_id = $data['wis']->destination_customer_id;
-        
-        $data['wis_item'] = CustomerWIS::print_customer_wis_item($wis_id);
-        $data['user'] = $this->user_info;
-        $data['owner'] = WarehouseTransfer::get_warehouse_data($data['wis']->cust_wis_from_warehouse);
-        $data['customer'] = CustomerWIS::get_customer($this->user_info->shop_id)->where('customer_id',$customer_id);
-        //dd($data['customer']);
-        
-        //return view('member.warehousev2.customer_wis.customer_wis_print', $data);
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data['wis'] = CustomerWIS::get_customer_wis_data($wis_id);        
+        $data['wis_item'] = CustomerWIS::customer_wis_itemline($wis_id);
+
         $pdf = view('member.warehousev2.customer_wis.customer_wis_print', $data);
-        return Pdf_global::show_pdf($pdf,null,$data['wis']->cust_wis_number);
+        return Pdf_global::show_pdf($pdf,null,$footer);
     }
     public function getCountTransaction(Request $request)
     {
@@ -341,6 +352,19 @@ class CustomerWarehouseIssuanceSlipController extends Member
                         $return[$key.'i'.$key_item]['item_qty'] = $value_item->invline_qty;
                         $return[$key.'i'.$key_item]['item_rate'] = $value_item->item_cost;
                         $return[$key.'i'.$key_item]['item_amount'] = $value_item->invline_amount;
+
+                        $refname = "sales_invoice";
+                        if($info)
+                        {
+                            if($info->is_sales_receipt == 1)
+                            {
+                                $refname = "sales_receipt";
+                            }
+                        }
+
+                        $return[$key.'i'.$key_item]['refname'] = $refname;
+                        $return[$key.'i'.$key_item]['refid'] = $key;
+
                     }
                 }
                 if($info)

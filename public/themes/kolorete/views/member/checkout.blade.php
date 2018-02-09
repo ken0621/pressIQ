@@ -12,7 +12,8 @@
 		</div>
 	</div>
 
-	<form method="post" class="submitt-asd">
+	{{-- <form method="post" class="submitt-asd"> If there's a return policy--}}
+	<form method="post">
 		{{ csrf_field() }}
 		<div class="bottom-container">
 			<div class="container">
@@ -146,8 +147,8 @@
 									</div>
 								</div>
 								<div class="button-container">
-									<!-- <button type="submit" class="button-proceed" id="proceed">Proceed</button> -->
-									<button type="button" class="button-proceed popup" id="proceed" link="/members/returnpolicy" size="md">Proceed</button>
+									<button type="submit" class="button-proceed" id="proceed">Proceed</button>
+									{{-- <button type="button" class="button-proceed popup" id="proceed" link="/members/returnpolicy" size="md">Proceed</button> --}}
 								</div>
 							</div>
 						</div>
@@ -185,11 +186,45 @@
 @section("script")
 
 <script type="text/javascript">
-	// $(document).ready(function(){
- //    $("#proceed").click(function(){
- //      $("#myModal2").modal('show');
- //    });
- //  });
+
+	 // $(document).ready(function(){
+	 //    $("#proceed").click(function(){
+	 //      $("#myModal2").modal('show');
+	 //    });
+	 //  });
+
+ 	// $(document).ready(function($) 
+ 	// {
+ 	// 	$(".btn-proceed").unbind('click');
+ 	// 	$(".btn-proceed").bind('click', function()
+ 	// 	{
+ 	// 	    var province = $(".province-is-empty").val();
+ 	// 	    var payment_method = $(".payment-method-is-empty").val();
+ 	// 	    var shipping_address = $(".textarea-is-empty").val();
+ 		    
+ 	// 	    if (province == "")
+ 	// 	    {
+ 	// 	        alert("Please select your province.");
+ 	// 	    }
+
+ 	// 	    else if(shipping_address == "")
+ 	// 	    {
+ 	// 	        alert("Please type your complete address");
+ 	// 	    }
+
+ 	// 	    else if(payment_method == "")
+ 	// 	    {
+ 	// 	        alert("Please select a payment method.");
+ 	// 	    }
+
+ 	// 	    else
+ 	// 	    {
+ 	// 	        $('.submitt-asd').submit();
+ 	// 	    }
+
+ 	// 	});
+ 	// });
+
 </script>
 
 @endsection

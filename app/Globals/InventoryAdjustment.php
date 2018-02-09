@@ -17,7 +17,7 @@ class InventoryAdjustment
 {
 	public static function info($shop_id, $adj_id)
 	{
-		return Tbl_inventory_adjustment::where('adj_shop_id', $shop_id)->where('inventory_adjustment_id', $adj_id)->first();
+		return Tbl_inventory_adjustment::warehouse()->where('adj_shop_id', $shop_id)->where('inventory_adjustment_id', $adj_id)->first();
 	}
 
 	public static function get($shop_id, $paginate = null, $search_keyword = null)
@@ -45,7 +45,23 @@ class InventoryAdjustment
 	}
 	public static function info_item($adj_id)
 	{
-		return Tbl_inventory_adjustment_line::um()->where('itemline_ia_id', $adj_id)->get();
+		$data = Tbl_inventory_adjustment_line::item()->um()->where('itemline_ia_id', $adj_id)->get();
+		foreach($data as $key => $value) 
+        {
+            $new_qty = UnitMeasurement::um_qty($value->itemline_item_um);
+            $actual_qty = UnitMeasurement::um_qty($value->itemline_item_um);
+            $diff_qty = UnitMeasurement::um_qty($value->itemline_item_um);
+
+            $total_actual_qty = $value->itemline_actual_qty * $new_qty;
+            $total_new_qty = $value->itemline_new_qty * $actual_qty;
+            $total_diff_qty = $value->itemline_diff_qty * $diff_qty;
+
+            $data[$key]->actual_qty = UnitMeasurement::um_view($total_actual_qty, $value->item_measurement_id,$value->itemline_item_um);
+            $data[$key]->new_qty = UnitMeasurement::um_view($total_new_qty, $value->item_measurement_id,$value->itemline_item_um);
+            $data[$key]->diff_qty = UnitMeasurement::um_view($total_diff_qty, $value->item_measurement_id,$value->itemline_item_um);
+        }
+
+		return $data;
 	}
 	public static function postInsert($shop_id, $insert, $insert_item)
 	{

@@ -131,7 +131,11 @@
                                                     <td class="text-center">
                                                         <input type="checkbox"  name="item_taxable[]" class="taxable-check compute" value="1" {{$sr_item->taxable == 1 ? 'checked' : ''}}>
                                                     </td>
-                                                    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                    <td class="text-center remove-tr cursor-pointer">
+                                                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                        <input type="hidden" name="item_refname[]" value="{{$sr_item->invline_refname}}">
+                                                        <input type="hidden" name="item_refid[]" value="{{$sr_item->invline_refid}}">
+                                                    </td>
                                                 </tr>
                                                 @endforeach
                                             @endif
@@ -158,7 +162,11 @@
                                                 <td class="text-center">
                                                     <input type="checkbox"  name="item_taxable[]" class="taxable-check compute" value="1">
                                                 </td>
-                                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                <td class="text-center remove-tr cursor-pointer">
+                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                    <input type="hidden" name="item_refname[]">
+                                                    <input type="hidden" name="item_refid[]">
+                                                </td>
                                             </tr>
                                               <tr class="tr-draggable">
                                                 <td class="invoice-number-td text-right">
@@ -183,7 +191,11 @@
                                                 <td class="text-center">
                                                     <input type="checkbox"  name="item_taxable[]" class="taxable-check compute" value="1">
                                                 </td>
-                                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                <td class="text-center remove-tr cursor-pointer">
+                                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                    <input type="hidden" name="item_refname[]">
+                                                    <input type="hidden" name="item_refid[]">
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -305,7 +317,11 @@
             <td class="text-center">
                 <input type="checkbox"  name="item_taxable[]" class="taxable-check compute" value="1">
             </td>
-            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+            <td class="text-center remove-tr cursor-pointer">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                <input type="hidden" name="item_refname[]">
+                <input type="hidden" name="item_refid[]">
+            </td>
         </tr>
     </table>
 </div>

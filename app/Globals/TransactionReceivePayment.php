@@ -162,6 +162,32 @@ class TransactionReceivePayment
 		}
 		return $return;
 	}
+
+    public static function applied_transaction($shop_id, $transaction_id = 0)
+    {
+    	$applied_transaction = null;
+        Self::insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction);
+    }
+
+    public static function insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction = array())
+    {
+    	$get_transaction = Tbl_receive_payment::where("rp_shop_id", $shop_id)->where("rp_id", $transaction_id)->first();
+    	$transaction_data = null;
+    	if($get_transaction)
+    	{
+    		$transaction_data['transaction_ref_name'] = "receive_payment";
+		 	$transaction_data['transaction_ref_id'] = $transaction_id;
+		 	$transaction_data['transaction_list_number'] = $get_transaction->transaction_refnum;
+		 	$transaction_data['transaction_date'] = $get_transaction->rp_date;
+
+		 	$attached_transaction_data = null;
+    	}
+
+    	if($transaction_data)
+		{
+			AccountingTransaction::postTransaction($shop_id, $transaction_data, $attached_transaction_data);
+		}
+    }
 	public static function return_payment($rp_id)
 	{
       	$_inv = Tbl_receive_payment_line::where('rpline_rp_id', $rp_id)->get();

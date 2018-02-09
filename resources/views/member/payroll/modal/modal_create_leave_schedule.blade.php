@@ -88,14 +88,9 @@
 		}
 	});
 
-	/* CALL A FUNCTION BY NAME */
-	function executeFunctionByName(functionName, context /*, args */) {
-	  var args = [].slice.call(arguments).splice(2);
-	  var namespaces = functionName.split(".");
-	  var func = namespaces.pop();
-	  for(var i = 0; i < namespaces.length; i++) {
-	    context = context[namespaces[i]];
-	  }
-	  return context[func].apply(context, args);
-	}
+		function reload(data)
+		{
+			data.element.modal("hide");
+			location.reload();
+		}
 </script>

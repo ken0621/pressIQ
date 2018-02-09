@@ -1,5 +1,3 @@
-@import "../../../assets/front/sass/mixin";
-
 $content-text: 'Open Sans', sans-serif;
 $regular: 400;
 $semi-bold: 600;
@@ -11,6 +9,14 @@ body
 {
 	background-color: #ededed;
 }
+
+@mixin transition($transition)
+{
+  	-webkit-transition: all $transition ease-in-out;
+  	-moz-transition: all $transition ease-in-out;
+  	-o-transition: all $transition ease-in-out;
+  	transition: all $transition ease-in-out;
+}/* apply @inlude transition(0.2s); */
 
 .alert
 {
@@ -246,41 +252,44 @@ body
 				}
 				span
 				{
-					color: #1D5BC6;
+					color: #693d28;
 				}
 			}
 			.choice
 			{
 				text-align: center;
+
 				.holder
 				{
 					display: inline-block;
 					vertical-align: middle;
+					
+					.btn
+					{
+						@include transition(0.2s);
+						border: 1px solid #585858;
+						background-color: #585858;
+						color: #fff;
+
+						&:hover
+						{
+							background-color: rgba(0,0,0,0.1);
+							color: #585858;
+						}
+					}
+
 					@media screen and (max-width: 370px)
 					{
 						display: block;
 					}
 				}
-
-				.btn
-				{
-					@include transition(0.2s);
-
-					background-color: #1D5BC6;
-					color: #fff;
-
-					&:hover
-					{
-						opacity: 0.8;
-					}
-				}
-
 				.or
 				{
 					color: $text-light;
 					font-size: 11px;
 					font-weight: $regular;
 					margin: 0 15px;
+
 					@media screen and (max-width: 370px)
 					{
 						display: block;
@@ -289,16 +298,19 @@ body
 				}
 				.login-href
 				{
-					color: #1D5BC6;
+					@include transition(0.2s);
+					color: #585858;
 					font-size: 15px;
 					font-weight: $regular;
+
 					@media screen and (max-width: 370px)
 					{
 						display: block;
 					}
+
 					&:hover
 					{
-						opacity: 0.8;
+						color: #000;
 					}
 				}
 				.btn-brown
@@ -308,7 +320,7 @@ body
 						width: 125px;
 					}
 					&:hover {
-						background-color: #48B920;
+						background-color: #613922;
 					}
 				}
 			}

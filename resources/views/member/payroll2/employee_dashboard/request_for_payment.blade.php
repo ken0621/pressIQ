@@ -7,6 +7,7 @@
     <li class="breadcrumb-item active">{{ $page }}</li>
     <a href="javascript:" onClick="action_load_link_to_modal('/modal_rfp_application', 'lg')"><button class="btn btn-primary pull-right">Create Payment Request</button></a>
 </ol>
+
 <div class="card mb-3">
     <div class="card-header">
         <i class="fa fa-table"></i> Request Payment Application

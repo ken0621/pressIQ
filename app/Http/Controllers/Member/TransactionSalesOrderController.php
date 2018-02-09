@@ -77,11 +77,14 @@ class TransactionSalesOrderController extends Member
 				$insert_item[$key]['item_remarks'] = $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
 				$insert_item[$key]['item_taxable'] = isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
+
+				$insert_item[$key]['item_refname'] 		= $request->item_refname[$key];
+				$insert_item[$key]['item_refid'] 		= $request->item_refid[$key];
 			}
 		}
 		$return = null;
 		$validate = TransactionSalesOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
-		TransactionSalesOrder::applied_transaction($this->user_info->shop_id);
+		TransactionSalesOrder::applied_transaction($this->user_info->shop_id, $validate);
 		if(is_numeric($validate))
 		{
 			$return['status'] = 'success';
@@ -112,6 +115,7 @@ class TransactionSalesOrderController extends Member
 		$insert['customer_memo']         = $request->customer_memo;
 
 		$insert_item = null;
+		$return_so = null;
 		foreach ($request->item_id as $key => $value) 
 		{
 			if($value)
@@ -126,11 +130,23 @@ class TransactionSalesOrderController extends Member
 				$insert_item[$key]['item_remarks'] = $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] = str_replace(',', '', $request->item_amount[$key]);
 				$insert_item[$key]['item_taxable'] = isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
+				
+				$insert_item[$key]['item_refname'] 		= $request->item_refname[$key];
+				$insert_item[$key]['item_refid'] 		= $request->item_refid[$key];
+
+				if($insert_item[$key]['item_refid'])
+				{
+					$return_so[$insert_item[$key]['item_refid']] = '';
+				}
 			}
+		}
+		if(count($return_so) > 0)
+		{
+			Session::put('applied_transaction_so',$return_so);
 		}
 		$return = null;
 		$validate = TransactionSalesOrder::postUpdate($sales_order_id, $this->user_info->shop_id, $insert, $insert_item);
-		TransactionSalesOrder::applied_transaction($this->user_info->shop_id);
+					TransactionSalesOrder::applied_transaction($this->user_info->shop_id, $validate);
 		if(is_numeric($validate))
 		{
 			$return['status'] = 'success';
@@ -198,6 +214,9 @@ class TransactionSalesOrderController extends Member
                     $return[$key.'i'.$key_item]['item_discount_type'] = $value_item->estline_discount_type;
                     $return[$key.'i'.$key_item]['item_remarks'] = $value_item->estline_discount_remark;
                     $return[$key.'i'.$key_item]['taxable'] = $value_item->taxable;
+
+                    $return[$key.'i'.$key_item]['refname'] = "estimate_quotation";
+                    $return[$key.'i'.$key_item]['refid'] = $key;
                 }
                 if($info)
                 {
@@ -220,7 +239,14 @@ class TransactionSalesOrderController extends Member
 	
 	public function getPrint(Request $request)
 	{
-		dd("Under Maintenance");
+		$id = $request->id;
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data['so'] = TransactionSalesOrder::info($this->user_info->shop_id, $id);
+        $data["transaction_type"] = "SALES ORDER";
+        $data["so_item"] = TransactionSalesOrder::info_item($id);
+
+        $pdf = view('member.accounting_transaction.customer.sales_order.so_print', $data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
 	}
-	
 }

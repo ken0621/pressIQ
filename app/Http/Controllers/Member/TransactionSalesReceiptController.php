@@ -86,6 +86,9 @@ class TransactionSalesReceiptController extends Member
 				$insert_item[$key]['item_remarks'] 		= $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] 		= str_replace(',', '', $request->item_amount[$key]);
 				$insert_item[$key]['item_taxable'] 		= isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
+
+				$insert_item[$key]['item_refname'] 		= $request->item_refname[$key];
+				$insert_item[$key]['item_refid'] 		= $request->item_refid[$key];
 			}
 		}
 		$return = null;
@@ -99,7 +102,7 @@ class TransactionSalesReceiptController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesReceipt::postInsert($this->user_info->shop_id, $insert, $insert_item);
-			TransactionSalesReceipt::applied_transaction($this->user_info->shop_id);
+			TransactionSalesReceipt::applied_transaction($this->user_info->shop_id, $validate);
 		}
 
 		if(is_numeric($validate))
@@ -137,6 +140,7 @@ class TransactionSalesReceiptController extends Member
 		$insert['customer_tax'] 		 = $request->customer_tax;
 
 		$insert_item = null;
+		$return_sr = null;
 		foreach ($request->item_id as $key => $value) 
 		{
 			if($value)
@@ -151,11 +155,24 @@ class TransactionSalesReceiptController extends Member
 				$insert_item[$key]['item_remarks'] 		= $request->item_remarks[$key];
 				$insert_item[$key]['item_amount'] 		= str_replace(',', '', $request->item_amount[$key]);
 				$insert_item[$key]['item_taxable'] 		= isset($request->item_taxable[$key]) ? $request->item_taxable[$key] : 0;
+				
+				$insert_item[$key]['item_refname'] 		= $request->item_refname[$key];
+				$insert_item[$key]['item_refid'] 		= $request->item_refid[$key];
+				if($insert_item[$key]['item_refid'])
+				{
+					$return_sr[$insert_item[$key]['item_refid']] = '';
+				}
 			}
 		}
+
+		if(count($return_sr) > 0)
+		{
+			Session::put('applied_transaction_sr',$return_sr);
+		}
+
 		$return = null;
 		$validate = null;
-		if(CustomerWIS::settings($shop_id) == 0)
+		if(CustomerWIS::settings($this->user_info->shop_id) == 0)
 		{
 			$warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
 			$validate = AccountingTransaction::inventory_validation('consume', $this->user_info->shop_id, $warehouse_id, $insert_item);
@@ -164,7 +181,7 @@ class TransactionSalesReceiptController extends Member
 		{
 			$return = null;
 			$validate = TransactionSalesReceipt::postUpdate($sales_receipt_id, $this->user_info->shop_id, $insert, $insert_item);
-			TransactionSalesReceipt::applied_transaction($this->user_info->shop_id);
+			TransactionSalesReceipt::applied_transaction($this->user_info->shop_id, $validate);
 		}
 		if(is_numeric($validate))
 		{			
@@ -235,6 +252,17 @@ class TransactionSalesReceiptController extends Member
                     $return[$key.'i'.$key_item]['item_discount_type'] = $value_item->estline_discount_type;
                     $return[$key.'i'.$key_item]['item_remarks'] = $value_item->estline_discount_remark;
                     $return[$key.'i'.$key_item]['taxable'] = $value_item->taxable;
+
+                    $refname = "estimate_quotation";
+                    if($info)
+                    {
+                    	if($info->is_sales_order == 1)
+                		{
+                			$refname = "sales_order";
+                		}
+                    }
+                    $return[$key.'i'.$key_item]['refname'] = $refname;
+                    $return[$key.'i'.$key_item]['refid'] = $key;
                 }
                 if($info)
                 {
@@ -247,16 +275,23 @@ class TransactionSalesReceiptController extends Member
                 }
             }
         }
-        $data['_item']  = Item::get_all_category_item([1,4,5]);
+        $data['_item']  = Item::get_all_category_item();
         $data['_transactions'] = $return;
         $data['remarks'] = $remarks;
         $data['_um']        = UnitMeasurement::load_um_multi();
 
         return view('member.accounting_transaction.customer.sales_receipt.applied_transaction', $data);
     }
-	
 	public function getPrint(Request $request)
 	{
-		dd("Under Maintenance");
+		$id = $request->id;
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data['sr'] = TransactionSalesReceipt::info($this->user_info->shop_id, $id);
+        $data["transaction_type"] = "SALES RECEIPT";
+        $data["sr_item"] = TransactionSalesReceipt::info_item($id);
+
+        $pdf = view('member.accounting_transaction.customer.sales_receipt.sr_print', $data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
 	}
 }

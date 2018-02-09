@@ -30,7 +30,15 @@ class TransactionEstimateQuotation
 	}
 	public static function info_item($eq_id)
 	{
-		return Tbl_customer_estimate_line::um()->where("estline_est_id", $eq_id)->get();		
+		$data = Tbl_customer_estimate_line::estimate_item()->um()->where("estline_est_id", $eq_id)->get();		
+		foreach($data as $key => $value) 
+        {
+            $qty = UnitMeasurement::um_qty($value->estline_um);
+
+            $total_qty = $value->estline_qty * $qty;
+            $data[$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->estline_um);
+        }
+        return $data;
 	}
 
 	public static function get($shop_id, $paginate = null, $search_keyword = null, $status = null)
@@ -160,6 +168,26 @@ class TransactionEstimateQuotation
 
         return $return; 
 	}
+
+	public static function insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction = array())
+    {
+    	$get_transaction = Tbl_customer_estimate::where("est_shop_id", $shop_id)->where("est_id", $transaction_id)->first();
+    	$transaction_data = null;
+    	if($get_transaction)
+    	{
+    		$transaction_data['transaction_ref_name'] = "estimate_quotation";
+		 	$transaction_data['transaction_ref_id'] = $transaction_id;
+		 	$transaction_data['transaction_list_number'] = $get_transaction->transaction_refnum;
+		 	$transaction_data['transaction_date'] = $get_transaction->est_date;
+
+		 	$attached_transaction_data = null;
+    	}
+
+    	if($transaction_data)
+		{
+			AccountingTransaction::postTransaction($shop_id, $transaction_data, $attached_transaction_data);
+		}
+    }
 	public static function insertline($estimate_id, $insert_item)
 	{
 		$itemline = null;

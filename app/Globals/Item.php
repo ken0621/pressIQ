@@ -27,6 +27,7 @@ use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_manufacturer;
 use App\Models\Tbl_item_type;
 use App\Models\Tbl_membership;
+use App\Models\Tbl_item_token;
 use Session;
 use DB;
 use Carbon\carbon;
@@ -124,7 +125,7 @@ class Item
         return $return;
 
     }
-    public static function create($shop_id, $item_type, $insert)
+    public static function create($shop_id, $item_type, $insert,$token = null)
     {
         $return['item_id'] = 0;
         $return['status'] = null;
@@ -193,6 +194,15 @@ class Item
                     $return = Warehouse2::refill($shop_id, $warehouse_id, $item_id, $insert['item_quantity'], 'Initial Quantity from Item',$source);
                 }
 
+                // patrick
+                if($shop_id == 87)
+                {
+                    $insert_token['item_id']    = $item_id;
+                    $insert_token['token_id']   = $token['token_id'];
+                    $insert_token['amount']     = $token['amount'];
+                    Tbl_item_token::insert($insert_token);
+                }
+
                 $return['item_id']       = $item_id;
                 $return['status']        = 'success';
                 $return['message']       = 'Item successfully created.';
@@ -208,7 +218,7 @@ class Item
 
         return $return;
     }
-    public static function modify($shop_id, $item_id, $update)
+    public static function modify($shop_id, $item_id, $update, $token = null)
     {
         $return['item_id'] = $item_id;
         $return['status'] = null;
@@ -240,6 +250,21 @@ class Item
             $update['updated_at'] = Carbon::now();
 
             Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
+
+            //patrick
+            $check = Tbl_item_token::where('item_id',$item_id)->first();
+            if($check)
+            {
+                Tbl_item_token::where('item_id',$item_id)->update($token);
+            }
+            else
+            {
+                $insert['item_id']      = $item_id;
+                $insert['token_id']     = $token['token_id'];
+                $insert['amount']       = $token['amount'];
+                Tbl_item_token::insert($insert);
+            }
+            
 
             $return['item_id']       = $item_id;
             $return['status']        = 'success';
@@ -425,7 +450,6 @@ class Item
             $_item_new[$key] = $item;
             $_item_new[$key]->inventorylog = Self::get_item_inventory($shop_id, $item->item_id, session("get_inventory"));
         }
-
         $return = isset($_item_new) ? $_item_new : null;  
 
         Self::get_clear_session();
@@ -1000,7 +1024,7 @@ class Item
 
         return $_category;
     } 
-    public static function get_all_category_item($type = array(1,2,3,4) , $for_tablet = false)
+    public static function get_all_category_item($type = array(1,2,3,4), $for_tablet = false, $get_inventory = false)
     {
         $shop_id = Item::getShopId(); 
         if($for_tablet == true)
@@ -1041,15 +1065,18 @@ class Item
                 {
                     $_category[$key]['item_list'][$key1]['inventory_count'] = Warehouse2::get_item_qty(Warehouse2::get_current_warehouse($shop_id), $item_list['item_id']);
                 }
-
-                $_category[$key]['item_list'][$key1]['item_inventory'] = Self::item_inventory_report($shop_id, $item_list['item_id']);
+                $_category[$key]['item_list'][$key1]['item_inventory'] = null;
+                if($get_inventory)
+                {
+                    $_category[$key]['item_list'][$key1]['item_inventory'] = Self::item_inventory_report($shop_id, $item_list['item_id']);
+                }
             }
             $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
         }
 
         return $_category;
     }
-    public static function get_item_per_sub($category_id, $type = array())
+    public static function get_item_per_sub($category_id, $type = array(), $get_inventory = false)
     {
         $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->get()->toArray();
         foreach($_category as $key =>$category)
@@ -1076,9 +1103,13 @@ class Item
                 }
                 $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
 
-                $_category[$key]['item_list'][$key1]['item_inventory'] = Self::item_inventory_report($category['type_shop'], $item_list['item_id']);
+                $_category[$key]['item_list'][$key1]['item_inventory'] = null;
+                if($get_inventory)
+                {
+                    $_category[$key]['item_list'][$key1]['item_inventory'] = Self::item_inventory_report($category['type_shop'], $item_list['item_id']);
+                }
             }
-            $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
+            $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type, $get_inventory);
         }
 
         return $_category;
@@ -2007,6 +2038,7 @@ class Item
             $offset_qty = $offset->count();
             $current_qty = $current->count();
         }
+
         return $current_qty - $offset_qty;
     }
     public static function item_inventory_report($shop_id, $item_id, $date_from = '', $date_to = '')
@@ -2021,6 +2053,7 @@ class Item
             $return[$key]->warehouse_id = $value->warehouse_id;
             $return[$key]->qty_on_hand = Self::get_item_inventory($shop_id, $item_id, $value->warehouse_id, $date_from, $date_to);
         }
+        // dd($return);
         return $return;
     }
 }

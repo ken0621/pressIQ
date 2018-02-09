@@ -80,6 +80,7 @@ class TransactionEstimateQuotationController extends Member
 		}
 		$return = null;
 		$validate = TransactionEstimateQuotation::postInsert($this->user_info->shop_id, $insert, $insert_item);
+			TransactionEstimateQuotation::insert_acctg_transaction($this->user_info->shop_id, $validate);
 		if(is_numeric($validate))
 		{
 			$return['status'] = 'success';
@@ -129,6 +130,7 @@ class TransactionEstimateQuotationController extends Member
 		}
 		$return = null;
 		$validate = TransactionEstimateQuotation::postUpdate($estimate_quotation_id, $this->user_info->shop_id, $insert, $insert_item);
+			TransactionEstimateQuotation::insert_acctg_transaction($this->user_info->shop_id, $validate);
 		if(is_numeric($validate))
 		{
 			$return['status'] = 'success';
@@ -143,5 +145,18 @@ class TransactionEstimateQuotationController extends Member
 		}
 
 		return json_encode($return);
+	}
+
+	public function getPrint(Request $request)
+	{
+		$id = $request->id;
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data['estimate'] = TransactionEstimateQuotation::info($this->user_info->shop_id, $id);
+        $data["transaction_type"] = "ESTIMATE";
+        $data["estimate_item"] = TransactionEstimateQuotation::info_item($id);
+
+        $pdf = view('member.accounting_transaction.customer.estimate_quotation.eq_print', $data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
 	}
 }

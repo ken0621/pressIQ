@@ -78,7 +78,7 @@ class CustomerWIS
         
         return $return;
     }
-    public static function applied_transaction($shop_id)
+    public static function applied_transaction($shop_id, $transaction_id = 0)
     {
         $applied_transaction = Session::get('applied_transaction_wis');
         if(count($applied_transaction) > 0)
@@ -88,6 +88,45 @@ class CustomerWIS
                 $update['item_delivered'] = 1;
                 Tbl_customer_invoice::where("inv_id", $key)->where('inv_shop_id', $shop_id)->update($update);
             }
+        }
+        Self::insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction);
+    }
+
+    public static function insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction = array())
+    {
+        $get_transaction = Tbl_customer_wis::where("cust_wis_shop_id", $shop_id)->where("cust_wis_id", $transaction_id)->first();
+        $transaction_data = null;
+        if($get_transaction)
+        {
+            $transaction_data['transaction_ref_name'] = "warehouse_issuance_slip";
+            $transaction_data['transaction_ref_id'] = $transaction_id;
+            $transaction_data['transaction_list_number'] = $get_transaction->transaction_refnum;
+            $transaction_data['transaction_date'] = $get_transaction->cust_delivery_date;
+
+            $attached_transaction_data = null;
+            if(count($applied_transaction) > 0)
+            {
+                foreach ($applied_transaction as $key => $value) 
+                {
+                    $get_data = Tbl_customer_invoice::where("inv_shop_id", $shop_id)->where("inv_id", $key)->first();
+                    if($get_data)
+                    {
+                        $attached_transaction_data[$key]['transaction_ref_name'] = "sales_invoice";
+                        if($get_data->is_sales_receipt == 1)
+                        {
+                            $attached_transaction_data[$key]['transaction_ref_name'] = "sales_receipt";
+                        }
+                        $attached_transaction_data[$key]['transaction_ref_id'] = $key;
+                        $attached_transaction_data[$key]['transaction_list_number'] = $get_data->transaction_refnum;
+                        $attached_transaction_data[$key]['transaction_date'] = $get_data->inv_date;
+                    }
+                }
+            }
+        }
+
+        if($transaction_data)
+        {
+            AccountingTransaction::postTransaction($shop_id, $transaction_data, $attached_transaction_data);
         }
     }
     public static function customer_create_wis($shop_id, $remarks, $ins, $_item = array(), $insert_item = array())
@@ -165,14 +204,19 @@ class CustomerWIS
     }
     public static function customer_update_wis($wis_id, $shop_id, $remarks, $ins, $_item = array(), $insert_item = array())
     {
-        $old = Tbl_customer_wis::where("cust_wis_id", $wis_id);
+        $old = Tbl_customer_wis::where("cust_wis_id", $wis_id)->first();
 
 
         $validate = null;
 
-        $warehouse_id = $ins['cust_wis_from_warehouse'];
-        // dd($_item);
-
+        if($old)
+        {
+            $warehouse_id = $old->cust_wis_from_warehouse;
+        }
+        if(!$warehouse_id)
+        {
+            $validate .= "Warehouse unknown.";
+        }
         if(count($_item) <= 0)
         {
             $validate .= "Please Select item.<br>";
@@ -215,10 +259,11 @@ class CustomerWIS
             $entry["total"]             = $overall_price;
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
-            $entry["ewt"]               = '';
-
+            $entry["ewt"]               = ''; 
+            Warehouse2::update_inventory_consume($shop_id, null, $reference_name, $wis_id); 
+            Tbl_customer_wis_item::where("cust_wis_id", $wis_id)->delete();
             Tbl_customer_wis_item_line::where("itemline_wis_id", $wis_id)->delete();
-            //Self::insertLine($po_id, $insert_item);
+            //Self::insertLine($po_id, $insert_item); 
 
             $val = Self::insertline($wis_id, $insert_item, $entry);
             if(is_numeric($val))
@@ -227,7 +272,7 @@ class CustomerWIS
 
                 if(!$return)
                 {
-                    $get_item = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','customer_wis')->where('record_consume_ref_id',$wis_id)->get();
+                    $get_item = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','customer_wis')->where('record_consume_ref_id',$wis_id)->where("record_warehouse_id", $warehouse_id)->get();
 
                     $ins_customer_item = null;
                     foreach ($get_item as $key_item => $value_item)
@@ -260,6 +305,8 @@ class CustomerWIS
             $itemline[$key]['itemline_um']          = $value['item_um'];
             $itemline[$key]['itemline_rate']        = $value['item_rate'];
             $itemline[$key]['itemline_amount']      = $value['item_amount'];
+            $itemline[$key]['itemline_refname']     = $value['item_refname'];
+            $itemline[$key]['itemline_refid']       = $value['item_refid'];
         }
         if(count($itemline) > 0)
         {
@@ -281,7 +328,7 @@ class CustomerWIS
     }
     public static function get_customer_wis_data($cust_wis_id)
     {
-        return Tbl_customer_wis::where('cust_wis_shop_id',WarehouseTransfer::getShopId())->where('cust_wis_id',$cust_wis_id)->first();
+        return Tbl_customer_wis::warehouse()->customerinfo()->where('cust_wis_shop_id',WarehouseTransfer::getShopId())->where('cust_wis_id',$cust_wis_id)->first();
     }
 
     public static function update_customer_wis($shop_id, $cust_wis_id, $update)
@@ -302,6 +349,18 @@ class CustomerWIS
     public static function print_customer_wis_item($wis_id)
     {
         return Tbl_customer_wis_item::InventoryItem()->where('cust_wis_id',$wis_id)->groupBy('record_item_id')->get();
+    }
+    public static function customer_wis_itemline($wis_id)
+    {
+        $data = Tbl_customer_wis_item_line::item()->um()->where('itemline_wis_id',$wis_id)->get();
+
+        foreach($data as $key => $value) 
+        {
+            $qty = UnitMeasurement::um_qty($value->itemline_um);
+            $total_qty = $value->itemline_qty * $qty;
+            $data[$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->itemline_um);
+        }
+        return $data;
     }
     public static function countTransaction($shop_id, $customer_id)
     {

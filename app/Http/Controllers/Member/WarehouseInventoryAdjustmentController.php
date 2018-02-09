@@ -49,7 +49,7 @@ class WarehouseInventoryAdjustmentController extends Member
     public function getCreate(Request $request)
     {
         $data['page']       = "Inventory Adjustment";
-        $data['_item']      = Item::get_all_category_item([1,4,5]);
+        $data['_item']      = Item::get_all_category_item([1,4,5], null, true);
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'inventory_adjustment');
         $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
@@ -130,7 +130,13 @@ class WarehouseInventoryAdjustmentController extends Member
     }
     public function getPrint(Request $request)
     {
-        dd('Under Maintenance');
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data['adj'] = InventoryAdjustment::info($this->user_info->shop_id, $request->id);
+        $data['_adj_line'] = InventoryAdjustment::info_item($request->id);
+
+        $pdf = view('member.warehousev2.inventory_adjustment.adj_print', $data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
     }
     public function postUpdateSubmit(Request $request)
     {

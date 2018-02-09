@@ -86,6 +86,7 @@ class TransactionReceivePaymentController extends Member
 
         $return = null;
 		$validate = TransactionReceivePayment::postInsert($this->user_info->shop_id, $insert, $insert_item);
+		TransactionReceivePayment::applied_transaction($this->user_info->shop_id, $validate);
 		if(is_numeric($validate))
 		{
 			$return['status'] = 'success';
@@ -159,5 +160,17 @@ class TransactionReceivePaymentController extends Member
 		$data['_cm'] = TransactionCreditMemo::loadAvailableCredit($this->user_info->shop_id, $request->c);
 		$data['customer_name'] = Customer::get_name($this->user_info->shop_id, $request->c);
 		return view("member.accounting_transaction.customer.receive_payment.load_transaction",$data);
+	}
+
+	public function getPrint(Request $request)
+	{
+		$id = $request->id;
+        $footer = AccountingTransaction::get_refuser($this->user_info);
+
+        $data["receive_payment"] = TransactionReceivePayment::info($this->user_info->shop_id, $id);
+        $data["_invoice"] = TransactionReceivePayment::info_item($id);
+
+        $pdf = view('member.accounting_transaction.customer.receive_payment.rp_print', $data);
+        return Pdf_global::show_pdf($pdf, null, $footer);
 	}
 }

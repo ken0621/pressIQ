@@ -25,7 +25,7 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-custom">
                                 <li><a href="/member/item/warehouse/inventory_adjustment/create?id={{$adj->inventory_adjustment_id}}">Edit Inventory Adjustment</a></li>
-                                <li><a href="javascript">Print</a></li>
+                                <li><a href="/member/item/warehouse/inventory_adjustment/print?id={{$adj->inventory_adjustment_id}}">Print</a></li>
                             </ul>
                         </div>
                     </td>

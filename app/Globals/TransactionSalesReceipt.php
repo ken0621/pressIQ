@@ -72,7 +72,15 @@ class TransactionSalesReceipt
 	}
 	public static function info_item($sales_receipt_id)
 	{
-		return Tbl_customer_invoice_line::um()->where("invline_inv_id", $sales_receipt_id)->get();		
+		$data = Tbl_customer_invoice_line::invoice_item()->um()->where("invline_inv_id", $sales_receipt_id)->get();
+		foreach($data as $key => $value) 
+        {
+            $qty = UnitMeasurement::um_qty($value->invline_um);
+
+            $total_qty = $value->invline_qty * $qty;
+            $data[$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->invline_um);
+        }
+        return $data;
 	}
 
 	public static function postUpdate($sales_receipt_id, $shop_id, $insert, $insert_item = array())
@@ -256,6 +264,9 @@ class TransactionSalesReceipt
 			$itemline[$key]['taxable'] 					= $value['item_taxable'] != null ? $value['item_taxable'] : 0;
 			$itemline[$key]['invline_amount'] 			= $value['item_amount'];
 			$itemline[$key]['date_created'] 			= Carbon::now();
+
+			$itemline[$key]['invline_refname'] 			= $value['item_refname'];
+			$itemline[$key]['invline_refid'] 			= $value['item_refid'];
 		}
 		if(count($itemline) > 0)
 		{
@@ -266,7 +277,7 @@ class TransactionSalesReceipt
 
 		return $return;
 	}
-    public static function applied_transaction($shop_id)
+    public static function applied_transaction($shop_id, $transaction_id = 0)
     {
         $applied_transaction = Session::get('applied_transaction_sr');
         if(count($applied_transaction) > 0)
@@ -277,5 +288,43 @@ class TransactionSalesReceipt
                 Tbl_customer_estimate::where("est_id", $key)->where('est_shop_id', $shop_id)->update($update);
             }
         }
+        Self::insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction);
+    }
+    public static function insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction = array())
+    {
+    	$get_transaction = Tbl_customer_invoice::where("inv_shop_id", $shop_id)->where("inv_id", $transaction_id)->first();
+    	$transaction_data = null;
+    	if($get_transaction)
+    	{
+    		$transaction_data['transaction_ref_name'] = "sales_receipt";
+		 	$transaction_data['transaction_ref_id'] = $transaction_id;
+		 	$transaction_data['transaction_list_number'] = $get_transaction->transaction_refnum;
+		 	$transaction_data['transaction_date'] = $get_transaction->inv_date;
+
+		 	$attached_transaction_data = null;
+		 	if(count($applied_transaction) > 0)
+		 	{
+			 	foreach ($applied_transaction as $key => $value) 
+			 	{
+			 		$get_data = Tbl_customer_estimate::where("est_shop_id", $shop_id)->where("est_id", $key)->first();
+			 		if($get_data)
+			 		{
+				 		$attached_transaction_data[$key]['transaction_ref_name'] = "estimate_qoutation";
+				 		if($get_data->is_sales_order == 1)
+				 		{
+				 			$attached_transaction_data[$key]['transaction_ref_name'] = "sales_order";
+				 		}
+					 	$attached_transaction_data[$key]['transaction_ref_id'] = $key;
+					 	$attached_transaction_data[$key]['transaction_list_number'] = $get_data->transaction_refnum;
+					 	$attached_transaction_data[$key]['transaction_date'] = $get_data->est_date;
+			 		}
+			 	}
+		 	}
+    	}
+
+    	if($transaction_data)
+		{
+			AccountingTransaction::postTransaction($shop_id, $transaction_data, $attached_transaction_data);
+		}
     }
 }

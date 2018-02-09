@@ -223,6 +223,16 @@
                         </div>
                     </div>
                 </div>
+                {{-- @if($shop_id == 87)
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <label for="basic-input">KROPS TOKEN</label>
+                            <input id="basic-input" type="text"  class="form-control" name="token" placeholder="Token">
+                        </div>
+                    </div>
+                </div>
+                @endif --}}
             </div>
         </div>
     </div>
@@ -354,9 +364,48 @@
         </div>
     </div>
 
+    {{-- patrick --}}
+    @if($shop_id == 87)
+    <div class="form-group">
+        <div class="form-horizontal">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <div class="tokens-holder">
+                        <select class="form-control token-type" name="token_type">
+                            <option class="hidden">Select Token</option>
+                            @if(isset($token_name))
+                            @foreach($tokens as $token)
+                                @if($token->token_name == $token_name)
+                                <option value="{{ $token->token_id }}" selected="">{{ $token->token_name }}</option>
+                                @else
+                                <option value="{{ $token->token_id }}">{{ $token->token_name }}</option>
+                                @endif
+                            @endforeach
+                            @else
+                            @foreach($tokens as $token)
+                                <option value="{{ $token->token_id }}">{{ $token->token_name }}</option>
+                            @endforeach
+                            @endif
+                            
+                            <option value='add_new'>Add New Token</option>
+                        </select>
+                    </div>
+                    @if(isset($amount))
+                    <input id="basic-input" type="text" value="{{ $amount }}" class="form-control" name="token_amount" placeholder="Amount">
+                    @else
+                    <input id="basic-input" type="text" value="0" class="form-control" name="token_amount" placeholder="Amount">
+                    @endif
+                </div>
+            </div> 
+        </div>
+    </div>
+    @endif
+
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
         <button {{ $item_button }} class="btn btn-primary btn-custom-primary add-submit-button" type="button"><i class="fa fa-save"></i> Save Item</button>
     </div>
 </form>
 <script type="text/javascript" src="/assets/member/js/item/item_add.js"></script>
+{{-- patrick --}}
+<script type="text/javascript" src="/assets/member/js/item/token.js"></script>

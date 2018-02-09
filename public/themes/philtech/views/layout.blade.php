@@ -372,7 +372,10 @@ offers New Franchise Business Model and New Rewards System using New Generation 
                             <li class="{{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">Legalities</a></li>
                             <li><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">Business Presentation</a></li>
                             <li><a href="javascript:" onClick="alert('Under Development');">News</a></li>
-                            <li><a href="/return_policy" >Return Policy</a></li>
+                            <li><a href="/return_policy">Return Policy</a></li>
+                            <li><a href="/privacy_policy">Privacy Policy</a></li>
+                            {{-- <li><a href="/franchise_terms_and_condition">Franchise Terms and Conditions</a></li> --}}
+                            <li><a href="/general_terms_and_condition">General Terms and Conditions</a></li>
                         </ul>
                     </div>
                     <div class="col-md-2 col-sm-6 match-height">

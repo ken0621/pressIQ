@@ -87,8 +87,8 @@
                                 <th style="width: 20px"></th>
                             </tr>
                         </thead>
-                        <tbody class="draggable">
-                            <tr class="tr-draggable tr-draggable-html">
+                        <tbody class="draggable tbody-item">
+                            <tr class="tr-draggable">
                                 <td class="invoice-number-td text-right">1</td>
                                 <td class="">
                                    <input type="text" name="related_name[]" class="form-control input-sm">
@@ -99,9 +99,9 @@
                                 <td>                                    
                                    <input type="text" class="form-control number-input input-sm" name="related_qty[]">
                                 </td>
-                                <td class="text-center cursor-pointer"><i class="fa fa-trash-o remove-tr" aria-hidden="true"></i></td>
+                                <td class="text-center cursor-pointer remove-tr"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                             </tr>
-                            <tr class="tr-draggable tr-draggable-html">
+                            <tr class="tr-draggable">
                                 <td class="invoice-number-td text-right">2</td>
                                 <td class="">
                                    <input type="text" name="related_name[]" class="form-control input-sm">
@@ -112,7 +112,7 @@
                                 <td>                                    
                                    <input type="text" class="form-control number-input input-sm" name="related_qty[]">
                                 </td>
-                                <td class="text-center cursor-pointer"><i class="fa fa-trash-o remove-tr" aria-hidden="true"></i></td>
+                                <td class="text-center cursor-pointer remove-tr"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                             </tr>
                         </tbody>
                     </table>
@@ -121,9 +121,14 @@
         </div>    
     </div>
 </div>
+<div class="modal-footer" >
+    <button type="button" class="btn btn-custom-white" data-dismiss="modal">Cancel</button>
+    <button class="btn btn-custom-primary btn-save-modallarge" type="submit" data-url="">Save U/M</button>
+</div>
+</form>
 <div class="div-script">
     <table class="div-item-row-script hide">
-         <tr class="tr-draggable tr-draggable-html">
+         <tr class="tr-draggable">
             <td class="invoice-number-td text-right">3</td>
             <td class="">
                <input type="text" name="related_name[]" class="form-control input-sm">
@@ -134,17 +139,9 @@
             <td>
                <input type="text" class="form-control number-input input-sm" name="related_qty[]">
             </td>
-            <td class="text-center cursor-pointer"><i class="fa fa-trash-o remove-tr" aria-hidden="true"></i></td>
+            <td class="text-center cursor-pointer remove-tr"><i class="fa fa-trash-o " aria-hidden="true"></i></td>
         </tr>
-    </div>
+    </table>
 </div>
-<div class="modal-footer" >
-    <button type="button" class="btn btn-custom-white" data-dismiss="modal">Cancel</button>
-    <button class="btn btn-custom-primary btn-save-modallarge" type="submit" data-url="">Save U/M</button>
-</div>
-</form>
-<script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
-<!-- <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script> -->
-<!-- <script type="text/javascript" src="/assets/member/js/transfer_warehouse.js"></script> -->
-<!-- <script type="text/javascript" src="/assets/member/js/warehouse.js"></script> -->
 <script type="text/javascript" src="/assets/member/js/unit_measurement.js"></script>
+<script type="text/javascript" src="/assets/member/js/textExpand.js"></script>

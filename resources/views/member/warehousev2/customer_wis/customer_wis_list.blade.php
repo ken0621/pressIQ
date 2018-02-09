@@ -10,7 +10,7 @@
                 <span class="page-title">Customer - Warehouse Issuance Slip</span>
             </h1>
             <div class="text-right">
-                <a class="btn btn-primary panel-buttons" href="/member/customer/wis/create">Create</a>
+                <a class="btn btn-primary panel-buttons" href="/member/customer/wis/create"><i class="fa fa-star"></i> Create WIS</a>
             </div>
         </div>
     </div>
@@ -20,8 +20,8 @@
         <div class="form-group">
             <div class="col-md-6">
                 <ul class="nav nav-tabs">
-                  <li id="all-list" class="active"><a data-toggle="tab" onClick="change_status('pending');"><i class="fa fa-star" aria-hidden="true"></i>&nbsp;Pending Deliveries</a></li>
-                  <li id="archived-list"><a data-toggle="tab" onClick="change_status('confirm');"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;Confirm Deliveries</a></li>
+                  <li id="all-list" class="active"><a data-toggle="tab" onClick="change_status('pending');"><i class="fa fa-star" aria-hidden="true"></i>&nbsp;Pending</a></li>
+                  <li id="archived-list"><a data-toggle="tab" onClick="change_status('confirm');"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;Confirm</a></li>
                   <!-- <li id="archived-list"><a data-toggle="tab" onClick="change_status('received');"><i class="fa fa-hand-grab-o" aria-hidden="true"></i>&nbsp;Received</a></li> -->
                 </ul>
             </div>

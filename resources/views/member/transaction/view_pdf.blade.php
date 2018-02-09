@@ -103,16 +103,6 @@
                                 @endif
                             </td>
                         </tr>
-                        @if(count($_codes) > 0)
-                        <tr>
-                            <td colspan="5">
-                                @if(isset($_codes[$item->item_id]) && count($_codes[$item->item_id]) > 0)
-                                    @foreach($_codes[$item->item_id] as $c)
-                                    <div>PIN <b>{{$c['item_pin']}}</b> - ACTIVATION CODE <b>{{$c['item_activation']}}</b></div>
-                                    @endforeach
-                                @endif
-                            </td>
-                        </tr>
                         @endif
                         @endforeach
                     </tbody>

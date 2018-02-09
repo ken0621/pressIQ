@@ -40,7 +40,7 @@
 				</div>
 			</div>
 			<div class="product-container">
-				<div class="row-no-padding clearfix">
+				<div class="row clearfix">
 
 					@if(count($_product) > 0)
 

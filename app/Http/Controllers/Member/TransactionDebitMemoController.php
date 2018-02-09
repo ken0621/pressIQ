@@ -93,7 +93,8 @@ class TransactionDebitMemoController extends Member
         }
 
         $validate = TransactionDebitMemo::postInsert($this->user_info->shop_id, $insert, $insert_item);
-        TransactionDebitMemo::applied_transaction($validate);
+        TransactionDebitMemo::appliedTransaction($this->user_info->shop_id, $validate);
+
         $return = null;
         if(is_numeric($validate))
         {

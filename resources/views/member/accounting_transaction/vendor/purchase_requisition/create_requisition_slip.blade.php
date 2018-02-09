@@ -27,24 +27,6 @@
         </div>
     </div>
 </div>
-<!-- <div class="panel panel-default panel-block panel-title-block">
-    <div class="panel-body form-horizontal">
-        <div class="form-group">
-            <div class="col-md-12">
-                <div class="input-group pos-search">
-                  <span style="background-color: #eee" class="input-group-addon button-scan" id="basic-addon1">
-                    <i class="fa fa-shopping-cart scan-icon"></i>
-                    <i style="display: none;" class="fa fa-spinner fa-pulse fa-fw scan-load"></i>
-                  </span>
-                  <input type="text" class="form-control event_search_item" placeholder="Enter item name or scan barcode" aria-describedby="basic-addon1">
-                  <div class="pos-search-container"></div>
-                </div>
-            </div>
-        </div>
-       
-    </div>
-</div> -->
-
 <input type="hidden" name="_token" value="{{csrf_token()}}">
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body form-horizontal">
@@ -55,7 +37,8 @@
                    <input type="text" class="form-control" name="requisition_slip_number" value="{{ isset($pr->transaction_refnum)? $pr->transaction_refnum : $transaction_refnum}}">
                 </div>
             </div>
-            <div class="col-sm-3 text-right"></div>
+            <div class="col-sm-3 text-right"><label>P.O Date</label>
+                            <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{ isset($po)? date('m/d/Y',strtotime($po->po_date)) : date('m/d/Y') }}"/></div>
             <div class="col-sm-3 text-right">
                 <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_requisition/load-transaction"><i class="fa fa-handshake-o"></i> {{$count_transaction or ''}} Open Transaction</a></h4>
             </div>

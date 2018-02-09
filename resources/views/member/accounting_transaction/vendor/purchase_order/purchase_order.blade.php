@@ -146,62 +146,58 @@
                                                     <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                 </tr>
                                             @endforeach
-                                        @else                                
-                                            <tr class="tr-draggable">
-                                                <input type="hidden" name="item_ref_name[]"></td>
-                                                <input type="hidden" name="item_ref_id[]"></td>
-                                                <td class="invoice-number-td text-right">1</td>
-                                                <td><input type="text" class="for-datepicker" name="item_servicedate[]"/></td>
-                                                <td>
-                                                    <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
-                                                        @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-                                                        <option class="hidden" value="" />
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
-                                                </td>
-
-                                                <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-                                                <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
-                                                <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
-                                                <td><input class="text-right txt-discount compute" type="text" name="item_discount[]"/></td>
-                                                <td><textarea class="textarea-expand" type="text" name="item_remark[]" ></textarea></td>
-                                                <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
-                                                <td class="text-center">
-                                                    <input type="hidden" class="poline_taxable" name="item_taxable[]" value="" >
-                                                    <input type="checkbox" name="" class="taxable-check" value="checked">
-                                                </td>
-                                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                            </tr>
-                                                
-                                            <tr class="tr-draggable">
-                                                <input type="hidden" name="item_ref_name[]"></td>
-                                                <input type="hidden" name="item_ref_id[]"></td>
-                                                <td class="invoice-number-td text-right">2</td>
-                                                <td><input type="text" class="for-datepicker" name="item_servicedate[]" /></td>
-                                                <td>
-                                                    <select class="22222 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
-                                                        @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-                                                        <option class="hidden" value="" />
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
-                                                </td>
-                                                <td><select class="3333 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-                                                <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
-                                                <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]"/></td>
-                                                <td><input class="text-right txt-discount compute" type="text" name="item_discount[]"/></td>
-                                                <td><textarea class="text-right number-input" type="text" name="item_remark[]"></textarea></td>
-                                                <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
-                                                <td class="text-center">
-                                                    <input type="hidden" class="poline_taxable" name="item_taxable[]" value="" >
-                                                    <input type="checkbox" name="" class="taxable-check" value="checked">
-                                                </td>
-                                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                            </tr>
                                         @endif
+                                        <tr class="tr-draggable">
+                                            <input type="hidden" name="item_ref_name[]"></td>
+                                            <input type="hidden" name="item_ref_id[]"></td>
+                                            <td class="invoice-number-td text-right">1</td>
+                                            <td><input type="text" class="for-datepicker" name="item_servicedate[]"/></td>
+                                            <td>
+                                                <select class="1111 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
+                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                                    <option class="hidden" value="" />
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
+                                            </td>
+
+                                            <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                            <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]" /></td>
+                                            <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]" value=""/></td>
+                                            <td><input class="text-right txt-discount compute" type="text" name="item_discount[]"/></td>
+                                            <td><textarea class="textarea-expand" type="text" name="item_remark[]" ></textarea></td>
+                                            <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
+                                            <td class="text-center">
+                                                <input type="checkbox" name="item_taxable[]" class="taxable-check compute" value="1">
+                                            </td>
+                                            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                        </tr>
+                                        <tr class="tr-draggable">
+                                            <input type="hidden" name="item_ref_name[]"></td>
+                                            <input type="hidden" name="item_ref_id[]"></td>
+                                            <td class="invoice-number-td text-right">2</td>
+                                            <td><input type="text" class="for-datepicker" name="item_servicedate[]" /></td>
+                                            <td>
+                                                <select class="22222 form-control select-item droplist-item input-sm pull-left" name="item_id[]" >
+                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                                    <option class="hidden" value="" />
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <textarea class="textarea-expand txt-desc" name="item_description[]"></textarea>
+                                            </td>
+                                            <td><select class="3333 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
+                                            <td><input class="text-center number-input txt-qty compute" type="text" name="item_qty[]"/></td>
+                                            <td><input class="text-right number-input txt-rate compute" type="text" name="item_rate[]" value="" /></td>
+                                            <td><input class="text-right txt-discount compute" type="text" name="item_discount[]"/></td>
+                                            <td><textarea class="text-right number-input" type="text" name="item_remark[]"></textarea></td>
+                                            <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
+                                            <td class="text-center">
+                                                <input type="checkbox" name="item_taxable[]" class="taxable-check compute" value="1">
+                                            </td>
+                                            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

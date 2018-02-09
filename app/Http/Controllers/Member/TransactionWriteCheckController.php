@@ -124,11 +124,7 @@ class TransactionWriteCheckController extends Member
         if(!$validate)
         {
             $validate = TransactionWriteCheck::postInsert($this->user_info->shop_id, $insert, $insert_item, $insert_acct);
-            if(Session::get('applied_transaction') > 0)
-            {
-                TransactionWriteCheck::checkPOQty($validate, Session::get("applied_transaction"));
-            }
-            TransactionWriteCheck::appliedTransaction($validate);
+            TransactionWriteCheck::appliedTransaction($this->user_info->shop_id, $validate);
         }
         else
         {

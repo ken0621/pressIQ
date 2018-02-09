@@ -533,7 +533,7 @@ function enter_bills()
 			action_date_picker();
 	    	action_compute();
 
-			$('.remarks-eb').html($('.pr-remarks').val());
+			$('.remarks-eb').html($('.po-remarks').val());
 		});
 	}
 	this.load_applied_transaction = function()

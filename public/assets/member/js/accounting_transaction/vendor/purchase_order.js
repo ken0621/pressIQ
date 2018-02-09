@@ -422,18 +422,26 @@ function purchase_order()
 	/*REMOVING ROW*/
 	function event_remove_tr()
 	{
-		$(document).on("click", ".remove-tr", function(e){
-			var len = $(".tbody-item .remove-tr").length;
+		// $(document).on("click", ".remove-tr", function(e){
+		// 	var len = $(".tbody-item .remove-tr").length;
 
-			if($(".tbody-item .remove-tr").length > 1)
-			{
+		// 	if($(".tbody-item .remove-tr").length > 1)
+		// 	{
+		// 		$(this).parent().remove();
+		// 		action_reassign_number();
+		// 	}
+		// 	else
+		// 	{
+		// 		console.log("success");
+		// 	}
+		// });
+		$(document).on("click", ".remove-tr", function(e){
+			if($(".tbody-item .remove-tr").length > 1){
+
 				$(this).parent().remove();
 				action_reassign_number();
-			}
-			else
-			{
-				console.log("success");
-			}
+				action_compute();
+			}			
 		});
 	}
 
@@ -486,7 +494,6 @@ function purchase_order()
 	this.load_applied_transaction = function()
 	{
 		load_applied_transaction();
-		action_compute()
 	}
 }
 

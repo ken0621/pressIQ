@@ -5,10 +5,12 @@ use App\Models\Tbl_requisition_slip;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_requisition_slip_item;
 use App\Models\Tbl_purchase_order_line;
-use Request;
+use App\Models\Tbl_customer_estimate;
 use Carbon\Carbon;
-use DB;
 use Validator;
+use Session;
+use Request;
+use DB;
 
 /**
  * Requisition Slip
@@ -85,6 +87,7 @@ class RequisitionSlip
         $poline = null;
         foreach ($vendor as $key => $value)
         {
+            $ins['po_date'] = $pr->requisition_slip_date;
             $ins['po_vendor_id'] = $key;
             $ins['transaction_refnum'] = $pr->transaction_refnum;
             $ins['po_shop_id'] = $pr->shop_id;
@@ -202,6 +205,7 @@ class RequisitionSlip
             }
         
             $validate = $rs_id;
+            Self::applied_transaction($shop_id, $validate);
         }
         
 		if(is_numeric($validate))
@@ -350,6 +354,53 @@ class RequisitionSlip
         }
 
         return $return;
+    }
+    public static function applied_transaction($shop_id, $transaction_id = 0)
+    {
+        $applied_transaction = Session::get('applied_transaction');
+        if(count($applied_transaction) > 0)
+        {
+            foreach ($applied_transaction as $key => $value) 
+            {
+                $update['est_status'] = 'closed';
+                Tbl_customer_estimate::where("est_id", $key)->where('est_shop_id', $shop_id)->update($update);
+            }
+        }
+
+        Self::insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction);
+    }
+    public static function insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction = array())
+    {
+        $get_transaction = Tbl_requisition_slip::where("shop_id", $shop_id)->where("requisition_slip_id", $transaction_id)->first();
+        $transaction_data = null;
+        if($get_transaction)
+        {
+            $transaction_data['transaction_ref_name'] = "purchase_requisition";
+            $transaction_data['transaction_ref_id'] = $transaction_id;
+            $transaction_data['transaction_list_number'] = $get_transaction->transaction_refnum;
+            $transaction_data['transaction_date'] = $get_transaction->requisition_slip_date;
+
+            $attached_transaction_data = null;
+            if(count($applied_transaction) > 0)
+            {
+                foreach ($applied_transaction as $key => $value) 
+                {
+                    $get_data = Tbl_customer_estimate::where("est_shop_id", $shop_id)->where("est_id", $key)->first();
+                    if($get_data)
+                    {
+                        $attached_transaction_data[$key]['transaction_ref_name'] = "sales_order";
+                        $attached_transaction_data[$key]['transaction_ref_id'] = $key;
+                        $attached_transaction_data[$key]['transaction_list_number'] = $get_data->transaction_refnum;
+                        $attached_transaction_data[$key]['transaction_date'] = $get_data->est_date;
+                    }
+                }
+            }
+        }
+
+        if($transaction_data)
+        {
+            AccountingTransaction::postTransaction($shop_id, $transaction_data, $attached_transaction_data);
+        }
     }
 
 }

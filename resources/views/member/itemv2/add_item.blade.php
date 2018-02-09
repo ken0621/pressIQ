@@ -387,7 +387,7 @@
                             @endforeach
                             @endif
                             
-                            <option value='add_new'>Add New Token</option>
+                            {{-- <option value='add_new'>Add New Token</option> --}}
                         </select>
                     </div>
                     @if(isset($amount))

@@ -22,7 +22,6 @@
 	{
 		toastr.success('Success');
 		data.element.modal('hide');
-		token.action_load_tokens();
 	}
 	function error_name()
 	{

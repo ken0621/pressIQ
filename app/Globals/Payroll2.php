@@ -479,8 +479,9 @@ class Payroll2
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 
 		}
-		
+
 		return $_timesheet;
+
 	}
 
 	public static function timesheet_process_daily_info($employee_id, $date, $timesheet_db, $payroll_period_company_id)
@@ -5331,7 +5332,7 @@ class Payroll2
 					// dd($a);
 					// dd($actual_gross_pay ." / " . $standard_gross_pay ." * " . $allowance_amount);
 					$standard_gross_pay += $actual_gross_pay;
-					$val["amount"] = @($actual_gross_pay/$standard_gross_pay) * $allowance_amount;
+					$val["amount"] = $return->_time_breakdown["day_spent"]["float"] * $allowance_amount;
 
 					// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);
 

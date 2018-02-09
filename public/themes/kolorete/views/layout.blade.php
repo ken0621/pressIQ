@@ -108,54 +108,73 @@
                                     <div class="categories-header">
                                         <span class="title">CATEGORIES</span><i id="close-menu" class="fa fa-times" aria-hidden="true"></i>
                                     </div>
-                                    <li><a href="#">Men's Apparel</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="#">Mobile and Gadget</a></li>
+
+                                    {{-- @if(isset($_categories))
+                                        @foreach($_categories as $category)
+                                            <li><a href="/product?type={{ $category['type_id'] }}">{{ $category['type_name'] }}</a>
+                                                @if($category['subcategory'])
+                                                    <ul class="sub-menu">
+                                                        <li><a href="#">Mobile and Gadget</a></li>
+                                                        <div class="divider"></div>
+                                                        <li><a href="#">Consumer Electronic</a></li>
+                                                        <div class="divider"></div>
+                                                        <li><a href="#">Home and Living</a></li>
+                                                        <div class="divider"></div>
+                                                    </ul>
+                                                @endif
+                                            </li>
                                             <div class="divider"></div>
-                                            <li><a href="#">Consumer Electronic</a></li>
-                                            <div class="divider"></div>
-                                            <li><a href="#">Home and Living</a></li>
-                                            <div class="divider"></div>
-                                        </ul>
-                                    </li>
-                                    <div class="divider"></div>
-                                    <li><a href="#">Mobile and Gadget</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="#">Consumer Electronic</a></li>
-                                            <div class="divider"></div>
-                                            <li><a href="#">Home and Living</a></li>
-                                            <div class="divider"></div>
-                                            <li><a href="#">Men's Accessories</a></li>
-                                            <div class="divider"></div>
-                                            <li><a href="#">Men's Shoes</a></li>
-                                            <div class="divider"></div>
-                                            <li><a href="#">Foods</a></li>
-                                            <div class="divider"></div>
-                                            <li><a href="#">Hobbies and Stationery</a></li>
-                                        </ul>
-                                    </li>
-                                    <div class="divider"></div>
-                                    <li><a href="#">Consumer Electronic</a></li>
-                                    <div class="divider"></div>
-                                    <li><a href="#">Home and Living</a></li>
-                                    <div class="divider"></div>
-                                    <li><a href="#">Men's Accessories</a></li>
-                                    <div class="divider"></div>
-                                    <li><a href="#">Men's Shoes</a></li>
-                                    <div class="divider"></div>
-                                    <li><a href="#">Foods</a></li>
-                                    <div class="divider"></div>
-                                    <li><a href="#">Hobbies and Stationery</a></li>
-                                    <div class="divider"></div>
-                                    <li><a href="#">Women's Apparel</a></li>
-                                    <div class="divider"></div>
-                                    <li><a href="#">Healthy and Beauty</a></li>
-                                    <div class="divider"></div>
-                                    <li><a href="#">Toys, Babies and Kids</a></li>
-                                    <div class="divider"></div>
-                                    <li><a href="#">Bags</a></li>
-                                    <div class="divider"></div>
-                                    <li><a href="#">Women's Accessories</a></li>
+                                        @endforeach
+                                    @else --}}
+                                        <li><a href="#">Men's Apparel</a>
+                                            <ul class="sub-menu">
+                                                <li><a href="#">Mobile and Gadget</a></li>
+                                                <div class="divider"></div>
+                                                <li><a href="#">Consumer Electronic</a></li>
+                                                <div class="divider"></div>
+                                                <li><a href="#">Home and Living</a></li>
+                                                <div class="divider"></div>
+                                            </ul>
+                                        </li>
+                                        <div class="divider"></div>
+                                        <li><a href="#">Mobile and Gadget</a>
+                                            <ul class="sub-menu">
+                                                <li><a href="#">Consumer Electronic</a></li>
+                                                <div class="divider"></div>
+                                                <li><a href="#">Home and Living</a></li>
+                                                <div class="divider"></div>
+                                                <li><a href="#">Men's Accessories</a></li>
+                                                <div class="divider"></div>
+                                                <li><a href="#">Men's Shoes</a></li>
+                                                <div class="divider"></div>
+                                                <li><a href="#">Foods</a></li>
+                                                <div class="divider"></div>
+                                                <li><a href="#">Hobbies and Stationery</a></li>
+                                            </ul>
+                                        </li>
+                                        <div class="divider"></div>
+                                        <li><a href="#">Consumer Electronic</a></li>
+                                        <div class="divider"></div>
+                                        <li><a href="#">Home and Living</a></li>
+                                        <div class="divider"></div>
+                                        <li><a href="#">Men's Accessories</a></li>
+                                        <div class="divider"></div>
+                                        <li><a href="#">Men's Shoes</a></li>
+                                        <div class="divider"></div>
+                                        <li><a href="#">Foods</a></li>
+                                        <div class="divider"></div>
+                                        <li><a href="#">Hobbies and Stationery</a></li>
+                                        <div class="divider"></div>
+                                        <li><a href="#">Women's Apparel</a></li>
+                                        <div class="divider"></div>
+                                        <li><a href="#">Healthy and Beauty</a></li>
+                                        <div class="divider"></div>
+                                        <li><a href="#">Toys, Babies and Kids</a></li>
+                                        <div class="divider"></div>
+                                        <li><a href="#">Bags</a></li>
+                                        <div class="divider"></div>
+                                        <li><a href="#">Women's Accessories</a></li>
+                                    {{-- @endif --}}
                                 </ul>
                             </div>
                         </div>

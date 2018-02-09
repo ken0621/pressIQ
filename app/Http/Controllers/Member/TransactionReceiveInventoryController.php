@@ -113,7 +113,7 @@ class TransactionReceiveInventoryController extends Member
         if(!$validate)
         {
             $validate = TransactionReceiveInventory::postInsert($this->user_info->shop_id, $insert, $insert_item);
-            TransactionReceiveInventory::appliedTransaction($validate);
+            TransactionReceiveInventory::appliedTransaction($this->user_info->shop_id, $validate);
         }
         if(is_numeric($validate))
         {
@@ -162,14 +162,6 @@ class TransactionReceiveInventoryController extends Member
                 $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_discount']    = 0;
             }
-        }
-
-
-        $validate = TransactionReceiveInventory::postUpdate($ri_id, $this->user_info->shop_id, $insert, $insert_item);
-
-        if(Session::get("applied_transaction") > 0)
-        {
-            TransactionPurchaseOrder::checkPoQty($validate, Session::get("applied_transaction"));
         }
 
         $return = null;

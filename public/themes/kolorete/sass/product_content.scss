@@ -63,7 +63,7 @@ body{
 					left: 0px;
 					width: 10%;
 					height: 1px;
-					background-color: #48b920;
+					background-color: #585858;
 				}
 			}
 			.product-price {
@@ -107,10 +107,10 @@ body{
 				width: 30%;
 				margin-top: 20px;
 				padding: 12px 0px 12px 0px;
-				border: 2px solid #48b920;
+				border: 2px solid #585858;
 				border-radius: 5px;
 				text-align: center;
-				color: #48b920;
+				color: #585858;
 				font-weight: 600;
 				font-size: 15px;
 
@@ -121,7 +121,7 @@ body{
 
 				&:hover {
 					cursor: pointer;
-					background-color: #48b920;
+					background-color: #585858;
 					transition: 0.3s all ease;
 
 					span {
@@ -185,7 +185,7 @@ body{
 			.line-bot {
 				position: absolute;
 				width: 5%;
-				background-color: #48b920;
+				background-color: #585858;
 				height: 1px;
 				bottom: -1px;
 				left: 0px;
@@ -214,7 +214,7 @@ body{
 								transition: 0.3s all ease;
 							}
 							.button-container {
-								background-color: #48b920;
+								background-color: #585858;
 								transition: 0.3s all ease;
 							}
 						}

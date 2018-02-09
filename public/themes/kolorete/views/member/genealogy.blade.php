@@ -14,7 +14,7 @@
 		</div>
 		<div class="right">
 			<div class="legend">
-				<!-- <div class="legend-label">SLOT </div> -->
+				<div class="legend-label">SLOT </div>
 				<div class="legend-select">
 					<select class="form-control select-slot">
 						@foreach($_slot as $slot)
@@ -44,7 +44,7 @@
 		$('.genealogy-frame').attr('src','/members/genealogy-tree?slot_no='+$(this).val()+'&mode='+$('.mode-genealogy').val()).load(function() 
 		{
 			$('.loading-content').addClass('hidden');
-			$('.genealogy-frame').css('opacity', 1).show();
+			$('.genealogy-frame').css('opacity', 1).hide().fadeIn();
 		});
 	});
 

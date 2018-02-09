@@ -904,6 +904,7 @@ class Warehouse2
             $get = $get->where('record_warehouse_id', $warehouse_id);
         }
         $get = $get->get();
+        die(var_dump($get));
         if(count($get) > 0)
         {
             foreach ($get as $key => $value) 

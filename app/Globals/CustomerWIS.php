@@ -94,7 +94,7 @@ class CustomerWIS
 
     public static function insert_acctg_transaction($shop_id, $transaction_id, $applied_transaction = array())
     {
-        $get_transaction = tbl_customer_wis::where("cust_wis_shop_id", $shop_id)->where("cust_wis_id", $transaction_id)->first();
+        $get_transaction = Tbl_customer_wis::where("cust_wis_shop_id", $shop_id)->where("cust_wis_id", $transaction_id)->first();
         $transaction_data = null;
         if($get_transaction)
         {
@@ -213,8 +213,7 @@ class CustomerWIS
         {
             $warehouse_id = $old->cust_wis_from_warehouse;
         }
-        // dd($_item);
-        if($warehouse_id)
+        if(!$warehouse_id)
         {
             $validate .= "Warehouse unknown.";
         }
@@ -260,9 +259,8 @@ class CustomerWIS
             $entry["total"]             = $overall_price;
             $entry["vatable"]           = '';
             $entry["discount"]          = '';
-            $entry["ewt"]               = '';  
-
-            Warehouse2::update_inventory_consume($shop_id, null, $reference_name, $wis_id);
+            $entry["ewt"]               = ''; 
+            Warehouse2::update_inventory_consume($shop_id, null, $reference_name, $wis_id); 
             Tbl_customer_wis_item::where("cust_wis_id", $wis_id)->delete();
             Tbl_customer_wis_item_line::where("itemline_wis_id", $wis_id)->delete();
             //Self::insertLine($po_id, $insert_item); 

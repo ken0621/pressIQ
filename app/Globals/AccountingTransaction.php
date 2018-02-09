@@ -107,7 +107,7 @@ class AccountingTransaction
 		if($get)
 		{
 			$datenow = $get->transaction_created_at;
-			if($get->acctg_transaction_history)
+			if($get->acctg_transaction_history ! = '')
 			{
                 $serialize = unserialize($get->acctg_transaction_history);
 				$serialize[$datenow] = collect($get)->toArray();

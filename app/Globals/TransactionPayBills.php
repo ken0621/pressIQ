@@ -257,5 +257,39 @@ class TransactionPayBills
 
     	Tbl_bill::where('bill_id', $bill_id)->update($update);
     }
+    public static function insert_acctg_transaction($shop_id, $transaction_id)
+    {
+        $get_transaction = Tbl_pay_bill::where("paybill_shop_id", $shop_id)->where("paybill_id", $transaction_id)->first();
+        
+        $transaction_data = null;
+        if($get_transaction)
+        {
+            $transaction_data['transaction_ref_name'] = "pay_bills";
+            $transaction_data['transaction_ref_id'] = $transaction_id;
+            $transaction_data['transaction_list_number'] = $get_transaction->transaction_refnum;
+            $transaction_data['transaction_date'] = $get_transaction->paybill_date;
+
+            /*$attached_transaction_data = null;
+            if(count($applied_transaction) > 0)
+            {
+                foreach ($applied_transaction as $key => $value) 
+                {
+                    $get_data = Tbl_customer_estimate::where("est_shop_id", $shop_id)->where("est_id", $key)->first();
+                    if($get_data)
+                    {
+                        $attached_transaction_data[$key]['transaction_ref_name'] = "sales_order";
+                        $attached_transaction_data[$key]['transaction_ref_id'] = $key;
+                        $attached_transaction_data[$key]['transaction_list_number'] = $get_data->transaction_refnum;
+                        $attached_transaction_data[$key]['transaction_date'] = $get_data->est_date;
+                    }
+                }
+            }*/
+        }
+
+        if($transaction_data)
+        {
+            AccountingTransaction::postTransaction($shop_id, $transaction_data, null);
+        }
+    }
 
 }

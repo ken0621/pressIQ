@@ -120,6 +120,7 @@ class TransactionPayBillsController extends Member
         if($ctr_bill != 0)
         {
             $validate = TransactionPayBills::postInsert($this->user_info->shop_id, $insert, $insert_item);
+            TransactionPayBills::insert_acctg_transaction($this->user_info->shop_id, $validate);
 
             $return = null;
             if(is_numeric($validate))

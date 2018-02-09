@@ -6,6 +6,7 @@ use App\Globals\AccountingTransaction;
 use App\Globals\TransactionDebitMemo;
 use App\Globals\TransactionPurchaseOrder;
 use App\Globals\Item;
+use App\Globals\Warehouse2;
 use App\Globals\UnitMeasurement;
 use App\Globals\Customer;
 use App\Globals\Vendor;
@@ -92,10 +93,14 @@ class TransactionDebitMemoController extends Member
             }
         }
 
-        $validate = TransactionDebitMemo::postInsert($this->user_info->shop_id, $insert, $insert_item);
-        TransactionDebitMemo::appliedTransaction($this->user_info->shop_id, $validate);
-
         $return = null;
+        $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+        $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
+        if(!$validate)
+        {
+            $validate = TransactionDebitMemo::postInsert($this->user_info->shop_id, $insert, $insert_item);
+            TransactionDebitMemo::appliedTransaction($this->user_info->shop_id, $validate);
+        }
         if(is_numeric($validate))
         {
             $return['status'] = 'success';
@@ -140,9 +145,16 @@ class TransactionDebitMemoController extends Member
             }
         }
 
-        
-        $validate = TransactionDebitMemo::postUpdate($debit_memo_id, $this->user_info->shop_id, $insert, $insert_item);
         $return = null;
+        $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+
+        $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
+
+        if(!$validate)
+        {
+            $validate = TransactionDebitMemo::postUpdate($debit_memo_id, $this->user_info->shop_id, $insert, $insert_item);
+        }
+
         if(is_numeric($validate))
         {
             $return['status'] = 'success';

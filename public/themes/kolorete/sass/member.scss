@@ -17,7 +17,7 @@ $content-text: 'Open Sans', sans-serif;
 
 .modal-header
 {
-	background-color: #585858;
+	background-color: #000;
 	color: #FFF;
 
 	.fa
@@ -108,10 +108,10 @@ $content-text: 'Open Sans', sans-serif;
 	}
 }
 
-.btn-ico-custom
+.btn-kol-custom
 {
 	@include transition(0.3s);
-	background-color: #000;
+	background-color: #585858;
 	color: #fff;
 
 	&:hover
@@ -123,7 +123,7 @@ $content-text: 'Open Sans', sans-serif;
 
 .btn-custom-primary
 {
-	background-color: #000;
+	background-color: #585858;
 	color: #fff;
 
 	.fa

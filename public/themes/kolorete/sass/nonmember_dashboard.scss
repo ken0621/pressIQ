@@ -343,7 +343,7 @@ $text-dark: #272c2f;
 		
 		.modal-header
 		{
-			background-color: #e1890b;
+			background-color: #000;
 
 			.close
 			{
@@ -495,17 +495,18 @@ $text-dark: #272c2f;
 				{
 					@include transition(0.2s);
 					color: #fff;
-					background-color: #e1890b;
+					background-color: #585858;
 					padding: 10px 40px;
 					border-radius: 2px;
-					border: 0px !important;
+					border: 1px solid #585858 !important;
 				  	width: 100%;
 				  	margin-top: 20px;
 				  	text-transform: uppercase;
 
 				  	&:hover
 				  	{
-				  		opacity: 0.8;
+				  		background-color: rgba(0,0,0,0.1);
+				  		color: #585858;
 				  	}
 				}
 			}

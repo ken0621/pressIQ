@@ -34,7 +34,7 @@
         @endif
         </select>
     </td>
-    <td><input class="text-center number-input txt-qty compute" type="text" value="{{$items['estline_qty']}}" name="invline_qty[]"/></td>
+    <td><input class="text-center txt-qty compute" type="text" value="{{$items['estline_qty']}}" name="invline_qty[]"/></td>
     <td><input class="text-right number-input txt-rate compute" value="{{$items['estline_rate']}}" type="text" name="invline_rate[]"/></td>
     <td><input class="text-right txt-discount compute" value="{{$items['estline_discount']}}" type="text" name="invline_discount[]"/></td>
     <td><textarea class="textarea-expand" type="text" value="{{$items['estline_discount_remark']}}" name="invline_discount_remark[]" ></textarea></td>
@@ -71,7 +71,7 @@
 @endif
 </td>
 <td><select class="2222 droplist-um select-um" name="invline_um[]"><option class="hidden" value="" /></select></td>
-<td><input class="text-center number-input txt-qty compute" type="text" name="invline_qty[]"/></td>
+<td><input class="text-center txt-qty compute" type="text" name="invline_qty[]"/></td>
 <td><input class="text-right number-input txt-rate compute" type="text" name="invline_rate[]"/></td>
 <td><input class="text-right txt-discount compute" type="text" name="invline_discount[]"/></td>
 <td><textarea class="textarea-expand" type="text" name="invline_discount_remark[]" ></textarea></td>

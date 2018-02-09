@@ -176,7 +176,7 @@
                                                                 @endif
                                                             </select>
                                                         </td>
-                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="invline_qty[]" value="{{$invline->invline_qty}}" /></td>
+                                                        <td><input class="text-center txt-qty compute" type="text" name="invline_qty[]" value="{{$invline->invline_qty}}" /></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="invline_rate[]" value="{{$invline->invline_rate}}" /></td>
                                                         <td><input class="text-right txt-discount compute" type="text" name="invline_discount[]" value="{{$invline->invline_discount}}" /></td>
                                                         <td><textarea class="textarea-expand" type="text" name="invline_discount_remark[]" value="{{$invline->invline_discount_remark}}"></textarea></td>
@@ -216,7 +216,7 @@
                                                     @endif
                                                     </td>
                                                     <td><select class="2222 droplist-um select-um" name="invline_um[]"><option class="hidden" value="" /></select></td>
-                                                    <td><input class="text-center number-input txt-qty compute" type="text" name="invline_qty[]"/></td>
+                                                    <td><input class="text-center txt-qty compute" type="text" name="invline_qty[]"/></td>
                                                     <td><input class="text-right number-input txt-rate compute" type="text" name="invline_rate[]"/></td>
                                                     <td><input class="text-right txt-discount compute" type="text" name="invline_discount[]"/></td>
                                                     <td><textarea class="textarea-expand" type="text" name="invline_discount_remark[]" ></textarea></td>
@@ -540,7 +540,7 @@
             @endif
             </td>
             <td><select class="select-um" name="invline_um[]"><option class="hidden" value="" /></select></td>
-            <td><input class="text-center number-input txt-qty compute" type="text" name="invline_qty[]"/></td>
+            <td><input class="text-center txt-qty compute" type="text" name="invline_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="invline_rate[]"/></td>
             <td><input class="text-right txt-discount compute" type="text" name="invline_discount[]"/></td>
             <td><textarea class="textarea-expand" type="text" name="invline_discount_remark[]" ></textarea></td>

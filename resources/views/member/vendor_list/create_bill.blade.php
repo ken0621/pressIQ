@@ -159,7 +159,7 @@
                                                             </select>
                                                         </td>
                                                         <td><textarea class="textarea-expand acct-desc" name="account_desc[]"></textarea></td>
-                                                        <td><input type="text" class="form-control text-right number-input input-sm acct-amount compute" value="0.00" name="account_amount[]"></td>
+                                                        <td><input type="text" class="form-control text-right number-input input-sm acct-amount compute" value="" name="account_amount[]"></td>
                                                         <td class="text-center acct-remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                     <tr class="tr-draggable">
@@ -171,8 +171,8 @@
                                                             </select>
                                                         </td>
                                                         <td><textarea class="textarea-expand acct-desc" name="account_desc[]"></textarea></td>
-                                                        <td><input type="text" class="form-control text-right input-sm number-input acct-amount compute" value="0.00" name="account_amount[]"></td>
-                                                        <td class="text-center acct-remove-tr  cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                        <td><input type="text" class="form-control text-right number-input input-sm number-input acct-amount compute" value="" name="account_amount[]"></td>
+                                                        <td class="text-center acct-remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -227,15 +227,15 @@
                                                                 @endif
                                                             </td>
                                                             <td>
-                                                                <select class="1111 droplist-um select-um {{isset($ebline->itemline_um) ? 'has-value' : ''}}" name="item_um[]">
-                                                                    @if($ebline->itemline_um)
-                                                                        @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $ebline->multi_um_id, 'selected_um_id' => $ebline->itemline_um])
+                                                                <select class="1111 droplist-um select-um {{isset($item->itemline_um) ? 'has-value' : ''}}" name="item_um[]">
+                                                                    @if($item->itemline_um)
+                                                                        @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $item->multi_um_id, 'selected_um_id' => $item->itemline_um])
                                                                     @else
                                                                         <option class="hidden" value="" />
                                                                     @endif
                                                                 </select>
                                                             </td>
-                                                            <td><input class="text-center number-input txt-qty compute" type="text" value="{{$item->itemline_qty}}" name="itemline_qty[]"/></td>
+                                                            <td><input class="text-center txt-qty compute" type="text" value="{{$item->itemline_qty}}" name="itemline_qty[]"/></td>
                                                             <td><input class="text-right number-input txt-rate compute" type="text" value="{{$item->itemline_rate}}" name="itemline_rate[]"/></td>
                                                             <td><input class="text-right number-input txt-amount" type="text" value="{{$item->itemline_amount}}" name="itemline_amount[]"/></td>
                                                             @if(isset($serial)) 
@@ -266,13 +266,13 @@
                                                         </td>
                                                         <td>
                                                             @if($pis)
-                                                                <<textarea class="textarea-expand txt-desc" readonly="true" name="itemline_description[]"></textarea>
+                                                                <textarea class="textarea-expand txt-desc" readonly="true" name="itemline_description[]"></textarea>
                                                             @else
                                                                 <textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea>
                                                             @endif
                                                         </td>
                                                         <td><select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
-                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
+                                                        <td><input class="text-center txt-qty compute" type="text" name="itemline_qty[]"/></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
                                                         <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
                                                         @include("member.load_ajax_data.load_td_serial_number")
@@ -286,7 +286,7 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <label>Memo</label>
-                                        <textarea class="form-control input-sm textarea-expand" name="bill_memo" ></textarea>
+                                        <textarea class="form-control input-sm textarea-expand" name="bill_memo" >{{isset($bill->bill_memo) ? $bill->bill_memo : ''}}</textarea>
                                     </div>
                                     <div class="col-sm-6">                      
                                         <div class="row">
@@ -329,7 +329,7 @@
                 </select>
             </td>
             <td><textarea class="textarea-expand acct-desc" name="account_desc[]"></textarea></td>
-            <td><input type="text" class="form-control input-sm acct-amount compute text-right number-input" name="account_amount[]" value="0.00"></td>
+            <td><input type="text" class="form-control input-sm acct-amount compute text-right number-input" name="account_amount[]" value=""></td>
             <td class="text-center acct-remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>
     </table>
@@ -356,7 +356,7 @@
                 @endif
             </td>
             <td><select class="2222 select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
-            <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
+            <td><input class="text-center txt-qty compute" type="text" name="itemline_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
             <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
             @include("member.load_ajax_data.load_td_serial_number")

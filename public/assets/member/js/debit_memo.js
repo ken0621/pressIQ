@@ -116,6 +116,7 @@ function debit_memo(){
 			    }
 			    if(value != '' && !isNaN(value)){
 			    	value = parseFloat(value);
+			    	value = value.toFixed(2);//den
 			    	ret = action_add_comma(value).toLocaleString();
 			    }
 			   	
@@ -381,7 +382,35 @@ function debit_memo(){
 		$parent.find(".txt-desc").html($this.find("option:selected").attr("sales-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
 		$parent.find(".txt-qty").val(1).change();
+		console.log($this.find("option:selected").attr("item-type"));
 		
+		if($this.find("option:selected").attr("has-um") != '')
+		{
+			$parent.find(".txt-qty").attr("disabled",true);
+			$.ajax(
+			{
+				url: '/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"),
+				method: 'get',
+				success: function(data)
+				{
+					$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
+					{
+						$parent.find(".txt-qty").removeAttr("disabled");
+						$(this).globalDropList("reload").globalDropList("enabled");
+						console.log($(this).find("option:first").val());
+						$(this).val($(this).find("option:first").val()).change();
+					})
+				},
+				error: function(e)
+				{
+					console.log(e.error());
+				}
+			})
+		}
+		else
+		{
+			$parent.find(".select-um").html('<option class="hidden" qty="1" value=""></option>').globalDropList("reload").globalDropList("disabled");
+		}
 		// $parent.find(".txt-rate").attr("readonly",false);
 		// $parent.find(".txt-discount").attr("disabled",false);
 		// if($this.find("option:selected").attr("item-type") == 4)
@@ -390,7 +419,7 @@ function debit_memo(){
 		// 	$parent.find(".txt-discount").attr("disabled","disabled");
 		// }
 
-		$parent.find(".txt-qty").attr("disabled",true);
+		/*$parent.find(".txt-qty").attr("disabled",true);
 
 		if($this.find("option:selected").attr("has-um") != '')
 		{
@@ -404,7 +433,7 @@ function debit_memo(){
 		else
 		{
 			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
-		}
+		}*/
 	}
 
 	function action_load_unit_measurement($this)

@@ -168,9 +168,9 @@ function bill()
 			    }
 			    if(value != '' && !isNaN(value)){
 			    	value = parseFloat(value);
+			    	value = value.toFixed(2)//den
 			    	ret = action_add_comma(value).toLocaleString();
 			    }
-			   	
 			    if(ret == 0){
 			    	ret = '';
 			    }
@@ -550,7 +550,21 @@ function bill()
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
 		$parent.find(".txt-qty").val(1).change();
 
-		$parent.find(".txt-rate").attr("readonly",false);
+		if($this.find("option:selected").attr("has-um") != '')
+		{	
+			$parent.find(".txt-qty").attr("disabled",true);							
+			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
+			{
+				$parent.find(".txt-qty").removeAttr("disabled");
+				$(this).globalDropList("reload").globalDropList("enabled");
+				$(this).val($(this).find("option:first").val()).change();
+			})
+		}
+		else
+		{
+			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("clear");
+		}
+		/*$parent.find(".txt-rate").attr("readonly",false);
 		$parent.find(".txt-discount").attr("disabled",false);
 		if($this.find("option:selected").attr("item-type") == 4)
 		{
@@ -581,7 +595,7 @@ function bill()
 		else
 		{
 			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("clear");
-		}
+		}*/
 	}
 
 	function action_load_unit_measurement($this)

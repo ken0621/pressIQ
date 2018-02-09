@@ -37,7 +37,7 @@
 						<li class="{{ Request::segment(2) == "profile" ? "active" : "" }}">
 							<a href="/members/profile"><div class="nav-holder"><div class="icon brown-icon-profile"></div> <span>Profile</span></div></a>
 						</li>
-						@if($mlm_member)
+						{{-- @if($mlm_member) --}}
 						<li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">
 							<a href="javascript:"><div class="nav-holder"><div class="icon brown-icon-flow-tree"></div> <span>Genealogy</span></div></a>
 
@@ -66,8 +66,8 @@
 								</li>
 							</ul>
 						</li>
-						@else
-						@endif
+						{{-- @else
+						@endif --}}
 					</ul>
 				</div>
 			</div>

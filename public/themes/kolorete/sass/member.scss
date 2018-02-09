@@ -359,7 +359,7 @@ $content-text: 'Open Sans', sans-serif;
 							{
 								.nav-holder
 								{
-									background-color: rgba(0,0,0,0.1);
+									background-color: rgba(255,255,255,0.1);
 									color: #fff;
 									text-decoration: none;
 									border-color: #1F262C;
@@ -390,10 +390,11 @@ $content-text: 'Open Sans', sans-serif;
 							{
 								> .nav-holder
 								{
-									background-color: rgba(0,0,0,0.1);
+									background-color: rgba(255,255,255,0.1);
 									color: #fff;
 									text-decoration: none;
 									border-color: #1F262C;
+
 									.icon 
 									{
 										color: #fff;
@@ -524,7 +525,7 @@ $content-text: 'Open Sans', sans-serif;
 								{
 									.nav-holder
 									{
-										background-color: rgba(0,0,0,0.1);
+										background-color: rgba(255,255,255,0.1);
 										.icon
 										{
 											img

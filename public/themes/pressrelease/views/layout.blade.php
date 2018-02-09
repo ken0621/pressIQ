@@ -102,8 +102,8 @@
                         <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="/#home">Home</a></span>
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="/newsroom">News Room</a></span>
-                        <div class="border-container"></div>
+                        {{-- <span><a class="smoth-scroll" href="/newsroom">News Room</a></span>
+                        <div class="border-container"></div> --}}
                         <span><a class="smoth-scroll" href="/about">About</a></span>
                         <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="/contact">Contact Us</a></span>
@@ -115,12 +115,12 @@
                         <ul>
                             @if(Request::segment(1)=="members")
                                 <li><a href="/#home" class="link-nav {{ Request::segment(1) == '' ? 'active' : '' }}">HOME</a></li>
-                                <li><a href="/contact" class="link-nav {{ Request::segment(1) == 'newsroom' ? 'active' : '' }}">NEWS ROOM</a></li>
+                               {{--  <li><a href="/contact" class="link-nav {{ Request::segment(1) == 'newsroom' ? 'active' : '' }}">NEWS ROOM</a></li> --}}
                                 <li><a href="/about" class="link-nav {{ Request::segment(1) == 'about' ? 'active' : '' }}" >ABOUT US</a></li>
                                 <li><a href="/contact" class="link-nav {{ Request::segment(1) == 'contact' ? 'active' : '' }}">CONTACT US</a></li>
                             @else
                                 <li><a href="/#home" class="link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">HOME</a></li>
-                                <li><a href="/contact" class="link-nav {{ Request::segment(1) == 'newsroom' ? 'active' : '' }}">NEWS ROOM</a></li>
+                               {{--  <li><a href="/contact" class="link-nav {{ Request::segment(1) == 'newsroom' ? 'active' : '' }}">NEWS ROOM</a></li> --}}
                                 <li><a href="/about" class="link-nav {{ Request::segment(1) == 'about' ? 'active' : '' }}" >ABOUT US</a></li>
                                 <li><a href="/contact" class="link-nav {{ Request::segment(1) == 'contact' ? 'active' : '' }}">CONTACT US</a></li>
                             @endif
@@ -146,7 +146,7 @@
                             <p class="footer-title">INFORMATION</p>
                         </div>
                         <a href="/#home"><p>HOME</p></a>
-                        <a href="/newsroom"><p>NEWS ROOM</p></a>
+                      {{--   <a href="/newsroom"><p>NEWS ROOM</p></a> --}}
                         <a href="/about"><p>ABOUT US</p></a>
                         <a href="/contact"><p>CONTACT US</p></a>
                     </div>

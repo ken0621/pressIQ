@@ -13,6 +13,7 @@ use Mail;
 use DB;
 use URL;
 use Session;
+use Excel;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
 use App\Globals\Payment;
@@ -478,6 +479,8 @@ class ShopMemberController extends Shop
 
     public function send($pr_info)
     {
+        // $campaigns = count(tbl_pressiq_press_releases::where('pr_from', session('user_email')->get()));
+        // $limit     = count(tbl_pressiq_press_releases::where('user_membership',session('user_email')->get()));    
         $to  = explode(",", $pr_info['pr_to']);
         $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
 
@@ -1105,10 +1108,11 @@ class ShopMemberController extends Shop
         }
     }
 
-    public function pressadmin_media_contacts()
+    public function pressadmin_media_contacts()  
     {
 
-        $data['_media_contacts'] = Tbl_press_release_recipient::get();
+        $data['_media_contacts'] = Tbl_press_release_recipient::orderByRaw('created_at DESC')
+                                    ->get();
         $data['edit']     = DB::table('tbl_press_release_recipients')
                             ->where('recipient_id',session('r_edit'))
                             ->get();
@@ -1201,7 +1205,9 @@ class ShopMemberController extends Shop
     public function manage_user()
     {
         // dd(session("edit_user"));
-        $data['_user'] = Tbl_pressiq_user::where('user_level',2)->get();
+        $data['_user'] = Tbl_pressiq_user::where('user_level',2)
+                        ->orderByRaw('user_date_created DESC')
+                        ->get();
         $data['_admin'] = Tbl_pressiq_user::where('user_level',1)->get();
         $data['_user_edit'] = Tbl_pressiq_user::where('user_id',session('edit_user'))->get();
         $data['_admin_edit'] = Tbl_pressiq_user::where('user_id',session('edit_admin'))->get();
@@ -1332,7 +1338,8 @@ class ShopMemberController extends Shop
     public function pressadmin_email()
     {   
 
-        $data['_email'] = Tbl_pressiq_press_releases::paginate(5);
+        $data['_email'] = Tbl_pressiq_press_releases::orderByRaw('pr_date_sent DESC')
+                            ->paginate(5);
 
         if(Session::exists('user_email'))
         {
@@ -1351,6 +1358,52 @@ class ShopMemberController extends Shop
         {
             return Redirect::to("/"); 
         }
+    }
+
+
+     public function press_admin_import_email()    
+    {
+      
+        if(Session::exists('user_email'))
+        {
+           $level=session('pr_user_level');
+           if($level!="1")
+           {
+                return Redirect::to("/");
+           }
+           else
+           {
+                $data["page"] = "Press Release - Recipient";
+                return view("press_admin.press_admin_import_recipient",$data);  
+           }
+        }
+        else
+        {
+            return Redirect::to("/"); 
+        }
+
+    }
+
+     public function importExcel(Request $request)  
+    { 
+        dd('123'); 
+        // if($request->hasFile('import_file')){
+        //     Excel::load($request->file('import_file')->getRealPath(), function ($reader) 
+        //     {
+        //         foreach ($reader->toArray() as $key => $row) {
+        //             $data['recipient_id']            = $row['recipient_id'];
+        //             $data['research_email_address']  = $row['research_email_address'];
+        //             $data['company_name']            = $row['company_name'];
+
+        //             if(!empty($data)) {
+        //                 DB::table('tbl_press_release_recipients')->insert($data);
+        //             }
+        //         }
+        //     });
+        // }
+
+        // Session::put('success', 'Youe file successfully import in database!!!');
+        // return back();
     }
 
     public function pressadmin_email_edit($id)

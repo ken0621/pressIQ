@@ -6,7 +6,7 @@
    <div class="pressview">
       <div class="dashboard-container">
           @if (session('message'))
-            <div class="alert alert-danger">
+            <div class="alert alert-success">
                 {{ session('message') }}
             </div>
           @endif
@@ -23,6 +23,15 @@
                 {{csrf_field()}}
         
                 <div id="create_release" class="tabcontent create-release-container">
+
+                  @if(session()->has('message'))
+                  <div class="details">
+                  <span style="color: red;">
+                    <strong>Error!</strong> {{ session('message') }}<br>
+                  </span>
+                  </div>
+                  @endif
+
                   <div class="title-container">New Release</div>
                     @if(session()->has("pr_edit"))
                       @foreach($edit as $edits)
@@ -125,7 +134,8 @@
                   <div class="button-container">
                     <span class="button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
                     <span class="preview-button"><a href="#" id="prev_btn">Preview</a></span>
-                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'choose_recipient')"><a>Continue &raquo;</a></button></span>
+
+                    <span class="button"><button type="button" id="btnnextCreate" class="tablinks"><a>Continue &raquo;</a></button></span>
                   </div>
                 </div>
 
@@ -172,7 +182,7 @@
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
                     {{-- POPUP CHOOSE RECIPIENT --}}
-                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'send_release')"><a>Continue &raquo;</a></button></span>
+                    <span class="button"><button type="button" id="btnnextSend" class="tablinks"><a>Continue &raquo;</a></button></span>
                       <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                       @endif
                     <div class="button-container"></div>
@@ -289,6 +299,20 @@
     document.getElementById('preview_boiler_content').innerHTML =boiler_content;
     $('#previewPopup').modal('show'); 
   });
+
+  $('#btnnextCreate').click(function()
+  {
+     // alert('This Field is Mandatory to Filled up');
+     openCity(event, 'choose_recipient');
+  });
+
+  $('#btnnextSend').click(function()
+  {
+      // alert('This ');
+      openCity(event, 'send_release');
+
+  });        
+
   $('#prev_btn_send').click(function()
   {
     var headline = document.getElementById('pr_headline').value;
@@ -313,7 +337,7 @@ height: 500,
 default_link_target: "_blank",
 media_live_embeds: true,
 plugins: ["autolink lists image charmap print preview anchor","visualblocks code","insertdatetime table contextmenu paste imagetools", "wordcount", "media", "link"],
-toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist |  image media link | preview',
+toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | image link | preview',
    
      // we override default upload handler to simulate successful upload
      images_upload_handler: function (blobInfo, success, failure) 

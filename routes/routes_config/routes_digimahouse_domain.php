@@ -121,6 +121,13 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/pressadmin/pressreleases_addrecipient', 'Shop\ShopMemberController@pressadmin_pressrelease_addrecipient');//PRESS RELEASE
 	Route::any('/pressadmin/pressreleases_deleterecipient/{id}', 'Shop\ShopMemberController@pressreleases_deleterecipient');//PRESS RELEASE
 	Route::any('/pressadmin/pressreleases_edit_recipient/{id}', 'Shop\ShopMemberController@pressreleases_edit_recipient');//PRESS RELEASE
+	Route::get('/pressadmin/import_recipient', 'Shop\ShopMemberController@press_admin_import_email');//PRESS RELEASE
+
+	Route::get('importExport', 			'Shop\ShopMemberController@importExport');
+	Route::get('downloadExcel/{type}',  'Shop\ShopMemberController@downloadExcel');
+	Route::post('importExcel', 			'Shop\ShopMemberController@importExcel');
+
+
 	Route::get('/newsroom',			'Shop\ShopNewsRoomController@index');//PRESS RELEASE
 	Route::any('/newsroom/search',	'Shop\ShopNewsRoomController@newsroom_search');//PRESS RELEASE
 	Route::any('/mediacontacts/search',	'Shop\ShopMemberController@mediacontacts_search');//PRESS RELEASE

@@ -1122,28 +1122,45 @@ class Payroll2
 
 	public static function sort_by_time($_time)
 	{
-		$count = 0;
+		//sir kim code problem causing undefined offset when 1 time in is null 
+
+		// $count = 0;
 
 
-		$n = count($_time);
-        for ($i = 0; $i < $n-1; $i++)
-        {
-            for ($j = 0; $j < $n-$i-1; $j++)
-            {
-                if (Payroll2::convert_time_in_minutes($_time[$j]->time_in) > Payroll2::convert_time_in_minutes($_time[$j+1]->time_in))
-                {
+		// $n = count($_time);
+  //       for ($i = 0; $i < $n-1; $i++)
+  //       {
+  //           for ($j = 0; $j < $n-$i-1; $j++)
+  //           {
+  //               if (Payroll2::convert_time_in_minutes($_time[$j]->time_in) > Payroll2::convert_time_in_minutes($_time[$j+1]->time_in))
+  //               {
 
-                    // swap temp and arr[i]
-                    $temp = $_time[$j];
-                    $_time[$j] = $_time[$j+1];
-                    $_time[$j+1] = $temp;
+  //                   // swap temp and arr[i]
+  //                   $temp = $_time[$j];
+  //                   $_time[$j] = $_time[$j+1];
+  //                   $_time[$j+1] = $temp;
                    
-                }
-            }
-        }
+  //               }
+  //           }
+  //       }
 		
-		 
-		return $_time;
+		// return $_time;
+
+		//kenneth
+		 usort($_time,function($firsttime,$secondtime)
+		 {
+		        $firsttime = Payroll2::convert_time_in_minutes($firsttime->time_in);
+		        $secondtime = Payroll2::convert_time_in_minutes($secondtime->time_in);
+
+		        if ($firsttime == $secondtime) {
+		           return 0;
+		        }
+
+		        return $firsttime < $secondtime ? -1 : 1;
+		 });
+
+   		 return $_time;
+
 	}
 	
 

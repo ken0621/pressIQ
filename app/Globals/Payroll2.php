@@ -5355,7 +5355,7 @@ class Payroll2
 
 					
 				}
-				else if ($data["group"]->payroll_group_salary_computation == "Daily Rate") 
+				else if ($allowance->payroll_allowance_type == 'daily') 
 				{
 					$val["amount"] = $allowance_amount * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);
 				}

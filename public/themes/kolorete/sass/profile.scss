@@ -231,7 +231,7 @@ $text-dark: #272c2f;
 				}
 				&.active
 				{
-					border-bottom: 2.5px solid #48B920;
+					border-bottom: 2.5px solid #000;
 					a
 					{
 						font-weight: $regular;
@@ -276,8 +276,15 @@ $text-dark: #272c2f;
 
 					.btn
 					{
-						background-color: #2161C8;
-						color: #fff;
+						border: 1px solid #585858;
+						background-color: rgba(0,0,0,0.1);
+						color: #585858;
+
+						&:hover
+						{
+							background-color: #585858;
+							color: #fff;
+						}
 
 						@media screen and (min-width: 150px)
 						{

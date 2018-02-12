@@ -1,8 +1,8 @@
 @extends("layout")
 @section("content")
 
-<div id="home" class="register-wrapper" style="background-image: url('/themes/{{ $shop_theme }}/img/cover-photo.jpg')">
-    <div style="padding: 100px 0 50px 0;">
+<div id="home" class="register-wrapper">
+    <div style="padding: 50px 0;">
         @include("member2.include_register")
 
         <!-- Modal -->

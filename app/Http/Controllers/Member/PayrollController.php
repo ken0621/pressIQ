@@ -2328,6 +2328,11 @@ class PayrollController extends Member
           $is_sub = Request::input('is_sub') == "true" ? true : false ;
           $data['is_sub'] = $is_sub;
 
+          $checkbank = Tbl_payroll_bank_convertion::where('bank_name','Metro Bank Single')->get();
+          if (count($checkbank) == 0) {
+               $insert['bank_name'] = 'Metro Bank Single';
+               Tbl_payroll_bank_convertion::insert($insert);
+          }
           $company_logo = '';
           if(Session::has('company_logo'))
           {
@@ -2420,6 +2425,11 @@ class PayrollController extends Member
           $data['action'] = $action;
           Session::put('company_logo_update', $data['company']->payroll_company_logo);
           $data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('tbl_payroll_company.payroll_company_name')->get();
+          $checkbank = Tbl_payroll_bank_convertion::where('bank_name','Metro Bank Single')->get();
+          if (count($checkbank) == 0) {
+               $insert['bank_name'] = 'Metro Bank Single';
+               Tbl_payroll_bank_convertion::insert($insert);
+          }
           $data['_bank'] = Tbl_payroll_bank_convertion::get();
           return view('member.payroll.modal.modal_view_company', $data);
      }
@@ -8066,11 +8076,11 @@ class PayrollController extends Member
                }
           }    
 
-          $data['stataus']         = 'success';
-          $data['function_name']   = 'payrollconfiguration.reload_leave_temp';
+          $response['call_function'] = 'reload';
+          $response['status'] = 'success';
 
-               
-          return collect($data)->toJson();
+          return $response;
+
      }
 
      public function delete_confirm_schedule_leave($id)

@@ -67,7 +67,7 @@
 					    					</a>
 					    				</div>
 					    				<div class="col-md-6">
-					    					<a href="javascript:" class="product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}">
+					    					<a href="javascript:" class="product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}" quantity="1">
 					    						<div class="image-holder">
 					    							<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
 					    						</div>
@@ -272,7 +272,7 @@
 
 				</div>
 			</div>
-			<div class="product-container">
+			{{-- <div class="product-container">
 				<div class="row clearfix">
 					<div class="col-md-2">
 						<div class="product-holder">
@@ -461,7 +461,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> --}}
 		</div>
 	</div>
 	
@@ -497,7 +497,7 @@
 				    						</a>
 				    					</div>
 				    					<div class="col-md-6">
-				    						<a href="javascript:" class="product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}">
+				    						<a href="javascript:" class="product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}" quantity="1">
 				    							<div class="image-holder">
 				    								<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
 				    							</div>

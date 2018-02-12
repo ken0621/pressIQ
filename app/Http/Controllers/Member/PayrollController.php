@@ -1593,17 +1593,31 @@ class PayrollController extends Member
 
      public function modal_save_contract()
      {
+          $getemployee = Tbl_payroll_employee_contract::selemployee(Request::input('payroll_employee_id'))->first();
+          $update['payroll_employee_contract_archived'] = 1;
+          Tbl_payroll_employee_contract::where('payroll_employee_contract_id',$getemployee->payroll_employee_contract_id)->update($update);
+
           $insert['payroll_employee_id']                    = Request::input('payroll_employee_id');
           $insert['payroll_department_id']                  = Request::input('payroll_department_id');
           $insert['payroll_jobtitle_id']                    = Request::input('payroll_jobtitle_id');
           $insert['payroll_employee_contract_date_hired']   = date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_hired')));
-          $insert['payroll_employee_contract_date_end']     = date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_end')));
+
+          if(Request::input('payroll_employee_contract_date_end') == '')
+          {
+               $insert['payroll_employee_contract_date_end']     = '';
+          }
+          else
+          {
+               $insert['payroll_employee_contract_date_end']     = date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_end')));
+          }
           $insert['payroll_group_id']                       = Request::input('payroll_group_id');
           $insert['payroll_employee_contract_status']       = Request::input('payroll_employee_contract_status');
           Tbl_payroll_employee_contract::insert($insert);
           
-          $return['status'] = 'success';
-          return json_encode($return);
+          $response['call_function'] = 'reload';
+          $response['status'] = 'success';
+          
+          return json_encode($response);
      }
 
 

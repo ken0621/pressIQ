@@ -148,7 +148,7 @@ class ShopMemberController extends Shop
                         $data["travel_and_tours"] = true;
                         if($slot->slot_membership == 3) 
                         {
-                            $data['link'] = '#';
+                            $data['link'] = 'http://tour.philtechglobalinc.com/auth/login';
                         }
                         else
                         {

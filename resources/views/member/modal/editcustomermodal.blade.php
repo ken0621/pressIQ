@@ -480,6 +480,7 @@
               @else
               <div class="form-group text-center">
               <span>You cannot change password of this account. It was singned up with Google or Facebook</span>
+              <span class="hide">{{ $customer->signup_with }}</span>
               </div>
               @endif
             </div>

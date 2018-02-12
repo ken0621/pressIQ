@@ -41,7 +41,7 @@
 						<div class="prod-list-container">
 							<div class="title-container">All<div class="line-bot"></div></div>
 							<div class="prod-list">
-								<div class="row clearfix">
+								<div class="row no-gutters clearfix gutters">
 									<!-- PER ITEM -->
 									@if(count($_product) > 0)
 										@foreach($_product as $product)

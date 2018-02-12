@@ -40,7 +40,7 @@
 				</div>
 			</div>
 			<div class="product-container">
-				<div class="row clearfix">
+				<div class="row no-gutters clearfix gutters">
 
 					@if(count($_product) > 0)
 

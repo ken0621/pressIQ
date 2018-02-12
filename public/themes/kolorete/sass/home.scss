@@ -122,11 +122,17 @@ body
     {
         padding: 20px 0;
         font-family: 'Roboto', sans-serif;
+        
+        .gutters
+        {
+            margin: -10px;
+        }
 
         .product-holder 
         {
             background-color: #fff;
             border-bottom: 4px solid #9e9e9e;
+            margin: 10px;
 
             .product-image 
             {

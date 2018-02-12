@@ -490,7 +490,7 @@
 				    			<div class="bottom-container">
 				    				<div class="row-no-padding clearfix">
 				    					<div class="col-md-6">
-				    						<a href="#">
+				    						<a href="/product/view2/{{ $product['eprod_id'] }}">
 				    							<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
 				    								<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
 				    							</div>

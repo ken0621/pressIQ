@@ -252,7 +252,6 @@ function on()
         $(".blur-me").css({
         filter: 'blur(20px)'
     });
-
 }
 
 function off()

@@ -92,7 +92,7 @@ class TransactionDebitMemoController extends Member
                 $insert_item[$key]['item_ref_id']       = $request->item_ref_id[$key];
             }
         }
-
+        
         $return = null;
         $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
         $validate = AccountingTransaction::inventory_validation('refill', $this->user_info->shop_id, $warehouse_id, $insert_item);
@@ -145,6 +145,10 @@ class TransactionDebitMemoController extends Member
             }
         }
 
+<<<<<<< HEAD
+=======
+        $validate = TransactionDebitMemo::postUpdate($debit_memo_id, $this->user_info->shop_id, $insert, $insert_item);
+>>>>>>> 82ec2d8686a440934b6eaedda084e2b1ae32da6f
         $return = null;
         $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
 
@@ -169,13 +173,11 @@ class TransactionDebitMemoController extends Member
         }
         return json_encode($return);
     }
-
     public function getCountTransaction(Request $request)
     {
         $vendor_id = $request->vendor_id;
         return TransactionPurchaseOrder::countOpenPOTransaction($this->user_info->shop_id, $vendor_id);
     }
-
     public function getLoadTransaction(Request $request)
     {
         $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
@@ -227,7 +229,6 @@ class TransactionDebitMemoController extends Member
                 }
             }
         }
-
         $data['_po']     = $return;
         $data['remarks'] = $remarks;
         $data['_um']     = UnitMeasurement::load_um_multi();
@@ -235,5 +236,4 @@ class TransactionDebitMemoController extends Member
 
         return view('member.accounting_transaction.vendor.debit_memo.applied_transaction', $data);
     }
-
 }

@@ -93,7 +93,7 @@
                         </div>
                         <div class="col-sm-2 pull-right">
                         	<label>Total Payment</label>
-                        	<input type="text" name="paybill_total_amount" class="input-sm form-control amount-received" value="{{isset($pb->paybill_total_amount)? $pb->paybill_total_amount : ''}}">
+                        	<input type="text" name="paybill_total_amount" class="input-sm form-control amount-received" value="{{isset($pb->paybill_total_amount)? $pb->paybill_total_amount : ''}}" readonly="true">
                         </div>
                     </div>
                    <!--  <div class="row clearfix">

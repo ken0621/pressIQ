@@ -17,6 +17,7 @@
 
 @endsection
 @section('script')
+<script type="text/javascript" src="/assets/mlm/jquery.aCollapTable.min.js"></script>  
 <script type="text/javascript">
 
     var logistic_report = new logistic_report();
@@ -52,6 +53,18 @@
             toastr.success('Success');
         }
     }
+    function action_collaptible(collapse = false)
+    {
+        $('.collaptable').aCollapTable(
+        { 
+            startCollapsed: collapse,
+            addColumn: false, 
+            plusButton: '&#9658; ', 
+            minusButton: '&#9660; '
+        });
 
+        if(collapse)    $(".act-more").closest("tr").find(".total-report").removeClass("hide");
+        else            $(".act-more").closest("tr").find(".total-report").addClass("hide");
+    }
 </script>
 @endsection

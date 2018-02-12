@@ -109,17 +109,17 @@ class AccountingTransaction
 			$datenow = $get->transaction_created_at;
 			if($get->acctg_transaction_history)
 			{
-                $serialize = unserialize($get_data->acctg_transaction_history);
+                $serialize = unserialize($get->acctg_transaction_history);
 				$serialize[$datenow] = collect($get)->toArray();
 
                 $update['acctg_transaction_history'] = serialize($serialize);
-                Tbl_acctg_transaction::where("acctg_transaction_id", $acctg_transaction_id)->update($update);
+                Tbl_acctg_transaction::where("acctg_transaction_id", $acctg_trans_id)->update($update);
 			}
 			else
 			{
 				$serialize[$datenow] = collect($get)->toArray();
                 $update['acctg_transaction_history'] = serialize($serialize);
-                Tbl_acctg_transaction::where("acctg_transaction_id", $acctg_transaction_id)->update($update);
+                Tbl_acctg_transaction::where("acctg_transaction_id", $acctg_trans_id)->update($update);
 			}
 		}
 
@@ -163,7 +163,7 @@ class AccountingTransaction
 		else
 		{
 			$acctg_trans_id = $check;
-			// Tbl_acctg_transaction_list::where("acctg_transaction_id", $acctg_trans_id)->delete();
+			Tbl_acctg_transaction_list::where("acctg_transaction_id", $acctg_trans_id)->delete();
 			Self::updateTransaction($acctg_trans_id, $transaction_data);
 		}
 

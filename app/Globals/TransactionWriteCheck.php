@@ -12,6 +12,7 @@ use App\Models\Tbl_bill;
 use App\Globals\AccountingTransaction;
 use Carbon\Carbon;
 use Validator;
+use Session;
 use DB;
 
 /**
@@ -286,17 +287,18 @@ class TransactionWriteCheck
 
         return $return;
     }
-    public static function checkPoQty($wc_id = null, $po_data = array())
+    public static function appliedTransaction($wc_id)
     {
         if($wc_id != null)
         {
-            if(count($po_data) > 0)
+            $applied_transaction = Session::get('applied_transaction');
+            if($applied_transaction > 0)
             {
-                foreach ($po_data as $key => $value)
+                foreach ($applied_transaction as $key => $value)
                 { 
                     Self::checkPolineQty($key, $wc_id);
-                }   
-            }
+                } 
+            }  
         }
     }
     public static function checkPolineQty($po_id, $wc_id)

@@ -157,7 +157,6 @@ class WriteCheck
 
             $wc_data = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
             AuditTrail::record_logs("Edited","bill_payment_check",$wc_id,"",serialize($wc_data));
-
         }
 
     }

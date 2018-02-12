@@ -24,6 +24,8 @@ use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_item_token;
+use App\Models\Tbl_item_token_log;
 
 use App\Globals\Inventory;
 use App\Globals\Item;
@@ -892,13 +894,16 @@ class Warehouse2
 
     }
 
-    public static function update_inventory_consume($shop_id, $warehouse_id, $ref_name, $ref_id)
+    public static function update_inventory_consume($shop_id, $warehouse_id = null, $ref_name, $ref_id)
     {
-        $get = Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
-                                                 ->where("record_consume_ref_name", $ref_name)
+        $get = Tbl_warehouse_inventory_record_log::where("record_consume_ref_name", $ref_name)
                                                  ->where("record_consume_ref_id", $ref_id)
-                                                 ->where("record_count_inventory", 1)
-                                                 ->get();
+                                                 ->where("record_count_inventory", 1);
+        if($warehouse_id)
+        {
+            $get = $get->where('record_warehouse_id', $warehouse_id);
+        }
+        $get = $get->get();
         if(count($get) > 0)
         {
             foreach ($get as $key => $value) 
@@ -912,11 +917,14 @@ class Warehouse2
                 Tbl_warehouse_inventory_record_log::where('record_log_id', $value->record_log_id)->update($update);
             }
         }
-        Tbl_warehouse_inventory_record_log::where('record_warehouse_id', $warehouse_id)
-                                                 ->where("record_consume_ref_name", $ref_name)
+        $del = Tbl_warehouse_inventory_record_log::where("record_consume_ref_name", $ref_name)
                                                  ->where("record_consume_ref_id", $ref_id)
-                                                 ->where("record_count_inventory", 0)
-                                                 ->delete();
+                                                 ->where("record_count_inventory", 0);
+        if($warehouse_id)
+        {
+            $del = $del->where('record_warehouse_id', $warehouse_id);
+        }
+        $del->delete();
     }
     public static function consume_bulk_src_ref($shop_id, $warehouse_id, $reference_name = '', $reference_id = 0 , $remarks = '', $_item, $ref_src_name = '', $ref_src_id = 0)
     {

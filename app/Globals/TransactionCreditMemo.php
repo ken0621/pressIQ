@@ -32,7 +32,7 @@ class TransactionCreditMemo
 	}
 	public static function postUpdate($cm_id, $shop_id, $insert, $insert_item = array())
 	{
-		$val = AccountingTransaction::customer_validation($insert, $insert_item, 'credit_memo');
+		$val = AccountingTransaction::customer_validation($insert, $insert_item);
 		if(!$val)
 		{
 	        /* SUBTOTAL */

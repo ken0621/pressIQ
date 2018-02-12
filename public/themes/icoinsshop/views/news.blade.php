@@ -30,13 +30,13 @@
 								<a class="{{ $news->post_id == $main_news->post_id ? 'hide' : '' }}" href="/news?id={{ $news->post_id }}">
 									<div class="other-news-per-container row-no-padding clearfix">
 										<div class="col-md-4">
-											<div class="news-img"><img src="/themes/{{ $shop_theme }}/img/news-img-1.jpg"></div>
+											<div class="news-img"><img src="{{ $news->post_image }}"></div>
 										</div>
 										<div class="col-md-8">
 											<div class="news-details">
-												<div class="news-title">Bitcoin</div>
-												<div class="news-content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium explicabo ab natus optio fuga officiis unde ullam quae, provident adipisci nulla quasi dolorem.</div>
-												<div class="read-more">READ MORE</div>
+												<div class="news-title">{{ $news->post_title }}</div>
+												{{-- <div class="news-content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium explicabo ab natus optio fuga officiis unde ullam quae, provident adipisci nulla quasi dolorem.</div> --}}
+												{{-- <div class="read-more">READ MORE</div> --}}
 											</div>
 										</div>							
 									</div>

@@ -35,6 +35,9 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_recaptcha_setting;
 use App\Models\Tbl_recaptcha_pool_amount;
+use App\Models\Tbl_item_token;
+use App\Models\Tbl_item_token_log;
+use App\Models\Tbl_token_list;
 
 use App\Models\Tbl_image;
 // use App\Models\Tbl_mlm_slot_points_log;
@@ -212,6 +215,18 @@ class ShopMemberController extends Shop
             // dd($slot_id." ; ".$data['reward_point_redemption']);
             // dd($data['wallet']);
             $data["krops_gc"] = Tbl_mlm_slot_points_log::Slot()->where('points_log_type',"GC")->where('slot_owner',Self::$customer_info->customer_id)->sum('points_log_points');
+            $token_list_titles = Tbl_token_list::get();
+            $token_titles = array();
+            $token_amounts = array();
+            foreach($token_list_titles as $title)
+            {
+                array_push($token_titles, $title->token_name);
+                $total_token = Tbl_item_token_log::where('token_log_slot_owner',Self::$customer_info->customer_id)->where('token_id',$title->token_id)->sum('amount');
+                array_push($token_amounts, $total_token);
+            }
+            $data['token_titles']   = $token_titles;
+            $data['token_amounts']  = $token_amounts;
+            
             return Self::load_view_for_members("member.dashboard", $data);
         }
         else
@@ -4555,6 +4570,20 @@ class ShopMemberController extends Shop
             MLM2::purchase($shop_id, $slot_id, $val);
             $return['status'] = 'success';
             $return['call_function'] = 'success_used';
+
+
+            $item = Tbl_warehouse_inventory_record_log::where('mlm_activation',$mlm_activation)
+                                                 ->where('mlm_pin',$mlm_pin)
+                                                 ->first();
+            // patrick
+            $item_token = Tbl_item_token::where('item_id',$item->record_item_id)->first();
+            $token_log['shop_id']                   = $this->shop_info->shop_id;
+            $token_log['token_log_slot_owner']      = Self::$customer_info->customer_id;
+            $token_log['token_log_date_created']    = Carbon::now();
+            $token_log['token_id']                  = $item_token->token_id;
+            $token_log['amount']              = $item_token->amount;
+            Tbl_item_token_log::insert($token_log);
+
         }
         else
         {

@@ -60,6 +60,7 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $data['_item']  = Item::get_all_category_item([1,4,5]);
         $data["_customer"]  = Customer::getAllCustomer();
         $data['action']     = "/member/customer/wis/create-submit";
+        $data['_um']        = UnitMeasurement::load_um_multi();
         $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'warehouse_issuance_slip');
 
         $data['c_id'] = $request->customer_id;
@@ -184,9 +185,10 @@ class CustomerWarehouseIssuanceSlipController extends Member
         $ins_wis['cust_delivery_date']              = date("Y-m-d", strtotime($request->delivery_date));
         $ins_wis['created_at']                      = Carbon::now();
 
-        //die(var_dump($ins_wis['cust_delivery_date']));
         $_item = null;
         $insert_item = null;
+
+        $return_wis = null;
         foreach ($items as $key => $value) 
         {
             if($value)
@@ -206,10 +208,20 @@ class CustomerWarehouseIssuanceSlipController extends Member
                 $_item[$key]['quantity'] = $request->item_qty[$key] * UnitMeasurement::um_qty($insert_item[$key]['item_um']);
                 $_item[$key]['remarks'] = $request->item_description[$key];
 
+                if($insert_item[$key]['item_refid'])
+                {
+                    $return_wis[$insert_item[$key]['item_refid']] = '';
+                }
             }
+        }
+        if(count($return_wis) > 0)
+        {
+            Session::put('applied_transaction_wis',$return_wis);
         }
 
         $val = CustomerWIS::customer_update_wis($wis_id, $shop_id, $remarks, $ins_wis, $_item, $insert_item);
+
+               CustomerWIS::applied_transaction($shop_id, $val);
         //die(var_dump($val));
         $data = null;
         if(is_numeric($val))

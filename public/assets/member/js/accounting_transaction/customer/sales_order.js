@@ -15,6 +15,14 @@ function sales_order()
 		action_date_picker();
 		action_reassign_number();
 		event_compute_class_change();
+		event_load_open_transaction();
+	}
+	function event_load_open_transaction()
+	{
+		if($('.droplist-customer').val())
+		{
+			action_load_open_transaction($('.droplist-customer').val());
+		}
 	}
 	function action_compute()
 	{

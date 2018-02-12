@@ -145,6 +145,8 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_remark']      = $request->item_remark[$key];
                 $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_taxable']     = $request->item_taxable[$key];
+                $insert_item[$key]['item_ref_name']    = $request->item_ref_name[$key];
+                $insert_item[$key]['item_ref_id']      = $request->item_ref_id[$key];
             }
         }
 
@@ -204,6 +206,8 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_remark']      = $request->item_remark[$key];
                 $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_taxable']     = $request->item_taxable[$key];
+                $insert_item[$key]['item_ref_name']    = $request->item_ref_name[$key];
+                $insert_item[$key]['item_ref_id']      = $request->item_ref_id[$key];
             }
         }
 
@@ -261,6 +265,7 @@ class TransactionPurchaseOrderController extends Member
                 {
                     if($value_item->item_type_id == 1 || $value_item->item_type_id == 4 || $value_item->item_type_id == 5)
                     {
+                        $return[$key.'i'.$key_item]['so_id'] = $value_item->estline_est_id;
                         $return[$key.'i'.$key_item]['service_date'] = $value_item->estline_service_date;
                         $return[$key.'i'.$key_item]['item_id'] = $value_item->estline_item_id;
                         $return[$key.'i'.$key_item]['item_description'] = $value_item->estline_description;
@@ -273,6 +278,7 @@ class TransactionPurchaseOrderController extends Member
                         $return[$key.'i'.$key_item]['item_discount_type'] = $value_item->estline_discount_type;
                         $return[$key.'i'.$key_item]['item_remarks'] = $value_item->estline_discount_remark;
                         $return[$key.'i'.$key_item]['taxable'] = $value_item->taxable;
+
                     }
                 }
                 if($info)

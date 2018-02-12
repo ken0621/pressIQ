@@ -54,6 +54,7 @@ class TransactionPurchaseRequisitionController extends Member
         $data['action'] = '/member/transaction/purchase_requisition/create-submit';
 
         $pr_id = $request->id;
+        Session::forget('applied_transaction');
         if($pr_id)
         {
         	$data['pr'] = RequisitionSlip::get_slip($this->user_info->shop_id, $pr_id);
@@ -100,8 +101,7 @@ class TransactionPurchaseRequisitionController extends Member
             $update['requisition_slip_status'] = 'closed';
         }
         $return = RequisitionSlip::update_status($this->user_info->shop_id, $pr_id, $update);
-
-        //$po = RequisitionSlip::create_po_line($pr_id, 1);
+        $data = RequisitionSlip::create_po($pr_id, $this->user_info->shop_id);
         $data = null;
         if($return)
         {
@@ -115,6 +115,8 @@ class TransactionPurchaseRequisitionController extends Member
 	{
 		$data['_so'] = TransactionSalesOrder::getAllOpenSO($this->user_info->shop_id);
 		$data['_eq'] = TransactionEstimateQuotation::getAllOpenEQ($this->user_info->shop_id);
+
+        $data['_applied'] = Session::get("applied_transaction");
 		$data['action'] = '/member/transaction/purchase_requisition/apply-transaction';
 
 		return view('member.accounting_transaction.vendor.purchase_requisition.load_transaction', $data);
@@ -122,8 +124,9 @@ class TransactionPurchaseRequisitionController extends Member
 
     public function postApplyTransaction(Request $request)
     {
-        $_transaction = $request->apply_transaction;
-        Session::put('applied_transaction_pr', $_transaction);
+        $_transaction = $request->_apply_transaction;
+        
+        Session::put('applied_transaction', $_transaction);
 
         $return['call_function'] = "success_apply_transaction";
         $return['status'] = "success";
@@ -132,43 +135,35 @@ class TransactionPurchaseRequisitionController extends Member
     }
     public function getLoadAppliedTransaction(Request $request)
     {
-        $_ids = Session::get('applied_transaction_pr');
+        $applied_transaction = Session::get('applied_transaction');
 
         $return = null;
         $remarks = null;
-        if(count($_ids) > 0)
+        if(count($applied_transaction) > 0)
         {
-            foreach ($_ids as $key => $value) 
+            foreach ($applied_transaction as $key => $value) 
             {
-                $get = TransactionSalesInvoice::transaction_data_item($key);
-                $info = TransactionSalesInvoice::transaction_data($this->user_info->shop_id, $key);
+                $get = TransactionSalesOrder::info_item($key);
+                $info = TransactionSalesOrder::info($this->user_info->shop_id, $key);
 
                 foreach ($get as $key_item => $value_item)
                 {
-                	if($value_item->item_type_id == 1 || $value_item->item_type_id == 4 || $value_item->item_type_id == 5)
-                	{
-	                    $return[$key.'i'.$key_item]['service_date'] = $value_item->estline_service_date;
-	                    $return[$key.'i'.$key_item]['item_id'] = $value_item->estline_item_id;
-	                    $return[$key.'i'.$key_item]['item_description'] = $value_item->estline_description;
-	                    $return[$key.'i'.$key_item]['multi_um_id'] = $value_item->multi_um_id;
-	                    $return[$key.'i'.$key_item]['item_um'] = $value_item->estline_um;
-	                    $return[$key.'i'.$key_item]['item_qty'] = $value_item->estline_qty;
-	                    $return[$key.'i'.$key_item]['item_rate'] = $value_item->estline_rate;
-	                    $return[$key.'i'.$key_item]['item_amount'] = $value_item->estline_amount;
-	                    $return[$key.'i'.$key_item]['item_discount'] = $value_item->estline_discount;
-	                    $return[$key.'i'.$key_item]['item_discount_type'] = $value_item->estline_discount_type;
-	                    $return[$key.'i'.$key_item]['item_remarks'] = $value_item->estline_discount_remark;
-	                    $return[$key.'i'.$key_item]['taxable'] = $value_item->taxable;
-                	}
+                    if($value_item->item_type_id == 1 || $value_item->item_type_id == 4 || $value_item->item_type_id == 5)
+                    {
+                        $return[$key.'i'.$key_item]['so_id'] = $value_item->estline_est_id;
+                        $return[$key.'i'.$key_item]['item_id'] = $value_item->estline_item_id;
+                        $return[$key.'i'.$key_item]['item_description'] = $value_item->estline_description;
+                        $return[$key.'i'.$key_item]['multi_um_id'] = $value_item->multi_um_id;
+                        $return[$key.'i'.$key_item]['item_um'] = $value_item->estline_um;
+                        $return[$key.'i'.$key_item]['item_qty'] = $value_item->estline_qty;
+                        $return[$key.'i'.$key_item]['item_rate'] = $value_item->estline_rate;
+                        $return[$key.'i'.$key_item]['item_amount'] = $value_item->estline_amount;
+                        $return[$key.'i'.$key_item]['item_rate'] = $value_item->estline_rate;
+                    }
                 }
                 if($info)
                 {
-                	$con = 'SO#';
-                	if($info->is_sales_order == 0)
-                	{
-                		$con = 'EQ#';
-                	}
-                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : $con.$info->est_id.', ';
+                    $remarks .= $info->transaction_refnum != "" ? $info->transaction_refnum.', ' : 'SO#'.$info->est_id.', ';
                 }
             }
         }

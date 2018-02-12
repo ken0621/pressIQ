@@ -11,6 +11,7 @@ use App\Globals\AccountingTransaction;
 use App\Globals\Warehouse2;
 use Carbon\Carbon;
 use Validator;
+use Session;
 use DB;
 
 /**
@@ -296,17 +297,18 @@ class TransactionEnterBills
 
         return $return;
     }
-    public static function checkPoQty($eb_id = null, $po_data = array())
+    public static function appliedTransaction($eb_id)
     {
         if($eb_id != null)
         {
-            if(count($po_data) > 0)
+            $applied_transaction = Session::get('applied_transaction');
+            if($applied_transaction > 0)
             {
-                foreach ($po_data as $key => $value)
+                foreach ($applied_transaction as $key => $value)
                 { 
                     Self::checkPolineQty($key, $eb_id);
-                }   
-            }
+                } 
+            }  
         }
     }
     public static function checkPolineQty($po_id, $eb_id)

@@ -115,6 +115,7 @@ class TransactionSalesOrderController extends Member
 		$insert['customer_memo']         = $request->customer_memo;
 
 		$insert_item = null;
+		$return_so = null;
 		foreach ($request->item_id as $key => $value) 
 		{
 			if($value)
@@ -132,11 +133,22 @@ class TransactionSalesOrderController extends Member
 				
 				$insert_item[$key]['item_refname'] 		= $request->item_refname[$key];
 				$insert_item[$key]['item_refid'] 		= $request->item_refid[$key];
+
+				if($insert_item[$key]['item_refid'])
+				{
+					$return_so[$insert_item[$key]['item_refid']] = '';
+				}
 			}
 		}
+		if(count($return_so) > 0)
+		{
+			Session::put('applied_transaction_so',$return_so);
+		}
 		$return = null;
+		
 		$validate = TransactionSalesOrder::postUpdate($sales_order_id, $this->user_info->shop_id, $insert, $insert_item);
-		TransactionSalesOrder::applied_transaction($this->user_info->shop_id);
+		TransactionSalesOrder::applied_transaction($this->user_info->shop_id, $validate);
+		
 		if(is_numeric($validate))
 		{
 			$return['status'] = 'success';

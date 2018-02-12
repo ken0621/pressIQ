@@ -2,13 +2,15 @@
 namespace App\Globals;
 
 use App\Models\Tbl_debit_memo;
+use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_debit_memo_line;
 use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_requisition_slip_item;
-
+use App\Models\Tbl_purchase_order_line;
 use App\Globals\AccountingTransaction;
 
 use Carbon\Carbon;
+use Session;
 use DB;
 
 /**
@@ -169,6 +171,8 @@ class TransactionDebitMemo
             $itemline[$key]['dbline_qty']          = $value['item_qty'];
             $itemline[$key]['dbline_rate']         = $value['item_rate'];
             $itemline[$key]['dbline_amount']       = $value['item_amount'];
+            $itemline[$key]['dbline_refname']      = $value['item_ref_name'];
+            $itemline[$key]['dbline_refid']        = $value['item_ref_id'];
 
         }
         if(count($itemline) > 0)
@@ -179,6 +183,43 @@ class TransactionDebitMemo
 
         return $return;
     }
+    public static function appliedTransaction($dm_id)
+    {
+        if($dm_id != null)
+        {
+            $applied_transaction = Session::get('applied_transaction');
+            if($applied_transaction > 0)
+            {
+                foreach ($applied_transaction as $key => $value)
+                { 
+                    Self::checkPolineQty($key, $dm_id);
+                } 
+            }  
+        }
+    }
+    public static function checkPolineQty($po_id, $dm_id)
+    {
+        $poline = Tbl_purchase_order_line::where('poline_po_id', $po_id)->get();
 
+        $ctr = 0;
+        foreach ($poline as $key => $value)
+        {
+            $dmline = Tbl_debit_memo_line::where('dbline_db_id', $dm_id)->where('dbline_refname', 'purchase_order')->where('dbline_item_id', $value->poline_item_id)->where('dbline_refid',$po_id)->first();
+            
+            $update['poline_qty'] = $value->poline_qty - $dmline->dbline_qty;
+
+            Tbl_purchase_order_line::where('poline_id', $value->poline_id)->update($update);    
+
+            if($update['poline_qty'] <= 0)
+            {
+                $ctr++;
+            }
+        }
+        if($ctr >= count($poline))
+        {
+            $updates["po_is_billed"] = $dm_id;
+            Tbl_purchase_order::where("po_id",$po_id)->update($updates);
+        }
+    }
    
 }

@@ -128,6 +128,7 @@ class TransactionWriteCheckController extends Member
             {
                 TransactionWriteCheck::checkPOQty($validate, Session::get("applied_transaction"));
             }
+            TransactionWriteCheck::appliedTransaction($validate);
         }
         else
         {

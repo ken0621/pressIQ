@@ -14,6 +14,15 @@ function sales_receipt()
 		action_date_picker();
 		action_compute();
 		event_compute_class_change();
+		event_load_open_transaction();
+		action_reassign_number();
+	}
+	function event_load_open_transaction()
+	{
+		if($('.droplist-customer').val())
+		{
+			action_load_open_transaction($('.droplist-customer').val());
+		}
 	}
 	function action_compute()
 	{

@@ -186,7 +186,7 @@
                                                             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                         </tr>
                                                         @endforeach
-                                                    @else
+                                                    @endif
                                                     <tr class="tr-draggable">
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
@@ -219,7 +219,6 @@
                                                         <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                         <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
-                                                    @endif
                                                 </tbody>
                                             </table>
                                         </div>
@@ -298,17 +297,16 @@
 
 @section('script')
 <script type="text/javascript" src="/assets/member/js/accounting_transaction/vendor/write_check.js"></script>
-
 <script type="text/javascript">
     $("#acct-a").click(function()
     {
-    	$('#account-tbl').toggle();
-    	$('i',this).toggleClass("fa-caret-right fa-caret-down")
+        $('#account-tbl').toggle();
+        $('i',this).toggleClass("fa-caret-right fa-caret-down")
     });
     $("#item-a").click(function()
     {
-    	$('#item-tbl').toggle();
-    	$('i',this).toggleClass("fa-caret-right fa-caret-down")
+        $('#item-tbl').toggle();
+        $('i',this).toggleClass("fa-caret-right fa-caret-down")
     });
 </script>
 @endsection

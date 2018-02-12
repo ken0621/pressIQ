@@ -87,10 +87,12 @@ class TransactionDebitMemoController extends Member
                 $insert_item[$key]['item_rate']         = str_replace(',', '', $request->item_rate[$key]);
                 $insert_item[$key]['item_discount']     = 0;
                 $insert_item[$key]['item_amount']       = str_replace(',', '', $request->item_amount[$key]);
+                $insert_item[$key]['item_ref_name']     = $request->item_ref_name[$key];
+                $insert_item[$key]['item_ref_id']       = $request->item_ref_id[$key];
             }
         }
-        
         $validate = TransactionDebitMemo::postInsert($this->user_info->shop_id, $insert, $insert_item);
+        TransactionDebitMemo::applied_transaction($validate);
         $return = null;
         if(is_numeric($validate))
         {
@@ -131,6 +133,8 @@ class TransactionDebitMemoController extends Member
                 $insert_item[$key]['item_rate']         = str_replace(',', '', $request->item_rate[$key]);
                 $insert_item[$key]['item_discount']     = 0;
                 $insert_item[$key]['item_amount']       = str_replace(',', '', $request->item_amount[$key]);
+                $insert_item[$key]['item_ref_name']     =$request->item_ref_name[$key];
+                $insert_item[$key]['item_ref_id']       =$request->item_ref_id[$key];
             }
         }
 

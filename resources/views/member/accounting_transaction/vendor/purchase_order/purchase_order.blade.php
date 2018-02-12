@@ -109,6 +109,8 @@
                                         @if(isset($po))
                                             @foreach($_poline as $poline)
                                                 <tr class="tr-draggable">
+                                                    <input type="hidden" name="item_ref_name[]" value="{{$poline->poline_refname}}"></td>
+                                                    <input type="hidden" name="item_ref_id[]" value="{{$poline->poline_refsname}}"></td>
                                                     <td class="invoice-number-td text-right">1</td>
                                                     <td><input type="text" class="for-datepicker" name="item_servicedate[]" value="{{ $poline->poline_service_date != '0000-00-00 00:00:00'? date('m/d/Y',strtotime($poline->poline_service_date)) : ''}}" /></td>
                                                     <td>                                                                            
@@ -146,6 +148,8 @@
                                             @endforeach
                                         @else                                
                                             <tr class="tr-draggable">
+                                                <input type="hidden" name="item_ref_name[]"></td>
+                                                <input type="hidden" name="item_ref_id[]"></td>
                                                 <td class="invoice-number-td text-right">1</td>
                                                 <td><input type="text" class="for-datepicker" name="item_servicedate[]"/></td>
                                                 <td>
@@ -172,6 +176,8 @@
                                             </tr>
                                                 
                                             <tr class="tr-draggable">
+                                                <input type="hidden" name="item_ref_name[]"></td>
+                                                <input type="hidden" name="item_ref_id[]"></td>
                                                 <td class="invoice-number-td text-right">2</td>
                                                 <td><input type="text" class="for-datepicker" name="item_servicedate[]" /></td>
                                                 <td>
@@ -296,6 +302,8 @@
 <div class="div-script">
     <table class="div-item-row-script hide">
         <tr class="tr-draggable">
+            <input type="hidden" name="item_ref_name[]"></td>
+            <input type="hidden" name="item_ref_id[]"></td>
             <td class="invoice-number-td text-right">2</td>
             <td><input type="text" class="for-datepicker"  name="item_servicedate[]"/></td>
             <td>

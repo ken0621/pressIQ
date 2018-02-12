@@ -169,6 +169,7 @@ class WarehouseIssuanceSlipController extends Member
         $data['wis_item'] = WarehouseTransfer::print_wis_item($wis_id);
         $data['user'] = $this->user_info;
         $data['owner'] = WarehouseTransfer::get_warehouse_data($data['wis']->wis_from_warehouse);
+        $data['deliver_to'] = WarehouseTransfer::get_warehouse_data($data['wis']->destination_warehouse_id);
         
         // return view('member.warehousev2.wis.print_wis', $data);
         $pdf = view('member.warehousev2.wis.print_wis', $data);

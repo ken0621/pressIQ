@@ -89,7 +89,6 @@ class TransactionDebitMemoController extends Member
                 $insert_item[$key]['item_amount']       = str_replace(',', '', $request->item_amount[$key]);
             }
         }
-
         
         $validate = TransactionDebitMemo::postInsert($this->user_info->shop_id, $insert, $insert_item);
         $return = null;
@@ -135,7 +134,6 @@ class TransactionDebitMemoController extends Member
             }
         }
 
-        
         $validate = TransactionDebitMemo::postUpdate($debit_memo_id, $this->user_info->shop_id, $insert, $insert_item);
         $return = null;
         if(is_numeric($validate))
@@ -152,13 +150,11 @@ class TransactionDebitMemoController extends Member
         }
         return json_encode($return);
     }
-
     public function getCountTransaction(Request $request)
     {
         $vendor_id = $request->vendor_id;
         return TransactionPurchaseOrder::countOpenPOTransaction($this->user_info->shop_id, $vendor_id);
     }
-
     public function getLoadTransaction(Request $request)
     {
         $data['_po'] = TransactionPurchaseOrder::getOpenPO($this->user_info->shop_id, $request->vendor);
@@ -210,7 +206,6 @@ class TransactionDebitMemoController extends Member
                 }
             }
         }
-
         $data['_po']     = $return;
         $data['remarks'] = $remarks;
         $data['_um']     = UnitMeasurement::load_um_multi();
@@ -218,5 +213,4 @@ class TransactionDebitMemoController extends Member
 
         return view('member.accounting_transaction.vendor.debit_memo.applied_transaction', $data);
     }
-
 }

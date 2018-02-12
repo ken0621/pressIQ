@@ -460,11 +460,9 @@ function debit_memo()
 			    	value = parseFloat(value);
 			    	ret = action_add_comma(value).toLocaleString();
 			    }
-			   	
 			    if(ret == 0){
 			    	ret = '';
 			    }
-
 				return ret;
 			  });
 		});
@@ -486,8 +484,6 @@ function debit_memo()
 	{
 		load_applied_transaction();
 	}
-
-
 }
 
 /*AFTER ADDING VENDOR*/
@@ -513,7 +509,6 @@ function success_item(data)
 		data.element.modal("hide");
 	});
 }
-
 
 function success_debit_memo(data)
 {

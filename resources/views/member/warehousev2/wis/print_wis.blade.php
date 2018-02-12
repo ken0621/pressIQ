@@ -4,6 +4,7 @@
 	<h3>{{strtoupper($owner->warehouse_name)}}</h3>
 	<div>{{ucwords($owner->warehouse_address)}}</div>
     <div>Warehouse Issuance Slip</div>
+    <div><strong> RECEIVER'S CODE : {{ucwords($wis->receiver_code)}}</strong></div>
 </div>
 <table  style="width: 100%">
     <tr>
@@ -11,7 +12,10 @@
         <td class="text-right">{{strtoupper($wis->wis_number)}}</td>
     </tr>
     <tr>
-        <td colspan="5">
+        <td colspan="2"><b>DELIVER TO : {{$deliver_to->warehouse_name}}</b></td>
+    </tr>
+    <tr>
+        <td colspan="2">
             <b>REMARKS : </b>{!! $wis->wis_remarks !!}
         </td>
     </tr>

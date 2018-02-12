@@ -144,8 +144,8 @@
         <div class="col-md-7 padding-lr-1">
           <select class="form-control sub-customer" name="hidden_sub_customer_id">
             <option value="0">Select Customer</option>
-            @foreach($_customer as $customer)
-            <option value="{{$customer->customer_id}}">{{$customer->first_name.' '.$customer->last_name}}</option>
+            @foreach($_customer as $customers)
+            <option value="{{$customers->customer_id}}">{{$customers->first_name.' '.$customers->last_name}}</option>
             @endforeach
           </select>
         </div>
@@ -171,7 +171,7 @@
           <li><a data-toggle="tab" href="#mlm">MLM</a></li>
           <li><a data-toggle="tab" href="#stockist">Stockist</a></li>
           @endif
-          @if ($customer->ismlm == 2)
+          @if ($customer_info->ismlm == 2)
           <li><a data-toggle="tab" href="#ecomm">E-commerce</a></li>
           @endif
         </ul>
@@ -451,7 +451,7 @@
           <div id="mlm" class="tab-pane fade">
             <br>
             <div class="form-horizontal">
-              @if($customer->signup_with == 'member_register')
+              @if($customer_info->signup_with == 'member_register')
               <div class="form-group">
                 <div class="col-md-12">
                   <div class="col-md-12">

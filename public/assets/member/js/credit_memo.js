@@ -115,7 +115,7 @@ function credit_memo(){
 			    	value = value.toFixed(2);
 			    }
 			    if(value != '' && !isNaN(value)){
-			    	value = parseFloat(value);
+			    	//value = parseFloat(value);
 			    	ret = action_add_comma(value).toLocaleString();
 			    }
 			   	

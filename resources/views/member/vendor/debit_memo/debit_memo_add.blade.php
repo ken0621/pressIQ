@@ -126,7 +126,7 @@
                                                             @endif
                                                         </select>
                                                     </td>
-                                                    <td><input class="text-center txt-qty compute" type="text" name="dbline_qty[]" value="{{$dbline->dbline_qty}}" /></td>
+                                                    <td><input class="text-center number-input txt-qty compute" type="text" name="dbline_qty[]" value="{{$dbline->dbline_qty}}" /></td>
                                                     <td><input class="text-right number-input txt-rate compute" type="text" name="dbline_rate[]" value="{{$dbline->dbline_rate}}" /></td>
                                                    <!-- <td><input class="text-right txt-discount compute" type="text" name="dbline_discount[]" value="" /> </td>
                                                     <td><textarea class="textarea-expand" type="text" name="dbline_discount_remark[]" value=""></textarea></td> -->
@@ -162,7 +162,7 @@
                                                     @endif
                                                 </td>
                                                 <td><select class="2222 droplist-um select-um" name="dbline_um[]"><option class="hidden" value="" /></select></td>
-                                                <td><input class="text-center txt-qty compute" type="text" name="dbline_qty[]"/></td>
+                                                <td><input class="text-center number-input txt-qty compute" type="text" name="dbline_qty[]"/></td>
                                                 <td><input class="text-right number-input txt-rate compute" type="text" name="dbline_rate[]"/></td>
                                                <!--  <td><input class="text-right txt-discount compute" type="text" name="dbline_discount[]"/></td>
                                                 <td><textarea class="textarea-expand" type="text" name="dbline_discount_remark[]" ></textarea></td> -->
@@ -192,7 +192,7 @@
                                                     @endif
                                                 </td>
                                                 <td><select class="3333 droplist-um select-um" name="dbline_um[]"><option class="hidden" value="" /></select></td>
-                                                <td><input class="text-center txt-qty compute" type="text" name="dbline_qty[]"/></td>
+                                                <td><input class="text-center number-input txt-qty compute" type="text" name="dbline_qty[]"/></td>
                                                 <td><input class="text-right number-input txt-rate compute" type="text" name="dbline_rate[]"/></td>
                                                <!--  <td><input class="text-right txt-discount compute" type="text" name="dbline_discount[]"/></td>
                                                 <td><input class="text-right number-input" type="text" name="dbline_discount_remark[]"/></td> -->
@@ -317,7 +317,7 @@
             </td>
             <td><textarea class="textarea-expand txt-desc" name="dbline_description[]"></textarea></td>
             <td><select class="select-um" name="dbline_um[]"><option class="hidden" value="" /></select></td>
-            <td><input class="text-center txt-qty compute" type="text" name="dbline_qty[]"/></td>
+            <td><input class="text-center number-input txt-qty compute" type="text" name="dbline_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="dbline_rate[]"/></td>
     <!--         <td><input class="text-right txt-discount compute" type="text" name="dbline_discount[]"/></td>
             <td><textarea class="textarea-expand" type="text" name="dbline_discount_remark[]" ></textarea></td> -->

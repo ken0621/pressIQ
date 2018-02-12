@@ -115,8 +115,8 @@ function debit_memo(){
 			    	value = value.toFixed(2);
 			    }
 			    if(value != '' && !isNaN(value)){
-			    	value = parseFloat(value);
-			    	value = value.toFixed(2);//den
+			    	//value = parseFloat(value);
+			    	//value = value.toFixed(2);//den
 			    	ret = action_add_comma(value).toLocaleString();
 			    }
 			   	

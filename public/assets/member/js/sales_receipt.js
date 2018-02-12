@@ -47,7 +47,7 @@ function sales_receipt(){
 			    }
 			    if(value != '' && !isNaN(value)){
 			    	console.log(value);
-			    	value = parseFloat(value);
+			    	//value = parseFloat(value);
 			    	console.log(value);
 			    	ret = action_add_comma(value).toLocaleString();
 			    	console.log(ret);

@@ -187,8 +187,7 @@ function customer_invoice()
 			    	value = value.toFixed(2);
 			    }
 			    if(value != '' && !isNaN(value)){
-			    	value = parseFloat(value);
-			    	value = value.toFixed(2);
+			    	//value = parseFloat(value);
 			    	ret = action_add_comma(value).toLocaleString();
 			    }
 

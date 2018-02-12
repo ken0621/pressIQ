@@ -235,7 +235,7 @@
                                                                     @endif
                                                                 </select>
                                                             </td>
-                                                            <td><input class="text-center txt-qty compute" type="text" value="{{$item->itemline_qty}}" name="itemline_qty[]"/></td>
+                                                            <td><input class="text-center number-input txt-qty compute" type="text" value="{{$item->itemline_qty}}" name="itemline_qty[]"/></td>
                                                             <td><input class="text-right number-input txt-rate compute" type="text" value="{{$item->itemline_rate}}" name="itemline_rate[]"/></td>
                                                             <td><input class="text-right number-input txt-amount" type="text" value="{{$item->itemline_amount}}" name="itemline_amount[]"/></td>
                                                             @if(isset($serial)) 
@@ -272,7 +272,7 @@
                                                             @endif
                                                         </td>
                                                         <td><select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
-                                                        <td><input class="text-center txt-qty compute" type="text" name="itemline_qty[]"/></td>
+                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
                                                         <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
                                                         @include("member.load_ajax_data.load_td_serial_number")
@@ -356,7 +356,7 @@
                 @endif
             </td>
             <td><select class="2222 select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
-            <td><input class="text-center txt-qty compute" type="text" name="itemline_qty[]"/></td>
+            <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
             <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
             @include("member.load_ajax_data.load_td_serial_number")

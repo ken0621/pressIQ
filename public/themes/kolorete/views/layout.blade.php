@@ -109,23 +109,21 @@
                                         <span class="title">CATEGORIES</span><i id="close-menu" class="fa fa-times" aria-hidden="true"></i>
                                     </div>
 
-                                    {{-- @if(isset($_categories))
-                                        @foreach($_categories as $category)
+                                    @if(count($_category) > 0)
+                                        @foreach($_category as $category)
                                             <li><a href="/product?type={{ $category['type_id'] }}">{{ $category['type_name'] }}</a>
                                                 @if($category['subcategory'])
                                                     <ul class="sub-menu">
-                                                        <li><a href="#">Mobile and Gadget</a></li>
+                                                        @foreach($category['subcategory'] as $subcategory)
+                                                        <li><a href="/product?type={{ $subcategory['type_id'] }}">{{ $subcategory['type_name'] }}</a></li>
                                                         <div class="divider"></div>
-                                                        <li><a href="#">Consumer Electronic</a></li>
-                                                        <div class="divider"></div>
-                                                        <li><a href="#">Home and Living</a></li>
-                                                        <div class="divider"></div>
+                                                        @endforeach
                                                     </ul>
                                                 @endif
                                             </li>
                                             <div class="divider"></div>
                                         @endforeach
-                                    @else --}}
+                                    @else
                                         <li><a href="#">Men's Apparel</a>
                                             <ul class="sub-menu">
                                                 <li><a href="#">Mobile and Gadget</a></li>
@@ -174,7 +172,7 @@
                                         <li><a href="#">Bags</a></li>
                                         <div class="divider"></div>
                                         <li><a href="#">Women's Accessories</a></li>
-                                    {{-- @endif --}}
+                                    @endif
                                 </ul>
                             </div>
                         </div>

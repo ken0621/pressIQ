@@ -181,6 +181,10 @@ class Cart2
 				$return = "Item Already consumed or used.";
 			}
 		}
+		else
+		{
+			$return = "Item doesn't exist.";
+		}
 		return $return;
 	}
 

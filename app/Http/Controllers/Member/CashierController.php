@@ -151,6 +151,7 @@ class CashierController extends Member
     }
     public function pos_scan_item()
     {
+        $val = 0;
         $data["shop_id"]    = $shop_id = $this->user_info->shop_id;
         $data["item_id"]    = $item_id = Request::input("item_id");
         $data["item"]       = $item = Cart2::scan_item($data["shop_id"], $data["item_id"]);
@@ -162,7 +163,6 @@ class CashierController extends Member
             $item_id = $val;
         }
 
-        $val = 0;
         if(!$data['item'])
         {
             $warehouse_id = Warehouse2::get_current_warehouse($shop_id);

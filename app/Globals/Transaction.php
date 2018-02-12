@@ -540,8 +540,8 @@ class Transaction
                 {
                     $chck = Tbl_customer_address::where('customer_id', $data->transaction_reference_id)
                                                 ->where("purpose", "shipping")
-                                                ->orWhere("purpose", "permanent")
-                                                ->orWhere("purpose", "billing")
+                                                // ->orWhere("purpose", "permanent")
+                                                // ->orWhere("purpose", "billing")
                                                 ->first();
                     if($chck)
                     {

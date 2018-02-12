@@ -183,7 +183,7 @@ class Cart2
 		}
 		else
 		{
-			$return = "Item doesn't exist.";
+			$return = "Item doesn't exist in this warehouse.";
 		}
 		return $return;
 	}

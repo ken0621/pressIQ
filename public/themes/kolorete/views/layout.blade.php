@@ -108,8 +108,10 @@
                                     <div class="categories-header">
                                         <span class="title">CATEGORIES</span><i id="close-menu" class="fa fa-times" aria-hidden="true"></i>
                                     </div>
-
-                                    @if(count($_category) > 0)
+                                    
+                                    @if(isset($_category))
+                                        <li><a href="/product">All</a></li>
+                                        <div class="divider"></div>
                                         @foreach($_category as $category)
                                             <li><a href="/product?type={{ $category['type_id'] }}">{{ $category['type_name'] }}</a>
                                                 @if($category['subcategory'])

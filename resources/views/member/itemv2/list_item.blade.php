@@ -14,7 +14,7 @@
 
             <div class="dropdown pull-right">
                 @if($shop_id == 87)
-                <button onclick="action_load_link_to_modal('/member/item/token/add-token', 'md')" class="btn btn-primary"><i class="fa fa-plus-circle"></i> New Token</button>
+                <button onclick="action_load_link_to_modal('/member/item/token/token-list', 'md')" class="btn btn-primary"><i class="fa fa-cogs"></i> Tokens</button>
                 @endif
                 <button link="/member/item/v2/columns" size="md" class="btn btn-def-white btn-custom-white popup"><i class="fa fa-gear"></i> Columns</button>
                 <button onclick="action_load_link_to_modal('/member/item/v2/add', 'lg')" class="btn btn-primary"><i class="fa fa-plus"></i> New Item</button>

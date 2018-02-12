@@ -32,4 +32,8 @@ Route::group(array('prefix' => '/member/item/'), function()
 	Route::get('/token/add-token','Member\ItemControllerV2@add_token');
 	Route::post('/token/add-token','Member\ItemControllerV2@add_token_submit');
 	Route::get('/token/token-list','Member\ItemControllerV2@get_token_list');
+	Route::get('/token/token-list-table','Member\ItemControllerV2@token_list_table');
+	Route::get('/token/archived','Member\ItemControllerV2@token_list_archived');
+	Route::get('/token/update-token','Member\ItemControllerV2@update_token');
+	Route::post('/token/update-token','Member\ItemControllerV2@update_token_submit');
 });

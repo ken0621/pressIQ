@@ -28,11 +28,14 @@
 				{{ csrf_field() }}
 				<input type="hidden" class="hidden_slot_no" name="slot_no">
 				<div class="holder">
-				  	<img src="{{captcha_src()}}"><br><br>
-					<input type="text" name="captcha" placeholder="Captcha" autocomplete="off">
-				  	<div style="margin-top: 10px;">
-				  		<button class="btn btn-primary btn-custom-primary submit-captcha" type="submit">Submit</button>
-				  		<span class="count-holder"></span>
+					<div class="col-md-4"></div>
+				  	<div class="form-group col-md-4 ">
+				  		<img src="{{captcha_src()}}">
+						<input style="margin-top: 10px" class="form-control" type="text" name="captcha" placeholder="Captcha" autocomplete="off">
+				  		<div style="margin-top: 10px;">
+					  		<button class="btn btn-primary btn-custom-primary submit-captcha" type="submit">Submit</button>
+					  		<span class="count-holder"></span>
+					  	</div>
 				  	</div>
 				</div>
 			</form>	

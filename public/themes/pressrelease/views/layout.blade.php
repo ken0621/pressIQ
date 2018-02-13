@@ -75,7 +75,7 @@
                     <div class="subhead-btn">Log out</div>
                 </span>
                 @else
-                <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/sign_up'">Register</span>
+               {{--  <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/sign_up'">Register</span> --}}
                 <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/signin'">
                     <div class="subhead-btn">Log in</div>
                 </span>

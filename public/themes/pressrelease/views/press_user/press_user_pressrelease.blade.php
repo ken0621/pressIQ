@@ -6,7 +6,7 @@
    <div class="pressview">
       <div class="dashboard-container">
           @if (session('message'))
-            <div class="alert alert-success">
+            <div class="alert alert-danger">
                 {{ session('message') }}
             </div>
           @endif
@@ -24,7 +24,7 @@
         
                 <div id="create_release" class="tabcontent create-release-container">
 
-                  @if(session()->has('message'))
+                  @if(session()->has('message_alert'))
                   <div class="details">
                   <span style="color: red;">
                     <strong>Error!</strong> {{ session('message') }}<br>

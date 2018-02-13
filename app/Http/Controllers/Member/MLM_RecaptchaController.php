@@ -60,8 +60,8 @@ class MLM_RecaptchaController extends Member
         {
             if(count($setting_points)>0)
             {
-                $update['point']    = number_format($setting_points->point,3);
-                $update['max']      = number_format($setting_points->max,3);
+                $update['point']    = number_format($request->point,3);
+                $update['max']      = number_format($request->max,3);
                 $update['schedule'] = $request->schedule;
                 Tbl_recaptcha_setting::where('shop_id',$this->user_info->shop_id)->update($update);
                 $response['call_function'] = 'setting_update';

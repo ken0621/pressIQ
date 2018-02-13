@@ -48,7 +48,7 @@
         recaptcha.action_load_points();
         data.element.modal('hide');
     }
-    function setting_update(data)
+    function setting_created(data)
     {
         toastr.success('Setting created');
         recaptcha.action_load_points();

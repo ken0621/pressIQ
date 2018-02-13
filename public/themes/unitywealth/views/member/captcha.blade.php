@@ -29,7 +29,7 @@
 				<input type="hidden" class="hidden_slot_no" name="slot_no">
 				<div class="holder">
 				  	<img src="{{captcha_src()}}"><br><br>
-					<input type="text" name="captcha" placeholder="Captcha">
+					<input type="text" name="captcha" placeholder="Captcha" autocomplete="off">
 				  	<div style="margin-top: 10px;">
 				  		<button class="btn btn-primary btn-custom-primary submit-captcha" type="submit">Submit</button>
 				  		<span class="count-holder"></span>

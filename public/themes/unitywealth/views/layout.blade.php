@@ -96,11 +96,15 @@
                 @if($mlm_member)
                 {{-- <li> <a href="javascript:">Videos</a> </li> --}}
                 <li class="{{ Request::segment(2) == "products" ? "active" : "" }}"> <a href="/members/ebooks"><i class="fa fa-book" aria-hidden="true"></i> Ebooks</a> </li>
-                <li class="{{ Request::segment(2) == "products" ? "active" : "" }}"> <a href="/members/videos"><i class="fa fa-play" aria-hidden="true"></i> Products</a> </li>
+                {{-- <li class="{{ Request::segment(2) == "products" ? "active" : "" }}"> <a href="/members/videos"><i class="fa fa-play" aria-hidden="true"></i> Products</a> </li> --}}
                 <li class="{{ Request::segment(2) == "certificate" ? "active" : "" }}"> <a href="/members/certificate"><i class="fa fa-certificate" aria-hidden="true"></i> Certificate</a> </li>
                 <li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}"> <a href="/members/genealogy?mode=sponsor"><i class="fa brown-icon-flow-tree" aria-hidden="true"></i> Genealogy</a> </li>
                 <li class="{{ Request::segment(2) == "report" ? "active" : "" }}"> <a href="/members/report"><i class="fa brown-icon-bar-chart" aria-hidden="true"></i> Reports</a> </li>
                 <li class="{{ Request::segment(2) == "lead-list" ? "active" : "" }}"> <a href="/members/lead-list"><i class="fa brown-icon-heart" aria-hidden="true"></i> Lead List</a> </li>
+                <li class="{{ Request::segment(2) == "codevault" ? "active" : "" }}"> <a href="/members/codevault"><i class="fa fa-code" aria-hidden="true"></i> Code Vault </li>
+                @if($allow_captcha)
+                    <li class="{{ Request::segment(2) == "captcha" ? "active" : "" }}"> <a href="/members/captcha"><i class="fa fa-recycle" aria-hidden="true"></i> Captcha </li>
+                @endif
                 <li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}"> <a href="/members/wallet-encashment"><i class="fa brown-icon-wallet" aria-hidden="true"></i> Wallet</a> </li>
                     @if($customer)
                         <li class="user-logout"> <a href="/members/logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></a> </li>

@@ -31,7 +31,7 @@
 					<div class="col-md-4"></div>
 				  	<div class="form-group col-md-4 ">
 				  		<img src="{{captcha_src()}}">
-						<input style="margin-top: 10px" class="form-control" type="text" name="captcha" placeholder="Captcha" autocomplete="off">
+						<input style="margin-top: 10px" class="form-control" type="text" name="captcha" placeholder="Captcha" autocomplete="off" required>
 				  		<div style="margin-top: 10px;">
 					  		<button class="btn btn-primary btn-custom-primary submit-captcha" type="submit">Submit</button>
 					  		<span class="count-holder"></span>
@@ -51,7 +51,7 @@
 	@if(Session::get("response")=='success')
     toastr.success("Success");
     @elseif(Session::get("response")=='error')
-    toastr.error("Error");
+    toastr.error("Please wait for 20 seconds");
     @elseif(Session::get("response")=='no_points')
     toastr.error("No More Wallet Available");
     @elseif(Session::get("response")=='wrong')

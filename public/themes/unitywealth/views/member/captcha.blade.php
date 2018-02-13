@@ -51,6 +51,8 @@
     toastr.error("Error");
     @elseif(Session::get("response")=='no_points')
     toastr.error("No More Wallet Available");
+    @elseif(Session::get("response")=='wrong')
+    toastr.error("Invalid Captcha");
     @endif
 
     @if(Session::get("response"))

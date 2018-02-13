@@ -211,10 +211,26 @@ class Payroll2
 	{
 		$month_number = $month;
 		$month = DateTime::createFromFormat('!m', $month)->format('F');
-		$data["_employee"] = Tbl_payroll_period::getContributions_filter($shop_id, $month, $year,$company_id)->get();
+
+		$checkcompany = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+
+		$branchcompany = array();
+		if($checkcompany['payroll_parent_company_id'] == 0)
+		{
+			$tempbranchcompany = Tbl_payroll_company::where('payroll_parent_company_id',$checkcompany['payroll_company_id'])->get();
+
+			foreach($tempbranchcompany as $branch)
+			{
+				$temp['payroll_company_id'] = $branch['payroll_company_id'];
+				array_push($branchcompany,$temp);
+			}
+		}
+
+		$data["_employee"] = Tbl_payroll_period::getContributions_filter($shop_id, $month, $year,$company_id,$branchcompany)->get();
+
 
 		$_contribution = null;
-		$count = 0;
+		$count = 1;
 
 		$grand_total_pagibig_ee 	= 0;
 		$grand_total_pagibig_er 	= 0;
@@ -228,13 +244,12 @@ class Payroll2
 		$grand_total_philhealth_ee 	  	= 0;
 		$grand_total_philhealth_er 		= 0;
 		$grand_total_philhealth_ee_er 	= 0;
-		
+		$employeecheck 					= array();
+
 		foreach($data["_employee"] as $key => $employee)
 		{
-
-				if(!isset($_contribution[$employee->employee_id]))
+				if(count($employeecheck) == 0)
 				{
-					$count++;
 					$period_count_contribution = 1;
 
 					$total_pagibig_ee = $employee->pagibig_ee;
@@ -246,88 +261,109 @@ class Payroll2
 
 					$total_philhealth_ee = $employee->philhealth_ee;
 					$total_philhealth_er = $employee->philhealth_er;
+
+					$temp['employee_id'] = $employee->employee_id;
+					array_push($employeecheck,$temp);
+					
 				}
 				else
 				{
-					$period_count_contribution = $_contribution[$employee->employee_id]->period_count_contribution + 1;
-					$total_pagibig_ee += $employee->pagibig_ee;
-					$total_pagibig_er += $employee->pagibig_er;
 
-					$total_sss_ee += $employee->sss_ee;
-					$total_sss_er += $employee->sss_er;
-					$total_sss_ec += $employee->sss_ec;
+					if(in_array($employee->employee_id, $employeecheck))
+					{
+						$period_count_contribution = $_contribution[$employee->employee_id]->period_count_contribution + 1;
+						$total_pagibig_ee += $employee->pagibig_ee;
+						$total_pagibig_er += $employee->pagibig_er;
 
-					$total_philhealth_ee += $employee->philhealth_ee;
-					$total_philhealth_er += $employee->philhealth_er;
+						$total_sss_ee += $employee->sss_ee;
+						$total_sss_er += $employee->sss_er;
+						$total_sss_ec += $employee->sss_ec;
+
+						$total_philhealth_ee += $employee->philhealth_ee;
+						$total_philhealth_er += $employee->philhealth_er;
+					}
+					else
+					{
+						$total_pagibig_ee = $employee->pagibig_ee;
+						$total_pagibig_er = $employee->pagibig_er;
+
+						$total_sss_ee = $employee->sss_ee;
+						$total_sss_er = $employee->sss_er;
+						$total_sss_ec = $employee->sss_ec;
+
+						$total_philhealth_ee = $employee->philhealth_ee;
+						$total_philhealth_er = $employee->philhealth_er;
+					}
 				}
 
-				$total_pagibig_ee_er 	= $total_pagibig_ee + $total_pagibig_er;
-				$total_sss_ee_er 		= $total_sss_ee + $total_sss_er + $total_sss_ec;
-				$total_philhealth_ee_er = $total_philhealth_ee + $total_philhealth_er;
+				if(count($employeecheck) != 0)
+				{
+					$total_pagibig_ee_er = $total_pagibig_ee + $total_pagibig_er;
+					$total_sss_ee_er = $total_sss_ee + $total_sss_er + $total_sss_ec;
+					$total_philhealth_ee_er = $total_philhealth_ee + $total_philhealth_er;
 
-				/* INFORMATION EMPLOYEE CONTRIBUTION */
-				$_contribution[$employee->employee_id] = new stdClass();
-				$_contribution[$employee->employee_id]->count = $count;
+					/* INFORMATION EMPLOYEE CONTRIBUTION */
+					$_contribution[$employee->employee_id] = new stdClass();
+					$_contribution[$employee->employee_id]->count = $count;
+					$_contribution[$employee->employee_id]->period_count_contribution = $period_count_contribution;
+					$_contribution[$employee->employee_id]->employee_id = $employee->employee_id;
+					$temp['employee_id'] = $employee->employee_id;
+					array_push($employeecheck,$temp);
+					$_contribution[$employee->employee_id]->payroll_employee_pagibig = ($employee->payroll_employee_pagibig == "" ? "N/A" : $employee->payroll_employee_pagibig);
+					$_contribution[$employee->employee_id]->payroll_employee_sss = ($employee->payroll_employee_sss == "" ? "N/A" : $employee->payroll_employee_sss);
+					$_contribution[$employee->employee_id]->payroll_employee_philhealth = ($employee->payroll_employee_philhealth == "" ? "N/A" : $employee->payroll_employee_philhealth);
 
-				$_contribution[$employee->employee_id]->period_count_contribution 	= $period_count_contribution;
-				$_contribution[$employee->employee_id]->employee_id 			  	= $employee->employee_id;
 
-				$_contribution[$employee->employee_id]->payroll_employee_pagibig 	= ($employee->payroll_employee_pagibig == "" ? "N/A" : $employee->payroll_employee_pagibig);
-				$_contribution[$employee->employee_id]->payroll_employee_sss 	 	= ($employee->payroll_employee_sss == "" ? "N/A" : $employee->payroll_employee_sss);
-				$_contribution[$employee->employee_id]->payroll_employee_philhealth = ($employee->payroll_employee_philhealth == "" ? "N/A" : $employee->payroll_employee_philhealth);
+					$_contribution[$employee->employee_id]->account_number = $employee->employee_id;
+					$_contribution[$employee->employee_id]->membership_program = $employee->employee_id;
+					$_contribution[$employee->employee_id]->payroll_employee_last_name = strtoupper($employee->payroll_employee_last_name);
+					$_contribution[$employee->employee_id]->payroll_employee_first_name = strtoupper($employee->payroll_employee_first_name);
+					$_contribution[$employee->employee_id]->payroll_employee_suffix_name = $employee->payroll_employee_suffix_name == "" ? "N/A" : strtoupper($employee->payroll_employee_suffix_name);
+					$_contribution[$employee->employee_id]->payroll_employee_middle_name = ($employee->payroll_employee_middle_name == "" ? "N/A" : strtoupper($employee->payroll_employee_middle_name));
+					$_contribution[$employee->employee_id]->period_covered 	= $month_number . "/" . $year;
+					$_contribution[$employee->employee_id]->monthly_compensation = 0;
+					
+					$_contribution[$employee->employee_id]->total_pagibig_ee = $total_pagibig_ee;
+					$_contribution[$employee->employee_id]->total_pagibig_er = $total_pagibig_er;
+					$_contribution[$employee->employee_id]->total_pagibig_ee_er = $total_pagibig_ee_er;
 
+					if($total_pagibig_ee == 0)
+					{
+						$data["pagibig"] = Tbl_payroll_period::GetContributions_employee($shop_id, $month, $year,$employee->employee_id)->get();
+						foreach($data["pagibig"] as $key => $pagibig)
+						{
+							if($pagibig->pagibig_ee != 0)
+							{
+								$_contribution[$employee->employee_id]->total_pagibig_ee = $pagibig->pagibig_ee;
+								$_contribution[$employee->employee_id]->total_pagibig_er = $pagibig->pagibig_er;
+								$_contribution[$employee->employee_id]->total_pagibig_ee_er = $pagibig->pagibig_ee + $pagibig->pagibig_er;
+							}
+							
+						}
+					}
 
-				$_contribution[$employee->employee_id]->account_number 				 = $employee->employee_id;
-				$_contribution[$employee->employee_id]->membership_program 		     = $employee->employee_id;
-				$_contribution[$employee->employee_id]->payroll_employee_last_name 	 = strtoupper($employee->payroll_employee_last_name);
-				$_contribution[$employee->employee_id]->payroll_employee_first_name  = strtoupper($employee->payroll_employee_first_name);
-				$_contribution[$employee->employee_id]->payroll_employee_suffix_name = $employee->payroll_employee_suffix_name == "" ? "N/A" : strtoupper($employee->payroll_employee_suffix_name);
-				$_contribution[$employee->employee_id]->payroll_employee_middle_name = ($employee->payroll_employee_middle_name == "" ? "N/A" : strtoupper($employee->payroll_employee_middle_name));
-				$_contribution[$employee->employee_id]->period_covered 				 = $month_number . "/" . $year;
-				$_contribution[$employee->employee_id]->monthly_compensation 		 = 0;
+					$_contribution[$employee->employee_id]->total_sss_ee = $total_sss_ee;
+					$_contribution[$employee->employee_id]->total_sss_er = $total_sss_er;
+					$_contribution[$employee->employee_id]->total_sss_ec = $total_sss_ec;
+					$_contribution[$employee->employee_id]->total_sss_ee_er = $total_sss_ee_er;
 
-				$_contribution[$employee->employee_id]->total_pagibig_ee = $total_pagibig_ee;
-				$_contribution[$employee->employee_id]->total_pagibig_er = $total_pagibig_er;
-				$_contribution[$employee->employee_id]->total_pagibig_ee_er = $total_pagibig_ee_er;
+					$_contribution[$employee->employee_id]->total_philhealth_ee = $total_philhealth_ee;
+					$_contribution[$employee->employee_id]->total_philhealth_er = $total_philhealth_er;
+					$_contribution[$employee->employee_id]->total_philhealth_ee_er = $total_philhealth_ee_er;
+				
+					$grand_total_pagibig_ee 	+= $employee->pagibig_ee;
+					$grand_total_pagibig_er 	+= $employee->pagibig_er;
+					$grand_total_pagibig_ee_er 	+= $employee->pagibig_ee + $employee->pagibig_er;
 
-				$_contribution[$employee->employee_id]->total_sss_ee = $total_sss_ee;
-				$_contribution[$employee->employee_id]->total_sss_er = $total_sss_er;
-				$_contribution[$employee->employee_id]->total_sss_ec = $total_sss_ec;
-				$_contribution[$employee->employee_id]->total_sss_ee_er = $total_sss_ee_er;
+					$grand_total_sss_ee 	+= $employee->sss_ee;
+					$grand_total_sss_er 	+= $employee->sss_er;
+					$grand_total_sss_ec 	+= $employee->sss_ec;
+					$grand_total_sss_ee_er 	+= $employee->sss_ee + $employee->sss_er + $employee->sss_ec;
 
-				$_contribution[$employee->employee_id]->total_philhealth_ee = $total_philhealth_ee;
-				$_contribution[$employee->employee_id]->total_philhealth_er = $total_philhealth_er;
-				$_contribution[$employee->employee_id]->total_philhealth_ee_er = $total_philhealth_ee_er;
-
-				/*removed changes to down
-				$grand_total_pagibig_ee += $total_pagibig_ee;
-				$grand_total_pagibig_er += $total_pagibig_er;
-				$grand_total_pagibig_ee_er += $total_pagibig_ee_er;
-
-				$grand_total_sss_ee += $total_sss_ee;
-				$grand_total_sss_er += $total_sss_er;
-				$grand_total_sss_ec += $total_sss_ec;
-				$grand_total_sss_ee_er += $total_sss_ee_er;
-
-				$grand_total_philhealth_ee += $total_philhealth_ee;
-				$grand_total_philhealth_er += $total_philhealth_er;
-				$grand_total_philhealth_ee_er += $total_philhealth_ee_er;
-				*/
-
-				/*changes to the top*/
-
-				$grand_total_pagibig_ee 	+= $employee->pagibig_ee;
-				$grand_total_pagibig_er 	+= $employee->pagibig_er;
-				$grand_total_pagibig_ee_er 	+= $employee->pagibig_ee + $employee->pagibig_er;
-
-				$grand_total_sss_ee 	+= $employee->sss_ee;
-				$grand_total_sss_er 	+= $employee->sss_er;
-				$grand_total_sss_ec 	+= $employee->sss_ec;
-				$grand_total_sss_ee_er 	+= $employee->sss_ee + $employee->sss_er + $employee->sss_ec;
-
-				$grand_total_philhealth_ee 		+= $employee->philhealth_ee;
-				$grand_total_philhealth_er 		+= $employee->philhealth_er;
-				$grand_total_philhealth_ee_er 	+= $employee->philhealth_ee + $employee->philhealth_er;
+					$grand_total_philhealth_ee 		+= $employee->philhealth_ee;
+					$grand_total_philhealth_er 		+= $employee->philhealth_er;
+					$grand_total_philhealth_ee_er 	+= $employee->philhealth_ee + $employee->philhealth_er;
+				}
 			
 		}
 		

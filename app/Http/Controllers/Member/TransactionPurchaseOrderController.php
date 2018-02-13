@@ -144,12 +144,11 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_discount']    = str_replace(',', '', $request->item_discount[$key]);
                 $insert_item[$key]['item_remark']      = $request->item_remark[$key];
                 $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
-                $insert_item[$key]['item_taxable']     = $request->item_taxable[$key];
+                $insert_item[$key]['item_taxable']     = isset($request->item_taxable[$key])? $request->item_taxable[$key] : 0;
                 $insert_item[$key]['item_ref_name']    = $request->item_ref_name[$key];
                 $insert_item[$key]['item_ref_id']      = $request->item_ref_id[$key];
             }
         }
-
         $validate = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
         TransactionPurchaseOrder::applied_transaction($this->user_info->shop_id, $validate);
 
@@ -205,7 +204,7 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_discount']    = str_replace(',', '', $request->item_discount[$key]);
                 $insert_item[$key]['item_remark']      = $request->item_remark[$key];
                 $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
-                $insert_item[$key]['item_taxable']     = $request->item_taxable[$key];
+                $insert_item[$key]['item_taxable']     = isset($request->item_taxable[$key])? $request->item_taxable[$key] : 0;
                 $insert_item[$key]['item_ref_name']    = $request->item_ref_name[$key];
                 $insert_item[$key]['item_ref_id']      = $request->item_ref_id[$key];
             }

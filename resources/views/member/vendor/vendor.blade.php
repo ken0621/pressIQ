@@ -28,7 +28,7 @@
             <div class="col-md-4 col-md-offset-8" style="padding: 10px">
                 <div class="input-group">
                     <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                    <input type="text" class="form-control vendor-search" data-value="1" placeholder="Search by vendor Name" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control vendor-search" name='search' data-value="1" placeholder="Search by vendor Name" aria-describedby="basic-addon1">
                 </div>
             </div>  
         </div>

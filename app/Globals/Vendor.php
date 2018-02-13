@@ -44,7 +44,6 @@ class Vendor
 				$data->where("archived", 1);
 				break;
 		}
-
 		return $data->get()->toArray();
 	}
 	public static function ins_vendor($info)
@@ -72,6 +71,27 @@ class Vendor
 	public static function getVendor($shop_id, $vendor_id)
 	{
 		return Tbl_vendor::where('vendor_shop_id', $shop_id)->where('vendor_id', $vendor_id)->first();
+	}
+	public static function search_get($shop_id, $keyword = '')
+	{
+		$return = Tbl_vendor::where('shop_id', $shop_id);
+
+		if($keyword != '')
+		{
+			$return = Tbl_vendor::where('shop_id', $shop_id);
+
+			$return->where(function($q) use ($keyword)
+            {
+                $q->orWhere("tbl_vendor.vendor_first_name", "LIKE", "%$keyword%");
+                $q->orWhere("tbl_vendor.vendor_last_name", "LIKE", "%$keyword%");
+                $q->orWhere("tbl_vendor.vendor_middle_name", "LIKE", "%$keyword%");
+                $q->orWhere("tbl_vendor.vendor_company", "LIKE", "%$keyword%");
+            });
+		}
+		
+		$return = $return->groupBy('tbl_vendor.vendor_id')->orderBy("tbl_vendor.vendor_company",'ASC')->get();
+
+		return $return;
 	}
 
 }

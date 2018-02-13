@@ -9,9 +9,9 @@
             <h1>
                 <span class="page-title">CREATE - Warehouse Transfer</span>
             </h1>
-             <div class="dropdown pull-right">
+            <div class="dropdown pull-right">
                 <div>
-                    <a class="btn btn-custom-white" href="/member/customer/wis">Cancel</a>
+                    <a class="btn btn-custom-white" href="/member/item/warehouse/wis">Cancel</a>
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
                     <span class="caret"></span></button>
                     <ul class="dropdown-menu  dropdown-menu-custom">

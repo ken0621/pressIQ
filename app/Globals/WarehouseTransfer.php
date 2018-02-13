@@ -231,6 +231,10 @@ class WarehouseTransfer
 
 		return $return_item;
 	}
+	public static function get_wis_itemline($wis_id)
+	{
+		return Tbl_warehouse_issuance_report_itemline::where("wt_wis_id", $wis_id)->get();
+	}
 	public static function get_rr_data($rr_id)
 	{
 		return Tbl_warehouse_receiving_report::where('rr_id',$rr_id)->first();

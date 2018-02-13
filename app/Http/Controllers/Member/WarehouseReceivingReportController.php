@@ -9,6 +9,7 @@ use App\Globals\Warehouse2;
 use App\Globals\WarehouseTransfer;
 use App\Globals\AccountingTransaction;
 use App\Globals\Pdf_global;
+use App\Globals\Item;
 
 use Session;
 use Carbon\Carbon;
@@ -53,24 +54,16 @@ class WarehouseReceivingReportController extends Member
             return redirect('/member/item/warehouse/rr/receive-inventory');
         }
     }
-    public function getReceiveInventory()
+    public function getReceiveInventory(Request $request, $wis_id)
     {
-        $check = WarehouseTransfer::get_wis_data(Session::get('wis_id'));
-        if($check)
-        {
-            $wis_id = Session::get('wis_id');
+        $data['wis']        = WarehouseTransfer::get_wis_data($wis_id);
+        $data['wis_item']   = WarehouseTransfer::get_wis_itemline($wis_id);
+        $data['_item']      = Item::get_all_category_item([1,4,5]);
+        $data['_um']        = UnitMeasurement::load_um_multi();
 
-            $data['wis'] = WarehouseTransfer::get_wis_data($wis_id);
-            $data['wis_item'] = WarehouseTransfer::get_wis_item($wis_id);
-
-            $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'receiving_report');
-            
-            return view('member.warehousev2.rr.rr_receive_inventory',$data);
-        }
-        else
-        {
-            return redirect('/member/item/warehouse/rr');
-        }
+        $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'receiving_report');
+        
+        return view('member.warehousev2.rr.rr_receive_inventory',$data);
     }
     public function postReceiveInventorySubmit(Request $request)
     {

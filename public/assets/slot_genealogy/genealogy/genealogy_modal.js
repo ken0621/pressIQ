@@ -20,10 +20,17 @@ function genealogy_modal()
 		event_radio_change();
 		event_verify_sponsor();
 		action_verify_submit();
+		action_hide_new_and_exist();
 	}
 	function select2()
 	{
 		$('.code-vault').select2();
+		$('.lead-list').select2();
+	}
+	function action_hide_new_and_exist()
+	{
+		$('.new-user').hide();
+	    $('.exist-user').hide();
 	}
 	function action_verify_submit()
 	{
@@ -217,10 +224,17 @@ function genealogy_modal()
 	        if(this.value == 'new')
 	        {
 	        	$('.new-user').slideDown();
+	        	$('.exist-user').slideUp();
+	        }
+	        else if(this.value == 'exist')
+	        {
+	        	$('.exist-user').slideDown();
+	        	$('.new-user').slideUp();
 	        }
 	        else
 	        {
 	        	$('.new-user').slideUp();
+	        	$('.exist-user').slideUp();
 	        }
 	    });
 	}

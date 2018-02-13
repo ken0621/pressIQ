@@ -138,7 +138,18 @@ class MemberSlotGenealogy
                             ->where("tbl_transaction.shop_id",$shop_id)
                             ->get();
         $data['shop_id'] = $shop_id;
+        $leads = Tbl_customer::where('customer_lead',$slot_id)->get();
+        foreach($leads as $key => $lead)
+        {
+            $slot = Tbl_mlm_slot::where('slot_owner',$lead->customer_id)->get();
+            if(count($slot)>0)
+            {
+                unset($leads[$key]);
+            }
+        }
+        $data['leads'] = $leads;
         $data['country'] = Tbl_country::get();
+
         return $data;
     }
     public static function downline($x = 0, $mode = '')

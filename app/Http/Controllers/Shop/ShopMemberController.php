@@ -2993,6 +2993,12 @@ class ShopMemberController extends Shop
             $new_customer_info = Tbl_customer::where('customer_id',$customer_id)->first();
             $slot_no     = Self::generate_slot_no_based_on_name($new_customer_info->first_name, $new_customer_info->last_name);
         }
+        if($request->owner == 'exist')
+        {
+            $customer_id = $request->leadlist;
+            $customer_info = Tbl_customer::where('customer_id',$customer_id)->first();
+            $slot_no     = Self::generate_slot_no_based_on_name($new_customer_info->first_name, $new_customer_info->last_name);
+        }
 
         $slot_id        = MLM2::create_slot($shop_id,$customer_id,$membership,$sponsor,$slot_no);
         $distributed['distributed'] = 1;

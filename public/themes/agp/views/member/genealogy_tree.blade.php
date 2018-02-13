@@ -61,7 +61,18 @@
                     <div class="holder">
                         <label>Choose Owner</label>
                         <input type="radio" class="btn-radio" name="owner" value="self" checked="checked"> Your Account<br>
-                        <input type="radio" class="btn-radio" name="owner" value="new"> New User<br>
+                        <input type="radio" class="btn-radio" name="owner" value="exist"> Lead List<br>
+                        <input type="radio" class="btn-radio" name="owner" value="new"> New User
+                    </div>
+
+                    <div class="holder">
+                        <div class="exist-user">
+                            <select style="width: 100%;" name="leadlist" class="lead-list">
+                                @foreach($leads as $lead)
+                                <option value="{{$lead->customer_id}}">{{$lead->email." (".$lead->first_name." ".$lead->last_name.")"}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                     <div class="holder">

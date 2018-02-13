@@ -208,6 +208,7 @@ function customer_wis_create()
 		$parent.find(".txt-desc").html($this.find("option:selected").attr("sales-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
 		$parent.find(".txt-qty").val(1).change();
+		$parent.find(".txt-qty").attr("disabled",true);
 		if($this.find("option:selected").attr("has-um"))
 		{
 			$parent.find(".txt-qty").attr("disabled",false);

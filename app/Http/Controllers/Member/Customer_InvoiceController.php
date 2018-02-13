@@ -463,8 +463,6 @@ class Customer_InvoiceController extends Member
                         $json["redirect"]   = '/member/customer/customer_invoice_pdf/'.$inv_id;
                     }
 
-
-
                     Request::session()->flash('success', 'Invoice Successfully Created');
                 }
             }
@@ -793,6 +791,7 @@ class Customer_InvoiceController extends Member
                         $json["redirect"]   = '/member/customer/customer_invoice_pdf/'.$inv_id;
                     }
                     Request::session()->flash('success', 'Invoice Successfully Updated');
+
                 }
                 elseif($json["status"] == "error" && count($json["status_message"]) > 0)
                 {

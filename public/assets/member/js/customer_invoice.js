@@ -944,3 +944,12 @@ var $input = $(obj);
 if ($input.prop('checked')) $(className).slideDown();
 else $(className).slideUp();
 }
+
+function success_invoice(data)
+{
+	if(data.status == 'success')
+	{
+		toastr.success("Success");
+		location.href = data.redirect;
+	}
+}

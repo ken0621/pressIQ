@@ -137,9 +137,9 @@
                                                 <th width="10"></th>
                                             </tr>
                                         </thead>
-                                        <tbody class="draggable tbody-item">
-                                            @if(isset($inv))
-                                                @foreach($_invline as $invline)
+                                        @if(isset($inv))
+                                            @foreach($_invline as $invline)
+                                                <tbody class="draggable tbody-item">
                                                     <tr class="tr-draggable tr-id-{{$invline->invline_ref_id}}">
                                                         <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
 
@@ -187,9 +187,9 @@
                                                         </td>
                                                         <td tr_id="{{$invline->invline_ref_id}}" linked_in="{{$invline->invline_ref_name}}" class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
-                                                @endforeach
-                                            @endif  
-                                        </tbody>
+                                                </tbody>
+                                            @endforeach
+                                        @endif  
                                         <tbody class="draggable tbody-item estimate-tbl">
                                                 @include("member.load_ajax_data.load_est_session_item")  
                                                 <tr class="tr-draggable">

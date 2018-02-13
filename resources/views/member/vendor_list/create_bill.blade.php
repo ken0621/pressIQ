@@ -117,10 +117,10 @@
                                 </div>
                                 
                                 <div class="row clearfix">
-                                    <div class="title">
+                                    <div class="title" style="display: none;">
                                         <h3><a id="acct-a"> <i class="fa fa-caret-down"></i>  Account Details </a></h3>
                                     </div>
-                                    <div class="table-responsive draggable-container" id="account-tbl">
+                                    <div class="table-responsive draggable-container" id="account-tbl" style="display: none;">
                                         <div class="col-sm-12">
                                             <table class="digima-table">
                                                 <thead >

@@ -185,6 +185,7 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Msurguy\Honeypot\HoneypotServiceProvider::class,
         niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
+        Mews\Captcha\CaptchaServiceProvider::class,
         
     ],
 
@@ -245,6 +246,7 @@ return [
         'Input'     => Illuminate\Support\Facades\Input::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
+        'Captcha' => Mews\Captcha\Facades\Captcha::class,
 
     ],
 

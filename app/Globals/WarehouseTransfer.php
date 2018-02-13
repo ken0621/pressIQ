@@ -233,7 +233,7 @@ class WarehouseTransfer
 	}
 	public static function get_wis_itemline($wis_id)
 	{
-		return Tbl_warehouse_issuance_report_itemline::where("wt_wis_id", $wis_id)->get();
+		return Tbl_warehouse_issuance_report_itemline::um()->where("wt_wis_id", $wis_id)->get();
 	}
 	public static function get_rr_data($rr_id)
 	{

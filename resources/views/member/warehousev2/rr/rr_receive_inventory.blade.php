@@ -69,15 +69,23 @@
                                     <td class="invoice-number-td text-center">1</td>
                                     <td>
                                         <select class="form-control droplist-item select-item input-sm" name="item_id[]" >
-                                            @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                            @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $item->wt_item_id])
                                             <option class="hidden" value="" />
                                         </select>
                                     </td>
-                                    <td><textarea class="form-control txt-desc" name="item_description[]"></textarea></td>
-                                    <td><select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-                                    <td><input class="form-control number-input txt-qty text-center compute" readonly="true" type="text" name="item_qty[]"/></td>
-                                    <td><input class="text-right number-input txt-rate" type="text" name="item_rate[]"/></td>
-                                    <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
+                                    <td><textarea class="form-control txt-desc" name="item_description[]">{{$item->wt_description}}</textarea></td>
+                                    <td>
+                                        <select class="2222 droplist-um select-um" name="item_um[]">
+                                            @if($item->wt_um)
+                                                @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $si_item->multi_um_id, 'selected_um_id' => $si_item->wt_um])
+                                            @else
+                                                <option class="hidden" value="" />
+                                            @endif
+                                        </select>
+                                    </td>
+                                    <td><input class="form-control number-input txt-qty text-center compute" readonly="true" type="text" name="item_qty[]" value="{{$item->wt_qty}}" /></td>
+                                    <td><input class="text-right number-input txt-rate" type="text" value="{{$item->wt_rate}}" name="item_rate[]"/></td>
+                                    <td><input class="text-right number-input txt-amount" value="{{$item->wt_amount}}" type="text" name="item_amount[]"/></td>
                                     <td class="text-center remove-tr cursor-pointer">
                                         <i class="fa fa-trash-o" aria-hidden="true"></i>
                                         <input type="hidden" name="item_refname[]">

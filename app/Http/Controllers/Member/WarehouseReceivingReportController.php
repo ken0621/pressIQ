@@ -10,6 +10,7 @@ use App\Globals\WarehouseTransfer;
 use App\Globals\AccountingTransaction;
 use App\Globals\Pdf_global;
 use App\Globals\Item;
+use App\Globals\UnitMeasurement;
 
 use Session;
 use Carbon\Carbon;
@@ -60,9 +61,19 @@ class WarehouseReceivingReportController extends Member
         $data['wis_item']   = WarehouseTransfer::get_wis_itemline($wis_id);
         $data['_item']      = Item::get_all_category_item([1,4,5]);
         $data['_um']        = UnitMeasurement::load_um_multi();
-
-        $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'receiving_report');
         
+        $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'receiving_report');
+        if($data['wis'])
+        {
+            if($data['wis']->wis_status == 'confirm')
+            {
+                
+            }
+            else
+            {
+                return redirect('/member/item/warehouse/rr');
+            }
+        }
         return view('member.warehousev2.rr.rr_receive_inventory',$data);
     }
     public function postReceiveInventorySubmit(Request $request)

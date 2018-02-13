@@ -1014,6 +1014,14 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "John Kenneth de Lara";
 
+        $code = "manpower-report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Man Power Report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/manpower_report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "John Kenneth de Lara";
+
         /* -- REPORT => PRODUCTS  */
         $code = "Employee-Summary-Report";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Employee Summary Report";

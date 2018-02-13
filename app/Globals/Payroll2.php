@@ -479,8 +479,9 @@ class Payroll2
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 
 		}
-		
+
 		return $_timesheet;
+
 	}
 
 	public static function timesheet_process_daily_info($employee_id, $date, $timesheet_db, $payroll_period_company_id)
@@ -1121,28 +1122,45 @@ class Payroll2
 
 	public static function sort_by_time($_time)
 	{
-		$count = 0;
+		//sir kim code problem causing undefined offset when 1 time in is null 
+
+		// $count = 0;
 
 
-		$n = count($_time);
-        for ($i = 0; $i < $n-1; $i++)
-        {
-            for ($j = 0; $j < $n-$i-1; $j++)
-            {
-                if (Payroll2::convert_time_in_minutes($_time[$j]->time_in) > Payroll2::convert_time_in_minutes($_time[$j+1]->time_in))
-                {
+		// $n = count($_time);
+  //       for ($i = 0; $i < $n-1; $i++)
+  //       {
+  //           for ($j = 0; $j < $n-$i-1; $j++)
+  //           {
+  //               if (Payroll2::convert_time_in_minutes($_time[$j]->time_in) > Payroll2::convert_time_in_minutes($_time[$j+1]->time_in))
+  //               {
 
-                    // swap temp and arr[i]
-                    $temp = $_time[$j];
-                    $_time[$j] = $_time[$j+1];
-                    $_time[$j+1] = $temp;
+  //                   // swap temp and arr[i]
+  //                   $temp = $_time[$j];
+  //                   $_time[$j] = $_time[$j+1];
+  //                   $_time[$j+1] = $temp;
                    
-                }
-            }
-        }
+  //               }
+  //           }
+  //       }
 		
-		 
-		return $_time;
+		// return $_time;
+
+		//kenneth
+		 usort($_time,function($firsttime,$secondtime)
+		 {
+		        $firsttime = Payroll2::convert_time_in_minutes($firsttime->time_in);
+		        $secondtime = Payroll2::convert_time_in_minutes($secondtime->time_in);
+
+		        if ($firsttime == $secondtime) {
+		           return 0;
+		        }
+
+		        return $firsttime < $secondtime ? -1 : 1;
+		 });
+
+   		 return $_time;
+
 	}
 	
 
@@ -5302,7 +5320,7 @@ class Payroll2
 						{
 							foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
 							{
-								if ($value->time_output["leave_hours"] || $lbl == 'late' || $lbl == 'undertime' ) 
+								if ($value->time_output["leave_hours"] != '00:00:00' || $lbl == 'late' || $lbl == 'undertime' ) 
 								{
 									$standard_gross_pay += $values['rate'];
 									$deduction += $values['rate'];
@@ -5331,15 +5349,15 @@ class Payroll2
 					// dd($a);
 					// dd($actual_gross_pay ." / " . $standard_gross_pay ." * " . $allowance_amount);
 					$standard_gross_pay += $actual_gross_pay;
-					$val["amount"] = @($actual_gross_pay/$standard_gross_pay) * $allowance_amount;
-
+					$val["amount"] = (@($actual_gross_pay/$standard_gross_pay) * $allowance_amount) * $return->_time_breakdown["day_spent"]["float"];
+					
 					// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);
 
 					
 				}
-				else if ($data["group"]->payroll_group_salary_computation == "Daily Rate") 
+				else if ($allowance->payroll_allowance_type == 'daily') 
 				{
-					$val["amount"] = $val["amount"] * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);
+					$val["amount"] = $allowance_amount * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);
 				}
 
 				$val["label"] 	= $allowance_name;
@@ -7515,5 +7533,110 @@ class Payroll2
 		}
 
 		return $has_year;
+	}
+
+	public static function number_to_word( $num = '' )
+	{
+	    $num    = ( string ) ( ( int ) $num );
+	   
+	    if( ( int ) ( $num ) && ctype_digit( $num ) )
+	    {
+	        $words  = array( );
+	       
+	        $num    = str_replace( array( ',' , ' ' ) , '' , trim( $num ) );
+	       
+	        $list1  = array('','one','two','three','four','five','six','seven',
+	            'eight','nine','ten','eleven','twelve','thirteen','fourteen',
+	            'fifteen','sixteen','seventeen','eighteen','nineteen');
+	       
+	        $list2  = array('','ten','twenty','thirty','forty','fifty','sixty',
+	            'seventy','eighty','ninety','hundred');
+	       
+	        $list3  = array('','thousand','million','billion','trillion',
+	            'quadrillion','quintillion','sextillion','septillion',
+	            'octillion','nonillion','decillion','undecillion',
+	            'duodecillion','tredecillion','quattuordecillion',
+	            'quindecillion','sexdecillion','septendecillion',
+	            'octodecillion','novemdecillion','vigintillion');
+	       
+	        $num_length = strlen( $num );
+	        $levels = ( int ) ( ( $num_length + 2 ) / 3 );
+	        $max_length = $levels * 3;
+	        $num    = substr( '00'.$num , -$max_length );
+	        $num_levels = str_split( $num , 3 );
+	       
+	        foreach( $num_levels as $num_part )
+	        {
+	            $levels--;
+	            $hundreds   = ( int ) ( $num_part / 100 );
+	            $hundreds   = ( $hundreds ? ' ' . $list1[$hundreds] . ' Hundred' . ( $hundreds == 1 ? '' : 's' ) . ' ' : '' );
+	            $tens       = ( int ) ( $num_part % 100 );
+	            $singles    = '';
+	           
+	            if( $tens < 20 )
+	            {
+	                $tens   = ( $tens ? ' ' . $list1[$tens] . ' ' : '' );
+	            }
+	            else
+	            {
+	                $tens   = ( int ) ( $tens / 10 );
+	                $tens   = ' ' . $list2[$tens] . ' ';
+	                $singles    = ( int ) ( $num_part % 10 );
+	                $singles    = ' ' . $list1[$singles] . ' ';
+	            }
+	            $words[]    = $hundreds . $tens . $singles . ( ( $levels && ( int ) ( $num_part ) ) ? ' ' . $list3[$levels] . ' ' : '' );
+	        }
+	       
+	        $commas = count( $words );
+	       
+	        if( $commas > 1 )
+	        {
+	            $commas = $commas - 1;
+	        }
+	       
+	        $words  = implode( ', ' , $words );
+	       
+	        //Some Finishing Touch
+	        //Replacing multiples of spaces with one space
+	        $words  = trim( str_replace( ' ,' , ',' , Self::trim_all( ucwords( $words ) ) ) , ', ' );
+	        if( $commas )
+	        {
+	            $words  = Self::str_replace_last( ',' , ' and' , $words );
+	        }
+	       
+	        return $words;
+	    }
+	    else if( ! ( ( int ) $num ) )
+	    {
+	        return 'Zero';
+	    }
+	    return '';
+	}
+
+	public static function trim_all( $str , $what = NULL , $with = ' ' )
+	{
+	    if( $what === NULL )
+	    {
+	        //  Character      Decimal      Use
+	        //  "\0"            0           Null Character
+	        //  "\t"            9           Tab
+	        //  "\n"           10           New line
+	        //  "\x0B"         11           Vertical Tab
+	        //  "\r"           13           New Line in Mac
+	        //  " "            32           Space
+	       
+	        $what   = "\\x00-\\x20";    //all white-spaces and control chars
+	    }
+	   
+	    return trim( preg_replace( "/[".$what."]+/" , $with , $str ) , $what );
+	}
+
+	public static function str_replace_last( $search , $replace , $str ) {
+	    if( ( $pos = strrpos( $str , $search ) ) !== false ) 
+	    {
+	        $search_length  = strlen( $search );
+	        $str    = substr_replace( $str , $replace , $pos , $search_length );
+	    }
+	    return $str;
 	}
 }

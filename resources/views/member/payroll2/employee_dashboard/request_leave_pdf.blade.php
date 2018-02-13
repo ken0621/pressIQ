@@ -31,7 +31,7 @@
 <body>
 <div>
 
- <table class="table table-bordered" style="font-size:12px;">
+ <table class="table table-bordered" style="font-size:12px;border:2px solid black !important;">
             <thead>
               <tr>
                 <th colspan="5" style="text-align: center;">PHILIPPINE ARCHIPELAGO PORTS AND TERMINAL SERVICES, INC.</th>
@@ -46,7 +46,7 @@
                     <td colspan="2">Date filed:&nbsp;&nbsp;&nbsp;<span style="font-weight: bold;">{{$leave_info[0]->payroll_request_leave_date_filed}}</span></td>
               </tr>
                <tr>
-                    <td colspan="3">Department:</td>
+                    <td colspan="3">Department:&nbsp;&nbsp;&nbsp;<span style="font-weight: bold;">{{$department}}</span></td>
                     <td colspan="2">Date received by HR:</td>
               </tr>
               <tr>

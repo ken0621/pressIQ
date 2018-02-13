@@ -147,3 +147,29 @@ $text-dark: #272c2f;
 	background-image: none !important;
 	border-color: #48B920 !important;
 }
+
+.btn-cust-paysett
+{
+	background-color: rgba(0,0,0,0.1);
+	color: #585858;
+	border: 1px solid #585858;
+
+	&:hover
+	{
+		background-color: #585858;
+		color: #fff;
+	}
+}
+
+.btn-cust-reqpay
+{
+	border: 1px solid #585858;
+	background-color: #585858;
+	color: #fff;
+
+	&:hover
+	{
+		background-color: rgba(0,0,0,0.1);
+		color: #585858;
+	}
+}

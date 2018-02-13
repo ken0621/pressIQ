@@ -3,9 +3,9 @@
 <form class="global-submit form-horizontal" role="form" action="/member/payroll/payroll_group/modal_update_payroll_group" method="post">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
-		<h4 class="modal-title">Create Payroll</h4>
+		<h4 class="modal-title">Edit Payroll</h4>
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
-		<input type="hidden" name="payroll_group_id" value="{{$group->payroll_group_id}}">
+		<input type="hidden" name="payroll_group_id" id="group_id" value="{{$group->payroll_group_id}}">
 	</div>
 	<div class="modal-body clearfix">
 		
@@ -18,6 +18,7 @@
 					<li><a data-toggle="tab" href="#deduction-basis">Deduction Basis</a></li>
 					<li><a data-toggle="tab" href="#over-time-rates">Over Time Rates</a></li>
 					<li><a data-toggle="tab" href="#shifting">Shifting</a></li>
+					<li><a data-toggle="tab" href="#employeetagging">Employee</a></li>
 				</ul>
 
 				<div class="tab-content tab-content-custom tab-pane-div margin-bottom-0">
@@ -610,6 +611,36 @@
 							<!--	</div>-->
 							<!--</div>-->
 						</div>
+					</div>
+					<div id="employeetagging" class="tab-pane fade">
+					 			
+								<div class="form-group">
+									<div class="col-md-12">
+										<span><a href="#" class="btn btn-custom-primary pull-right popup" link="/member/payroll/payroll_group/modal_payroll_tag_edit">Tag Employee</a></span>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-md-12">
+										<table class="table table-bordered table-condensed">
+											<thead>
+												<tr>
+													<th>Employee Name</th>
+													<th></th>
+												</tr>
+											</thead>
+											<tbody class="tbl-tag">
+												@foreach($employee as $emp)
+													<tr>
+													<td>{{$emp->payroll_employee_display_name}}<input type="hidden" name="employee_tag[]" value="{{$emp->payroll_employee_id}}"></td>
+													<td class="text-center">
+														<a href="#" class="popup" size="sm" link="/member/payroll/leave/v2/modal_leave_action/{{$emp->payroll_employee_id}}/remove_payroll_tag/{{$group->payroll_group_id}}"><i class="fa fa-times"></i></a>
+													</td>
+													</tr>
+												@endforeach
+											</tbody>
+										</table>
+									</div>
+								</div>
 					</div>
 				</div>
 			</div>

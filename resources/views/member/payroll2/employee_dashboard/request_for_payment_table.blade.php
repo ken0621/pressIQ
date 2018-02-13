@@ -26,6 +26,9 @@
                      <ul class="dropdown-menu" role="menu" aria-labelledby="menu-drop-down">
                        <li style="padding-left: 10px;" role="presentation" class="popup" link='/rfp_application_view/{{ $payment_request->payroll_request_payment_id }}' size='lg'><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-search" aria-hidden="true"></i> &nbsp; View</a></li>
                        <li style="padding-left: 10px;" role="presentation" class="popup" link='/rfp_application_cancel/{{ $payment_request->payroll_request_payment_id }}' size='sm'><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-ban" aria-hidden="true"></i> &nbsp; Cancel</a></li>
+                        <li>
+                            &nbsp;&nbsp;<a role="form" target="_blank" tabindex="-1" href="/employee_request_rfp_export_pdf/{{$payment_request->payroll_request_payment_id}}"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;View PDF Form</a>
+                        </li>
                      </ul>
                    </div>
                </td>

@@ -111,7 +111,7 @@
 							@for($x=0;$x<count($token_titles);$x++)
 							<div class="holder">
 								<div class="color fifth-pgc"></div>
-								<div class="name"><span>{{ $token_titles[$x] }}</span> <div class="name fifth-pgc-text">{{ $token_amounts[$x]." TOKEN(S)" }}</div></div>
+								<div class="name"><span>{{ $token_titles[$x] }}</span> <div class="name fifth-pgc-text">{{ number_format($token_amounts[$x],2)." TOKEN(S)" }}</div></div>
 							</div>
 							@endfor
 						</div>

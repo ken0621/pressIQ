@@ -38,6 +38,8 @@ function genealogy_modal()
 		{
 			
 			var owner = $("input[name='owner']:checked").val();
+
+			var leadlist = $('.lead-list').val();
 			
 			var membership = $('.code-vault').val();
 			var sponsor = $('.sponsor').val();
@@ -54,6 +56,7 @@ function genealogy_modal()
 			var form = true;
 			var pass = true;
 			var passlength = true;
+			var lead = true;
 
 			var stop = false;
 
@@ -78,6 +81,19 @@ function genealogy_modal()
 				if(owner == 'self')
 				{
 					console.log('submit');
+				}
+				else if(owner == 'exist')
+				{
+					if(leadlist == '' || leadlist == null)
+					{
+						lead = false;
+						console.log("lead list: "+leadlist+" lead: "+lead);
+					}
+					if(!lead)
+					{
+						toastr.error('Invalid lead list');
+						e.preventDefault();
+					}
 				}
 				else
 				{

@@ -119,6 +119,7 @@ class Customer_ReceivePaymentController extends Member
         $insert["rp_memo"]              = Request::input('rp_memo');
         $insert["date_created"]         = Carbon::now();
 
+        //die(var_dump($insert["rp_total_amount"]));
         //die(var_dump(Request::input('rp_ar_account')));
         // if($cm_id != '')
         // {

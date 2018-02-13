@@ -24,8 +24,10 @@ use App\Models\Tbl_settings;
 
 use App\Models\Tbl_warehouse_issuance_report;
 use App\Models\Tbl_warehouse_issuance_report_item;
+use App\Models\Tbl_warehouse_issuance_report_itemline;
 use App\Models\Tbl_warehouse_receiving_report;
 use App\Models\Tbl_warehouse_receiving_report_item;
+use App\Models\Tbl_warehouse_receiving_report_itemline;
 
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
@@ -162,30 +164,59 @@ class WarehouseTransfer
         {
         	$wis_id = Tbl_warehouse_issuance_report::insertGetId($ins);
         	$reference_name = 'wis';
+        	$val = Self::wis_insertline($wis_id, $_item);
+            if(is_numeric($val))
+            {
+	        	$return = Warehouse2::consume_bulk($shop_id, $warehouse_id, $reference_name, $wis_id ,$remarks ,$_item);
 
-        	$return = Warehouse2::consume_bulk($shop_id, $warehouse_id, $reference_name, $wis_id ,$remarks ,$_item);
+	        	if(!$return)
+	        	{
+	        		$get_item = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','wis')->where('record_consume_ref_id',$wis_id)->get();
 
-        	if(!$return)
-        	{
-        		$get_item = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','wis')->where('record_consume_ref_id',$wis_id)->get();
+	        		$ins_report_item = null;
+	        		foreach ($get_item as $key_item => $value_item)
+	        		{
+	        			$ins_report_item[$key_item]['wis_id'] = $wis_id;
+	        			$ins_report_item[$key_item]['record_log_item_id'] = $value_item->record_log_id;
+	        		}
 
-        		$ins_report_item = null;
-        		foreach ($get_item as $key_item => $value_item)
-        		{
-        			$ins_report_item[$key_item]['wis_id'] = $wis_id;
-        			$ins_report_item[$key_item]['record_log_item_id'] = $value_item->record_log_id;
-        		}
-
-        		if($ins_report_item)
-        		{
-        			Tbl_warehouse_issuance_report_item::insert($ins_report_item);
-        			$validate = 1;
-        		}
-        	}
+	        		if($ins_report_item)
+	        		{
+	        			Tbl_warehouse_issuance_report_item::insert($ins_report_item);
+	        			$validate = 1;
+	        		}
+	        	}
+	        }
         }
 
         return $validate;
 	}
+
+    public static function wis_insertline($wis_id, $insert_item)
+    {
+        $return = null;
+        $itemline = null;
+        foreach ($insert_item as $key => $value) 
+        {
+            $itemline[$key]['wt_wis_id']      	= $wis_id;
+            $itemline[$key]['wt_item_id']     	= $value['item_id'];
+            $itemline[$key]['wt_description'] 	= $value['item_description'];
+            $itemline[$key]['wt_qty']         	= $value['item_qty'];
+            $itemline[$key]['wt_orig_qty']      = $value['item_qty'];
+            $itemline[$key]['wt_um']           	= $value['item_um'];
+            $itemline[$key]['wt_rate']          = $value['item_rate'];
+            $itemline[$key]['wt_amount']     	= $value['item_amount'];
+            $itemline[$key]['wt_refname']     	= $value['item_refname'];
+            $itemline[$key]['wt_refid']       	= $value['item_refid'];
+        }
+        if(count($itemline) > 0)
+        {
+            Tbl_warehouse_issuance_report_itemline::insert($itemline);
+            $return = 1;
+        }
+
+        return $return;
+    }
     public static function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');

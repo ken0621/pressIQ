@@ -12,6 +12,7 @@ use App\Globals\Item;
 use App\Globals\AccountingTransaction;
 use App\Globals\Transaction;
 use App\Models\Tbl_warehouse_issuance_report;
+use App\Globals\UnitMeasurement;
 
 use Session;
 use Carbon\Carbon;
@@ -134,6 +135,7 @@ class WarehouseIssuanceSlipController extends Member
         $ins_wis['destination_warehouse_id'] = $request->destination_warehouse_id;
         $ins_wis['destination_warehouse_address'] = $request->destination_warehouse_address;
         $ins_wis['created_at'] = Carbon::now();
+        $ins_wis['wis_delivery_date'] = date("Y-m-d", strtotime($request->delivery_date));
 
         $_item = null;
         foreach ($items as $key => $value) 
@@ -141,13 +143,22 @@ class WarehouseIssuanceSlipController extends Member
             if($value)
             {
                 $_item[$key] = null;
-                $_item[$key]['item_id'] = $value;
-                $_item[$key]['quantity'] = $request->item_quantity[$key];
-                $_item[$key]['remarks'] = $request->item_remarks[$key];
+                $_item[$key]['item_id']          = $value;
+                $_item[$key]['item_description'] = $request->item_description[$key];
+                $_item[$key]['item_um']          = $request->item_um[$key];
+                $_item[$key]['item_qty']         = $request->item_qty[$key];
+                $_item[$key]['item_rate']        = $request->item_rate[$key];
+                $_item[$key]['item_amount']      = $request->item_amount[$key];
+                $_item[$key]['item_refname']     = $request->item_refname[$key];
+                $_item[$key]['item_refid']       = $request->item_refid[$key];
+
+
+                $_item[$key]['quantity']         = $request->item_qty[$key] * UnitMeasurement::um_qty($_item[$key]['item_um']);
+                $_item[$key]['remarks']          = $request->item_description[$key];
             }
         }
 
-        $val = WarehouseTransfer::create_wis($shop_id, $remarks,$ins_wis , $_item);
+        $val = WarehouseTransfer::create_wis($shop_id, $remarks, $ins_wis , $_item);
         $return = null;
         if(is_numeric($val))
         {

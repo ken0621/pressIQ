@@ -32,6 +32,7 @@ function wis_create()
 		action_lastclick_row();
 		event_remove_tr();
 		action_reassign_number();
+		event_compute_class_change();
 	}
 	function event_remove_tr()
 	{		
@@ -54,6 +55,13 @@ function wis_create()
 		});
 	}
 
+	function event_compute_class_change()
+	{
+		$(document).on("change",".compute", function()
+		{
+			action_compute();
+		});
+	}
 	function  action_load_warehouse_info(data)
 	{
 		$(".txt-warehouse-address").html(data.find("option:selected").attr("warehouse-address"));
@@ -137,7 +145,7 @@ function wis_create()
 		// $parent.find(".txt-remaining-qty").html($this.find("option:selected").attr("inventory-count") + " pc(s)").change();
 		$parent = $this.closest(".tr-draggable");
 		$parent.find(".txt-desc").html($this.find("option:selected").attr("sales-info")).change();
-		$parent.find(".txt-rate").val($this.find("option:selected").attr("pedeprice")).change();
+		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent.find(".txt-qty").val(1).change();
 		$parent.find(".txt-qty").attr("disabled",true);
 		if($this.find("option:selected").attr("has-um"))
@@ -152,6 +160,7 @@ function wis_create()
 		}
 		else
 		{
+			$parent.find(".txt-qty").attr("disabled",false);
 			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
 		}
     	action_compute();

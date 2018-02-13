@@ -205,7 +205,7 @@
             </td>
             <td><textarea class="form-control txt-desc" name="item_remarks[]"></textarea></td>
             <td><select class="2222 select-um select-um" name="item_um[]"><option class="hidden" value="" /></select></td>
-            <td><input class="form-control number-input txt-qty text-center compute" type="text" name="item_quantity[]"/></td>
+            <td><input class="form-control number-input txt-qty text-center compute" type="text" name="item_qty[]"/></td>
             <td><input class="text-right number-input txt-rate" type="text" name="item_rate[]"/></td>
             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
             <td class="text-center remove-tr cursor-pointer">

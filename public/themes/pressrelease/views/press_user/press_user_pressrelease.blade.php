@@ -112,7 +112,7 @@
                       @else
                   <div class="title">Type:</div>
                    <select name="pr_type" id="pr_type" class="form-control" style="width: 80% !important;">
-                     <option>--Select option--</option>
+                     <option value="">--Select option--</option>
                      <option value="Media Release">Media Release</option>
                      <option value="Press Release">Press Release</option>
                      <option value="Invitation">Invitation</option>

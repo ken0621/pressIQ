@@ -1,4 +1,4 @@
-<form class="global-submit form-horizontal" role="form" action="/member/item/token/add-token" method="post">
+<form class="global-submit form-horizontal" role="form" action="/member/item/token/update-token" method="post">
 	{{ csrf_field()  }}
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
@@ -8,14 +8,15 @@
 		<div class="form-group">
 	        <div class="col-md-12">
 	            <label for="basic-input">Token Name</label>
-				<input id="basic-input" class="form-control" name="token_name" placeholder="Token Name">
+				<input id="basic-input" value="{{$token_name}}" class="form-control" name="token_name" placeholder="Token Name">
+	        	<input type="hidden" name="token_id" value="{{$token_id}}">
 	        </div>
 	    </div>
 
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-		<button class="btn btn-primary btn-custom-primary" type="submit">Save</button>
+		<button class="btn btn-primary btn-custom-primary" type="submit">Update</button>
 	</div>
 </form>
 <script type="text/javascript">

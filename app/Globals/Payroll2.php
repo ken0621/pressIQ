@@ -1122,28 +1122,45 @@ class Payroll2
 
 	public static function sort_by_time($_time)
 	{
-		$count = 0;
+		//sir kim code problem causing undefined offset when 1 time in is null 
+
+		// $count = 0;
 
 
-		$n = count($_time);
-        for ($i = 0; $i < $n-1; $i++)
-        {
-            for ($j = 0; $j < $n-$i-1; $j++)
-            {
-                if (Payroll2::convert_time_in_minutes($_time[$j]->time_in) > Payroll2::convert_time_in_minutes($_time[$j+1]->time_in))
-                {
+		// $n = count($_time);
+  //       for ($i = 0; $i < $n-1; $i++)
+  //       {
+  //           for ($j = 0; $j < $n-$i-1; $j++)
+  //           {
+  //               if (Payroll2::convert_time_in_minutes($_time[$j]->time_in) > Payroll2::convert_time_in_minutes($_time[$j+1]->time_in))
+  //               {
 
-                    // swap temp and arr[i]
-                    $temp = $_time[$j];
-                    $_time[$j] = $_time[$j+1];
-                    $_time[$j+1] = $temp;
+  //                   // swap temp and arr[i]
+  //                   $temp = $_time[$j];
+  //                   $_time[$j] = $_time[$j+1];
+  //                   $_time[$j+1] = $temp;
                    
-                }
-            }
-        }
+  //               }
+  //           }
+  //       }
 		
-		 
-		return $_time;
+		// return $_time;
+
+		//kenneth
+		 usort($_time,function($firsttime,$secondtime)
+		 {
+		        $firsttime = Payroll2::convert_time_in_minutes($firsttime->time_in);
+		        $secondtime = Payroll2::convert_time_in_minutes($secondtime->time_in);
+
+		        if ($firsttime == $secondtime) {
+		           return 0;
+		        }
+
+		        return $firsttime < $secondtime ? -1 : 1;
+		 });
+
+   		 return $_time;
+
 	}
 	
 
@@ -5303,7 +5320,7 @@ class Payroll2
 						{
 							foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
 							{
-								if ($value->time_output["leave_hours"] || $lbl == 'late' || $lbl == 'undertime' ) 
+								if ($value->time_output["leave_hours"] != '00:00:00' || $lbl == 'late' || $lbl == 'undertime' ) 
 								{
 									$standard_gross_pay += $values['rate'];
 									$deduction += $values['rate'];
@@ -5332,15 +5349,15 @@ class Payroll2
 					// dd($a);
 					// dd($actual_gross_pay ." / " . $standard_gross_pay ." * " . $allowance_amount);
 					$standard_gross_pay += $actual_gross_pay;
-					$val["amount"] = $return->_time_breakdown["day_spent"]["float"] * $allowance_amount;
-
+					$val["amount"] = (@($actual_gross_pay/$standard_gross_pay) * $allowance_amount) * $return->_time_breakdown["day_spent"]["float"];
+					
 					// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);
 
 					
 				}
-				else if ($data["group"]->payroll_group_salary_computation == "Daily Rate") 
+				else if ($allowance->payroll_allowance_type == 'daily') 
 				{
-					$val["amount"] = $val["amount"] * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);
+					$val["amount"] = $allowance_amount * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);
 				}
 
 				$val["label"] 	= $allowance_name;

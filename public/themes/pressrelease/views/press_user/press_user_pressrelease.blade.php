@@ -24,14 +24,6 @@
         
                 <div id="create_release" class="tabcontent create-release-container">
 
-                  @if(session()->has('message_alert'))
-                  <div class="details">
-                  <span style="color: red;">
-                    <strong>Error!</strong> {{ session('message') }}<br>
-                  </span>
-                  </div>
-                  @endif
-
                   <div class="title-container">New Release</div>
                     @if(session()->has("pr_edit"))
                       @foreach($edit as $edits)
@@ -140,8 +132,8 @@
                 </div>
 
                 <div id="choose_recipient" class="tabcontent choose-recipient-container">
-                    <div class="title-container">Choose Recipient</div>
 
+                    <div class="title-container">Choose Recipient</div>
                     <div class="title">Country:</div>
                     <select data-placeholder="--Choose a country--" multiple class="chosen-select" id="choose_country" name="choose_country[]">
                          @foreach($_country as $country_name)
@@ -288,7 +280,6 @@
 <script>
   $('#prev_btn').click(function()
   {
-    // alert("123");
     var headline = document.getElementById('pr_headline').value;
     var type = document.getElementById('pr_type').value;
     var content = tinymce.get('pr_content').getContent();
@@ -302,15 +293,28 @@
 
   $('#btnnextCreate').click(function()
   {
-     // alert('This Field is Mandatory to Filled up');
-     openCity(event, 'choose_recipient');
+   if(pr_headline.value!="" && tinymce.get('pr_content').getContent() != "" && tinymce.get('pr_boiler_content').getContent() != "")
+        {
+          openCity(event, 'choose_recipient');     
+        }
+
+    else
+        {
+          alert('Error! Please fill the required fields!'); 
+        }
   });
 
   $('#btnnextSend').click(function()
   {
-      // alert('This ');
-      openCity(event, 'send_release');
+    if(recipient_email.value!="")
+        {
+          openCity(event, 'send_release');    
+        }
 
+    else
+        {
+          alert('Error! Choose Recipient First!'); 
+        }
   });        
 
   $('#prev_btn_send').click(function()

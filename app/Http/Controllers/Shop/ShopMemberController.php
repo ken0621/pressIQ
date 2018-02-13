@@ -479,25 +479,24 @@ class ShopMemberController extends Shop
 
     public function send($pr_info)
     {
-        dd('Sorry, were doing some work on the site!');
 
         // $campaigns = count(tbl_pressiq_press_releases::where('pr_from', session('user_email')->get()));
         // $limit     = count(tbl_pressiq_press_releases::where('user_membership',session('user_email')->get()));    
+  
 
+        $to  = explode(",", $pr_info['pr_to']);
+        $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
 
-        // $to  = explode(",", $pr_info['pr_to']);
-        // $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
+        foreach ($to as $pr_info['pr_to']) 
+        {
 
-        // foreach ($to as $pr_info['pr_to']) 
-        // {
-
-        //     Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
-        //     {
-        //         $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
-        //         $message->to($pr_info['pr_to']);
-        //         $message->subject($pr_info["pr_headline"]);
-        //     });
-        // }
+            Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
+            {
+                $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
+                $message->to($pr_info['pr_to']);
+                $message->subject($pr_info["pr_headline"]);
+            });
+        }
     }  
    
     public function send_contact_us()
@@ -1190,6 +1189,7 @@ class ShopMemberController extends Shop
                 $data["user_password"]                   = Crypt::encrypt(request('user_password'));
                 $data["user_date_created"]               = Carbon::now();
                 $data["user_company_name"]               = $request->user_company_name;
+                $data["user_membership"]                 = $request->user_membership;
                 $data["user_level"]                      = "2";
                 if($path!="")
                 {
@@ -1295,7 +1295,6 @@ class ShopMemberController extends Shop
         Session::put('pr_user_id',$user_data->user_id);
 
         return Redirect::to("/signin"); 
-
     }
 
     public function pressadmin_manage_admin_edit()
@@ -1343,7 +1342,7 @@ class ShopMemberController extends Shop
     {   
 
         $data['_email'] = Tbl_pressiq_press_releases::orderByRaw('pr_date_sent DESC')
-                            ->paginate(5);
+                          ->paginate(5);
 
         if(Session::exists('user_email'))
         {

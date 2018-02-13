@@ -36,12 +36,20 @@
           </div>    
 
         <div class="press-release-content">
-
            <div id="new_user_account" class="tabcontent user-media-container">
-               <div class="title-container">Add New User</div>
-
+               <div class="title-container">Registration for New User</div><br>
                <form method="post" action="/pressadmin/add_user" enctype="multipart/form-data">
                 {{csrf_field()}}
+                <div class="register-form" >
+                  <select class="form-control" name="user_membership" id="user_membership" style="width: 300px">
+                    <option selected>--Costing Option--</option>
+                     <option value="1">1 Time Sending</option>
+                     <option value="3">3 Times Sending</option>
+                     <option value="5">5 Times Sending</option>
+                     <option value="6">6 Months Contract</option>
+                     <option value="12">12 Months Contract</option>
+                  </select> 
+                </div>
                 
                 <div class="register-form">
                 <input class="form-control" type="text" name="user_first_name" id="user_first_name" placeholder="First Name" >
@@ -61,9 +69,11 @@
                 <div class="register-form">
                   <input class="form-control" type="text" name="user_company_name" id="user_company_name" placeholder="Company" >
                 </div>
+
                 <div class="register-form">
-                  <input type="file" name="user_company_image" id="user_company_image" accept=".png, .jpg, .jpeg" >
+                 <input type="file" name="user_company_image" id="user_company_image" accept=".png, .jpg, .jpeg">
                 </div>
+
                 @if(session()->has('message'))
                   <div class="details">
                   <span style="color: red;">
@@ -142,7 +152,7 @@
             </div>
 
             <div id="admin_account" class="tabcontent add-media-container">
-                <div class="title-container">Update Admin Account</div>
+                <div class="title-container">Update Admin Account</div><br>
                   <table  class="table table-bordered" id="showHere_table">
                      <tr>
                          <th style="width: 20%;">First Name</th>

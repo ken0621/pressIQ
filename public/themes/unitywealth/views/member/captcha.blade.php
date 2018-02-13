@@ -28,7 +28,8 @@
 				{{ csrf_field() }}
 				<input type="hidden" class="hidden_slot_no" name="slot_no">
 				<div class="holder">
-				  	<div class="g-recaptcha" data-sitekey="6Let6UAUAAAAAD0MvJH0Tl_Bej1YkE1oaD0mIE-j"></div>
+				  	<img src="{{captcha_src()}}"><br><br>
+					<input type="text" name="captcha" placeholder="Captcha">
 				  	<div style="margin-top: 10px;">
 				  		<button class="btn btn-primary btn-custom-primary submit-captcha" type="submit">Submit</button>
 				  		<span class="count-holder"></span>

@@ -75,9 +75,9 @@ body{
 
     <td colspan="2">SSS</td>
     <td colspan="2">PAG-IBIG</td>
-    <td colspan="1">PHIL-HEALTH</td>
+    <td rowspan="1">PHIL-HEALTH</td>
     <td rowspan="2">WITH HOLDING TAX</td>
-    <td rowspan="2">TOTAL DEDUCTIONS</td>
+    <td rowspan="2">TOTAL DEDUCTIONS</td>       
     <td rowspan="2">NETHOME PAY</td>
     <td colspan="4">GOVERNMENT EMPLOYER SHARE</td>
    </tr>
@@ -85,6 +85,7 @@ body{
     <td ></td>
     <td ></td>
     <td ></td>
+    <td ></td>  
     <td ></td>
     <td ></td>
     <td ></td>
@@ -94,7 +95,7 @@ body{
     <td ></td>
     <td ></td>
     <td ></td>
-    <td ></td>
+    <td></td>
     <td >ALLOWANCE</td>
     <td >BONUS</td>
     <td >COMMISSION</td>
@@ -157,7 +158,7 @@ body{
     
     <td class="text-center" >({{ number_format($employee->adjustment_deductions,2) }})</td>
     <td class="text-center" >({{ number_format((number_format($employee->cash_bond,2) + number_format($employee->adjustment_cash_bond,2)), 2) }})</td>
-    <td class="text-center" >({{ number_format((number_format($employee->cash_advance,2) + number_format($employee->adjustment_cash_advance,2)),2) }}</td)>
+    <td class="text-center" >({{ number_format((number_format($employee->cash_advance,2) + number_format($employee->adjustment_cash_advance,2)),2) }})</td>
     <td class="text-center" >({{ number_format($employee->other_loans,2) }})</td>
     <!-- <td class="text-center" >{{ number_format($employee->adjustment_deduction,2) }}</td> -->
 

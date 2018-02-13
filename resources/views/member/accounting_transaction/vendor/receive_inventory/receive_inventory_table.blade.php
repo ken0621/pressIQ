@@ -26,7 +26,7 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-custom">
                                 <li><a href="/member/transaction/receive_inventory/create?id={{$ri->ri_id}}">Edit</a></li>
-                                <li><a href="/member/transaction/receive_inventory/print?id={{$ri->ri_id}}">Print</a></li>
+                                <li><a target="_blank" href="/member/transaction/receive_inventory/print?id={{$ri->ri_id}}">Print</a></li>
                             </ul>
                         </div>
                     </td>

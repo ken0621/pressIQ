@@ -26,7 +26,7 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-custom">
                                 <li><a href="/member/transaction/sales_invoice/create?id={{$si->inv_id}}">Edit Sales Invoice</a></li>
-                                <li><a href="/member/transaction/sales_invoice/print?id={{$si->inv_id}}">Print</a></li>
+                                <li><a target="_blank" href="/member/transaction/sales_invoice/print?id={{$si->inv_id}}">Print</a></li>
                             </ul>
                         </div>
                     </td>

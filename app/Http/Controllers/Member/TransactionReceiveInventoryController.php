@@ -88,6 +88,7 @@ class TransactionReceiveInventoryController extends Member
         $insert['transaction_date']         = $request->transaction_date;
         $insert['transaction_duedate']      = $request->transaction_duedate;
         $insert['vendor_memo']              = $request->vendor_memo;
+        $insert['vendor_remarks']           = $request->vendor_remarks;
         $insert['vendor_total']             = $request->vendor_total;
 
         $insert_item = null;
@@ -145,6 +146,7 @@ class TransactionReceiveInventoryController extends Member
         $insert['transaction_date']         = $request->transaction_date;
         $insert['transaction_duedate']      = $request->transaction_duedate;
         $insert['vendor_memo']              = $request->vendor_memo;
+        $insert['vendor_remarks']           = $request->vendor_remarks;
         $insert['vendor_total']             = $request->vendor_total;
 
         $insert_item = null;

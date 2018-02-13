@@ -26,7 +26,7 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-custom">
                                 <li><a href="/member/transaction/enter_bills/create?id={{$eb->bill_id}}">Edit</a></li>
-                                <li><a href="/member/transaction/enter_bills/print?id={{$eb->bill_id}}">Print</a></li>
+                                <li><a target="_blank" href="/member/transaction/enter_bills/print?id={{$eb->bill_id}}">Print</a></li>
                             </ul>
                         </div>
                     </td>

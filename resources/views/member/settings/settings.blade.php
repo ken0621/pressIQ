@@ -131,3 +131,15 @@
 			<option value="0">No</option>
 		</select>
 	</div>
+
+	<hr>
+	<center>Abubot</center>
+	<!-- Customixation for Abubot -->
+	<div class="settings" id="abubot_custom">
+		Customization for Abubot
+		<input type="hidden" name="settings_key[]" value="customizaton">
+		<select name="settings_value[]" class="form-control">
+			<option value="1">Yes</option>
+			<option value="0">No</option>
+		</select>
+	</div>

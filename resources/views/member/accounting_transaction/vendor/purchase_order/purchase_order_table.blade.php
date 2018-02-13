@@ -26,8 +26,7 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-custom">
                                 <li><a href="/member/transaction/purchase_order/create?id={{$po->po_id}}">Edit</a></li>
-                                <li><a href="/member/transaction/purchase_order/print?id={{$po->po_id}}">Print</a></li>
-                            </ul>
+                                <li><a target="_blank" href="/member/transaction/purchase_order/print?id={{$po->po_id}}">Print</a></li>
                         </div>
                     </td>
                 </tr>                                    

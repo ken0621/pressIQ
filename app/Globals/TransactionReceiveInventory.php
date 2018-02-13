@@ -79,6 +79,7 @@ class TransactionReceiveInventory
             $ins['ri_terms_id']         = $insert['vendor_terms'];
             $ins['ri_date']         	= date("Y-m-d", strtotime($insert['transaction_date']));
             $ins['ri_due_date']         = date("Y-m-d", strtotime($insert['transaction_duedate']));
+            $ins['ri_remarks']          = $insert['vendor_remarks'] != null ? $insert['vendor_remarks'] : '';
             $ins['ri_memo']             = $insert['vendor_memo'];
             $ins['date_created']		= Carbon::now();
             $ins['inventory_only']		= 1;
@@ -121,6 +122,7 @@ class TransactionReceiveInventory
             $update['ri_terms_id']         = $insert['vendor_terms'];
             $update['ri_date']             = date("Y-m-d", strtotime($insert['transaction_date']));
             $update['ri_due_date']         = date("Y-m-d", strtotime($insert['transaction_duedate']));
+            $update['ri_remarks']          = $insert['vendor_remarks'] != null ? $insert['vendor_remarks'] : '';
             $update['ri_memo']             = $insert['vendor_memo'];
             $update['date_created']        = Carbon::now();
             $update['inventory_only']      = 1;

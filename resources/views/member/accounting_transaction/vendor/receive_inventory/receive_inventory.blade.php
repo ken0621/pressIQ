@@ -170,7 +170,7 @@
                                 <div class="row clearfix">
                                     <div class="col-sm-6">
                                         <label>Remarks</label>
-                                        <textarea class="form-control input-sm remarks-ri textarea-expand" name="vendor_reamrks" ></textarea>
+                                        <textarea class="form-control input-sm remarks-ri textarea-expand" name="vendor_remarks" >{{isset($ri->ri_remarks)? $ri->ri_remarks : ''}}</textarea>
                                     </div>
                                     <div class="col-sm-6">                      
                                         <div class="row">

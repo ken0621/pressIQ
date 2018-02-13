@@ -232,7 +232,7 @@ class Payroll2
 		$_contribution = null;
 		$count = 1;
 
-		$grand_total_pagibig_ee 	= 0;
+		$grand_total_pagibig_ee 	= 0; 
 		$grand_total_pagibig_er 	= 0;
 		$grand_total_pagibig_ee_er 	= 0;
 

@@ -440,14 +440,37 @@ class PayrollReportController extends Member
 	{
 		$data["page"] = "Loan Summary";
 		$deduction_type = str_replace("_"," ",$deduction_type);
-		$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type);
+
+		$checkcompany = Tbl_payroll_company::where('payroll_company_id',$company)->first();
+
+		$branchcompany = array();
+		if($checkcompany['payroll_parent_company_id'] == 0)
+		{
+			$tempbranchcompany = Tbl_payroll_company::where('payroll_parent_company_id',$checkcompany['payroll_company_id'])->get();
+
+			foreach($tempbranchcompany as $branch)
+			{
+				$temp['payroll_company_id'] = $branch['payroll_company_id'];
+				array_push($branchcompany,$temp);
+			}
+		}
+
+		$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type,$company,$branchcompany);
+
 		if($company == 0)
 		{
 			$data['company']	= Tbl_payroll_company::selcompany($this->shop_id())->get();
 		}
 		else
 		{
-			$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
+			if($branchcompany == null) 
+			{
+					$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
+			}
+			else
+			{
+					$data['company']	= Tbl_payroll_company::selcompanybranch($branchcompany)->get();
+			}
 		}
 		
 		$data['totals']	= $this->get_totals_loan_summary($data);
@@ -458,7 +481,22 @@ class PayrollReportController extends Member
 	public function table_company_loan_summary()
 	{
 		$data['company_id'] = Request::input('company_id');
-		$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$data['company_id'],0)->get();
+
+		$checkcompany = Tbl_payroll_company::where('payroll_company_id',$data['company_id'])->first();
+
+		$branchcompany = array();
+		if($checkcompany['payroll_parent_company_id'] == 0)
+		{
+			$tempbranchcompany = Tbl_payroll_company::where('payroll_parent_company_id',$checkcompany['payroll_company_id'])->get();
+
+			foreach($tempbranchcompany as $branch)
+			{
+				$temp['payroll_company_id'] = $branch['payroll_company_id'];
+				array_push($branchcompany,$temp);
+			}
+		}
+
+		$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$data['company_id'],0,$branchcompany)->get();
 
 		if($data['company_id'] == 0)
 		{
@@ -466,9 +504,18 @@ class PayrollReportController extends Member
 		}
 		else
 		{
-			$data['company']	= Tbl_payroll_company::selcompanybyid($data['company_id'])->get();
+			if($branchcompany == null) 
+			{
+					$data['company']	= Tbl_payroll_company::selcompanybyid($data['company_id'])->get();
+			}
+			else
+			{
+					$data['company']	= Tbl_payroll_company::selcompanybranch($branchcompany)->get();
+			}
+			
 		}
 
+		
 		$data['totals']	= $this->get_totals_loan_summary($data);
 
 		return view('member.payrollreport.table_company_loan_summary',$data);
@@ -490,24 +537,63 @@ class PayrollReportController extends Member
 		$data["_company"] = Payroll::company_heirarchy(Self::shop_id());
 		$data['company']	= Tbl_payroll_company::selcompany($this->shop_id())->get();
 
+		$checkcompany = Tbl_payroll_company::where('payroll_company_id',$company)->first();
+
+		$branchcompany = array();
+		if($checkcompany['payroll_parent_company_id'] == 0)
+		{
+			$tempbranchcompany = Tbl_payroll_company::where('payroll_parent_company_id',$checkcompany['payroll_company_id'])->get();
+
+			foreach($tempbranchcompany as $branch)
+			{
+				$temp['payroll_company_id'] = $branch['payroll_company_id'];
+				array_push($branchcompany,$temp);
+			}
+		}
+		
 		if($company != 0 && $deduction_type == 'noval')
 		{
-			$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$company,0)->get();	
-			$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
-		}	
-		else if($deduction_type != 'noval')
-		{
-			$deduction_type = str_replace("_"," ",$deduction_type);
-			$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type);
+			$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$company,0,$branchcompany)->get();
+
 			if($company == 0)
 			{
 				$data['company']	= Tbl_payroll_company::selcompany($this->shop_id())->get();
 			}
 			else
 			{
-				$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
+				if($branchcompany == null) 
+				{
+						$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
+				}
+				else
+				{
+						$data['company']	= Tbl_payroll_company::selcompanybranch($branchcompany)->get();
+				}
+				
+			}
+
+		}	
+		else if($deduction_type != 'noval')
+		{
+			$deduction_type = str_replace("_"," ",$deduction_type);
+			$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type,$company,$branchcompany);
+			if($company == 0)
+			{
+				$data['company']	= Tbl_payroll_company::selcompany($this->shop_id())->get();
+			}
+			else
+			{
+				if($branchcompany == null) 
+				{
+						$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
+				}
+				else
+				{
+						$data['company']	= Tbl_payroll_company::selcompanybranch($branchcompany)->get();
+				}
 			}
 		}
+
 		$data['totals']	= $this->get_totals_loan_summary($data);
 
           Excel::create("Loan Summary Reports",function($excel) use ($data)

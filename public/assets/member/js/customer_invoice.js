@@ -115,7 +115,7 @@ function customer_invoice()
 	}
 	function action_lastclick_row()
 	{
-		$(document).on("click", "tbody.draggable.tbody-item tr:last td:not(.remove-tr)", function(){
+		$(document).on("click", "tbody.draggable tr:last td:not(.remove-tr)", function(){
 			action_lastclick_row_op();
 		});
 		$(document).on("click", "tbody.cm-draggable tr:last td:not(.remove-tr)", function(){
@@ -133,7 +133,7 @@ function customer_invoice()
 
 	function action_lastclick_row_op()
 	{
-		$("tbody.draggable.tbody-item").append(global_tr_html);
+		$("tbody.draggable").append(global_tr_html);
 		action_reassign_number();
 		action_trigger_select_plugin();
 		action_date_picker();

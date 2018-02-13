@@ -188,7 +188,7 @@
                                                         <td tr_id="{{$invline->invline_ref_id}}" linked_in="{{$invline->invline_ref_name}}" class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                 @endforeach
-                                            @endif                             
+                                            @endif  
                                         </tbody>
                                         <tbody class="draggable tbody-item estimate-tbl">
                                                 @include("member.load_ajax_data.load_est_session_item")  

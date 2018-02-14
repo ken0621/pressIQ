@@ -23,7 +23,7 @@
 						</tr>
 					</table>
 				</div>
-				@if($mlm == 1)
+				{{-- @if($mlm == 1)
 				<div class="profile-lead">
 					<a data-toggle="modal" data-target="#leads_modal" href="javascript:">
 						<img src="/themes/{{ $shop_theme }}/img/leads.png"> Leads Link
@@ -34,7 +34,7 @@
 					      <!-- Modal content-->
 					      <div class="modal-content">
 					         <div class="modal-header">
-					            {{-- <button type="button" class="close" data-dismiss="modal">&times;</button> --}}
+					            <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
 					            <h4 class="modal-title">LEADS LINK</h4>
 					         </div>
 					         <div class="modal-body">
@@ -49,7 +49,7 @@
 					   </div>
 					</div>
 				</div>
-				@endif
+				@endif --}}
 				<div class="profile-about">
 					<div class="title">About Me</div>
 					<table>

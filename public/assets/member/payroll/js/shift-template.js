@@ -87,7 +87,37 @@ function shifting()
 			url 	: 	"/member/payroll/shift_template/get_shift_tag_employee",
 			type 	: 	"POST",
 			data 	: 	{
-				_token:misc('_token')
+				_token:misc('_token'),
+				shift_id : $("#shift_id").val()
+			},
+			success : 	function(result)
+			{
+				result = JSON.parse(result);
+				var html = "";
+				console.log(result);
+				$(result.new_record).each(function(index, emp)
+				{			
+						html += tbl_tag2(emp,result.shift_id);
+				});
+				$(".tbl-tag").html(html);
+				remove_tag();
+			},
+			error 	: 	function(err)
+			{
+				error_function();
+			}
+		});
+	}
+
+
+	this.load_add_tag_employee = function()
+	{
+		$(".tbl-tag").html('<tr><td colspan="3" class="text-center">'+misc('loader') + '</td></tr>');
+		$.ajax({
+			url 	: 	"/member/payroll/shift_template/get_shift_add_tag_employee",
+			type 	: 	"POST",
+			data 	: 	{
+				_token:misc('_token'),
 			},
 			success : 	function(result)
 			{
@@ -97,6 +127,35 @@ function shifting()
 				$(result.new_record).each(function(index, emp)
 				{			
 						html += tbl_tag(emp);
+				});
+				$(".tbl-tag").html(html);
+				remove_tag();
+			},
+			error 	: 	function(err)
+			{
+				error_function();
+			}
+		});
+	}
+
+	this.load_edit_tag_employee = function()
+	{
+		$(".tbl-tag").html('<tr><td colspan="3" class="text-center">'+misc('loader') + '</td></tr>');
+		$.ajax({
+			url 	: 	"/member/payroll/shift_template/load_shift_employee_tag",
+			type 	: 	"POST",
+			data 	: 	{
+				_token:misc('_token'),
+				shift_id : $("#shift_id").val()
+			},
+			success : 	function(result)
+			{	
+				result = JSON.parse(result);
+				var html = "";
+				console.log(result);
+				$(result.new_record).each(function(index, emp)
+				{			
+						html += tbl_tag2(emp);
 				});
 				$(".tbl-tag").html(html);
 				remove_tag();
@@ -220,6 +279,17 @@ function shifting()
 		$(".time-entry.out").timeEntry('destroy');
 		$(".time-entry.in").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
 		$(".time-entry.out").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 12, 0, 0)});
+	}
+
+	function tbl_tag2(data,id)
+	{
+		var html ='<tr>';
+		html +=	'<td>' + data.payroll_employee_display_name + '<input type="hidden" name="employee_tag[]" value="'+data.payroll_employee_id+'"></td>';
+		html +=	'<td class="text-center"><a href="#" class="popup" size="sm" link="/member/payroll/leave/v2/modal_leave_action/'+data.payroll_employee_id+'/remove_shift_tag/'+id+'"><i class="fa fa-times"></i></a></td>';
+		html += '</tr>';
+
+		return html;
+
 	}
 
 	function action_show_break_hour()

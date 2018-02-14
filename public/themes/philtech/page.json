@@ -270,6 +270,27 @@
 			"type":"tinymce",
 			"default":"",
 			"size":"6"
+		},
+		"privacy_policy" :
+		{
+			"label":"Privacy Policy Procedure",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"franchise_terms_and_condition" :
+		{
+			"label":"Franchise Terms and Condition",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"general_terms_and_condition" :
+		{
+			"label":"General Terms and Condition",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
 		}
 	}
 }

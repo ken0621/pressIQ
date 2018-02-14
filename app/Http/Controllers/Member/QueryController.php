@@ -14,14 +14,14 @@ class QueryController extends Member
 		$return = null;
 		foreach ($data as $key => $value) 
 		{
-			$ez_bonus = Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("wallet_log_slot",$value->slot_id)->where("wallet_log_plan","EZ_REFERRAL_BONUS")->where("wallet_log_amount", "<", 0)->sum("wallet_log_amount") * -1;
-			$query_total_payout = Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("wallet_log_slot",$value->slot_id)->where("wallet_log_amount", "<", 0);
+			$ez_bonus = Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("wallet_log_slot",$value->slot_id)->where("wallet_log_plan","EZ_REFERRAL_BONUS")->sum("wallet_log_amount") * -1;
+			$query_total_payout = Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("wallet_log_slot",$value->slot_id)->whereIn("wallet_log_plan",['EON','BANK']);
 			$search_key = '';
-			$query_total_payout->where(function($q) use ($search_key)
-			{
-				$q->orWhere("wallet_log_plan", "EON");
-				$q->orWhere("wallet_log_plan", "BANK");
-			});
+			// $query_total_payout->where(function($q) use ($search_key)
+			// {
+			// 	$q->orWhere("wallet_log_plan", "EON");
+			// 	$q->orWhere("wallet_log_plan", "BANK");
+			// });
 
 			$total_payout = $query_total_payout->sum("wallet_log_amount") * -1;
 

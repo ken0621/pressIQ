@@ -208,10 +208,9 @@ function customer_wis_create()
 		$parent.find(".txt-desc").html($this.find("option:selected").attr("sales-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
 		$parent.find(".txt-qty").val(1).change();
-		$parent.find(".txt-qty").attr("disabled",true);
 		if($this.find("option:selected").attr("has-um"))
 		{
-			$parent.find(".txt-qty").attr("disabled",false);
+			$parent.find(".txt-qty").attr("disabled",true);
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
 				$parent.find(".txt-qty").removeAttr("disabled");

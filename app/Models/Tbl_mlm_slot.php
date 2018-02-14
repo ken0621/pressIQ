@@ -47,6 +47,11 @@ class Tbl_mlm_slot extends Model
         $query->leftjoin('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_mlm_slot.slot_id');
         return $query;
     }
+    public function scopeWalletInfo($query)
+    {
+        $query->leftjoin('tbl_mlm_slot_wallet_log', 'wallet_log_slot', '=', 'tbl_mlm_slot.slot_id');
+        return $query;        
+    }
     public function scopeCurrentWallet($query)
     {
         $query->select("*",

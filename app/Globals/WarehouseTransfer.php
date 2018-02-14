@@ -217,6 +217,31 @@ class WarehouseTransfer
 
         return $return;
     }
+    public static function rr_insertline($rr_id, $insert_item)
+    {
+        $return = null;
+        $itemline = null;
+        foreach ($insert_item as $key => $value) 
+        {
+            $itemline[$key]['rr_id']      		= $rr_id;
+            $itemline[$key]['rr_item_id']     	= $value['item_id'];
+            $itemline[$key]['rr_description'] 	= $value['item_description'];
+            $itemline[$key]['rr_qty']         	= $value['item_qty'];
+            $itemline[$key]['rr_orig_qty']      = $value['item_qty'];
+            $itemline[$key]['rr_um']           	= $value['item_um'];
+            $itemline[$key]['rr_rate']          = $value['item_rate'];
+            $itemline[$key]['rr_amount']     	= $value['item_amount'];
+            $itemline[$key]['rr_refname']     	= $value['item_refname'];
+            $itemline[$key]['rr_refid']       	= $value['item_refid'];
+        }
+        if(count($itemline) > 0)
+        {
+            Tbl_warehouse_receiving_report_itemline::insert($itemline);
+            $return = 1;
+        }
+
+        return $return;
+    }
     public static function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->value('user_shop');
@@ -333,31 +358,35 @@ class WarehouseTransfer
 
 	        $to['name'] = 'rr';
 	        $to['id'] = $rr_id;	
+	        $val = Self::rr_insertline($rr_id, $_item);
+            if(is_numeric($val))
+            {
 
-        	$val = Warehouse2::transfer_bulk($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $_item, $ins_rr['rr_remarks'], $source, $to);
+	        	$val = Warehouse2::transfer_bulk($shop_id, $wis_data->wis_from_warehouse, $ins_rr['warehouse_id'], $_item, $ins_rr['rr_remarks'], $source, $to);
 
-        	if(!$val)
-        	{
-        		$get_item = Tbl_warehouse_inventory_record_log::where('record_source_ref_name','rr')->where('record_source_ref_id',$rr_id)->get();
+	        	if(!$val)
+	        	{
+	        		$get_item = Tbl_warehouse_inventory_record_log::where('record_source_ref_name','rr')->where('record_source_ref_id',$rr_id)->get();
 
-        		$ins_report_item = null;
-        		foreach ($get_item as $key_item => $value_item)
-        		{
-        			$ins_report_item[$key_item]['rr_id'] = $rr_id;
-        			$ins_report_item[$key_item]['record_log_item_id'] = $value_item->record_log_id;
-        		}
+	        		$ins_report_item = null;
+	        		foreach ($get_item as $key_item => $value_item)
+	        		{
+	        			$ins_report_item[$key_item]['rr_id'] = $rr_id;
+	        			$ins_report_item[$key_item]['record_log_item_id'] = $value_item->record_log_id;
+	        		}
 
-        		if($ins_report_item)
-        		{
-    				Tbl_warehouse_receiving_report_item::insert($ins_report_item);
+	        		if($ins_report_item)
+	        		{
+	    				Tbl_warehouse_receiving_report_item::insert($ins_report_item);
 
-    				if($wis_data->wis_status == 'confirm')
-    				{
-	    				$udpate_wis['wis_status'] = 'received';
-	    				WarehouseTransfer::update_wis($shop_id, $wis_id, $udpate_wis);	
-    				}
-        		}
-        	}
+	    				if($wis_data->wis_status == 'confirm')
+	    				{
+		    				$udpate_wis['wis_status'] = 'received';
+		    				WarehouseTransfer::update_wis($shop_id, $wis_id, $udpate_wis);	
+	    				}
+	        		}
+	        	}
+	        }
 
         	return $val;
     	}

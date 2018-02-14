@@ -33,6 +33,7 @@ function rr_create()
 		event_remove_tr();
 		action_reassign_number();
 		event_compute_class_change();
+		action_compute();
 	}
 	function event_remove_tr()
 	{		

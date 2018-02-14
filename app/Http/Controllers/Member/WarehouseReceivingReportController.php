@@ -61,7 +61,7 @@ class WarehouseReceivingReportController extends Member
         $data['wis_item']   = WarehouseTransfer::get_wis_itemline($wis_id);
         $data['_item']      = Item::get_all_category_item([1,4,5]);
         $data['_um']        = UnitMeasurement::load_um_multi();
-        
+        $data['wis_id']     = $wis_id;
         $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'receiving_report');
         if($data['wis'])
         {
@@ -81,14 +81,15 @@ class WarehouseReceivingReportController extends Member
         $shop_id = $this->user_info->shop_id;
         $ins_rr['rr_shop_id'] = $shop_id;
         $ins_rr['rr_number'] = $request->rr_number;
-        $ins_rr['wis_id'] = Session::get('wis_id');
+        $ins_rr['wis_id'] = $request->wis_id;
+        $ins_rr['rr_date_received'] = $request->rr_date_received;
         $ins_rr['warehouse_id'] = Warehouse2::get_current_warehouse($shop_id);
         $ins_rr['rr_remarks'] = $request->rr_remarks;
         $ins_rr['created_at'] = Carbon::now();
 
-        $wis_data = WarehouseTransfer::get_wis_data(Session::get('wis_id'));
+        $wis_data = WarehouseTransfer::get_wis_data($request->wis_id);
 
-        $_item = $request->rr_item_quantity;
+        $_item = $request->item_id;
 
         $return = null;
 
@@ -99,14 +100,26 @@ class WarehouseReceivingReportController extends Member
             {
                 if($value)
                 {
-                    if($request->wis_item_quantity[$key] < $value)
+                    $qty = $request->item_qty[$key] * UnitMeasurement::um_qty($items[$key]['item_um']);
+                    if($request->wis_item_quantity[$key] < $qty)
                     {
-                        $return .= "The ITEM no ".$key." is not enough to transfer <br>";
+                        $return .= "The ITEM no ".$value." is not enough to transfer <br>";
                     }
 
-                    $items[$key]['item_id'] = $key;
-                    $items[$key]['quantity'] = $value;
-                    $items[$key]['remarks'] = 'Transfer item no. '.$key.' from WIS -('.$wis_data->wis_number.')';                
+                    $items[$key] = null;
+                    $items[$key]['item_id']          = $value;
+                    $items[$key]['item_description'] = $request->item_description[$key];
+                    $items[$key]['item_um']          = $request->item_um[$key];
+                    $items[$key]['item_qty']         = $request->item_qty[$key];
+                    $items[$key]['item_rate']        = $request->item_rate[$key];
+                    $items[$key]['item_amount']      = $request->item_amount[$key];
+                    $items[$key]['item_refname']     = $request->item_refname[$key];
+                    $items[$key]['item_refid']       = $request->item_refid[$key];
+
+
+                    $items[$key]['quantity']         = $request->item_qty[$key] * UnitMeasurement::um_qty($items[$key]['item_um']);
+
+                    $items[$key]['remarks'] = 'Transfer item no. '.$value.' from WIS -('.$wis_data->wis_number.')';                
                 }
             }            
         }

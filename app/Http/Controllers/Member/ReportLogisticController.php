@@ -17,7 +17,6 @@ class ReportLogisticController extends Member
         $data['head_title']  = 'Logistic Report'; 
         $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
         
-     
         $data['head_icon']  = 'fa fa-area-chart';
         $data['head_discription'] = '';
 
@@ -30,6 +29,7 @@ class ReportLogisticController extends Member
         $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
         $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
         $data['_report'] = Transaction::get_all_transaction_item($this->user_info->shop_id, $data['from'], $data['to'], 'receipt', $payment_type,'a0');
+        //dd($data['_report']);
         $data['payment_method'] = $payment_type;
 
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */

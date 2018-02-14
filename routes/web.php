@@ -483,6 +483,14 @@ Route::any('/member/item/inventory_log','Member\InventoryLogController@index');
 AdvancedRoute::controller('/member/accounting/stock_ledger', 'Member\ReportStockLedgerController');
 /* End */
 
+/* REPORT - INVENTORY - SUMMARY*/
+AdvancedRoute::controller('/member/report/inventory/summary', 'Member\InventorySummaryController');
+/* End */
+
+/* REPORT - INVENTORY - DETAILES*/
+AdvancedRoute::controller('/member/report/inventory/detailed', 'Member\InventoryDetailedController');
+/* End */
+
 /* WAREHOUSE V2*/
 AdvancedRoute::controller('/member/item/v2/warehouse', 'Member\WarehouseControllerV2');
 /* End */

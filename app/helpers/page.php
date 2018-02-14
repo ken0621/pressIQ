@@ -202,7 +202,29 @@ function page_list($pis = 0)
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "ARCY";
 
-    
+    /* -- REPORT => INVENTORY SUBMENU */
+    $segment = "submenu-inventory";
+    $nav[$page]['submenu'][$segment]['name']   = "Inventory"; 
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+        /* -- INVENTORY => INVENTORY SUMMARY  */
+        $code = "report-inventory-summary";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Inventory - Summary";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/inventory/summary";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
+        /* -- INVENTORY => INVENTORY DETAILED  */
+        $code = "report-inventory-detailed";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Inventory - Detailed";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/inventory/detailed";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 
     /* TRANSACTION */
     // $page = "transaction_list";  

@@ -114,7 +114,8 @@ function inventory_adjustment()
 			{
 				var total_per_tr = ((new_quantity * rate)).toFixed(2);
 
-				var diff = qty - new_quantity;
+				//var diff = qty - new_quantity;
+				var diff = new_quantity - qty;
 				difference.val(action_add_comma(diff));
 			}
 			

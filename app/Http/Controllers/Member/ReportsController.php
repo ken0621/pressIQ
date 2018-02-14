@@ -647,7 +647,6 @@ class ReportsController extends Member
 
         $data['_warehouse'] = Tbl_warehouse::where("warehouse_shop_id", $this->user_info->shop_id)->get();
         $data['_item'] = Tbl_item::type()->where("shop_id", $this->user_info->shop_id)->where("tbl_item.archived", 0)->get();
-
         foreach($data['_item'] as $key=>$item)
         {
             // $data['_item'][$key]->item_warehouse  = Tbl_item::warehouseInventory($item->shop_id, $item->item_id)
@@ -657,7 +656,7 @@ class ReportsController extends Member
             //                                         ->get();
             $data['_item'][$key]->item_warehouse = Item::item_inventory_report($item->shop_id, $item->item_id, $data['from'], $data['to']);
         }   
-
+        
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
         if($report_type && !$load_view)
         {

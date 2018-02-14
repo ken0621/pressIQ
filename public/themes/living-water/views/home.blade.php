@@ -2,10 +2,9 @@
 @section("content")
 <div class="content">
     <!-- Media Slider -->
-    <div id="home" class="slider-wrapper" style="background-image: url('/themes/living-water/img/home-banner.jpg')">
-        <div class="container">
-            
-        </div>
+    <div id="home" class="slider-wrapper single-item">
+        <img src="/themes/{{ $shop_theme }}/img/home-banner.jpg">
+        <img src="/themes/{{ $shop_theme }}/img/home-banner-2.jpg">
     </div>
 
     <div id="about" class="wrapper-1">
@@ -17,9 +16,7 @@
                             <span class="icon-container"><img src="/themes/living-water/img/water-drops.png"></span><span class="title">ABOUT US</span>
                         </div>
                         <div class="description-container">
-                            <p>LIVINGWATER has been in the business of supplying healthy drinking water for almost three (3) years. Given its vast marketing experiences and a solid development foundation, our company has carved for itself a formidable position in the supply of healthy drinking water in the Philippines.</p>
-                            <p>Being the first to launch in the market a unique marketing approach, LIVINGWATER popularize the 3-N-1 system – PURIFIED WATER, MINERAL WATER, ALKALINE WATER in just one refilling station. This technology attributes to the drastic growth of our practical Franchisees who want to give their customers the best option on what to buy on their budget, taste, health preferences, and the freedom to choose – that is all LIVINGWATER all about.</p>
-                            <p>Holding on its firm belief to continuously innovate and improve, LIVINGWATER has been able to anticipate market demands, explore and introduce new products to meet the needs of its broad clientele, and has become a trendsetter in this industry.</p>
+                            <p>{!! get_content($shop_theme_info, "home", "home_about_description") !!}</p>
                         </div>
                         <div class="button-container">
                             <a href="#"><button>READ MORE</button></a>
@@ -29,7 +26,7 @@
                 <div class="col-md-6">
                     <div class="right-container">
                         <div class="image-holder">
-                            <img src="/themes/living-water/img/about-image.jpg">
+                            <img src="{{ get_content($shop_theme_info, "home", "home_about_image") }}">
                         </div>
                     </div>
                 </div>
@@ -37,64 +34,31 @@
         </div>
     </div>
 
-    <div id="prcess" class="wrapper-2">
+    <div id="process" class="wrapper-2">
         <div class="container">
             <div class="title-container">
                 <span class="icon-container"><img src="/themes/living-water/img/water-drops.png"></span><span class="title">OUR PROCESS</span>
             </div>
-            <div class="process-carousel">
-                <div class="holder">
+            <div class="row clearfix">
+                <div class="col-md-6">
                     <div class="process-container">
                         <div class="process-holder">
-                            <div class="process-image"><img src="/themes/living-water/img/process-image-1.png"></div>
+                            <div class="process-image"><img src="{{ get_content($shop_theme_info, "home", "home_process_image_1") }}"></div>
                         </div>
                         <div class="details-container">
-                            <div class="title">Lorem Ipsum</div>
-                            <div class="ratings"><img src="/themes/living-water/img/star.png"></div>
+                            <div class="title">{!! get_content($shop_theme_info, "home", "home_process_title_1") !!}</div>
+                            <div class="description">{!! get_content($shop_theme_info, "home", "home_process_description_1") !!}</div>
                         </div>
                     </div>
                 </div>
-                <div class="holder">
+                <div class="col-md-6">
                     <div class="process-container">
                         <div class="process-holder">
-                            <div class="process-image"><img src="/themes/living-water/img/process-image-2.png"></div>
+                            <div class="process-image"><img src="{{ get_content($shop_theme_info, "home", "home_process_image_2") }}"></div>
                         </div>
                         <div class="details-container">
-                            <div class="title">Lorem Ipsum</div>
-                            <div class="ratings"><img src="/themes/living-water/img/star.png"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="holder">
-                    <div class="process-container">
-                        <div class="process-holder">
-                            <div class="process-image"><img src="/themes/living-water/img/process-image-1.png"></div>
-                        </div>
-                        <div class="details-container">
-                            <div class="title">Lorem Ipsum</div>
-                            <div class="ratings"><img src="/themes/living-water/img/star.png"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="holder">
-                    <div class="process-container">
-                        <div class="process-holder">
-                            <div class="process-image"><img src="/themes/living-water/img/process-image-2.png"></div>
-                        </div>
-                        <div class="details-container">
-                            <div class="title">Lorem Ipsum</div>
-                            <div class="ratings"><img src="/themes/living-water/img/star.png"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="holder">
-                    <div class="process-container">
-                        <div class="process-holder">
-                            <div class="process-image"><img src="/themes/living-water/img/process-image-1.png"></div>
-                        </div>
-                        <div class="details-container">
-                            <div class="title">Lorem Ipsum</div>
-                            <div class="ratings"><img src="/themes/living-water/img/star.png"></div>
+                            <div class="title">{!! get_content($shop_theme_info, "home", "home_process_title_2") !!}</div>
+                            <div class="description">{!! get_content($shop_theme_info, "home", "home_process_description_2") !!}</div>
                         </div>
                     </div>
                 </div>
@@ -102,7 +66,31 @@
         </div>
     </div>
 
-    <div id="contact" class="wrapper-3">
+    <div id="product" class="wrapper-3">
+        <div class="container">
+            <div class="title-container">
+                <span class="icon-container"><img src="/themes/living-water/img/water-drops.png"></span><span class="title">A HEALTHY WATER FOR EVERYONE</span>
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-6">
+                    <div class="left-container">
+                        <div class="image-holder">
+                            <img src="{{ get_content($shop_theme_info, "home", "home_product_image") }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="right-container">
+                        <div class="description-container">
+                            <p>{!! get_content($shop_theme_info, "home", "home_product_description") !!}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="contact" class="wrapper-4">
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-6">
@@ -149,8 +137,18 @@
                 </div>
                 <div class="col-md-6">
                     <div class="info-container">
-                        <span class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-address.png"></span><span class="title">Business Address</span>
-                        <div class="details-container"><p></p></div>
+                        <div class="title">Main Office: </div>
+                        <div class="details-container">
+                            <span class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></span><span class="details">{!! get_content($shop_theme_info, "contact_details", "contact_company_address") !!}</span>
+                        </div>
+                        <div class="title">Email Address: </div>
+                        <div class="details-container">
+                            <span class="icon"><i class="fa fa-envelope" aria-hidden="true"></i></span><span class="details">{!! get_content($shop_theme_info, "contact_details", "contact_company_email_address") !!}</span>
+                        </div>
+                        <div class="title">Contact Number: </div>
+                        <div class="details-container">
+                            <span class="icon"><i class="fa fa-phone" aria-hidden="true"></i></span><span class="details">{!! get_content($shop_theme_info, "contact_details", "contact_company_contact_number") !!}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -167,6 +165,28 @@
 @endsection
 
 @section("script")
+
+<script type="text/javascript">
+
+    $(document).ready(function()
+    {
+        $('.single-item').slick
+        ({
+            prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/arrow-left.png'>",
+            nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/arrow-right.png'>",
+            dots: false,
+            autoplay: true,
+            autoplaySpeed: 3000,
+        });
+
+        lightbox.option({
+          'disableScrolling': true,
+          'wrapAround': true
+        });
+
+    });
+    
+</script>
 
 <script type="text/javascript">
 /*$(document).ready(function($) {

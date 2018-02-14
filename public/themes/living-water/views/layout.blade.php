@@ -11,7 +11,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
-        <link rel="icon" href="/themes/{{ $shop_theme }}/img/header-logo.jpg" type="image/jpg" />
+        <link rel="icon" href="/themes/{{ $shop_theme }}/img/favicon.png" type="image/jpg" />
     
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=PT+Serif:400,700" rel="stylesheet">
@@ -50,9 +50,9 @@
         <div class="container">
             <div class="left-container">
                 <span><i class="fa fa-phone" aria-hidden="true"></i></span>
-                <span>Call Us 09-562-87-6385</span>
+                <span>Call Us {!! get_content($shop_theme_info, "contact_details", "contact_company_contact_number") !!}</span>
                 <span><i class="fa fa-envelope" aria-hidden="true"></i></span>
-                <span>livingwater@gmail.com</span>
+                <span>{!! get_content($shop_theme_info, "contact_details", "contact_company_email_address") !!}</span>
             </div>
         </div>
     </div>
@@ -81,15 +81,15 @@
                             @if(Request::segment(1)=="members")
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                 <li><a class="smoth-scroll" href="#about">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="#aboutus">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="#expertise">PRODUCT</a></li>
-                                <li><a class="smoth-scroll" href="#careers">CONTACT</a></li>
+                                <li><a class="smoth-scroll" href="#process">PROCESS</a></li>
+                                <li><a class="smoth-scroll" href="#product">PRODUCT</a></li>
+                                <li><a class="smoth-scroll" href="#contact">CONTACT</a></li>
                             @else
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                 <li><a class="smoth-scroll" href="#about">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="#aboutus">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="#expertise">PRODUCT</a></li>
-                                <li><a class="smoth-scroll" href="#careers">CONTACT</a></li>
+                                <li><a class="smoth-scroll" href="#process">PROCESS</a></li>
+                                <li><a class="smoth-scroll" href="#product">PRODUCT</a></li>
+                                <li><a class="smoth-scroll" href="#contact">CONTACT</a></li>
                             @endif
                         </ul>
                     </nav>
@@ -120,11 +120,11 @@
                          <div class="footer-title-container">
                             <p class="footer-title">INFORMATION</p>
                         </div>
-                        <div class="info-list"><a class="smoth-scroll" href="#">HOME</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="#">ABOUT US</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="#">PROCESS</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="#">PRODUCTS</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="#">CONTACT US</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="#home">HOME</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="#about">ABOUT US</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="#process">PROCESS</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="#product">PRODUCTS</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="#contact">CONTACT US</a></div>
                     </div>
                     <div class="col-md-4">
                         <div class="footer-title-container">

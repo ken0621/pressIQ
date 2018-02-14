@@ -43,9 +43,9 @@ body{
 {
 	position: relative;
 	width: 100%;
-	background-position: center;
-	background-size: cover;
-	min-height: 565px;
+	// background-position: center;
+	// background-size: cover;
+	// min-height: 565px;
 }
 
 .wrapper-1
@@ -156,35 +156,32 @@ body{
 			margin-bottom: 20px;
 		}
 	}
-	.holder	
+	.process-container
 	{
-		padding: 15px 5px;
-		margin: auto 5px;
-		.process-container
+		width: 65%; 
+		margin: auto;
+		.process-holder
 		{
-			.process-holder
+			background-color: #f6f6f6;
+			text-align: center;
+			padding: 25px;
+		}
+		.details-container	
+		{
+			padding: 0 25px;
+			.title
 			{
-				background-color: #f6f6f6;
+				font-family: 'PT Serif', serif;
+				font-weight: 700;
+				padding: 10px 0 5px 0;
+				font-size: 17px;
 				text-align: center;
-				padding: 25px;
 			}
-			.details-container	
+			.description
 			{
-				text-align: center;
-				.title
-				{
-					font-family: 'PT Serif', serif;
-					font-weight: 700;
-					padding: 10px 0 5px 0;
-					font-size: 17px;
-				}
-				.ratings
-				{
-					img
-					{
-						display: inline-block;
-					}
-				}
+				color: #575757;
+				font-size: 13px;
+				font-family: 'PT Sans', sans-serif;
 			}
 		}
 	}
@@ -193,6 +190,62 @@ body{
 .wrapper-3
 {
 	background-color: #f6f6f6;
+	padding: 50px 0;
+	.title-container
+	{
+		text-align: center;
+		padding-bottom: 10px;
+		.icon-container
+		{
+			margin-left: 20px;
+			vertical-align: middle;
+			img
+			{
+				width: 85%;
+			}
+		}
+		.title
+		{
+
+			font-family: 'PT Serif', serif;
+			color: #474747;
+			font-weight: 700;
+			font-size: 25px;
+		}
+		span
+		{
+			vertical-align: middle;
+			display: inline-block;
+			margin-bottom: 20px;
+		}
+	}
+	.left-container
+	{
+		text-align: center;
+		padding-top: 20px;
+		.image-holder
+		{
+			img
+			{
+				width: 80%;
+			}
+		}
+	}
+	.right-container
+	{
+		.description-container
+		{
+			font-size: 17px;
+			font-family: 'PT Sans', sans-serif;
+			color: #575757;
+			padding: 20px 0 0 0;
+		}
+	}
+}
+
+.wrapper-4
+{
+	background-color: #fff;
 	padding: 50px 0;
 	.title-container
 	{
@@ -268,6 +321,33 @@ body{
 	}
 	.info-container
 	{
-		
+		margin-left: 40px;
+		margin-top: 50px;
+		.title
+		{
+			font-size: 25px;
+			font-weight: 700;
+			font-family: 'PT Serif', serif; 
+			color: #474747;
+			margin-top: 20px;
+		}
+		.details-container
+		{
+			.icon
+			{
+				font-size: 25px;
+			}
+			.details
+			{
+				font-family: 'PT Sans', sans-serif;
+				color: #575757;
+				padding-left: 10px;
+				font-size: 20px;
+			}
+			span
+			{
+				vertical-align: middle;
+			}
+		}
 	}
 }

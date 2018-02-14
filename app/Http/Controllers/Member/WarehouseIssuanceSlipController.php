@@ -152,7 +152,6 @@ class WarehouseIssuanceSlipController extends Member
                 $_item[$key]['item_refname']     = $request->item_refname[$key];
                 $_item[$key]['item_refid']       = $request->item_refid[$key];
 
-
                 $_item[$key]['quantity']         = $request->item_qty[$key] * UnitMeasurement::um_qty($_item[$key]['item_um']);
                 $_item[$key]['remarks']          = $request->item_description[$key];
             }
@@ -177,11 +176,11 @@ class WarehouseIssuanceSlipController extends Member
     public function getPrint(Request $request, $wis_id)
     {
         $data['wis'] = WarehouseTransfer::get_wis_data($wis_id);
-        $data['wis_item'] = WarehouseTransfer::print_wis_item($wis_id);
+        $data['wis_item_v1'] = WarehouseTransfer::print_wis_item($wis_id);
+        $data['wis_item'] = WarehouseTransfer::get_wis_itemline($wis_id);
         $data['user'] = $this->user_info;
         $data['owner'] = WarehouseTransfer::get_warehouse_data($data['wis']->wis_from_warehouse);
         $data['deliver_to'] = WarehouseTransfer::get_warehouse_data($data['wis']->destination_warehouse_id);
-        
         // return view('member.warehousev2.wis.print_wis', $data);
         $pdf = view('member.warehousev2.wis.print_wis', $data);
         return Pdf_global::show_pdf($pdf,null,$data['wis']->wis_number);

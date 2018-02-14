@@ -12,7 +12,15 @@
         <td class="text-right">{{strtoupper($wis->wis_number)}}</td>
     </tr>
     <tr>
-        <td colspan="2"><b>DELIVER TO : {{$deliver_to->warehouse_name}}</b></td>
+        <td colspan="2">
+            <b>DELIVER TO : {{$deliver_to->warehouse_name or ''}}</b>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <b>ADDRESS :</b> 
+            {{ $wis->destination_warehouse_address }}
+        </td>
     </tr>
     <tr>
         <td colspan="2">
@@ -21,12 +29,15 @@
     </tr>
 </table>
 <br>
+
 <table style="width: 100%;">
     <thead style="font-weight: bold;">
         <tr>
             <td>ITEM NAME</td>
             <td>ITEM SKU</td>
             <td>ISSUED QTY</td>
+            <td>RATE</td>
+            <td>AMOUNT</td>
         </tr>
     </thead>
     <tbody>
@@ -35,7 +46,19 @@
             <tr>
                 <td>{{$item->item_name}}</td>
                 <td>{{$item->item_sku}}</td>
-                <td>{{$item->wis_item_quantity}} pc(s)</td>
+                <td>{{$item->qty}}</td>
+                <td>{{currency('',$item->wt_rate)}}</td>
+                <td>{{currency('',$item->wt_amount)}}</td>
+            </tr>
+            @endforeach
+        @elseif(count($wis_item_v1) > 0)
+            @foreach($wis_item_v1 as $itemv1)
+            <tr>
+                <td>{{$itemv1->item_name}}</td>
+                <td>{{$itemv1->item_sku}}</td>
+                <td>{{$itemv1->qty}} pc(s)</td>
+                <td>{{currency('',$itemv1->item_price)}}</td>
+                <td>{{currency('',($itemv1->qty * $itemv1->item_price))}}</td>
             </tr>
             @endforeach
         @else

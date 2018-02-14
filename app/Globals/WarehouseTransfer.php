@@ -44,9 +44,7 @@ class WarehouseTransfer
 {   
 	public static function get_all_wis($shop_id = 0, $status = 'pending', $current_warehouse = 0)
 	{
-		$data = Tbl_warehouse_issuance_report::inventory_item()->where('wis_shop_id',$shop_id)->where('wis_status', $status)->groupBy
-		('tbl_warehouse_issuance_report.wis_id')->where('wis_from_warehouse', $current_warehouse)->get();
-
+		$data = Tbl_warehouse_issuance_report::inventory_item()->where('wis_shop_id',$shop_id)->where('wis_status', $status)->groupBy('tbl_warehouse_issuance_report.wis_id')->where('wis_from_warehouse', $current_warehouse)->get();
 		foreach ($data as $key => $value) 
 		{
 			$count = Tbl_warehouse_receiving_report::wis()->inventory_item()->where('tbl_warehouse_receiving_report.wis_id',$value->wis_id)->count();
@@ -258,7 +256,15 @@ class WarehouseTransfer
 	}
 	public static function get_wis_itemline($wis_id)
 	{
-		return Tbl_warehouse_issuance_report_itemline::um()->where("wt_wis_id", $wis_id)->get();
+		$data = Tbl_warehouse_issuance_report_itemline::item()->um()->where("wt_wis_id", $wis_id)->get();
+		foreach($data as $key => $value) 
+        {
+            $qty = UnitMeasurement::um_qty($value->wt_um);
+
+            $total_qty = $value->wt_orig_qty * $qty;
+            $data[$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->wt_um);
+        }
+        return $data;
 	}
 	public static function get_rr_data($rr_id)
 	{

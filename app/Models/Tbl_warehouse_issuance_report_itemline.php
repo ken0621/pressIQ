@@ -13,4 +13,8 @@ class Tbl_warehouse_issuance_report_itemline extends Model
     {
         return $query->leftjoin('tbl_unit_measurement_multi','multi_um_id','=','wt_um');
     }
+    public function scopeItem($query)
+    {
+        return $query->leftjoin('tbl_item','item_id','=','wt_item_id');
+    }
 }

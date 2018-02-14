@@ -48,6 +48,16 @@ class Tbl_payroll_company extends Model
         return $query;
     }
 
+    public function scopeselcompanybranch($query,$payroll_company_id = 0, $archived = 0)
+    {
+        $query->leftjoin('tbl_payroll_rdo','tbl_payroll_rdo.payroll_rdo_id','=','tbl_payroll_company.payroll_company_rdo')
+              ->whereIn('payroll_company_id', $payroll_company_id)
+              ->where('payroll_company_archived',$archived);
+
+        return $query;
+    }
+
+
     public function scopeselbycode($query, $shop_id = 0, $payroll_company_code = '')
     {
         $query->where('shop_id', $shop_id)->where('payroll_company_code', $payroll_company_code);

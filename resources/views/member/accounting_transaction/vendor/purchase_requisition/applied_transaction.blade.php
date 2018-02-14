@@ -11,7 +11,6 @@
             </select>
         </td>
         <td><textarea class="textarea-expand txt-desc" name="rs_item_description[]" readonly="true">{{$transaction['item_description']}}</textarea></td>
-        <td><input class="text-center number-input txt-qty compute" type="text" name="rs_item_qty[]" value="{{$transaction['item_qty']}}" /></td>
         <td><select class="droplist-item-um select-um {{isset($transaction['multi_id']) ? 'has-value' : ''}}" name="rs_item_um[]">
                 @if($transaction['item_um'])
                     @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $transaction['multi_um_id'], 'selected_um_id' => $transaction['item_um']])
@@ -20,6 +19,8 @@
                 @endif
             </select>
         </td>
+        <td><input class="text-center number-input txt-remain-qty" type="text" name="" value="{{$transaction['item_invty_count']}}" readonly="true" /></td>
+        <td><input class="text-center number-input txt-qty compute" type="text" name="rs_item_qty[]" value="{{$transaction['item_qty']}}" /></td>
         <td><input class="text-right number-input txt-rate compute" type="text" name="rs_item_rate[]" value="{{$transaction['item_rate']}}" /></td>
         <td><input class="text-right number-input txt-amount" type="text" name="rs_item_amount[]" value="{{$transaction['item_amount']}}"/></td>
         <td class="text-center">

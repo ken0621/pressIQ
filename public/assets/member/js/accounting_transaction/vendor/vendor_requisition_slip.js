@@ -175,6 +175,7 @@ function vendor_requisition_slip()
 		$parent = $this.closest(".tr-draggable");
 		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
 		$parent.find(".txt-qty").val(1).change();
+		$parent.find(".txt-remain-qty").val($this.find("option:selected").attr("inventory-count")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
 		$parent.find(".txt-amount").val($this.find("option:selected").attr("cost")).change();
 
@@ -537,7 +538,6 @@ function vendor_requisition_slip()
 	{
 		return '<div style="padding: ' + $padding + 'px; font-size: 20px;" class="text-center"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>';
 	}
-
 	function load_applied_transaction()
 	{
 		$('.applied-transaction-list').load('/member/transaction/purchase_requisition/load-applied-transaction', function()

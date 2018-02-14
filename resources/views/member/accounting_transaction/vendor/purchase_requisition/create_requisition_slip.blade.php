@@ -37,8 +37,8 @@
                    <input type="text" class="form-control" name="requisition_slip_number" value="{{ isset($pr->transaction_refnum)? $pr->transaction_refnum : $transaction_refnum}}">
                 </div>
             </div>
-            <div class="col-sm-3 text-right"><label>P.O Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{ isset($po)? date('m/d/Y',strtotime($po->po_date)) : date('m/d/Y') }}"/></div>
+            <div class="col-sm-3"><label>P.R Date</label>
+                <input type="text" class="datepicker form-control input-sm" name="transaction_date" value="{{ isset($po)? date('m/d/Y',strtotime($po->po_date)) : date('m/d/Y') }}"/></div>
             <div class="col-sm-3 text-right">
                 <h4><a class="popup popup-link-open-transaction" size="md" link="/member/transaction/purchase_requisition/load-transaction"><i class="fa fa-handshake-o"></i> {{$count_transaction or ''}} Open Transaction</a></h4>
             </div>
@@ -65,8 +65,9 @@
                                 <th style="width: 15px;">#</th>
                                 <th class="text-left" width="250px">ITEM SKU</th>
                                 <th class="text-left" >ITEM DESCRIPTION</th>
-                                <th class="text-center" width="100px">QTY</th>
                                 <th class="text-center" width="100px">U/M</th>
+                                <th class="text-center" width="100px">REMAINING QTY</th>
+                                <th class="text-center" width="100px">REQUESTING QTY</th>
                                 <th class="text-center" width="150px">Rate</th>
                                 <th class="text-center" width="150px">Amount</th>
                                 <th class="text-center" width="300px">Vendor</th>
@@ -89,7 +90,6 @@
                                         </select>
                                     </td>
                                     <td><textarea class="textarea-expand txt-desc" name="rs_item_description[]" readonly="true">{{$prline->rs_item_description}}</textarea></td>
-                                    <td><input class="text-center number-input txt-qty compute" type="text" name="rs_item_qty[]" value="{{$prline->rs_item_qty}}" /></td>
                                     <td><select class="droplist-item-um select-um {{isset($poline->rs_item_um) ? 'has-value' : ''}}" name="rs_item_um[]">
                                             @if($prline->rs_item_um)
                                                 @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $prline->multi_um_id, 'selected_um_id' => $prline->rs_item_um])
@@ -98,6 +98,8 @@
                                             @endif
                                         </select>
                                     </td>
+                                    <td><input class="text-center number-input txt-remain-qty" type="text" name="" value="{{$prline->invty_count}}" readonly="true" /></td>
+                                    <td><input class="text-center number-input txt-qty compute" type="text" name="rs_item_qty[]" value="{{$prline->rs_item_qty}}" /></td>
                                     <td><input class="text-right number-input txt-rate compute" type="text" name="rs_item_rate[]" value="{{$prline->rs_item_rate}}" /></td>
                                     <td><input class="text-right number-input txt-amount" type="text" name="rs_item_amount[]" value="{{$prline->rs_item_amount}}"/></td>
                                     <td>
@@ -120,8 +122,9 @@
                                     </select>
                                 </td>
                                 <td><textarea class="textarea-expand txt-desc" name="rs_item_description[]" readonly="true"></textarea></td>
-                                <td><input class="text-center number-input txt-qty compute" type="text" name="rs_item_qty[]" /></td>
                                 <td><select class="droplist-item-um select-um" name="rs_item_um[]"></select></td>
+                                <td><input class="text-center number-input txt-remain-qty" type="text" name="" value="" readonly="true"/></td>
+                                <td><input class="text-center number-input txt-qty compute" type="text" name="rs_item_qty[]" /></td>
                                 <td><input class="text-right number-input txt-rate compute" type="text" name="rs_item_rate[]" /></td>
                                 <td><input class="text-right number-input txt-amount" type="text" name="rs_item_amount[]"/></td>
                                 <td>
@@ -142,8 +145,9 @@
                                     </select>
                                 </td>
                                 <td><textarea class="textarea-expand txt-desc" name="rs_item_description[]" readonly="true"></textarea></td>
-                                <td><input class="text-center number-input txt-qty compute" type="text" name="rs_item_qty[]" /></td>
                                 <td><select class="droplist-item-um select-um" name="rs_item_um[]"></select></td>
+                                <td><input class="text-center number-input txt-remain-qty" type="text" name="" readonly="true" /></td>
+                                <td><input class="text-center number-input txt-qty compute" type="text" name="rs_item_qty[]" /></td>
                                 <td><input class="text-right number-input txt-rate compute" type="text" name="rs_item_rate[]" /></td>
                                 <td><input class="text-right number-input txt-amount" type="text" name="rs_item_amount[]"/></td>
                                 <td>
@@ -160,7 +164,7 @@
         </div>
         <div class="row clearfix">
             <div class="col-sm-6">
-                <label>Remarks</label>
+                <label>Memo</label>
                 <textarea class="form-control input-sm textarea-expand remarks-pr" name="vendor_memo" >{{isset($pr->requisition_slip_memo)? $pr->requisition_slip_memo : ''}}</textarea>
             </div>
             <div class="col-sm-6">                      
@@ -194,8 +198,9 @@
                 </select>
             </td>
             <td><textarea class="textarea-expand txt-desc" name="rs_item_description[]" readonly="true"></textarea></td>
-            <td><input class="text-center number-input txt-qty compute" type="text" name="rs_item_qty[]" /></td>
             <td><select class="droplist-item-um select-um" name="rs_item_um[]"></select></td>
+            <td><input class="text-center number-input txt-remain-qty" type="text" name="" readonly="true"/></td>
+            <td><input class="text-center number-input txt-qty compute" type="text" name="rs_item_qty[]" /></td>
             <td><input class="text-right number-input txt-rate compute" type="text" name="rs_item_rate[]" /></td>
             <td><input class="text-right number-input txt-amount" type="text" name="rs_item_amount[]"/></td>
             <td>

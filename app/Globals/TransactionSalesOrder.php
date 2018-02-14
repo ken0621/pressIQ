@@ -3,6 +3,7 @@ namespace App\Globals;
 
 use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_customer_estimate_line;
+use App\Models\Tbl_item;
 use Carbon\Carbon;
 use DB;
 use App\Globals\AccountingTransaction;
@@ -27,11 +28,13 @@ class TransactionSalesOrder
 	{
 		return Tbl_customer_estimate::customer()->where("est_shop_id", $shop_id)->where("est_id", $sales_order_id)->first();
 	}
-	public static function info_item($sales_order_id)
+	public static function info_item($sales_order_id, $warehouse_id)
 	{
+		
 		$data = Tbl_customer_estimate_line::estimate_item()->um()->where("estline_est_id", $sales_order_id)->get();		
 		foreach($data as $key => $value) 
         {
+        	$data[$key]->invty_count = Tbl_item::recordloginventory($warehouse_id)->where('item_id', $value->estline_item_id)->value('inventory_count');
             $qty = UnitMeasurement::um_qty($value->estline_um);
 
             $total_qty = $value->estline_qty * $qty;

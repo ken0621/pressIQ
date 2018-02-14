@@ -6,6 +6,7 @@ use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_requisition_slip_item;
 use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_customer_estimate;
+use App\Models\Tbl_item;
 use Carbon\Carbon;
 use Validator;
 use Session;
@@ -57,9 +58,15 @@ class RequisitionSlip
     {
         return Tbl_requisition_slip::where('shop_id',$shop_id)->where('requisition_slip_id', $slip_id)->first();
     }
-    public static function get_slip_item($slip_id)
+    public static function get_slip_item($slip_id, $warehouse_id)
     {
-        return Tbl_requisition_slip_item::vendor()->um()->item()->where('rs_id', $slip_id)->get();
+        $data = Tbl_requisition_slip_item::vendor()->um()->item()->where('rs_id', $slip_id)->get();
+        foreach($data as $key => $value) 
+        {
+            $data[$key]->invty_count = Tbl_item::recordloginventory($warehouse_id)->where('item_id', $value->rs_item_id)->value('inventory_count');
+        }
+        //die(var_dump($data));
+        return $data;
     }
     public static function update_status($shop_id, $slip_id, $update)
     {
@@ -197,6 +204,7 @@ class RequisitionSlip
             $total_amount = collect($_item)->sum('rs_item_amount'); 
             $insert['total_amount'] = $total_amount;
 
+
             Tbl_requisition_slip::where('requisition_slip_id', $rs_id)->update($insert);
 
             if(count($_item) > 0)
@@ -292,7 +300,6 @@ class RequisitionSlip
             Tbl_requisition_slip::where('requisition_slip_id', $pr_id)->update($insert);
             Tbl_requisition_slip_item::where('rs_id', $pr_id)->delete();
 
-
             foreach ($input->rs_item_id as $key => $value) 
             {
                 if($value)
@@ -310,9 +317,9 @@ class RequisitionSlip
 
                 }
             }
-            
 
             $total_amount = collect($_item)->sum('rs_item_amount'); 
+
             $insert['total_amount'] = $total_amount;
 
             Tbl_requisition_slip::where('requisition_slip_id', $pr_id)->update($insert);

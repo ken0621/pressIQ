@@ -48,6 +48,7 @@ class TransactionPurchaseRequisitionController extends Member
 	{
 		$data['page'] = 'Create Purchase Requisition';
         $data['_item']  = Item::get_all_category_item([1,4,5]);
+        //dd($data['_item']);
         $data["_vendor"] = Vendor::getAllVendor('active');
         $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'purchase_requisition');
 
@@ -57,8 +58,10 @@ class TransactionPurchaseRequisitionController extends Member
         Session::forget('applied_transaction');
         if($pr_id)
         {
+            $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
         	$data['pr'] = RequisitionSlip::get_slip($this->user_info->shop_id, $pr_id);
-        	$data['_prline'] = RequisitionSlip::get_slip_item($pr_id);
+        	$data['_prline'] = RequisitionSlip::get_slip_item($pr_id, $warehouse_id);
+            //dd($data['_prline']);
             $data['action'] = '/member/transaction/purchase_requisition/update-submit';
         }
         $data['count_transaction'] = TransactionPurchaseRequisition::countTransaction($this->user_info->shop_id);
@@ -143,7 +146,8 @@ class TransactionPurchaseRequisitionController extends Member
         {
             foreach ($applied_transaction as $key => $value) 
             {
-                $get = TransactionSalesOrder::info_item($key);
+                $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
+                $get = TransactionSalesOrder::info_item($key, $warehouse_id);
                 $info = TransactionSalesOrder::info($this->user_info->shop_id, $key);
 
                 foreach ($get as $key_item => $value_item)
@@ -159,6 +163,7 @@ class TransactionPurchaseRequisitionController extends Member
                         $return[$key.'i'.$key_item]['item_rate'] = $value_item->estline_rate;
                         $return[$key.'i'.$key_item]['item_amount'] = $value_item->estline_amount;
                         $return[$key.'i'.$key_item]['item_rate'] = $value_item->estline_rate;
+                        $return[$key.'i'.$key_item]['item_invty_count'] = $value_item->invty_count;
                     }
                 }
                 if($info)

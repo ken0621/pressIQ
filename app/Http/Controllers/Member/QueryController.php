@@ -10,7 +10,7 @@ class QueryController extends Member
 {
 	public function getIndex(Request $request)
 	{
-		$data = Tbl_mlm_slot::walletinfo()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("slot_status","EZ")->groupBy("slot_id")->get();
+		$data = Tbl_mlm_slot::customer()->bank()->walletinfo()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("slot_status","EZ")->groupBy("tbl_mlm_slot.slot_id")->get();
 		$return = null;
 		foreach ($data as $key => $value) 
 		{
@@ -18,6 +18,22 @@ class QueryController extends Member
 			$total_payout = Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("wallet_log_slot",$value->slot_id)->whereIn("wallet_log_plan",['EON','BANK'])->groupBy("slot_id")->sum("wallet_log_amount") * -1;
 
 			$return[$key]['slot_no'] = $value->slot_no;
+			$return[$key]['customer_name'] = $value->first_name." ".$value->middle_name." ".$value->last_name;
+
+			$payout_details = null;
+			if($value->payout_bank_id)
+			{
+				$payout_details = $value->payout_bank_name."-".$value->bank_account_name."-".$value->bank_account_number."-".$value->bank_account_type;
+				if(!$value->bank_account_number)
+				{
+					$payout_details = null;
+				}
+			}
+			if($value->slot_eon)
+			{
+				$payout_details = $value->slot_eon."-".$value->slot_eon_account_no."-".$value->slot_eon_card_no;
+			}
+			$return[$key]['payout_details'] = $payout_details;
 			$return[$key]['ez_bonus'] = $ez_bonus;
 			$return[$key]['total_payout'] = $total_payout;
 			$return[$key]['payout'] = $ez_bonus - $total_payout;
@@ -25,6 +41,10 @@ class QueryController extends Member
 			if($return[$key]['payout'] == 0)
 			{
 				unset($return[$key]);
+			}
+			if(!$payout_details)
+			{
+				unset($return[$key]);				
 			}
 		}
 		$data['_payout'] = $return;

@@ -17,7 +17,8 @@ class Tbl_mlm_slot extends Model
 
     public function scopeBank($query)
     {
-        $query->leftJoin("tbl_mlm_slot_bank", "tbl_mlm_slot_bank.slot_id", "=", "tbl_mlm_slot.slot_id");
+        $query->leftJoin("tbl_mlm_slot_bank", "tbl_mlm_slot_bank.slot_id", "=", "tbl_mlm_slot.slot_id")
+              ->leftjoin("tbl_payout_bank","tbl_mlm_slot_bank.payout_bank_id","=","tbl_payout_bank.payout_bank_id");
     }
     public function scopeVmoney($query)
     {
@@ -70,7 +71,7 @@ class Tbl_mlm_slot extends Model
     }
     public function scopeCustomer($query)
     {
-        $query->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner');
+        $query->leftjoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner');
         
         // ->where('tbl_customer_address.purpose', 'billing');
 

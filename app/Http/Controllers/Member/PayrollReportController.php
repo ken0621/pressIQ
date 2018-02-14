@@ -737,7 +737,7 @@ class PayrollReportController extends Member
 
 
 		$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
-		// dd(unserialize($data["_employee"][0]->cutoff_breakdown));
+		// dd($data["_employee"]);
 
 		if ($payroll_company_id != 0 || $payroll_department_id != 0) 
 		{

@@ -7046,7 +7046,7 @@ class Payroll2
 							{
 								$adjustment_cash_advance += Payroll2::payroll_number_format($breakdown["amount"], 2);
 							}
-							if (strcasecmp($breakdown["category"], "cash_bond") == 0) 
+							if (strcasecmp($breakdown["category"], "Cash Bond") == 0) 
 							{
 								$adjustment_cash_bond 	+= Payroll2::payroll_number_format($breakdown["amount"], 2);
 							}
@@ -7107,6 +7107,7 @@ class Payroll2
 
 
 				}
+
 
 				$data["_employee"][$key]->total_deduction_employee 	= $deduction;
 				$data["_employee"][$key]->cola 						= $cola;

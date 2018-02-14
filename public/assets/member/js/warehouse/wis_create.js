@@ -32,6 +32,7 @@ function wis_create()
 		action_lastclick_row();
 		event_remove_tr();
 		action_reassign_number();
+		action_compute();
 		event_compute_class_change();
 	}
 	function event_remove_tr()

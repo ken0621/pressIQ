@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Member;
 
 use Illuminate\Http\Request;
@@ -37,29 +36,30 @@ class WarehouseIssuanceSlipController extends Member
         
         return view('member.warehousev2.wis.load_wis_table',$data);
     }
-    public function getCreate()
+    public function getCreate(Request $request)
     {
     	$data['page'] = 'WIS';
         $data['_item']  = Item::get_all_category_item([1,4,5]);
         $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
-
-        
-        // $ref_key = 'warehouse_issuance_slip';
-        
-        // $ref_number = Transaction::get_transaction_reference_number($this->user_info->shop_id,$ref_key)->get();
-        
-        // foreach ($ref_number as $key => $value) 
-        // {
-        //     $ref_number[$key]->prefix = $value->prefix;
-        //     $ref_number[$key]->separator = $value->separator;
-        // }
-
-        // $prefix = $value->prefix;
-        // $separator = $value->separator;
-        // $other = date('Y-m-d');
-        // $ref_other = str_replace('-','',$other);
-        
+      
         $data['transaction_ref_number'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'warehouse_transfer');
+        $data['_um']        = UnitMeasurement::load_um_multi();
+        $data['action'] = "/member/item/warehouse/wis/create-submit";
+        if($request->id)
+        {        
+            $data['action'] = "/member/item/warehouse/wis/update-submit";
+            $data['wis'] = WarehouseTransfer::get_wis_data($request->id);
+            $data['wis_item_v1'] = WarehouseTransfer::print_wis_item($request->id);
+            $data['wis_item'] = WarehouseTransfer::get_wis_itemline($request->id);
+
+            if($data['wis'])
+            {
+                if($data['wis']->wis_status != 'pending')
+                {
+                    return redirect('/member/item/warehouse/wis');
+                }
+            }
+        }
        
     	return view('member.warehousev2.wis.wis_create',$data);
     }

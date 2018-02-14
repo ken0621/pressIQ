@@ -44,14 +44,15 @@
     </div>
 </div> -->
 
-<form class="global-submit form-to-submit-add" action="/member/item/warehouse/wis/create-submit" method="post">
+<form class="global-submit form-to-submit-add" action="{{$action}}" method="post">
 <input type="hidden" name="_token" value="{{csrf_token()}}">
+<input type="hidden" name="wis_id" value="{{$wis->wis_id or ''}}">
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body form-horizontal">
         <div class="form-group">
             <div class="col-md-4">
                 <label>WIS Number</label>
-                <input type="text" name="wis_number" value='{{$transaction_ref_number}}' class="form-control">
+                <input type="text" name="wis_number" value='{{isset($wis) ? $wis->wis_number :$transaction_ref_number}}' class="form-control">
             </div>
         </div>
         <div class="form-group">
@@ -59,7 +60,7 @@
                 <label>Warehouse Destination</label>
                 <select required class="form-control select-warehouse droplist-warehouse" name="destination_warehouse_id">
                     @foreach($_warehouse as $warehouse)
-                        <option warehouse-address="{{$warehouse->warehouse_address}}" value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>
+                        <option {{isset($wis) ? ($wis->destination_warehouse_id == $warehouse->warehouse_id ? 'selected' : ''): ''}} warehouse-address="{{$warehouse->warehouse_address}}" value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>
                     @endforeach
                 </select>
             </div>
@@ -70,12 +71,12 @@
             <div class="col-md-4">
                 <label>Ship to</label>
                 <div>
-                    <textarea class="form-control txt-warehouse-address" name="destination_warehouse_address"></textarea>
+                    <textarea class="form-control txt-warehouse-address" name="destination_warehouse_address">{{isset($wis) ? $wis->destination_warehouse_address :''}}</textarea>
                 </div>
             </div>
             <div class="col-md-4">
                 <label>Delivery Date</label>
-                <input type="text" name="delivery_date" class="datepicker form-control input-sm" value="{{ isset($wis->cust_delivery_date) == ''? date('m/d/Y') : $wis->cust_delivery_date }}">
+                <input type="text" name="delivery_date" class="datepicker form-control input-sm" value="{{ isset($wis->wis_delivery_date) == ''? date('m/d/Y') : date('m/d/Y', strtotime($wis->wis_delivery_date)) }}">
             </div>
         </div>
         <div class="form-group hide">
@@ -100,6 +101,37 @@
                             </tr>
                         </thead>
                         <tbody class="draggable tbody-item">
+                            @if(count($wis_item) > 0)
+                            @foreach($wis_item as $item) 
+                             <tr class="tr-draggable">
+                                <td class="invoice-number-td text-center">1</td>
+                                <td>
+                                    <select class="form-control droplist-item select-item input-sm" name="item_id[]" >
+                                        @include("member.load_ajax_data.load_item_category", ['add_search' => "", "item_id" => $item->wt_item_id])
+                                        <option class="hidden" value="" />
+                                    </select>
+                                </td>
+                                <td><textarea class="form-control txt-desc" name="item_description[]">{{$item->wt_description}}</textarea></td>
+                                <td>
+                                    <select class="2222 droplist-um select-um" name="item_um[]"><option class="hidden" value="" />
+                                    @if($item->wt_um)
+                                        @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $item->multi_um_id, 'selected_um_id' => $item->wt_um])
+                                    @else
+                                        <option class="hidden" value="" />
+                                    @endif
+                                    </select>
+                                </td>
+                                <td><input class="form-control number-input txt-qty text-center compute" type="text" name="item_qty[]"/ value="{{$item->wt_orig_qty}}"></td>
+                                <td><input class="text-right number-input txt-rate" type="text" name="item_rate[]" value="{{currency('',$item->wt_rate)}}"/></td>
+                                <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{currency('',$item->wt_amount)}}"/></td>
+                                <td class="text-center remove-tr cursor-pointer">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                    <input type="hidden" name="item_refname[]">
+                                    <input type="hidden" name="item_refid[]">
+                                </td>
+                            </tr>
+                            @endforeach
+                            @endif
                             <tr class="tr-draggable">
                                 <td class="invoice-number-td text-center">1</td>
                                 <td>
@@ -172,7 +204,7 @@
             <div class="col-md-6">
                 <label>Remarks</label>
                 <div>
-                    <textarea class="form-control" name="wis_remarks"></textarea>
+                    <textarea class="form-control" name="wis_remarks">{{$wis->wis_remarks or ''}}</textarea>
                 </div>
             </div>
             <div class="col-md-6">

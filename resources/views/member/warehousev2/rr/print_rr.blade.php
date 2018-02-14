@@ -24,7 +24,7 @@
             <td>ITEM NAME</td>
             <td>ITEM SKU</td>
             <td>ISSUED QTY</td>
-            <td>RATE</td>
+            <td>SRP</td>
             <td>AMOUNT</td>
         </tr>
     </thead>

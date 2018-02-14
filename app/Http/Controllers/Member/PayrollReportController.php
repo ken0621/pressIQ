@@ -737,6 +737,7 @@ class PayrollReportController extends Member
 
 
 		$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
+		// dd($data["_employee"]);
 
 		if ($payroll_company_id != 0 || $payroll_department_id != 0) 
 		{
@@ -776,7 +777,7 @@ class PayrollReportController extends Member
 		$data = Payroll2::get_total_payroll_register($data);
 		// dd($data);
 		$data['columns'] = Tbl_payroll_register_column::select('*')->where('shop_id',Self::shop_id())->get();
-
+		// dd($data);
 		return view('member.payrollreport.payroll_register_report_table', $data);
 	}
 

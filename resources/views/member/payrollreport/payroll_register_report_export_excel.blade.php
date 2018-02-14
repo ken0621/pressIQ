@@ -149,7 +149,7 @@ body{
     <td class="text-center" >{{ number_format($employee->adjustment_incentives,2) }}</td>
     <td class="text-center" >{{ number_format($employee->adjustment_additions,2) }}</td>
     <td class="text-center" >{{ number_format($employee->adjustment_13th_month_and_other,2) }}</td>
-    <td class="text-center" >{{ number_format($employee->adjustment_de_minimis_benefit,2) }}</td>
+    <td class="text-center" >{{ number_format($employee->allowance_de_minimis,2) }}</td>
     <td class="text-center" >{{ number_format($employee->adjustment_others,2) }}</td>
 
     <td class="text-center" >{{ number_format($employee->gross_pay,2) }}</td>
@@ -204,7 +204,7 @@ body{
     <td class="text-center" ><b>{{ number_format($total_adjustment_incentives, 2) }}</b></td>
     <td class="text-center" ><b>{{ number_format($total_adjustment_additions, 2) }}</b></td>
     <td class="text-center" ><b>{{ number_format($total_adjustment_13th_month_and_other, 2) }}</b></td>
-    <td class="text-center" ><b>{{ number_format($total_adjustment_de_minimis_benefit, 2) }}</b></td>
+    <td class="text-center" ><b>{{ number_format($allowance_de_minimis_total, 2) }}</b></td>
     <td class="text-center" ><b>{{ number_format($total_adjustment_others, 2) }}</b></td>
 
     <td class="text-center" ><b>{{ number_format($total_gross, 2) }}</b></td>

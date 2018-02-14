@@ -19,7 +19,7 @@
                       <li><a class="select-action" code="sedit">Save & Edit</a></li>
                       <li><a class="select-action" code="sprint">Save & Print</a></li>
                       <li><a class="select-action" code="snew">Save & New</a></li>
-                      <li><a class="select-action" code="snew">Save & Confirm WT</a></li>
+                      <li><a class="select-action" code="sconfirm">Save & Confirm WT</a></li>
                     </ul>
                 </div>
             </div>
@@ -46,6 +46,7 @@
 
 <form class="global-submit form-to-submit-add" action="{{$action}}" method="post">
 <input type="hidden" name="_token" value="{{csrf_token()}}">
+<input type="hidden" class="button-action" name="button_action" value="">
 <input type="hidden" name="wis_id" value="{{$wis->wis_id or ''}}">
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body form-horizontal">

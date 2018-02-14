@@ -164,6 +164,122 @@ class WarehouseIssuanceSlipController extends Member
             $return['status'] = 'success';
             $return['call_function'] = 'success_create_wis';
             Session::forget('wis_item');
+             $return['status_message'] = 'Success creating warehouse transfer';
+
+            $redirect = '/member/item/warehouse/wis/';
+            if($btn_action == 'sclose')
+            {
+                $redirect = '/member/item/warehouse/wis/';
+            }
+            elseif($btn_action == 'sedit')
+            {
+                $redirect = '/member/item/warehouse/wis/create?id='.$wis_id;
+            }
+            elseif($btn_action == 'sprint')
+            {
+                $redirect = '/member/item/warehouse/wis/print/'.$wis_id;
+            }
+            elseif($btn_action == 'snew')
+            {
+                $redirect = '/member/item/warehouse/wis/create';
+            }
+            elseif($btn_action == 'sconfirm')
+            {
+                /*FOR CONFIRMATION*/
+                $up['wis_status'] = "confirm";
+                $up['receiver_code'] = WarehouseTransfer::get_code($this->user_info->shop_id);
+
+                WarehouseTransfer::update_wis($this->user_info->shop_id, $wis_id, $up);
+
+            }
+
+            $return['redirect'] = $redirect;
+        }
+        else
+        {
+            $return['status'] = 'error';
+            $return['status_message'] = $val;
+        }
+
+        return json_encode($return);
+    }
+
+    public function postUpdateSubmit(Request $request)
+    {
+        $remarks = $request->wis_remarks;
+        $items = Session::get('wis_item');
+        $items = $request->item_id;
+        $shop_id = $this->user_info->shop_id;
+
+        $btn_action = $request->button_action;
+
+        $wis_id = $request->wis_id;
+        $ins_wis['wis_shop_id'] = $shop_id;
+        $ins_wis['wis_number'] = $request->wis_number;
+        $ins_wis['wis_from_warehouse'] = Warehouse2::get_current_warehouse($shop_id);
+        $ins_wis['wis_remarks'] = $remarks;
+        $ins_wis['destination_warehouse_id'] = $request->destination_warehouse_id;
+        $ins_wis['destination_warehouse_address'] = $request->destination_warehouse_address;
+        $ins_wis['created_at'] = Carbon::now();
+        $ins_wis['wis_delivery_date'] = date("Y-m-d", strtotime($request->delivery_date));
+
+        $_item = null;
+        foreach ($items as $key => $value) 
+        {
+            if($value)
+            {
+                $_item[$key] = null;
+                $_item[$key]['item_id']          = $value;
+                $_item[$key]['item_description'] = $request->item_description[$key];
+                $_item[$key]['item_um']          = $request->item_um[$key];
+                $_item[$key]['item_qty']         = $request->item_qty[$key];
+                $_item[$key]['item_rate']        = $request->item_rate[$key];
+                $_item[$key]['item_amount']      = $request->item_amount[$key];
+                $_item[$key]['item_refname']     = $request->item_refname[$key];
+                $_item[$key]['item_refid']       = $request->item_refid[$key];
+
+                $_item[$key]['quantity']         = $request->item_qty[$key] * UnitMeasurement::um_qty($_item[$key]['item_um']);
+                $_item[$key]['remarks']          = $request->item_description[$key];
+            }
+        }
+
+        $val = WarehouseTransfer::update_data_wis($wis_id, $shop_id, $remarks, $ins_wis , $_item);
+        $return = null;
+        if(is_numeric($val))
+        {
+            Session::forget('wis_item');
+            $return['status'] = 'success';
+            $return['call_function'] = 'success_create_wis';
+            $return['status_message'] = 'Success updating warehouse transfer';
+
+            $redirect = '/member/item/warehouse/wis/';
+            if($btn_action == 'sclose')
+            {
+                $redirect = '/member/item/warehouse/wis/';
+            }
+            elseif($btn_action == 'sedit')
+            {
+                $redirect = '/member/item/warehouse/wis/create?id='.$wis_id;
+            }
+            elseif($btn_action == 'sprint')
+            {
+                $redirect = '/member/item/warehouse/wis/print/'.$wis_id;
+            }
+            elseif($btn_action == 'snew')
+            {
+                $redirect = '/member/item/warehouse/wis/create';
+            }
+            elseif($btn_action == 'sconfirm')
+            {
+                /*FOR CONFIRMATION*/
+                $up['wis_status'] = "confirm";
+                $up['receiver_code'] = WarehouseTransfer::get_code($this->user_info->shop_id);
+
+                WarehouseTransfer::update_wis($this->user_info->shop_id, $wis_id, $up);
+
+            }
+
+            $return['redirect'] = $redirect;
         }
         else
         {

@@ -556,7 +556,7 @@ function success_create_wis(data)
 {
 	if(data.status == 'success')
 	{
-		toastr.success('Success');
-		location.href = '/member/item/warehouse/wis';
+		toastr.success(data.status_message);
+		location.href = data.redirect;
 	}
 }

@@ -141,6 +141,59 @@ class WarehouseTransfer
 	{
 		return Tbl_warehouse_issuance_report::where('wis_shop_id',$shop_id)->where('wis_id',$wis_id)->update($up);
 	}
+	public static function update_data_wis($wis_id, $shop_id, $remarks, $ins, $_item)
+	{
+		 $validate = null;
+        $warehouse_id = $ins['wis_from_warehouse'];
+        // dd($_item);
+        foreach ($_item as $key => $value)
+        {
+            $serial = isset($value['serial']) ? $value['serial'] : null;
+            $validate .= Warehouse2::consume_validation($shop_id, $warehouse_id, $value['item_id'], $value['quantity'], $value['remarks'], $serial);
+        }
+
+        $check = Tbl_warehouse_issuance_report::where('wis_number',$ins['wis_number'])->where("wis_id","!=", $wis_id)->where('wis_shop_id',$shop_id)->first();
+        if($check)
+        {
+        	$validate .= 'WIS number already exist';
+        }
+
+        if(!$validate)
+        {
+        	Tbl_warehouse_issuance_report::where("wis_id", $wis_id)->update($ins);
+        	$reference_name = 'wis';
+
+            Warehouse2::update_inventory_consume($shop_id, null, $reference_name, $wis_id); 
+        	Tbl_warehouse_issuance_report_itemline::where("wt_wis_id", $wis_id)->delete();
+        	Tbl_warehouse_issuance_report_item::where("wis_id", $wis_id)->delete();
+        	$val = Self::wis_insertline($wis_id, $_item);
+            if(is_numeric($val))
+            {
+	        	$return = Warehouse2::consume_bulk($shop_id, $warehouse_id, $reference_name, $wis_id ,$remarks ,$_item);
+
+	        	if(!$return)
+	        	{
+	        		$get_item = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','wis')->where('record_consume_ref_id',$wis_id)->get();
+
+	        		$ins_report_item = null;
+	        		foreach ($get_item as $key_item => $value_item)
+	        		{
+	        			$ins_report_item[$key_item]['wis_id'] = $wis_id;
+	        			$ins_report_item[$key_item]['record_log_item_id'] = $value_item->record_log_id;
+	        		}
+
+	        		if($ins_report_item)
+	        		{
+	        			Tbl_warehouse_issuance_report_item::insert($ins_report_item);
+	        			$validate = 1;
+	        		}
+	        	}
+	        }
+        }
+
+        return $validate;
+
+	}
 	public static function create_wis($shop_id, $remarks, $ins, $_item)
 	{
         $validate = null;

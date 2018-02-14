@@ -17,11 +17,13 @@ class Pdf_global
         {
         	$pdf->setOrientation('landscape');
         }
-        if($paper_size != null)
-        {
-        	$pdf->setPaper($paper_size);
-        }
-        $pdf->setOption('viewport-size','1366x1024');
+        // if($paper_size != null)
+        // {
+        // 	$pdf->setPaper($paper_size);
+        // }
+        // $pdf->setOption('viewport-size','1366x1024');
+        $pdf->setOption('page-height','9.3133333333');
+        $pdf->setOption('page-width','24.13');
         return $pdf->inline();
 	}
 	public static function show_pdfv2($html, $orient = null, $footer = '')

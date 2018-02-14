@@ -22,8 +22,6 @@ class Pdf_global
         	$pdf->setPaper($paper_size);
         }
         $pdf->setOption('viewport-size','1366x1024');
-        $pdf->setOption('page-width', '215.9');
-        $pdf->setOption('page-height', '139.7');
         return $pdf->inline();
 	}
 	public static function show_pdfv2($html, $orient = null, $footer = '')

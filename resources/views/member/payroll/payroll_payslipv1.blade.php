@@ -30,7 +30,7 @@
             padding: 10px; 
             border: 1px solid #bbb; 
             /*display: inline-block; */
-            vertical-align: top; 
+            vertical-align: top; -
             top: 0; 
             background-color: #fff; 
             margin: 5px;

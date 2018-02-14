@@ -24,15 +24,29 @@
             <td>ITEM NAME</td>
             <td>ITEM SKU</td>
             <td>ISSUED QTY</td>
+            <td>RATE</td>
+            <td>AMOUNT</td>
         </tr>
     </thead>
     <tbody>
-        @if(count($rr_item) > 0)
+         @if(count($rr_item) > 0)
             @foreach($rr_item as $item)
             <tr>
                 <td>{{$item->item_name}}</td>
                 <td>{{$item->item_sku}}</td>
-                <td>{{$item->wis_item_quantity}} pc(s)</td>
+                <td>{{$item->qty}}</td>
+                <td>{{currency('',$item->rr_rate)}}</td>
+                <td>{{currency('',$item->rr_amount)}}</td>
+            </tr>
+            @endforeach
+        @elseif(count($rr_item_v1) > 0)
+            @foreach($rr_item_v1 as $itemv1)
+            <tr>
+                <td>{{$itemv1->item_name}}</td>
+                <td>{{$itemv1->item_sku}}</td>
+                <td>{{$itemv1->qty}} pc(s)</td>
+                <td>{{currency('',$itemv1->item_price)}}</td>
+                <td>{{currency('',($itemv1->qty * $itemv1->item_price))}}</td>
             </tr>
             @endforeach
         @else

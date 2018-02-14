@@ -159,7 +159,8 @@ class WarehouseReceivingReportController extends Member
     public function getPrint(Request $request, $rr_id)
     {
         $data['rr'] = WarehouseTransfer::get_rr_data($rr_id);
-        $data['rr_item'] = WarehouseTransfer::print_rr_item($rr_id);
+        $data['rr_item_v1'] = WarehouseTransfer::print_rr_item($rr_id);
+        $data['rr_item'] = WarehouseTransfer::get_rr_itemline($rr_id);
         $data['user'] = $this->user_info;
         $data['owner'] = WarehouseTransfer::get_warehouse_data($data['rr']->warehouse_id);
         

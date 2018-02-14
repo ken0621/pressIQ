@@ -266,6 +266,19 @@ class WarehouseTransfer
         }
         return $data;
 	}
+
+	public static function get_rr_itemline($rr_id)
+	{
+		$data = Tbl_warehouse_receiving_report_itemline::item()->um()->where("rr_id", $rr_id)->get();
+		foreach($data as $key => $value) 
+        {
+            $qty = UnitMeasurement::um_qty($value->rr_um);
+
+            $total_qty = $value->rr_orig_qty * $qty;
+            $data[$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->rr_um);
+        }
+        return $data;
+	}
 	public static function get_rr_data($rr_id)
 	{
 		return Tbl_warehouse_receiving_report::where('rr_id',$rr_id)->first();

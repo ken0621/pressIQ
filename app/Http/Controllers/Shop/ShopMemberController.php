@@ -1389,25 +1389,26 @@ class ShopMemberController extends Shop
     }
 
      public function importExcel(Request $request)  
-    { 
-        dd('123'); 
-        // if($request->hasFile('import_file')){
-        //     Excel::load($request->file('import_file')->getRealPath(), function ($reader) 
-        //     {
-        //         foreach ($reader->toArray() as $key => $row) {
-        //             $data['recipient_id']            = $row['recipient_id'];
-        //             $data['research_email_address']  = $row['research_email_address'];
-        //             $data['company_name']            = $row['company_name'];
+    {  
+        if($request->hasFile('import_file'))
+        {
+            Excel::load($request->file('import_file')->getRealPath(), function ($reader) 
+            {
+                foreach ($reader->toArray() as $key => $row) 
+                {
+                    $data['research_email_address']  = $row['research_email_address'];
+                    $data['company_name']            = $row['company_name'];
+                    $data['name']                    = $row['name'];
+                    if(!empty($data)) 
+                    {
+                        DB::table('tbl_press_release_recipients')->insert($data);
+                    }
+                }
+            });
+        }
 
-        //             if(!empty($data)) {
-        //                 DB::table('tbl_press_release_recipients')->insert($data);
-        //             }
-        //         }
-        //     });
-        // }
-
-        // Session::put('success', 'Youe file successfully import in database!!!');
-        // return back();
+        Session::put('success', 'Your file successfully import in database!!!');
+        return back();
     }
 
     public function pressadmin_email_edit($id)

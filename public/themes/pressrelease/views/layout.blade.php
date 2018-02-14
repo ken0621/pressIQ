@@ -141,7 +141,7 @@
         <div class="container">
             <div class="footer-container">
                 <div class="upper row clearfix">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="footer-title-container">
                             <p class="footer-title">INFORMATION</p>
                         </div>
@@ -150,23 +150,32 @@
                         <a href="/about"><p>ABOUT US</p></a>
                         <a href="/contact"><p>CONTACT US</p></a>
                     </div>
+                    <div class="col-md-3">
+                        <div class="footer-title-container">
+                            <p class="footer-title">OFFICES</p>
+                        </div>
+                        <div><p>HONG KONG</p></div>
+                      {{--   <a href="/newsroom"><p>NEWS ROOM</p></a> --}}
+                        <div><p>PHILIPPINES</p></div>
+                        <div><p>ATLANTA</p></div>
+                    </div>
                         <form action="Post"> 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="footer-title-container">
                                 <p class="footer-title">NEWS LETTER</p>
                             </div>
-                            <input type="email" placeholder="Subscribe Here / Enter Your Email" id="newsletter" name="newsletter" required>
+                            <input type="email" placeholder="Enter Your Email" id="newsletter" name="newsletter" required>
                             <span>
                             <button type="submit" formaction="/newsletter/send"><i class="fa fa-paper-plane" aria-hidden="true"></i>
                             </span>
                         </div>
                         </form>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="footer-follow-container">
                             <p class="footer-follow-title">FOLLOW US ON</p>
-                            <span><a href="https://www.facebook.com/press-iq"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></span>
-                            <span><a href="https://www.twitter.com/press-iq"><i class="fa fa-twitter-square" aria-hidden="true"></i></a></span>
-                            <span><a href="https://www.linkedin.com/press-iq"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a></span>
+                            <span><a href="https://www.facebook.com/Press-IQ-153736705433100/"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></span>
+                            <span><a href="https://twitter.com/Press_IQ?lang=en"><i class="fa fa-twitter-square" aria-hidden="true"></i></a></span>
+                            <span><a href="https://www.linkedin.com/company/press-iq/"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a></span>
                         </div>
                     </div>
                 </div>
@@ -175,7 +184,7 @@
     </footer>
     <div class="container">
         <div class="bottom">                           
-            <div class="ftr-title">© Press Release All Right Reserved</div>
+            <div class="ftr-title">© Press-IQ All Right Reserved</div>
             <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
         </div>
     </div>

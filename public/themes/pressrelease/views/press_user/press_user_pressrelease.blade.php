@@ -233,9 +233,9 @@
           </div>
           <div id="preview_boiler_content"></div>
             <div>
-              &nbsp; <a href="https://twitter.com/share" class="twitter-share-button" data-url="" data-size="large">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+              &nbsp; <a href="https://twitter.com/Press_IQ?lang=en" class="twitter-share-button" data-url="" data-size="large">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
               
-              <iframe src="https://www.facebook.com/plugins/like.php?href=https%3A%2F%2Ffacebook/press-iq.com&width=74&layout=button_count&action=like&size=large&show_faces=false&share=false&height=21&appId" width="74" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+              <iframe src="https://www.facebook.com/plugins/like.php?href=https://www.facebook.com/Press-IQ-153736705433100&width=74&layout=button_count&action=like&size=large&show_faces=false&share=false&height=21&appId" width="74" height="28" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
             </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -300,7 +300,7 @@
 
     else
         {
-          alert('Error! Please fill the required fields!'); 
+          alert('Please fill the required fields!'); 
         }
   });
 
@@ -313,7 +313,7 @@
 
     else
         {
-          alert('Error! Choose Recipient First!'); 
+          alert('Choose Recipient First!'); 
         }
   });        
 

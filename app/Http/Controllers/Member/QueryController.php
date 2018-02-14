@@ -41,7 +41,7 @@ class QueryController extends Member
 					$payout_details = null;
 				}
 			}
-			if($value->slot_eon)
+			if($value->slot_eon_account_no && $value->slot_eon_card_no)
 			{
 				$payout_details = $value->slot_eon."-".$value->slot_eon_account_no."-".$value->slot_eon_card_no;
 			}

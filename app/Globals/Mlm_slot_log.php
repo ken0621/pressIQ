@@ -162,6 +162,19 @@ class Mlm_slot_log
 				$update['slot_wallet_all'] = $slot_wallet_all;
 				$update['slot_wallet_current'] = $slot_wallet_current;
 				Tbl_mlm_slot::where('slot_id', $arry_log['wallet_log_slot'])->update($update);
+
+
+				if(isset($arry_log['shop_id']))
+				{
+					if($arry_log['shop_id'] == 5)
+					{
+						$slot_info_ez = Tbl_mlm_slot::where("slot_id",$arry_log['wallet_log_slot'])->where("slot_status","EZ")->first();
+						if($slot_info_ez)
+						{
+						   Mlm_complan_manager_cd::graduate_check($slot_info_ez);
+						}
+					}
+				}
 			}
 		}	
 

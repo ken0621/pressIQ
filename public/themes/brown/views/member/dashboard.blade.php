@@ -173,7 +173,7 @@
 						</div>
 						<div class="holder">
 							<div class="color"></div>
-							<div class="name"><span>EZ Enrollment Bonus</span><span class="value">{{ isset($wallet->display_complan_ez_referral_bonus) ? $wallet->display_complan_ez_referral_bonus : "0" }}</span></div>
+							<div class="name"><span>EZ Enrollment Bonus</span><span class="value">{{ isset($wallet->display_complan_ez_referral_bonus) ? $wallet->display_complan_ez_referral_bonus : "	PHP 0.00" }}</span></div>
 						</div>
 						<div class="holder">
 							<div class="color"></div>
@@ -185,6 +185,23 @@
 						</div>
 					</div>	
 				</div>
+				@if(isset($first_slot))
+					@if($first_slot->slot_status == "EZ")
+						<div class="title"><i class="fa fa-table"></i>Graduation's Requirements</div>
+						<div class="sub-container">
+							<div class="chart-legend" style="min-height: 117px; max-height: auto;">
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>Paid amount(s)</span><span class="value">PHP {{ number_format($ez_paid_amount,2) }}</span></div>
+								</div>
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>Needed amount(s)</span><span class="value">PHP {{ number_format(($ez_needed_amount * -1),2) }}</span></div>
+								</div>
+							</div>
+						</div>		
+					@endif		
+				@endif
 				<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 				<div class="sub-container">
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">

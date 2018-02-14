@@ -81,8 +81,23 @@ class Mlm_complan_manager_cd
 
                 foreach($slots as $slot)
                 {
+                    $required_amount  = Tbl_mlm_slot_wallet_log::where("wallet_log_slot",$slot->slot_id)->where("wallet_log_plan","EZ")->sum("wallet_log_amount"); 
+                    if(!$required_amount)
+                    {
+                        $required_amount = 0;
+                    }       
+
+                    $paid_price_ez    = Tbl_mlm_slot_wallet_log::join("tbl_brown_ez_program","tbl_brown_ez_program.record_program_log_id","tbl_mlm_slot_wallet_log.wallet_log_id")
+                                                               ->where("wallet_log_slot",$slot->slot_id)
+                                                               ->sum("paid_price"); 
+                    if(!$paid_price_ez)
+                    {
+                        $paid_price_ez = 0;
+                    }
+
+                    $total_ez = $paid_price_ez - ($required_amount * -1);                                                                      
                 	// if wallet is not negative
-                	if($slot->slot_wallet_current >= 0)
+                	if($total_ez >= 0)
                 	{
                 		// graduate cd
                 		$a = Mlm_complan_manager_cd::gradute_ez($slot);

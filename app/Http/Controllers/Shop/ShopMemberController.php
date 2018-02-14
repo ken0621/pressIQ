@@ -119,7 +119,18 @@ class ShopMemberController extends Shop
             $data['mlm_pin'] = '';
             $data['mlm_activation'] = '';            
             $data["first_slot"]         = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
-           
+
+            if($data["first_slot"])
+            {
+                if($data["first_slot"]->slot_status == "EZ")
+                {
+                    $data["ez_needed_amount"] = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","EZ")->where("wallet_log_slot",$data["first_slot"]->slot_id)->sum("wallet_log_amount");
+                    $data["ez_paid_amount"]   = Tbl_mlm_slot_wallet_log::join("tbl_brown_ez_program","tbl_brown_ez_program.record_program_log_id","tbl_mlm_slot_wallet_log.wallet_log_id")
+                                                                       ->where("wallet_log_slot",$data["first_slot"]->slot_id)
+                                                                       ->sum("paid_price"); 
+                }
+            }
+
             if($this->shop_info->shop_theme == 'philtech')
             {
                 $data["travel_and_tours"] = false;

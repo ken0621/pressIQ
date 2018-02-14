@@ -29,6 +29,7 @@ use App\Models\Tbl_mlm_binary_report;
 use App\Models\Tbl_stairstep_points_log;
 use App\Models\Tbl_brown_rank;
 use App\Models\Tbl_advertisement_bonus_settings;
+use App\Models\Tbl_brown_ez_program;
 use App\Globals\Mlm_gc;
 use App\Globals\Mlm_complan_manager_repurchasev2;
 use App\Models\Tbl_mlm_gc;
@@ -687,7 +688,58 @@ class Mlm_complan_manager
                    $arry_log['wallet_log_status'] = "n_ready";   
                 }
                 $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('DIRECT', $slot_info->shop_id); 
-                Mlm_slot_log::slot_array($arry_log);
+
+
+                $check_ez_slot = Tbl_mlm_slot::where("slot_id",$slot_sponsor->slot_id)->where("shop_id",$slot_info->shop_id)->where("slot_status","EZ")->first();
+
+                if(!$check_ez_slot)
+                {
+                    Mlm_slot_log::slot_array($arry_log); 
+                }
+                else
+                {
+                    $amount_will_paid = $direct_points_given;
+                    $paid_price_ez    = Tbl_mlm_slot_wallet_log::join("tbl_brown_ez_program","tbl_brown_ez_program.record_program_log_id","tbl_mlm_slot_wallet_log.wallet_log_id")
+                                                               ->where("wallet_log_slot",$slot_sponsor->slot_id)
+                                                               ->sum("paid_price");
+                    if(!$paid_price_ez)
+                    {
+                        $paid_price_ez = 0;
+                    }
+                    
+                    $required_amount  = Tbl_mlm_slot_wallet_log::where("wallet_log_slot",$slot_sponsor->slot_id)->where("wallet_log_plan","EZ")->sum("wallet_log_amount");                                        
+                    if(!$required_amount)
+                    {
+                        $required_amount = 0;
+                    }
+
+                    $required_to_pay  = ($required_amount * -1) - $paid_price_ez;
+
+                    $remaining_ez     = $required_to_pay - $amount_will_paid;
+
+                    if($remaining_ez >= 0)
+                    {
+                        $arry_log['wallet_log_amount'] = 0;
+                        $ez_log_id = Mlm_slot_log::slot_array_with_return($arry_log);
+
+                        $insert_ez_log["record_program_log_id"]  = $ez_log_id;
+                        $insert_ez_log["shop_program_id"]        = $slot_info->shop_id;
+                        $insert_ez_log["paid_price"]             = $amount_will_paid;
+                        $insert_ez_log["cd_price"]               = 0;
+                        Tbl_brown_ez_program::insert($insert_ez_log);
+                    }
+                    else
+                    {
+                        $arry_log['wallet_log_amount'] = ($remaining_ez * -1);
+                        $ez_log_id = Mlm_slot_log::slot_array_with_return($arry_log);
+
+                        $insert_ez_log["record_program_log_id"]  = $ez_log_id;
+                        $insert_ez_log["shop_program_id"]        = $slot_info->shop_id;
+                        $insert_ez_log["paid_price"]             = $required_to_pay;
+                        $insert_ez_log["cd_price"]               = 0;
+                        Tbl_brown_ez_program::insert($insert_ez_log);
+                    }
+                }
 
                 if(Self::plan_check_if_enabled($slot_info->shop_id, "BROWN_RANK"))
                 {
@@ -1068,7 +1120,55 @@ class Mlm_complan_manager
                             $arry_log['wallet_log_status']          = "released";   
                             $arry_log['wallet_log_matrix_triangle'] = $selected;
                             $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('BINARY', $slot_info->shop_id); 
-                            Mlm_slot_log::slot_array($arry_log); 
+
+                            $check_ez_slot = Tbl_mlm_slot::where("slot_id",$key)->where("shop_id",$slot_info->shop_id)->where("slot_status","EZ")->first();
+
+                            if(!$check_ez_slot)
+                            {
+                                Mlm_slot_log::slot_array($arry_log); 
+                            }
+                            else
+                            {
+                                $amount_will_paid = $binary_settings_matrix_income;
+                                $paid_price_ez    = Tbl_mlm_slot_wallet_log::join("tbl_brown_ez_program","tbl_brown_ez_program.record_program_log_id","tbl_mlm_slot_wallet_log.wallet_log_id")
+                                                                           ->where("wallet_log_slot",$key)
+                                                                           ->sum("paid_price");
+
+                                $required_amount  = Tbl_mlm_slot_wallet_log::where("wallet_log_slot",$key)->where("wallet_log_plan","EZ")->sum("wallet_log_amount");                                        
+                                if(!$required_amount)
+                                {
+                                    $required_amount = 0;
+                                }
+
+                                $required_to_pay  = ($required_amount * -1) - $paid_price_ez;
+
+                                $remaining_ez     = $required_to_pay - $amount_will_paid;
+
+                                if($remaining_ez >= 0)
+                                {
+                                    $arry_log['wallet_log_amount'] = 0;
+                                    $ez_log_id = Mlm_slot_log::slot_array_with_return($arry_log);
+
+                                    $insert_ez_log["record_program_log_id"]  = $ez_log_id;
+                                    $insert_ez_log["shop_program_id"]        = $slot_info->shop_id;
+                                    $insert_ez_log["paid_price"]             = $amount_will_paid;
+                                    $insert_ez_log["cd_price"]               = 0;
+                                    Tbl_brown_ez_program::insert($insert_ez_log);
+                                }
+                                else
+                                {
+                                    $arry_log['wallet_log_amount'] = ($remaining_ez * -1);
+                                    $ez_log_id = Mlm_slot_log::slot_array_with_return($arry_log);
+
+                                    $insert_ez_log["record_program_log_id"]  = $ez_log_id;
+                                    $insert_ez_log["shop_program_id"]        = $slot_info->shop_id;
+                                    $insert_ez_log["paid_price"]             = $required_to_pay;
+                                    $insert_ez_log["cd_price"]               = 0;
+                                    Tbl_brown_ez_program::insert($insert_ez_log);
+                                }
+                            }
+
+
 
                             // Mlm_complan_manager::binary_single_line($slot_info);
                         }

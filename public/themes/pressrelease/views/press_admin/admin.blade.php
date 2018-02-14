@@ -27,7 +27,7 @@
 			   <li class="{{ Request::segment(2) == "manage_user" ? "active" : "" }}"><a href="/pressadmin/manage_user">Manage User</a></li>
 			   <li class="{{ Request::segment(2) == "email" ? "active" : "" }}"><a href="/pressadmin/email">Email</a></li>
 
-			   <li class="{{ Request::segment(2) == "import" ? "active" : "" }}"><a href="/pressadmin/import_recipient">Importaion Recipient</a></li>
+			   {{-- <li class="{{ Request::segment(2) == "import" ? "active" : "" }}"><a href="/pressadmin/import_recipient">Importaion Recipient</a></li> --}}
 
 			</ul>
 		</div>

@@ -10,7 +10,7 @@ use App\Globals\Report;
 use Carbon\Carbon;
 class QueryController extends Member
 {
-	public function getIndex(Request $request)
+	public function anyIndex(Request $request)
 	{
         $report_type    = $request->report_type;
         $load_view      = $request->load_view;

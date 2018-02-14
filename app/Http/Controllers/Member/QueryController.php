@@ -15,7 +15,14 @@ class QueryController extends Member
         $report_type    = $request->report_type;
         $load_view      = $request->load_view;
 
-		$dataget = Tbl_mlm_slot::customer()->bank()->walletinfo()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("slot_status","EZ")->groupBy("tbl_mlm_slot.slot_id")->get();
+		$query = Tbl_mlm_slot::customer()->bank()->walletinfo()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->groupBy("tbl_mlm_slot.slot_id");
+		$search_key = '';
+		$query->where(function($q) use ($search_key)
+			{
+				$q->orWhere("slot_status", "EZ");
+				$q->orWhere("old_slot_status", "EZ");
+			});
+		$dataget = $query->get();
 		$return = null;
 		foreach ($dataget as $key => $value) 
 		{

@@ -172,5 +172,10 @@
     <div id="fb-root"></div>
 
      @yield("script")
+     <script> 
+       $(window).load(function() { 
+         $.fn.lightspeedBox(); 
+       }); 
+     </script> 
     </body>
 </html>

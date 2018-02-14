@@ -25,9 +25,11 @@
                 </div>
                 <div class="col-md-6">
                     <div class="right-container">
-                        <div class="image-holder">
-                            <img src="{{ get_content($shop_theme_info, "home", "home_about_image") }}">
-                        </div>
+                        <a class="lsb-preview" href="{{ get_content($shop_theme_info, "home", "home_about_image") }}">
+                            <div class="image-holder">
+                                <img src="{{ get_content($shop_theme_info, "home", "home_about_image") }}">
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -43,7 +45,11 @@
                 <div class="col-md-6">
                     <div class="process-container">
                         <div class="process-holder">
-                            <div class="process-image"><img src="{{ get_content($shop_theme_info, "home", "home_process_image_1") }}"></div>
+                            <a class="lsb-preview" href="{{ get_content($shop_theme_info, "home", "home_process_image_1") }}">
+                                <div class="process-image">
+                                    <img src="{{ get_content($shop_theme_info, "home", "home_process_image_1") }}">
+                                </div>
+                            </a>
                         </div>
                         <div class="details-container">
                             <div class="title">{!! get_content($shop_theme_info, "home", "home_process_title_1") !!}</div>
@@ -54,7 +60,11 @@
                 <div class="col-md-6">
                     <div class="process-container">
                         <div class="process-holder">
-                            <div class="process-image"><img src="{{ get_content($shop_theme_info, "home", "home_process_image_2") }}"></div>
+                            <a class="lsb-preview" href="{{ get_content($shop_theme_info, "home", "home_process_image_2") }}">
+                                <div class="process-image">
+                                    <img src="{{ get_content($shop_theme_info, "home", "home_process_image_2") }}">
+                                </div>
+                            </a>
                         </div>
                         <div class="details-container">
                             <div class="title">{!! get_content($shop_theme_info, "home", "home_process_title_2") !!}</div>
@@ -74,9 +84,11 @@
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="left-container">
-                        <div class="image-holder">
-                            <img src="{{ get_content($shop_theme_info, "home", "home_product_image") }}">
-                        </div>
+                        <a class="lsb-preview" href="{{ get_content($shop_theme_info, "home", "home_product_image") }}">
+                            <div class="image-holder">
+                                <img src="{{ get_content($shop_theme_info, "home", "home_product_image") }}">
+                            </div>
+                        </a>
                     </div>
                 </div>
                 <div class="col-md-6">

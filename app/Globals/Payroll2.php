@@ -7074,6 +7074,7 @@ class Payroll2
 					}
 					if (isset($breakdown["record_type"])) 
 					{
+						
 						if ($breakdown["record_type"] == "allowance_de_minimis") 
 						{
 							$allowance_de_minimis += Payroll2::payroll_number_format($breakdown["amount"],2);

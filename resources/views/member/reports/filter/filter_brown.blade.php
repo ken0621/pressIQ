@@ -3,6 +3,7 @@
     	<form class="global-submit filter" method="post" action="{{$action}}" >
     	{!! csrf_field() !!}
     	<input type="hidden" name="report_type" value="plain" class="report_type_i">
+        <input type="hidden" name="wallet_log_plan" value="{{$wallet_log_plan}}" class="wallet_log_plan">
     	<input type="hidden" name="report_field_type" class="report_field_type" value="{{$report_code or ''}}">
         <div>
             <div class="col-md-2 hidden">

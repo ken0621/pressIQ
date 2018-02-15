@@ -12,8 +12,14 @@ class QueryController extends Member
 {
 	public function anyIndex(Request $request)
 	{
-        $report_type    = $request->report_type;
-        $load_view      = $request->load_view;
+        $report_type    	  = $request->report_type;
+        $load_view      	  = $request->load_view;
+        $wallet_log_plan      = $request->wallet_log_plan;
+
+        if(!$wallet_log_plan)
+        {
+        	$wallet_log_plan = "EZ_REFERRAL_BONUS";
+        }
 
 		$query = Tbl_mlm_slot::customer()->bank()->walletinfo()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->groupBy("tbl_mlm_slot.slot_id");
 		$search_key = '';
@@ -26,7 +32,7 @@ class QueryController extends Member
 		$return = null;
 		foreach ($dataget as $key => $value) 
 		{
-			$ez_bonus = Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("wallet_log_slot",$value->slot_id)->where("wallet_log_plan","EZ_REFERRAL_BONUS")->groupBy("slot_id")->sum("wallet_log_amount");
+			$ez_bonus = Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("wallet_log_slot",$value->slot_id)->where("wallet_log_plan",$wallet_log_plan)->groupBy("slot_id")->sum("wallet_log_amount");
 			$total_payout = Tbl_mlm_slot_wallet_log::slot()->where("tbl_mlm_slot.shop_id", $this->user_info->shop_id)->where("wallet_log_slot",$value->slot_id)->whereIn("wallet_log_plan",['EON','BANK'])->groupBy("slot_id")->sum("wallet_log_amount") * -1;
 
 			// $return[$key]['slot_no'] = $value->slot_no;
@@ -66,6 +72,7 @@ class QueryController extends Member
 			}
 		}
         $data['action'] = '/member/report/query';
+        $data['wallet_log_plan'] = $wallet_log_plan;
 		$data['_payout'] = $return;
 
 		if($report_type && !$load_view)

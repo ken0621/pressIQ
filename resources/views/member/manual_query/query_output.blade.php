@@ -24,7 +24,7 @@
 	    				@if(count($_payout) > 0)
 	    					@foreach($_payout as $key => $payout)
 		    				<tr class="tr-draggable">
-			    				<td class="text-center">{{date('F d, y',strtotime($payout->wallet_log_date_created))}}</td>
+			    				<td class="text-center">{{date('F d, Y',strtotime($payout->wallet_log_date_created))}}</td>
 			    				<td class="text-center">{{$payout->slot_no}}</td>
 					            <td class="text-center">{{$payout->first_name}} {{$payout->last_name}}</td>
 				                <td class="text-center">{{$payout->slot_eon}}</td>

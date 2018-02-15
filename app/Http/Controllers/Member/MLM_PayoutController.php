@@ -409,7 +409,7 @@ class MLM_PayoutController extends Member
 	{
 		return view("member.mlm_payout.payout_reject");
 	}
-	public function postRejectEncashmentsubmit()
+	public function anyRejectEncashmentsubmit()
 	{
 		$amount = Request::input('less_than_amount');
 		$encashment_type = Request::input('encashment_type');

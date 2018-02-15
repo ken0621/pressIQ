@@ -28,6 +28,16 @@
 				@endforeach
 			</select>
 		</div>
+		<div class="col-md-2 padding-lr-1" style="margin-left:25px;">
+			<small>Filter by Department</small>
+			<select class="form-control" id="filter_department" data-id="{{$filtering_company}}">
+				<option value="0">All Department</option>
+				@foreach($_department as $department)
+				<option value="{{$department->payroll_department_id}}">{{$department->payroll_department_name}}</option> 
+				@endforeach
+			</select>
+		</div>
+
 		<div class="form-group tab-content panel-body employee-container">
 			<div id="all" class="tab-pane fade in active">
 				<div class="form-group order-tags"></div>

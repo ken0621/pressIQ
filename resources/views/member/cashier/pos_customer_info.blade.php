@@ -47,7 +47,7 @@
                 <div class="col-md-7">
                     <select name="slot_id" class="form-control input-sm change-slot-id">
                         @foreach($exist['_slot'] as $slot)
-                            <option value="{{$slot->slot_no}}">{{$slot->slot_no}}</option>
+                            <option value="{{$slot->slot_id}}">{{$slot->slot_no}}</option>
                         @endforeach
                     </select>
                 </div>

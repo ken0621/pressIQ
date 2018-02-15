@@ -138,6 +138,8 @@ class WarehouseControllerV2 extends Member
         }
 
         $id = Tbl_warehouse::insertGetId($ins_warehouse);
+
+        Warehouse::insert_access($id);
               
         $data['status'] = 'success';
 

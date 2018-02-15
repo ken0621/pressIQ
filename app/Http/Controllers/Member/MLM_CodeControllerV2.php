@@ -130,9 +130,12 @@ class MLM_CodeControllerV2 extends Member
         {
             $record_log_id = $request->record_log_id;
 
-            foreach ($record_log_id as $key => $value) 
+            if ($record_log_id) 
             {
-                Item::disassemble_membership_kit($value);
+                foreach ($record_log_id as $key => $value) 
+                {
+                    Item::disassemble_membership_kit($value);
+                }
             }
             
             $return['status'] = 'success';

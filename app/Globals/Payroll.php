@@ -2828,11 +2828,11 @@ class Payroll
 			{
 				$period_category = 'First Period';
 			}
-			if($next_month != $current_month)
-			{
-				// dd($current_month);
-				$period_category = 'Last Period';
-			}
+			// if($next_month != $current_month)
+			// {
+			// 	// dd($current_month);
+			// 	$period_category = 'Last Period';
+			// }
 
 			$count_per_period = 2;
 		}

@@ -26,6 +26,7 @@ use App\Models\Tbl_settings;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_item_token;
 use App\Models\Tbl_item_token_log;
+use App\Models\Tbl_receive_inventory;
 
 use App\Globals\Inventory;
 use App\Globals\Item;
@@ -1648,5 +1649,17 @@ class Warehouse2
     public static function delete_inventory_history($shop_id, $ref = array())
     {
         Tbl_inventory_history::where('shop_id', $shop_id)->where("history_reference", $ref['name'])->where('history_reference_id',$ref['id'])->delete();
+    }
+    public static function item_per_transaction($shop_id, $history_reference,  $item_id)
+    {
+        /*if($history_reference == 'receive_inventory')
+        {
+            $history_reference_id = Tbl_receive_inventory::where('ri_shop_id', $shop_id)->value('ri_id');
+            $history_reference = 'receive_inventory';
+        }
+
+        $data = Tbl_inventory_history::where('shop_id', $shop_id)->where('item_id', $item_id)->where('history_reference', $history_reference)->where('history_reference_id', $history_reference_id)->get();
+        dd($data);
+        return $data;*/
     }
 }

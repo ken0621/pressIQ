@@ -238,7 +238,40 @@ body{
 			font-size: 17px;
 			font-family: 'PT Sans', sans-serif;
 			color: #575757;
-			padding: 20px 0 0 0;
+			padding: 30px 0 0 0;
+			ul
+			{
+				li
+				{
+					margin-bottom: 15px;
+				}
+			}	
+		}
+		.button-container
+		{
+			margin-left: 40px;
+			margin-top: 30px;
+			button
+			{
+				background-color: #e0e0e0;
+				border: none;
+				border: 2px solid #9a9a9a;
+				padding: 10px 20px;
+				font-family: 'PT Serif', serif; 
+				font-weight: 700;
+				&:hover
+				{
+					@include transition(0.3s);
+					background-color: #1c1c1c;
+					color: #fff;
+					border: 2px solid #1c1c1c;
+				}
+			}
+			a
+			{
+				text-decoration: none;
+				color: inherit;
+			}
 		}
 	}
 }

@@ -86,10 +86,10 @@
           </tr>
 				   <tr>
 
-                      <td>BASIC PAY</td>
+                      <td></td>
+                      <td style="font-weight: bold;">BASIC PAY</td>
                       <td style="font-weight: bold">{{ payroll_currency($employee->net_basic_pay) }}</td>
-                      <td >GROSS SALARY</td>
-                       <td style="font-weight: bold">{{ payroll_currency($employee->gross_pay) }}</td>
+                       <td ></td>
                    </tr>
                  @foreach($employee->cutoff_breakdown->_gross_pay_breakdown as $breakdown)
                       <tr>
@@ -131,11 +131,19 @@
                                       <td>TOTAL DEDUCTION</td>
                                        <td  style="font-weight: bold">{{ payroll_currency($employee->total_deduction) }}</td>
                                         <td ></td>
-                                  </tr>
+                                  </tr> 
+
+                                <tr>
+
+                                  <td></td>
+                                  <td style="font-weight: bold;">GROSS SALARY</td>
+                                  <td style="font-weight: bold">{{ payroll_currency($employee->gross_pay) }}</td>
+                                   <td ></td>
+                               </tr>
 
                                   <tr>
                                       <td ></td>
-                                      <td >TAKE HOME PAY</td>
+                                      <td style="font-weight: bold;">TAKE HOME PAY</td>
                                        <td style="font-weight: bold">{{ payroll_currency($employee->net_pay) }}</td>
                                         <td ></td>
                                   </tr>

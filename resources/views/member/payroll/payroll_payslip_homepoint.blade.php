@@ -95,22 +95,29 @@
                       <tr>
                           <td></td>
                           <td>{{ strtoupper($breakdown["label"]) }}</td>
-                          <td style="font-weight: bold">{{ payroll_currency($breakdown["amount"]) }}</td>
+                          <td>{{ payroll_currency($breakdown["amount"]) }}</td>
                            <td></td>
                       </tr>
                   @endforeach
 
-                 @foreach($employee->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
+                              <tr>
+                                  <td></td>
+                                  <td style="font-weight: bold;">GROSS SALARY</td>
+                                  <td style="font-weight: bold">{{ payroll_currency($employee->gross_pay) }}</td>
+                                   <td ></td>
+                               </tr>
+
+                  @foreach($employee->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
                                     @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
                                     @else
                                       <tr>
                                           <td></td>
                                           <td >{{ strtoupper($breakdown["label"]) }}</td>
-                                          <td style="font-weight: bold">{{ payroll_currency($breakdown["amount"]) }}</td>
+                                          <td>{{ payroll_currency($breakdown["amount"]) }}</td>
                                            <td ></td>
                                       </tr>
                                     @endif
-           		   @endforeach
+                    @endforeach
 
 
                       @foreach($employee->cutoff_breakdown->_net_pay_breakdown as $breakdown)
@@ -119,7 +126,7 @@
                                       <tr>
                                           <td></td>
                                           <td >{{ strtoupper($breakdown["label"]) }}</td>
-                                          <td style="font-weight: bold">{{ payroll_currency($breakdown["amount"]) }}</td>
+                                          <td >{{ payroll_currency($breakdown["amount"]) }}</td>
                                            <td ></td>
                                       </tr>
                                     @endif
@@ -129,17 +136,9 @@
                                   <tr>
                                       <td></td>
                                       <td>TOTAL DEDUCTION</td>
-                                       <td  style="font-weight: bold">{{ payroll_currency($employee->total_deduction) }}</td>
+                                       <td>{{ payroll_currency($employee->total_deduction) }}</td>
                                         <td ></td>
                                   </tr> 
-
-                                <tr>
-
-                                  <td></td>
-                                  <td style="font-weight: bold;">GROSS SALARY</td>
-                                  <td style="font-weight: bold">{{ payroll_currency($employee->gross_pay) }}</td>
-                                   <td ></td>
-                               </tr>
 
                                   <tr>
                                       <td ></td>

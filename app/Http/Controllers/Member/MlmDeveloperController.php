@@ -911,6 +911,7 @@ class MlmDeveloperController extends Member
             Tbl_tree_sponsor::where("sponsor_tree_parent_id", $slot_id)->delete();
             Tbl_tree_sponsor::where("sponsor_tree_child_id", $slot_id)->delete();
             //Tbl_mlm_slot_wallet_log::where("wallet_log_slot_sponsor", $slot_id)->delete();
+            
             Tbl_mlm_slot_points_log::where("points_log_Sponsor", $slot_id)->delete();
 
             $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();

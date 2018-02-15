@@ -63,6 +63,8 @@ function global()
 
     function action_global_submit(link, data, modal)
     {
+        console.log(link);
+        console.log(data);
         $(".modal-loader").removeClass("hidden");
         $.ajax({
             url:link,
@@ -121,15 +123,18 @@ function global()
             error: function(x,t,m)
             {
                 // console.log(x + ' ' + t +' ' + m); 
-                if(t==="timeout") {
+                if(t==="timeout")
+                {
                     toastr.warning(m);
                     setTimeout(function()
                     {
                         action_global_submit(link, data, modal);
                     }, 2000);
                 } 
-                else {
+                else 
+                {
                     $(".modal-loader").addClass("hidden");
+                    console.log(m);
                     toastr.error(m + '. Please Contact The Administrator.');
                 }
                 

@@ -28,7 +28,7 @@
         <li class="active change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-money"></i> Pending</a></li>
         <li class="cursor-pointer change-tab approve-tab" mode="done"><a class="cursor-pointer"><i class="fa fa-check"></i> Processed</a></li>
         {{-- @if($shop_id == 90 && $count_reject == 0) --}}
-        @if($shop_id == 90)
+        @if($shop_id == 90 || $shop_id == 55)
         <li class="pull-right">
             <button class="btn btn-primary popup" link="/member/mlm/payout/reject-encashment" size="md" style="margin: 5px;">REJECT ENCASHMENT</button>
         </li>

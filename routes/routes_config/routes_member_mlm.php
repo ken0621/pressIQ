@@ -338,6 +338,7 @@ Route::post('member/mlm/developer/sample_upload', 'Member\MlmDeveloperController
 Route::any('member/mlm/developer/myTest', 'Member\MlmDeveloperController@myTest');
 Route::any('member/mlm/developer/recompute', 'Member\MlmDeveloperController@recompute');
 Route::any('member/mlm/developer/recompute_reset', 'Member\MlmDeveloperController@recompute_reset');
+Route::any('member/mlm/developer/remove_double_income', 'Member\MlmDeveloperController@remove_double_income');
 
 Route::get('member/mlm/developer/redistribute', 'Member\MlmDeveloperController@redistribute');
 Route::post('member/mlm/developer/redistribute', 'Member\MlmDeveloperController@redistribute_submit');

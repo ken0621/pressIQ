@@ -147,7 +147,7 @@ class TransactionPurchaseRequisitionController extends Member
             foreach ($applied_transaction as $key => $value) 
             {
                 $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
-                $get = TransactionSalesOrder::info_item($key, $warehouse_id);
+                $get = TransactionSalesOrder::info_item_whse($key, $warehouse_id);
                 $info = TransactionSalesOrder::info($this->user_info->shop_id, $key);
 
                 foreach ($get as $key_item => $value_item)

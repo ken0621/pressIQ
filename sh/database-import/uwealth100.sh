@@ -1,7 +1,7 @@
 ## INFO ##
 username="root";
 password="water123";
-database="digimahouse";
+database="local_unity";
 
 ## DEPENDENCIES ##
 command -v gzip >/dev/null 2>&1 || { sudo apt-get update; sudo apt-get install gzip; }

@@ -708,6 +708,7 @@ class Mlm_complan_manager
             /* CHECK IF PERCENTAGE OR FIXED AMOUNT */
             //indirect_seting_percent  0 = fixed
             //indirect_seting_percent  1 = percentage
+            //indirect_seting_percent  2 = advance
             $value  = 0;
             $value2 = 0;
             if($level->indirect_seting_percent == 0)

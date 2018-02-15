@@ -1108,4 +1108,83 @@ class MlmDeveloperController extends Member
             return view("member.mlm_developer.change_owner", $data);
         }
     }
+    public function remove_double_income()
+    {
+        $double_indirect = Tbl_mlm_slot_wallet_log::where("shop_id",90)
+                                                  ->select("*",DB::raw('COUNT(wallet_log_slot_sponsor) as total_count'))
+                                                  ->where("wallet_log_plan","INDIRECT")
+                                                  ->groupBy("wallet_log_slot","wallet_log_slot_sponsor")
+                                                  ->havingRaw("COUNT(wallet_log_slot_sponsor) > 1")
+                                                  ->get();
+
+        $double_direct   = Tbl_mlm_slot_wallet_log::where("shop_id",90)
+                                                  ->select("*",DB::raw('COUNT(wallet_log_slot_sponsor) as total_count'))
+                                                  ->where("wallet_log_plan","DIRECT")
+                                                  ->groupBy("wallet_log_slot","wallet_log_slot_sponsor")
+                                                  ->havingRaw("COUNT(wallet_log_slot_sponsor) > 1")
+                                                  ->get();
+                                                  
+        foreach($double_indirect as $double)
+        {
+            $check_if_double = Tbl_mlm_slot_wallet_log::where("wallet_log_slot",$double->wallet_log_slot)
+                                                      ->where("wallet_log_slot_sponsor",$double->wallet_log_slot_sponsor)
+                                                      ->where("wallet_log_plan","INDIRECT")
+                                                      ->count();
+            if($check_if_double >= 2)
+            {
+                $get_last = Tbl_mlm_slot_wallet_log::where("wallet_log_slot",$double->wallet_log_slot)
+                                                      ->where("wallet_log_slot_sponsor",$double->wallet_log_slot_sponsor)
+                                                      ->where("wallet_log_plan","INDIRECT")
+                                                      ->orderBy("wallet_log_id","DESC")
+                                                      ->first();
+                Tbl_mlm_slot_wallet_log::where("wallet_log_slot",$double->wallet_log_slot)
+                                                      ->where("wallet_log_slot_sponsor",$double->wallet_log_slot_sponsor)
+                                                      ->where("wallet_log_plan","INDIRECT")
+                                                      ->where("wallet_log_id",$get_last->wallet_log_id)
+                                                      ->delete();                                      
+
+                $arry_log['wallet_log_slot']    = $double->wallet_log_slot;
+                $slot_wallet_all                = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $arry_log['wallet_log_slot'])->sum('wallet_log_amount');
+                $slot_wallet_current            = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $arry_log['wallet_log_slot'])->where('wallet_log_status', 'released')->sum('wallet_log_amount');
+                $update['slot_wallet_all']      = $slot_wallet_all;
+                $update['slot_wallet_current']  = $slot_wallet_current;
+                Tbl_mlm_slot::where('slot_id', $arry_log['wallet_log_slot'])->update($update);                                       
+            }   
+        }
+
+        $double = null;
+
+        foreach($double_direct as $double)
+        {
+            $check_if_double = Tbl_mlm_slot_wallet_log::where("wallet_log_slot",$double->wallet_log_slot)
+                                                      ->where("wallet_log_slot_sponsor",$double->wallet_log_slot_sponsor)
+                                                      ->where("wallet_log_plan","DIRECT")
+                                                      ->count();
+            if($check_if_double >= 2)
+            {
+                $get_last = Tbl_mlm_slot_wallet_log::where("wallet_log_slot",$double->wallet_log_slot)
+                                                      ->where("wallet_log_slot_sponsor",$double->wallet_log_slot_sponsor)
+                                                      ->where("wallet_log_plan","DIRECT")
+                                                      ->orderBy("wallet_log_id","DESC")
+                                                      ->first();
+                Tbl_mlm_slot_wallet_log::where("wallet_log_slot",$double->wallet_log_slot)
+                                                      ->where("wallet_log_slot_sponsor",$double->wallet_log_slot_sponsor)
+                                                      ->where("wallet_log_plan","DIRECT")
+                                                      ->where("wallet_log_id",$get_last->wallet_log_id)
+                                                      ->delete();                                      
+            }           
+
+
+            $arry_log['wallet_log_slot']    = $double->wallet_log_slot;
+            $slot_wallet_all                = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $arry_log['wallet_log_slot'])->sum('wallet_log_amount');
+            $slot_wallet_current            = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $arry_log['wallet_log_slot'])->where('wallet_log_status', 'released')->sum('wallet_log_amount');
+            $update['slot_wallet_all']      = $slot_wallet_all;
+            $update['slot_wallet_current']  = $slot_wallet_current;
+            Tbl_mlm_slot::where('slot_id', $arry_log['wallet_log_slot'])->update($update);                                    
+        }
+
+
+        dd("Success");
+
+    }
 }

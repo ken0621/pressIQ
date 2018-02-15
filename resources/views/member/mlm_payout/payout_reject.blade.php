@@ -1,4 +1,4 @@
-<form class="global-submit" method="post" action="/member/mlm/payout/reject-encashment-submit">
+<form class="global-submit" method="post" action="/member/mlm/payout/reject-encashmentsubmit">
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
@@ -42,10 +42,7 @@
 		if(data.status == 'success')
 		{
 			toastr.success("Success");
-			setInterval(function()
-			{
-				location.reload();
-			},2000)
+			location.reload();
 		}
 	}
 </script>

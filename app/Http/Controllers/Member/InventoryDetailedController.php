@@ -34,14 +34,16 @@ class InventoryDetailedController extends Member
         $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
         $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 
+
         $data['_report'] = Tbl_item::um()->where('shop_id',$this->user_info->shop_id)->get();
         
         foreach($data['_report']as $key => $value) 
         {
         	$warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);
             $data['_report'][$key]->invty_count = Tbl_item::recordloginventory($warehouse_id)->where('item_id', $value->item_id)->value('inventory_count');
+            //$data['_report'][$key]->transaction = Tbl_warehouse_inventory_record_log::where('record_source_ref_name', $transaction)->where('record_source_ref_id',$transaction_id)->get();
         }
-
+        //dd($data);
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
         if($report_type && !$load_view)
         {

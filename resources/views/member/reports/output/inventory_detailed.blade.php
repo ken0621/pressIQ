@@ -17,9 +17,9 @@
 							<th class="text-center">Qty out</th>
 							<th class="text-center">Stock on hand-Qty</th>
 							<th class="text-center">Sales Price</th>
-							<th class="text-center">Total Sales</th>
+							<th class="text-right">Total Sales</th>
 							<th class="text-center">Cost</th>
-							<th class="text-center">Total Cost</th>
+							<th class="text-right">Total Cost</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -29,6 +29,10 @@
 								<td class="text-center">{{$report['item_id']}}</td>
 								<td class="text-center">{{$report['item_name']}}</td>
 								<td class="text-center">Ltr</td>
+							</tr>
+							<tr><td></td>
+								<td></td>
+								<td></td>
 								<td class="text-center">WIS</td>
 								<td class="text-center">00001</td>
 								<td class="text-center">01/01/2018</td>
@@ -37,9 +41,9 @@
 								<td class="text-center">1</td>
 								<td class="text-center">{{$report['invty_count']}}</td>
 								<td class="text-center">{{$report['item_price']}}</td>
-								<td class="text-center">{{$report['item_price'] * $report['invty_count']}}</td>
+								<td class="text-right">{{currency('PHP', $report['item_price'] * $report['invty_count'])}}</td>
 								<td class="text-center">{{$report['item_cost']}}</td>
-								<td class="text-center">{{$report['item_cost'] * $report['invty_count']}}</td>
+								<td class="text-right">{{currency('PHP', $report['item_cost'] * $report['invty_count'])}}</td>
 							</tr>
 							@endforeach
 						@else

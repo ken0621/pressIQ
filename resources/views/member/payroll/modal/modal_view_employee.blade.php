@@ -165,7 +165,7 @@
                 </div>
               </div>
               <div id="company-details" class="tab-pane fade ">
-                <input type="hidden" name="payroll_employee_contract_id" value="{{isset($contract->payroll_employee_contract_id) ? $contract->payroll_employee_contract_id : ''}}">
+                <input type= "hidden" name="payroll_employee_contract_id" value="{{isset($contract->payroll_employee_contract_id) ? $contract->payroll_employee_contract_id : ''}}">
                 <div class="form-horizontal">
                   <div class="form-group">
                     <div class="col-md-6">

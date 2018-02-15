@@ -49,7 +49,7 @@ class Tbl_payroll_deduction_payment_v2 extends Model
 	}
 
 
-	public function scopegetallinfo($query,$shop_id = 0 ,$payroll_employee_id = 0 ,$payroll_deduction_id = 0 )
+	public function scopegetallinfo($query,$shop_id = 0 ,$payroll_employee_id = 0 ,$payroll_deduction_id = 0, $branchcompany = null)
 	{
 		$query->join('tbl_payroll_deduction_v2','tbl_payroll_deduction_v2.payroll_deduction_id','=','tbl_payroll_deduction_payment_v2.payroll_deduction_id')
           ->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_deduction_payment_v2.payroll_employee_id')
@@ -61,10 +61,20 @@ class Tbl_payroll_deduction_payment_v2 extends Model
           {
           	$query->where('tbl_payroll_deduction_v2.shop_id',$shop_id);
           }
-          if ($payroll_employee_id!=0) 
+          // if ($payroll_employee_id!=0) 
+          // {
+          // 	$query->where('tbl_payroll_employee_basic.payroll_employee_company_id',$payroll_employee_id);
+          // }
+          if($branchcompany != null)
           {
-          	$query->where('tbl_payroll_employee_basic.payroll_employee_company_id',$payroll_employee_id);
+               $query->whereIn("tbl_payroll_employee_basic.payroll_employee_company_id", $branchcompany);
+
           }
+          else if($payroll_employee_id != 0)
+          {
+               $query->where('tbl_payroll_employee_basic.payroll_employee_company_id',$payroll_employee_id);
+          }
+
           if ($payroll_deduction_id!=0)
           {
           	$query->where('tbl_payroll_deduction_v2.payroll_deduction_id',$payroll_deduction_id);

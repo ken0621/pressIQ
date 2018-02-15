@@ -97,24 +97,25 @@ class ShopLoginController extends Shop
         }
     }
 
-      public function thank_you()
+    public function thank_you()
     {
         
         $data["page"] = "Thank You";
         return view("press_user.thank_you", $data);
     }
 
-     public function forgot_password()
+    public function forgot_password()
     {
         
         $data["page"] = "Forgot Password";
         return view("forgot_password", $data);
     }
 
-     public function forgot_password_send()
+    public function forgot_password_send()
     {
         $password_info["user_email"]              =request('user_email');
         $password_info["subject"]                 ="Forgot Password";
+        $password_info["company_name"]            =request('company_name');
 
         $password_info["explode_email"] = explode("@", $password_info['user_email']);
         
@@ -123,10 +124,26 @@ class ShopLoginController extends Shop
             $message->from($password_info["explode_email"][0] . '@press-iq.com',$password_info['user_email']);
             $message->to('marketing@press-iq.com');  
             $message->subject($password_info['subject']);
-           
+       
         });
-       Session::flash('forgot_password', 'Forgot Password request successfully sent!');
-        return Redirect::back();
+       Session::flash('forgot_password', 'Forgot Password message successfully sent! ');
+       return Redirect::back();
+    }
+
+    public function forgot_password_change()
+    {
+
+        $data["page"] = "Change Password";
+        return view("change_password", $data);
+
+    }
+
+    public function forgot_password_change_submit()
+    {
+        
+       dd('Sorry Website Under Construction!');
+
+
     }
 
     public function submit()

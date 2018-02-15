@@ -181,6 +181,7 @@
                 </div>
 
                 <div id="send_release" class="tabcontent send-release-container">
+                  <img class="pull-right" src="https://media.giphy.com/media/y1ZBcOGOOtlpC/200.gif" id="img_load" style="display:none;"/>
                   <div class="title-container">Send Release</div>
                   <div class="title">Publisher:</div>
                   <div class="content">{{session('user_first_name')}} {{session('user_last_name')}}</div>
@@ -195,7 +196,7 @@
                   <div class="button-container">
                     <button class="tablinks" type="button" onclick="openCity(event, 'choose_recipient')" id="defaultOpen">&laquo; Back</button>
                     <button class="preview-button" type="button"  id="prev_btn_send">Preview</button>
-                    <button type="submit" formaction="/pressuser/pressrelease/pr">Send &raquo;</button>
+                    <button type="submit" id="button_load" formaction="/pressuser/pressrelease/pr">Send &raquo;</button>
                   </div>
                 </div>
               </form>
@@ -278,6 +279,13 @@
 <script src="/email_assets/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
 
 <script>
+
+  $('#button_load').click(function()
+  {
+    $('#img_load').show(); 
+     $.ajax({})
+   });
+
   $('#prev_btn').click(function()
   {
     var headline = document.getElementById('pr_headline').value;
@@ -373,21 +381,8 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
            fileName = blobInfo.filename();
        formData.append('file', blobInfo.blob(), fileName);
        formData.append('_token', "{{ csrf_token() }}");
-   
-       // formData.append('file', blobInfo.blob(), fileName(blobInfo));
        xhr.send(formData);
-   
-       // setTimeout(function() 
-       // {
-       //   // no matter what you upload, we will turn it into TinyMCE logo (smiley)
-       //   success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
-       // }, 2000);
      },
-   
-     // init_instance_callback: function (ed) 
-     // {
-     //   ed.execCommand('mceImage');
-     // }
    });
 </script>
 
@@ -416,5 +411,4 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
     });
   });
 </script>
-
 @endsection

@@ -1388,7 +1388,7 @@ class ShopMemberController extends Shop
 
     }
 
-     public function importExcel(Request $request)  
+     public function importExcel(Request $request)     
     {  
         if($request->hasFile('import_file'))
         {
@@ -1399,13 +1399,21 @@ class ShopMemberController extends Shop
                     $data['research_email_address']  = $row['research_email_address'];
                     $data['company_name']            = $row['company_name'];
                     $data['name']                    = $row['name'];
+                    $data['position']                = $row['position'];
+                    $data['title_of_journalist']     = $row['title_of_journalist'];
+                    $data['country']                 = $row['country'];
+                    $data['industry_type']           = $row['industry_type'];
+                    $data['website']                 = $row['website'];
+                    $data['description']             = $row['description'];
+                    $data['media_type']              = $row['media_type'];
+
                     if(!empty($data)) 
                     {
                         DB::table('tbl_press_release_recipients')->insert($data);
                     }
                 }
-            });
-        }
+            });     
+        }     
 
         Session::put('success', 'Your file successfully import in database!!!');
         return back();

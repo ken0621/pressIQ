@@ -99,11 +99,14 @@
 					<div class="heading-container">Forgot Password</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="content-container"><p>Subject:  Password Request </p></div>
-				<div class="content-container"><p>Email/Username:   {{$user_email}} </p></div>
-				<div class="content-container"><p>Hello Admin! Please Force Login this Account to Set New Password details then give the Details Back</p></div>
-			</div>
+				<div class="row">
+					<div class="content-container"><p>Subject: Change Password </p></div>
+					<div class="content-container"><p>Company Name:{{$company_name}}</p></div>
+					<div class="content-container"><p>Email:{{$user_email}} </p></div>
+					<div class="content-container"><p>Hi Admin! {{$user_email}} request to change the password and give the details back.</p></div>
+					{{-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; --}}
+					{{-- <a href="http://sample.digimahouse.test/forgot/password/change">Change your Password</a> --}}
+				</div>
 		</div>
 	</div>
 </body>

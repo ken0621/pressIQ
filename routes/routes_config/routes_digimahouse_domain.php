@@ -57,12 +57,16 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/payment_success', 'Shop\ShopItemPaymentController@payment_success'); //MARK FIGS
 	Route::get('/replicated', 'Shop\ShopAboutController@replicated'); //MARK FIGS
 	Route::get('/terms_and_conditions', 'Shop\ShopAboutController@terms_and_conditions'); //MARK FIGS
-
+ 
 
 
 	Route::any('/signin', 'Shop\ShopLoginController@signin');
 	Route::any('/forgot/password', 'Shop\ShopLoginController@forgot_password'); //ROMMEL C.
 	Route::any('/forgot/password/send', 'Shop\ShopLoginController@forgot_password_send');
+	Route::any('/forgot/password/change', 'Shop\ShopLoginController@forgot_password_change');
+	Route::any('/forgot/password/change/submit', 'Shop\ShopLoginController@forgot_password_change_submit');
+
+	
 	Route::any('/logout', 'Shop\ShopMemberController@logout');
 	Route::any('/thank_you','Shop\ShopLoginController@thank_you');//PRESS RELEASE
 	Route::post('/contactus', 'Shop\ShopContactController@contact_us');

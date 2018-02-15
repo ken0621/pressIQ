@@ -846,7 +846,7 @@ class PayrollTimeSheet2Controller extends Member
 		$data["cutoff_input"] 		= unserialize($payroll_time_keeping_approved_info->cutoff_input);
 		$data["cutoff_compute"] 	= unserialize($payroll_time_keeping_approved_info->cutoff_compute);
 		$data["cutoff_breakdown"] 	= unserialize($payroll_time_keeping_approved_info->cutoff_breakdown);
-
+		
 		return $data;
 	}
 	public function compute_whole_cutoff($period_company_id, $employee_id,$unapproved = false)

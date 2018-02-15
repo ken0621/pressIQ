@@ -143,8 +143,15 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_rate']        = str_replace(',', '', $request->item_rate[$key]);
                 $insert_item[$key]['item_discount']    = str_replace(',', '', $request->item_discount[$key]);
                 $insert_item[$key]['item_remark']      = $request->item_remark[$key];
-                $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_taxable']     = isset($request->item_taxable[$key])? $request->item_taxable[$key] : 0;
+                if($insert_item[$key]['item_taxable'] == '1')
+                {
+                    $insert_item[$key]['item_amount']   = (str_replace(',', '', $request->item_amount[$key] * .12)) + str_replace(',', '', $request->item_amount[$key]);
+                }
+                else
+                {
+                    $insert_item[$key]['item_amount']   = str_replace(',', '', $request->item_amount[$key]);
+                }
                 $insert_item[$key]['item_ref_name']    = $request->item_ref_name[$key];
                 $insert_item[$key]['item_ref_id']      = $request->item_ref_id[$key];
             }
@@ -203,11 +210,20 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_rate']        = str_replace(',', '', $request->item_rate[$key]);
                 $insert_item[$key]['item_discount']    = str_replace(',', '', $request->item_discount[$key]);
                 $insert_item[$key]['item_remark']      = $request->item_remark[$key];
-                $insert_item[$key]['item_amount']      = str_replace(',', '', $request->item_amount[$key]);
                 $insert_item[$key]['item_taxable']     = isset($request->item_taxable[$key])? $request->item_taxable[$key] : 0;
+                
+                if($insert_item[$key]['item_taxable'] == '1')
+                {
+                    $insert_item[$key]['item_amount']   = (str_replace(',', '', $request->item_amount[$key] * .12)) + str_replace(',', '', $request->item_amount[$key]);
+                }
+                else
+                {
+                    $insert_item[$key]['item_amount']   = str_replace(',', '', $request->item_amount[$key]);
+                }
                 $insert_item[$key]['item_ref_name']    = $request->item_ref_name[$key];
                 $insert_item[$key]['item_ref_id']      = $request->item_ref_id[$key];
             }
+
         }
 
        

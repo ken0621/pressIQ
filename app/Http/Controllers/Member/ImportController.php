@@ -73,6 +73,53 @@ class ImportController extends Member
 
 		return view('member.import.item_import');
 	}
+	public function getItemBundle()
+	{
+
+		return view('member.import.item_import_bundle');
+	}
+	public function getItemBundleTemplate()
+	{
+		Excel::create("ItemTemplate", function($excel)
+		{
+			// Set the title
+		    $excel->setTitle('Digimahouse');
+
+		    // Chain the setters
+		    $excel->setCreator('DigimaWebSolutions')
+		          ->setCompany('DigimaWebSolutions');
+
+		    $excel->sheet('Template', function($sheet) {
+		    	$header = [
+		    				'Type',
+		    				'Name',
+		    				'Sku',
+		    				'UM',
+		    				'Category',
+		    				'Sales Information',
+		    				'Sales Price',
+		    				'Income Account',
+		    				'Sale to Customer',
+		    				'Purchase From Supplier',
+		    				'Purchasing Information',
+		    				'Purchase Cost',
+		    				'Expense Account',
+		    				'Barcode',
+		    				'Qty on Hand',
+		    				'Reorder Point',
+		    				'As of Date',
+		    				'Asset Account',
+		    				'Packing Size',
+		    				'Manufacturer'
+		    				];
+		    	$sheet->freezeFirstRow();
+		        $sheet->row(1, $header);
+
+		    });
+
+
+		})->download('csv');
+	}
 
 	public function getItemTemplate()
 	{
@@ -116,7 +163,302 @@ class ImportController extends Member
 
 		})->download('csv');
 	}
+	public function postItemBundleReadFile()
+	{
+		Session::forget("import_item_error");
 
+		$value     = Request::input('value');
+		$input     = Request::input('input');
+
+		$ctr 	   		= Request::input('ctr');
+		$data_length 	= Request::input('data_length');
+		$error_data 	= Request::input('error_data');
+
+		if($ctr != $data_length)
+		{
+			$data['type']					= isset($value["Type"]) 				? strToUpper($value["Type"]) : '';			//1,2,3
+			$data['name'] 					= isset($value["Name"]) 				? $value["Name"] : '';					  	//1,2,3
+			$data['sku'] 					= isset($value["Sku"]) 					? $value["Sku"] : '';				      	//1,2,3
+			$data['um'] 					= isset($value["UM"]) 					? $value["UM"] : '';					  	//1,2,3
+			$data['category'] 				= isset($value["Category"]) 			? $value["Category"] : '';				  	//1,2,3
+			$data['sales_information'] 		= isset($value["Sales Information"]) 	? $value["Sales Information"] : '';		  	//1,2,3
+			$data['sales_price'] 			= isset($value["Sales Price"]) 			? $value["Sales Price"] : '';			  	//1,2,3
+			$data['income_account'] 		= isset($value["Income Account"]) 		? $value["Income Account"] : '';		  	//1,2,3
+			$data['sale_to_customer'] 		= isset($value["Sale to Customer"]) 	? $value["Sale to Customer"] : '';        	//2,3
+			$data{'purchase_from_supplier'} = isset($value["Purchase From Supplier"]) ? $value["Purchase From Supplier"] : '';	//2,3
+			$data['purchasing_information'] = isset($value["Purchasing Information"]) ? $value["Purchasing Information"] : '';	//3
+			$data['purchase_cost'] 			= isset($value["Purchase Cost"]) 		? $value["Purchase Cost"] : ''; 			//3
+			$data['expense_account'] 		= isset($value["Expense Account"]) 		? $value["Expense Account"] : '';			//3
+			$data['barcode'] 				= isset($value["Barcode"]) 				? $value["Barcode"] : '';					//3
+			$data['qty_on_hand'] 			= isset($value["Qty on Hand"]) 			? $value["Qty on Hand"] : 0;				//3
+			$data['reorder_point'] 			= isset($value["Reorder Point"]) 		? $value["Reorder Point"] : 0;				//3
+			$data['as_of_date'] 			= isset($value["As of Date"]) 			? $value["As of Date"] : '';				//3
+			$data['asset_account'] 			= isset($value["Asset Account"]) 		? $value["Asset Account"] : '';				//3
+			$data['packing_size'] 			= isset($value["Packing Size"]) 		? $value["Packing Size"] : '';				//3
+			$data['manufacturer'] 			= isset($value["Manufacturer"]) 		? $value["Manufacturer"] : '';				//3
+
+
+			/* Import Setting */
+			$auto_category			= isset($input["category"]) 		? $input["category"] : NULL;
+			$auto_income_account	= isset($input["income_account"]) 	? $input["income_account"] : NULL;
+			$auto_expense_account	= isset($input["expense_account"]) 	? $input["expense_account"] : NULL;
+			$auto_asset_account		= isset($input["asset_account"]) 	? $input["asset_account"] : NULL;
+			$auto_manufacturer		= isset($input["manufacturer"]) 	? $input["manufacturer"] : NULL;
+
+			/* Validation */
+			$duplicate_item		= Tbl_item::where("shop_id", $this->getShopId())->where("item_name", $data['name'])->first();
+			$has_Category 		= Tbl_category::where("type_name", $data['category'])->where("type_shop", $this->getShopId())->first();
+			$has_Income_Account = Tbl_chart_of_account::where("account_shop_id", $this->getShopId())
+								->where("account_name", $data['income_account'])->first();
+			$has_Expense_Account= Tbl_chart_of_account::where("account_shop_id", $this->getShopId())
+								->where("account_name", $data['expense_account'])->first();
+			$has_Asset_Account 	= Tbl_chart_of_account::where("account_shop_id", $this->getShopId())
+								->where("account_name", $data['asset_account'])->first();
+			$has_UM 			= Tbl_unit_measurement::where("um_shop", $this->getShopId())->where("um_name", $data['um'])->first();
+			$has_Manufacturer 	= Tbl_manufacturer::where("manufacturer_shop_id", $this->getShopId())->where("manufacturer_name", $data['manufacturer'])->first();
+
+			if(!$duplicate_item)
+			{
+				if($has_Category || $auto_category)
+				{
+					if($has_Manufacturer || $auto_manufacturer || $data['manufacturer'] == '')
+					{
+						/* CHECK CATEGORY */
+						if(!$has_Category && $auto_category && $data['category'] != '')
+						{
+							$data['category'] = $this->create_category($data['category']);
+						}
+						else
+						{
+							$data['category'] = $has_Category->type_id;
+						}
+
+						/* CHECK INCOME ACCOUNT */
+						if($data['income_account'] == '') // DEFAULT
+						{
+							$data['income_account'] = Tbl_chart_of_account::where("account_code", "accounting-sales")
+									->where("account_shop_id", $this->getShopId())->value("account_id");
+						}
+						elseif(!$has_Income_Account && $auto_income_account && $data['income_account'] != '')
+						{
+							$data['income_account'] = $this->create_income_account($data['income_account']);
+						}
+						else
+						{
+							$data['income_account'] = $has_Income_Account->account_id;
+						}
+
+						/* IF TYPE IS ACCEPTED */
+						if($data['type'] == "INVENTORY" || $data['type'] == "NON-INVENTORY" || $data['type'] == "SERVICE")
+						{
+							$insert["shop_id"]				      	  = $this->getShopId();
+							$insert["item_name"]				      = $data['name'];
+							$insert["item_sku"]					      = $data['sku'];
+							$insert["item_category_id"]			      = $data['category'];
+							$insert["item_sales_information"] 	      = $data['sales_information'];
+							$insert["item_price"] 				      = $data['sales_price'];
+							$insert["item_income_account_id"]         = $data['income_account'];
+							$insert["item_date_created"]         	  = Carbon::now();
+
+							$message = [];
+
+							if($data['type'] == "INVENTORY")
+							{
+								/*  Check Expense Account */
+								if($data['expense_account'] == '') // DEFAULT
+								{
+									$data['expense_account'] = Tbl_chart_of_account::where("account_code", "accounting-expense")
+									->where("account_shop_id", $this->getShopId())->value("account_id");
+								}
+								elseif(!$has_Expense_Account && $auto_expense_account && $data['expense_account'] != '')
+								{
+									$data['expense_account'] = $this->create_expense_account($data['expense_account']);
+								}
+								else
+								{
+									$data['expense_account'] = $has_Expense_Account->account_id;
+								}
+
+								/* Check Asset Account */
+								if($data['asset_account'] == '') // DEFAULT
+								{
+									$data['asset_account'] = Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")
+									->where("account_shop_id", $this->getShopId())->value("account_id");
+								}
+								elseif(!$has_Asset_Account && $auto_asset_account && $data['asset_account'] != '')
+								{
+									$data['asset_account'] = $this->create_asset_account($data['asset_account']);
+								}
+								elseif($has_Asset_Account)
+								{
+									$data['asset_account'] = $has_Asset_Account->account_id;
+								}
+
+								/* Check Manufacturer Account */
+								if(!$has_Manufacturer && $auto_manufacturer && $data['manufacturer'] != '')
+								{
+									$data['manufacturer'] = $this->create_manufacturer($data['manufacturer']);
+								}
+								elseif($has_Manufacturer)
+								{
+									$data['manufacturer'] = $has_Manufacturer->manufacturer_id;
+								}
+
+								$insert["item_type_id"]				      = 1;
+								$insert["item_purchasing_information"]    = $data['purchasing_information'];
+								$insert["item_cost"]				      = $data['purchase_cost'];
+								$insert["item_expense_account_id"]	      = $data['expense_account'];
+								$insert["item_barcode"]				      = $data['barcode'];
+								$insert["item_quantity"]		          = $data['qty_on_hand'] == '' ? 0 : $data['qty_on_hand'];
+								$insert["item_reorder_point"] 		      = $data['reorder_point'];
+								$insert["item_date_tracked"]	          = datepicker_input($data['as_of_date']);
+								$insert["item_asset_account_id"]          = $data['asset_account'];
+								$insert["packing_size"]				      = $data['packing_size'];
+								$insert["item_manufacturer_id"]	      	  = $data['manufacturer'];
+
+								$rules["item_quantity"]				      = 'required|numeric';
+								$rules["item_cost"]					      = 'required|numeric';
+								$rules["item_expense_account_id"]		  = 'required';
+								$rules["item_asset_account_id"]			  = 'required';
+								
+								if($data['qty_on_hand'] > 0)
+								{
+									$rules["item_date_tracked"] 		  = 'required|date';
+									$message["item_date_tracked.required"]= "The As of Date field is required when Qty on Hand is not empty";
+									$message["item_date_tracked.date"]	  = "The As of Date field should be in Date format";
+								}
+							}
+							elseif($data['type'] == "NON-INVENTORY")
+							{
+								$insert["item_type_id"]				      = 2;
+								$insert["item_sale_to_customer"]		  = isset($data['sale_to_customer']) ? $data['sale_to_customer'] : 0;
+								$insert["item_purchase_from_supplier"]	  = isset($data{'purchase_from_supplier'}) ? $data{'purchase_from_supplier'} : 0;
+								
+								$rules["item_sale_to_customer"]		  	  = 'required|numeric|min:0|max:1';
+								$rules["item_purchase_from_supplier"]  	  = 'required|numeric|min:0|max:1';
+				
+							}
+							elseif($data['type'] == "SERVICE")
+							{
+								$insert["item_type_id"]				      = 3;
+								$insert["item_sale_to_customer"]		  = isset($data['sale_to_customer']) ? $data['sale_to_customer'] : 0;
+								$insert["item_purchase_from_supplier"]	  = isset($data{'purchase_from_supplier'}) ? $data{'purchase_from_supplier'} : 0;
+								
+								$rules["item_sale_to_customer"]		      = 'required|numeric|min:0|max:1';
+								$rules["item_purchase_from_supplier"]     = 'required|numeric|min:0|max:1';
+							}
+
+							$rules["item_name"]					      = 'required';
+							$rules["item_sku"]					      = 'required';
+							$rules["item_price"]				      = 'required|numeric';
+							$rules["item_income_account_id"]		  = 'required';
+
+							$validator = Validator::make($insert, $rules, $message);
+							if ($validator->fails())
+							{
+								$json["status"] 	= "error";
+								$json["message"]  	= $validator->errors()->first();
+							}
+							else
+							{
+								/* INSERT ITEM */ 
+								$item_id 		= Tbl_item::insertGetId($insert);
+
+								/* INSERT WAREHOUSE SLIP AND INVENTORY */
+								$insert_sub["warehouse_id"] = $this->current_warehouse->warehouse_id;
+								$insert_sub["item_id"] 		= $item_id;
+								$insert_sub["item_reorder_point"] = $data['reorder_point'];
+								Tbl_sub_warehouse::insert($insert_sub);
+
+								$ins_slip["inventory_reason"] 		= "insert_item";
+								$ins_slip["warehouse_id"] 			= $this->current_warehouse->warehouse_id;
+								$ins_slip["inventory_remarks"] 		= "Insert Item";
+								$ins_slip["inventory_slip_date"] 	= Carbon::now();
+								$ins_slip["inventory_slip_shop_id"] = $this->getShopId();
+								$ins_slip["inventroy_source_reason"]= "item";
+								$ins_slip["inventory_source_id"] 	= $item_id;
+								$slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
+
+								$ins_inven["inventory_item_id"] = $item_id;
+								$ins_inven["warehouse_id"] 		= $this->current_warehouse->warehouse_id;
+								$ins_inven["inventory_created"] = Carbon::now();
+								$ins_inven["inventory_count"] 	= $data['qty_on_hand'];
+								$ins_inven["inventory_slip_id"] = $slip_id;
+								$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
+
+								Warehouse::insert_item_to_all_warehouse($item_id, $data['reorder_point']);
+
+								$json["status"]		= "success";
+								$json["message"]	= "Success";
+								$json["item_id"]	= $item_id;
+							}
+						}
+						else
+						{
+							$json["status"]		= "error";
+							$json["message"]	= "Item Type Unknown";
+						}
+					}
+					else
+					{
+						$json["status"]		= "error";
+						$json["message"]	= "Manufacturer Not Found";
+					}
+				}
+				else
+				{
+					$json["status"]		= "error";
+					$json["message"]	= "Category Not Found";
+				}
+			}
+			else
+			{
+				$json["status"]		= "error";
+				$json["message"]	= "Duplicate Item Name";
+			}
+
+			$status_color 		= $json["status"] == 'success' ? 'green' : 'red';
+			$json["tr_data"]	= "<tr>";
+			$json["tr_data"]   .= "<td class='$status_color'>".$json["status"]."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$json["message"]."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$data['type']."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$data['name']."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$data['sku']."</td>";
+			$json["tr_data"]   .= "<td>".$data['um']."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$data['category']."</td>";
+			$json["tr_data"]   .= "<td>".$data['sales_information']."</td>";
+			$json["tr_data"]   .= "<td>".$data['sales_price']."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$data['income_account']."</td>";
+			$json["tr_data"]   .= "<td>".$data['sale_to_customer']."</td>";
+			$json["tr_data"]   .= "<td>".$data{'purchase_from_supplier'}."</td>";
+			$json["tr_data"]   .= "<td>".$data['purchasing_information']."</td>";
+			$json["tr_data"]   .= "<td>".$data['purchase_cost']."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$data['expense_account']."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$data['barcode']."</td>";
+			$json["tr_data"]   .= "<td>".$data['qty_on_hand']."</td>";
+			$json["tr_data"]   .= "<td>".$data['reorder_point']."</td>";
+			$json["tr_data"]   .= "<td>".$data['as_of_date']."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$data['asset_account']."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$data['packing_size']."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$data['manufacturer']."</td>";
+			$json["tr_data"]   .= "</tr>";
+
+			$json["value_data"] = $value;
+			$length 			= sizeOf($json["value_data"]);
+
+			foreach($json["value_data"] as $key=>$value)
+			{
+				$json["value_data"]['Error Description'] = $json["message"];
+			}
+		}
+		else /* DETERMINE IF LAST IN CSV */
+		{
+			Session::put("import_item_error", $error_data);
+			$json["status"] = "end";
+		}
+
+        return json_encode($json);
+	}
 	public function postItemReadFile()
 	{
 		Session::forget("import_item_error");

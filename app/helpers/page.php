@@ -420,8 +420,7 @@ function page_list($pis = 0)
     $nav[$page]['name'] = "Loyalty Reward System";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "braille";
-    $nav[$page]['type']     = "menu";
-    
+    $nav[$page]['type']     = "menu";    
 
 
     /* -- MLM => SLOTS */
@@ -1307,6 +1306,15 @@ function page_list($pis = 0)
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Still developing";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
+
+    /* -- ITEM => IMPORT  */
+    $code = "item-import-bundle";
+    $nav[$page]['submenu'][$code]['label'] = "Import Bundle";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/import/item-bundle";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Still developing";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Arcylen</span>";
     
     /* VENDORS */
     $page = "vendor";  

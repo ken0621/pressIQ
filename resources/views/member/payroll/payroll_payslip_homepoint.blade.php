@@ -92,20 +92,23 @@
                        <td ></td>
                    </tr>
                  @foreach($employee->cutoff_breakdown->_gross_pay_breakdown as $breakdown)
+                    @if(strtoupper($breakdown["label"]) != 'COLA')
                       <tr>
                           <td></td>
                           <td>{{ strtoupper($breakdown["label"]) }}</td>
                           <td>{{ payroll_currency($breakdown["amount"]) }}</td>
                            <td></td>
                       </tr>
+                    @else
+                    @endif
                   @endforeach
-
+{{-- 
                               <tr>
                                   <td></td>
                                   <td style="font-weight: bold;">GROSS SALARY</td>
                                   <td style="font-weight: bold">{{ payroll_currency($employee->gross_pay) }}</td>
                                    <td ></td>
-                               </tr>
+                               </tr> --}}
 
                   @foreach($employee->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
                                     @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)

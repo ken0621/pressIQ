@@ -51,6 +51,41 @@ function government_forms()
 			});
 			}, 700);
 		});
+
+
+		// $(".filter-by-branch-hdmf").on("change", function(e)
+		// {
+		// 	var branch_id 		= $(e.currentTarget).val();
+		// 	var company_id      = $('.filter-by-company-hdmf').val();
+		// 	var month      		= $('.filter-by-company-hdmf').attr("data-id");
+		// 	var year 			= $(".year").val();
+		// 	alert(company_id);
+		// 	ajaxdata.company_id = company_id;
+		// 	ajaxdata.month      = month;
+		// 	ajaxdata._token 	= $("._token").val();
+		// 	ajaxdata.year		= year;
+		// 	ajaxdata.branch		= branch_id;
+		// 	$('#spinningLoader').show();
+		// 	$(".load-filter-data").hide();
+		// 	setTimeout(function(e){
+		// 	$.ajax(
+		// 	{
+		// 		url:"/member/payroll/reports/government_forms_hdmf_filter_branch",
+		// 		type:"post",
+		// 		data: ajaxdata,
+				
+		// 		success: function(data)
+		// 		{
+					
+		// 			$('#spinningLoader').hide();
+		// 			$(".load-filter-data").show();
+		// 			$(".load-filter-data").html(data);
+		// 			// alert(data);
+		// 		}
+		// 	});
+		// 	}, 700);
+		// });
+		
 	}
 	function action_load_table_sss()
 	{    

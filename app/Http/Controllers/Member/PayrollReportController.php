@@ -32,6 +32,7 @@ use App\Models\Tbl_payroll_employee_salary;
 use App\Models\Tbl_payroll_register_column;
 use App\Models\Tbl_payroll_manpower_report;
 use App\Models\Tbl_payroll_department;
+use App\Models\Tbl_payroll_branch_location;
 
 use App\Models\Tbl_payroll_leave_temp;
 use App\Models\Tbl_payroll_leave_schedule;
@@ -71,6 +72,7 @@ class PayrollReportController extends Member
 	}
 	public function government_forms_hdmf($month,$year)
 	{ 
+		$data['_branch'] = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
 		$data["page"] = "Monthly Government Forms";
 		$year = $year;
 		$shop_id = $this->shop_id();

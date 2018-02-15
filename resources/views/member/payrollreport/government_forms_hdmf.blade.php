@@ -18,6 +18,15 @@
                         @endforeach
                     </select>
                 </div>
+                       <div class="col-md-3">
+                        <select class="form-control filter-by-branch-hdmf" name="branch_location_id">
+                          <option value="0">Select Branch</option>
+                          @foreach($_branch as $branch)
+                          <option value="{{$branch->branch_location_id}}">{{$branch->branch_location_name}}</option>
+                          @endforeach
+                        </select>
+                      </div>
+
                 <input type="hidden" class="year" value="{{$year}}">
             </div>
         </div>

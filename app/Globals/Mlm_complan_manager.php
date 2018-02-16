@@ -906,7 +906,6 @@ class Mlm_complan_manager
                 if($binary['points'] != 0)
                 {
                     // ADD OLD BINARY POINTS + NEW BINARY POINTS
-
                     $binary[$tree->placement_tree_position] = $binary[$tree->placement_tree_position] + $binary['points']; 
                     $binary_report['binary_report_s_points_l'] = $binary["left"] - $binary_report['binary_report_s_left'];
                     $binary_report['binary_report_s_points_r'] = $binary["right"]- $binary_report['binary_report_s_right']; 

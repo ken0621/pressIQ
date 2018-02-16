@@ -25,9 +25,10 @@ class Mlm_tree
     public static function insert_tree_placement($slot_info, $new_slot, $level)
     {
         
-        if($slot_info != null)
+        if($slot_info != null) //check if there is a slot
         {
-            $old_level   = $level;
+            $old_level   = $level; 
+            
             $upline_info = Tbl_mlm_slot::id($slot_info->slot_placement)->first();
             
             /*CHECK IF TREE IS ALREADY EXIST*/
@@ -90,6 +91,7 @@ class Mlm_tree
                 $placement                       = Tbl_mlm_slot::where("slot_id",$new_slot->slot_placement)->first();
                 $top_slot                        = Tbl_tree_placement::where("placement_tree_child_id",$new_slot->slot_placement)->orderBy("placement_tree_level","DESC")->first();
                 $get_top_level                   = Tbl_tree_placement::where("placement_tree_parent_id",$top_slot->placement_tree_parent_id)->where("placement_tree_child_id",$new_slot->slot_placement)->first();
+                
                 if($get_top_level)
                 {     
                     $new_level = $get_top_level->placement_tree_level;

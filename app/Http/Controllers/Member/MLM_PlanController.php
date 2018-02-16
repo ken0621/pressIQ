@@ -37,6 +37,7 @@ use App\Models\Tbl_mlm_plan_binary_promotions;
 use App\Models\Tbl_direct_pass_up_settings;
 use App\Models\Tbl_advertisement_bonus_settings;
 use App\Models\Tbl_leadership_advertisement_settings;
+use App\Models\Tbl_direct_advance;
 
 use App\Http\Controllers\Member\MLM_ProductController;
 use App\Http\Controllers\Member\MLM_PlanController;
@@ -666,6 +667,19 @@ class MLM_PlanController extends Member
             Tbl_mlm_plan::insert($insert);
         }
 
+        if($count == 28)
+        {
+             // start STAIRSTEP complan settings insert
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "INDIRECT_ADVANCE";
+            $insert['marketing_plan_name'] = "Indirect Advance";
+            $insert['marketing_plan_trigger'] = "Slot Creation";
+            $insert['marketing_plan_label'] = "Indirect Advance";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
 
         // end basic complan
         
@@ -1284,13 +1298,59 @@ class MLM_PlanController extends Member
     	}
     	echo json_encode($data);
 	}
-	public static function direct($shop_id)
-	{
-	    $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
-	    // dd($data);
-	    $data['basic_settings'] = MLM_PlanController::basic_settings('DIRECT');
-	    return view('member.mlm_plan.configure.direct', $data);
-	}
+    public function direct($shop_id)
+    {
+        $data['membership']        = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        $data['basic_settings']    = MLM_PlanController::basic_settings('DIRECT');
+        $data['plan']              = Tbl_mlm_plan::where('marketing_plan_code', 'DIRECT')->where('shop_id', $shop_id)->first();
+        $_advance                  = Tbl_direct_advance::where("shop_id", $this->user_info->shop_id)->get();
+        $__advance                 = null;
+
+        foreach($_advance as $advance)
+        {
+            $__advance[$advance->direct_membership_parent][$advance->direct_membership_new_entry] = $advance->direct_advance_bonus;
+        }
+
+        $data["_advance"] = $__advance;
+
+        return view('member.mlm_plan.configure.direct', $data);
+    }
+    public function advance_mode()
+    {
+        $update["advance_mode"] = request()->advance_mode;
+        Tbl_mlm_plan::where("shop_id", $this->user_info->shop_id)->where("marketing_plan_code", request()->plan)->update($update);
+    }
+    public function direct_advance()
+    {
+
+        Tbl_direct_advance::where("shop_id", $this->user_info->shop_id)->delete();
+
+        foreach(request()->direct_advance_bonus as $key => $direct_advance_bonus)
+        {
+            $insert[$key]["direct_membership_parent"]     = request()->direct_membership_parent[$key];
+            $insert[$key]["direct_membership_new_entry"]  = request()->direct_membership_new_entry[$key];
+            $insert[$key]["direct_advance_bonus"]         = $direct_advance_bonus;
+            $insert[$key]["shop_id"]                      = $this->user_info->shop_id;
+        }
+
+        Tbl_direct_advance::insert($insert);
+
+        echo json_encode("success");
+    }
+    public static function indirect_advance($shop_id)
+    {
+        $data['membership']        = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        $data['basic_settings']    = MLM_PlanController::basic_settings('INDIRECT_ADVANCE');
+        return view('member.mlm_plan.configure2.indirect_advance', $data);
+    }
+    public static function indirect_advance_setting()
+    {
+        $data["page"] = "Indirect Settings Advance";
+        return view('member.mlm_plan.configure2.indirect_advance_setting');
+    }
+    public static function indirect_advance_setting_submit()
+    {
+    }
 	public static function indirect($shop_id)
 	{
 	    $data['membership'] = Tbl_membership::getactive(0, $shop_id)->get();

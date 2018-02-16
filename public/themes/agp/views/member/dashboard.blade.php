@@ -188,9 +188,9 @@
 									<div class="col-md-4">
 										<div class="action" style="text-align: center;">
 											@if($direct->distributed == 1)
-												<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-default"><i class="fa fa-star"></i> VIEW INFO</button>
+												<button style="width: 100%;" onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-primary"><i class="fa fa-star"></i> VIEW INFO</button>
 											@else
-												<button class="btn btn-danger place_slot_btn" place_slot_id="{{$direct->slot_id}}"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
+												<button style="width: 100%; font-size: 12px;" onclick="action_load_link_to_modal('/members/enter-placement?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-danger"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 											@endif
 										</div>
 									</div>

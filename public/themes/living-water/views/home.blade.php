@@ -19,7 +19,7 @@
                             <p>{!! get_content($shop_theme_info, "home", "home_about_description") !!}</p>
                         </div>
                         <div class="button-container">
-                            <a href="#"><button>READ MORE</button></a>
+                            <a href="/about"><button>READ MORE &raquo;</button></a>
                         </div>
                     </div>
                 </div>
@@ -78,9 +78,6 @@
 
     <div id="product" class="wrapper-3">
         <div class="container">
-            <div class="title-container">
-                <span class="icon-container"><img src="/themes/living-water/img/water-drops.png"></span><span class="title">A HEALTHY WATER FOR EVERYONE</span>
-            </div>
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="left-container">
@@ -93,8 +90,18 @@
                 </div>
                 <div class="col-md-6">
                     <div class="right-container">
+                        <div class="title-container">
+                            <span class="icon-container"><img src="/themes/living-water/img/water-drops.png"></span><span class="title">PRODUCT AND SERVICES</span>
+                        </div>
                         <div class="description-container">
-                            <p>{!! get_content($shop_theme_info, "home", "home_product_description") !!}</p>
+                            <ul>
+                                <li>Testing and analyzing of clients in-house water supplies for the presence of bacteria, fungi, organic and inorganic compounds, taste and odor.</li>
+                                <li>Installation of the optimal water treatment and purification systems based on the client’s informed, educated and affordable choice.</li>
+                                <li>Routine monitoring of installed components to minimize equipment failure and ensure timely replacement of expired filters and components.</li>
+                            </ul>
+                        </div>
+                        <div class="button-container">
+                            <a href="/product"><button>READ MORE &raquo;</button></a>
                         </div>
                     </div>
                 </div>

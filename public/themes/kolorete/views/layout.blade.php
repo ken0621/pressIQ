@@ -9,8 +9,9 @@
         <title>{{ ucfirst($shop_info->shop_key) }} | {{ $page or '' }}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
-        <link rel="icon" href="/themes/{{ $shop_theme }}/img/3xcell-icon.png"" type="image/png"/>
+        {{-- <link rel="icon" href="/themes/{{ $shop_theme }}/img/3xcell-icon.png"" type="image/png"/> --}}
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet">
@@ -19,12 +20,12 @@
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
-        
+
         @include("frontend.ghead")
-         
+
         <!-- OTHER CSS -->
         @yield("css")
-        
+
         <style type="text/css">
 
         .content
@@ -44,7 +45,7 @@
         </style>
 
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
-        
+
     </head>
 
     <body>
@@ -52,7 +53,7 @@
         <div id="overlay" onclick="off()"></div>
 
         <div class="side-nav">
-            
+
         </div>
 
         {{-- BLURED WHEN SIDENAV WAS CLICKED --}}
@@ -108,7 +109,7 @@
                                     <div class="categories-header">
                                         <span class="title">CATEGORIES</span><i id="close-menu" class="fa fa-times" aria-hidden="true"></i>
                                     </div>
-                                    
+
                                     @if(isset($_category))
                                         <li><a href="/product">All</a></li>
                                         <div class="divider"></div>
@@ -190,7 +191,7 @@
                             <span>
                                 <i class="fa fa-search" aria-hidden="true"></i>
                             </span>
-                            
+
                             <span class="my-cart">My Cart</span>
                             <a class="popup" link="/cartv2" size="lg" href="javascript:" style="padding: 0;">
                                 <span><img src="/themes/{{ $shop_theme }}/img/my-cart-logo.png"></span>
@@ -198,7 +199,7 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
 
             <!-- CONTENT -->
             <div id="scroll-to" class="clearfix">
@@ -208,8 +209,8 @@
             <!-- FOOTER -->
             <footer id="bottom-footer">
                 <div class="container">
-                    
-                    <div class="bottom">                           
+
+                    <div class="bottom">
                         <div class="ftr-title">© 2018 koloretemarketing. All Rights Reserved.</div>
                         <div class="ftr-title-2"><span class="kolorete-policies"><a href="/terms_and_conditions">kolorete marketing Policies</a></span><span class="divider">|</span><span>Powered By: DIGIMA WEB SOLUTIONS, Inc.</span></div>
                     </div>
@@ -236,15 +237,14 @@
         <script type="text/javascript">
             $(function()
             {
-
-                $('#close-menu').on('click',function() 
-                {                 
+                $('#close-menu').on('click',function()
+                {
                     $(this).closest('#menu').toggle(500,function(){
-                    $('.mini-submenu').fadeIn();    
+                    $('.mini-submenu').fadeIn();
                 });
             });
                 $('.mini-submenu').on('click',function()
-                {       
+                {
                     $(this).next('#menu').toggle(500);
                     $('.mini-submenu').hide();
                 })

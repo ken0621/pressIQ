@@ -248,7 +248,7 @@ class TransactionReceiveInventoryController extends Member
                 }
             }
         }
-
+        //die(var_dump($return));
         $data['_po']     = $return;
         $data['remarks'] = $remarks;
         $data['_um']     = UnitMeasurement::load_um_multi();

@@ -102,8 +102,19 @@ class TransactionPurchaseOrder
         $poline_amount = null;
         foreach ($po_line as $key => $value)
         {
-            $balance = $value->poline_qty * $value->poline_rate;
-            $poline_amount += $balance;
+            if($value->taxable == '1')
+            {   
+                $balance = $value->poline_qty * $value->poline_rate;
+                $amount_balance = ($balance * 0.12) + $balance;
+                $poline_amount += $amount_balance;
+            }
+            elseif($value->taxable == '0')
+            {
+                $balance = $value->poline_qty * $value->poline_rate;
+                $poline_amount += $balance;
+               
+            }
+            
         }
 
         return $poline_amount;
@@ -191,7 +202,7 @@ class TransactionPurchaseOrder
             $update['taxable']            = $insert['vendor_tax'];
             $update['date_created']       = Carbon::now();
             
-            //die(var_dump($insert['vendor_ewt']));
+            
              /* SUBTOTAL */
             $subtotal_price = collect($insert_item)->sum('item_amount'); 
 
@@ -203,13 +214,13 @@ class TransactionPurchaseOrder
             }
 
             /* TAX */
-            $tax = (collect($insert_item)->where('item_taxable', '1')->sum('item_amount')) * 0.12;
+            //$tax = (collect($insert_item)->where('item_taxable', '1')->sum('item_amount')) /** 0.12*/;
 
             /* EWT */
             $ewt = $subtotal_price * convertToNumber($insert['vendor_ewt']);
             
             /* OVERALL TOTAL */
-            $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
+            $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount/* + $tax*/;
             //die(var_dump($overall_price));
             
             $update['po_subtotal_price'] = $subtotal_price;
@@ -260,9 +271,9 @@ class TransactionPurchaseOrder
             $itemline[$key]['poline_rate']           = $value['item_rate'];
             $itemline[$key]['poline_discount']       = $discount;
             $itemline[$key]['poline_discounttype']   = $discount_type;
-            $itemline[$key]['poline_discount_remark']= $value['item_remark'];  
-            $itemline[$key]['poline_amount']         = $value['item_amount'];   
-            $itemline[$key]['taxable']               = $value['item_taxable'];
+            $itemline[$key]['poline_discount_remark']= $value['item_remark'];    
+            $itemline[$key]['taxable']               = $value['item_taxable']; 
+            $itemline[$key]['poline_amount']         = $value['item_amount'];
             $itemline[$key]['poline_refname']        = $value['item_ref_name'];   
             $itemline[$key]['poline_refid']          = $value['item_ref_id']; 
             $itemline[$key]['date_created']          = Carbon::now();

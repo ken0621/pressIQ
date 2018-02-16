@@ -82,9 +82,16 @@ class ShopProductContent2Controller extends Shop
                     }
                 }
             }
+
+            //display categories in product view
+            if ($this->shop_info->shop_theme == "kolorete") 
+            {
+                $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
+            }
             
             return view("product_content", $data);
         }
+        
         else
         {
             return Redirect::back();

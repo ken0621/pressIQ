@@ -32,6 +32,7 @@ use App\Models\Tbl_payroll_employee_salary;
 use App\Models\Tbl_payroll_register_column;
 use App\Models\Tbl_payroll_manpower_report;
 use App\Models\Tbl_payroll_department;
+use App\Models\Tbl_payroll_branch_location;
 
 use App\Models\Tbl_payroll_leave_temp;
 use App\Models\Tbl_payroll_leave_schedule;
@@ -71,6 +72,7 @@ class PayrollReportController extends Member
 	}
 	public function government_forms_hdmf($month,$year)
 	{ 
+		$data['_branch'] = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
 		$data["page"] = "Monthly Government Forms";
 		$year = $year;
 		$shop_id = $this->shop_id();
@@ -84,6 +86,7 @@ class PayrollReportController extends Member
 	}
 	public function government_forms_sss($month,$year)
 	{ 
+		$data['_branch'] = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
 		$data["page"] = "Monthly Government Forms";
 		$year = $year;
 		$shop_id = $this->shop_id();
@@ -97,6 +100,7 @@ class PayrollReportController extends Member
 	}
 	public function government_forms_philhealth($month,$year)
 	{ 
+		$data['_branch'] = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
 		$data["page"] = "Monthly Government Forms";
 		$year = $year;
 		$shop_id = $this->shop_id();
@@ -110,10 +114,38 @@ class PayrollReportController extends Member
 		return view("member.payrollreport.government_forms_philhealth", $data);
 	}
 
-	public function government_forms_hdmf_iframe($month,$company_id,$year)
+	public function government_forms_hdmf_iframe($month,$company_id,$year,$branch_id)
 	{ 
-		if($company_id==0)
+		if($company_id > 0 || $branch_id > 0)
 		{
+			$data["page"] = "Monthly Government Forms";
+			$year = $year;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id,$branch_id);
+			$data['company_id1'] = $company_id;
+			$data["contri_info"] = $contri_info; 
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+			if($company_id == 0)
+			{
+				$companyname = 'ALL Company';
+			}
+			else
+			{
+				$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+				$companyname = $data['company']->payroll_company_name;
+			}
+			$format["title"] = $companyname;
+			$format["format"] = "A4";
+			$format["default_font"] = "sans-serif";
+			$pdf = PDF2::loadView('member.payrollreport.government_forms_hdmf_pdf', $data, [], $format);
+			return $pdf->stream('document.pdf');
+
+		}
+		else
+		{
+
 			$data["page"] = "Monthly Government Forms";
 			$year = $year;
 			$shop_id = $this->shop_id();
@@ -134,39 +166,24 @@ class PayrollReportController extends Member
 			$pdf = PDF2::loadView('member.payrollreport.government_forms_hdmf_pdf', $data, [], $format);
 			return $pdf->stream('document.pdf');
 		}
-		else
-		{
-			$data["page"] = "Monthly Government Forms";
-			$year = $year;
-			$shop_id = $this->shop_id();
-			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
-			$data['company_id1'] = $company_id;
-			$data["contri_info"] = $contri_info; 
-			$data["month"] = $month;
-			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
-			$data["year"] = $year;
-			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
-			
-			$format["title"] = $data['company']->payroll_company_name;
-			$format["format"] = "A4";
-			$format["default_font"] = "sans-serif";
-			$pdf = PDF2::loadView('member.payrollreport.government_forms_hdmf_pdf', $data, [], $format);
-			return $pdf->stream('document.pdf');
-		}
 	}
 
 	public function government_forms_hdmf_filter()
 	{
-		if (Request::input("company_id") > 0) 
-		{
+
+			$branch_id =	Request::input("branch_id");
 			$company_id =	Request::input("company_id");
         	$month      =	Request::input('month');
         	$year 		= 	Request::input('year');
 			$data["page"] = "Monthly Government Forms";
 			$year = $year;
 			$shop_id = $this->shop_id();
-			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
+
+		if (Request::input("company_id") > 0 || Request::input("branch_id") > 0) 
+		{
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id,$branch_id);
 			$data['company_id1'] = $company_id;
+			$data['branch_id'] = $branch_id;
 			$data["contri_info"] = $contri_info; 
 			$data["month"] = $month;
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
@@ -184,15 +201,10 @@ class PayrollReportController extends Member
 		}
 		else
 		{
-            $month      =	Request::input('month');
-            $company_id =	Request::input("company_id");
-            $year 		= 	Request::input('year');
-            $data["page"] = "Monthly Government Forms";
-			$year = $year;
-			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id,$month, $year);
 			$data["contri_info"] = $contri_info; 
 			$data["month"] = $month;
+			$data['branch_id'] = $branch_id;
 			$data['company_id1'] = $company_id;
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
@@ -206,14 +218,17 @@ class PayrollReportController extends Member
 		$company_id =	Request::input("company_id");
 		$month      =	Request::input('month');
 		$year 		= 	Request::input('year');
-		if (Request::input("company_id") > 0) {
-			$data["page"] = "Monthly Government Forms";
-			$year = $year;
-			$shop_id = $this->shop_id();
-			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
+		$branch_id =	Request::input("branch_id");
+		$data["page"] = "Monthly Government Forms";
+		$year = $year;
+		$shop_id = $this->shop_id();
+		if (Request::input("company_id") > 0 || Request::input("branch_id") > 0)  
+		{
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id,$branch_id);
 			$data["contri_info"] = $contri_info; 
 			$data['company_id1'] = $company_id;
 			$data["month"] = $month;
+			$data['branch_id'] = $branch_id;
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
@@ -228,12 +243,10 @@ class PayrollReportController extends Member
 		}
 		else
 		{
-			$data["page"] = "Monthly Government Forms";
-			$year = $year;
-			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
 			$data["contri_info"] = $contri_info; 
 			$data['company_id1'] = $company_id;
+			$data['branch_id'] = $branch_id;
 			$data["month"] = $month;
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
@@ -246,14 +259,18 @@ class PayrollReportController extends Member
 		$company_id =	Request::input("company_id");
 		$month      =	Request::input('month');
 		$year 		= 	Request::input('year');
-		if ($company_id != null && $month != null) {
-			$data["page"] = "Monthly Government Forms";
-			$year = $year;
-			$shop_id = $this->shop_id();
-			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
+		$branch_id =	Request::input("branch_id");
+		$data["page"] = "Monthly Government Forms";
+		$year = $year;
+		$shop_id = $this->shop_id();
+		if (Request::input("company_id") > 0 || Request::input("branch_id") > 0)  
+		{
+
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id,$branch_id);
 			$data['company_id1'] = $company_id;
 			$data["contri_info"] = $contri_info; 
 			$data["month"] = $month;
+			$data['branch_id'] = $branch_id;
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
@@ -269,13 +286,11 @@ class PayrollReportController extends Member
 		}
 		else
 		{
-			$data["page"] = "Monthly Government Forms";
-			$year = $year;
-			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
 			$data["contri_info"] = $contri_info; 
 			$data['company_id1'] = $company_id;
 			$data["month"] = $month;
+			$data['branch_id'] = $branch_id;
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
@@ -283,9 +298,40 @@ class PayrollReportController extends Member
 			return view("member.payrollreport.government_forms_philhealth_filter", $data);
 		}
 	}
-    public function government_forms_hdmf_export_excel($month,$company_id,$year)
+    public function government_forms_hdmf_export_excel($month,$company_id,$year,$branch_id)
 	{
-		if($company_id==0)
+		if($company_id > 0 || $branch_id > 0)
+		{
+			$data["page"] = "Monthly Government Forms";
+			$year = $year;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id,$branch_id);
+			
+			$data["contri_info"] = $contri_info; 
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+
+			if($company_id == 0)
+			{
+				$companyname = 'ALL Company';
+			}
+			else
+			{
+				$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+				$companyname = $data['company']->payroll_company_name;
+			}
+			// AuditTrail::record_logs("DOWNLOAD","HDMF REPORT",$this->shop_id(),"","");
+			Excel::create("Government Forms HDMF".$companyname,function($excel) use ($data)
+			{
+				$excel->sheet('clients',function($sheet) use ($data)
+				{
+					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
+				});
+			})->download('xls');
+     
+		}
+		else
 		{
 			$data["page"] = "Monthly Government Forms";
 			$year = $year;
@@ -297,8 +343,7 @@ class PayrollReportController extends Member
 			$data["year"] = $year;
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
 
-
-			AuditTrail::record_logs("DOWNLOAD","HDMF REPORT",$this->shop_id(),"","");
+			// AuditTrail::record_logs("DOWNLOAD","HDMF REPORT",$this->shop_id(),"","");
             // dd(count($contri_info["_employee_contribution"]));
 			Excel::create("Government Forms HDMF",function($excel) use ($data)
 			{
@@ -306,34 +351,43 @@ class PayrollReportController extends Member
 				{
 					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
 				});
-			})->download('xls');        
+			})->download('xls');   
 		}
-		else
+ 			
+	}
+	public function government_forms_sss_export_excel($month,$company_id,$year,$branch_id)
+	{
+		if($company_id > 0 || $branch_id > 0)
 		{
 			$data["page"] = "Monthly Government Forms";
 			$year = $year;
 			$shop_id = $this->shop_id();
-			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id,$branch_id);
 			
 			$data["contri_info"] = $contri_info; 
 			$data["month"] = $month;
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
-			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
-			AuditTrail::record_logs("DOWNLOAD","HDMF REPORT",$this->shop_id(),"","");
-			Excel::create("Government Forms HDMF".$data['company']->payroll_company_name,function($excel) use ($data)
+			if($company_id == 0)
+			{
+				$companyname = 'ALL Company';
+			}
+			else
+			{
+				$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+				$companyname = $data['company']->payroll_company_name;
+			}
+			// AuditTrail::record_logs("DOWNLOAD","SSS REPORT",$this->shop_id(),"","");
+			Excel::create("Government Forms SSS-".$companyname,function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
 				{
-					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
+					$sheet->loadView('member.payrollreport.government_forms_sss_export_excel',$data);
 				});
 			})->download('xls');
+
 		}
- 			
-	}
-	public function government_forms_sss_export_excel($month,$company_id,$year)
-	{
-		if($company_id==0)
+		else
 		{
 			$data["page"] = "Monthly Government Forms";
 			$year = $year;
@@ -354,32 +408,40 @@ class PayrollReportController extends Member
 				});
 			})->download('xls');
 		}
-		else
+ 			
+	}
+	public function government_forms_philhealth_export_excel($month,$company_id,$year,$branch_id)
+	{
+		if($company_id > 0 || $branch_id > 0)
 		{
 			$data["page"] = "Monthly Government Forms";
 			$year = $year;
 			$shop_id = $this->shop_id();
-			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
-			
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id,$branch_id);
 			$data["contri_info"] = $contri_info; 
-			$data["month"] = $month;
-			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
-			$data["year"] = $year;
-			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
-			AuditTrail::record_logs("DOWNLOAD","SSS REPORT",$this->shop_id(),"","");
-			Excel::create("Government Forms SSS-".$data['company']->payroll_company_name,function($excel) use ($data)
+			$data["month"] 		 = $month;
+			$data["month_name"]  = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] 	 	 = $year;
+			if($company_id == 0)
+			{
+				$companyname = 'ALL Company';
+			}
+			else
+			{
+				$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+				$companyname = $data['company']->payroll_company_name;
+			}
+			// AuditTrail::record_logs("DOWNLOAD","PHILHEALTH REPORT",$this->shop_id(),"","");
+			Excel::create("Government Forms PHILHEALTH".$companyname,function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
 				{
-					$sheet->loadView('member.payrollreport.government_forms_sss_export_excel',$data);
+					$sheet->loadView('member.payrollreport.government_forms_philhealth_export_excel',$data);
 				});
 			})->download('xls');
+
 		}
- 			
-	}
-	public function government_forms_philhealth_export_excel($month,$company_id,$year)
-	{
-		if($company_id==0)
+		else
 		{
 			$data["page"] = "Monthly Government Forms";
 			$year = $year;
@@ -390,29 +452,8 @@ class PayrollReportController extends Member
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
-			AuditTrail::record_logs("DOWNLOAD","PHILHEALTH REPORT",$this->shop_id(),"","");
+			// AuditTrail::record_logs("DOWNLOAD","PHILHEALTH REPORT",$this->shop_id(),"","");
 			Excel::create("Government Forms PHILHEALTH",function($excel) use ($data)
-			{
-				$excel->sheet('clients',function($sheet) use ($data)
-				{
-					$sheet->loadView('member.payrollreport.government_forms_philhealth_export_excel',$data);
-				});
-			})->download('xls');
-		}
-		else
-		{
-			$data["page"] = "Monthly Government Forms";
-			$year = $year;
-			$shop_id = $this->shop_id();
-			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
-			
-			$data["contri_info"] = $contri_info; 
-			$data["month"] 		 = $month;
-			$data["month_name"]  = DateTime::createFromFormat('!m', $month)->format('F');
-			$data["year"] 	 	 = $year;
-			$data['company'] 	 = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
-			AuditTrail::record_logs("DOWNLOAD","PHILHEALTH REPORT",$this->shop_id(),"","");
-			Excel::create("Government Forms PHILHEALTH".$data['company']->payroll_company_name,function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
 				{

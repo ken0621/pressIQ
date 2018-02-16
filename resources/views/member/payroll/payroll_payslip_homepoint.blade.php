@@ -86,31 +86,41 @@
           </tr>
 				   <tr>
 
-                      <td>BASIC PAY</td>
+                      <td></td>
+                      <td style="font-weight: bold;">BASIC PAY</td>
                       <td style="font-weight: bold">{{ payroll_currency($employee->net_basic_pay) }}</td>
-                      <td >GROSS SALARY</td>
-                       <td style="font-weight: bold">{{ payroll_currency($employee->gross_pay) }}</td>
+                       <td ></td>
                    </tr>
                  @foreach($employee->cutoff_breakdown->_gross_pay_breakdown as $breakdown)
+                    @if(strtoupper($breakdown["label"]) != 'COLA')
                       <tr>
                           <td></td>
                           <td>{{ strtoupper($breakdown["label"]) }}</td>
-                          <td style="font-weight: bold">{{ payroll_currency($breakdown["amount"]) }}</td>
+                          <td>{{ payroll_currency($breakdown["amount"]) }}</td>
                            <td></td>
                       </tr>
+                    @else
+                    @endif
                   @endforeach
+{{-- 
+                              <tr>
+                                  <td></td>
+                                  <td style="font-weight: bold;">GROSS SALARY</td>
+                                  <td style="font-weight: bold">{{ payroll_currency($employee->gross_pay) }}</td>
+                                   <td ></td>
+                               </tr> --}}
 
-                 @foreach($employee->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
+                  @foreach($employee->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
                                     @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
                                     @else
                                       <tr>
                                           <td></td>
                                           <td >{{ strtoupper($breakdown["label"]) }}</td>
-                                          <td style="font-weight: bold">{{ payroll_currency($breakdown["amount"]) }}</td>
+                                          <td>{{ payroll_currency($breakdown["amount"]) }}</td>
                                            <td ></td>
                                       </tr>
                                     @endif
-           		   @endforeach
+                    @endforeach
 
 
                       @foreach($employee->cutoff_breakdown->_net_pay_breakdown as $breakdown)
@@ -119,7 +129,7 @@
                                       <tr>
                                           <td></td>
                                           <td >{{ strtoupper($breakdown["label"]) }}</td>
-                                          <td style="font-weight: bold">{{ payroll_currency($breakdown["amount"]) }}</td>
+                                          <td >{{ payroll_currency($breakdown["amount"]) }}</td>
                                            <td ></td>
                                       </tr>
                                     @endif
@@ -129,13 +139,13 @@
                                   <tr>
                                       <td></td>
                                       <td>TOTAL DEDUCTION</td>
-                                       <td  style="font-weight: bold">{{ payroll_currency($employee->total_deduction) }}</td>
+                                       <td>{{ payroll_currency($employee->total_deduction) }}</td>
                                         <td ></td>
-                                  </tr>
+                                  </tr> 
 
                                   <tr>
                                       <td ></td>
-                                      <td >TAKE HOME PAY</td>
+                                      <td style="font-weight: bold;">TAKE HOME PAY</td>
                                        <td style="font-weight: bold">{{ payroll_currency($employee->net_pay) }}</td>
                                         <td ></td>
                                   </tr>

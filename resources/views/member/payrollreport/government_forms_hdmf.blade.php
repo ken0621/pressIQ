@@ -83,8 +83,8 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-        <a href="/member/payroll/reports/government_forms_hdmf_export_excel/{{$month}}/0/{{ $year }}"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
-        <a role="form" target="_blank" href="/member/payroll/reports/government_forms_hdmf_iframe/{{ $month }}/0/{{ $year }}"><button class="btn btn-primary btn-custom-primary" type="submit">View PDF Form</button></a>&nbsp;&nbsp;
+        <a href="/member/payroll/reports/government_forms_hdmf_export_excel/{{$month}}/0/{{ $year }}/0"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
+        <a role="form" target="_blank" href="/member/payroll/reports/government_forms_hdmf_iframe/{{ $month }}/0/{{ $year }}/0"><button class="btn btn-primary btn-custom-primary" type="submit">View PDF Form</button></a>&nbsp;&nbsp;
     </div>
     </div>
     

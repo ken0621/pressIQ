@@ -43,6 +43,7 @@ class Tbl_payroll_period extends Model
 		$query->where('month_contribution', $month);
 		$query->where('year_contribution', $year);
 		$query->where('tbl_payroll_period.shop_id', $shop_id);
+		$query->orderBy('tbl_payroll_employee_basic.payroll_employee_id','asc');
 		$query->join("tbl_payroll_period_company", "tbl_payroll_period_company.payroll_period_id", "=", "tbl_payroll_period.payroll_period_id");
 		$query->join("tbl_payroll_time_keeping_approved", "tbl_payroll_time_keeping_approved.payroll_period_company_id", "=", "tbl_payroll_period_company.payroll_period_company_id");
 		$query->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id");
@@ -61,20 +62,27 @@ class Tbl_payroll_period extends Model
 		
 		return $query;
 	}
-	public function scopeGetContributions_filter($query, $shop_id, $month, $year,$company_id,$branchcompany = null)
+	public function scopeGetContributions_filter($query, $shop_id, $month, $year,$company_id,$branchcompany = null,$branch_id)
 	{
 		$query->where('month_contribution', $month);
 		$query->where('year_contribution', $year);
 		$query->where('tbl_payroll_period.shop_id', $shop_id);
+		$query->orderBy('tbl_payroll_employee_basic.payroll_employee_id','asc');
 		$query->join("tbl_payroll_period_company", "tbl_payroll_period_company.payroll_period_id", "=", "tbl_payroll_period.payroll_period_id");
 		$query->join("tbl_payroll_time_keeping_approved", "tbl_payroll_time_keeping_approved.payroll_period_company_id", "=", "tbl_payroll_period_company.payroll_period_company_id");
 		$query->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id");
 		
+		if($branch_id != 0)
+		{
+			$query->where("tbl_payroll_employee_basic.branch_location_id", $branch_id);
+		}
+
 		if($branchcompany != null)
 		{
 			$query->whereIn("tbl_payroll_employee_basic.payroll_employee_company_id", $branchcompany);
 		}
-		else
+
+		if($company_id != 0)
 		{
 			$query->where("tbl_payroll_employee_basic.payroll_employee_company_id", $company_id);
 		}

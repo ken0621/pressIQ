@@ -14,6 +14,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/government_forms_hdmf/{id}/{year}','Member\PayrollReportController@government_forms_hdmf');
 	Route::any('/reports/government_forms_hdmf_iframe/{id}/{id2}/{year}','Member\PayrollReportController@government_forms_hdmf_iframe');
 	Route::any('/reports/government_forms_hdmf_filter','Member\PayrollReportController@government_forms_hdmf_filter');
+	Route::any('/reports/government_forms_hdmf_filter_branch','Member\PayrollReportController@government_forms_hdmf_filter_branch');
 	Route::any('/reports/government_forms_sss_filter','Member\PayrollReportController@government_forms_sss_filter');
 	Route::any('/reports/government_forms_philhealth_filter','Member\PayrollReportController@government_forms_philhealth_filter');
 	Route::any('/reports/government_forms_hdmf_export_excel/{id}/{id2}/{year}','Member\PayrollReportController@government_forms_hdmf_export_excel');

@@ -4577,12 +4577,15 @@ class ShopMemberController extends Shop
                                                  ->first();
             // patrick
             $item_token = Tbl_item_token::where('item_id',$item->record_item_id)->first();
-            $token_log['shop_id']                   = $this->shop_info->shop_id;
-            $token_log['token_log_slot_owner']      = Self::$customer_info->customer_id;
-            $token_log['token_log_date_created']    = Carbon::now();
-            $token_log['token_id']                  = $item_token->token_id;
-            $token_log['amount']              = $item_token->amount;
-            Tbl_item_token_log::insert($token_log);
+            if($item_token)
+            {            
+                $token_log['shop_id']                   = $this->shop_info->shop_id;
+                $token_log['token_log_slot_owner']      = Self::$customer_info->customer_id;
+                $token_log['token_log_date_created']    = Carbon::now();
+                $token_log['token_id']                  = $item_token->token_id;
+                $token_log['amount']              = $item_token->amount;
+                Tbl_item_token_log::insert($token_log);
+            }
 
         }
         else

@@ -162,7 +162,24 @@ function vendor()
 	        $(".drop-down-display-name").slideToggle("fast");
 	    });
 	}
-
+	/*function search_vendor()
+	{
+		$("body").on("change",'.vendor-search', function ()
+		{
+			alert(123);
+		//$("#search-criteria").on("keyup", function() {
+	    var g = $(this).val();
+	    $(".fbbox .fix label").each( function() {
+	        var s = $(this).text();
+	        if (s.indexOf(g)!=-1) {
+	            $(this).parent().parent().show();
+	        }
+	        else {
+	            $(this).parent().parent().hide();
+	        }
+	    });
+	});​
+	}*/
 	function initialize_select_plugin()
 	{
 		$(".select-country").globalDropList(

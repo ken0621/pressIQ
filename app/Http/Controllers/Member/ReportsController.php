@@ -656,6 +656,7 @@ class ReportsController extends Member
             //                                         ->get();
             $data['_item'][$key]->item_warehouse = Item::item_inventory_report($item->shop_id, $item->item_id, $data['from'], $data['to']);
         }   
+            
         
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
         if($report_type && !$load_view)

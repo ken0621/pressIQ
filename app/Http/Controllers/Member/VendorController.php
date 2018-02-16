@@ -76,7 +76,6 @@ class VendorController extends Member
 
         return json_encode($json);
     }
-
 	public function getList()
 	{
         if($this->hasAccess("vendor-list","access_page"))

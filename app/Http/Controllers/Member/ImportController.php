@@ -74,12 +74,11 @@ class ImportController extends Member
 		return view('member.import.item_import');
 	}
 	public function getItemBundle()
-	{
-		/**
+	{		
 		$item[1] = 2;
 		$item[2] = 1;
 		$array[56] = $item;
-		dd($array); **/
+		dd($array); 
 		return view('member.import.item_import_bundle');
 	}
 	public function getItemBundleTemplate()
@@ -375,11 +374,21 @@ class ImportController extends Member
 								$item_id 		 = Tbl_item::insertGetId($insert);
 								if($data['type'] == "BUNDLE")
 								{
-									Session::put("bundle_id", $item_id);
+									/*CHECK IF HAVE CURRENT SESSIONS*/
+									if(Session::get("bundle_id") && Session::get("item_bundle_id"))
+									{
+										/*INSERT BUNDLE HERE*/
+									}
+									else
+									{
+										Session::put("bundle_id", $item_id);
+									}
 								}
 								else
 								{
-									$get_item = "";
+									$item_array = Session::get("item_bundle_id");
+									$item_array[$item_id] = $data['qty_in_bundle'];
+									Session::put("item_bundle_id", $item_array);
 								}
 							}
 						}

@@ -216,12 +216,12 @@ class MLM_CodeControllerV2 extends Member
             if($value->record_consume_ref_name == 'transaction_list')
             {
                 $data['_item_product_code'][$key]->used_by = 'Used By SLOT NUMBER-'.strtoupper($value->slot_no);
-                if(!$data['_item_product_code'][$key]->used_by)
+                if(!$value->slot_no)
                 {
                     $customer = Customer::get_info($this->user_info->shop_id, $value->record_consume_ref_id);
                     if($customer)
                     {
-                        $data['_item_product_code'][$key]->used_by = $customer->first_name." ".$customer->middle_name." ".$customer->last_name;
+                        $data['_item_product_code'][$key]->used_by = 'Used By Customer - '.ucwords($customer->first_name." ".$customer->middle_name." ".$customer->last_name);
                     }
                 }
             }

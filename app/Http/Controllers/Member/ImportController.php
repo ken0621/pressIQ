@@ -75,12 +75,11 @@ class ImportController extends Member
 	}
 	public function getItemBundle()
 	{
-
 		return view('member.import.item_import_bundle');
 	}
 	public function getItemBundleTemplate()
 	{
-		Excel::create("ItemTemplate", function($excel)
+		Excel::create("ItemBundleTemplate", function($excel)
 		{
 			// Set the title
 		    $excel->setTitle('Digimahouse');
@@ -95,6 +94,7 @@ class ImportController extends Member
 		    				'Name',
 		    				'Sku',
 		    				'UM',
+		    				'Qty In Bundle',
 		    				'Category',
 		    				'Sales Information',
 		    				'Sales Price',
@@ -165,6 +165,20 @@ class ImportController extends Member
 	}
 	public function postItemBundleReadFile()
 	{
+		$value     = Request::input('value');
+		$input     = Request::input('input');
+
+		$ctr 	   		= Request::input('ctr');
+		$data_length 	= Request::input('data_length');
+		$error_data 	= Request::input('error_data');
+
+		if($ctr != $data_length)
+		{
+			
+		}
+	}
+	public function postItemBundleReadFile_old()
+	{
 		Session::forget("import_item_error");
 
 		$value     = Request::input('value');
@@ -179,7 +193,9 @@ class ImportController extends Member
 			$data['type']					= isset($value["Type"]) 				? strToUpper($value["Type"]) : '';			//1,2,3
 			$data['name'] 					= isset($value["Name"]) 				? $value["Name"] : '';					  	//1,2,3
 			$data['sku'] 					= isset($value["Sku"]) 					? $value["Sku"] : '';				      	//1,2,3
-			$data['um'] 					= isset($value["UM"]) 					? $value["UM"] : '';					  	//1,2,3
+			$data['um'] 					= isset($value["UM"]) 					? $value["UM"] : '';	
+
+			$data['qty_in_bundle']			= isset($value["Qty In Bundle"])		? $value["Qty In Bundle"] : '';					  	//1,2,3
 			$data['category'] 				= isset($value["Category"]) 			? $value["Category"] : '';				  	//1,2,3
 			$data['sales_information'] 		= isset($value["Sales Information"]) 	? $value["Sales Information"] : '';		  	//1,2,3
 			$data['sales_price'] 			= isset($value["Sales Price"]) 			? $value["Sales Price"] : '';			  	//1,2,3

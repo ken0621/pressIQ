@@ -81,6 +81,7 @@
                         <th>Name</th>
                         <th>SKU</th>
                         <th>UM</th>
+                        <th>Qty In Bundle</th>
                         <th>Category</th>
                         <th>Sales Information</th>
                         <th>Sales Price</th>

@@ -44,7 +44,7 @@ class WarehouseInventoryAdjustmentController extends Member
     public function getCreate(Request $request)
     {
         $data['page']       = "Inventory Adjustment";
-        $data['_item']      = Item::get_all_category_item([1,4,5]);
+        $data['_item']      = Item::get_all_category_item([1,4,5], null, true);
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'inventory_adjustment');
         $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);

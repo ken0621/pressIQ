@@ -30,7 +30,9 @@ use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_employment_status;
 use App\Models\Tbl_payroll_employee_salary;
 use App\Models\Tbl_payroll_register_column;
-
+use App\Models\Tbl_payroll_manpower_report;
+use App\Models\Tbl_payroll_department;
+use App\Models\Tbl_payroll_branch_location;
 
 use App\Models\Tbl_payroll_leave_temp;
 use App\Models\Tbl_payroll_leave_schedule;
@@ -70,6 +72,7 @@ class PayrollReportController extends Member
 	}
 	public function government_forms_hdmf($month,$year)
 	{ 
+		$data['_branch'] = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
 		$data["page"] = "Monthly Government Forms";
 		$year = $year;
 		$shop_id = $this->shop_id();
@@ -79,11 +82,11 @@ class PayrollReportController extends Member
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 		$data["year"] = $year;
 		$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
-
 		return view("member.payrollreport.government_forms_hdmf", $data);
 	}
 	public function government_forms_sss($month,$year)
 	{ 
+		$data['_branch'] = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
 		$data["page"] = "Monthly Government Forms";
 		$year = $year;
 		$shop_id = $this->shop_id();
@@ -97,6 +100,7 @@ class PayrollReportController extends Member
 	}
 	public function government_forms_philhealth($month,$year)
 	{ 
+		$data['_branch'] = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
 		$data["page"] = "Monthly Government Forms";
 		$year = $year;
 		$shop_id = $this->shop_id();
@@ -110,10 +114,38 @@ class PayrollReportController extends Member
 		return view("member.payrollreport.government_forms_philhealth", $data);
 	}
 
-	public function government_forms_hdmf_iframe($month,$company_id,$year)
+	public function government_forms_hdmf_iframe($month,$company_id,$year,$branch_id)
 	{ 
-		if($company_id==0)
+		if($company_id > 0 || $branch_id > 0)
 		{
+			$data["page"] = "Monthly Government Forms";
+			$year = $year;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id,$branch_id);
+			$data['company_id1'] = $company_id;
+			$data["contri_info"] = $contri_info; 
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+			if($company_id == 0)
+			{
+				$companyname = 'ALL Company';
+			}
+			else
+			{
+				$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+				$companyname = $data['company']->payroll_company_name;
+			}
+			$format["title"] = $companyname;
+			$format["format"] = "A4";
+			$format["default_font"] = "sans-serif";
+			$pdf = PDF2::loadView('member.payrollreport.government_forms_hdmf_pdf', $data, [], $format);
+			return $pdf->stream('document.pdf');
+
+		}
+		else
+		{
+
 			$data["page"] = "Monthly Government Forms";
 			$year = $year;
 			$shop_id = $this->shop_id();
@@ -134,39 +166,24 @@ class PayrollReportController extends Member
 			$pdf = PDF2::loadView('member.payrollreport.government_forms_hdmf_pdf', $data, [], $format);
 			return $pdf->stream('document.pdf');
 		}
-		else
-		{
-			$data["page"] = "Monthly Government Forms";
-			$year = $year;
-			$shop_id = $this->shop_id();
-			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
-			$data['company_id1'] = $company_id;
-			$data["contri_info"] = $contri_info; 
-			$data["month"] = $month;
-			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
-			$data["year"] = $year;
-			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
-			
-			$format["title"] = $data['company']->payroll_company_name;
-			$format["format"] = "A4";
-			$format["default_font"] = "sans-serif";
-			$pdf = PDF2::loadView('member.payrollreport.government_forms_hdmf_pdf', $data, [], $format);
-			return $pdf->stream('document.pdf');
-		}
 	}
 
 	public function government_forms_hdmf_filter()
 	{
-		if (Request::input("company_id") > 0) 
-		{
+
+			$branch_id =	Request::input("branch_id");
 			$company_id =	Request::input("company_id");
         	$month      =	Request::input('month');
         	$year 		= 	Request::input('year');
 			$data["page"] = "Monthly Government Forms";
 			$year = $year;
 			$shop_id = $this->shop_id();
-			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
+
+		if (Request::input("company_id") > 0 || Request::input("branch_id") > 0) 
+		{
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id,$branch_id);
 			$data['company_id1'] = $company_id;
+			$data['branch_id'] = $branch_id;
 			$data["contri_info"] = $contri_info; 
 			$data["month"] = $month;
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
@@ -184,15 +201,10 @@ class PayrollReportController extends Member
 		}
 		else
 		{
-            $month      =	Request::input('month');
-            $company_id =	Request::input("company_id");
-            $year 		= 	Request::input('year');
-            $data["page"] = "Monthly Government Forms";
-			$year = $year;
-			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id,$month, $year);
 			$data["contri_info"] = $contri_info; 
 			$data["month"] = $month;
+			$data['branch_id'] = $branch_id;
 			$data['company_id1'] = $company_id;
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
@@ -206,14 +218,17 @@ class PayrollReportController extends Member
 		$company_id =	Request::input("company_id");
 		$month      =	Request::input('month');
 		$year 		= 	Request::input('year');
-		if (Request::input("company_id") > 0) {
-			$data["page"] = "Monthly Government Forms";
-			$year = $year;
-			$shop_id = $this->shop_id();
-			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
+		$branch_id =	Request::input("branch_id");
+		$data["page"] = "Monthly Government Forms";
+		$year = $year;
+		$shop_id = $this->shop_id();
+		if (Request::input("company_id") > 0 || Request::input("branch_id") > 0)  
+		{
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id,$branch_id);
 			$data["contri_info"] = $contri_info; 
 			$data['company_id1'] = $company_id;
 			$data["month"] = $month;
+			$data['branch_id'] = $branch_id;
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
@@ -228,17 +243,14 @@ class PayrollReportController extends Member
 		}
 		else
 		{
-			$data["page"] = "Monthly Government Forms";
-			$year = $year;
-			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
 			$data["contri_info"] = $contri_info; 
 			$data['company_id1'] = $company_id;
+			$data['branch_id'] = $branch_id;
 			$data["month"] = $month;
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
-
 			return view("member.payrollreport.government_forms_sss_filter", $data);
 		}
 	}
@@ -247,14 +259,18 @@ class PayrollReportController extends Member
 		$company_id =	Request::input("company_id");
 		$month      =	Request::input('month');
 		$year 		= 	Request::input('year');
-		if ($company_id != null && $month != null) {
-			$data["page"] = "Monthly Government Forms";
-			$year = $year;
-			$shop_id = $this->shop_id();
-			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
+		$branch_id =	Request::input("branch_id");
+		$data["page"] = "Monthly Government Forms";
+		$year = $year;
+		$shop_id = $this->shop_id();
+		if (Request::input("company_id") > 0 || Request::input("branch_id") > 0)  
+		{
+
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id,$branch_id);
 			$data['company_id1'] = $company_id;
 			$data["contri_info"] = $contri_info; 
 			$data["month"] = $month;
+			$data['branch_id'] = $branch_id;
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
@@ -270,13 +286,11 @@ class PayrollReportController extends Member
 		}
 		else
 		{
-			$data["page"] = "Monthly Government Forms";
-			$year = $year;
-			$shop_id = $this->shop_id();
 			$contri_info = Payroll2::get_contribution_information_for_a_month($shop_id, $month, $year);
 			$data["contri_info"] = $contri_info; 
 			$data['company_id1'] = $company_id;
 			$data["month"] = $month;
+			$data['branch_id'] = $branch_id;
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
@@ -284,9 +298,40 @@ class PayrollReportController extends Member
 			return view("member.payrollreport.government_forms_philhealth_filter", $data);
 		}
 	}
-    public function government_forms_hdmf_export_excel($month,$company_id,$year)
+    public function government_forms_hdmf_export_excel($month,$company_id,$year,$branch_id)
 	{
-		if($company_id==0)
+		if($company_id > 0 || $branch_id > 0)
+		{
+			$data["page"] = "Monthly Government Forms";
+			$year = $year;
+			$shop_id = $this->shop_id();
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id,$branch_id);
+			
+			$data["contri_info"] = $contri_info; 
+			$data["month"] = $month;
+			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] = $year;
+
+			if($company_id == 0)
+			{
+				$companyname = 'ALL Company';
+			}
+			else
+			{
+				$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+				$companyname = $data['company']->payroll_company_name;
+			}
+			// AuditTrail::record_logs("DOWNLOAD","HDMF REPORT",$this->shop_id(),"","");
+			Excel::create("Government Forms HDMF".$companyname,function($excel) use ($data)
+			{
+				$excel->sheet('clients',function($sheet) use ($data)
+				{
+					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
+				});
+			})->download('xls');
+     
+		}
+		else
 		{
 			$data["page"] = "Monthly Government Forms";
 			$year = $year;
@@ -298,8 +343,7 @@ class PayrollReportController extends Member
 			$data["year"] = $year;
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
 
-
-			AuditTrail::record_logs("DOWNLOAD","HDMF REPORT",$this->shop_id(),"","");
+			// AuditTrail::record_logs("DOWNLOAD","HDMF REPORT",$this->shop_id(),"","");
             // dd(count($contri_info["_employee_contribution"]));
 			Excel::create("Government Forms HDMF",function($excel) use ($data)
 			{
@@ -307,34 +351,43 @@ class PayrollReportController extends Member
 				{
 					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
 				});
-			})->download('xls');        
+			})->download('xls');   
 		}
-		else
+ 			
+	}
+	public function government_forms_sss_export_excel($month,$company_id,$year,$branch_id)
+	{
+		if($company_id > 0 || $branch_id > 0)
 		{
 			$data["page"] = "Monthly Government Forms";
 			$year = $year;
 			$shop_id = $this->shop_id();
-			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id,$branch_id);
 			
 			$data["contri_info"] = $contri_info; 
 			$data["month"] = $month;
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
-			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
-			AuditTrail::record_logs("DOWNLOAD","HDMF REPORT",$this->shop_id(),"","");
-			Excel::create("Government Forms HDMF".$data['company']->payroll_company_name,function($excel) use ($data)
+			if($company_id == 0)
+			{
+				$companyname = 'ALL Company';
+			}
+			else
+			{
+				$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+				$companyname = $data['company']->payroll_company_name;
+			}
+			// AuditTrail::record_logs("DOWNLOAD","SSS REPORT",$this->shop_id(),"","");
+			Excel::create("Government Forms SSS-".$companyname,function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
 				{
-					$sheet->loadView('member.payrollreport.government_forms_hdmf_export_excel',$data);
+					$sheet->loadView('member.payrollreport.government_forms_sss_export_excel',$data);
 				});
 			})->download('xls');
+
 		}
- 			
-	}
-	public function government_forms_sss_export_excel($month,$company_id,$year)
-	{
-		if($company_id==0)
+		else
 		{
 			$data["page"] = "Monthly Government Forms";
 			$year = $year;
@@ -355,32 +408,40 @@ class PayrollReportController extends Member
 				});
 			})->download('xls');
 		}
-		else
+ 			
+	}
+	public function government_forms_philhealth_export_excel($month,$company_id,$year,$branch_id)
+	{
+		if($company_id > 0 || $branch_id > 0)
 		{
 			$data["page"] = "Monthly Government Forms";
 			$year = $year;
 			$shop_id = $this->shop_id();
-			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
-			
+			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id,$branch_id);
 			$data["contri_info"] = $contri_info; 
-			$data["month"] = $month;
-			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
-			$data["year"] = $year;
-			$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
-			AuditTrail::record_logs("DOWNLOAD","SSS REPORT",$this->shop_id(),"","");
-			Excel::create("Government Forms SSS-".$data['company']->payroll_company_name,function($excel) use ($data)
+			$data["month"] 		 = $month;
+			$data["month_name"]  = DateTime::createFromFormat('!m', $month)->format('F');
+			$data["year"] 	 	 = $year;
+			if($company_id == 0)
+			{
+				$companyname = 'ALL Company';
+			}
+			else
+			{
+				$data['company'] = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
+				$companyname = $data['company']->payroll_company_name;
+			}
+			// AuditTrail::record_logs("DOWNLOAD","PHILHEALTH REPORT",$this->shop_id(),"","");
+			Excel::create("Government Forms PHILHEALTH".$companyname,function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
 				{
-					$sheet->loadView('member.payrollreport.government_forms_sss_export_excel',$data);
+					$sheet->loadView('member.payrollreport.government_forms_philhealth_export_excel',$data);
 				});
 			})->download('xls');
+
 		}
- 			
-	}
-	public function government_forms_philhealth_export_excel($month,$company_id,$year)
-	{
-		if($company_id==0)
+		else
 		{
 			$data["page"] = "Monthly Government Forms";
 			$year = $year;
@@ -391,29 +452,8 @@ class PayrollReportController extends Member
 			$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 			$data["year"] = $year;
 			$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
-			AuditTrail::record_logs("DOWNLOAD","PHILHEALTH REPORT",$this->shop_id(),"","");
+			// AuditTrail::record_logs("DOWNLOAD","PHILHEALTH REPORT",$this->shop_id(),"","");
 			Excel::create("Government Forms PHILHEALTH",function($excel) use ($data)
-			{
-				$excel->sheet('clients',function($sheet) use ($data)
-				{
-					$sheet->loadView('member.payrollreport.government_forms_philhealth_export_excel',$data);
-				});
-			})->download('xls');
-		}
-		else
-		{
-			$data["page"] = "Monthly Government Forms";
-			$year = $year;
-			$shop_id = $this->shop_id();
-			$contri_info = Payroll2::get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id);
-			
-			$data["contri_info"] = $contri_info; 
-			$data["month"] 		 = $month;
-			$data["month_name"]  = DateTime::createFromFormat('!m', $month)->format('F');
-			$data["year"] 	 	 = $year;
-			$data['company'] 	 = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
-			AuditTrail::record_logs("DOWNLOAD","PHILHEALTH REPORT",$this->shop_id(),"","");
-			Excel::create("Government Forms PHILHEALTH".$data['company']->payroll_company_name,function($excel) use ($data)
 			{
 				$excel->sheet('clients',function($sheet) use ($data)
 				{
@@ -441,14 +481,37 @@ class PayrollReportController extends Member
 	{
 		$data["page"] = "Loan Summary";
 		$deduction_type = str_replace("_"," ",$deduction_type);
-		$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type);
+
+		$checkcompany = Tbl_payroll_company::where('payroll_company_id',$company)->first();
+
+		$branchcompany = array();
+		if($checkcompany['payroll_parent_company_id'] == 0)
+		{
+			$tempbranchcompany = Tbl_payroll_company::where('payroll_parent_company_id',$checkcompany['payroll_company_id'])->get();
+
+			foreach($tempbranchcompany as $branch)
+			{
+				$temp['payroll_company_id'] = $branch['payroll_company_id'];
+				array_push($branchcompany,$temp);
+			}
+		}
+
+		$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type,$company,$branchcompany);
+
 		if($company == 0)
 		{
 			$data['company']	= Tbl_payroll_company::selcompany($this->shop_id())->get();
 		}
 		else
 		{
-			$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
+			if($branchcompany == null) 
+			{
+					$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
+			}
+			else
+			{
+					$data['company']	= Tbl_payroll_company::selcompanybranch($branchcompany)->get();
+			}
 		}
 		
 		$data['totals']	= $this->get_totals_loan_summary($data);
@@ -459,7 +522,22 @@ class PayrollReportController extends Member
 	public function table_company_loan_summary()
 	{
 		$data['company_id'] = Request::input('company_id');
-		$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$data['company_id'],0)->get();
+
+		$checkcompany = Tbl_payroll_company::where('payroll_company_id',$data['company_id'])->first();
+
+		$branchcompany = array();
+		if($checkcompany['payroll_parent_company_id'] == 0)
+		{
+			$tempbranchcompany = Tbl_payroll_company::where('payroll_parent_company_id',$checkcompany['payroll_company_id'])->get();
+
+			foreach($tempbranchcompany as $branch)
+			{
+				$temp['payroll_company_id'] = $branch['payroll_company_id'];
+				array_push($branchcompany,$temp);
+			}
+		}
+
+		$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$data['company_id'],0,$branchcompany)->get();
 
 		if($data['company_id'] == 0)
 		{
@@ -467,9 +545,18 @@ class PayrollReportController extends Member
 		}
 		else
 		{
-			$data['company']	= Tbl_payroll_company::selcompanybyid($data['company_id'])->get();
+			if($branchcompany == null) 
+			{
+					$data['company']	= Tbl_payroll_company::selcompanybyid($data['company_id'])->get();
+			}
+			else
+			{
+					$data['company']	= Tbl_payroll_company::selcompanybranch($branchcompany)->get();
+			}
+			
 		}
 
+		
 		$data['totals']	= $this->get_totals_loan_summary($data);
 
 		return view('member.payrollreport.table_company_loan_summary',$data);
@@ -491,24 +578,63 @@ class PayrollReportController extends Member
 		$data["_company"] = Payroll::company_heirarchy(Self::shop_id());
 		$data['company']	= Tbl_payroll_company::selcompany($this->shop_id())->get();
 
+		$checkcompany = Tbl_payroll_company::where('payroll_company_id',$company)->first();
+
+		$branchcompany = array();
+		if($checkcompany['payroll_parent_company_id'] == 0)
+		{
+			$tempbranchcompany = Tbl_payroll_company::where('payroll_parent_company_id',$checkcompany['payroll_company_id'])->get();
+
+			foreach($tempbranchcompany as $branch)
+			{
+				$temp['payroll_company_id'] = $branch['payroll_company_id'];
+				array_push($branchcompany,$temp);
+			}
+		}
+		
 		if($company != 0 && $deduction_type == 'noval')
 		{
-			$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$company,0)->get();	
-			$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
-		}	
-		else if($deduction_type != 'noval')
-		{
-			$deduction_type = str_replace("_"," ",$deduction_type);
-			$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type);
+			$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$company,0,$branchcompany)->get();
+
 			if($company == 0)
 			{
 				$data['company']	= Tbl_payroll_company::selcompany($this->shop_id())->get();
 			}
 			else
 			{
-				$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
+				if($branchcompany == null) 
+				{
+						$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
+				}
+				else
+				{
+						$data['company']	= Tbl_payroll_company::selcompanybranch($branchcompany)->get();
+				}
+				
+			}
+
+		}	
+		else if($deduction_type != 'noval')
+		{
+			$deduction_type = str_replace("_"," ",$deduction_type);
+			$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type,$company,$branchcompany);
+			if($company == 0)
+			{
+				$data['company']	= Tbl_payroll_company::selcompany($this->shop_id())->get();
+			}
+			else
+			{
+				if($branchcompany == null) 
+				{
+						$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
+				}
+				else
+				{
+						$data['company']	= Tbl_payroll_company::selcompanybranch($branchcompany)->get();
+				}
 			}
 		}
+
 		$data['totals']	= $this->get_totals_loan_summary($data);
 
           Excel::create("Loan Summary Reports",function($excel) use ($data)
@@ -639,6 +765,7 @@ class PayrollReportController extends Member
 		
 		$data['filtering_company']	= $period_company_id;
 		$data['_company']           = Payroll::company_heirarchy(Self::shop_id());
+		$data['_department']		= Tbl_payroll_department::where('shop_id',Self::shop_id())->where('payroll_department_archived',0)->get();
 
 		return view('member.payrollreport.payroll_register_report_period',$data);
 	}
@@ -647,22 +774,51 @@ class PayrollReportController extends Member
 	{
 		$payroll_company_id = request::input('payroll_company_id');
 		$period_company_id  = request::input('period_company_id');
+		$payroll_department_id  = request::input('payroll_department_id');
+
 
 		$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
+		// dd($data["_employee"]);
 
-		if ($payroll_company_id != 0) 
+		if ($payroll_company_id != 0 || $payroll_department_id != 0) 
 		{
-			$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->basic()->get();
+			if($payroll_department_id != 0)
+			{		
+					if($payroll_company_id != 0)
+					{
+						  $data["_employee"] 	= Tbl_payroll_time_keeping_approved::join('tbl_payroll_employee_contract','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')->where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->where('tbl_payroll_employee_contract.payroll_department_id',$payroll_department_id)->where('tbl_payroll_employee_contract.payroll_employee_contract_archived', 0)->basic()->get();
+					}
+					else
+					{
+						$data["_employee"] 	= Tbl_payroll_time_keeping_approved::join('tbl_payroll_employee_contract','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')->where("payroll_period_company_id", $period_company_id)->where('tbl_payroll_employee_contract.payroll_department_id',$payroll_department_id)->where('tbl_payroll_employee_contract.payroll_employee_contract_archived', 0)->basic()->get();
+					}
+				  
+			}
+			else if($payroll_company_id != 0)
+			{		
+					if($payroll_department_id != 0)
+					{
+						  $data["_employee"] 	= Tbl_payroll_time_keeping_approved::join('tbl_payroll_employee_contract','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')->where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->where('tbl_payroll_employee_contract.payroll_department_id',$payroll_department_id)->where('tbl_payroll_employee_contract.payroll_employee_contract_archived', 0)->basic()->get();
+					}
+					else
+					{
+						    $data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->basic()->get();
+
+					}
+				  
+			}
+	
 			if (count($data["_employee"]) == 0 )
 			{
 				$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_company_id)->get();
 			}
+
 		}
 
 		$data = Payroll2::get_total_payroll_register($data);
 		// dd($data);
 		$data['columns'] = Tbl_payroll_register_column::select('*')->where('shop_id',Self::shop_id())->get();
-
+		// dd($data);
 		return view('member.payrollreport.payroll_register_report_table', $data);
 	}
 
@@ -927,7 +1083,7 @@ class PayrollReportController extends Member
 			return $response;
 	}
 
-	public function payroll_register_report_export_excel($period_company_id, $payroll_company_id)
+	public function payroll_register_report_export_excel($period_company_id, $payroll_company_id,$payroll_department_id)
 	{
         $data["company"] 			= Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
 		$data["_employee"] 			= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
@@ -935,13 +1091,39 @@ class PayrollReportController extends Member
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
 
-		if ($payroll_company_id != 0) 
+		if ($payroll_company_id != 0 || $payroll_department_id != 0) 
 		{
-			$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->basic()->get();
+			if($payroll_department_id != 0)
+			{		
+					if($payroll_company_id != 0)
+					{
+						  $data["_employee"] 	= Tbl_payroll_time_keeping_approved::join('tbl_payroll_employee_contract','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')->where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->where('tbl_payroll_employee_contract.payroll_department_id',$payroll_department_id)->where('tbl_payroll_employee_contract.payroll_employee_contract_archived', 0)->basic()->get();
+					}
+					else
+					{
+						$data["_employee"] 	= Tbl_payroll_time_keeping_approved::join('tbl_payroll_employee_contract','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')->where("payroll_period_company_id", $period_company_id)->where('tbl_payroll_employee_contract.payroll_department_id',$payroll_department_id)->where('tbl_payroll_employee_contract.payroll_employee_contract_archived', 0)->basic()->get();
+					}
+				  
+			}
+			else if($payroll_company_id != 0)
+			{		
+					if($payroll_department_id != 0)
+					{
+						  $data["_employee"] 	= Tbl_payroll_time_keeping_approved::join('tbl_payroll_employee_contract','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')->where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->where('tbl_payroll_employee_contract.payroll_department_id',$payroll_department_id)->where('tbl_payroll_employee_contract.payroll_employee_contract_archived', 0)->basic()->get();
+					}
+					else
+					{
+						    $data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->basic()->get();
+
+					}
+				  
+			}
+	
 			if (count($data["_employee"]) == 0 )
 			{
 				$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_company_id)->get();
 			}
+
 		}
 
 		$data = Payroll2::get_total_payroll_register($data);
@@ -980,6 +1162,70 @@ class PayrollReportController extends Member
 
 		return view('member.payrollreport.payroll_employee_summary_report', $data);
 	}
+
+	/* start man power report */
+  	public function manpower_report()
+    {
+    	  $data["_company"] = Payroll::company_heirarchy(Self::shop_id());
+    	  $data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id') ->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
+			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
+			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->get();
+          return view("member.payrollreport.manpower_report",$data);
+    }
+
+    public function manpower_report_export_excel($company_id)
+    {
+
+
+		if($company_id == 0)
+		{
+			$data['company'] = 'All Company';
+			 $data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id') ->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
+			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
+			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->get();
+		}
+		else
+		{
+			$data['company'] = Tbl_payroll_company::where('shop_id',Self::shop_id())->where('payroll_company_id',$company_id)->value('payroll_company_name');
+				  $data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
+			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
+			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->where('tbl_payroll_employee_basic.payroll_employee_company_id',$company_id)->get();
+		}
+
+
+
+    	Excel::create("Manpower Report",function($excel) use ($data)
+		{
+			$excel->sheet('clients',function($sheet) use ($data)
+			{
+				$sheet->loadView('member.payrollreport.manpower_report_excel',$data);
+			});
+		})->download('xls'); 
+
+    }
+
+    public function manpower_report_filter()
+    {
+    	$company_id =	Request::input("company_id");
+		if($company_id == 0)
+		{
+			$data['company'] = Tbl_payroll_company::where('shop_id',Self::shop_id())->where('payroll_parent_company_id',0)->value('payroll_company_name');
+			 $data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id') ->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
+			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
+			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->get();
+		}
+		else
+		{    	 
+			$data["_company"] = Payroll::company_heirarchy(Self::shop_id());
+    	    $data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
+			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
+			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->where('tbl_payroll_employee_basic.payroll_employee_company_id',$company_id)->get();
+
+		}
+
+
+          return view("member.payrollreport.manpower_report_filter",$data);
+    }
 
 	/* start bir report */
 
@@ -1082,7 +1328,7 @@ class PayrollReportController extends Member
 	                                              ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
 	                                              ->get();
 
-	     if(count($data['first_period']) != 0 && $company != 0)
+	     if(count($data['last_period']) != 0 && count($data['first_period']) != 0 && $company != 0)
 	     {
 			  //get minimun earnes
 			    $data['employee_minimum'] = Tbl_payroll_employee_basic::join('tbl_payroll_employee_salary','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_employee_salary.payroll_employee_id')
@@ -1093,15 +1339,42 @@ class PayrollReportController extends Member
 			    											->select('tbl_payroll_employee_basic.payroll_employee_id')
 			    											->distinct()
 			    											->get();
-			    //get data first_period minimum earners
-				$data["_employee"]                    	  = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data['first_period'][0]->payroll_period_company_id)->whereIn('employee_id',$data['employee_minimum'])->basic()->get();
+
+			     if(count($data['employee_minimum']) == 0)
+			     {
+			     	$temp['first_period_total_minimum']   = 0;
+			     	$temp['last_period_total_minimum']    = 0;
+			     	$temp['total_for_1601c_minimum']	  = 0;
+			     	$temp['first_minimum_16_b']	          = 0;
+			     	$temp['last_minimum_16_b']            = 0;
+			     	$temp['total_minimum_1601c']          = 0;
+
+			     }
+			     else
+			     {
+			 	//get data first_period minimum earners
+				    $data["_employee"]                    	 = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data['first_period'][0]->payroll_period_company_id)->whereIn('employee_id',$data['employee_minimum'])->basic()->get();
 				//total minimun first period
-				$data['total_minimum_first']              = Payroll2::get_total_payroll_register($data);
+				    $data['total_minimum_first']             = Payroll2::get_total_payroll_register($data);
 
 				//get data last_period minimum earners
-				$data["_employee"]             	          = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data['last_period'][0]->payroll_period_company_id)->whereIn('employee_id',$data['employee_minimum'])->basic()->get();
-				//total minimun last period
-				$data['total_minimum_last']               = Payroll2::get_total_payroll_register($data);
+				    $data["_employee"]             	         = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data['last_period'][0]->payroll_period_company_id)->whereIn('employee_id',$data['employee_minimum'])->basic()->get();
+			  	//total minimun last period
+				    $data['total_minimum_last']              = Payroll2::get_total_payroll_register($data);
+
+
+				    $temp['first_period_total_minimum']      = Payroll2::payroll_number_format($data['total_minimum_first']['total_gross'],2);
+				    $temp['last_period_total_minimum']       = Payroll2::payroll_number_format($data['total_minimum_last']['total_gross'],2);
+				    $temp['total_for_1601c_minimum']		  =  Payroll2::payroll_number_format(($data['total_minimum_first']['total_gross'] + $data['total_minimum_last']['total_gross']),2);
+
+					$temp['first_minimum_16_b']	              = $data['total_minimum_first']['nightdiff_total'
+					] + $data['total_minimum_first']['leave_pay_total'] + $data['total_minimum_first']['special_holiday_total'] + $data['total_minimum_first']['regular_holiday_total'] + $data['total_minimum_first']['overtime_total'];
+					$temp['last_minimum_16_b']           	  = $data['total_minimum_last']['nightdiff_total'
+					] + $data['total_minimum_last']['leave_pay_total'] + $data['total_minimum_last']['special_holiday_total'] + $data['total_minimum_last']['regular_holiday_total'] + $data['total_minimum_last']['overtime_total'];
+
+					$temp['total_minimum_1601c']              = $temp['first_minimum_16_b'] + $temp['last_minimum_16_b'];
+			     }
+
 
 			    $data["_employee"]                    	  = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data['first_period'][0]->payroll_period_company_id)->basic()->get();
 
@@ -1114,17 +1387,6 @@ class PayrollReportController extends Member
 			     $temp['first_period_total_compensation'] = Payroll2::payroll_number_format($data['first_period'][0]->payroll_period_total_gross, 2);
 			     $temp['last_period_total_compensation']  = Payroll2::payroll_number_format($data['last_period'][0]->payroll_period_total_gross, 2);
 			     $temp['total_for_1601c']                 =  Payroll2::payroll_number_format(($data['last_period'][0]->payroll_period_total_gross + $data['first_period'][0]->payroll_period_total_gross), 2);
-
-			     $temp['first_period_total_minimum']      = Payroll2::payroll_number_format($data['total_minimum_first']['total_gross'],2);
-			     $temp['last_period_total_minimum']       = Payroll2::payroll_number_format($data['total_minimum_last']['total_gross'],2);
-			     $temp['total_for_1601c_minimum']		  =  Payroll2::payroll_number_format(($data['total_minimum_first']['total_gross'] + $data['total_minimum_last']['total_gross']),2);
-
-				$temp['first_minimum_16_b']	              = $data['total_minimum_first']['nightdiff_total'
-				] + $data['total_minimum_first']['leave_pay_total'] + $data['total_minimum_first']['special_holiday_total'] + $data['total_minimum_first']['regular_holiday_total'] + $data['total_minimum_first']['overtime_total'];
-				$temp['last_minimum_16_b']           	  = $data['total_minimum_last']['nightdiff_total'
-				] + $data['total_minimum_last']['leave_pay_total'] + $data['total_minimum_last']['special_holiday_total'] + $data['total_minimum_last']['regular_holiday_total'] + $data['total_minimum_last']['overtime_total'];
-
-				$temp['total_minimum_1601c']              = $temp['first_minimum_16_b'] + $temp['last_minimum_16_b'];
 
 				$allowances_first                         = $data['non_taxable_total_first']['total_adjustment_allowance'] + $data['non_taxable_total_first']['total_adjustment_bonus'] + $data['non_taxable_total_first']['total_adjustment_commission'] + $data['non_taxable_total_first']['total_adjustment_incentives'] + $data['non_taxable_total_first']['total_adjustment_additions']  + $data['non_taxable_total_first']['total_adjustment_13th_month_and_other']  + $data['non_taxable_total_first']['total_adjustment_de_minimis_benefit']  + $data['non_taxable_total_first']['total_adjustment_others'];
 

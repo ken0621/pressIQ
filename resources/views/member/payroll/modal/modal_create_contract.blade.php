@@ -63,4 +63,11 @@
 		<button class="btn btn-custom-primary btn-submit" type="submit">Save</button>
 	</div>
 </form>
+<script type="text/javascript">
+			function reload(data)
+		{
+			data.element.modal("hide");
+			location.reload();
+		}
+</script>
 <script type="text/javascript" src="/assets/member/js/payroll/modal_create_company_details.js"></script>

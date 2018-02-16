@@ -39,7 +39,21 @@ use Carbon\Carbon;
 
 class Transaction
 {
-
+    public static function get_customer_name_transaction($transaction_list_id, $shop_id = null)
+    {
+        $customer_name = null;
+        $transaction_id = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->value("transaction_id");
+        if($transaction_id)
+        {
+            $customer_id = Tbl_transaction::where("transaction_id", $transaction_id)->value("transaction_reference_id");
+            $customer = Customer::get_info($shop_id, $customer_id);
+            if($customer)
+            {
+                $customer_name = ucwords($customer->first_name." ".$customer->middle_name." ".$customer->last_name);
+            }
+        }
+        return $customer_name;
+    }
     public static function get_transaction_item_code($transaction_list_id, $shop_id = null)
     {
         $list = Tbl_transaction_list::salesperson()->transaction()->where('transaction_list_id',$transaction_list_id)->first();

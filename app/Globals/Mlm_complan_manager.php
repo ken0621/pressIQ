@@ -664,6 +664,7 @@ class Mlm_complan_manager
         }   
         Mlm_complan_manager::cutoff_direct('DIRECT', $slot_info->shop_id);      
 	}
+
     public static function plan_check_if_enabled($shop_id, $marketing_plan_code)
     {
         return Tbl_mlm_plan::where("shop_id", $shop_id)->where("marketing_plan_code", $marketing_plan_code)->first();

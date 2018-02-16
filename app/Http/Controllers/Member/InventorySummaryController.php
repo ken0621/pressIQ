@@ -33,6 +33,7 @@ class InventorySummaryController extends Member
         $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
         $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 
+        //dd($period);
         //dd($data);
         //$data['_report'] = Tbl_item::um()->where('shop_id',$this->user_info->shop_id)->get();
         $warehouse_id = Warehouse2::get_current_warehouse($this->user_info->shop_id);

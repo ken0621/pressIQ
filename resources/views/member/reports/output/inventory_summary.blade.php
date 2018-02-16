@@ -33,7 +33,7 @@
 								<td class="text-right">{{number_format($report['total_price'], 2)}}</td>
 								<td class="text-right">{{number_format(($report['total_price']/ $total_price_total) * 100, 2).'%'}}</td>
 							</tr>
-							@endforeach
+							@if($report->report_period == 'all')
 							<tr style="font-weight: bold;">
 								<td class="text-center" colspan="2">TOTAL</td>
 								<td class="text-center">{{$inventory_count_total }}</td>
@@ -45,6 +45,8 @@
 								<td class="text-right">{{number_format($total_price_total, 2) }}</td>
 								<td class="text-right">{{number_format($total_retail_value, 2)}}%</td>
 							</tr>
+							@endif
+							@endforeach
 						@else
 						<tr><td colspan="22"><h3 class="text-center">No Transaction</h3></td></tr>
 						@endif					

@@ -1385,7 +1385,7 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }
 
-    }
+    }  
 
      public function importExcel(Request $request)     
     {  

@@ -33,6 +33,7 @@ use App\Models\Tbl_mlm_indirect_points_settings;
 use App\Models\Tbl_mlm_unilevel_points_settings;
 use App\Models\Tbl_mlm_discount_card_settings;
 use App\Models\Tbl_item;
+use App\Models\Tbl_indirect_advance;
 use App\Models\Tbl_mlm_plan_binary_promotions;
 use App\Models\Tbl_direct_pass_up_settings;
 use App\Models\Tbl_advertisement_bonus_settings;
@@ -1339,26 +1340,72 @@ class MLM_PlanController extends Member
     }
     public static function indirect_advance($shop_id)
     {
-        $data['membership']        = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        $__membership              = null;
+        $_membership               = Tbl_membership::getactive(0, $shop_id)->get();
+
+        foreach($_membership as $key => $membership)
+        {
+            $__membership[$key]     = $membership;
+            $__membership[$key]->level = Tbl_indirect_advance::where("shop_id", $shop_id)->where("indirect_membership_parent", $membership->membership_id)->max("indirect_level");
+        }
+
+        $data['membership']        = $__membership;
+
         $data['basic_settings']    = MLM_PlanController::basic_settings('INDIRECT_ADVANCE');
         return view('member.mlm_plan.configure2.indirect_advance', $data);
     }
-    public static function indirect_advance_setting()
+    public function indirect_advance_setting($membership_id)
     {
-        $data["page"] = "Indirect Settings Advance";
-        return view('member.mlm_plan.configure2.indirect_advance_setting');
+        $shop_id                            = $this->user_info->shop_id;
+        $data["page"]                       = "Indirect Settings Advance";
+        $data["parent_membership"]          = Tbl_membership::getactive(0, $shop_id)->where("tbl_membership.membership_id", $membership_id)->first();
+        $data["membership"] = $_membership  = Tbl_membership::getactive(0, $shop_id)->get();
+        $_indirect                          = Tbl_indirect_advance::where("shop_id", $this->user_info->shop_id)->where("indirect_membership_parent", $membership_id)->orderBy("indirect_level")->get();
+        $_bonus                             = null;
+
+        foreach($_indirect as $indirect)
+        {
+            $_bonus[$indirect->indirect_level][$indirect->indirect_membership_new_entry] = $indirect->indirect_advance_bonus; 
+        }
+
+        $data["_bonus"]                     = $_bonus;
+
+        return view('member.mlm_plan.configure2.indirect_advance_setting', $data);
     }
-    public static function indirect_advance_setting_submit()
+    public function indirect_advance_setting_submit($parent_id)
     {
+        $insert = null;
+        $ctr    = 0;
+ 
+        Tbl_indirect_advance::where("shop_id", $this->user_info->shop_id)->delete();
+
+        foreach(request()->bonus as $level => $_bonus)
+        {
+            foreach($_bonus as $new_entry_membership_id => $bonus)
+            {
+                $_insert[$ctr]["indirect_membership_parent"]       = $parent_id;
+                $_insert[$ctr]["indirect_membership_new_entry"]    = $new_entry_membership_id;
+                $_insert[$ctr]["indirect_advance_bonus"]           = $bonus;
+                $_insert[$ctr]["indirect_level"]                   = $level;
+                $_insert[$ctr]["shop_id"]                          = $this->user_info->shop_id;
+                $ctr++;
+            }
+        }
+
+        Tbl_indirect_advance::insert($_insert);
+
+        return redirect()->back();
     }
 	public static function indirect($shop_id)
 	{
 	    $data['membership'] = Tbl_membership::getactive(0, $shop_id)->get();
+
 	    foreach($data['membership'] as $value)
 	    {
-	    	$c =Tbl_mlm_indirect_setting::where('membership_id', $value->membership_id)->where('indirect_setting_archive', 0)->count();
+	    	$c = Tbl_mlm_indirect_setting::where('membership_id', $value->membership_id)->where('indirect_setting_archive', 0)->count();
 	    	$value->indirect_count = $c;
 	    }
+
 	    $data['basic_settings'] = MLM_PlanController::basic_settings('INDIRECT');
 	    return view('member.mlm_plan.configure.indirect', $data);
 	}

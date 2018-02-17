@@ -83,7 +83,7 @@ Route::any('/member/mlm/plan/save/setting', 'Member\MLM_PlanController@save_sett
 Route::any('/member/mlm/plan/{plan}', 'Member\MLM_PlanController@configure_plan');//Luke
 Route::any('/member/mlm/plan/{plan}/basicsettings', 'Member\MLM_PlanController@get_basicsettings');//Luke
 Route::get('/member/mlm/plan/INDIRECT_ADVANCE/{id}', 'Member\MLM_PlanController@indirect_advance_setting');//Guillermo
-Route::post('/member/mlm/plan/INDIRECT_ADVANCE/{id}', 'Member\MLM_PlanController@indirect_advance_setting');//Guillermo
+Route::post('/member/mlm/plan/INDIRECT_ADVANCE/{id}', 'Member\MLM_PlanController@indirect_advance_setting_submit');//Guillermo
 Route::any('/member/mlm/plan/edit/submit', 'Member\MLM_PlanController@configure_plan_submit');//Luke
 Route::any('/member/mlm/plan/binary/settings/submit', 'Member\MLM_PlanController@submit_binary_advance');//Luke
 Route::any('/member/mlm/plan/wallet/type/view', 'Member\MLM_PlanController@wallet_type');//Luke

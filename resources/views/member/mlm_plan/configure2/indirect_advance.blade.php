@@ -27,7 +27,6 @@
                 <thead>
                     <tr>
                         <th>MEMBERSHIP</th>
-                        <th class="text-center">COST</th>
                         <th class="text-center">LEVEL</th>
                         <th></th>
                     </tr>
@@ -36,8 +35,7 @@
                     @foreach($membership as $mem)
                     <tr>
                         <td>{{ $mem->membership_name }}</td>
-                        <td class="text-center">PHP 1,500.00</td>
-                        <td class="text-center">8 LEVEL/S</td>
+                        <td class="text-center">{{ $mem->level or "0" }} LEVEL/S</td>
                         <td class="text-center"><a href="/member/mlm/plan/INDIRECT_ADVANCE/{{ $mem->membership_id }}">CONFIGURE</a></td>
                     </tr>
                     @endforeach

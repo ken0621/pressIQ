@@ -3030,12 +3030,12 @@ class Payroll2
 		$return->cola						= $cola->cola_day_pay;
 		$return->cola_daily 				= $cola->cola_daily;
 		$return->total_day_income_plus_cola = $cola->cola_plus_daily_rate;
-		$return->total_day_income			= $total_day_income;
+		$return->total_day_income			= round($total_day_income,2);
 		$return->total_day_cola 			= 0;
 		$return->total_day_cola_deduction 	= $cola->cola_daily_deduction;
 		$return->total_day_cola_addition 	= $cola->cola_daily_addition;
 		$return->cola_percentile			= $cola->cola_percentile;
-		$return->total_day_basic			= $subtotal_after_addition - ($breakdown_deduction + $breakdown_addition);
+		$return->total_day_basic			= round($subtotal_after_addition - ($breakdown_deduction + $breakdown_addition),2);
 		$return->breakdown_addition 		= $breakdown_addition;
 		$return->breakdown_deduction		= $breakdown_deduction; 
 		$return->rendered_tardiness			= @(($late_float + $undertime_float) / $target_float) + $absent_float;
@@ -4499,9 +4499,9 @@ class Payroll2
 				}
 				else
 				{
-					$sss_contribution["ee"] = $sss_contribution["ee"] / $divisor;
-					$sss_contribution["er"] = $sss_contribution["er"] / $divisor;
-					$sss_contribution["ec"] = $sss_contribution["ec"] / $divisor;
+					$sss_contribution["ee"] = round($sss_contribution["ee"] / $divisor,2);
+					$sss_contribution["er"] = round($sss_contribution["er"] / $divisor,2);
+					$sss_contribution["ec"] = round($sss_contribution["ec"] / $divisor,2);
 				}
 			}
 			else
@@ -4512,9 +4512,9 @@ class Payroll2
 				{
 					$sss_reference_amount = $sss_declared;
 					$sss_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
-					$sss_contribution["ee"] = $sss_contribution["ee"];
-					$sss_contribution["er"] = $sss_contribution["er"];
-					$sss_contribution["ec"] = $sss_contribution["ec"];
+					$sss_contribution["ee"] = round($sss_contribution["ee"],2);
+					$sss_contribution["er"] = round($sss_contribution["er"],2);
+					$sss_contribution["ec"] = round($sss_contribution["ec"],2);
 				}
 				else
 				{
@@ -4583,9 +4583,9 @@ class Payroll2
 						$sss_description .= "<br> New SSS Bracket falls to " . payroll_currency($sss_contribution["ee"]);
 						$sss_description .= "<br> NEW BRACKET (" . payroll_currency($sss_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($total_previous_cutoff_sss_ee) . ")";
 						
-						$sss_contribution["ee"] = $sss_contribution["ee"] - $total_previous_cutoff_sss_ee;
-						$sss_contribution["er"] = $sss_contribution["er"] - $total_previous_cutoff_sss_er;
-						$sss_contribution["ec"] = $sss_contribution["ec"] - $total_previous_cutoff_sss_ec;
+						$sss_contribution["ee"] = round($sss_contribution["ee"] - $total_previous_cutoff_sss_ee,2);
+						$sss_contribution["er"] = round($sss_contribution["er"] - $total_previous_cutoff_sss_er,2);
+						$sss_contribution["ec"] = round($sss_contribution["ec"] - $total_previous_cutoff_sss_ec,2);
 
 						$last_cutoff->sss_salary;
 					}
@@ -4676,8 +4676,8 @@ class Payroll2
 				}
 				else
 				{
-					$philhealth_contribution["ee"] = $philhealth_contribution["ee"] / $divisor;
-					$philhealth_contribution["er"] = $philhealth_contribution["er"] / $divisor;
+					$philhealth_contribution["ee"] = round($philhealth_contribution["ee"] / $divisor,2);
+					$philhealth_contribution["er"] = round($philhealth_contribution["er"] / $divisor,2);
 				}
 			}
 			else
@@ -4688,8 +4688,8 @@ class Payroll2
 				{
 					$philhealth_reference_amount = $philhealth_declared;
 					$philhealth_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
-					$philhealth_contribution["ee"] = $philhealth_contribution["ee"];
-					$philhealth_contribution["er"] = $philhealth_contribution["er"];
+					$philhealth_contribution["ee"] = round($philhealth_contribution["ee"],2);
+					$philhealth_contribution["er"] = round($philhealth_contribution["er"],2);
 				}
 				else
 				{
@@ -4754,8 +4754,8 @@ class Payroll2
 						$philhealth_contribution = Payroll2::philhealth_contribution_update_2018($philhealth_reference_amount);
 						$philhealth_description .= "<br> New PHILHEALTH Bracket falls to " . payroll_currency($philhealth_contribution["ee"]);
 						$philhealth_description .= "<br> NEW BRACKET (" . payroll_currency($philhealth_contribution["ee"]) . ") LESS PREVIOUS CUTOFF (" . payroll_currency($total_previous_cutoff_philhealth_ee) . ")";
-						$philhealth_contribution["ee"] = $philhealth_contribution["ee"] - $total_previous_cutoff_philhealth_ee;
-						$philhealth_contribution["er"] = $philhealth_contribution["er"] - $total_previous_cutoff_philhealth_er;
+						$philhealth_contribution["ee"] = round($philhealth_contribution["ee"] - $total_previous_cutoff_philhealth_ee,2);
+						$philhealth_contribution["er"] = round($philhealth_contribution["er"] - $total_previous_cutoff_philhealth_er,2);
 						$last_cutoff->phihealth_salary;
 					}
 					else
@@ -4841,8 +4841,8 @@ class Payroll2
 			}
 			else
 			{
-				$pagibig_contribution["ee"] = $pagibig_contribution["ee"] / $divisor;
-				$pagibig_contribution["er"] = @($pagibig_tbl["payroll_pagibig_er_share"] / $divisor);
+				$pagibig_contribution["ee"] = round($pagibig_contribution["ee"] / $divisor,2);
+				$pagibig_contribution["er"] = round(@($pagibig_tbl["payroll_pagibig_er_share"] / $divisor),2);
 			}
 		}
 		else
@@ -4852,8 +4852,8 @@ class Payroll2
 			if($pagibig_period == code_to_word($period_count))
 			{
 				$pagibig_description .= "<br> This cutoff is " .  code_to_word($period_count) . ".";
-				$pagibig_contribution["ee"] = $pagibig_contribution["ee"];
-				$pagibig_contribution["er"] = $pagibig_tbl["payroll_pagibig_er_share"];
+				$pagibig_contribution["ee"] = round($pagibig_contribution["ee"],2);
+				$pagibig_contribution["er"] = round($pagibig_tbl["payroll_pagibig_er_share"],2);
 			}
 			else
 			{

@@ -49,7 +49,8 @@ class Transaction
             $customer = Customer::get_info($shop_id, $customer_id);
             if($customer)
             {
-                $customer_name = ucwords($customer->first_name." ".$customer->middle_name." ".$customer->last_name);
+                $slot_no = Tbl_mlm_slot::where("slot_owner", $customer_id)->value("slot_no");
+                $customer_name = "Used By Customer - ".ucwords($customer->first_name." ".$customer->middle_name." ".$customer->last_name) ;
             }
         }
         return $customer_name;

@@ -540,7 +540,7 @@ class ShopMemberController extends Shop
     
         $demo_info["explode_email"] = explode("@", $demo_info['demo_email']);
 
-        Mail::send('emails.demo_request',$demo_info, function($message) use ($demo_info)
+        Mail::send('emails.Demo_request',$demo_info, function($message) use ($demo_info)
         {
            $message->from($demo_info["explode_email"][0] . '@press-iq.com',$demo_info['demo_email']);
            $message->to("marketing@press-iq.com");  
@@ -548,6 +548,22 @@ class ShopMemberController extends Shop
         });
         Session::flash('Demo_message', 'Demo Request Successfully Sent!');
         return Redirect::back();  
+    }
+
+    public function send_newsletter()
+    {
+        $newsletter_info["newsletter_email"]       =request('newsletter');
+        $newsletter_info["subject"]                ="NewsLetter";
+
+        $newsletter_info["explode_email"] = explode("@", $newsletter_info['newsletter_email']);
+
+        Mail::send('emails.newsletter_email',$newsletter_info, function($message) use ($newsletter_info)
+        {
+           $message->from($newsletter_info["explode_email"][0] . '@press-iq.com',$newsletter_info['newsletter_email']);
+           $message->to("oliverbacsal@gmail.com");
+           $message->subject($newsletter_info['subject']);  
+        });
+        return Redirect::back(); 
     }
 
     public function press_release_save_as_draft(Request $request)
@@ -1469,6 +1485,28 @@ class ShopMemberController extends Shop
     }
     /*Press Release*/
 
+    public function send_contact_us_p4ward()
+    {
+        $p4ward_contactus["contactus_first_name"]         =request('contactus_first_name');
+        $p4ward_contactus["contactus_last_name"]          =request('contactus_last_name');
+        $p4ward_contactus["contactus_phone_number"]       =request('contactus_phone_number');
+        $p4ward_contactus["contactus_subject"]            =request('contactus_subject');
+        $p4ward_contactus["contactus_email"]              =request('contactus_email');
+        $p4ward_contactus["contactus_message"]            =request('contactus_message');
+        $p4ward_contactus["contactus_to"]                 =request('contactus_to');
+
+        $p4ward_contactus["explode_email"] = explode("@", $p4ward_contactus['contactus_email']);
+
+        Mail::send('email.contact_us',$p4ward_contactus, function($message) use ($p4ward_contactus)
+        {
+            $message->from($p4ward_contactus["explode_email"][0] . '@p4ward.com',$p4ward_contactus['contactus_email']);
+            $message->to("admin@p4wardph.com");  
+            $message->subject($p4ward_contactus['contactus_subject']);
+           
+        });
+        Session::flash('message_concern_p4ward', 'Message Successfully Sent!');
+        return Redirect::to('/#contactus');  
+    }
 
     public function getEventDetails(Request $request)
     {

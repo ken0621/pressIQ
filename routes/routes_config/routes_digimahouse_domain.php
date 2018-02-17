@@ -57,6 +57,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/payment_success', 'Shop\ShopItemPaymentController@payment_success'); //MARK FIGS
 	Route::get('/replicated', 'Shop\ShopAboutController@replicated'); //MARK FIGS
 	Route::get('/terms_and_conditions', 'Shop\ShopAboutController@terms_and_conditions'); //MARK FIGS
+	Route::any('/contact_us/send', 'Shop\ShopMemberController@send_contact_us_p4ward');
 
 
 
@@ -66,6 +67,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::post('/contactus', 'Shop\ShopContactController@contact_us');
 	Route::any('/contactus/send', 'Shop\ShopMemberController@send_contact_us');
 	Route::any('/demo/send', 	  'Shop\ShopMemberController@send_demo');
+	Route::any('/newsletter/send', 	  'Shop\ShopMemberController@send_newsletter');
 	Route::any('/sign_up', 'Shop\ShopRegisterController@press_signup'); //PRESS RELEASE
 	Route::get('/pressuser', 'Shop\ShopMemberController@pressuser'); //PRESS RELEASE
 	Route::get('/pressuser/mypressrelease/pressrelease/view/{pid}', 'Shop\ShopMemberController@pressuser_view'); //PRESS RELEASE

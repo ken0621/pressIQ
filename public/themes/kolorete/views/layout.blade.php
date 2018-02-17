@@ -251,5 +251,10 @@
             })
         </script>
         @yield("js")
+        <script> 
+          $(window).load(function() { 
+            $.fn.lightspeedBox(); 
+          }); 
+        </script> 
     </body>
 </html>

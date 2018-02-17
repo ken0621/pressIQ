@@ -7,8 +7,10 @@
 				<div class="col-md-6">
 					<!-- PRODUCT IMAGE -->
 					<div class="prod-image-container">
-						<img class="single-product-img" src="{{ get_product_first_image($product) }}">
-					</div>
+						<a class="lsb-preview" href="{{ get_product_first_image($product) }}">
+							<img class="single-product-img" src="{{ get_product_first_image($product) }}">
+						</a>
+					</div>	
 				</div>
 				<div class="col-md-6">
 					<div class="purchase-details-container">

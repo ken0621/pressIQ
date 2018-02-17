@@ -12,17 +12,13 @@
             <table>
                 <tr>
                     <th style="width: 30%;">Email From</th>
-                    <th style="width: 30%;">Header</th>
-                    <th style="width: 30%;">Content</th>
-                    <th style="width: 30%;">Boilerplate</th>
-                    <th style="width: 30%;">Action</th>
+                    <th style="width: 60%;">Header</th>
+                    <th style="width: 60%;">Action</th>
                     @foreach($_email as $email)
                     <tr>
-                        <td style="width: 20%;">{{$email->pr_from}}</td>
-                        <td style="width: 20%;">{{$email->pr_headline}}</td>
-                        <td style="width: 20%;">{!!$email->pr_content!!}</td>
-                        <td style="width: 20%;">{!!$email->pr_boiler_content!!}</td>
-                        <td style="width: 20%;">
+                        <td style="width: 30%;">{{$email->pr_from}}</td>
+                        <td style="width: 60%;">{{$email->pr_headline}}</td>
+                        <td style="width: 60%;">
                             <a href="/pressadmin/email_edit/{{$email->pr_id}}"><button type="button"  class="btn btn-warning center">
                             <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button>
 

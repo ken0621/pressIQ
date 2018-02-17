@@ -435,19 +435,19 @@ class ShopMemberController extends Shop
                     DB::table('tbl_pressiq_press_releases')
                         ->where('pr_id', session('pr_edit'))
                         ->update([
-                        'pr_type'          =>request('pr_type'),
-                        'pr_headline'      =>request('pr_headline'),
-                        'pr_content'       =>request('pr_content'),
-                        'pr_boiler_content'=>request('pr_boiler_content'),
-                        'pr_from'          =>session('user_email'),
-                        'pr_to'            =>request('pr_to'),
-                        'pr_status'        =>"Sent",
-                        'pr_date_sent'     =>$date,
-                        'pr_sender_name'   =>session('user_first_name').' '.session('user_last_name'),
-                        'pr_receiver_name' =>request('recipient_name_only'),
-                        'pr_co_name'       =>session('user_company_name'),
-                        'pr_co_img'        =>session('user_company_image'),
-                        'pr_send_limit'    =>request('hidden_number'),
+                        'pr_type'           =>request('pr_type'),
+                        'pr_headline'       =>request('pr_headline'),
+                        'pr_content'        =>request('pr_content'),
+                        'pr_boiler_content' =>request('pr_boiler_content'),
+                        'pr_from'           =>session('user_email'),
+                        'pr_to'             =>request('pr_to'),
+                        'pr_status'         =>"Sent",
+                        'pr_date_sent'      =>$date,
+                        'pr_sender_name'    =>session('user_first_name').' '.session('user_last_name'),
+                        'pr_receiver_name'  =>request('recipient_name_only'),
+                        'pr_co_name'        =>session('user_company_name'),
+                        'pr_co_img'         =>session('user_company_image'),
+                        'pr_send_limit'     =>request('hidden_number'),
                         ]);
                     Session::forget('pr_edit');
                     Session::flash('email_sent', 'Email Successfully Sent!');
@@ -466,38 +466,27 @@ class ShopMemberController extends Shop
             return view("press_user.press_user_pressrelease", $data);
         }
     }
-    public function pressuser_pressrelease_recipient_search(Request $request)
-    {  
-     
-      $search_key = $request->search_key;
-      $data['_recipient'] = Tbl_press_release_recipient::where('name','like','%'.$search_key.'%')
-                            ->Orwhere('company_name','like','%'.$search_key.'%')
-                            ->Orwhere('position','like','%'.$search_key.'   %')
-                            ->get();
-      return view("press_user.search_recipient", $data);
-    }
 
     public function send($pr_info)
     {
-        dd('Sorry, Website under Construction!');
+        // dd('Sorry, Website under Construction!');
 
         // $campaigns = count(tbl_pressiq_press_releases::where('pr_from', session('user_email')->get()));
         // $limit     = count(tbl_pressiq_press_releases::where('user_membership',session('user_email')->get()));    
   
+        $to  = explode(",", $pr_info['pr_to']);
+        $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
 
-        // $to  = explode(",", $pr_info['pr_to']);
-        // $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
+        foreach ($to as $pr_info['pr_to']) 
+        {
 
-        // foreach ($to as $pr_info['pr_to']) 
-        // {
-
-        //     Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
-        //     {
-        //         $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
-        //         $message->to($pr_info['pr_to']);
-        //         $message->subject($pr_info["pr_headline"]);
-        //     });
-        // }
+            Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
+            {
+                $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
+                $message->to($pr_info['pr_to']);
+                $message->subject($pr_info["pr_headline"]);
+            });
+        }
     }  
    
     public function send_contact_us()
@@ -659,6 +648,17 @@ class ShopMemberController extends Shop
         {
             return Redirect::to("/"); 
         }
+    }
+
+    public function pressuser_pressrelease_recipient_search(Request $request)
+    {  
+     
+      $search_key = $request->search_key;
+      $data['_recipient'] = Tbl_press_release_recipient::where('name','like','%'.$search_key.'%')
+                            ->Orwhere('company_name','like','%'.$search_key.'%')
+                            ->Orwhere('position','like','%'.$search_key.'   %')
+                            ->get();
+      return view("press_user.search_recipient", $data);
     }
 
     public function press_user_manage_user()
@@ -1139,7 +1139,6 @@ class ShopMemberController extends Shop
         {   
             return Redirect::to("/"); 
         }
-      
     }
 
     public function mediacontacts_search(Request $request)
@@ -1209,7 +1208,6 @@ class ShopMemberController extends Shop
 
     public function manage_user()
     {
-        // dd(session("edit_user"));
         $data['_user'] = Tbl_pressiq_user::where('user_level',2)
                         ->orderByRaw('user_date_created DESC')
                         ->get();
@@ -1284,7 +1282,8 @@ class ShopMemberController extends Shop
         session::flush();
         $_user_data = DB::table('tbl_pressiq_user')->where('user_id',$id)->get();
         
-        foreach ($_user_data as $user_data) {
+        foreach ($_user_data as $user_data) 
+        {
             # code...
         }
         Session::put('user_email', $user_data->user_email);
@@ -1343,7 +1342,7 @@ class ShopMemberController extends Shop
     {   
 
         $data['_email'] = Tbl_pressiq_press_releases::orderByRaw('pr_date_sent DESC')
-                          ->paginate(5);
+                          ->paginate(10);
 
         if(Session::exists('user_email'))
         {
@@ -1390,22 +1389,24 @@ class ShopMemberController extends Shop
 
      public function importExcel(Request $request)     
     {  
-        if($request->hasFile('import_file'))
+
+        if($request->hasFile('import_file'))          
         {
             Excel::load($request->file('import_file')->getRealPath(), function ($reader) 
             {
-                foreach ($reader->toArray() as $key => $row) 
+                foreach ($reader->toArray() as $key => $rows) 
                 {
-                    $data['research_email_address']  = $row['research_email_address'];
-                    $data['company_name']            = $row['company_name'];
-                    $data['name']                    = $row['name'];
-                    $data['position']                = $row['position'];
-                    $data['title_of_journalist']     = $row['title_of_journalist'];
-                    $data['country']                 = $row['country'];
-                    $data['industry_type']           = $row['industry_type'];
-                    $data['website']                 = $row['website'];
-                    $data['description']             = $row['description'];
-                    $data['media_type']              = $row['media_type'];
+
+                    $data['research_email_address']  = $row['research_email_address'] != null ? $row['research_email_address']:'';
+                    $data['company_name']            = $row['company_name'] != null ? $row['company_name']:'';
+                    $data['name']                    = $row['name'] != null ? $row['name']:'';
+                    $data['position']                = $row['position'] != null ? $row['position']:'';
+                    $data['title_of_journalist']     = $row['title_of_journalist'] != null ? $row['title_of_journalist']:'';
+                    $data['country']                 = $row['country'] != null ? $row['country']:'';
+                    $data['industry_type']           = $row['industry_type'] != null ? $row['industry_type']:'';
+                    $data['website']                 = $row['website'] != null ? $row['website']:'';
+                    $data['description']             = $row['description'] != null ? $row['description']:'';
+                    $data['media_type']              = $row['media_type'] != null ? $row['media_type']:'';
 
                     if(!empty($data)) 
                     {

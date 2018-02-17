@@ -15,7 +15,6 @@
                <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Create New Release</button>
                <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Choose Recipients</button>
                <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Send Release</button>
-               <!-- <button class="tablinks" onclick="openCity(event, 'summary')" id="">Summary</button> -->
             </div>
            
             <div class="press-release-content">
@@ -268,7 +267,6 @@
        evt.currentTarget.className += " active";
    }
    
-   // Get the element with id="defaultOpen" and click on it
    document.getElementById("defaultOpen").click();
    
    $(".chosen-select").chosen({disable_search_threshold: 10});
@@ -279,12 +277,11 @@
 <script src="/email_assets/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
 
 <script>
-
   $('#button_load').click(function()
   {
     $('#img_load').show(); 
      $.ajax({})
-   });
+  });
 
   $('#prev_btn').click(function()
   {
@@ -350,8 +347,7 @@ default_link_target: "_blank",
 media_live_embeds: true,
 plugins: ["autolink lists image charmap print preview anchor","visualblocks code","insertdatetime table contextmenu paste imagetools", "wordcount", "media", "link"],
 toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | image link | preview',
-   
-     // we override default upload handler to simulate successful upload
+
      images_upload_handler: function (blobInfo, success, failure) 
      {
        var xhr, formData;

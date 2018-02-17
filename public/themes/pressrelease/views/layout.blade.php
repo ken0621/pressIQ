@@ -155,7 +155,6 @@
                             <p class="footer-title">OFFICES</p>
                         </div>
                         <div><p>HONG KONG</p></div>
-                      {{--   <a href="/newsroom"><p>NEWS ROOM</p></a> --}}
                         <div><p>PHILIPPINES</p></div>
                         <div><p>ATLANTA</p></div>
                     </div>

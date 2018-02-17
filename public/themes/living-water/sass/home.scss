@@ -55,39 +55,74 @@ body{
 	padding-bottom: 50px;
 	.left-container
 	{
-		.icon-container
+		.title-container
 		{
-			margin-left: 20px;
-			vertical-align: middle;
-			img
+			@media screen and (max-width: 425px)
 			{
-				width: 85%;
+				text-align: center;
 			}
-		}
-		.title
-		{
+			.icon-container
+			{
+				margin-left: 20px;
+				vertical-align: middle;
+				img
+				{
+					width: 85%;
+					@media screen and (max-width: 375px)
+					{
+						width: 60%;
+					}
+				}
+			}
+			.title
+			{
 
-			font-family: 'PT Serif', serif;
-			color: #474747;
-			font-weight: 700;
-			font-size: 25px;
-		}
-		span
-		{
-			vertical-align: middle;
-			display: inline-block;
-			margin-bottom: 20px;
+				font-family: 'PT Serif', serif;
+				color: #474747;
+				font-weight: 700;
+				font-size: 25px;
+				@media screen and (max-width: 375px)
+				{
+					font-size: 20px;
+				}
+				@media screen and (max-width: 320px)
+				{
+					font-size: 18px;
+				}
+			}
+			span
+			{
+				vertical-align: middle;
+				display: inline-block;
+				margin-bottom: 20px;
+				@media screen and (max-width: 768px)
+				{
+					margin-bottom: 0px;
+				}
+			}
 		}
 		.description-container
 		{
 			font-family: 'PT Sans', sans-serif;
 			color: #575757;
 			padding: 10px 0 0 20px;
+			@media screen and (max-width: 425px)
+			{
+				padding-left: 0px;
+			}
+			@media screen and (max-width: 320px)
+			{
+				font-size: 13px;
+			}
 		}
 		.button-container
 		{
 			margin-left: 20px;
 			margin-top: 20px;
+			@media screen and (max-width: 425px)
+			{
+				margin-left: 0px;
+			}
 			button
 			{
 				background-color: #e0e0e0;
@@ -121,6 +156,13 @@ body{
 			{
 				width: 50%;
 			}
+			@media screen and (max-width: 425px)
+			{
+				img
+				{
+					width: 100%;
+				}
+			}
 		}
 	}
 }
@@ -131,7 +173,7 @@ body{
 	.title-container
 	{
 		text-align: center;
-		padding-bottom: 10px;
+		padding-bottom: 20px;
 		.icon-container
 		{
 			margin-left: 20px;
@@ -139,6 +181,10 @@ body{
 			img
 			{
 				width: 85%;
+				@media screen and (max-width: 375px)
+				{
+					width: 60%;
+				}
 			}
 		}
 		.title
@@ -148,6 +194,14 @@ body{
 			color: #474747;
 			font-weight: 700;
 			font-size: 25px;
+			@media screen and (max-width: 375px)
+			{
+				font-size: 20px;
+			}
+			@media screen and (max-width: 320px)
+			{
+				font-size: 18px;
+			}
 		}
 		span
 		{
@@ -160,15 +214,30 @@ body{
 	{
 		width: 65%; 
 		margin: auto;
+		@media screen and (max-width: 425px)
+		{
+			width: 90%;
+		}
+		@media screen and (max-width: 425px)
+		{
+			width: 100%;
+		}
 		.process-holder
 		{
 			background-color: #f6f6f6;
 			text-align: center;
 			padding: 25px;
+			@media screen and (max-width: 375px)
+			{
+				img
+				{
+					width: 100%;
+				}
+			}
 		}
 		.details-container	
 		{
-			padding: 0 25px;
+			padding: 0 25px 20px 25px;;
 			.title
 			{
 				font-family: 'PT Serif', serif;
@@ -191,54 +260,80 @@ body{
 {
 	background-color: #f6f6f6;
 	padding: 50px 0;
-	.title-container
-	{
-		text-align: center;
-		padding-bottom: 10px;
-		.icon-container
-		{
-			margin-left: 20px;
-			vertical-align: middle;
-			img
-			{
-				width: 85%;
-			}
-		}
-		.title
-		{
-
-			font-family: 'PT Serif', serif;
-			color: #474747;
-			font-weight: 700;
-			font-size: 25px;
-		}
-		span
-		{
-			vertical-align: middle;
-			display: inline-block;
-			margin-bottom: 20px;
-		}
-	}
 	.left-container
 	{
 		text-align: center;
-		padding-top: 20px;
 		.image-holder
 		{
 			img
 			{
-				width: 80%;
+				width: 70%;
+			}
+			@media screen and (max-width: 425px)
+			{
+				img
+				{
+					width: 100%;
+				}
 			}
 		}
 	}
 	.right-container
 	{
+		margin-top: 20px;
+		.title-container
+		{
+			text-align: center;
+			.icon-container
+			{
+				margin-left: 20px;
+				vertical-align: middle;
+				img
+				{
+					width: 85%;
+					@media screen and (max-width: 375px)
+					{
+						width: 60%;
+					}
+				}
+			}
+			.title
+			{
+
+				font-family: 'PT Serif', serif;
+				color: #474747;
+				font-weight: 700;
+				font-size: 25px;
+				@media screen and (max-width: 375px)
+				{
+					font-size: 20px;
+				}
+				@media screen and (max-width: 320px)
+				{
+					font-size: 17px;
+				}
+			}
+			span
+			{
+				vertical-align: middle;
+				display: inline-block;
+				margin-bottom: 20px;
+				@media screen and (max-width: 768px)
+				{
+					margin-bottom: 0px;
+				}
+			}
+		}
 		.description-container
 		{
 			font-size: 17px;
 			font-family: 'PT Sans', sans-serif;
 			color: #575757;
-			padding: 30px 0 0 0;
+			margin-top: 20px;
+			@media screen and (max-width: 320px)
+			{
+				font-size: 15px;
+			}
 			ul
 			{
 				li
@@ -282,7 +377,10 @@ body{
 	padding: 50px 0;
 	.title-container
 	{
-		padding-bottom: 10px;
+		@media screen and (max-width: 425px)
+		{
+			text-align: center;
+		}
 		.icon-container
 		{
 			margin-left: 20px;
@@ -290,6 +388,10 @@ body{
 			img
 			{
 				width: 85%;
+				@media screen and (max-width: 375px)
+				{
+					width: 60%;
+				}
 			}
 		}
 		.title
@@ -299,6 +401,14 @@ body{
 			color: #474747;
 			font-weight: 700;
 			font-size: 25px;
+			@media screen and (max-width: 375px)
+			{
+				font-size: 20px;
+			}
+			@media screen and (max-width: 320px)
+			{
+				font-size: 18px;
+			}
 		}
 		span
 		{
@@ -316,6 +426,10 @@ body{
 		font-size: 18px;
 		width: 100%;
 		border: 1px solid #919191;
+		@media screen and (max-width: 768px)
+		{
+			margin-left: 0px;
+		}
 	}
 	textarea
 	{
@@ -330,11 +444,19 @@ body{
 		min-height: 150px;
 		min-width: 100%;
 		border: 1px solid #919191;
+		@media screen and (max-width: 768px)
+		{
+			margin-left: 0px;
+		}
 	}
 	.button-container
 	{
 		margin-left: 20px;
 		margin-top: 10px;
+		@media screen and (max-width: 768px)
+		{
+			margin-left: 0px;
+		}
 		button
 		{
 			background-color: #e0e0e0;
@@ -356,6 +478,14 @@ body{
 	{
 		margin-left: 40px;
 		margin-top: 50px;
+		@media screen and (max-width: 768px)
+		{
+			margin-left: 0px;
+		}
+		@media screen and (max-width: 375px)
+		{
+			text-align: center
+		}
 		.title
 		{
 			font-size: 25px;
@@ -363,12 +493,20 @@ body{
 			font-family: 'PT Serif', serif; 
 			color: #474747;
 			margin-top: 20px;
+			@media screen and (max-width: 375px)
+			{
+				font-size: 20px;
+			}
 		}
 		.details-container
 		{
 			.icon
 			{
 				font-size: 25px;
+				@media screen and (max-width: 375px)
+				{
+					font-size: 20px;
+				}
 			}
 			.details
 			{
@@ -376,6 +514,10 @@ body{
 				color: #575757;
 				padding-left: 10px;
 				font-size: 20px;
+				@media screen and (max-width: 375px)
+				{
+					font-size: 15px;
+				}
 			}
 			span
 			{

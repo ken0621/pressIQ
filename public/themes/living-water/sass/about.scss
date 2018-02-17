@@ -3,39 +3,105 @@
 	padding: 30px 0 0 0;
 	.about-living-water-container
 	{
-		.title-container
+		.left-container
 		{
-			text-align: left;
-			.icon-container
+			.title-container
 			{
-				margin-left: 20px;
-				vertical-align: middle;
-				img
+				@media screen and (max-width: 425px)
 				{
-					width: 85%;
+					text-align: center;
+				}
+				.icon-container
+				{
+					margin-left: 20px;
+					vertical-align: middle;
+					img
+					{
+						width: 85%;
+						@media screen and (max-width: 375px)
+						{
+							width: 60%;
+						}
+					}
+				}
+				.title
+				{
+
+					font-family: 'PT Serif', serif;
+					color: #474747;
+					font-weight: 700;
+					font-size: 25px;
+					@media screen and (max-width: 375px)
+					{
+						font-size: 20px;
+					}
+					@media screen and (max-width: 320px)
+					{
+						font-size: 18px;
+					}
+				}
+				span
+				{
+					vertical-align: middle;
+					display: inline-block;
+					margin-bottom: 20px;
+					@media screen and (max-width: 768px)
+					{
+						margin-bottom: 0px;
+					}
 				}
 			}
-			.title
+			.description-container-1
 			{
-
-				font-family: 'PT Serif', serif;
-				color: #474747;
-				font-weight: 700;
-				font-size: 25px;
-			}
-			span
-			{
-				vertical-align: middle;
-				display: inline-block;
-				margin-bottom: 20px;
+				font-family: 'PT Sans', sans-serif;
+				color: #575757;
+				padding: 10px 0 0 20px;
+				@media screen and (max-width: 425px)
+				{
+					padding-left: 0px;
+				}
+				@media screen and (max-width: 320px)
+				{
+					font-size: 13px;
+				}
 			}
 		}
-		.info-container
+		.description-container-2
 		{
-			padding-left: 20px;
 			font-family: 'PT Sans', sans-serif;
 			color: #575757;
-			padding-left: 20px;
+			padding: 10px 0 0 20px;
+			@media screen and (max-width: 425px)
+			{
+				padding-left: 0px;
+			}
+			@media screen and (max-width: 320px)
+			{
+				font-size: 13px;
+			}
+		}
+		.right-container
+		{
+			text-align: center;
+			padding-top: 30px;
+			@media screen and (max-width: 768px)
+			{
+				padding-top: 0px;
+			}
+			.image-holder
+			{
+				img
+				{
+					width: 50%;
+				}
+				@media screen and (max-width: 425px)
+				{
+					img
+					{
+						width: 100%;
+					}
+				}
+			}
 		}
 	}
 	.mission-vision-container
@@ -56,10 +122,15 @@
 				margin-right: 5px;
 				vertical-align: middle;
 				color: #fff;
+				@media screen and (max-width: 425px)
+				{
+					margin-left: 0px;
+				}
 				img
 				{
 					width: 30px;
 				}
+
 			}
 			.title
 			{
@@ -74,6 +145,10 @@
 				vertical-align: middle;
 				display: inline-block;
 				margin-bottom: 20px;
+				@media screen and (max-width: 768px)
+				{
+					margin-bottom: 0px;
+				}
 			}
 		}
 		.info-container
@@ -82,6 +157,14 @@
 			font-family: 'PT Sans', sans-serif;
 			color: #fff;
 			padding-left: 20px;
+			@media screen and (max-width: 768px)
+			{
+				margin-bottom: 20px;
+			}
+			@media screen and (max-width: 425px)
+			{
+				padding-left: 0px;
+			}
 		}
 	}
 	

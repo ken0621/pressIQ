@@ -1485,6 +1485,29 @@ class ShopMemberController extends Shop
     }
     /*Press Release*/
 
+    public function send_contact_us_p4ward()
+    {
+        $p4ward_contactus["contactus_first_name"]         =request('contactus_first_name');
+        $p4ward_contactus["contactus_last_name"]          =request('contactus_last_name');
+        $p4ward_contactus["contactus_phone_number"]       =request('contactus_phone_number');
+        $p4ward_contactus["contactus_subject"]            =request('contactus_subject');
+        $p4ward_contactus["contactus_email"]              =request('contactus_email');
+        $p4ward_contactus["contactus_message"]            =request('contactus_message');
+        $p4ward_contactus["contactus_to"]                 =request('contactus_to');
+
+        Mail::send('email.contact_us',$p4ward_contactus, function($message) use ($p4ward_contactus)
+        {
+            $message->from($p4ward_contactus['contactus_email']);
+            $message->to("sample@gmail.com");  
+            $message->subject($p4ward_contactus['contactus_subject']);
+           
+        });
+        Session::flash('message_concern_p4ward', 'Message Successfully Sent!');
+        return Redirect::to('/#contactus');  
+
+
+    }
+
 
     public function getEventDetails(Request $request)
     {

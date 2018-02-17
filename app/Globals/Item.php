@@ -2056,4 +2056,24 @@ class Item
         // dd($return);
         return $return;
     }
+    public static function import_create_bundle($bundle_id, $_item_id = array())
+    {
+        $date = Carbon::now();
+        if(count($_item_id) > 0)
+        {
+            $ins = null;
+            foreach ($_item_id as $key => $value) 
+            {
+                $ins[$key]['bundle_bundle_id'] = $bundle_id;
+                $ins[$key]['bundle_item_id'] = $key;
+                $ins[$key]['bundle_qty'] = $value;
+                $ins[$key]['created_at'] = $date;
+            }
+            if(count($ins) > 0)
+            {
+                Tbl_item_bundle::insert($ins);
+            }
+        }
+
+    }
 }

@@ -74,11 +74,9 @@ class ImportController extends Member
 		return view('member.import.item_import');
 	}
 	public function getItemBundle()
-	{		
-		$item[1] = 2;
-		$item[2] = 1;
-		$array[56] = $item;
-		dd($array); 
+	{
+		Session::forget("bundle_id");
+		Session::forget("item_bundle_id");
 		return view('member.import.item_import_bundle');
 	}
 	public function getItemBundleTemplate()
@@ -374,15 +372,7 @@ class ImportController extends Member
 								$item_id 		 = Tbl_item::insertGetId($insert);
 								if($data['type'] == "BUNDLE")
 								{
-									/*CHECK IF HAVE CURRENT SESSIONS*/
-									if(Session::get("bundle_id") && Session::get("item_bundle_id"))
-									{
-										/*INSERT BUNDLE HERE*/
-									}
-									else
-									{
-										Session::put("bundle_id", $item_id);
-									}
+									Session::put("bundle_id", $item_id);
 								}
 								else
 								{
@@ -390,6 +380,17 @@ class ImportController extends Member
 									$item_array[$item_id] = $data['qty_in_bundle'];
 									Session::put("item_bundle_id", $item_array);
 								}
+
+								/*CHECK IF HAVE CURRENT SESSIONS*/
+								if(Session::get("item_bundle_id"))
+								{
+									/*INSERT BUNDLE HERE*/
+									Item::import_create_bundle(Session::get("bundle_id"),Session::get("item_bundle_id"));
+									Session::put("item_bundle_id",null);
+								}
+
+								$json["status"]		= "success";
+								$json["message"]	= "Success";
 							}
 						}
 						else

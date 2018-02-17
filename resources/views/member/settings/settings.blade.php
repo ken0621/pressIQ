@@ -11,8 +11,8 @@
 		<input type="hidden" name="settings_key[]" value="currency">
 		<select name="settings_value[]" class="form-control"> 
 			@foreach($currency as $cur)
-				<option value="{{$cur->iso}}">{{$cur->name}}</option>
-			@endforeach
+				<option value="{{$cur->iso}}" {{isset($_settings['currency']) ? ($_settings['currency'] == $cur->iso ? 'selected' : '') : ''}} >{{$cur->name}}</option>
+			@endforeach 
 		</select>
 	</div>
 <!-- End Currency Settings -->
@@ -23,7 +23,7 @@
 		<input type="hidden" name="settings_key[]" value="country">
 		<select name="settings_value[]" class="form-control">
 			@foreach($country as $cou)
-				<option value="{{$cou->country_name}}">{{$cou->country_name}}</option>
+				<option value="{{$cou->country_name}}" {{isset($_settings['country']) ? ($_settings['country'] == $cou->country_name ? 'selected' : '') : ''}}>{{$cou->country_name}}</option>
 			@endforeach
 		</select>
 	</div>
@@ -34,8 +34,8 @@
 		Require Item Serial
 		<input type="hidden" name="settings_key[]" value="item_serial">
 		<select name="settings_value[]" class="form-control">
-			<option value="enable">Enable</option>
-			<option value="disable">Disable</option>
+			<option value="enable" {{isset($_settings['item_serial']) ? ($_settings['item_serial'] == 'enable' ? 'selected' : '') : ''}}>Enable</option>
+			<option value="disable" {{isset($_settings['item_serial']) ? ($_settings['item_serial'] == 'disable' ? 'selected' : '') : ''}}>Disable</option>
 		</select>
 	</div>
 <!-- Item Serial Settings -->
@@ -47,16 +47,16 @@
 		Enable Debit Memo For Service Type transaction
 		<input type="hidden" name="settings_key[]" value="debit_memo">
 		<select name="settings_value[]" class="form-control">
-			<option value="enable">Enable</option>
-			<option value="disable">Disable</option>
+			<option value="enable"  {{isset($_settings['debit_memo']) ? ($_settings['debit_memo'] == 'enable' ? 'selected' : '') : ''}}>Enable</option>
+			<option value="disable"  {{isset($_settings['debit_memo']) ? ($_settings['debit_memo'] == 'disable' ? 'selected' : '') : ''}}>Disable</option>
 		</select>
 	</div>
 	<div class="settings" id="bad_order">
 		Enable Bad Oder for Replacing Item
 		<input type="hidden" name="settings_key[]" value="bad_order">
 		<select name="settings_value[]" class="form-control">
-			<option value="enable">Enable</option>
-			<option value="disable">Disable</option>
+			<option value="enable" {{isset($_settings['bad_order']) ? ($_settings['bad_order'] == 'enable' ? 'selected' : '') : ''}}>Enable</option>
+			<option value="disable" {{isset($_settings['bad_order']) ? ($_settings['bad_order'] == 'disable' ? 'selected' : '') : ''}}>Disable</option>
 		</select>
 	</div>
 <!-- Bad Order Settings -->
@@ -68,8 +68,8 @@
 		Use Product as Membership
 		<input type="hidden" name="settings_key[]" value="use_product_as_membership">
 		<select name="settings_value[]" class="form-control">
-			<option value="0">Disable</option>
-			<option value="1">Enable</option>
+			<option value="0"  {{isset($_settings['use_product_as_membership']) ? ($_settings['use_product_as_membership'] == '0' ? 'selected' : '') : ''}}>Disable</option>
+			<option value="1"  {{isset($_settings['use_product_as_membership']) ? ($_settings['use_product_as_membership'] == '1' ? 'selected' : '') : ''}}>Enable</option>
 		</select>
 	</div>
 
@@ -77,8 +77,8 @@
 		Enable Consume Inventory on Pending Order
 		<input type="hidden" name="settings_key[]" value="enable_consume_on_pending">
 		<select name="settings_value[]" class="form-control">
-			<option value="0">Disable</option>
-			<option value="1">Enable</option>
+			<option value="0"   {{isset($_settings['enable_consume_on_pending']) ? ($_settings['enable_consume_on_pending'] == '0' ? 'selected' : '') : ''}}>Disable</option>
+			<option value="1"   {{isset($_settings['enable_consume_on_pending']) ? ($_settings['enable_consume_on_pending'] == '1' ? 'selected' : '') : ''}}>Enable</option>
 		</select>
 	</div>
 <!-- Item Serial Settings -->
@@ -91,8 +91,8 @@
 		View Invoice in Product Orders
 		<input type="hidden" name="settings_key[]" value="enable_view_invoice">
 		<select name="settings_value[]" class="form-control">
-			<option value="0">Disable</option>
-			<option value="1">Enable</option>
+			<option value="0"  {{isset($_settings['enable_view_invoice']) ? ($_settings['enable_view_invoice'] == '0' ? 'selected' : '') : ''}}>Disable</option>
+			<option value="1"  {{isset($_settings['enable_view_invoice']) ? ($_settings['enable_view_invoice'] == '1' ? 'selected' : '') : ''}}>Enable</option>
 		</select>
 	</div>
 
@@ -103,8 +103,8 @@
 		Customer with Unit in Receive Payment
 		<input type="hidden" name="settings_key[]" value="customer_unit_receive_payment">
 		<select name="settings_value[]" class="form-control">
-			<option value="0">Disable</option>
-			<option value="1">Enable</option>
+			<option value="0" {{isset($_settings['customer_unit_receive_payment']) ? ($_settings['customer_unit_receive_payment'] == '0' ? 'selected' : '') : ''}}>Disable</option>
+			<option value="1" {{isset($_settings['customer_unit_receive_payment']) ? ($_settings['customer_unit_receive_payment'] == '1' ? 'selected' : '') : ''}}>Enable</option>
 		</select>
 	</div>
 
@@ -116,8 +116,8 @@
 		Warehouse Issuance Slip / Delivery Receipt
 		<input type="hidden" name="settings_key[]" value="customer_wis">
 		<select name="settings_value[]" class="form-control">
-			<option value="0">Disable</option>
-			<option value="1">Enable</option>
+			<option value="0" {{isset($_settings['customer_wis']) ? ($_settings['customer_wis'] == '0' ? 'selected' : '') : ''}}>Disable</option>
+			<option value="1" {{isset($_settings['customer_wis']) ? ($_settings['customer_wis'] == '1' ? 'selected' : '') : ''}}>Enable</option>
 		</select>
 	</div>
 
@@ -127,7 +127,27 @@
 		Allow Out of Stock
 		<input type="hidden" name="settings_key[]" value="out_of_stock">
 		<select name="settings_value[]" class="form-control">
-			<option value="1">Yes</option>
-			<option value="0">No</option>
+			<option value="1" {{isset($_settings['out_of_stock']) ? ($_settings['out_of_stock'] == '1' ? 'selected' : '') : ''}}>Yes</option>
+			<option value="0" {{isset($_settings['out_of_stock']) ? ($_settings['out_of_stock'] == '0' ? 'selected' : '') : ''}}>No</option>
+		</select>
+	</div>
+
+	<center>Notification</center>
+
+	<div class="settings" id="customer_wis">
+		Notify me on Notification bar
+		<input type="hidden" name="settings_key[]" value="notification_bar">
+		<select name="settings_value[]" class="form-control">
+			<option value="1" {{isset($_settings['notification_bar']) ? ($_settings['notification_bar'] == '1' ? 'selected' : '') : ''}}>Yes</option>
+			<option value="0" {{isset($_settings['notification_bar']) ? ($_settings['notification_bar'] == '0' ? 'selected' : '') : ''}}>No</option>
+		</select>
+	</div>
+
+	<div class="settings" id="customer_wis">
+		Popup Notification for Reorder Items
+		<input type="hidden" name="settings_key[]" value="reorder_item">
+		<select name="settings_value[]" class="form-control">
+			<option value="1" {{isset($_settings['reorder_item']) ? ($_settings['reorder_item'] == '1' ? 'selected' : '') : ''}}>Yes</option>
+			<option value="0" {{isset($_settings['reorder_item']) ? ($_settings['reorder_item'] == '0' ? 'selected' : '') : ''}}>No</option>
 		</select>
 	</div>

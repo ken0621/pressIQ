@@ -75,6 +75,13 @@ class SettingsController extends Member
         // Set your required data here
         $data['currency'] = Currency::get();
         $data['country'] =  Tbl_country::get();
+        $data["_old_settings"] = Tbl_settings::where("shop_id", $this->user_info->shop_id)->get();
+        $data['_settings'] = null;
+        foreach ($data['_old_settings'] as $key => $value) 
+        {
+            $data['_settings'][$value->settings_key] = $value->settings_value;
+        }
+
         // end
         return view('member.settings.settings', $data);
     }

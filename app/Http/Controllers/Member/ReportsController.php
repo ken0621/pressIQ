@@ -650,13 +650,10 @@ class ReportsController extends Member
 
         foreach($data['_item'] as $key=>$item)
         {
-            // $data['_item'][$key]->item_warehouse  = Tbl_item::warehouseInventory($item->shop_id, $item->item_id)
-            //                                         ->where("item_id", $item->item_id)
-            //                                         ->whereRaw("DATE(inventory_created) >= '".$data['from']."'")
-            //                                         ->whereRaw("DATE(inventory_created) <= '".$data['to']."'")
-            //                                         ->get();
             $data['_item'][$key]->item_warehouse = Item::item_inventory_report($item->shop_id, $item->item_id, $data['from'], $data['to']);
-        }   
+            $data['_item'][$key]->pending_transit = Item::get_transit_item($this->user_info->shop_id, $item->item_id, $data['from'], $data['to'])["pending_transit"];
+            $data['_item'][$key]->in_transit = Item::get_transit_item($this->user_info->shop_id, $item->item_id, $data['from'], $data['to'])["in_transit"];
+        } 
 
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
         if($report_type && !$load_view)

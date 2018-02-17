@@ -1,7 +1,7 @@
 <div class="report-container">
   <div class="panel panel-default panel-block panel-title-block panel-report load-data">
       <div class="panel-heading load-content">
-         @include('member.reports.report_header');
+         @include('member.reports.report_header')
          <div class="table-reponsive">
          		<table class="table table-condensed collaptable">
             <tr>
@@ -21,6 +21,8 @@
               @foreach($_warehouse as $key=>$warehouse)
                 <th>{{$warehouse->warehouse_name}}</th>
               @endforeach
+              <th>Pending For Transit</th>
+              <th>In Transit</th>
               <th>Total</th>
             </tr>
          		<tbody>
@@ -36,6 +38,8 @@
                   <td class="text-center">{{$item_wh->qty_on_hand}}</td>
                 @endforeach
                 @if(count($item->item_warehouse))
+                  <td class="text-center" nowrap>{{$item->pending_transit}}</td>
+                  <td class="text-center" nowrap>{{$item->in_transit}}</td>
                   <td class="text-center" nowrap>{{collect($item->item_warehouse)->sum('qty_on_hand')}}</td>
                 @endif
               </tr>

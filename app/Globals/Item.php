@@ -2074,6 +2074,30 @@ class Item
                 Tbl_item_bundle::insert($ins);
             }
         }
+    }
+    public static function get_transit_item($shop_id, $item_id, $date_from = '', $date_to = '')
+    {
+        $get_pending = Tbl_warehouse_inventory_record_log::transit()
+                                                 ->where("record_shop_id", $shop_id)
+                                                 ->where("record_item_id", $item_id)
+                                                 ->where("record_consume_ref_name","customer_wis");
 
+        $get_intransit = Tbl_warehouse_inventory_record_log::transit()
+                                                 ->where("record_shop_id", $shop_id)
+                                                 ->where("record_item_id", $item_id)
+                                                 ->where("record_consume_ref_name","customer_wis");
+        
+        // $return["pending_transit"] = 0;
+        // $return["in_transit"] = 0;
+        if($date_from && $date_to)
+        {
+            $get_pending = $get_pending->whereBetween('record_log_date_updated',[$date_from, $date_to]);
+            $get_intransit = $get_intransit->whereBetween('record_log_date_updated',[$date_from, $date_to]);
+        }
+        
+        $return['pending_transit'] = $get_pending->where("cust_wis_status","pending")->count();
+        $return['in_transit'] = $get_intransit->where("cust_wis_status","confirm")->count();
+
+        return $return;
     }
 }

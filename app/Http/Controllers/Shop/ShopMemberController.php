@@ -467,7 +467,7 @@ class ShopMemberController extends Shop
         }
     }
 
-    public function send($pr_info)
+    public function send($pr_info)        
     {
         dd('Sorry, Website under Construction!');
 
@@ -553,20 +553,20 @@ class ShopMemberController extends Shop
 
     public function press_release_save_as_draft(Request $request)
     {  
-        $pr_info["pr_type"]         =$request->pr_type; 
-        $pr_info["pr_headline"]     =$request->pr_headline;
-        $pr_info["pr_content"]      =$request->pr_content;
-        $pr_info["pr_boiler_content"]=$request->pr_boiler_content;
-        $pr_info["pr_from"]         =session('user_email');
-        $pr_info["pr_to"]           =$request->pr_to;
-        $pr_info["pr_status"]       ="Draft";
-        $pr_info["pr_date_sent"]    =Carbon::now();
-        $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
-        $pr_info["pr_receiver_name"]=request('recipient_name');
-        $pr_info["pr_co_name"]      =session('user_company_name');
-        $pr_info["pr_co_img"]       =session('user_company_image');
-        $pr_info["pr_type"]         =$request->pr_type;
-
+        $pr_info["pr_type"]             =$request->pr_type; 
+        $pr_info["pr_headline"]         =$request->pr_headline;
+        $pr_info["pr_content"]          =$request->pr_content;
+        $pr_info["pr_boiler_content"]   =$request->pr_boiler_content;
+        $pr_info["pr_from"]             =session('user_email');
+        $pr_info["pr_to"]               =$request->pr_to;
+        $pr_info["pr_status"]           ="Draft";
+        $pr_info["pr_date_sent"]        =Carbon::now();
+        $pr_info["pr_sender_name"]      =session('user_first_name').' '.session('user_last_name');
+        $pr_info["pr_receiver_name"]     =request('recipient_name');
+        $pr_info["pr_co_name"]          =session('user_company_name');
+        $pr_info["pr_co_img"]           =session('user_company_image');
+        $pr_info["pr_type"]             =$request->pr_type;
+ 
         if(Session::has('pr_edit'))
         {
             $date=Carbon::now();

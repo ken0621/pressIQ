@@ -8,6 +8,7 @@ use App\Globals\Customer;
 use App\Globals\Report;
 
 use App\Globals\BarcodeGenerator;
+use App\Globals\Transaction;
 use Redirect;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -130,9 +131,12 @@ class MLM_CodeControllerV2 extends Member
         {
             $record_log_id = $request->record_log_id;
 
-            foreach ($record_log_id as $key => $value) 
+            if ($record_log_id) 
             {
-                Item::disassemble_membership_kit($value);
+                foreach ($record_log_id as $key => $value) 
+                {
+                    Item::disassemble_membership_kit($value);
+                }
             }
             
             $return['status'] = 'success';
@@ -213,6 +217,10 @@ class MLM_CodeControllerV2 extends Member
             if($value->record_consume_ref_name == 'transaction_list')
             {
                 $data['_item_product_code'][$key]->used_by = 'Used By SLOT NUMBER-'.strtoupper($value->slot_no);
+                // if(!$value->slot_no)
+                // {
+                $data['_item_product_code'][$key]->used_by = Transaction::get_customer_name_transaction($value->record_consume_ref_id, $this->user_info->shop_id);
+                // }
             }
         }
 

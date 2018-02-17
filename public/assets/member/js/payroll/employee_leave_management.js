@@ -204,9 +204,9 @@ function employee_leave_management()
 		html += '<ul class="dropdown-menu" role="menu" aria-labelledby="menu-drop-down">';
 		html += '<li style="padding-left: 10px;" role="presentation" class="popup" link="/employee_request_leave_view/'+data.payroll_request_leave_id+'" size="lg"><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-search" aria-hidden="true"></i> &nbsp; View</a></li>';
 		html += '<li style="padding-left: 10px;" role="presentation" class="popup" link="/employee_request_leave_cancel/'+data.payroll_request_leave_id+'" size="sm"><a role="menuitem" tabindex="-1" href="#"><i class="fa fa-ban" aria-hidden="true"></i> &nbsp; Cancel</a></li>';
+			html += '<li style="padding-left: 10px;" link= size="sm"><a role="form" target="_blank" tabindex="-1" href="/employee_request_leave_export_pdf/'+data.payroll_request_leave_id+'"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;View PDF Form</a></li>';
 		html += '</ul></div></td>';
 		html += '</tr>';
-
 		return html;
 	}
 

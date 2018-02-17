@@ -367,16 +367,20 @@ class Customer_SaleReceiptController extends Member
                         $json["status"]         = "success-invoice";
                         if($button_action == "save-and-edit")
                         {
-                            //$json["redirect"]    = "/member/customer/sales_receipt?id=".$inv_id;
-                            $json["redirect"] = '/member/customer/sales_receipt/list';
+                            $json["redirect"]    = "/member/customer/sales_receipt?id=".$inv_id;
+                            //$json["redirect"] = '/member/customer/sales_receipt/list';
                         }
                         elseif($button_action == "save-and-new")
                         {
                             $json["redirect"]   = '/member/customer/sales_receipt';
                         }
-                        else
+                        elseif($button_action == "save-and-close")
                         {
                             $json["redirect"] = '/member/customer/sales_receipt/list';
+                        }
+                        elseif($button_action == "save-and-print")
+                        {
+                            $json["redirect"] = '/member/customer/customer_invoice_pdf/'.$inv_id;
                         }
                         Request::session()->flash('success', 'Sales Receipt Successfully Created');
                     }
@@ -685,6 +689,17 @@ class Customer_SaleReceiptController extends Member
                         {
                             $json["redirect"]   = '/member/customer/sales_receipt/list';
                         }
+
+                        $json["status"]         = "success-invoice";
+                        if($button_action == "save-and-edit")
+                        {
+                            $json["redirect"]    = "/member/customer/sales_receipt?id=".$inv_id;
+                        }
+                        elseif($button_action == "save-and-print")
+                        {
+                            $json["redirect"] = '/member/customer/customer_invoice_pdf/'.$inv_id;
+                        }
+
                         Request::session()->flash('success', 'Sales Receipt Successfully Updated');
                     }
 
@@ -722,6 +737,11 @@ class Customer_SaleReceiptController extends Member
     }
     public function invoice_view_pdf($inv_id)
     {
+        $date = date("F j, Y, g:i a");
+        $first_name         = $this->user_info->user_first_name;
+        $last_name         = $this->user_info->user_last_name;
+        $footer ='Printed by: '.$first_name.' '.$last_name.'           '.$date.'           ';
+
         $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
 
         $data["transaction_type"] = "Sales Receipt";
@@ -749,7 +769,7 @@ class Customer_SaleReceiptController extends Member
             }
         }
           $pdf = view('member.customer_invoice.invoice_pdf', $data);
-          return Pdf_global::show_pdf($pdf);
+          return Pdf_global::show_pdf($pdf, null, $footer);
     }
     /**
      * Show the form for creating a new resource.

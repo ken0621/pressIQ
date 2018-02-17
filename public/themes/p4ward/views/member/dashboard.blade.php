@@ -14,7 +14,7 @@
 	                <div class="join-container" style="background-image: url('/themes/{{ $shop_theme }}/img/nonmember-bg.jpg');">
 	                    <div class="btn btn-text">
 	                        <div class="text-header1">Join Us Now!</div>
-	                        <div class="text-header2">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<br>Aenean commodo ligula eget dolor.</div>
+	                        <div class="text-header2">"SUCCESS in achieving your dreams. SIGNIFICANCE is helping others achieve their dreams. This is an opportunity for you to be both. Because it's not just about you, it's about others."</div>
 	                    </div>
 	                    <div class="btn-container">
 	                        <!-- <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">BUY A KIT</button></a> -->
@@ -79,7 +79,7 @@
 					</div>
 				</div>
 				
-				<div class="square-containr">
+				{{-- <div class="square-containr">
 					<div class="title"> Reward Points</div>
 					<div class="sub-container">
 						<div class="chart-legend" style="max-height: auto;">
@@ -89,7 +89,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> --}}
 
 				<div class="square-container">
 					<div class="title">Enter Product Code</div>

@@ -3,6 +3,7 @@
 <form class="global-submit form-to-submit-transfer" role="form" action="{{$action}}" method="POST" >
     <input type="hidden" name="_token" value="{{csrf_token()}}">
     <input type="hidden" name="sir_id" value="{{$sir_id or ''}}">
+    <input type="hidden" name="action_button" class="button-action" value="">
     <input type="hidden" name="credit_memo_id" value="{{Request::input('id')}}" >
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
@@ -14,8 +15,21 @@
                     
                     </small>
                 </h1>
-                <a href="/member/customer/credit_memo/list" class="panel-buttons btn btn-custom-white pull-right">Cancel</a>
-                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save</button>
+                <!-- <a href="/member/customer/credit_memo/list" class="panel-buttons btn btn-custom-white pull-right">Cancel</a>
+                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save</button> -->
+                <div class="dropdown pull-right">
+                    <div>
+                        <a class="btn btn-custom-white" href="/member/customer/credit_memo/list">Cancel</a>
+                        <button class="btn btn-custom-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu  dropdown-menu-custom">
+                            <li><a class="select-action" code="save-and-close">Save & Close</a></li>
+                            <li><a class="select-action" code="save-and-edit">Save & Edit</a></li>
+                            <li><a class="select-action" code="save-and-print">Save & Print</a></li>
+                            <li><a class="select-action" code="save-and-new">Save & New</a></li>
+                        </ul>
+                    </div>
+                </div>
                 @if(isset($cm))
                 <div class="pull-right">
                     <div class="dropdown">

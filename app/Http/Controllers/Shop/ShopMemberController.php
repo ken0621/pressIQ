@@ -35,6 +35,9 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_recaptcha_setting;
 use App\Models\Tbl_recaptcha_pool_amount;
+use App\Models\Tbl_item_token;
+use App\Models\Tbl_item_token_log;
+use App\Models\Tbl_token_list;
 
 use App\Models\Tbl_image;
 // use App\Models\Tbl_mlm_slot_points_log;
@@ -145,7 +148,7 @@ class ShopMemberController extends Shop
                         $data["travel_and_tours"] = true;
                         if($slot->slot_membership == 3) 
                         {
-                            $data['link'] = '#';
+                            $data['link'] = 'http://tour.philtechglobalinc.com/auth/login';
                         }
                         else
                         {
@@ -212,6 +215,18 @@ class ShopMemberController extends Shop
             // dd($slot_id." ; ".$data['reward_point_redemption']);
             // dd($data['wallet']);
             $data["krops_gc"] = Tbl_mlm_slot_points_log::Slot()->where('points_log_type',"GC")->where('slot_owner',Self::$customer_info->customer_id)->sum('points_log_points');
+            $token_list_titles = Tbl_token_list::get();
+            $token_titles = array();
+            $token_amounts = array();
+            foreach($token_list_titles as $title)
+            {
+                array_push($token_titles, $title->token_name);
+                $total_token = Tbl_item_token_log::where('token_log_slot_owner',Self::$customer_info->customer_id)->where('token_id',$title->token_id)->sum('amount');
+                array_push($token_amounts, $total_token);
+            }
+            $data['token_titles']   = $token_titles;
+            $data['token_amounts']  = $token_amounts;
+            
             return Self::load_view_for_members("member.dashboard", $data);
         }
         else
@@ -1716,7 +1731,7 @@ class ShopMemberController extends Shop
         $return = "";
         $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
         $payout_setting = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
-        $minimum = doubleval($payout_setting->enchasment_settings_minimum);
+        $minimum = doubleval(isset($payout_setting->enchasment_settings_minimum) ? $payout_setting->enchasment_settings_minimum : 0);
 
         if($this->shop_info->shop_id != 60) //no neet to setup for JCA - temporary only
         {
@@ -2962,18 +2977,25 @@ class ShopMemberController extends Shop
     }
     public function getNetwork()
     {
-        $data["page"] = "Network List";
-        $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
-
-        if(request()->input("slot_no") == "")
+        if (Self::$customer_info) 
         {
-            $slot_no = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->value("slot_no");
-            return Redirect::to("/members/network?slot_no=" . $slot_no);
+            $data["page"] = "Network List";
+            $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+
+            if(request()->input("slot_no") == "")
+            {
+                $slot_no = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->value("slot_no");
+                return Redirect::to("/members/network?slot_no=" . $slot_no);
+            }
+            else
+            {
+                $data["_tree_level"] = MLM2::get_sponsor_network_tree($this->shop_info->shop_id, request()->input("slot_no"));
+                return (Self::load_view_for_members("member.network", $data));
+            }
         }
         else
         {
-            $data["_tree_level"] = MLM2::get_sponsor_network_tree($this->shop_info->shop_id, request()->input("slot_no"));
-            return (Self::load_view_for_members("member.network", $data));
+            return Redirect::to("/members/login");
         }
     }
     public function getNetworkSlot()
@@ -3109,9 +3131,38 @@ class ShopMemberController extends Shop
         // unitywealth100
         if($this->shop_info->shop_id == 90)
         {
-            $data['page'] = "Captcha";
-            $data['slot'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
-            return view('member.captcha',$data);
+            $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first();
+            if($point)
+            {
+                $explode_schedule = explode("-", $point->schedule);
+
+                if (isset($explode_schedule[0]) && isset($explode_schedule[1])) 
+                {
+                    $current_time = date('h:i A');
+                    $sunrise      = $explode_schedule[0];
+                    $sunset       = $explode_schedule[1];
+                    $date1        = \DateTime::createFromFormat('H:i a', $current_time);
+                    $date2        = \DateTime::createFromFormat('H:i a', $sunrise);
+                    $date3        = \DateTime::createFromFormat('H:i a', $sunset);
+
+                    if ($date1 > $date2 && $date1 < $date3)
+                    {
+                        // Allow
+                    }
+                    else
+                    {
+                        dd('You can only access this module every ' . str_replace("-", " to ", $point->schedule));
+                    }
+                }
+
+                $data['page'] = "Captcha";
+                $data['slot'] = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+                return view('member.captcha',$data);
+            }
+            else
+            {
+                dd("Some error occurred. Please contact the administrator.");
+            }
         }
         
     }
@@ -3120,7 +3171,7 @@ class ShopMemberController extends Shop
         $point = Tbl_recaptcha_setting::where('shop_id',$this->shop_info->shop_id)->first();
         if($point)
         {
-            $points = $point->point;
+            $point = $point->point;
         }
         else
         {
@@ -3141,15 +3192,46 @@ class ShopMemberController extends Shop
         $remaining_points   = $pool_amount-$acquired_points;
         if($remaining_points>=$point)
         {
-            $query = Tbl_mlm_slot_wallet_log::insert($insert);
-
-            if($query)
+            if (Session::get("captcha_limit")) 
             {
-                $response = 'success';
+                $timeFirst  = strtotime(Session::get("captcha_limit"));
+                $timeSecond = strtotime(date('Y-m-d H:i:s'));
+                $differenceInSeconds = $timeSecond - $timeFirst;
+
+                if ($differenceInSeconds >= 20) 
+                {
+                    $query = Tbl_mlm_slot_wallet_log::insert($insert);
+
+                    if($query)
+                    {
+                        $response = 'success';
+
+                        Session::put("captcha_limit", date('Y-m-d H:i:s'));
+                    }
+                    else
+                    {
+                        $response = 'error';
+                    }
+                }
+                else
+                {
+                    $response = 'error';
+                }
             }
             else
             {
-                $response = 'error';
+                $query = Tbl_mlm_slot_wallet_log::insert($insert);
+
+                if($query)
+                {
+                    $response = 'success';
+
+                    Session::put("captcha_limit", date('Y-m-d H:i:s'));
+                }
+                else
+                {
+                    $response = 'error';
+                }
             }
         }
         else
@@ -3205,50 +3287,57 @@ class ShopMemberController extends Shop
     }
     public function getLeadList()
     {
-        $data["page"]       = "Lead List";
-        $shop_id            = $this->shop_info->shop_id;
-        $_slot              = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
-        
-        $query              = Tbl_customer::where("shop_id", $shop_id);
-
-        if(count($_slot) > 0)
+        if (Self::$customer_info) 
         {
-            $query->where(function($q) use ($_slot)
-            {
-                foreach($_slot as $slot)
-                {
-                    $q->orWhere("customer_lead", $slot->slot_id);
-                }
-            });
-        }
-        else
-        {
-            $query->where("customer_lead", "-1");
-        }
-
-
-
-        $_lead      = $query->get();
-
-        foreach($_lead as $key => $lead)
-        {
-            $slot_owned = Tbl_mlm_slot::where("slot_owner", $lead->customer_id)->first();
+            $data["page"]       = "Lead List";
+            $shop_id            = $this->shop_info->shop_id;
+            $_slot              = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
             
-            if($slot_owned)
+            $query              = Tbl_customer::where("shop_id", $shop_id);
+
+            if(count($_slot) > 0)
             {
-                $_lead[$key]->slot_owned = $slot_owned->slot_no;
+                $query->where(function($q) use ($_slot)
+                {
+                    foreach($_slot as $slot)
+                    {
+                        $q->orWhere("customer_lead", $slot->slot_id);
+                    }
+                });
             }
             else
             {
-                $_lead[$key]->slot_owned = "NONE";
+                $query->where("customer_lead", "-1");
             }
 
-            $_lead[$key]->date_created = date("F d, Y", strtotime($lead->created_at)) . "<br>" . date("h:i A", strtotime($lead->created_at));
+
+
+            $_lead      = $query->get();
+
+            foreach($_lead as $key => $lead)
+            {
+                $slot_owned = Tbl_mlm_slot::where("slot_owner", $lead->customer_id)->first();
+                
+                if($slot_owned)
+                {
+                    $_lead[$key]->slot_owned = $slot_owned->slot_no;
+                }
+                else
+                {
+                    $_lead[$key]->slot_owned = "NONE";
+                }
+
+                $_lead[$key]->date_created = date("F d, Y", strtotime($lead->created_at)) . "<br>" . date("h:i A", strtotime($lead->created_at));
+            }
+
+            $data["_lead"] = $_lead;
+
+            return (Self::load_view_for_members("member.lead", $data)); 
         }
-
-        $data["_lead"] = $_lead;
-
-        return (Self::load_view_for_members("member.lead", $data)); 
+        else
+        {
+            return Redirect::to("/members/login");
+        }
     }
     public function getWalletLogs()
     {
@@ -4491,12 +4580,29 @@ class ShopMemberController extends Shop
         $consume['name'] = 'customer_product_code';
         $consume['id'] =Self::$customer_info->customer_id;
         $val = Warehouse2::consume_product_codes($shop_id, $mlm_pin, $mlm_activation, $consume);
-
+        
         if(is_numeric($val))
         {
             MLM2::purchase($shop_id, $slot_id, $val);
             $return['status'] = 'success';
             $return['call_function'] = 'success_used';
+
+
+            $item = Tbl_warehouse_inventory_record_log::where('mlm_activation',$mlm_activation)
+                                                 ->where('mlm_pin',$mlm_pin)
+                                                 ->first();
+            // patrick
+            $item_token = Tbl_item_token::where('item_id',$item->record_item_id)->first();
+            if($item_token)
+            {            
+                $token_log['shop_id']                   = $this->shop_info->shop_id;
+                $token_log['token_log_slot_owner']      = Self::$customer_info->customer_id;
+                $token_log['token_log_date_created']    = Carbon::now();
+                $token_log['token_id']                  = $item_token->token_id;
+                $token_log['amount']              = $item_token->amount;
+                Tbl_item_token_log::insert($token_log);
+            }
+
         }
         else
         {

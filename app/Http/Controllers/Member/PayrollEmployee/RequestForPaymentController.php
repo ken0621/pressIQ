@@ -226,4 +226,40 @@ class RequestForPaymentController extends PayrollMember
 			return view('member.payroll2.employee_dashboard.modal.modal_confirm',$data);
 		}
 	}
+
+	public function employee_request_rfp_export_pdf($request_id)
+	{
+
+		$parameter['date']					= date('Y-m-d');
+		$parameter['company_id']			= 0;
+		$parameter['employement_status']	= 0;
+		$parameter['shop_id'] 				= $this->employee_info->shop_id;
+
+		$data['request_payment_info'] 		= Tbl_payroll_request_payment::where('payroll_request_payment_id',$request_id)->first();
+		$data['_request_payment_sub_info'] 	= Tbl_payroll_request_payment_sub::where('payroll_request_payment_id',$request_id)->orderby('payroll_request_payment_sub_id')->get();
+		$data['_group_approver'] 			= EmployeeController::get_group_approver_grouped_by_level(Self::employee_shop_id() ,$data['request_payment_info']['payroll_approver_group_id'],'rfp');
+		$data['approver_group_info'] 		= tbl_payroll_approver_group::where('payroll_approver_group_id',$data['request_payment_info']['payroll_approver_group_id'])->first();
+
+		$data['total_in_words'] = Payroll2::number_to_word($data['request_payment_info']["payroll_request_payment_total_amount" ]);
+
+
+		$approver_info = array();
+		foreach($data['_group_approver'] as $key => $approver)
+		{
+			$data["approver_info"] = Tbl_payroll_employee_basic::selemployee($parameter)->where('tbl_payroll_employee_basic.payroll_employee_id',$approver[0]->payroll_employee_id)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->first();
+			$temp['payroll_employee_display_name'] = $data["approver_info"]["payroll_employee_display_name"];
+			$temp['payroll_jobtitle_name'] = $data["approver_info"]["payroll_jobtitle_name"];
+			array_push($approver_info,$temp);
+		}
+
+		$data["approver_info"]	= $approver_info;
+
+		$data["employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->where('tbl_payroll_employee_basic.payroll_employee_id',$this->employee_info->payroll_employee_id)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->first();
+
+			$format["format"] = "A4";
+			$format["default_font"] = "sans-serif";	
+			$pdf = PDF2::loadView('member.payroll2.employee_dashboard.request_for_payment_pdf', $data, [], $format);
+			return $pdf->stream('document.pdf');
+	}
+
 }

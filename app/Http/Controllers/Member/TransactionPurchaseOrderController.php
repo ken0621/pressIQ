@@ -18,21 +18,12 @@ use App\Globals\AccountingTransaction;
 use App\Globals\TransactionSalesOrder;
 use App\Globals\TransactionDebitMemo;
 
-use App\Models\Tbl_customer;
-use App\Models\Tbl_warehousea;
-use App\Models\Tbl_customer_invoice;
-use App\Models\Tbl_manual_invoice;
-use App\Models\Tbl_customer_invoice_line;
-use App\Models\Tbl_item;
-use App\Models\Tbl_warehouse;
-use App\Models\Tbl_vendor;
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
 use App\Globals\Purchase_Order;
 use App\Globals\ItemSerial;
-use App\Models\Tbl_purchase_order;
-use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_terms;
+use App\Models\Tbl_purchase_order_line;
 
 use Carbon\Carbon;
 use Session;
@@ -51,8 +42,42 @@ class TransactionPurchaseOrderController extends Member
     public function getLoadPurchaseOrder(Request $request)
     {
         $data['_purchase_order'] = TransactionPurchaseOrder::get($this->user_info->shop_id, 10, $request->search_keyword, $request->tab_type);
-        //dd($data['_purchase_order']);
+        
         return view('member.accounting_transaction.vendor.purchase_order.purchase_order_table', $data);
+    }
+    public function getAddItem($po_id)
+    {
+        $po_data = Tbl_purchase_order_line::um()->where("poline_po_id",$po_id)->get();
+        
+        foreach ($po_data as $key => $value) 
+        {
+            Session::push('po_item',collect($value)->toArray());
+        }
+        $data["ctr_item"] = count(Session::get("po_item"));
+
+        $data['_item']      = Item::get_all_category_item();
+        $data['_um']        = UnitMeasurement::load_um_multi();
+        $data["serial"] = ItemSerial::check_setting();
+
+        return view('member.accounting_transaction.vendor.purchase_order.po_load_item_session',$data);
+    }
+    public function getPrint(Request $request)
+    {
+        $po_id = $request->id;
+
+        $data["po"] = TransactionPurchaseOrder::info($this->user_info->shop_id, $po_id);
+        $data["_poline"]       = TransactionPurchaseOrder::info_item($po_id);
+        //dd($data);
+        foreach($data["_poline"] as $key => $value) 
+        {
+            $qty = UnitMeasurement::um_qty($value->poline_um);
+
+            $total_qty = $value->poline_orig_qty * $qty;
+            $data["_poline"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->poline_um);
+        }
+
+        $pdf = view("member.accounting_transaction.vendor.purchase_order.purchase_order_pdf",$data);
+        return Pdf_global::show_pdf($pdf);
     }
     public function getCreate(Request $request)
     {
@@ -62,16 +87,17 @@ class TransactionPurchaseOrderController extends Member
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $shop_id)->get();
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
-
+        $data['transaction_refnum'] = AccountingTransaction::get_ref_num($this->user_info->shop_id, 'purchase_order');
         $data['action']     = "/member/transaction/purchase_order/create-purchase-order";
         $data['count_transaction'] = TransactionDebitMemo::countTransaction($shop_id);
         $data["vendor_id"]       = $request->vendor_id;
         $data["terms_id"]       = $request->vendor_terms;
         $po_id = $request->id;
+
         if($po_id)
         {
-            $data["po"]            = Tbl_purchase_order::where("po_id", $po_id)->first();
-            $data["_poline"]       = Tbl_purchase_order_line::um()->where("poline_po_id", $po_id)->get();
+            $data["po"]            = TransactionPurchaseOrder::info($this->user_info->shop_id, $po_id);
+            $data["_poline"]       = TransactionPurchaseOrder::info_item($po_id);
             $data["action"]        = "/member/transaction/purchase_order/update-purchase-order";
         }
         
@@ -117,6 +143,7 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_taxable']     = $request->item_taxable[$key];
             }
         }
+        //die(var_dump($insert_item));
 
         $validate = TransactionPurchaseOrder::postInsert($this->user_info->shop_id, $insert, $insert_item);
 
@@ -158,8 +185,6 @@ class TransactionPurchaseOrderController extends Member
         $insert['vendor_subtotal']       = $request->vendor_subtotal;
         $insert['vendor_total']          = $request->vendor_total;
 
-        //die(var_dump($insert));
-
         $insert_item = null;
         foreach ($request->item_id as $key => $value) 
         {
@@ -177,7 +202,7 @@ class TransactionPurchaseOrderController extends Member
                 $insert_item[$key]['item_taxable']     = $request->item_taxable[$key];
             }
         }
-
+       
         $validate = TransactionPurchaseOrder::postUpdate($po_id, $this->user_info->shop_id, $insert, $insert_item);
 
         $return = null;
@@ -200,7 +225,8 @@ class TransactionPurchaseOrderController extends Member
     {
         $data['_so'] = TransactionSalesOrder::getAllOpenSO($this->user_info->shop_id);
         $data['_pr'] = TransactionPurchaseRequisition::getAllOpenPR($this->user_info->shop_id);
-        //dd($data['_pr']);
+        
+       
         return view('member.accounting_transaction.vendor.purchase_order.load_transaction', $data);
     }
 }

@@ -91,13 +91,13 @@
                         <td class="text-center restday_pay_td_td" id="restday_pay_td">{{ number_format($employee->restday,2 )}}</td>
                         <td class="text-center leave_pay_td_td" id="leave_pay_td">{{ number_format($employee->leave_pay,2) }} <br> ({{$employee->time_leave_hours}} hours)</td>
 
-                        <td class="text-center allowance_td_td" id="allowance_td">{{ number_format((number_format($employee->allowance,2) + number_format($employee->adjustment_allowance, 2)), 2) }}</td>
+                        <td class="text-center allowance_td_td" id="allowance_td">{{ number_format($employee->allowance + $employee->adjustment_allowance, 2) }}</td>
                         <td class="text-center bonus_td_td" id="bonus_td">{{ number_format($employee->adjustment_bonus,2) }}</td>
                         <td class="text-center commision_td_td" id="commision_td">{{ number_format($employee->adjustment_commission,2) }}</td>
                         <td class="text-center incentives_td_td" id="incentives_td">{{ number_format($employee->adjustment_incentives,2) }}</td>
                         <td class="text-center additions_td_td" id="additions_td">{{ number_format($employee->adjustment_additions,2) }}</td>
                         <td class="text-center month_13_and_other_td_td" id="month_13_and_other_td">{{ number_format($employee->adjustment_13th_month_and_other,2) }}</td>
-                        <td class="text-center de_minimis_benefit_td_td" id="de_minimis_benefit_td">{{ number_format($employee->adjustment_de_minimis_benefit,2) }}</td>
+                        <td class="text-center de_minimis_benefit_td_td" id="de_minimis_benefit_td">({{ number_format((number_format($employee->allowance_de_minimis,2) + number_format($employee->adjustment_de_minimis_benefit,2)),2) }})</td>
                         <td class="text-center others_td_td" id="others_td">{{ number_format($employee->adjustment_others,2) }}</td>
 
 
@@ -147,13 +147,13 @@
                         <td class="text-center" id="restday_pay_total"><b>{{ number_format($restday_total, 2) }}</b></td>
                         <td class="text-center" id="leave_pay_total"><b>{{ number_format($leave_pay_total, 2) }}</b></td>
 
-                        <td class="text-center" id="allowance_total"><b>{{ number_format(number_format($total_adjustment_allowance, 2) + number_format($allowance_total, 2), 2)}}</b></td>
+                        <td class="text-center" id="allowance_total"><b>{{ number_format($total_adjustment_allowance + $allowance_total, 2)}}</b></td>
                         <td class="text-center" id="bonus_total"><b>{{ number_format($total_adjustment_bonus, 2) }}</b></td>
                         <td class="text-center" id="commision_total"><b>{{ number_format($total_adjustment_commission, 2) }}</b></td>
                         <td class="text-center" id="incentives_total"><b>{{ number_format($total_adjustment_incentives, 2) }}</b></td>
                         <td class="text-center" id="additions_total"><b>{{ number_format($total_adjustment_additions, 2) }}</b></td>
                         <td class="text-center" id="month_13_and_other_total"><b>{{ number_format($total_adjustment_13th_month_and_other, 2) }}</b></td>
-                        <td class="text-center" id="de_minimis_benefit_total"><b>{{ number_format($total_adjustment_de_minimis_benefit, 2) }}</b></td>
+                        <td class="text-center" id="de_minimis_benefit_total"><b>{{ number_format($total_adjustment_de_minimis_benefit + $allowance_de_minimis_total, 2)}}</b></td>
                         <td class="text-center" id="others_total"><b>{{ number_format($total_adjustment_others, 2) }}</b></td>
 
                         <td class="text-center" id="gross_pay_total"><b>{{ number_format($total_gross, 2) }}</b></td>

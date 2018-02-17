@@ -1,0 +1,138 @@
+.product-container
+{
+	background-color: #fff;
+	padding: 50px 0;
+	.left-container
+	{
+		text-align: center;
+		.image-holder
+		{
+			img
+			{
+				width: 70%;
+			}
+			@media screen and (max-width: 425px)
+			{
+				img
+				{
+					width: 100%;
+				}
+			}
+		}
+	}
+	.right-container
+	{
+		margin-top: 20px;
+		.title-container
+		{
+			text-align: center;
+			.icon-container
+			{
+				margin-left: 20px;
+				vertical-align: middle;
+				img
+				{
+					width: 85%;
+					@media screen and (max-width: 375px)
+					{
+						width: 60%;
+					}
+				}
+			}
+			.title
+			{
+
+				font-family: 'PT Serif', serif;
+				color: #474747;
+				font-weight: 700;
+				font-size: 25px;
+				@media screen and (max-width: 375px)
+				{
+					font-size: 20px;
+				}
+				@media screen and (max-width: 320px)
+				{
+					font-size: 17px;
+				}
+			}
+			span
+			{
+				vertical-align: middle;
+				display: inline-block;
+				margin-bottom: 20px;
+				@media screen and (max-width: 768px)
+				{
+					margin-bottom: 0px;
+				}
+			}
+		}
+		.description-container
+		{
+			font-size: 17px;
+			font-family: 'PT Sans', sans-serif;
+			color: #575757;
+			margin-top: 20px;
+			@media screen and (max-width: 320px)
+			{
+				font-size: 15px;
+			}
+			ul
+			{
+				li
+				{
+					margin-bottom: 15px;
+				}
+			}	
+		}
+	}
+	.other-info-container
+	{
+		padding: 20px 40px;
+		@media screen and (max-width: 768px)
+		{
+			padding: 20px 0;
+		}
+		.header
+		{
+			font-family: 'PT Serif', serif;
+			color: #474747;
+			font-weight: 700;
+			font-size: 20px;
+			text-align: center;
+			margin-bottom: 20px;
+			@media screen and (max-width: 375px)
+			{
+				font-size: 18px;
+			}
+			@media screen and (max-width: 320px)
+			{
+				font-size: 15px;
+			}
+		}
+		.title
+		{
+			font-family: 'PT Serif', sans-serif;
+			color: #575757;
+			font-weight: 700;
+			font-size: 15px;
+			@media screen and (max-width: 375px)
+			{
+				font-size: 13px;
+			}
+		}
+		.list-container
+		{
+			// font-size: 17px;
+			font-family: 'PT Sans', sans-serif;
+			color: #575757;
+			margin-top: 10px;
+			ul
+			{
+				li
+				{
+					margin-bottom: 10px;
+				}
+			}	
+		}
+	}
+}

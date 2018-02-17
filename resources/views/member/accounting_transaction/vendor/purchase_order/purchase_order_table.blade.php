@@ -25,7 +25,8 @@
                                 Action <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-custom">
-                                <li><a href="javascript">PRINT</a></li>
+                                <li><a href="/member/transaction/purchase_order/create?id={{$po->po_id}}">Edit</a></li>
+                                <li><a href="/member/transaction/purchase_order/print?id={{$po->po_id}}">Print</a></li>
                             </ul>
                         </div>
                     </td>

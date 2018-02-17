@@ -124,8 +124,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/pressuser/choose_recipient', 'Shop\ShopMemberController@pressuser_choose_recipient');
 	// Route::get('/pressrelease/view','Shop\ShopMemberController@press_email');//PRESS RELEASE
 
-	Route::get('/announcement', 'Shop\ShopAboutController@announcement'); //Alternative
-
 	
 	
 	Route::get('/blog', 'Shop\ShopBlogController@index');
@@ -192,6 +190,9 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 
 	/* Return Policy */
 	Route::get('/return_policy', 'Shop\ShopAboutController@return_policy'); 
+	Route::get('/privacy_policy', 'Shop\ShopAboutController@privacy_policy');
+	Route::get('/franchise_terms_and_condition', 'Shop\ShopAboutController@franchise_terms_and_condition');
+	Route::get('/general_terms_and_condition', 'Shop\ShopAboutController@general_terms_and_condition'); 
 
 	/* Alternative */
 	Route::get('/product2', 'Shop\ShopProductController@product2'); //Carlo

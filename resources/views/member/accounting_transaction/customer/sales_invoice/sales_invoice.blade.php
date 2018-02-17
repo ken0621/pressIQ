@@ -3,6 +3,7 @@
 <form class="global-submit" action="{{$action or ''}}" method="post">
     <div class="panel panel-default panel-block panel-title-block">
         <input type="hidden" class="button-action" name="button_action" value="">
+        <input type="hidden" name="invoice_id" value="{{Request::input('id')}}">
         <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}"/>
         <div class="panel-heading">
             <div>
@@ -15,6 +16,10 @@
                 </h1>
                 <div class="dropdown pull-right">
                     <div>
+
+                        @if(isset($sales_invoice))
+                        <a class="btn btn-custom-white"  href="/member/accounting/journal/entry/invoice/{{$sales_invoice->inv_id}}">Transaction Journal</a>
+                        @endif  
                         <a class="btn btn-custom-white" href="/member/transaction/sales_invoice">Cancel</a>
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select Action
                         <span class="caret"></span></button>
@@ -23,6 +28,7 @@
                           <li><a class="select-action" code="sedit">Save & Edit</a></li>
                           <li><a class="select-action" code="sprint">Save & Print</a></li>
                           <li><a class="select-action" code="snew">Save & New</a></li>
+                          <li><a class="select-action" code="swis">Save & Create WIS</a></li>
                         </ul>
                     </div>
                 </div>
@@ -100,6 +106,8 @@
                                                 <th width="10"></th>
                                             </tr>
                                         </thead>
+                                        <tbody class="applied-transaction-list">
+                                        </tbody>
                                         <tbody class="draggable tbody-item estimate-tbl">
                                             @if(isset($sales_invoice))
                                                 @foreach($sales_invoice_item as $si_item)
@@ -123,7 +131,6 @@
                                                             @else
                                                                 <option class="hidden" value="" />
                                                             @endif
-                                                            <option class="hidden" value="" />
                                                         </select>
                                                     </td>
                                                     <td><input class="text-center number-input txt-qty compute" value="{{$si_item->invline_qty}}" type="text" name="item_qty[]"/></td>
@@ -132,8 +139,7 @@
                                                     <td><textarea class="textarea-expand" type="text" name="item_remarks[]">{{$si_item->invline_discount_remark}}</textarea></td>
                                                     <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]" value="{{$si_item->invline_amount}}" /></td>
                                                     <td class="text-center">
-                                                        <input type="hidden" class="invline_taxable" name="item_taxable[]" value="" >
-                                                        <input type="checkbox" name="" class="taxable-check compute" {{$si_item->taxable == 1 ? 'checked' : ''}} value="checked">
+                                                        <input type="checkbox"  name="item_taxable[]" class="taxable-check compute" value="1" {{$si_item->taxable == 1 ? 'checked' : ''}}>
                                                     </td>
                                                     <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                 </tr>
@@ -160,8 +166,7 @@
                                                 <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
                                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                 <td class="text-center">
-                                                    <input type="hidden" class="invline_taxable" name="item_taxable[]" value="" >
-                                                    <input type="checkbox" name="" class="taxable-check compute" value="checked">
+                                                    <input type="checkbox"  name="item_taxable[]" class="taxable-check compute" value="1" >
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
@@ -186,8 +191,7 @@
                                                 <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
                                                 <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
                                                 <td class="text-center">
-                                                    <input type="hidden" class="invline_taxable" name="item_taxable[]" value="" >
-                                                    <input type="checkbox" name="" class="taxable-check compute" value="checked">
+                                                    <input type="checkbox"  name="item_taxable[]" class="taxable-check compute" value="1" >
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
@@ -199,7 +203,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Message Displayed on Invoice</label>
-                                <textarea class="form-control input-sm textarea-expand" name="customer_message" placeholder="">{{isset($sales_invoice) ? $sales_invoice->inv_message : ''}}</textarea>
+                                <textarea class="form-control input-sm textarea-expand remarks-si" name="customer_message" placeholder="">{{isset($sales_invoice) ? $sales_invoice->inv_message : ''}}</textarea>
                             </div>
                             <div class="col-sm-3">
                                 <label>Statement Memo</label>
@@ -223,7 +227,7 @@
                                             </div>
                                             <div class="col-sm-3  padding-lr-1">
                                                 <!-- <input class="form-control input-sm text-right ewt_value number-input" type="text" name="ewt"> -->
-                                                <select class="form-control input-sm ewt-value compute" name="customer_ewt">  
+                                                <select class="form-control input-sm ewt-value compute" name="customer_ewt">
                                                     <option value="0" {{isset($sales_invoice) ? $sales_invoice->ewt == 0 ? 'selected' : '' : ''}}></option>
                                                     <option value="0.01" {{isset($sales_invoice) ? $sales_invoice->ewt == 0.01 ? 'selected' : '' : ''}}>1%</option>
                                                     <option value="0.02" {{isset($sales_invoice) ? $sales_invoice->ewt == 0.02 ? 'selected' : '' : ''}}>2%</option>
@@ -328,8 +332,7 @@
             <td><textarea class="textarea-expand" type="text" name="item_remarks[]" ></textarea></td>
             <td><input class="text-right number-input txt-amount" type="text" name="item_amount[]"/></td>
             <td class="text-center">
-                <input type="hidden" class="invline_taxable" name="item_taxable[]" value="" >
-                <input type="checkbox" name="" class="taxable-check compute" value="checked">
+                <input type="checkbox"  name="item_taxable[]" class="taxable-check compute" value="1">
             </td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>

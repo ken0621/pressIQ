@@ -39,7 +39,22 @@ use Carbon\Carbon;
 
 class Transaction
 {
-
+    public static function get_customer_name_transaction($transaction_list_id, $shop_id = null)
+    {
+        $customer_name = null;
+        $transaction_id = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->value("transaction_id");
+        if($transaction_id)
+        {
+            $customer_id = Tbl_transaction::where("transaction_id", $transaction_id)->value("transaction_reference_id");
+            $customer = Customer::get_info($shop_id, $customer_id);
+            if($customer)
+            {
+                $slot_no = Tbl_mlm_slot::where("slot_owner", $customer_id)->value("slot_no");
+                $customer_name = "Used By Customer - ".ucwords($customer->first_name." ".$customer->middle_name." ".$customer->last_name) ;
+            }
+        }
+        return $customer_name;
+    }
     public static function get_transaction_item_code($transaction_list_id, $shop_id = null)
     {
         $list = Tbl_transaction_list::salesperson()->transaction()->where('transaction_list_id',$transaction_list_id)->first();
@@ -608,7 +623,15 @@ class Transaction
             {
                 if($transaction_type == 'proof')
                 {
-                    $data->where('transaction_type', $transaction_type)->where('payment_status','pending');
+                    if($shop_id == 47)
+                    {
+                        $data->where('transaction_type', $transaction_type)->where('payment_status','pending');
+                        $data->groupBy("tbl_transaction_list.transaction_id");
+                    }
+                    else
+                    {
+                        $data->where('transaction_type', $transaction_type)->where('payment_status','pending');
+                    }
                 }
                 elseif($transaction_type == 'reject')
                 {
@@ -751,7 +774,7 @@ class Transaction
 
         //patrick
         $emails = array();
-        if($transaction_type == 'proof')
+        if($transaction_type == 'proof' && $shop_id != 47)
         {
             foreach ($data as $key => $value) 
             {

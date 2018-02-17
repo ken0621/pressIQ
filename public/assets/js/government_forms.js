@@ -25,11 +25,15 @@ function government_forms()
 	{    
 		$(".filter-by-company-hdmf").on("change", function(e)
 		{
+			var branch_id      = $('.filter-by-branch-hdmf').val();
 			var company_id 		= $(e.currentTarget).val();
 			var month      		= $(this).attr("data-id");
+			var year 			= $(".year").val();
 			ajaxdata.company_id = company_id;
 			ajaxdata.month      = month;
 			ajaxdata._token 	= $("._token").val();
+			ajaxdata.year		= year;
+			ajaxdata.branch_id	= branch_id;
 			$('#spinningLoader').show();
 			$(".load-filter-data").hide();
 			setTimeout(function(e){
@@ -49,16 +53,54 @@ function government_forms()
 			});
 			}, 700);
 		});
+
+
+		$(".filter-by-branch-hdmf").on("change", function(e)
+		{
+			var branch_id 		= $(e.currentTarget).val();
+			var company_id      = $('.filter-by-company-hdmf').val();
+			var month      		= $('.filter-by-company-hdmf').attr("data-id");
+			var year 			= $(".year").val();
+			ajaxdata.company_id = company_id;
+			ajaxdata.month      = month;
+			ajaxdata._token 	= $("._token").val();
+			ajaxdata.year		= year;
+			ajaxdata.branch_id	= branch_id;
+			$('#spinningLoader').show();
+			$(".load-filter-data").hide();
+			setTimeout(function(e){
+			$.ajax(
+			{
+				url:"/member/payroll/reports/government_forms_hdmf_filter",
+				type:"post",
+				data: ajaxdata,
+				
+				success: function(data)
+				{
+					
+					$('#spinningLoader').hide();
+					$(".load-filter-data").show();
+					$(".load-filter-data").html(data);
+					// alert(data);
+				}
+			});
+			}, 700);
+		});
+		
 	}
 	function action_load_table_sss()
 	{    
 		$(".filter-by-company-sss").on("change", function(e)
 		{
+			var branch_id      = $('.filter-by-branch-sss').val();
 			var company_id 		= $(e.currentTarget).val();
 			var month      		= $(this).attr("data-id");
+			var year 			= $(".year").val();
 			ajaxdata.company_id = company_id;
 			ajaxdata.month      = month;
 			ajaxdata._token 	= $("._token").val();
+			ajaxdata.year		= year;
+			ajaxdata.branch_id	= branch_id;
 			$('#spinningLoader').show();
 			$(".load-filter-data").hide();
 	        setTimeout(function(e){
@@ -78,16 +120,52 @@ function government_forms()
 			});
 			}, 700);
 		});
+
+		$(".filter-by-branch-sss").on("change", function(e)
+		{
+			var branch_id 		= $(e.currentTarget).val();
+			var company_id      = $('.filter-by-company-sss').val();
+			var month      		= $('.filter-by-company-sss').attr("data-id");
+			var year 			= $(".year").val();
+			ajaxdata.company_id = company_id;
+			ajaxdata.month      = month;
+			ajaxdata._token 	= $("._token").val();
+			ajaxdata.year		= year;
+			ajaxdata.branch_id	= branch_id;
+			$('#spinningLoader').show();
+			$(".load-filter-data").hide();
+			setTimeout(function(e){
+			$.ajax(
+			{
+				url:"/member/payroll/reports/government_forms_sss_filter",
+				type:"post",
+				data: ajaxdata,
+				
+				success: function(data)
+				{
+					
+					$('#spinningLoader').hide();
+					$(".load-filter-data").show();
+					$(".load-filter-data").html(data);
+					// alert(data);
+				}
+			});
+			}, 700);
+		});
 	}
 	function action_load_table_philhealth()
 	{    
 		$(".filter-by-company-philhealth").on("change", function(e)
 		{
+			var branch_id      = $('.filter-by-branch-philhealth').val();
 			var company_id 		= $(e.currentTarget).val();
 			var month      		= $(this).attr("data-id");
+			var year 			= $(".year").val();
 			ajaxdata.company_id = company_id;
 			ajaxdata.month      = month;
 			ajaxdata._token 	= $("._token").val();
+			ajaxdata.year		= year;
+			ajaxdata.branch_id	= branch_id;
 			$('#spinningLoader').show();
 			$(".load-filter-data").hide();
 	        setTimeout(function(e){
@@ -99,6 +177,38 @@ function government_forms()
 				
 				success: function(data)
 				{
+					$('#spinningLoader').hide();
+					$(".load-filter-data").show();
+					$(".load-filter-data").html(data);
+					// alert(data);
+				}
+			});
+			}, 700);
+		});
+
+		$(".filter-by-branch-philhealth").on("change", function(e)
+		{
+			var branch_id 		= $(e.currentTarget).val();
+			var company_id      = $('.filter-by-company-philhealth').val();
+			var month      		= $('.filter-by-company-philhealth').attr("data-id");
+			var year 			= $(".year").val();
+			ajaxdata.company_id = company_id;
+			ajaxdata.month      = month;
+			ajaxdata._token 	= $("._token").val();
+			ajaxdata.year		= year;
+			ajaxdata.branch_id	= branch_id;
+			$('#spinningLoader').show();
+			$(".load-filter-data").hide();
+			setTimeout(function(e){
+			$.ajax(
+			{
+				url:"/member/payroll/reports/government_forms_philhealth_filter",
+				type:"post",
+				data: ajaxdata,
+				
+				success: function(data)
+				{
+					
 					$('#spinningLoader').hide();
 					$(".load-filter-data").show();
 					$(".load-filter-data").html(data);

@@ -15,7 +15,18 @@
                         @endforeach
                     </select>
                 </div>
+
+                <div class="col-md-3">
+                <select class="form-control filter-by-branch-sss" name="branch_location_id">
+                  <option value="0">Select Branch</option>
+                  @foreach($_branch as $branch)
+                  <option value="{{$branch->branch_location_id}}">{{$branch->branch_location_name}}</option>
+                  @endforeach
+                </select>
+              </div>
+
             </div>
+            <input type="hidden" class="year" value="{{$year}}">
         </div>
     </div>
     <div class="text-center" id="spinningLoader" style="display:none;">
@@ -73,7 +84,7 @@
 	</div>
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-        &nbsp;<a href="/member/payroll/reports/government_forms_sss_export_excel/{{$month}}/0"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
+        &nbsp;<a href="/member/payroll/reports/government_forms_sss_export_excel/{{$month}}/0/{{ $year }}/0"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
     </div>
     </div>
 </form>

@@ -6,6 +6,7 @@ use App\Globals\SalesReport;
 use App\Globals\Report;
 use App\Globals\Pdf_global;
 use App\Globals\Accounting;
+use App\Globals\Item;
 
 use App\Models\Tbl_shipping;
 use App\Models\Tbl_user;
@@ -39,6 +40,30 @@ use Excel;
 
 class ReportsController extends Member
 {
+
+    public function income_statement()
+    {
+        
+    }
+    public function quick_report($account_id = 0)
+    {
+        $period         = Request::input('report_period');
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
+        $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
+
+        $report_type = Request::input('report_type');
+        $report_field_type = Request::input('report_field_type');
+        $data['report_type'] = $report_type;
+        $shop_id = $this->user_info->shop_id;
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
+
+        $data['_account'] = Accounting::getAccountTransaction(null, $account_id);
+        dd($data['_account']);
+
+    }
 	public function checkuser($str = '')
     {
         $user_info = Tbl_user::where("user_email", Session('user_email'))->shop()->first();
@@ -625,12 +650,14 @@ class ReportsController extends Member
 
         foreach($data['_item'] as $key=>$item)
         {
-            $data['_item'][$key]->item_warehouse  = Tbl_item::warehouseInventory($item->shop_id, $item->item_id)
-                                                    ->where("item_id", $item->item_id)
-                                                    ->whereRaw("DATE(inventory_created) >= '".$data['from']."'")
-                                                    ->whereRaw("DATE(inventory_created) <= '".$data['to']."'")
-                                                    ->get();
+            // $data['_item'][$key]->item_warehouse  = Tbl_item::warehouseInventory($item->shop_id, $item->item_id)
+            //                                         ->where("item_id", $item->item_id)
+            //                                         ->whereRaw("DATE(inventory_created) >= '".$data['from']."'")
+            //                                         ->whereRaw("DATE(inventory_created) <= '".$data['to']."'")
+            //                                         ->get();
+            $data['_item'][$key]->item_warehouse = Item::item_inventory_report($item->shop_id, $item->item_id, $data['from'], $data['to']);
         }   
+        // dd($data['_item']);
 
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
         if($report_type && !$load_view)
@@ -643,7 +670,6 @@ class ReportsController extends Member
             return view('member.reports.accounting.item_list', $data);
         }
     }
-
     public function account_list()
     {
         $data['shop_name']  = $this->user_info->shop_key; 

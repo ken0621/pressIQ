@@ -7,7 +7,7 @@
 	<table class="table table-bordered table-striped table-condensed">
 		<thead>
 			<tr>
-				<th class="text-center"><!-- <input onChange="action_check_all_checkbox();" class="all-checkbox-check" type="checkbox" > --></th>
+				<th class="text-center"><input class="all-checkbox-check" id="select-all" type="checkbox" ></th>
 				<th>ACCOUNT #</th>
 				<th>AMOUNT</th>
 				<th>NAME</th>
@@ -51,16 +51,20 @@ function action_employee_checkbox()
 	$(".export-xls-button").attr("href", default_xls + '&employee=' + employee);
 	$(".export-txt-button").attr("href", default_txt + '?employee=' + employee);
 }
-function action_check_all_checkbox()
-{
 
-	$(document).on('change', '.all-checkbox-check', function() {
-	    if(this.checked) {
-	       $('.employee-checkbox').attr('checked', true);
-	    }
-	    else{
-	    	$('.employee-checkbox').attr('checked', false);
-	    }
-	});
-}
+$('#select-all').click(function(event) {   
+    if(this.checked) {
+
+    	var param = [];
+        $(':checkbox').each(function(index, el) {
+               this.checked = true;    
+				param.push($(el).val());
+
+        });
+		var employee = JSON.stringify(param);
+
+		$(".export-xls-button").attr("href", default_xls + '&employee=' + employee);
+		$(".export-txt-button").attr("href", default_txt + '?employee=' + employee);
+    }
+});
 </script>

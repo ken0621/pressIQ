@@ -1,8 +1,9 @@
-var purchase_order = new purchase_order();
+var enter_bills = new enter_bills();
 var global_tr_html = $(".div-script tbody").html();
+var global_tr_html_acct = $(".acct-div-script tbody").html();
 var item_selected = ''; 
 
-function purchase_order()
+function enter_bills()
 {
 	init();
 
@@ -14,6 +15,7 @@ function purchase_order()
 		action_reassign_number();
 
 		event_remove_tr();
+		event_remove_tr_acct()
 		event_compute_class_change();
 		event_taxable_check_change();
 		event_accept_number_only();
@@ -90,6 +92,7 @@ function purchase_order()
 
     	});
 
+    	
         $('.droplist-um:not(.has-value)').globalDropList("disabled");
 
         $(".draggable .tr-draggable:last td select.select-um").globalDropList(
@@ -103,6 +106,18 @@ function purchase_order()
     		}
 
         }).globalDropList('disabled');
+
+		$(".draggable.tbody-acct .tr-draggable:last td select.select-coa").globalDropList(
+        {            
+		    link 		: '/member/accounting/chart_of_account/popup/add',
+		    link_size 	: 'md',
+		    width 		: "100%",
+		    placeholder : 'Account',
+            onChangeValue : function()
+            {
+            	action_load_coa_info($(this));
+            }
+        });
 	}
 
 	function action_load_open_transaction($vendor_id)
@@ -327,7 +342,6 @@ function purchase_order()
 			$this.prev().val(0);
 		}
 	}
-
 	function action_load_item_info($this)
 	{
 		$parent = $this.closest(".tr-draggable");
@@ -336,7 +350,7 @@ function purchase_order()
 		$parent.find(".txt-qty").val(1).change();
 		if($this.find("option:selected").attr("has-um"))
 		{
-			$parent.find(".txt-qty").attr("disabled",true);
+			$parent.find(".txt-qty").attr("disabled",false);
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
 				$parent.find(".txt-qty").removeAttr("disabled");
@@ -349,6 +363,11 @@ function purchase_order()
 			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
 		}
     	action_compute();
+	}
+	function action_load_coa_info($this)
+	{
+		$parent = $this.closest(".tr-draggable");
+		$parent.find(".acct-desc").html($this.find("option:selected").attr("acct-desc")).change();		
 	}
 
 	//Purpose: Add the specified number of dates to a given date.
@@ -367,7 +386,7 @@ function purchase_order()
 
 	function action_date_picker()
 	{/*class name of tbody and text field for date*/
-		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
+		$(".draggable .for-datepicker").datepicker({ dateFormat: 'yy-dd-mm', });
 	}
 
 	/*ITEM NUMBER*/
@@ -380,60 +399,68 @@ function purchase_order()
 		});
 	}
 
+	/*ITEM NUMBER*/
+	function action_acct_reassign_number()
+	{
+		var num = 1;
+		$(".acct-number-td").each(function(){
+			$(this).html(num);
+			num++;
+		});
+	}
+
 	function event_click_last_row()
 	{
-		$(document).on("click", "tbody.draggable tr:last td:not(.remove-tr)", function(){
+		$(document).on("click", "tbody.draggable.tbody-item tr:last td:not(.remove-tr)", function(){
 			event_click_last_row_op();
+		});
+		$(document).on("click", "tbody.draggable.tbody-acct tr:last td:not(.acct-remove-tr)", function(){
+			event_click_last_row_op_acctg();
 		});
 	}
 
 	/*INSERTING ANOTHER ROW WHEN CLICKING LAST ROW*/
 	function event_click_last_row_op()
 	{
-		$("tbody.draggable").append(global_tr_html);
+		$("tbody.draggable.tbody-item").append(global_tr_html);
 		action_reassign_number();
 		action_load_initialize_select();
 		action_date_picker();
+	}
+
+	/*INSERTING ANOTHER ROW WHEN CLICKING LAST ROW*/
+	function event_click_last_row_op_acctg()
+	{
+		$("tbody.draggable.tbody-acct").append(global_tr_html_acct);
+		action_acct_reassign_number();
+		action_reassign_number();
+		action_load_initialize_select();
 	}
 
 	/*REMOVING ROW*/
 	function event_remove_tr()
 	{
 		$(document).on("click", ".remove-tr", function(e){
-			if($(".tbody-item .remove-tr").length > 1)
-			{
-				if($(this).attr("tr_id") != 0 && $(this).attr("tr_id") != null)
-				{					
-					var id = $(this).attr("tr_id");
-					console.log($(this).attr("linked_in"));
-					if($(this).attr("linked_in") != 'no')
-					{						
-						$(".tr-id-"+id).remove();
-					}
-					else
-					{
-						$(".po-tbl").load("/member/vendor/po_remove/"+id, function()
-						{
-							// console.log("success-removing");
-							iniatilize_select();
-							$(".tbody-item .select-um").globalDropList("enabled");
-							$(".po-"+id).removeClass("hidden");
-							$(".drawer-toggle").trigger("click");
-							action_reassign_number();
-							action_compute();
-						});
-					}
-				}
-				else
-				{
-					$(this).parent().remove();
-				}
+			if($(".tbody-item .remove-tr").length > 1){
 
+				$(this).parent().remove();
 				action_reassign_number();
 				action_compute();
 			}			
 		});
 	}
+	function event_remove_tr_acct()
+	{
+		$(document).on("click", ".acct-remove-tr", function(e){
+			if($(".tbody-acct .acct-remove-tr").length > 1){
+
+				$(this).parent().remove();
+				action_acct_reassign_number();
+				action_compute();
+			}			
+		});
+	}
+
 
 	function event_accept_number_only()//
 	{
@@ -478,7 +505,23 @@ function purchase_order()
 		})
 	}
 
+	function load_applied_transaction()
+	{
+		$('.applied-transaction-list').load('/member/transaction/enter_bills/load-applied-transaction', function()
+		{
+			console.log("success");
+			action_reassign_number();
+			action_load_initialize_select();
+			action_date_picker();
+	    	action_compute();
 
+			$('.remarks-eb').html($('.po-remarks').val());
+		});
+	}
+	this.load_applied_transaction = function()
+	{
+		load_applied_transaction();
+	}
 }
 
 /*AFTER ADDING VENDOR*/
@@ -514,69 +557,18 @@ function success_enter_bills(data)
 	}
 }
 
-function add_po_to_bill(po_id)
+function success_apply_transaction(data)
 {
-	// $(".modal-loader").removeClass("hidden");
-	// $.ajax({
-	// 	url : "/member/vendor/load_po_item",
-	// 	data : {po_id: po_id},
-	// 	dataType : "json",
-	// 	type : "get",
-	// 	success : function(data)
-	// 	{
- //             $(data).each(function (a, b)
- //             {		
-	//              var $container = "";
-	//              var con = $("tbody.draggable").prepend(global_tr_html);
-	//              bill.action_trigger_select_plugin_not_last();
-	//              $container = $("tbody.draggable .tr-draggable:first");
-	//              // $this.closest(".tr-draggable");
-
-	//             $container.addClass("tr-"+b.poline_po_id);
-	//             $container.find(".select-item").val(b.poline_item_id).change();
-	//             $container.find(".txt-desc").val(b.poline_description);
-	//             $container.find(".select-um").load('/member/item/load_one_um/'+b.multi_um_id, function()
- //             	{
- //             		$container.find(".select-um").globalDropList("reload");
- //             		$container.find(".select-um").val(b.poline_um).change();
- //             	});
-	// 			$container.find(".poline_id").val(b.poline_id);
-	// 			$container.find(".itemline_po_id").val(po_id);
-	//             $container.find(".txt-qty").val(b.poline_qty);
-	//             $container.find(".txt-rate").val(b.poline_rate);
-	//             $container.find(".txt-amount").val(b.poline_amount);
-	//             $container.find(".remove-tr").addClass("remove-tr"+b.poline_po_id);
-	//             $container.find(".remove-tr").attr("tr_id", b.poline_po_id);
- //             });
-
-	//          $(".po-listing").prepend(po_id_list);
-	//          var $po_id = $(".po-listing .po_id:first");
-	//          $(".po-listing .po_id:first").addClass("div_po_id"+po_id);
-	//          $po_id.find(".po-id-input").val(po_id).change();
-
-	//         $(".po-"+po_id).addClass("hidden");
-	// 		// $(".modal-loader").addClass("hidden");
-
- //             bill.action_compute();
- //             bill.action_reassign_number();
-	// 	},
-	// 	error : function()
-	// 	{
-	// 		alert("Something wen't wrong.");
-	// 	}
-	// });
+    if(data.status == "success")
+    {
+    	data.element.modal("toggle");
+		enter_bills.load_applied_transaction();
+    }
+} 
 
 
-	$(".po-tbl").load('/member/vendor/load_added_item/'+po_id, function()
-	{
-		console.log("success");
-		bill.action_compute();
-		bill.iniatilize_select();
-		$(".tbody-item .select-um").globalDropList("enabled");
+///
 
-		$(".po-"+po_id).addClass("hidden");
-	});
-}
 function iniatilize(id)
 {
    $('.select-poline-item-'+id).globalDropList(

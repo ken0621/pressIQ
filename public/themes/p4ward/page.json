@@ -118,7 +118,7 @@
 		{
 			"label":"Email Address",
 			"type":"textbox",
-			"default":"admin@p4ward.com",
+			"default":"admin@p4wardph.com",
 			"size":"3"
 		},
 		"home_phone_number" :
@@ -151,6 +151,16 @@
 			"type":"image",
 			"default":"/themes/p4ward/img/p4ward_image_partner.jpg",
 			"size":"3"
+		}
+	},
+	"terms_and_condition":
+	{
+		"terms_condition" :
+		{
+			"label":"Terms and Condition",
+			"type":"tinymce",
+			"default":"",
+			"size":"12"
 		}
 	}
 }

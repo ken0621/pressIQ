@@ -11,7 +11,7 @@
 			<div class="col-md-12">
 				<small>Shift Code</small>
 				<input type="text" name="shift_code_name" value="{{ $shift_code->shift_code_name }}" class="form-control" placeholder="Shift Code" required>
-				<input type="hidden" name="shift_code_id" value="{{ $shift_code->shift_code_id }}" class="form-control" placeholder="Shift Code" required>
+				<input type="hidden" name="shift_code_id" id="shift_id" value="{{ $shift_code->shift_code_id }}" class="form-control" placeholder="Shift Code" required>
 			</div>
 			</div>
 		</div>
@@ -91,11 +91,39 @@
 							@endif
 						@endforeach
 					</tbody>
+
+
 				</table>
 			</div>
 		</div>
+
+		<div class="form-group">
+			<div class="col-md-12">
+			<table class="table table-bordered table-condensed">
+							<thead>
+								<tr>
+									<th>Employee Name</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody class="tbl-tag">
+								@foreach($employee as $emp)
+									<tr>
+									<td>{{$emp->payroll_employee_display_name}}<input type="hidden" name="employee_tag[]" value="{{$emp->payroll_employee_id}}"></td>
+									<td class="text-center">
+										<a href="#" class="popup" size="sm" link="/member/payroll/leave/v2/modal_leave_action/{{$emp->payroll_employee_id}}/remove_shift_tag/{{ $shift_code->shift_code_id }}"><i class="fa fa-times"></i></a>
+									</td>
+									</tr>
+								@endforeach
+							</tbody>
+				</table>
+			</div>
+		</div>
+
+
 	</div>
 	<div class="modal-footer">
+		<span><a href="#" class="btn btn-custom-primary popup" link="/member/payroll/shift_template/modal_tag_shift_employee">Tag Employee</a></span>
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
 		<button class="btn btn-primary btn-custom-primary" type="submit">Submit</button>
 	</div>

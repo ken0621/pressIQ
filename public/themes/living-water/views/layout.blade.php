@@ -78,12 +78,18 @@
                 <!-- NAVIGATION -->
                     <nav class="navirino">
                         <ul>
-                            @if(Request::segment(1)=="members")
-                                <li><a class="smoth-scroll" href="#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="#about">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="#process">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="#product">PRODUCT</a></li>
-                                <li><a class="smoth-scroll" href="#contact">CONTACT</a></li>
+                            @if(Request::segment(1)=="about")
+                                <li><a class="smoth-scroll" href="/#home">HOME</a></li>
+                                <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
+                                <li><a class="smoth-scroll" href="/#process">PROCESS</a></li>
+                                <li><a class="smoth-scroll" href="/#product">PRODUCT</a></li>
+                                <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
+                            @elseif(Request::segment(1)=="product")
+                                <li><a class="smoth-scroll" href="/#home">HOME</a></li>
+                                <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
+                                <li><a class="smoth-scroll" href="/#process">PROCESS</a></li>
+                                <li><a class="smoth-scroll" href="/#product">PRODUCT</a></li>
+                                <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
                             @else
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                 <li><a class="smoth-scroll" href="#about">ABOUT US</a></li>

@@ -1495,19 +1495,18 @@ class ShopMemberController extends Shop
         $p4ward_contactus["contactus_message"]            =request('contactus_message');
         $p4ward_contactus["contactus_to"]                 =request('contactus_to');
 
+        $p4ward_contactus["explode_email"] = explode("@", $p4ward_contactus['contactus_email']);
+
         Mail::send('email.contact_us',$p4ward_contactus, function($message) use ($p4ward_contactus)
         {
-            $message->from($p4ward_contactus['contactus_email']);
-            $message->to("sample@gmail.com");  
+            $message->from($p4ward_contactus["explode_email"][0] . '@p4ward.com',$p4ward_contactus['contactus_email']);
+            $message->to("admin@p4wardph.com");  
             $message->subject($p4ward_contactus['contactus_subject']);
            
         });
         Session::flash('message_concern_p4ward', 'Message Successfully Sent!');
         return Redirect::to('/#contactus');  
-
-
     }
-
 
     public function getEventDetails(Request $request)
     {

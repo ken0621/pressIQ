@@ -161,7 +161,7 @@
                         <form action="Post"> 
                         <div class="col-md-3">
                             <div class="footer-title-container">
-                                <p class="footer-title">NEWS LETTER SEND</p>
+                                <p class="footer-title">NEWS LETTER</p>
                             </div>
                             <input type="email" style="background-color:#FDFDFD;" placeholder="Enter Your Email" id="newsletter" name="newsletter" required>
                             <span>

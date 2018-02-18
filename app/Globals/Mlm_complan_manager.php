@@ -28,6 +28,8 @@ use App\Models\Tbl_mlm_discount_card_settings;
 use App\Models\Tbl_mlm_binary_report;
 use App\Models\Tbl_stairstep_points_log;
 use App\Models\Tbl_brown_rank;
+use App\Models\Tbl_indirect_advance;
+use App\Models\Tbl_direct_advance;
 use App\Models\Tbl_advertisement_bonus_settings;
 use App\Globals\Mlm_gc;
 use App\Globals\Mlm_complan_manager_repurchasev2;
@@ -579,21 +581,46 @@ class Mlm_complan_manager
     // DIRECT
 	public static function direct($slot_info)
 	{
+        $mlm_plan = Tbl_mlm_plan::where("shop_id", $slot_info->shop_id)->where("marketing_plan_code", "DIRECT")->first();
+
+        $__direct = null;
+
+        if($mlm_plan->advance_mode == 1)
+        {
+            $_direct = Tbl_direct_advance::where("shop_id", $slot_info->shop_id)->get();
+
+            foreach($_direct as $direct)
+            {
+                $__direct[$direct->direct_membership_parent][$direct->direct_membership_new_entry] = $direct->direct_advance_bonus;
+            }
+        }
+
         $slot_sponsor = Tbl_mlm_slot::where('slot_id', $slot_info->slot_sponsor)->membership()->first();
         /* CHECK IF SLOT RECIPIENT EXIST */
         if($slot_sponsor)
         {
             if($slot_info->membership_points_direct != null || $slot_info->membership_points_direct != 0)
             {
-                /* DIRECT INCOME LIMIT */
-                $check_points = Tbl_membership_points::where("membership_id",$slot_sponsor->slot_membership)->first();
-                if($check_points)
+                if($mlm_plan->advance_mode == 1)
                 {
-                    if($check_points->membership_direct_income_limit != 0)
+                    $direct_points_given = $__direct[$slot_sponsor->membership_id][$slot_info->membership_id];
+                }
+                else
+                {
+                    /* DIRECT INCOME LIMIT */
+                    $check_points = Tbl_membership_points::where("membership_id",$slot_sponsor->slot_membership)->first();
+                    if($check_points)
                     {
-                        if($slot_info->membership_points_direct > $check_points->membership_direct_income_limit)
+                        if($check_points->membership_direct_income_limit != 0)
                         {
-                            $direct_points_given = $check_points->membership_direct_income_limit;
+                            if($slot_info->membership_points_direct > $check_points->membership_direct_income_limit)
+                            {
+                                $direct_points_given = $check_points->membership_direct_income_limit;
+                            }
+                            else
+                            {
+                                $direct_points_given = $slot_info->membership_points_direct;
+                            }
                         }
                         else
                         {
@@ -604,10 +631,6 @@ class Mlm_complan_manager
                     {
                         $direct_points_given = $slot_info->membership_points_direct;
                     }
-                }
-                else
-                {
-                    $direct_points_given = $slot_info->membership_points_direct;
                 }
 
                 $direct_points_gc_given = $slot_info->membership_points_direct_gc;
@@ -698,6 +721,59 @@ class Mlm_complan_manager
     // END DIRECT
 
     // INDIRECT
+    public static function indirect_advance($slot_info)
+    {
+        $settings_indirect  = Tbl_indirect_advance::where("shop_id", $slot_info->shop_id)->get();
+        $slot_tree          = Tbl_tree_sponsor::child($slot_info->slot_id)->orderby("sponsor_tree_level", "asc")->distinct_level()->parentslot()->membership()->get();
+        
+
+        /* RECORD ALL INTO A SINGLE VARIABLE */
+        $indirect_level = null;
+        foreach($settings_indirect as $key => $level)
+        {
+            $indirect_level[$level->indirect_membership_new_entry][$level->indirect_membership_parent][$level->indirect_level] = $level->indirect_advance_bonus;
+        }
+
+        /* CHECK IF LEVEL EXISTS */
+        if($indirect_level)
+        {
+            foreach($slot_tree as $key => $tree)
+            {
+                /* COMPUTE FOR BONUS */
+                if(isset($indirect_level[$slot_info->membership_id][$tree->membership_id][$tree->sponsor_tree_level]))
+                {
+                    $indirect_bonus    = $indirect_level[$slot_info->membership_id][$tree->membership_id][$tree->sponsor_tree_level];   
+                }
+                else
+                {
+                    $indirect_bonus    = 0;
+                }
+
+                /* CHECK IF BONUS IS ZERO */
+                if($indirect_bonus != 0)
+                {
+                    $log_array['earning'] = $indirect_bonus;
+                    $log_array['level'] = $tree->sponsor_tree_level;
+                    $log_array['level_tree'] = 'Sponsor Tree';
+                    $log_array['complan'] = 'INDIRECT';
+
+                    $slot_sponsor = Mlm_compute::get_slot_info($tree->slot_id);
+                    $log = Mlm_slot_log::log_constructor($slot_sponsor, $slot_info,  $log_array);
+
+                    $arry_log['wallet_log_slot'] = $tree->slot_id;
+                    $arry_log['shop_id'] = $slot_info->shop_id;
+                    $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+                    $arry_log['wallet_log_details'] = $log;
+                    $arry_log['wallet_log_amount'] = $indirect_bonus;
+                    $arry_log['wallet_log_plan'] = "INDIRECT";
+                    $arry_log['wallet_log_status'] = "n_ready";   
+                    $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('INDIRECT', $slot_info->shop_id); 
+                    
+                    Mlm_slot_log::slot_array($arry_log);
+                }
+            }
+        }
+    }
 	public static function indirect($slot_info)
 	{
         $settings_indirect = Tbl_mlm_indirect_setting::where('indirect_setting_archive', 0)->get();

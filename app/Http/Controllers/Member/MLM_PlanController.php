@@ -1377,7 +1377,7 @@ class MLM_PlanController extends Member
         $insert = null;
         $ctr    = 0;
  
-        Tbl_indirect_advance::where("shop_id", $this->user_info->shop_id)->delete();
+        Tbl_indirect_advance::where("shop_id", $this->user_info->shop_id)->where("indirect_membership_parent", $parent_id)->delete();
 
         foreach(request()->bonus as $level => $_bonus)
         {

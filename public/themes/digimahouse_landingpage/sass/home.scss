@@ -64,7 +64,7 @@ body
 
     	.btn-container
     	{
-			padding-top: 10px;
+			padding: 10px 0;
 
 			.get-plan-now
 			{
@@ -117,14 +117,14 @@ body
 	/* @media for Tablets */
 	@media screen and (max-width: 990px)
 	{
-		height: 250px;
+		height: 50vh;
 
 		.caption-container
 		{
-			position: relative;
-			top: 20px;
-			left: 30px;
-			bottom: 20px;
+			// position: relative;
+			// top: 20px;
+			// left: 30px;
+			// bottom: 20px;
 
 			.caption-1
 		    {
@@ -146,8 +146,6 @@ body
 
 	    	.btn-container
 	    	{
-				padding: 10px 0px 0px 0px;
-
 				.get-plan-now
 				{
 					font-size: 12px;

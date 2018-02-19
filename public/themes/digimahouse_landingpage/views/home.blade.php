@@ -378,7 +378,7 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?v=1.0">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?v=1.1">
 @endsection
 
 @section("js")

@@ -457,7 +457,7 @@ class ShopMemberController extends Shop
                 else
                 {
                     $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info);
-                     Session::flash('email_sent', 'Press Release Successfully Sent!');
+                    Session::flash('email_sent', 'Press Release Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
                 }
                 

@@ -302,7 +302,7 @@
 
   $('#btnnextCreate').click(function()
   {
-   if(pr_headline.value!="" && tinymce.get('pr_content').getContent() != "" && tinymce.get('pr_boiler_content').getContent() != "")
+   if(pr_type.value !="" && pr_headline.value !="" && tinymce.get('pr_content').getContent() != "" && tinymce.get('pr_boiler_content').getContent() != "")
         {
           openCity(event, 'choose_recipient');     
         }

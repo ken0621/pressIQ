@@ -167,13 +167,13 @@
                     <div class="col-md-6 right">
                         
                         <div>Powered by:</div>
-                        <div class="row clearfix">
-                            <div class="col-md-2"><img src="/themes/{{ $shop_theme }}/img/adobe-logo.png"></div>
-                            <div class="col-md-2"><img src="/themes/{{ $shop_theme }}/img/bootstrap-logo.png"></div>
-                            <div class="col-md-2"><img src="/themes/{{ $shop_theme }}/img/jquery-logo.png"></div>
-                            <div class="col-md-2"><img src="/themes/{{ $shop_theme }}/img/laravel-logo.png"></div>
-                            <div class="col-md-2"><img src="/themes/{{ $shop_theme }}/img/php-logo.png"></div>
-                            <div class="col-md-2"><img src="/themes/{{ $shop_theme }}/img/mysql-logo.png"></div>
+                        <div class="powered">
+                            <div><img src="/themes/{{ $shop_theme }}/img/adobe-logo.png"></div>
+                            <div><img src="/themes/{{ $shop_theme }}/img/bootstrap-logo.png"></div>
+                            <div><img src="/themes/{{ $shop_theme }}/img/jquery-logo.png"></div>
+                            <div><img src="/themes/{{ $shop_theme }}/img/laravel-logo.png"></div>
+                            <div><img src="/themes/{{ $shop_theme }}/img/php-logo.png"></div>
+                            <div><img src="/themes/{{ $shop_theme }}/img/mysql-logo.png"></div>
                         </div>
                     </div>
                 </div>

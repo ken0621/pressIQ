@@ -9,7 +9,6 @@
         <title>{{ ucfirst($shop_info->shop_key) }} | {{ $page or '' }}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
         <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
         {{-- <link rel="icon" href="/themes/{{ $shop_theme }}/img/3xcell-icon.png"" type="image/png"/> --}}
         <!-- GOOGLE FONT -->

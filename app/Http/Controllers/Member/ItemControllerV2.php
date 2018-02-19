@@ -121,7 +121,7 @@ class ItemControllerV2 extends Member
 			$data['item_type']		  = Item::get_item_type_modify();	
 		}
 		$data['shop_id']	= $this->user_info->shop_id;
-		$data['tokens']		= Tbl_token_list::where('shop_id',$this->user_info->shop_id)->get();
+		$data['tokens']		= Tbl_token_list::where('shop_id',$this->user_info->shop_id)->where('archived',0)->get();
 		return $data;
 	}
 	public function submit_item($from)

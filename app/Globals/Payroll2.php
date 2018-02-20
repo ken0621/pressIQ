@@ -1939,7 +1939,16 @@ class Payroll2
 		{
 			$extra_day_hours = $regular_hours;	
 			$is_absent = false;
-		
+		}
+		if ($day_type=="rest_day") 
+		{
+			$rest_day_hours = $time_spent;
+			$is_absent = false;
+		}
+		if ($day_type=="extra_day") 
+		{
+			$extra_day_hours = $regular_hours;	
+			$is_absent = false;
 		}
 		if ($is_holiday=="regular") 
 		{
@@ -3879,8 +3888,7 @@ class Payroll2
 
 		/* GET PERIOD CATEGORY ARR */
 		$data["period_category_arr"] 	= $period_category_arr	= Payroll::getperiodcount($shop_id, $end_date, $period_category, $start_date);
-
-		/* BREAKDOWN MODE */
+		
 		$return->_breakdown = array();
 
 		/* FLAT RATE DECLARED BASIC PAY */
@@ -3947,7 +3955,7 @@ class Payroll2
 		
 		
 		$return = Payroll2::cutoff_breakdown_compute_time($return, $data);
-
+		
 		if ($return->_time_breakdown["time_spent"]["float"] != 0 || $group->payroll_group_salary_computation == "Flat Rate")
 		{
 			$return = Payroll2::cutoff_breakdown_deductions($return, $data); //meron bang non-taxable deduction?? lol
@@ -5307,14 +5315,6 @@ class Payroll2
 									$standard_gross_pay += $values['rate'];
 									$deduction += $values['rate'];
 								}
-								// if ($data["group"]->payroll_group_salary_computation != "Daily Rate") 
-								// {
-								// 	if ($value->time_output["leave_hours"] == '00:00:00') 
-								// 	{
-								// 		$standard_gross_pay += $values['rate'];
-								// 		$deduction += $values['rate'];
-								// 	}
-								// }
 							}
 						}
 
@@ -5327,18 +5327,15 @@ class Payroll2
 						$count++;
 					}
 
-					// dd($d);
-					// dd($a);
-					// dd($actual_gross_pay ." / " . $standard_gross_pay ." * " . $allowance_amount);
 					$standard_gross_pay += $actual_gross_pay;
 					$val["amount"] = @($actual_gross_pay/$standard_gross_pay) * $allowance_amount;
 
-					// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);
-
-					
+					// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);	
 				}
+
 				else if ($data["group"]->payroll_group_salary_computation == "Daily Rate") 
 				{
+					
 					$val["amount"] = $val["amount"] * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);
 				}
 

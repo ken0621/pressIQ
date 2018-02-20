@@ -33,10 +33,12 @@ use App\Models\Tbl_mlm_indirect_points_settings;
 use App\Models\Tbl_mlm_unilevel_points_settings;
 use App\Models\Tbl_mlm_discount_card_settings;
 use App\Models\Tbl_item;
+use App\Models\Tbl_indirect_advance;
 use App\Models\Tbl_mlm_plan_binary_promotions;
 use App\Models\Tbl_direct_pass_up_settings;
 use App\Models\Tbl_advertisement_bonus_settings;
 use App\Models\Tbl_leadership_advertisement_settings;
+use App\Models\Tbl_direct_advance;
 
 use App\Http\Controllers\Member\MLM_ProductController;
 use App\Http\Controllers\Member\MLM_PlanController;
@@ -666,6 +668,19 @@ class MLM_PlanController extends Member
             Tbl_mlm_plan::insert($insert);
         }
 
+        if($count == 28)
+        {
+             // start STAIRSTEP complan settings insert
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "INDIRECT_ADVANCE";
+            $insert['marketing_plan_name'] = "Indirect Advance";
+            $insert['marketing_plan_trigger'] = "Slot Creation";
+            $insert['marketing_plan_label'] = "Indirect Advance";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
 
         // end basic complan
         
@@ -1284,21 +1299,113 @@ class MLM_PlanController extends Member
     	}
     	echo json_encode($data);
 	}
-	public static function direct($shop_id)
-	{
-	    $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
-	    // dd($data);
-	    $data['basic_settings'] = MLM_PlanController::basic_settings('DIRECT');
-	    return view('member.mlm_plan.configure.direct', $data);
-	}
+    public function direct($shop_id)
+    {
+        $data['membership']        = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        $data['basic_settings']    = MLM_PlanController::basic_settings('DIRECT');
+        $data['plan']              = Tbl_mlm_plan::where('marketing_plan_code', 'DIRECT')->where('shop_id', $shop_id)->first();
+        $_advance                  = Tbl_direct_advance::where("shop_id", $this->user_info->shop_id)->get();
+        $__advance                 = null;
+
+        foreach($_advance as $advance)
+        {
+            $__advance[$advance->direct_membership_parent][$advance->direct_membership_new_entry] = $advance->direct_advance_bonus;
+        }
+
+        $data["_advance"] = $__advance;
+
+        return view('member.mlm_plan.configure.direct', $data);
+    }
+    public function advance_mode()
+    {
+        $update["advance_mode"] = request()->advance_mode;
+        Tbl_mlm_plan::where("shop_id", $this->user_info->shop_id)->where("marketing_plan_code", request()->plan)->update($update);
+    }
+    public function direct_advance()
+    {
+
+        Tbl_direct_advance::where("shop_id", $this->user_info->shop_id)->delete();
+
+        foreach(request()->direct_advance_bonus as $key => $direct_advance_bonus)
+        {
+            $insert[$key]["direct_membership_parent"]     = request()->direct_membership_parent[$key];
+            $insert[$key]["direct_membership_new_entry"]  = request()->direct_membership_new_entry[$key];
+            $insert[$key]["direct_advance_bonus"]         = $direct_advance_bonus;
+            $insert[$key]["shop_id"]                      = $this->user_info->shop_id;
+        }
+
+        Tbl_direct_advance::insert($insert);
+
+        echo json_encode("success");
+    }
+    public static function indirect_advance($shop_id)
+    {
+        $__membership              = null;
+        $_membership               = Tbl_membership::getactive(0, $shop_id)->get();
+
+        foreach($_membership as $key => $membership)
+        {
+            $__membership[$key]     = $membership;
+            $__membership[$key]->level = Tbl_indirect_advance::where("shop_id", $shop_id)->where("indirect_membership_parent", $membership->membership_id)->max("indirect_level");
+        }
+
+        $data['membership']        = $__membership;
+
+        $data['basic_settings']    = MLM_PlanController::basic_settings('INDIRECT_ADVANCE');
+        return view('member.mlm_plan.configure2.indirect_advance', $data);
+    }
+    public function indirect_advance_setting($membership_id)
+    {
+        $shop_id                            = $this->user_info->shop_id;
+        $data["page"]                       = "Indirect Settings Advance";
+        $data["parent_membership"]          = Tbl_membership::getactive(0, $shop_id)->where("tbl_membership.membership_id", $membership_id)->first();
+        $data["membership"] = $_membership  = Tbl_membership::getactive(0, $shop_id)->get();
+        $_indirect                          = Tbl_indirect_advance::where("shop_id", $this->user_info->shop_id)->where("indirect_membership_parent", $membership_id)->orderBy("indirect_level")->get();
+        $_bonus                             = null;
+
+        foreach($_indirect as $indirect)
+        {
+            $_bonus[$indirect->indirect_level][$indirect->indirect_membership_new_entry] = $indirect->indirect_advance_bonus; 
+        }
+
+        $data["_bonus"]                     = $_bonus;
+
+        return view('member.mlm_plan.configure2.indirect_advance_setting', $data);
+    }
+    public function indirect_advance_setting_submit($parent_id)
+    {
+        $insert = null;
+        $ctr    = 0;
+ 
+        Tbl_indirect_advance::where("shop_id", $this->user_info->shop_id)->where("indirect_membership_parent", $parent_id)->delete();
+
+        foreach(request()->bonus as $level => $_bonus)
+        {
+            foreach($_bonus as $new_entry_membership_id => $bonus)
+            {
+                $_insert[$ctr]["indirect_membership_parent"]       = $parent_id;
+                $_insert[$ctr]["indirect_membership_new_entry"]    = $new_entry_membership_id;
+                $_insert[$ctr]["indirect_advance_bonus"]           = $bonus;
+                $_insert[$ctr]["indirect_level"]                   = $level;
+                $_insert[$ctr]["shop_id"]                          = $this->user_info->shop_id;
+                $ctr++;
+            }
+        }
+
+        Tbl_indirect_advance::insert($_insert);
+
+        return redirect()->back();
+    }
 	public static function indirect($shop_id)
 	{
 	    $data['membership'] = Tbl_membership::getactive(0, $shop_id)->get();
+
 	    foreach($data['membership'] as $value)
 	    {
-	    	$c =Tbl_mlm_indirect_setting::where('membership_id', $value->membership_id)->where('indirect_setting_archive', 0)->count();
+	    	$c = Tbl_mlm_indirect_setting::where('membership_id', $value->membership_id)->where('indirect_setting_archive', 0)->count();
 	    	$value->indirect_count = $c;
 	    }
+
 	    $data['basic_settings'] = MLM_PlanController::basic_settings('INDIRECT');
 	    return view('member.mlm_plan.configure.indirect', $data);
 	}

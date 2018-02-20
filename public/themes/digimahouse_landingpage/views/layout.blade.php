@@ -16,11 +16,11 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700" rel="stylesheet">
         @include("frontend.ghead")
         <!-- GLOBAL CSS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?v=1.0">
         {{-- Parallax --}}
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/parallax.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/parallax.css?v=1.0">
         <!-- OTHER CSS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css?v=1.0">
 
         @yield("css")
 
@@ -167,13 +167,13 @@
                     <div class="col-md-6 right">
                         
                         <div>Powered by:</div>
-                        <div class="row clearfix">
-                            <div class="col-md-2"><img src="/themes/{{ $shop_theme }}/img/adobe-logo.png"></div>
-                            <div class="col-md-2"><img src="/themes/{{ $shop_theme }}/img/bootstrap-logo.png"></div>
-                            <div class="col-md-2"><img src="/themes/{{ $shop_theme }}/img/jquery-logo.png"></div>
-                            <div class="col-md-2"><img src="/themes/{{ $shop_theme }}/img/laravel-logo.png"></div>
-                            <div class="col-md-2"><img src="/themes/{{ $shop_theme }}/img/php-logo.png"></div>
-                            <div class="col-md-2"><img src="/themes/{{ $shop_theme }}/img/mysql-logo.png"></div>
+                        <div class="powered">
+                            <div><img src="/themes/{{ $shop_theme }}/img/adobe-logo.png"></div>
+                            <div><img src="/themes/{{ $shop_theme }}/img/bootstrap-logo.png"></div>
+                            <div><img src="/themes/{{ $shop_theme }}/img/jquery-logo.png"></div>
+                            <div><img src="/themes/{{ $shop_theme }}/img/laravel-logo.png"></div>
+                            <div><img src="/themes/{{ $shop_theme }}/img/php-logo.png"></div>
+                            <div><img src="/themes/{{ $shop_theme }}/img/mysql-logo.png"></div>
                         </div>
                     </div>
                 </div>

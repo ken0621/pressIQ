@@ -124,7 +124,7 @@
                 @if($customer)
                 <div class="left-container">
                     <span><i class="fa fa-envelope" aria-hidden="true"></i></span>
-                    <span>admin@p4ward.com</span>
+                    <span>admin@p4wardph.com</span>
                     <span><i class="fa fa-phone" aria-hidden="true"></i></span>
                     <span>Call us 028995519</span>
                 </div>
@@ -136,7 +136,7 @@
                 @else
                 <div class="left-container">
                     <span><i class="fa fa-envelope" aria-hidden="true"></i></span>
-                    <span>admin@p4ward.com</span>
+                    <span>admin@p4wardph.com</span>
                     <span><i class="fa fa-phone" aria-hidden="true"></i></span>
                     <span>Call us 028995519</span>
                 </div>

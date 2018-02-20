@@ -304,43 +304,50 @@
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="title-container">Get Intouch With Us</div>
-                     <div class="row clearfix">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="First Name*">
+                     <form action="Post"> 
+                        @if (session('message_concern_p4ward'))
+                            <div class="alert alert-success">
+                                {{ session('message_concern_p4ward') }}
+                            </div>
+                        @endif
+                        <div class="row clearfix">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="contactus_first_name" name="contactus_first_name" placeholder="First Name*" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="contactus_last_name" name="contactus_last_name" placeholder="Last Name*" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                        <input type="phone" class="form-control" id="contactus_phone_number" name="contactus_phone_number" placeholder="Phone Number*" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="email" class="form-control" id="contactus_email" name="contactus_email" placeholder="Email Address*" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text area" class="form-control" id="contactus_subject" name="contactus_subject" placeholder="Subject*" required> 
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <textarea type="text" class="form-control text-message" id="contactus_message" name="contactus_message" placeholder="Message*" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="button-container">
+                                    <button type="submit" formaction="/contact_us/send">Send</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Last Name*">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                    <input type="phone" class="form-control" placeholder="Phone Number*">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="email" class="form-control" placeholder="Email Address*">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text area" class="form-control" placeholder="Subject*">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <textarea type="text" class="form-control text-message" placeholder="Message*"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="button-container">
-                                <a href="#Read More">SEND</a>
-                            </div>
-                        </div>
-                    </div>
+                     </form>
                 </div>
                 <div class="col-md-6">
                     <span class="icon"><img src="/themes/{{ $shop_theme }}/img/icon-address.png"></span><span class="title">Business Address</span>

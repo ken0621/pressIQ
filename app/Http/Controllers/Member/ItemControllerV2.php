@@ -24,6 +24,8 @@ class ItemControllerV2 extends Member
 	 		$data["page"] 		 	= "Item List";
 			$data["_item_type"]     = Item::get_item_type_list();
 			$data["_item_category"] = Item::getItemCategory($this->user_info->shop_id);
+			//patrick
+			$data['shop_id']		= $this->user_info->shop_id;
 
 			return view("member.itemv2.list_item", $data);
 		}
@@ -119,7 +121,7 @@ class ItemControllerV2 extends Member
 			$data['item_type']		  = Item::get_item_type_modify();	
 		}
 		$data['shop_id']	= $this->user_info->shop_id;
-		$data['tokens']		= Tbl_token_list::where('shop_id',$this->user_info->shop_id)->get();
+		$data['tokens']		= Tbl_token_list::where('shop_id',$this->user_info->shop_id)->where('archived',0)->get();
 		return $data;
 	}
 	public function submit_item($from)
@@ -458,17 +460,42 @@ class ItemControllerV2 extends Member
 		}
 		return json_encode($response);
 	}
+	public function update_token()
+	{
+		$data['page'] = 'Update Token';
+		$token = Tbl_token_list::where('token_id',request('id'))->first();
+		$data['token_name'] = $token->token_name;
+		$data['token_id']	= $token->token_id;
+		return view('member.itemv2.update_token',$data);
+	}
+	public function update_token_submit()
+	{
+		$update['token_name'] = Request::input('token_name');
+		if($update['token_name'] != '')
+		{
+			$query = Tbl_token_list::where('token_id',Request::input('token_id'))->update($update);
+			$response['call_function'] = 'success';
+		}
+		else
+		{
+			$response['call_function'] = 'error_name';
+		}
+		return json_encode($response);
+	}
 	public function get_token_list()
 	{
-		$list = Tbl_token_list::where('shop_id',$this->user_info->shop_id)->get();
-		$data = '<select class="form-control token-type" name="token-type">';
-		$data .= '<option class="hidden">Select Token</option>';
-		foreach($list as $token)
-		{
-			$data .= '<option value="'.$token->token_id.'">'. $token->token_name .'</option>';
-		}
-		$data .= '<option value="add_new">Add New Token</option>';
-		$data .= '</select>';
-		return $data;
+		$data['page'] = 'Token List';
+		return view('member.itemv2.token_list',$data);
+	}
+	public function token_list_table()
+	{
+		$activetab = request('activetab');
+		$data['tokens'] = Tbl_token_list::where('archived',$activetab)->get();
+		return view('member.itemv2.token_list_table',$data);
+	}
+	public function token_list_archived()
+	{
+		$update['archived'] = request('archived');
+		Tbl_token_list::where('token_id',request('token_id'))->update($update);
 	}
 }

@@ -336,16 +336,6 @@ nav
 }
 
 
-
-.row-no-padding
-{
-	> div
-	{
-		padding-left: 0;
-		padding-right: 0;
-	}
-}
-
 footer
 {
 	color:#fff;
@@ -353,7 +343,6 @@ footer
 	padding: 50px;
 	font-family: $open-sans;
 	
-
 	.text-header
 	{
 		font-weight: 700;
@@ -421,27 +410,13 @@ footer
 	background-color: #f2f2f2;
 	font-size: 12px;
 
-	@media screen and (max-width: 990px)
+	.right
 	{
-		.right
+		.powered
 		{
-			padding-top: 10px;
-		}
-	}
-
-	@media screen and (max-width: 360px)
-	{
-		.right
-		{
-			padding-top: 10px;
-		}
-	}
-
-	@media screen and (max-width: 320px)
-	{
-		.right
-		{
-			padding-top: 10px;
+			display: flex;
+			justify-content: space-between;
+			flex-wrap: wrap;
 		}
 	}
 }

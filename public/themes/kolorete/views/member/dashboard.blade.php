@@ -52,10 +52,10 @@
 									<div class="color tr"></div>
 									<div class="name"><span>Total Reward</span> <div class="name tr-text">{{ $wallet->display_total_earnings }}</div></div>
 								</div>
-								<div class="holder">
+								{{-- <div class="holder">
 									<div class="color tr"></div>
 									<div class="name"><span>Total KROPS</span> <div class="name tr-text">0.00 KROP(S)</div></div>
-								</div>
+								</div> --}}
 							</div>
 						</div>
 					</div>
@@ -83,21 +83,22 @@
 					</div>
 				</div> --}}
 				
-				<div class="square-containr">
+				{{-- <div class="square-containr">
 					<div class="title"> Reward Points</div>
 					<div class="sub-container">
 						<div class="chart-legend" style="max-height: auto;">
-							{{-- <div class="holder">
+							<div class="holder">
 								<div class="color fifth-pgc"></div>
 								<div class="name"><span>5th Pair GC</span> <div class="name fifth-pgc-text">{{ $points->display_binary }}</div></div>
-							</div> --}}
+							</div>
 							<div class="holder">
 								<div class="color fifth-pgc"></div>
 								<div class="name"><span>KROPS GC</span> <div class="name fifth-pgc-text">{{isset($krops_gc) ? currency('',$krops_gc)." POINT(S)" : '0.00 POINT(S)' }}</div></div>
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> --}}
+				
 			</div>
 
 
@@ -152,13 +153,13 @@
 									<div class="name"><span>Unilevel Bonus</span> <div class="name w2hpx">PHP 0.00</div></div>
 
 								</div>
-								<div class="holder">
+								{{-- <div class="holder">
 
 									<div class="color"></div>
 
 									<div class="name"><span>Direct Pass Up Bonus</span> <div class="name w2hpx">PHP 0.00</div></div>
 
-								</div>
+								</div> --}}
 							@endif
 						</div>
 					</div>

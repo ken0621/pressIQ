@@ -6,17 +6,15 @@
 	<div class="slider">
 		<div class="fullscreen background parallax" style="background-image: url('/themes/{{ $shop_theme }}/img/img-slider-1.png');" data-img-width="1366" data-img-height="800" data-diff="100">
 			<div class="container">
-				<div class="row clearfix">
-					<div class="caption-container">
-						<div class="caption-1">DigimaHouse <span>ERP Online</span></div>
-						<div class="caption-2">A house built for your business</div>
-						<div class="caption-para">
-							Our goal is to provide and build<br>professional websites, mobile<br>applications that best suit to your<br>business.
-						</div>
-						
-						<div class="btn-container">
-							<button class="get-plan-now">Get Plan Now</button>
-						</div>
+				<div class="caption-container">
+					<div class="caption-1">DigimaHouse <span>ERP Online</span></div>
+					<div class="caption-2">A house built for your business</div>
+					<div class="caption-para">
+						Our goal is to provide and build<br>professional websites, mobile<br>applications that best suit to your<br>business.
+					</div>
+					
+					<div class="btn-container">
+						<button class="get-plan-now">Get Plan Now</button>
 					</div>
 				</div>
 			</div>
@@ -25,27 +23,27 @@
 	<!-- Divider -->
 	<div class="divider">
 		<div class="container">
-			<div class="row clearfix">
-				<div class="col-md-4">
-					<div class="div-cont">
+			<div class="div-cont-holder">
+				<div class="div-cont">
+					<div class="top">
 						<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/divider-icon1.png">
 						<div class="divider-text-header">Easy Customizable</div>
-						<div class="divider-sub-text-header">Over 20+ Website Templates to choose</div>
 					</div>
+					<div class="divider-sub-text-header">Over 20+ Website Templates to choose</div>
 				</div>
-				<div class="col-md-4">
-					<div class="div-cont">
+				<div class="div-cont">
+					<div class="top">
 						<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/divider-icon2.png">
 						<div class="divider-text-header">Mobile Responsive</div>
-						<div class="divider-sub-text-header">Viewable for any mobile devices</div>
 					</div>
+					<div class="divider-sub-text-header">Viewable for any mobile devices</div>
 				</div>
-				<div class="col-md-4">
-					<div class="div-cont">
+				<div class="div-cont">
+					<div class="top">
 						<img width="42" height="42" src="/themes/{{ $shop_theme }}/img/divider-icon3.png">
 						<div class="divider-text-header">Quality and Effective</div>
-						<div class="divider-sub-text-header">Trusted and high quality designs</div>
 					</div>
+					<div class="divider-sub-text-header">Trusted and high quality designs</div>
 				</div>
 			</div>
 		</div>
@@ -374,12 +372,13 @@
 
 	<!-- SCROLL TO TOP -->
 	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
+
 </div>
 
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?v=1.1">
 @endsection
 
 @section("js")

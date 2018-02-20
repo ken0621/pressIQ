@@ -13,8 +13,8 @@
          <div class="press-release-container">
             <div class="tab"  style="border-style: none;">
                <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Create New Release</button>
-               <button class="tablinks" onclick="openCity(event, 'choose_recipient')" id="">Choose Recipients</button>
-               <button class="tablinks" onclick="openCity(event, 'send_release')" id="">Send Release</button>
+               <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Choose Recipients</button>
+               <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Send Release</button>
                <!-- <button class="tablinks" onclick="openCity(event, 'summary')" id="">Summary</button> -->
             </div>
            
@@ -96,12 +96,13 @@
                     </div>
                      
                     <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
+                    <span class="button"><button class="tablinks" type="button" onclick="openCity(event, 'create_release')" id="defaultOpen"><a>&laquo; Back to Release</a></button></span>
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
 
                     {{-- POPUP CHOOSE RECIPIENT --}}
-                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'send_release')"><a>Continue To Send &raquo;</a></button></span>
+                    <span class="button"><button type="button" id="btnNext" class="tablinks" onclick="openCity(event, 'send_release')"><a>Continue &raquo;</a></button></span>
                     <input type="hidden" name="pr_to" id="recipient_email" class="form-control" value="{{$edits->pr_to}}" readonly >
                     @endforeach
                       @else
@@ -160,6 +161,8 @@
                     <span class="result-container" style="font-size:15px"><span id="results_number" style="font-size:15px"></span></span>
                     </div>
                     <input type="hidden"  id="recipient_name" name="pr_receiver_name"  class="form-control" multiple readonly>
+
+                    <span class="button"><button class="tablinks" type="button" onclick="openCity(event, 'create_release')" id="defaultOpen"><a>&laquo; Back to Release</a></button></span>
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
@@ -182,6 +185,8 @@
                   <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
                   <a href="javascript:" id="pop_chosen_recipient_btn">  VIEW</a>
                   <div class="button-container">
+
+                    <button class="tablinks" type="button" onclick="openCity(event, 'choose_recipient')" id="defaultOpen">&laquo; Back</button>
                     <button class="preview-button" type="button"  id="prev_btn_send">Preview</button>
                     <button type="submit" formaction="/pressuser/pressrelease/pr">Send &raquo;</button>
                   </div>

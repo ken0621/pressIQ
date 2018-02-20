@@ -121,6 +121,8 @@ class ShopMemberController extends Shop
         
         $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
         $data["item_kit"]    = Item::get_all_assembled_kit($this->shop_info->shop_id);
+        $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id); //kolorete
+
         if(Self::$customer_info)
         {
             $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
@@ -135,7 +137,7 @@ class ShopMemberController extends Shop
             $data['mlm_pin'] = '';
             $data['mlm_activation'] = '';            
             $data["first_slot"]         = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
-           
+
             if($this->shop_info->shop_theme == 'philtech')
             {
                 $data["travel_and_tours"] = false;
@@ -148,7 +150,7 @@ class ShopMemberController extends Shop
                         $data["travel_and_tours"] = true;
                         if($slot->slot_membership == 3) 
                         {
-                            $data['link'] = '#';
+                            $data['link'] = 'http://tour.philtechglobalinc.com/auth/login';
                         }
                         else
                         {
@@ -229,12 +231,13 @@ class ShopMemberController extends Shop
             
             return Self::load_view_for_members("member.dashboard", $data);
         }
+
         else
         {
             return Redirect::to('/members/login');
         }
-
     }
+
     public function getDirectReferrals()
     {
         if (Self::$customer_info) 
@@ -540,7 +543,7 @@ class ShopMemberController extends Shop
     
         $demo_info["explode_email"] = explode("@", $demo_info['demo_email']);
 
-        Mail::send('emails.demo_request',$demo_info, function($message) use ($demo_info)
+        Mail::send('emails.Demo_request',$demo_info, function($message) use ($demo_info)
         {
            $message->from($demo_info["explode_email"][0] . '@press-iq.com',$demo_info['demo_email']);
            $message->to("marketing@press-iq.com");  
@@ -548,6 +551,22 @@ class ShopMemberController extends Shop
         });
         Session::flash('Demo_message', 'Demo Request Successfully Sent!');
         return Redirect::back();  
+    }
+
+    public function send_newsletter()
+    {
+        $newsletter_info["newsletter_email"]       =request('newsletter');
+        $newsletter_info["subject"]                ="NewsLetter";
+
+        $newsletter_info["explode_email"] = explode("@", $newsletter_info['newsletter_email']);
+
+        Mail::send('emails.newsletter_email',$newsletter_info, function($message) use ($newsletter_info)
+        {
+           $message->from($newsletter_info["explode_email"][0] . '@press-iq.com',$newsletter_info['newsletter_email']);
+           $message->to("oliverbacsal@gmail.com");
+           $message->subject($newsletter_info['subject']);  
+        });
+        return Redirect::back(); 
     }
 
     public function press_release_save_as_draft(Request $request)
@@ -1469,6 +1488,28 @@ class ShopMemberController extends Shop
     }
     /*Press Release*/
 
+    public function send_contact_us_p4ward()
+    {
+        $p4ward_contactus["contactus_first_name"]         =request('contactus_first_name');
+        $p4ward_contactus["contactus_last_name"]          =request('contactus_last_name');
+        $p4ward_contactus["contactus_phone_number"]       =request('contactus_phone_number');
+        $p4ward_contactus["contactus_subject"]            =request('contactus_subject');
+        $p4ward_contactus["contactus_email"]              =request('contactus_email');
+        $p4ward_contactus["contactus_message"]            =request('contactus_message');
+        $p4ward_contactus["contactus_to"]                 =request('contactus_to');
+
+        $p4ward_contactus["explode_email"] = explode("@", $p4ward_contactus['contactus_email']);
+
+        Mail::send('email.contact_us',$p4ward_contactus, function($message) use ($p4ward_contactus)
+        {
+            $message->from($p4ward_contactus["explode_email"][0] . '@p4ward.com',$p4ward_contactus['contactus_email']);
+            $message->to("admin@p4wardph.com");  
+            $message->subject($p4ward_contactus['contactus_subject']);
+           
+        });
+        Session::flash('message_concern_p4ward', 'Message Successfully Sent!');
+        return Redirect::to('/#contactus');  
+    }
 
     public function getEventDetails(Request $request)
     {
@@ -2649,7 +2690,9 @@ class ShopMemberController extends Shop
             $data["_locale"]             = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
             $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
 
-            $data['beneficiary'] = null;
+            $data['beneficiary']         = null;
+            $data["_category"]           = Ecom_Product::getAllCategory($this->shop_info->shop_id); //kolorete
+
             if(Self::$customer_info)
             {
                 $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
@@ -2657,7 +2700,6 @@ class ShopMemberController extends Shop
 
                 $data['beneficiary'] = CustomerBeneficiary::first(Self::$customer_info->customer_id);
             }
-
 
             // $data["allowed_change_pass"] = true;
 
@@ -2916,6 +2958,7 @@ class ShopMemberController extends Shop
             $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
             $data['slot_no'] = 0;
             $data['mode'] = 'sponsor';
+            $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id); //kolorete
             
             if($slot)
             {
@@ -2965,6 +3008,7 @@ class ShopMemberController extends Shop
         {
             $data["page"] = "Network List";
             $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+            $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id); //kolorete
 
             if(request()->input("slot_no") == "")
             {
@@ -3231,6 +3275,7 @@ class ShopMemberController extends Shop
         if (isset($this->shop_info->shop_id) && isset(Self::$customer_info->customer_id)) 
         {
             $data["page"]               = "Report";
+            $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id); //kolorete
 
             if(request("sort_by"))
             {
@@ -3336,6 +3381,7 @@ class ShopMemberController extends Shop
             $data["_encashment"]    = MLM2::customer_payout($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
             $total_payout           = MLM2::customer_total_payout(Self::$customer_info->customer_id);
             $data["total_payout"]   = Currency::format($total_payout);
+            $data["_category"]      = Ecom_Product::getAllCategory($this->shop_info->shop_id); // kolorete
             return (Self::load_view_for_members("member.wallet_encashment", $data));
         }
         else
@@ -4577,12 +4623,15 @@ class ShopMemberController extends Shop
                                                  ->first();
             // patrick
             $item_token = Tbl_item_token::where('item_id',$item->record_item_id)->first();
-            $token_log['shop_id']                   = $this->shop_info->shop_id;
-            $token_log['token_log_slot_owner']      = Self::$customer_info->customer_id;
-            $token_log['token_log_date_created']    = Carbon::now();
-            $token_log['token_id']                  = $item_token->token_id;
-            $token_log['amount']              = $item_token->amount;
-            Tbl_item_token_log::insert($token_log);
+            if($item_token)
+            {            
+                $token_log['shop_id']                   = $this->shop_info->shop_id;
+                $token_log['token_log_slot_owner']      = Self::$customer_info->customer_id;
+                $token_log['token_log_date_created']    = Carbon::now();
+                $token_log['token_id']                  = $item_token->token_id;
+                $token_log['amount']              = $item_token->amount;
+                Tbl_item_token_log::insert($token_log);
+            }
 
         }
         else

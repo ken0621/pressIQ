@@ -118,7 +118,7 @@
 		{
 			"label":"Email Address",
 			"type":"textbox",
-			"default":"admin@p4ward.com",
+			"default":"admin@p4wardph.com",
 			"size":"3"
 		},
 		"home_phone_number" :

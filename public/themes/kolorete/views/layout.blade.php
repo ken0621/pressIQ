@@ -10,7 +10,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
-        <link rel="icon" href="/themes/{{ $shop_theme }}/img/3xcell-icon.png"" type="image/png"/>
+        {{-- <link rel="icon" href="/themes/{{ $shop_theme }}/img/3xcell-icon.png"" type="image/png"/> --}}
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet">
@@ -19,12 +19,12 @@
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
-        
+
         @include("frontend.ghead")
-         
+
         <!-- OTHER CSS -->
         @yield("css")
-        
+
         <style type="text/css">
 
         .content
@@ -44,7 +44,7 @@
         </style>
 
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
-        
+
     </head>
 
     <body>
@@ -52,7 +52,7 @@
         <div id="overlay" onclick="off()"></div>
 
         <div class="side-nav">
-            
+
         </div>
 
         {{-- BLURED WHEN SIDENAV WAS CLICKED --}}
@@ -99,33 +99,47 @@
                         <div class="col-md-4">
                             <div class="categories-container">
                                 {{-- <a onclick="myFunction()"><i class="fa fa-bars" aria-hidden="true"></i></a><span>Categories</span> --}}
+                                @if(Request::segment(2)=="login")
+                                <div class="mini-submenu-disabled">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </div>
+                                @elseif(Request::segment(2)=="register")
+                                <div class="mini-submenu-disabled">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </div>
+                                @else
                                 <div class="mini-submenu">
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                 </div>
+                                @endif
                                 <ul id="menu">
                                     <div class="categories-header">
                                         <span class="title">CATEGORIES</span><i id="close-menu" class="fa fa-times" aria-hidden="true"></i>
                                     </div>
 
-                                    {{-- @if(isset($_categories))
-                                        @foreach($_categories as $category)
+                                    @if(isset($_category))
+                                        <li><a href="/product">All</a></li>
+                                        <div class="divider"></div>
+                                        @foreach($_category as $category)
                                             <li><a href="/product?type={{ $category['type_id'] }}">{{ $category['type_name'] }}</a>
                                                 @if($category['subcategory'])
                                                     <ul class="sub-menu">
-                                                        <li><a href="#">Mobile and Gadget</a></li>
+                                                        @foreach($category['subcategory'] as $subcategory)
+                                                        <li><a href="/product?type={{ $subcategory['type_id'] }}">{{ $subcategory['type_name'] }}</a></li>
                                                         <div class="divider"></div>
-                                                        <li><a href="#">Consumer Electronic</a></li>
-                                                        <div class="divider"></div>
-                                                        <li><a href="#">Home and Living</a></li>
-                                                        <div class="divider"></div>
+                                                        @endforeach
                                                     </ul>
                                                 @endif
                                             </li>
                                             <div class="divider"></div>
                                         @endforeach
-                                    @else --}}
+                                    @else
                                         <li><a href="#">Men's Apparel</a>
                                             <ul class="sub-menu">
                                                 <li><a href="#">Mobile and Gadget</a></li>
@@ -174,7 +188,7 @@
                                         <li><a href="#">Bags</a></li>
                                         <div class="divider"></div>
                                         <li><a href="#">Women's Accessories</a></li>
-                                    {{-- @endif --}}
+                                    @endif
                                 </ul>
                             </div>
                         </div>
@@ -186,19 +200,28 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" placeholder="Search...">
+                            <form action="/product" method="get" id="form-search" style="display: inline-block;">
+                                 <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" name="search" id="keyword1" aria-describedby="sizing-addon1" placeholder="Search...">
+                                 <span class="search-button" id="sizing-addon1">
+                                    <a href="" onclick="onSearch(1);" id="submit_link"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                 </span>
+                            </form>
+
+                            {{-- <input type="text" placeholder="Search...">
                             <span>
                                 <i class="fa fa-search" aria-hidden="true"></i>
-                            </span>
-                            
-                            <span class="my-cart">My Cart</span>
-                            <a class="popup" link="/cartv2" size="lg" href="javascript:" style="padding: 0;">
-                                <span><img src="/themes/{{ $shop_theme }}/img/my-cart-logo.png"></span>
-                            </a>
+                            </span> --}}
+
+                            <div class="cart" style="display: inline-block;">
+                                <span class="my-cart">My Cart</span>
+                                <a class="popup" link="/cartv2" size="lg" href="javascript:" style="padding: 0;">
+                                    <span><img src="/themes/{{ $shop_theme }}/img/my-cart-logo.png"></span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
 
             <!-- CONTENT -->
             <div id="scroll-to" class="clearfix">
@@ -208,8 +231,8 @@
             <!-- FOOTER -->
             <footer id="bottom-footer">
                 <div class="container">
-                    
-                    <div class="bottom">                           
+
+                    <div class="bottom">
                         <div class="ftr-title">© 2018 koloretemarketing. All Rights Reserved.</div>
                         <div class="ftr-title-2"><span class="kolorete-policies"><a href="/terms_and_conditions">kolorete marketing Policies</a></span><span class="divider">|</span><span>Powered By: DIGIMA WEB SOLUTIONS, Inc.</span></div>
                     </div>
@@ -236,15 +259,14 @@
         <script type="text/javascript">
             $(function()
             {
-
-                $('#close-menu').on('click',function() 
-                {                 
+                $('#close-menu').on('click',function()
+                {
                     $(this).closest('#menu').toggle(500,function(){
-                    $('.mini-submenu').fadeIn();    
+                    $('.mini-submenu').fadeIn();
                 });
             });
                 $('.mini-submenu').on('click',function()
-                {       
+                {
                     $(this).next('#menu').toggle(500);
                     $('.mini-submenu').hide();
                 })

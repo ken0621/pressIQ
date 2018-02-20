@@ -11,6 +11,7 @@
 				<input id="basic-input" class="form-control" name="token_name" placeholder="Token Name">
 	        </div>
 	    </div>
+
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
@@ -22,7 +23,7 @@
 	{
 		toastr.success('Success');
 		data.element.modal('hide');
-		token.action_load_tokens();
+		new_token.action_load_table();
 	}
 	function error_name()
 	{

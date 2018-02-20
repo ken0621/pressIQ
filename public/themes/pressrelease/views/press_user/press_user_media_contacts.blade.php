@@ -4,20 +4,11 @@
 <div class="pressview">
         <div class="dashboard-container">
         <div class="media-container">
-          @if (Session::has('success_user'))
-          <div class="alert alert-success">
-             <center>{{ Session::get('success_user') }}</center>
-          </div>
-          @endif                        
-          @if (Session::has('delete_user'))   
-          <div class="alert alert-danger">
-             <center>{{ Session::get('delete_user') }}</center>
-          </div>
-          @endif
           <div class="tab">
             <button class="tablinks" onclick="openCity(event, 'add_media')" id="defaultOpen">Add Media Contacts</button>
             <button class="tablinks" onclick="openCity(event, 'press_user')" >Media Contacts</button>
-          </div>                                    
+          </div>
+                                    
             <div class="press-release-content">
                 <div id="add_media" class="tabcontent add-media-container">
                     <form method="post" action="/pressuser/media_contacts/add">
@@ -55,6 +46,7 @@
                             <button type="submit" id="submit_button" name="submit_button">Add Contacts</button>
                         </div>
                     </form>
+                 
                 </div>
 
                 <div id="press_user" class="tabcontent press-media-container">
@@ -76,10 +68,10 @@
                              </tr>
                             @foreach($user_media_contacts as $_user)
                             <tr>
-                               <td style="width: 25%;">{{$_user->name}}</td>
-                               <td style="width: 25%;">{{$_user->company_name}}</td>
-                               <td style="width: 25%;">{{$_user->country}}</td>
-                               <td style="width: 25%;">
+                               <td>{{$_user->name}}</td>
+                               <td>{{$_user->company_name}}</td>
+                               <td>{{$_user->country}}</td>
+                               <td>
                                  <a href=""><button type="button"  class="btn btn-warning center">
                                  <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button>
                                  

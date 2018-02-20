@@ -21,16 +21,19 @@ body
 .slider
 {
 	position: relative;
-
-	height: 500px;
+	// height: 500px;
+	height: 100vh;
 
 	.caption-container
 	{
+		display: flex;
+		flex-direction: column;
+		// align-items: center;
 		font-family: $open-sans;
 		color: #101010;
-		position: relative;
-		top: 125px;
-		left: 40px;
+		// position: relative;
+		// top: 125px;
+		// left: 40px;
 
 	    .caption-1
 	    {
@@ -56,12 +59,12 @@ body
 			color: #373737;
 			font-weight: $light;
 			font-size: 18px;
-			text-align: left;
+			// text-align: left;
 	    }
 
     	.btn-container
     	{
-			padding: 20px 0px 0px 0px;
+			padding: 10px 0;
 
 			.get-plan-now
 			{
@@ -77,51 +80,51 @@ body
 	}
 
 	/* @media for Laptop */
-	@media screen and (max-width: 1280px)
-	{
-		.caption-container
-		{
-			position: relative;
-			top: 120px;
-			left: 30px;
+	// @media screen and (max-width: 1280px)
+	// {
+	// 	.caption-container
+	// 	{
+	// 		position: relative;
+	// 		top: 120px;
+	// 		left: 30px;
 
-		    .caption-1
-		    {
-				font-size: 28px;
-		    }
+	// 	    .caption-1
+	// 	    {
+	// 			font-size: 28px;
+	// 	    }
 
-		    .caption-2
-		    {
-				font-size: 14px;
-		    }
+	// 	    .caption-2
+	// 	    {
+	// 			font-size: 14px;
+	// 	    }
 
-		    .caption-para
-		    {
-				font-size: 18px;
-		    }
+	// 	    .caption-para
+	// 	    {
+	// 			font-size: 18px;
+	// 	    }
 
-	    	.btn-container
-	    	{
-				.get-plan-now
-				{
-					font-size: 14px;
-				}
-			}
-		}
-	}
+	//     	.btn-container
+	//     	{
+	// 			.get-plan-now
+	// 			{
+	// 				font-size: 14px;
+	// 			}
+	// 		}
+	// 	}
+	// }
 	/* end @media for Laptop */
 
 	/* @media for Tablets */
 	@media screen and (max-width: 990px)
 	{
-		height: 250px;
+		height: 50vh;
 
 		.caption-container
 		{
-			position: relative;
-			top: 20px;
-			left: 30px;
-			bottom: 20px;
+			// position: relative;
+			// top: 20px;
+			// left: 30px;
+			// bottom: 20px;
 
 			.caption-1
 		    {
@@ -143,8 +146,6 @@ body
 
 	    	.btn-container
 	    	{
-				padding: 10px 0px 0px 0px;
-
 				.get-plan-now
 				{
 					font-size: 12px;
@@ -188,6 +189,29 @@ body
 	background-color: #0051ff;
 	font-family: $open-sans;
 
+	.div-cont-holder
+	{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		.div-cont
+		{
+			.top
+			{
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+		}
+
+		@media screen and (max-width: 500px)
+		{
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+	}
+
 	.divider-text-header
 	{
 		// text-align: left;
@@ -199,27 +223,27 @@ body
 
 	.divider-sub-text-header
 	{
-		// text-align: left;
+		text-align: center;
 		font-weight: $light;
 		font-size: 12px;
 		color: #fff;
 	}
 
-	img
-	{
-		float: left;
-		margin-right: 5px;
-	}
+	// img
+	// {
+	// 	float: left;
+	// 	margin-right: 5px;
+	// }
 
-	@media screen and (max-width: 991px)
-	{	
-		text-align: center;
+	// @media screen and (max-width: 991px)
+	// {	
+	// 	text-align: center;
 
-		img
-		{
-			float: none;
-		}
-	}
+	// 	img
+	// 	{
+	// 		float: none;
+	// 	}
+	// }
 }
 
 /* TOP-CONTAINER */

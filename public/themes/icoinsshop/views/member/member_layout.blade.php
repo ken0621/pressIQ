@@ -4,7 +4,7 @@
 	<div class="container">
 		<div class="members">
 			<div class="header hidden">
-				
+
 				<div class="notification">
 					<img src="/themes/{{ $shop_theme }}/img/bell.png">
 					<span class="badge">500</span>
@@ -29,11 +29,11 @@
 				</div>
 				<div class="side-nav">
 					<ul>
-					
+
 						<li class="{{ Request::segment(2) == "" ? "active" : "" }}">
 							<a href="/members"><div class="nav-holder"><div class="icon brown-icon-dashboard"></div> <span>Dashboard</span></div></a>
 						</li>
-						
+
 						<li class="{{ Request::segment(2) == "profile" ? "active" : "" }}">
 							<a href="/members/profile"><div class="nav-holder"><div class="icon brown-icon-profile"></div> <span>Profile</span></div></a>
 						</li>
@@ -91,4 +91,3 @@
 @yield("member_script")
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/member.js"></script>
 @endsection
-

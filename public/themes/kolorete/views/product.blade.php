@@ -6,7 +6,7 @@
 			<div class="prod-container">
 				<div class="row clearfix">
 
-					<div class="cat-promo-holder col-md-3 col-sm-3 col-xs-4">
+					{{-- <div class="cat-promo-holder col-md-3 col-sm-3 col-xs-4">
 
 						<!-- PRODUCT CATEGORIES -->
 						<div class="cat-container">
@@ -35,14 +35,13 @@
 								@endif
 							</div>
 						</div>
+					</div> --}}
 
-					</div>
-
-					<div class="product-list-holder col-md-9 col-sm-12 col-xs-12">
+					<div class="product-list-holder col-md-12 col-sm-12 col-xs-12">
 						<div class="prod-list-container">
 							<div class="title-container">All<div class="line-bot"></div></div>
-							<div class="prod-list row clearfix">
-								<div class="row clearfix">
+							<div class="prod-list">
+								<div class="row no-gutters clearfix gutters">
 									<!-- PER ITEM -->
 									@if(count($_product) > 0)
 										@foreach($_product as $product)
@@ -64,7 +63,7 @@
 											</div>
 										</a> --}}
 
-										<div class="col-md-3">
+										<div class="col-md-2">
 											<div class="product-holder">
 												<a class="item-hover" href="/product/view2/{{ $product['eprod_id'] }}" style="text-decoration: none;">
 													<div class="product-image">
@@ -85,7 +84,7 @@
 															</a>
 														</div>
 														<div class="col-md-6">
-															<a href="javascript:" class="product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}">
+															<a href="javascript:" class="product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}" quantity="1">
 																<div class="image-holder">
 																	<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
 																</div>
@@ -97,7 +96,7 @@
 										</div>
 										@endforeach
 									@else
-										<div class="col-md-3">
+										<div class="col-md-2">
 											<div class="product-holder">
 												<a href="javascript:">
 													<div class="product-image">
@@ -128,7 +127,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-3">
+										<div class="col-md-2">
 											<div class="product-holder">
 												<a href="javascript:">
 													<div class="product-image">
@@ -159,7 +158,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-3">
+										<div class="col-md-2">
 											<div class="product-holder">
 												<a href="javascript:">
 													<div class="product-image">
@@ -190,7 +189,7 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-3">
+										<div class="col-md-2">
 											<div class="product-holder">
 												<a href="javascript:">
 													<div class="product-image">
@@ -199,6 +198,68 @@
 													<div class="details-container">
 														<div class="product-name  match-height">Verdon Ne Silky Keratin Hair Spa</div>
 														<div class="product-price">P 120.00</div>
+													</div>
+												</a>
+												<div class="bottom-container">
+													<div class="row-no-padding clearfix">
+														<div class="col-md-6">
+															<a href="#">
+																<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+																	<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+																</div>
+															</a>
+														</div>
+														<div class="col-md-6">
+															<a href="#">
+																<div class="image-holder">
+																	<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+																</div>
+															</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2">
+											<div class="product-holder">
+												<a href="javascript:">
+													<div class="product-image">
+														<img src="/themes/{{ $shop_theme }}/img/product-2.jpg">
+													</div>
+													<div class="details-container">
+														<div class="product-name  match-height">Elite Contact Lens Mangge kyo Sharinggan</div>
+														<div class="product-price">P 360.00</div>
+													</div>
+												</a>
+												<div class="bottom-container">
+													<div class="row-no-padding clearfix">
+														<div class="col-md-6">
+															<a href="#">
+																<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+																	<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
+																</div>
+															</a>
+														</div>
+														<div class="col-md-6">
+															<a href="#">
+																<div class="image-holder">
+																	<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
+																</div>
+															</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2">
+											<div class="product-holder">
+												<a href="javascript:">
+													<div class="product-image">
+														<img src="/themes/{{ $shop_theme }}/img/product-2.jpg">
+													</div>
+													<div class="details-container">
+														<div class="product-name  match-height">Elite Contact Lens Mangge kyo Sharinggan</div>
+														<div class="product-price">P 360.00</div>
 													</div>
 												</a>
 												<div class="bottom-container">

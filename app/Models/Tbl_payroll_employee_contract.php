@@ -35,7 +35,7 @@ class Tbl_payroll_employee_contract extends Model
 		{
 			$query->where('tbl_payroll_employee_contract.payroll_employee_id', $employee_id);
 		}
-
+ 
 		return $query;
 	}
 

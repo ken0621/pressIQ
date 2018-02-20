@@ -18,7 +18,6 @@
 <!--EXTERNAL-->
 <script type="text/javascript" src="/assets/front/external_js/match-height.js"></script>
 <script type="text/javascript" src="/assets/front/external_js/fit-text.js"></script>
-<script type="text/javascript" src="/assets/front/external_js/figuesslider.js"></script>
 <script type="text/javascript" src="/assets/front/external_js/jquery.keep-ratio.min.js"></script>
 <script type="text/javascript" src="/assets/front/external_js/footable.js"></script>
 <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>

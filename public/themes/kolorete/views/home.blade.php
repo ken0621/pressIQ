@@ -61,14 +61,14 @@
 					    			<div class="row-no-padding clearfix">
 					    				<div class="col-md-6">
 					    					<a href="/product/view2/{{ $product['eprod_id'] }}">
-					    						<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+					    						<div class="image-holder-1" style="border-right: 1px solid #9e9e9e;">
 					    							<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
 					    						</div>
 					    					</a>
 					    				</div>
 					    				<div class="col-md-6">
 					    					<a href="javascript:" class="product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}" quantity="1">
-					    						<div class="image-holder">
+					    						<div class="image-holder-2">
 					    							<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
 					    						</div>
 					    					</a>
@@ -491,14 +491,14 @@
 				    				<div class="row-no-padding clearfix">
 				    					<div class="col-md-6">
 				    						<a href="/product/view2/{{ $product['eprod_id'] }}">
-				    							<div class="image-holder" style="border-right: 1px solid #9e9e9e;">
+				    							<div class="image-holder-1" style="border-right: 1px solid #9e9e9e;">
 				    								<img src="/themes/{{ $shop_theme }}/img/view-product-image.png">
 				    							</div>
 				    						</a>
 				    					</div>
 				    					<div class="col-md-6">
 				    						<a href="javascript:" class="product-add-cart" item-id="{{ $product['variant'][0]['evariant_item_id'] }}" quantity="1">
-				    							<div class="image-holder">
+				    							<div class="image-holder-2">
 				    								<img src="/themes/{{ $shop_theme }}/img/add-to-cart-image.png">
 				    							</div>
 				    						</a>
@@ -728,7 +728,15 @@
 				<img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-1.jpg" style="width: 85%;">
 			</div> --}}
 			<div class="brand-container">
-				<span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-1.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-2.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-3.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-4.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-5.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-6.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-7.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-8.jpg"></span>
+				{{-- <span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-1.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-2.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-3.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-4.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-5.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-6.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-7.jpg"></span><span class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-8.jpg"></span> --}}
+				<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-1.jpg"></div>
+				<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-2.jpg"></div>
+				<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-3.jpg"></div>
+				<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-4.jpg"></div>
+				<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-5.jpg"></div>
+				<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-6.jpg"></div>
+				<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-7.jpg"></div>
+				<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/trusted-brand-image-8.jpg"></div>
 			</div>
 		</div>
 	</div>

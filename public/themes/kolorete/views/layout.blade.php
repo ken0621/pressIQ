@@ -99,11 +99,25 @@
                         <div class="col-md-4">
                             <div class="categories-container">
                                 {{-- <a onclick="myFunction()"><i class="fa fa-bars" aria-hidden="true"></i></a><span>Categories</span> --}}
+                                @if(Request::segment(2)=="login")
+                                <div class="mini-submenu-disabled">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </div>
+                                @elseif(Request::segment(2)=="register")
+                                <div class="mini-submenu-disabled">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </div>
+                                @else
                                 <div class="mini-submenu">
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                 </div>
+                                @endif
                                 <ul id="menu">
                                     <div class="categories-header">
                                         <span class="title">CATEGORIES</span><i id="close-menu" class="fa fa-times" aria-hidden="true"></i>

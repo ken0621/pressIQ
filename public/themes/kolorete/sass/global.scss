@@ -157,6 +157,11 @@ button:hover{
 				margin-top: 3px;
 			}
 		}
+
+		.mini-submenu-disabled
+		{
+			@extend .mini-submenu;
+		}
 		#menu
 		{
 			display: none;

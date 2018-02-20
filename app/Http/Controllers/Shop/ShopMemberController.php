@@ -121,6 +121,8 @@ class ShopMemberController extends Shop
         
         $data["item_kit_id"] = Item::get_first_assembled_kit($this->shop_info->shop_id);
         $data["item_kit"]    = Item::get_all_assembled_kit($this->shop_info->shop_id);
+        $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id); //kolorete
+
         if(Self::$customer_info)
         {
             $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
@@ -135,7 +137,7 @@ class ShopMemberController extends Shop
             $data['mlm_pin'] = '';
             $data['mlm_activation'] = '';            
             $data["first_slot"]         = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->membership()->first();
-           
+
             if($this->shop_info->shop_theme == 'philtech')
             {
                 $data["travel_and_tours"] = false;
@@ -229,12 +231,13 @@ class ShopMemberController extends Shop
             
             return Self::load_view_for_members("member.dashboard", $data);
         }
+
         else
         {
             return Redirect::to('/members/login');
         }
-
     }
+
     public function getDirectReferrals()
     {
         if (Self::$customer_info) 
@@ -2687,7 +2690,9 @@ class ShopMemberController extends Shop
             $data["_locale"]             = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
             $data["allowed_change_pass"] = isset(Self::$customer_info->signup_with) ? (Self::$customer_info->signup_with == "member_register" ? true : false) : false;
 
-            $data['beneficiary'] = null;
+            $data['beneficiary']         = null;
+            $data["_category"]           = Ecom_Product::getAllCategory($this->shop_info->shop_id); //kolorete
+
             if(Self::$customer_info)
             {
                 $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
@@ -2695,7 +2700,6 @@ class ShopMemberController extends Shop
 
                 $data['beneficiary'] = CustomerBeneficiary::first(Self::$customer_info->customer_id);
             }
-
 
             // $data["allowed_change_pass"] = true;
 
@@ -2954,6 +2958,7 @@ class ShopMemberController extends Shop
             $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->first();
             $data['slot_no'] = 0;
             $data['mode'] = 'sponsor';
+            $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id); //kolorete
             
             if($slot)
             {
@@ -3003,6 +3008,7 @@ class ShopMemberController extends Shop
         {
             $data["page"] = "Network List";
             $data['_slot'] = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+            $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id); //kolorete
 
             if(request()->input("slot_no") == "")
             {
@@ -3269,6 +3275,7 @@ class ShopMemberController extends Shop
         if (isset($this->shop_info->shop_id) && isset(Self::$customer_info->customer_id)) 
         {
             $data["page"]               = "Report";
+            $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id); //kolorete
 
             if(request("sort_by"))
             {
@@ -3374,6 +3381,7 @@ class ShopMemberController extends Shop
             $data["_encashment"]    = MLM2::customer_payout($this->shop_info->shop_id, Self::$customer_info->customer_id, 0);
             $total_payout           = MLM2::customer_total_payout(Self::$customer_info->customer_id);
             $data["total_payout"]   = Currency::format($total_payout);
+            $data["_category"]      = Ecom_Product::getAllCategory($this->shop_info->shop_id); // kolorete
             return (Self::load_view_for_members("member.wallet_encashment", $data));
         }
         else

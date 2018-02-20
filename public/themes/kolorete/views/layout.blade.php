@@ -186,15 +186,24 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" placeholder="Search...">
+                            <form action="/product" method="get" id="form-search" style="display: inline-block;">
+                                 <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" name="search" id="keyword1" aria-describedby="sizing-addon1" placeholder="Search...">
+                                 <span class="search-button" id="sizing-addon1">
+                                    <a href="" onclick="onSearch(1);" id="submit_link"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                 </span>
+                            </form>
+
+                            {{-- <input type="text" placeholder="Search...">
                             <span>
                                 <i class="fa fa-search" aria-hidden="true"></i>
-                            </span>
+                            </span> --}}
 
-                            <span class="my-cart">My Cart</span>
-                            <a class="popup" link="/cartv2" size="lg" href="javascript:" style="padding: 0;">
-                                <span><img src="/themes/{{ $shop_theme }}/img/my-cart-logo.png"></span>
-                            </a>
+                            <div class="cart" style="display: inline-block;">
+                                <span class="my-cart">My Cart</span>
+                                <a class="popup" link="/cartv2" size="lg" href="javascript:" style="padding: 0;">
+                                    <span><img src="/themes/{{ $shop_theme }}/img/my-cart-logo.png"></span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -111,10 +111,7 @@ button:hover
 	.right-container
 	{
 		float: right;
-		@media screen and (max-width: 768px) 
-		{
-		    font-size: 10px;
-		}
+		
 		a
 		{
 			color: #fff;
@@ -513,10 +510,10 @@ button:hover
 {
     text-align: center;
 
-    @media screen and (max-width: 991px) 
-    {
-        display: none;
-    }
+    // @media screen and (max-width: 991px) 
+    // {
+    //     display: none;
+    // }
 
     &:hover 
     {

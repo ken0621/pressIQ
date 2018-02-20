@@ -79,6 +79,10 @@ button:hover{
 	.left-container
 	{
 		float: left;
+		@media screen and (max-width: 768px) 
+		{
+		    font-size: 10px;
+		}
 		.about
 		{
 			font-weight: 700;
@@ -99,6 +103,10 @@ button:hover{
 	.right-container
 	{
 		float: right;
+		@media screen and (max-width: 768px) 
+		{
+		    font-size: 10px;
+		}
 		a
 		{
 			color: #fff;
@@ -119,7 +127,14 @@ button:hover{
 	position: relative;
 	background-color: #fff;
 	padding: 10px 0;
-
+	@media screen and (max-width: 768px) 
+	{
+	    text-align: right;
+	}
+	@media screen and (max-width: 425px) 
+	{
+	    text-align: center;
+	}
 	.categories-container
 	{
 		margin-top: 20px;
@@ -176,6 +191,10 @@ button:hover{
 			.categories-header
 			{
 				margin: 15px 0 5px 0;
+				@media screen and (max-width: 768px)
+				{
+					text-align: left;
+				}
 				.title
 				{
 					color: #fff;
@@ -200,6 +219,10 @@ button:hover{
 				padding: 10px 0;
 				position: relative;
 				z-index: 100;
+				@media screen and (max-width: 768px)
+				{
+					text-align: left;
+				}
 				a
 				{
 					text-decoration: none;
@@ -256,6 +279,29 @@ button:hover{
 		// left: 205px;
 		top: 20px;
 		right: 180px;
+		@media screen and (max-width: 768px) 
+		{
+		    right: 135px;
+		}
+		@media screen and (max-width: 425px) 
+		{
+		    right: 170px;
+		}
+		@media screen and (max-width: 375px) 
+		{
+		    right: 145px;
+		}
+		@media screen and (max-width: 320px) 
+		{
+		    right: 65px;
+		}
+	}
+	@media screen and (max-width: 320px) 
+	{
+		.cart
+		{
+			margin-top: 15px;
+		}
 	}
 	.my-cart
 	{
@@ -539,6 +585,15 @@ button:hover{
 		    	float: unset;
 				text-align: center;
 		    }
+		    @media screen and (max-width: 768px)
+		    {
+		    	font-size: 12px;
+		    }
+		    @media screen and (max-width: 425px) 
+		    {
+		        font-size: 6px;
+		    }
+
 		}
 		.ftr-title-2
 		{
@@ -550,6 +605,14 @@ button:hover{
 		    {
 		    	float: unset;
 				text-align: center;
+		    }
+		    @media screen and (max-width: 768px)
+		    {
+		    	font-size: 12px;
+		    }
+		    @media screen and (max-width: 425px) 
+		    {
+		        font-size: 6px;
 		    }
 		    .kolorete-policies
 		    {
@@ -563,6 +626,10 @@ button:hover{
 		    .divider
 		    {
 		    	margin: 0 10px;
+		    	@media screen and (max-width: 425px) 
+		    	{
+		    	    padding: 0px;
+		    	}
 		    }
 		}
 

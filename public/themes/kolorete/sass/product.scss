@@ -186,11 +186,30 @@ body
 						.details-container 
 						{
 						    padding: 8px;
-
+                            @media screen and (max-width: 768px) 
+                            {
+                                text-align: center;
+                            }
 						    .product-name 
 						    {
 						        color: #1f1f1f;
 						        font-size: 12px;
+                                @media screen and (max-width: 768px) 
+                                {
+                                    font-size: 20px;
+                                }
+                                @media screen and (max-width: 425px) 
+                                {
+                                    font-size: 18px;
+                                }
+                                @media screen and (max-width: 375px) 
+                                {
+                                    font-size: 16px;
+                                }
+                                @media screen and (max-width: 3250px) 
+                                {
+                                    font-size: 14px;
+                                }
 						    }
 
 						    .product-price 
@@ -198,6 +217,22 @@ body
 						        margin-top: 5px;
 						        font-weight: 700;
 						        color: #1f1f1f;
+                                @media screen and (max-width: 768px) 
+                                {
+                                    font-size: 15px;
+                                }
+                                @media screen and (max-width: 425px) 
+                                {
+                                    font-size: 13px;
+                                }
+                                @media screen and (max-width: 375px) 
+                                {
+                                    font-size: 12px;
+                                }
+                                @media screen and (max-width: 320px) 
+                                {
+                                    font-size: 10px;
+                                }
 						    }
 						}
 
@@ -207,10 +242,39 @@ body
                             padding-bottom: 10px;
                             text-align: center;
 
-                            .image-holder 
+                            .image-holder-1
                             {
                                 width: 100%;
                                 margin: auto;
+                                @media screen and (max-width: 768px) 
+                                {
+                                    padding-right: 100px
+                                }
+                                @media screen and (max-width: 425px) 
+                                {
+                                    padding-right: 70px
+                                }
+                                @media screen and (max-width: 320px) 
+                                {
+                                    padding-right: 50px;
+                                }
+                            }
+                            .image-holder-2
+                            {
+                                width: 100%;
+                                margin: auto;
+                                @media screen and (max-width: 768px) 
+                                {
+                                    padding-left: 100px
+                                }
+                                @media screen and (max-width: 425px) 
+                                {
+                                    padding-left: 70px
+                                }
+                                @media screen and (max-width: 320px) 
+                                {
+                                    padding-left: 50px;
+                                }
                             }
                         }
                     }

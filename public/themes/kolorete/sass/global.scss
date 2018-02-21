@@ -256,77 +256,76 @@ button:hover
 		}
 	}
 
-    .flex-parent
-    {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    // .flex-parent
+    // {
+    //     display: flex;
+    //     align-items: center;
+    //     justify-content: space-between;
 
-        .flex-item
-        {
-            flex: 1 100px;
-            position: relative;
+    //     .flex-item
+    //     {
+    //         flex: 1 100px;
+    //         position: relative;
 
-            form
-            {
-                position: relative;
+    //         form
+    //         {
+    //             position: relative;
 
-                input
-            	{
-            		width: 100%;
-            		border: 1px solid #767676;
-            		padding: 5px 30px 5px 10px;
-            		// position: relative;
-            		// margin-left: 18px;
-            	}
+    //             input
+    //         	{
+    //         		width: 100%;
+    //         		border: 1px solid #767676;
+    //         		padding: 5px 30px 5px 10px;
+    //         		// position: relative;
+    //         		// margin-left: 18px;
+    //         	}
 
-            	.fa-search
-            	{
-            		position: absolute;
-            		font-size: 20px;
-            		color: #000;
-        		    top: 6px;
-                    right: 0;
-                    left: 175px;
+    //         	.fa-search
+    //         	{
+    //         		position: absolute;
+    //         		font-size: 20px;
+    //         		color: #000;
+    //     		    top: 6px;
+    //                 right: 0;
+    //                 left: 175px;
 
-            		@media screen and (max-width: 768px)
-            		{
-            		    right: 135px;
-            		}
-            		@media screen and (max-width: 425px)
-            		{
-            		    right: 170px;
-            		}
-            		@media screen and (max-width: 375px)
-            		{
-            		    right: 145px;
-            		}
-            		@media screen and (max-width: 320px)
-            		{
-            		    right: 65px;
-            		}
-            	}
-            }
+    //         		@media screen and (max-width: 768px)
+    //         		{
+    //         		    right: 135px;
+    //         		}
+    //         		@media screen and (max-width: 425px)
+    //         		{
+    //         		    right: 170px;
+    //         		}
+    //         		@media screen and (max-width: 375px)
+    //         		{
+    //         		    right: 145px;
+    //         		}
+    //         		@media screen and (max-width: 320px)
+    //         		{
+    //         		    right: 65px;
+    //         		}
+    //         	}
+    //         }
 
-            .cart
-            {
-                display: inline-block;
-                margin-left: auto;
+    //         .cart
+    //         {
+    //             display: inline-block;
+    //             margin-left: auto;
 
-                a
-                {
-                    text-decoration: none;
-                }
-            }
-        }
+    //             a
+    //             {
+    //                 text-decoration: none;
+    //             }
+    //         }
+    //     }
 
-        @media screen and (max-width: 800px)
-        {
-            //flex-direction: column;
-            flex-wrap: wrap;
-        }
-    }
-
+    //     @media screen and (max-width: 800px)
+    //     {
+    //         //flex-direction: column;
+    //         flex-wrap: wrap;
+    //     }
+    // }
 
 	@media screen and (max-width: 320px)
 	{

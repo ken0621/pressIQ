@@ -379,7 +379,7 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }
     }
-    
+        
     public function send_pr()
     {
         $pr_info["pr_type"]         =request('pr_type');
@@ -457,7 +457,7 @@ class ShopMemberController extends Shop
                 else
                 {
                     $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info);
-                    Session::flash('email_sent', 'Press Release Successfully Sent!');
+                     Session::flash('email_sent', 'Press Release Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
                 }
                 
@@ -469,24 +469,24 @@ class ShopMemberController extends Shop
 
     public function send($pr_info)        
     {
-        dd('Sorry, Website under Construction!');
+        // dd('Sorry, Website under Construction!');
 
         // $campaigns = count(tbl_pressiq_press_releases::where('pr_from', session('user_email')->get()));
         // $limit     = count(tbl_pressiq_press_releases::where('user_membership',session('user_email')->get()));    
   
-        // $to  = explode(",", $pr_info['pr_to']);
-        // $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
+        $to  = explode(",", $pr_info['pr_to']);
+        $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
 
-        // foreach ($to as $pr_info['pr_to']) 
-        // {
+        foreach ($to as $pr_info['pr_to']) 
+        {
 
-        //     Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
-        //     {
-        //         $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
-        //         $message->to($pr_info['pr_to']);
-        //         $message->subject($pr_info["pr_headline"]);
-        //     });
-        // }
+            Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
+            {
+                $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
+                $message->to($pr_info['pr_to']);
+                $message->subject($pr_info["pr_headline"]);
+            });
+        }
     }  
    
     public function send_contact_us()
@@ -562,7 +562,7 @@ class ShopMemberController extends Shop
         $pr_info["pr_status"]           ="Draft";
         $pr_info["pr_date_sent"]        =Carbon::now();
         $pr_info["pr_sender_name"]      =session('user_first_name').' '.session('user_last_name');
-        $pr_info["pr_receiver_name"]     =request('recipient_name');
+        $pr_info["pr_receiver_name"]    =request('recipient_name');
         $pr_info["pr_co_name"]          =session('user_company_name');
         $pr_info["pr_co_img"]           =session('user_company_image');
         $pr_info["pr_type"]             =$request->pr_type;
@@ -827,8 +827,8 @@ class ShopMemberController extends Shop
 
     public function press_release_analytics_campaign()
     {
-         if (Session::exists('user_email')) 
-         {
+        if (Session::exists('user_email')) 
+        {
             $explode_email = explode("@", Session::get('user_email'));
             $curl = curl_init();
             curl_setopt_array($curl, array(
@@ -870,7 +870,7 @@ class ShopMemberController extends Shop
                 return view("press_user.press_user_analytics_view",$data);
             }
         }
-         else
+        else
         {
            return Redirect::to("/"); 
         }
@@ -1154,6 +1154,7 @@ class ShopMemberController extends Shop
 
     public function add_user(Request $request)
     {
+
         if(request()->isMethod("post"))
         {       
             $value["user_first_name"]=request('user_first_name');
@@ -1167,6 +1168,8 @@ class ShopMemberController extends Shop
             $rules["password"] = ['required','min:5','confirmed'];
             $value["user_company_name"] = request("user_company_name");
             $rules["user_company_name"] = ['required'];
+            $value["user_country"]=request('user_country');
+            $rules["user_country"]=['required'];
             $value["user_company_image"] = request("user_company_image");
             $rules["user_company_image"] = ['required'];
             $validator = Validator::make($value, $rules);
@@ -1190,6 +1193,7 @@ class ShopMemberController extends Shop
                 $data["user_date_created"]               = Carbon::now();
                 $data["user_company_name"]               = $request->user_company_name;
                 $data["user_membership"]                 = $request->user_membership;
+                $data["user_country"]                    = $request->user_country;
                 $data["user_level"]                      = "2";
                 if($path!="")
                 {
@@ -1208,15 +1212,13 @@ class ShopMemberController extends Shop
 
     public function manage_user()
     {
-        $data['_user'] = Tbl_pressiq_user::where('user_level',2)
-                        ->orderByRaw('user_date_created DESC')
-                        ->get();
-        $data['_admin'] = Tbl_pressiq_user::where('user_level',1)->get();
-        $data['_user_edit'] = Tbl_pressiq_user::where('user_id',session('edit_user'))->get();
-        $data['_admin_edit'] = Tbl_pressiq_user::where('user_id',session('edit_admin'))->get();
-        
-        $data['_edit'] = Tbl_pressiq_user::where('user_id',session('u_edit'))->get();
-        
+        $data['_user']          = Tbl_pressiq_user::where('user_level',2)
+                                 ->orderByRaw('user_date_created DESC')
+                                 ->get();
+        $data['_admin']         = Tbl_pressiq_user::where('user_level',1)->get();
+        $data['_user_edit']     = Tbl_pressiq_user::where('user_id',session('edit_user'))->get();
+        $data['_admin_edit']    = Tbl_pressiq_user::where('user_id',session('edit_admin'))->get();
+        $data['_edit']          = Tbl_pressiq_user::where('user_id',session('u_edit'))->get();
 
         if(Session::exists('user_email'))
         {
@@ -1385,7 +1387,7 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }
 
-    }  
+    }    
 
      public function importExcel(Request $request)     
     {  
@@ -1414,7 +1416,11 @@ class ShopMemberController extends Shop
                     }
                 }
             });     
-        }     
+        } 
+        else
+        {
+            return redirect::back();
+        }    
 
         Session::put('success', 'Your file successfully import in database!!!');
         return back();

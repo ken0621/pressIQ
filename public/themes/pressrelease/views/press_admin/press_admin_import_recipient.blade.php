@@ -10,7 +10,7 @@
             </button>
             <strong>Success!</strong> {{ $message }}
           </div>
-      @endif
+      @endif     
       {!! Session::forget('success') !!}
       <div class="dashboard-container">
         <div class="title-container">Import Recipient File</div>

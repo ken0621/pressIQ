@@ -111,10 +111,7 @@ button:hover
 	.right-container
 	{
 		float: right;
-		@media screen and (max-width: 768px)
-		{
-		    font-size: 10px;
-		}
+        
 		a
 		{
 			color: #fff;
@@ -539,11 +536,6 @@ button:hover
 .image-logo-holder
 {
     text-align: center;
-
-    // @media screen and (max-width: 991px)
-    // {
-    //     display: none;
-    // }
 
     &:hover
     {

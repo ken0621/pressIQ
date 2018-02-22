@@ -103,5 +103,31 @@ class Tbl_payroll_period extends Model
 		}
 
 		return $query;
-	}                                       
+	}   
+
+	public function scopeGetFirstPeriod($query,$company,$year,$month)
+	{
+		$query->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+	          ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
+	            ->where('tbl_payroll_period_company.payroll_period_status','!=','pending')
+	            ->where('tbl_payroll_period_company.payroll_company_id',$company)
+	            ->where('year_contribution',$year)
+	            ->where('period_count','first_period')
+	            ->where('month_contribution',$month);
+
+	    return $query;
+	}
+
+	public function scopeGetLastPeriod($query,$company,$year,$month)
+	{
+		$query->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
+	         ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
+	          ->where('tbl_payroll_period_company.payroll_period_status','!=','pending')
+              ->where('year_contribution',$year)
+              ->where('tbl_payroll_period_company.payroll_company_id',$company)
+              ->where('period_count','last_period')
+              ->where('month_contribution',$month);
+
+              return $query;
+	}                                  
 }

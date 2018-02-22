@@ -785,18 +785,18 @@ body
 		text-align: left;
 		@media screen and (max-width: 768px)
 		{
-			margin-bottom: 20px;
+			margin-bottom: 10px 0 20px 0;
 		}
 
-		a
+		button
 		{
 			@include transition(0.3s);
 			background-color: #0466af;
-			width: 180px;
 			color: #fff;
+			width: 160px;
 			font-size: 15px;
-			padding: 10px 40px;
-			text-decoration: none;
+			padding: 15px 0;
+			border: none;
 
 			&:hover
 			{

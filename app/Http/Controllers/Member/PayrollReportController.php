@@ -777,32 +777,24 @@ class PayrollReportController extends Member
 		$payroll_department_id  = request::input('payroll_department_id');
 
 
-		$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
+		$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->GetJobTitle()->basic()->get();
 		// dd($data["_employee"]);
 
 		if ($payroll_company_id != 0 || $payroll_department_id != 0) 
 		{
 			if($payroll_department_id != 0)
 			{		
-					if($payroll_company_id != 0)
-					{
-						  $data["_employee"] 	= Tbl_payroll_time_keeping_approved::join('tbl_payroll_employee_contract','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')->where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->where('tbl_payroll_employee_contract.payroll_department_id',$payroll_department_id)->where('tbl_payroll_employee_contract.payroll_employee_contract_archived', 0)->basic()->get();
-					}
-					else
-					{
-						$data["_employee"] 	= Tbl_payroll_time_keeping_approved::join('tbl_payroll_employee_contract','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')->where("payroll_period_company_id", $period_company_id)->where('tbl_payroll_employee_contract.payroll_department_id',$payroll_department_id)->where('tbl_payroll_employee_contract.payroll_employee_contract_archived', 0)->basic()->get();
-					}
-				  
+					      $data["_employee"] 	= Tbl_payroll_time_keeping_approved::FilterbyDept($payroll_company_id,$payroll_department_id,$period_company_id)->basic()->get();				  
 			}
 			else if($payroll_company_id != 0)
 			{		
 					if($payroll_department_id != 0)
 					{
-						  $data["_employee"] 	= Tbl_payroll_time_keeping_approved::join('tbl_payroll_employee_contract','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')->where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->where('tbl_payroll_employee_contract.payroll_department_id',$payroll_department_id)->where('tbl_payroll_employee_contract.payroll_employee_contract_archived', 0)->basic()->get();
+						  $data["_employee"] 	= Tbl_payroll_time_keeping_approved::FilterbyDept($payroll_company_id,$payroll_department_id,$period_company_id)->basic()->get();
 					}
 					else
 					{
-						    $data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->basic()->get();
+						  $data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->GetJobTitle()->basic()->get();
 
 					}
 				  
@@ -810,7 +802,7 @@ class PayrollReportController extends Member
 	
 			if (count($data["_employee"]) == 0 )
 			{
-				$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_company_id)->get();
+				$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->GetJobTitle()->basicfilter($payroll_company_id)->get();
 			}
 
 		}
@@ -818,7 +810,6 @@ class PayrollReportController extends Member
 		$data = Payroll2::get_total_payroll_register($data);
 		// dd($data);
 		$data['columns'] = Tbl_payroll_register_column::select('*')->where('shop_id',Self::shop_id())->get();
-		// dd($data);
 		return view('member.payrollreport.payroll_register_report_table', $data);
 	}
 
@@ -828,7 +819,12 @@ class PayrollReportController extends Member
 			$data['columns'] = Tbl_payroll_register_column::select('*')->where('shop_id',Self::shop_id())->get();
 			if(count($data['columns']) == 0)
 			{
-				$insert['name']							= 1;			
+				$insert['name']							= 1;
+				$insert['position']						= 1;
+				$insert['taxstatus']					= 1;
+				$insert['dailyrate']					= 1;
+				$insert['monthlybasic']					= 1;
+				$insert['semimonthlybasic']				= 1;			
 				$insert['gross_basic_pay']				= 1;
 				$insert['absent']						= 1;
 				$insert['late']							= 1;
@@ -877,7 +873,12 @@ class PayrollReportController extends Member
 
 	public function save_payroll_register_selected_columns()
 	{		
-			$update['name']							= 0;			
+			$update['name']							= 0;
+			$update['position']						= 0;
+			$update['taxstatus']					= 0;
+			$update['dailyrate']					= 0;
+			$update['monthlybasic']					= 0;
+			$update['semimonthlybasic']				= 0;			
 			$update['gross_basic_pay']				= 0;
 			$update['absent']						= 0;
 			$update['late']							= 0;
@@ -921,6 +922,26 @@ class PayrollReportController extends Member
 			if(!empty(request::input('name')))
 			{
 				$update['name'] = request::input('name');
+			}
+			if(!empty(request::input('position')))
+			{
+				$update['position'] = request::input('position');
+			}
+			if(!empty(request::input('taxstatus')))
+			{
+				$update['taxstatus'] = request::input('taxstatus');
+			}
+			if(!empty(request::input('dailyrate')))
+			{
+				$update['dailyrate'] = request::input('dailyrate');
+			}
+			if(!empty(request::input('monthlybasic')))
+			{
+				$update['monthlybasic'] = request::input('monthlybasic');
+			}
+			if(!empty(request::input('semimonthlybasic')))
+			{
+				$update['semimonthlybasic'] = request::input('semimonthlybasic');
 			}
 			if(!empty(request::input('gross_basic_pay')))
 			{
@@ -1086,7 +1107,7 @@ class PayrollReportController extends Member
 	public function payroll_register_report_export_excel($period_company_id, $payroll_company_id,$payroll_department_id)
 	{
         $data["company"] 			= Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
-		$data["_employee"] 			= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
+		$data["_employee"] 			= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->GetJobTitle()->basic()->get();
 		$data["period_info"] 		= $company_period = Tbl_payroll_period_company::sel($period_company_id)->first();
 		$data["show_period_start"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_start));
 		$data["show_period_end"]	= date("F d, Y", strtotime($data["period_info"]->payroll_period_end));
@@ -1095,25 +1116,17 @@ class PayrollReportController extends Member
 		{
 			if($payroll_department_id != 0)
 			{		
-					if($payroll_company_id != 0)
-					{
-						  $data["_employee"] 	= Tbl_payroll_time_keeping_approved::join('tbl_payroll_employee_contract','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')->where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->where('tbl_payroll_employee_contract.payroll_department_id',$payroll_department_id)->where('tbl_payroll_employee_contract.payroll_employee_contract_archived', 0)->basic()->get();
-					}
-					else
-					{
-						$data["_employee"] 	= Tbl_payroll_time_keeping_approved::join('tbl_payroll_employee_contract','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')->where("payroll_period_company_id", $period_company_id)->where('tbl_payroll_employee_contract.payroll_department_id',$payroll_department_id)->where('tbl_payroll_employee_contract.payroll_employee_contract_archived', 0)->basic()->get();
-					}
-				  
+					      $data["_employee"] 	= Tbl_payroll_time_keeping_approved::FilterbyDept($payroll_company_id,$payroll_department_id,$period_company_id)->basic()->get();				  
 			}
 			else if($payroll_company_id != 0)
 			{		
 					if($payroll_department_id != 0)
 					{
-						  $data["_employee"] 	= Tbl_payroll_time_keeping_approved::join('tbl_payroll_employee_contract','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')->where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->where('tbl_payroll_employee_contract.payroll_department_id',$payroll_department_id)->where('tbl_payroll_employee_contract.payroll_employee_contract_archived', 0)->basic()->get();
+						  $data["_employee"] 	= Tbl_payroll_time_keeping_approved::FilterbyDept($payroll_company_id,$payroll_department_id,$period_company_id)->basic()->get();
 					}
 					else
 					{
-						    $data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->basic()->get();
+						  $data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->where('employee_company_id',$payroll_company_id)->GetJobTitle()->basic()->get();
 
 					}
 				  
@@ -1121,12 +1134,13 @@ class PayrollReportController extends Member
 	
 			if (count($data["_employee"]) == 0 )
 			{
-				$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basicfilter($payroll_company_id)->get();
+				$data["_employee"] 	= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->GetJobTitle()->basicfilter($payroll_company_id)->get();
 			}
 
 		}
 
 		$data = Payroll2::get_total_payroll_register($data);
+		$data['columns'] = Tbl_payroll_register_column::select('*')->where('shop_id',Self::shop_id())->get();
 
      	Excel::create($data["company"]->payroll_company_name, function($excel) use ($data)
 		{
@@ -1167,9 +1181,7 @@ class PayrollReportController extends Member
   	public function manpower_report()
     {
     	  $data["_company"] = Payroll::company_heirarchy(Self::shop_id());
-    	  $data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id') ->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
-			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
-			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->get();
+    	  $data['manpower_info'] = Tbl_payroll_manpower_report::selmanpower(Self::shop_id(),0)->get();
           return view("member.payrollreport.manpower_report",$data);
     }
 
@@ -1180,16 +1192,12 @@ class PayrollReportController extends Member
 		if($company_id == 0)
 		{
 			$data['company'] = 'All Company';
-			 $data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id') ->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
-			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
-			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->get();
+			$data['manpower_info'] = Tbl_payroll_manpower_report::selmanpower(Self::shop_id(),$company_id)->get();
 		}
 		else
 		{
 			$data['company'] = Tbl_payroll_company::where('shop_id',Self::shop_id())->where('payroll_company_id',$company_id)->value('payroll_company_name');
-				  $data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
-			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
-			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->where('tbl_payroll_employee_basic.payroll_employee_company_id',$company_id)->get();
+			 $data['manpower_info'] = Tbl_payroll_manpower_report::selmanpower(Self::shop_id(),$company_id)->get();
 		}
 
 
@@ -1206,23 +1214,17 @@ class PayrollReportController extends Member
 
     public function manpower_report_filter()
     {
-    	$company_id =	Request::input("company_id");
+    	$company_id = Request::input("company_id");
 		if($company_id == 0)
 		{
 			$data['company'] = Tbl_payroll_company::where('shop_id',Self::shop_id())->where('payroll_parent_company_id',0)->value('payroll_company_name');
-			 $data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id') ->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
-			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
-			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->get();
+			 $data['manpower_info'] = Tbl_payroll_manpower_report::selmanpower(Self::shop_id(),$company_id)->get();
 		}
 		else
 		{    	 
 			$data["_company"] = Payroll::company_heirarchy(Self::shop_id());
-    	    $data['manpower_info'] = Tbl_payroll_manpower_report::join('tbl_payroll_employee_basic','tbl_payroll_manpower_report.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
-			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
-			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')->where('tbl_payroll_manpower_report.shop_id',Self::shop_id())->where('tbl_payroll_employee_basic.payroll_employee_company_id',$company_id)->get();
-
+    	    $data['manpower_info'] = Tbl_payroll_manpower_report::selmanpower(Self::shop_id(),$company_id)->get();
 		}
-
 
           return view("member.payrollreport.manpower_report_filter",$data);
     }
@@ -1308,26 +1310,11 @@ class PayrollReportController extends Member
 		$date = date('Y-m-d');
 		$data["month_name"]   = DateTime::createFromFormat('!m', $month)->format('F');
 
- 		$data['first_period'] = Tbl_payroll_period::sel($shop_id)
-	                                              ->where('tbl_payroll_period_company.payroll_period_status','!=','pending')
-	                                              ->where('tbl_payroll_period_company.payroll_company_id',$company)
-	                                              ->where('year_contribution',$year)
-	                                              ->where('period_count','first_period')
-	                                              ->where('month_contribution',$data["month_name"])
-	                                              ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
-	                                              ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
-	                                              ->get();
+ 		$data['first_period'] = Tbl_payroll_period::sel($shop_id)->GetFirstPeriod($company,$year,$data["month_name"])->get();
 
-	     $data['last_period'] = Tbl_payroll_period::sel($shop_id)
-	                                              ->where('tbl_payroll_period_company.payroll_period_status','!=','pending')
-	                                              ->where('year_contribution',$year)
-	                                              ->where('tbl_payroll_period_company.payroll_company_id',$company)
-	                                              ->where('period_count','last_period')
-	                                              ->where('month_contribution',$data["month_name"])
-	                                              ->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_id','=','tbl_payroll_period.payroll_period_id')
-	                                              ->join('tbl_payroll_company', 'tbl_payroll_company.payroll_company_id','=', 'tbl_payroll_period_company.payroll_company_id')
-	                                              ->get();
-
+	    $data['last_period'] = Tbl_payroll_period::sel($shop_id)->GetLastPeriod($company,$year,$data["month_name"])->get();
+	                                            
+	                                             
 	     if(count($data['last_period']) != 0 && count($data['first_period']) != 0 && $company != 0)
 	     {
 			  //get minimun earnes
@@ -1365,52 +1352,61 @@ class PayrollReportController extends Member
 
 				    $temp['first_period_total_minimum']      = Payroll2::payroll_number_format($data['total_minimum_first']['total_gross'],2);
 				    $temp['last_period_total_minimum']       = Payroll2::payroll_number_format($data['total_minimum_last']['total_gross'],2);
-				    $temp['total_for_1601c_minimum']		  =  Payroll2::payroll_number_format(($data['total_minimum_first']['total_gross'] + $data['total_minimum_last']['total_gross']),2);
+				    $temp['total_for_1601c_minimum']		 =  Payroll2::payroll_number_format(($data['total_minimum_first']['total_gross'] + $data['total_minimum_last']['total_gross']),2);
 
-					$temp['first_minimum_16_b']	              = $data['total_minimum_first']['nightdiff_total'
+				    //add first and last minimum
+					$temp['first_minimum_16_b']	             = $data['total_minimum_first']['nightdiff_total'
 					] + $data['total_minimum_first']['leave_pay_total'] + $data['total_minimum_first']['special_holiday_total'] + $data['total_minimum_first']['regular_holiday_total'] + $data['total_minimum_first']['overtime_total'];
-					$temp['last_minimum_16_b']           	  = $data['total_minimum_last']['nightdiff_total'
+					$temp['last_minimum_16_b']           	 = $data['total_minimum_last']['nightdiff_total'
 					] + $data['total_minimum_last']['leave_pay_total'] + $data['total_minimum_last']['special_holiday_total'] + $data['total_minimum_last']['regular_holiday_total'] + $data['total_minimum_last']['overtime_total'];
 
-					$temp['total_minimum_1601c']              = $temp['first_minimum_16_b'] + $temp['last_minimum_16_b'];
+					//first + last minimum
+					$temp['total_minimum_1601c']             = $temp['first_minimum_16_b'] + $temp['last_minimum_16_b'];
 			     }
 
+			     	//get nontaxable first and last
+			   	     $data["_employee"]                    	 = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data['first_period'][0]->payroll_period_company_id)->basic()->get();
 
-			    $data["_employee"]                    	  = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data['first_period'][0]->payroll_period_company_id)->basic()->get();
+			         $data['non_taxable_total_first']        = Payroll2::get_total_payroll_register($data);
 
-			    $data['non_taxable_total_first']          = Payroll2::get_total_payroll_register($data);
+			         $data["_employee"]                    	 = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data['last_period'][0]->payroll_period_company_id)->basic()->get();
 
-			    $data["_employee"]                    	  = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $data['last_period'][0]->payroll_period_company_id)->basic()->get();
+			         $data['non_taxable_total_last']          = Payroll2::get_total_payroll_register($data);
 
-			    $data['non_taxable_total_last']          = Payroll2::get_total_payroll_register($data);
 
-			     $temp['first_period_total_compensation'] = Payroll2::payroll_number_format($data['first_period'][0]->payroll_period_total_gross, 2);
-			     $temp['last_period_total_compensation']  = Payroll2::payroll_number_format($data['last_period'][0]->payroll_period_total_gross, 2);
-			     $temp['total_for_1601c']                 =  Payroll2::payroll_number_format(($data['last_period'][0]->payroll_period_total_gross + $data['first_period'][0]->payroll_period_total_gross), 2);
+			         //compute first and last non taxable
+			         $temp['first_period_total_compensation'] = Payroll2::payroll_number_format($data['first_period'][0]->payroll_period_total_gross, 2);
+			         $temp['last_period_total_compensation']  = Payroll2::payroll_number_format($data['last_period'][0]->payroll_period_total_gross, 2);
+			         $temp['total_for_1601c']                 =  Payroll2::payroll_number_format(($data['last_period'][0]->payroll_period_total_gross + $data['first_period'][0]->payroll_period_total_gross), 2);
 
-				$allowances_first                         = $data['non_taxable_total_first']['total_adjustment_allowance'] + $data['non_taxable_total_first']['total_adjustment_bonus'] + $data['non_taxable_total_first']['total_adjustment_commission'] + $data['non_taxable_total_first']['total_adjustment_incentives'] + $data['non_taxable_total_first']['total_adjustment_additions']  + $data['non_taxable_total_first']['total_adjustment_13th_month_and_other']  + $data['non_taxable_total_first']['total_adjustment_de_minimis_benefit']  + $data['non_taxable_total_first']['total_adjustment_others'];
+			         //add allowances first period
+			         $allowances_first                        = $data['non_taxable_total_first']['total_adjustment_allowance'] + $data['non_taxable_total_first']['total_adjustment_bonus'] + $data['non_taxable_total_first']['total_adjustment_commission'] + $data['non_taxable_total_first']['total_adjustment_incentives'] + $data['non_taxable_total_first']['total_adjustment_additions']  + $data['non_taxable_total_first']['total_adjustment_13th_month_and_other']  + $data['non_taxable_total_first']['total_adjustment_de_minimis_benefit']  + $data['non_taxable_total_first']['total_adjustment_others'];
 
-				$temp['non_tax_compensation_first']       = $data['non_taxable_total_first']['total_er'] + $data['non_taxable_total_first']['total_ee'] + $data['non_taxable_total_first']['total_ec'] + $allowances_first; 
+				     $temp['non_tax_compensation_first']      = $data['non_taxable_total_first']['total_er'] + $data['non_taxable_total_first']['total_ee'] + $data['non_taxable_total_first']['total_ec'] + $allowances_first; 
 
-				$allowances_last                         = $data['non_taxable_total_last']['total_adjustment_allowance'] + $data['non_taxable_total_last']['total_adjustment_bonus'] + $data['non_taxable_total_last']['total_adjustment_commission'] + $data['non_taxable_total_last']['total_adjustment_incentives'] + $data['non_taxable_total_last']['total_adjustment_additions']  + $data['non_taxable_total_last']['total_adjustment_13th_month_and_other']  + $data['non_taxable_total_last']['total_adjustment_de_minimis_benefit']  + $data['non_taxable_total_last']['total_adjustment_others'];
 
-				$temp['non_tax_compensation_last']       = $data['non_taxable_total_last']['total_er'] + $data['non_taxable_total_last']['total_ee'] + $data['non_taxable_total_last']['total_ec'] + $allowances_last; 
+				     //add allowances last period
+				     $allowances_last                         = $data['non_taxable_total_last']['total_adjustment_allowance'] + $data['non_taxable_total_last']['total_adjustment_bonus'] + $data['non_taxable_total_last']['total_adjustment_commission'] + $data['non_taxable_total_last']['total_adjustment_incentives'] + $data['non_taxable_total_last']['total_adjustment_additions']  + $data['non_taxable_total_last']['total_adjustment_13th_month_and_other']  + $data['non_taxable_total_last']['total_adjustment_de_minimis_benefit']  + $data['non_taxable_total_last']['total_adjustment_others'];
 
-				$temp['total_non_tax_compensation']		 = $temp['non_tax_compensation_first'] + $temp['non_tax_compensation_last'];
+				     $temp['non_tax_compensation_last']       = $data['non_taxable_total_last']['total_er'] + $data['non_taxable_total_last']['total_ee'] + $data['non_taxable_total_last']['total_ec'] + $allowances_last; 
 
-				$temp['total_taxable_first'] 			 = $temp['first_period_total_compensation'] - ($temp['non_tax_compensation_first'] + $temp['first_minimum_16_b'] + $temp['first_period_total_minimum']);
 
-				$temp['total_taxable_last'] 			 = $temp['last_period_total_compensation'] - ($temp['non_tax_compensation_last'] + $temp['last_minimum_16_b'] + $temp['last_period_total_minimum']);
 
-				$temp['total_taxable']		 = $temp['total_taxable_first'] + $temp['total_taxable_last'];
+				     $temp['total_non_tax_compensation']	  = $temp['non_tax_compensation_first'] + $temp['non_tax_compensation_last'];
 
-			    $temp['tax_with_held_first']			  = $data['non_taxable_total_first']['witholding_tax_total'];
-			    $temp['tax_with_held_last']				  = $data['non_taxable_total_last']['witholding_tax_total'];
-			    $temp['tax_total']						  = $temp['tax_with_held_first'] + $temp['tax_with_held_last'];
+				     $temp['total_taxable_first'] 			  = $temp['first_period_total_compensation'] - ($temp['non_tax_compensation_first'] + $temp['first_minimum_16_b'] + $temp['first_period_total_minimum']);
 
-			     array_push($bir_report,$temp);
+				     $temp['total_taxable_last'] 			  = $temp['last_period_total_compensation'] - ($temp['non_tax_compensation_last'] + $temp['last_minimum_16_b'] + $temp['last_period_total_minimum']);
 
-			     return $bir_report;
+				     $temp['total_taxable']		              = $temp['total_taxable_first'] + $temp['total_taxable_last'];
+
+			         $temp['tax_with_held_first']			  = $data['non_taxable_total_first']['witholding_tax_total'];
+			         $temp['tax_with_held_last']		      = $data['non_taxable_total_last']['witholding_tax_total'];
+			         $temp['tax_total']						  = $temp['tax_with_held_first'] + $temp['tax_with_held_last'];
+
+			         array_push($bir_report,$temp);
+
+			         return $bir_report;
 	     }
 	}
 

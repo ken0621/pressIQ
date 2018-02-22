@@ -5,6 +5,7 @@ use Request;
 use stdClass;
 use Redirect;
 use Carbon\Carbon;
+use Excel;
 
 use DateTime;
 use App\Http\Controllers\Controller;
@@ -72,11 +73,27 @@ class PayrollLedger extends Member
 		$data["_employee"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee_id)
 		->where("tbl_payroll_period_company.payroll_period_status","!=","pending")
 		->get();
-
+		$data["employee_id"] = $employee_id;
 		$data = Payroll2::get_total_payroll_register($data);
 		
 		return view("member.payrollreport.payroll_employee_ledger",$data);
 	}
 
+	public function export_excel_ledger($employee_id)
+	{
+		$data["employee"] = Tbl_payroll_employee_basic::where("tbl_payroll_employee_basic.payroll_employee_id",$employee_id)->first();
+		$data["_employee"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee_id)
+		->where("tbl_payroll_period_company.payroll_period_status","!=","pending")
+		->get();
+		$data = Payroll2::get_total_payroll_register($data);
+
+		Excel::create("Employee Ledger",function($excel) use ($data)
+		{
+			$excel->sheet('clients',function($sheet) use ($data)
+			{
+				$sheet->loadView('member.payrollreport.payroll_employee_ledger_excel',$data);
+			});
+		})->download('xls');
+	}
 
 }

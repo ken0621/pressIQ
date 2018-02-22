@@ -6874,14 +6874,27 @@ class Payroll2
 			{
 
 				$time_performance = unserialize($employee->cutoff_breakdown)->_time_breakdown;
-				
 				$data["_employee"][$key]->time_spent 				= $time_performance["time_spent"]["time"];
 				$data["_employee"][$key]->time_overtime 			= $time_performance["overtime"]["time"];
 				$data["_employee"][$key]->time_night_differential 	= $time_performance["night_differential"]["time"];
-				$data["_employee"][$key]->time_leave_hours 			= $time_performance["leave_hours"]["time"];
-				$data["_employee"][$key]->time_regular_holiday 		= $time_performance["regular_holiday"]["float"];
-				$data["_employee"][$key]->time_special_holiday 		= $time_performance["special_holiday"]["float"];
 
+				if(isset($time_performance["leave_hours"]["time"]))
+				{
+					$data["_employee"][$key]->time_leave_hours 		= $time_performance["leave_hours"]["time"];
+					$time_total_leave_hours							+= $time_performance["leave_hours"]["time"];
+				}
+				if(isset($time_performance["regular_holiday"]["float"]))
+				{
+					$data["_employee"][$key]->time_regular_holiday 		= $time_performance["regular_holiday"]["float"];
+					$time_total_regular_holiday					   	    += $time_performance["regular_holiday"]["float"];
+				}
+				if(isset($time_performance["special_holiday"]["float"]))
+				{
+					$data["_employee"][$key]->time_special_holiday 		= $time_performance["special_holiday"]["float"];
+					$time_total_special_holiday			                += $time_performance["special_holiday"]["float"];
+				}
+				
+				
 				if ($payroll_group_salary_computation->payroll_group_code != "Flat Rate") 
 				{
 					$data["_employee"][$key]->time_absent 			= $time_performance["absent"]["float"];
@@ -6898,10 +6911,8 @@ class Payroll2
 				$time_total_time_spent				+= $time_performance["time_spent"]["time"];
 				$time_total_overtime				+= $time_performance["overtime"]["time"];
 				$time_total_night_differential		+= $time_performance["night_differential"]["time"];
-				$time_total_leave_hours				+= $time_performance["leave_hours"]["time"];
-				$time_total_regular_holiday			+= $time_performance["regular_holiday"]["float"];
-				$time_total_special_holiday			+= $time_performance["special_holiday"]["float"];
 				
+		
 				if ($payroll_group_salary_computation->payroll_group_code != "Flat Rate") 
 				{
 					$time_total_undertime				+= $time_performance["undertime"]["time"];

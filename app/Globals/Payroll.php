@@ -2796,10 +2796,10 @@ class Payroll
 			{
 				$period_category = 'Second Period';
 			}
-			else if($next_month != $current_month)
-			{
-				$period_category = 'Last Period';
-			}
+			// else if($next_month != $current_month)
+			// {
+			// 	$period_category = 'Last Period';
+			// }
 
 			/* get total number of weeks per month */
 			for($i = 1; $i <= $date_end_count; $i++)

@@ -304,15 +304,15 @@ body{
     <td class="text-center incentives_td_td" id="incentives_td">{{ number_format($employee->adjustment_incentives,2) }}</td>
     <td class="text-center additions_td_td" id="additions_td">{{ number_format($employee->adjustment_additions,2) }}</td>
     <td class="text-center month_13_and_other_td_td" id="month_13_and_other_td">{{ number_format($employee->adjustment_13th_month_and_other,2) }}</td>
-    <td class="text-center de_minimis_benefit_td_td" id="de_minimis_benefit_td">{{ number_format($employee->allowance_de_minimis,2) }}</td>
+    <td class="text-center de_minimis_benefit_td_td" id="de_minimis_benefit_td">{{ number_format($employee->allowance_de_minimis + $employee->adjustment_de_minimis_benefit, 2) }}</td>
     <td class="text-center others_td_td" id="others_td">{{ number_format($employee->adjustment_others,2) }}</td>
     @if($columns[0]->gross_pay == 1)
     <td class="text-center gross_pay_td_td" id="gross_pay_td">{{ number_format($employee->gross_pay,2) }}</td>
     @endif
     <!--<td class="text-center" >{{ number_format($employee->adjustment_allowance,2) }}</td>-->
     <td class="text-center deductions_td_td" id="deductions_td">({{ number_format($employee->adjustment_deductions,2) }})</td>
-    <td class="text-center cash_bond_td_td" id="cash_bond_td">({{ number_format((number_format($employee->cash_bond,2) + number_format($employee->adjustment_cash_bond,2)), 2) }})</td>
-    <td class="text-center cash_advance_td_td" id="cash_advance_td">({{ number_format((number_format($employee->cash_advance,2) + number_format($employee->adjustment_cash_advance,2)),2) }})</td>
+    <td class="text-center cash_bond_td_td" id="cash_bond_td">({{ number_format($employee->cash_bond + $employee->adjustment_cash_bond, 2) }})</td>
+    <td class="text-center cash_advance_td_td" id="cash_advance_td">({{ number_format($employee->cash_advance + $employee->adjustment_cash_advance,2) }})</td>
     <td class="text-center other_loan_td_td" id="other_loan_td">({{ number_format($employee->other_loans,2) }})</td>
     <!-- <td class="text-center" >{{ number_format($employee->adjustment_deduction,2) }}</td> -->
     <td class="text-center sss_loan_td_td" id="sss_loan_td">({{ number_format($employee->sss_loan,2) }})</td>

@@ -4482,14 +4482,45 @@ class PayrollController extends Member
                     $empdataremwithoutpay  = Tbl_payroll_leave_schedulev2::getleavewithoutpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'],$date,$company,Self::shop_id())->get();
                     $empdata               = Tbl_payroll_leave_schedulev2::getviewleavedata($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'],$date,$company,Self::shop_id())->get();
 
-                    array_push($datas, $empdata); 
-                    array_push($remwithpay, $empdataremwithpay); 
-                    array_push($remwithoutpay, $empdataremwithoutpay); 
+                    foreach($empdata as $newkey => $emp)
+                    {
+                         if($emp->payroll_employee_id == $emp_id['payroll_employee_id'])
+                         {
+                              if(count($empdataremwithpay) == 0)
+                              {
+                                   $withpaytotal = 0;
+                              }
+                              else
+                              {
+                                   $withpaytotal = $empdataremwithpay[0]->total_leave_consume;
+                              }
+
+                              if(count($empdataremwithoutpay) == 0)
+                              {
+                                   $withoutpaytotal = 0;
+                              }
+                              else
+                              {
+                                   $withoutpaytotal = $empdataremwithoutpay[0]->total_leave_consume;
+                              }
+
+                              $temp['payroll_leave_temp_name']        = $emp->payroll_leave_temp_name;
+                              $temp['payroll_employee_id']            = $emp->payroll_employee_id;
+                              $temp['payroll_employee_display_name']  = $emp->payroll_employee_display_name;
+                              $temp['payroll_leave_temp_hours']       = $emp->payroll_leave_temp_hours;
+                              $temp['total_leave_consume']            = $emp->total_leave_consume;
+                              $temp['remaining_leave']                = $emp->remaining_leave;
+                              $temp['withpaytotal']                   = $withpaytotal;
+                              $temp['withoutpaytotal']                = $withoutpaytotal;
+
+                              array_push($datas, $temp); 
+                         }
+
+                    }
                } 
 
                $data['leave_report']    = $datas;
-               $data['remwithpay']      = $remwithpay;
-               $data['remwithoutpay']   = $remwithoutpay;   
+
           }
           else if($category == 'annual_leave')
           {

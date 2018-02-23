@@ -183,65 +183,16 @@
                         <tbody>
                             @if(isset($leave_report))
                             @foreach($leave_report as $leave_data)
-                                @foreach($leave_data as $leave)
                             <tr>
-                                <td class="text-center">{{ $leave->payroll_leave_temp_name }}</td>
-                                <td class="text-center">{{ $leave->payroll_employee_id }}</td>
-                                <td class="text-center">{{ $leave->payroll_employee_display_name }}</td>
-                                <td class="text-center">{{ $leave->payroll_leave_temp_hours }}</td>
-
-
-                                @php $paycheck = NULL; @endphp
-                                @foreach($remwithpay as $remwith)
-                                    @foreach($remwith as $pay)
-                                             @if($pay->payroll_employee_id == $leave->payroll_employee_id)
-                                                     @php
-                                                     $paycheck = $pay;
-                                                     break;
-                                                     @endphp
-                                             @endif
-                                    @endforeach
-                                @endforeach
-
-                                @if(!is_null($paycheck))
-                                @foreach($remwithpay as $remwith)
-                                    @foreach($remwith as $pay)
-                                             @if($pay->payroll_employee_id == $leave->payroll_employee_id)
-                                                 <td class="text-center">{{$pay->total_leave_consume}}</td>
-                                             @endif
-                                    @endforeach
-                                @endforeach
-                                 @else
-                                    <td class="text-center">0.00</td>
-                                @endif
-
-                                @php $withoutpaycheck = NULL; @endphp
-                                @foreach($remwithoutpay as $remwiths)
-                                    @foreach($remwiths as $withoutpay)
-                                             @if($withoutpay->payroll_employee_id == $leave->payroll_employee_id)
-                                                     @php
-                                                     $withoutpaycheck = $withoutpay;
-                                                     break;
-                                                     @endphp
-                                             @endif
-                                    @endforeach
-                                @endforeach
-
-                                @if(!is_null($withoutpaycheck))
-                                    @foreach($remwithoutpay as $remwiths)
-                                            @foreach($remwiths as $withoutpay)
-                                                     @if($withoutpay->payroll_employee_id == $leave->payroll_employee_id)
-                                                        <td class="text-center">{{$withoutpay->total_leave_consume}}</td>
-                                                     @endif
-                                            @endforeach
-                                     @endforeach
-                                @else
-                                    <td class="text-center">0.00</td>
-                                @endif
-                                <td class="text-center">{{ $leave->total_leave_consume }}</td>
-                                <td class="text-center">{{ $leave->remaining_leave }}</td>
+                                <td class="text-center">{{ $leave_data['payroll_leave_temp_name'] }}</td>
+                                <td class="text-center">{{ $leave_data['payroll_employee_id'] }}</td>
+                                <td class="text-center">{{ $leave_data['payroll_employee_display_name'] }}</td>
+                                <td class="text-center">{{ $leave_data['payroll_leave_temp_hours'] }}</td>
+                                <td class="text-center">{{ $leave_data['withpaytotal'] }}</td>
+                                <td class="text-center">{{ $leave_data['withoutpaytotal'] }}</td>
+                                <td class="text-center">{{ $leave_data['total_leave_consume'] }}</td>
+                                <td class="text-center">{{ $leave_data['remaining_leave'] }}</td>
                             </tr>
-                                 @endforeach
                             @endforeach
                             @endif
                         </tbody>

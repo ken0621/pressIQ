@@ -298,7 +298,7 @@ body{
     <td class="text-center leave_pay_td_td" id="leave_pay_td">{{ number_format($employee->leave_pay,2) }}</td> 
     @endif
 
-    <td class="text-center allowance_td_td" id="allowance_td">{{ number_format((number_format($employee->allowance,2) + number_format($employee->adjustment_allowance, 2)), 2) }}</td>
+    <td class="text-center allowance_td_td" id="allowance_td">{{ number_format($employee->allowance + $employee->adjustment_allowance, 2) }}</td>
     <td class="text-center bonus_td_td" id="bonus_td">{{ number_format($employee->adjustment_bonus,2) }}</td>
     <td class="text-center commision_td_td" id="commision_td">{{ number_format($employee->adjustment_commission,2) }}</td>
     <td class="text-center incentives_td_td" id="incentives_td">{{ number_format($employee->adjustment_incentives,2) }}</td>

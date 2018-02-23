@@ -5371,22 +5371,42 @@ class Payroll2
 						$a[$count] = $d;
 						$count++;
 					}
-					// dd($actual_gross_pay);
-					// if($allowance->special_holiday_pay==1)
-					// {
-					// 	$allowance_amount = $allowance_amount * 1.3;
-					// }
 
+					$standard_gross_pay += $actual_gross_pay;
+					$val["amount"] = (@($actual_gross_pay/$standard_gross_pay) * $allowance_amount) * $return->_time_breakdown["day_spent"]["float"];
+
+					if($return->_time_breakdown["special_holiday"]["float"] != 0)
+					{
+						$dayspent = $return->_time_breakdown["day_spent"]["float"];
+						$special_holiday_spent = $return->_time_breakdown["special_holiday"]["float"];
+						$allowances = 0;
+						for($i = 1; $i <= $dayspent; $i++)
+						{
+							if($special_holiday_spent != 0)
+							{
+								for($j = $special_holiday_spent; $j > 0; $j--)
+								{
+									$tempallow = $special_holiday_rate * $allowance_amount;
+									$allowances += $tempallow;
+								}
+								$special_holiday_spent = 0;
+								continue;
+							}
+
+							$allowances += $allowance_amount;
+						}
+
+						$val["amount"] = (@($actual_gross_pay/$standard_gross_pay) * $allowances);
+
+					}
 					// dd($d);
 					// dd($a);
 					// dd($actual_gross_pay ." / " . $standard_gross_pay ." * " . $allowance_amount);
-					$standard_gross_pay += $actual_gross_pay;
-					$val["amount"] = (@($actual_gross_pay/$standard_gross_pay) * $allowance_amount) * $return->_time_breakdown["day_spent"]["float"];
 							
 					// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);
 
-					
 				}
+
 				else if ($allowance->payroll_allowance_type == 'daily') 
 				{
 					$val["amount"] = $allowance_amount * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);

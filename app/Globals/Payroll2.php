@@ -5250,7 +5250,8 @@ class Payroll2
 	{
 		$_allowance = Tbl_payroll_employee_allowance_v2::where("payroll_employee_id", $data["employee_id"])->where('tbl_payroll_allowance_v2.payroll_allowance_archived',0)->joinAllowance()->get();
 		$total_allowance_year_non_taxable = Payroll2::get_total_allowance_for_a_year($data["employee_id"], $data["period_info"]["year_contribution"], "Non-Taxable");
-		
+		$special_holiday_rate = Tbl_payroll_overtime_rate::where('payroll_group_id',$data['group']->payroll_group_id)->where('payroll_overtime_name','Special Holiday')->value('payroll_overtime_regular');
+
 		foreach($_allowance as $key => $allowance)
 		{
 			$allowance_period = strtolower(str_replace(' ', '_', $allowance->payroll_allowance_add_period));
@@ -5295,7 +5296,7 @@ class Payroll2
 					$regular_holiday = 0;
 					$deduction = 0;
 					$count = 0;
-
+	
 					foreach ($data['cutoff_input'] as $value) 
 					{
 						if (isset($value->compute->_breakdown_addition)) 
@@ -5370,13 +5371,18 @@ class Payroll2
 						$a[$count] = $d;
 						$count++;
 					}
+					// dd($actual_gross_pay);
+					// if($allowance->special_holiday_pay==1)
+					// {
+					// 	$allowance_amount = $allowance_amount * 1.3;
+					// }
 
 					// dd($d);
 					// dd($a);
 					// dd($actual_gross_pay ." / " . $standard_gross_pay ." * " . $allowance_amount);
 					$standard_gross_pay += $actual_gross_pay;
 					$val["amount"] = (@($actual_gross_pay/$standard_gross_pay) * $allowance_amount) * $return->_time_breakdown["day_spent"]["float"];
-					
+							
 					// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);
 
 					

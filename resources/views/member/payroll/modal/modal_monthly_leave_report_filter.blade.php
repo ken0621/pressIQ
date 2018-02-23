@@ -100,23 +100,16 @@
                         </thead>
                         <tbody>
                             @if(isset($leave_report))
-                            @foreach($leave_report as $leave_data)
-                                @foreach($leave_data as $leave)
-                                    <tr>
-                                        <td class="text-center">{{ $leave->payroll_leave_temp_name }}</td>
-                                        <td class="text-center">{{ $leave->payroll_employee_id }}</td>
-                                        <td class="text-center">{{ $leave->payroll_employee_display_name }}</td>
-                                        <td class="text-center">{{ $leave->payroll_leave_temp_hours }}</td>
-                                        <td class="text-center">{{ $leave->total_leave_consume }}</td>
-                                        @foreach($remainings as $remain)
-                                         @foreach($remain as $rem)
-                                          @if($rem->payroll_employee_id == $leave->payroll_employee_id)
-                                          <td class="text-center">{{ $rem->remaining_leave }}</td>
-                                          @endif
-                                          @endforeach
-                                        @endforeach
-                                    </tr>
-                                 @endforeach
+                             @foreach($leave_report as $leave_data)
+                                <tr>
+                                        <td class="text-center">{{ $leave_data['payroll_leave_temp_name'] }}</td>
+                                        <td class="text-center">{{ $leave_data['payroll_employee_id'] }}</td>
+                                        <td class="text-center">{{ $leave_data['payroll_employee_display_name'] }}</td>
+                                        <td class="text-center">{{ $leave_data['payroll_leave_temp_hours'] }}</td>
+                                        <td class="text-center">{{ $leave_data['total_leave_consume'] }}</td>
+                                        <td class="text-center">{{ $leave_data['remaining_leave'] }}</td>
+
+                                </tr>
                             @endforeach
                             @endif
                         </tbody>
@@ -143,23 +136,16 @@
                         </thead>
                         <tbody>
                             @if(isset($leave_report))
-                            @foreach($leave_report as $leave_data)
-                                @foreach($leave_data as $leave)
-                                    <tr>
-                                        <td class="text-center">{{ $leave->payroll_leave_temp_name }}</td>
-                                        <td class="text-center">{{ $leave->payroll_employee_id }}</td>
-                                        <td class="text-center">{{ $leave->payroll_employee_display_name }}</td>
-                                        <td class="text-center">{{ $leave->payroll_leave_temp_hours }}</td>
-                                        <td class="text-center">{{ $leave->total_leave_consume }}</td>
-                                        @foreach($remainings as $remain)
-                                         @foreach($remain as $rem)
-                                          @if($rem->payroll_employee_id == $leave->payroll_employee_id)
-                                          <td class="text-center">{{ $rem->remaining_leave }}</td>
-                                          @endif
-                                          @endforeach
-                                        @endforeach
-                                    </tr>
-                                 @endforeach
+                             @foreach($leave_report as $leave_data)
+                                <tr>
+                                        <td class="text-center">{{ $leave_data['payroll_leave_temp_name'] }}</td>
+                                        <td class="text-center">{{ $leave_data['payroll_employee_id'] }}</td>
+                                        <td class="text-center">{{ $leave_data['payroll_employee_display_name'] }}</td>
+                                        <td class="text-center">{{ $leave_data['payroll_leave_temp_hours'] }}</td>
+                                        <td class="text-center">{{ $leave_data['total_leave_consume'] }}</td>
+                                        <td class="text-center">{{ $leave_data['remaining_leave'] }}</td>
+
+                                </tr>
                             @endforeach
                             @endif
                         </tbody>

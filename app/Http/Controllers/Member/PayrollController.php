@@ -4412,13 +4412,29 @@ class PayrollController extends Member
                     $empdata          = Tbl_payroll_leave_schedulev2::getleavewithoutpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'],$date,$company,Self::shop_id())->get();
 
 
-                    array_push($datas, $empdata); 
-                    array_push($remaining, $empdataremaining);
+                    foreach($empdata as $newkey => $emp)
+                    {
+                         foreach($empdataremaining as $newkeys => $emps)
+                         {
+                              if($emps->payroll_employee_id == $emp->payroll_employee_id)
+                              {
+                                   $temp['payroll_leave_temp_name']        = $emp->payroll_leave_temp_name;
+                                   $temp['payroll_employee_id']            = $emp->payroll_employee_id;
+                                   $temp['payroll_leave_date_created']     = $emp->payroll_leave_date_created;
+                                   $temp['payroll_employee_display_name']  = $emp->payroll_employee_display_name;
+                                   $temp['payroll_leave_employee_id']      = $emp->payroll_leave_employee_id;
+                                   $temp['total_leave_consume']            = $emp->total_leave_consume;
+                                   $temp['remaining_leave']                = $emps->remaining_leave;
+                                   $temp['payroll_leave_temp_hours']       = $emp->payroll_leave_temp_hours;
+
+                                   array_push($datas, $temp);
+                              }
+                         }
+                    }
                }
 
 
                    $data['leave_report'] = $datas;
-                   $data['remainings']   = $remaining;
           }
           else if($category == 'monthly_with')
           {
@@ -4430,12 +4446,28 @@ class PayrollController extends Member
                     $empdataremaining  = Tbl_payroll_leave_schedulev2::getremainings($emp_id['payroll_employee_id'],$date,$company,Self::shop_id())->get();
                     $empdata           = Tbl_payroll_leave_schedulev2::getleavewithpay($emp_id['payroll_employee_id'],$emp_id['payroll_leave_employee_id'],$date,$company,Self::shop_id())->get();
 
-                    array_push($datas, $empdata); 
-                    array_push($remaining, $empdataremaining);
+                    foreach($empdata as $newkey => $emp)
+                    {
+                         foreach($empdataremaining as $newkeys => $emps)
+                         {
+                              if($emps->payroll_employee_id == $emp->payroll_employee_id)
+                              {
+                                   $temp['payroll_leave_temp_name']        = $emp->payroll_leave_temp_name;
+                                   $temp['payroll_employee_id']            = $emp->payroll_employee_id;
+                                   $temp['payroll_leave_date_created']     = $emp->payroll_leave_date_created;
+                                   $temp['payroll_employee_display_name']  = $emp->payroll_employee_display_name;
+                                   $temp['payroll_leave_employee_id']      = $emp->payroll_leave_employee_id;
+                                   $temp['total_leave_consume']            = $emp->total_leave_consume;
+                                   $temp['remaining_leave']                = $emps->remaining_leave;
+                                   $temp['payroll_leave_temp_hours']       = $emp->payroll_leave_temp_hours;
+
+                                   array_push($datas, $temp);
+                              }
+                         }
+                    }
                }
 
                    $data['leave_report'] = $datas;
-                   $data['remainings']   = $remaining;
           }
           else if($category == 'monthly_remaining')
           {

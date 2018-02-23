@@ -5377,28 +5377,28 @@ class Payroll2
 
 					if($return->_time_breakdown["special_holiday"]["float"] != 0)
 					{
-						$dayspent = $return->_time_breakdown["day_spent"]["float"];
-						$special_holiday_spent = $return->_time_breakdown["special_holiday"]["float"];
 						$allowances = 0;
-						for($i = 1; $i <= $dayspent; $i++)
+						foreach($data['cutoff_input'] as $value)
 						{
-							if($special_holiday_spent != 0)
-							{
-								for($j = $special_holiday_spent; $j > 0; $j--)
+								if($value->time_output['time_spent'] != '00:00:00')
 								{
-									$tempallow = $special_holiday_rate * $allowance_amount;
-									$allowances += $tempallow;
+									if($value->time_output['is_holiday'] == "special")
+									{
+										$tempallow = $special_holiday_rate * $allowance_amount;
+										$allowances += $tempallow;
+									}
+									else
+									{
+										$allowances += $allowance_amount;
+									}
 								}
-								$special_holiday_spent = 0;
-								continue;
-							}
-
-							$allowances += $allowance_amount;
+							
 						}
 
 						$val["amount"] = (@($actual_gross_pay/$standard_gross_pay) * $allowances);
 
 					}
+		
 					// dd($d);
 					// dd($a);
 					// dd($actual_gross_pay ." / " . $standard_gross_pay ." * " . $allowance_amount);

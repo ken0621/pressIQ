@@ -47,6 +47,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/*START payroll ledger*/
 	Route::any('/reports/payroll_ledger','Member\PayrollLedger@index');
 	Route::any('/reports/payroll_ledger/{employee_id}','Member\PayrollLedger@modal_ledger');
+	Route::any('/reports/payroll_ledger/export_excel_ledger/{employee_id}','Member\PayrollLedger@export_excel_ledger');
 	/*END payroll ledger/
 
 	/*START PAYROLL REGISTER REPORT*/

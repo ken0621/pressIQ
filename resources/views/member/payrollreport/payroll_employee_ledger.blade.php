@@ -11,6 +11,9 @@
                 </small>
             </h1>
             {{-- <a href="#"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button></a> --}}
+            <a href="/member/payroll/reports/payroll_ledger/export_excel_ledger/{{$employee_id}}" class="excel_tag"><button type="button" class="btn btn-success pull-right" style="margin-right:20px;margin-bottom: 20px"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
+
+       {{--      <button style="margin-right:  20px;" type="button" onclick="action_load_link_to_modal('/member/payroll/reports/payroll_ledger/modal_filter_ledger_columns', 'sm')" class="btn btn-def-white btn-custom-white pull-right"><i class="fa fa-cog" aria-hidden="true"></i> &nbsp;COLUMNS</button> --}}
         </div>
     </div>
 </div>

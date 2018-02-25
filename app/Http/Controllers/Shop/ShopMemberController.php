@@ -3391,7 +3391,7 @@ class ShopMemberController extends Shop
     }
     public function getWalletTransfer()
     {
-        // dd("This page is under maintenance");
+        dd("This page is under maintenance");
         $data['page'] = "Wallet Transfer";
         $data['customer_id'] = Self::$customer_info->customer_id;
         // $slot_no = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();

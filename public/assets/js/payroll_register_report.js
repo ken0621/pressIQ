@@ -17,7 +17,7 @@ function payroll_register_report()
 		$(document).ready(function(){
 			event_register_report_filter();
 			action_register_report_table(0);
-			export_excel_register_report();
+			// export_excel_register_report();
 		});
 	}
 	
@@ -55,16 +55,16 @@ function payroll_register_report()
 			});
 	}
 
-	function export_excel_register_report()
-	{
-		$(".btn-export-excel").on('click',function()
-		{
-			var period_company_id = $(".period_company_id").val();
-			var payroll_company_id    = $('#filter_report').val();
-			var payroll_department_id = $('#filter_department').val();
-			window.location = "/member/payroll/reports/payroll_register_report_period/export_excel/"+period_company_id+"/"+payroll_company_id+"/"+payroll_department_id;
-		});
-	}
+	// function export_excel_register_report()
+	// {
+	// 	$(".btn-export-excel").on('click',function()
+	// 	{
+	// 		var period_company_id = $(".period_company_id").val();
+	// 		var payroll_company_id    = $('#filter_report').val();
+	// 		var payroll_department_id = $('#filter_department').val();
+	// 		window.location = "/member/payroll/reports/payroll_register_report_period/export_excel/"+period_company_id+"/"+payroll_company_id+"/"+payroll_department_id;
+	// 	});
+	// }
 
 }
 

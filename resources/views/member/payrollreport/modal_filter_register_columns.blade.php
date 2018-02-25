@@ -14,6 +14,26 @@
                   <label><input type="checkbox" name="name" value="1" {{$column->name == 1 ? 'checked' : 'unchecked'}}>Name</label>
                 </div>
 
+                  <div class="checkbox">
+                  <label><input type="checkbox" name="position" value="1" {{$column->position == 1 ? 'checked' : 'unchecked'}}>Position</label>
+                </div>
+
+                  <div class="checkbox">
+                  <label><input type="checkbox" name="taxstatus" value="1" {{$column->taxstatus == 1 ? 'checked' : 'unchecked'}}>Tax Status</label>
+                </div>
+
+                  <div class="checkbox">
+                  <label><input type="checkbox" name="dailyrate" value="1" {{$column->dailyrate == 1 ? 'checked' : 'unchecked'}}>Daily Rate</label>
+                </div>
+
+                  <div class="checkbox">
+                  <label><input type="checkbox" name="monthlybasic" value="1" {{$column->monthlybasic == 1 ? 'checked' : 'unchecked'}}>Monthly Basic</label>
+                </div>
+
+                  <div class="checkbox">
+                  <label><input type="checkbox" name="semimonthlybasic" value="1" {{$column->semimonthlybasic == 1 ? 'checked' : 'unchecked'}}>Semi Monthly Basic</label>
+                </div>
+
                 <div class="checkbox">
                 <label><input type="checkbox" name="gross_basic_pay" value="1" {{$column->gross_basic_pay == 1 ? 'checked' : 'unchecked'}}>Gross Basic Pay</label>
                 </div>

@@ -104,4 +104,35 @@ class Tbl_payroll_time_keeping_approved extends Model
 		}
 		return $query;
 	}
+
+	public function scopeFilterbyDept($query,$payroll_company_id,$payroll_department_id,$period_company_id)
+	{
+		$date = date('Y-m-d');
+		$query->join('tbl_payroll_employee_contract','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
+		->join('tbl_payroll_jobtitle','tbl_payroll_employee_contract.payroll_jobtitle_id','=','tbl_payroll_jobtitle.payroll_jobtitle_id')
+		->join('tbl_payroll_employee_salary','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_salary.payroll_employee_id')
+		->where("payroll_period_company_id", $period_company_id)
+		->where('tbl_payroll_employee_contract.payroll_department_id',$payroll_department_id)
+		->where('tbl_payroll_employee_contract.payroll_employee_contract_archived', 0)
+		->where('payroll_employee_salary_effective_date','<=', $date)
+		->orderBy('payroll_employee_salary_id', 'desc');
+
+		if($payroll_company_id != 0)
+		{
+			$query->where('employee_company_id',$payroll_company_id);
+		}
+		return $query;
+	}
+
+	public function scopeGetJobTitle($query)
+	{
+		$date = date('Y-m-d');
+		$query->join('tbl_payroll_employee_contract','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
+		->join('tbl_payroll_jobtitle','tbl_payroll_employee_contract.payroll_jobtitle_id','=','tbl_payroll_jobtitle.payroll_jobtitle_id')
+		->join('tbl_payroll_employee_salary','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_salary.payroll_employee_id')
+		->where('payroll_employee_salary_effective_date','<=', $date)
+		->orderBy('payroll_employee_salary_id', 'desc');
+
+		return $query;
+	}
 }

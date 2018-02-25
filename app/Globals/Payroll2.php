@@ -5258,7 +5258,8 @@ class Payroll2
 	{
 		$_allowance = Tbl_payroll_employee_allowance_v2::where("payroll_employee_id", $data["employee_id"])->where('tbl_payroll_allowance_v2.payroll_allowance_archived',0)->joinAllowance()->get();
 		$total_allowance_year_non_taxable = Payroll2::get_total_allowance_for_a_year($data["employee_id"], $data["period_info"]["year_contribution"], "Non-Taxable");
-		
+		$special_holiday_rate = Tbl_payroll_overtime_rate::where('payroll_group_id',$data['group']->payroll_group_id)->where('payroll_overtime_name','Special Holiday')->value('payroll_overtime_regular');
+
 		foreach($_allowance as $key => $allowance)
 		{
 			$allowance_period = strtolower(str_replace(' ', '_', $allowance->payroll_allowance_add_period));
@@ -5303,7 +5304,7 @@ class Payroll2
 					$regular_holiday = 0;
 					$deduction = 0;
 					$count = 0;
-
+	
 					foreach ($data['cutoff_input'] as $value) 
 					{
 						if (isset($value->compute->_breakdown_addition)) 
@@ -5373,10 +5374,11 @@ class Payroll2
 
 					$standard_gross_pay += $actual_gross_pay;
 
+
 					$val["amount"] = (@($actual_gross_pay/$standard_gross_pay) * $allowance_amount) * $return->_time_breakdown["day_spent"]["float"];
 					
-					// dd($actual_gross_pay ."/". $standard_gross_pay ."*".$allowance_amount." = ".$val["amount"]."*".$return->_time_breakdown["day_spent"]["float"]);	
 				}
+
 				else if ($allowance->payroll_allowance_type == 'daily') 
 				{
 					$val["amount"] = $allowance_amount * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);
@@ -6805,6 +6807,9 @@ class Payroll2
 		$nightdiff_total 		 			= 0;
 		$restday_total 		 				= 0;
 		$rendered_days_total				= 0;
+		$daily_rate_total					= 0;
+		$monthly_basic_total				= 0;
+		$semimonthly_basic_total			= 0;
 
 		$total_adjustment_allowance					= 0;
 		$total_adjustment_bonus						= 0;
@@ -6845,6 +6850,7 @@ class Payroll2
 			$total_pagibig_ee 		+= Payroll2::payroll_number_format($employee->pagibig_ee,2);
 			$total_pagibig_er 		+= Payroll2::payroll_number_format($employee->pagibig_er,2);
 
+
 			// $total_deduction_employee += $employee["total_deduction"];
 
 			$data["_employee"][$key] 		   = $employee;
@@ -6859,19 +6865,34 @@ class Payroll2
 			$g_total_ee += Payroll2::payroll_number_format($total_ee,2);
 
 			$total_deduction += ($total_ee);
+			$monthly_basic_total += $employee->payroll_employee_salary_monthly;
+			$semimonthly_basic_total += $employee->payroll_employee_salary_monthly / 2;
 
 			if (isset($employee->cutoff_breakdown)) 
 			{
 
 				$time_performance = unserialize($employee->cutoff_breakdown)->_time_breakdown;
-				
 				$data["_employee"][$key]->time_spent 				= $time_performance["time_spent"]["time"];
 				$data["_employee"][$key]->time_overtime 			= $time_performance["overtime"]["time"];
 				$data["_employee"][$key]->time_night_differential 	= $time_performance["night_differential"]["time"];
-				$data["_employee"][$key]->time_leave_hours 			= $time_performance["leave_hours"]["time"];
-				$data["_employee"][$key]->time_regular_holiday 		= $time_performance["regular_holiday"]["float"];
-				$data["_employee"][$key]->time_special_holiday 		= $time_performance["special_holiday"]["float"];
 
+				if(isset($time_performance["leave_hours"]["time"]))
+				{
+					$data["_employee"][$key]->time_leave_hours 		= $time_performance["leave_hours"]["time"];
+					$time_total_leave_hours							+= $time_performance["leave_hours"]["time"];
+				}
+				if(isset($time_performance["regular_holiday"]["float"]))
+				{
+					$data["_employee"][$key]->time_regular_holiday 		= $time_performance["regular_holiday"]["float"];
+					$time_total_regular_holiday					   	    += $time_performance["regular_holiday"]["float"];
+				}
+				if(isset($time_performance["special_holiday"]["float"]))
+				{
+					$data["_employee"][$key]->time_special_holiday 		= $time_performance["special_holiday"]["float"];
+					$time_total_special_holiday			                += $time_performance["special_holiday"]["float"];
+				}
+				
+				
 				if ($payroll_group_salary_computation->payroll_group_code != "Flat Rate") 
 				{
 					$data["_employee"][$key]->time_absent 			= $time_performance["absent"]["float"];
@@ -6888,10 +6909,8 @@ class Payroll2
 				$time_total_time_spent				+= $time_performance["time_spent"]["time"];
 				$time_total_overtime				+= $time_performance["overtime"]["time"];
 				$time_total_night_differential		+= $time_performance["night_differential"]["time"];
-				$time_total_leave_hours				+= $time_performance["leave_hours"]["time"];
-				$time_total_regular_holiday			+= $time_performance["regular_holiday"]["float"];
-				$time_total_special_holiday			+= $time_performance["special_holiday"]["float"];
 				
+		
 				if ($payroll_group_salary_computation->payroll_group_code != "Flat Rate") 
 				{
 					$time_total_undertime				+= $time_performance["undertime"]["time"];
@@ -7168,7 +7187,7 @@ class Payroll2
 			if (isset($employee->cutoff_input)) 
 			{
 				$_cutoff_input_breakdown = unserialize($employee->cutoff_input);
-				
+				// dd($_cutoff_input_breakdown);
 				$overtime 		 = 0;
 				$special_holiday = 0;
 				$regular_holiday = 0;
@@ -7179,6 +7198,7 @@ class Payroll2
 				$nightdiff 		 = 0;
 				$restday 		 = 0;
 				$rendered_days   = 0;
+				$daily_rate      = 0;
 
 				$ot_category = array('Rest Day OT', 'Over Time', 'Legal Holiday Rest Day OT', 'Legal OT', 'Special Holiday Rest Day OT', 'Special Holiday OT');
 				$nd_category = array('Legal Holiday Rest Day ND','Legal Holiday ND','Special Holiday Rest Day ND','Special Holiday ND','Rest Day ND','Night Differential');
@@ -7224,6 +7244,13 @@ class Payroll2
 						
 					}
 
+					if(isset($value->compute->daily_rate))
+					{
+					
+							$daily_rate  		= Payroll2::payroll_number_format($value->compute->daily_rate,2);
+						
+					}
+
 					if (isset($value->compute->_breakdown_deduction)) 
 					{
 						foreach ($value->compute->_breakdown_deduction as $lbl => $values) 
@@ -7260,6 +7287,7 @@ class Payroll2
 				$data["_employee"][$key]->nightdiff 		= $nightdiff;
 				$data["_employee"][$key]->restday 			= $restday;
 				$data["_employee"][$key]->rendered_days     = $rendered_days;
+				$data["_employee"][$key]->daily_rate   	    = $daily_rate;
 
 				$overtime_total 		 		+=	Payroll2::payroll_number_format($overtime,2);
 				$special_holiday_total 			+=	Payroll2::payroll_number_format($special_holiday,2);
@@ -7271,6 +7299,7 @@ class Payroll2
 				$nightdiff_total 		 		+=	Payroll2::payroll_number_format($nightdiff,2);
 				$restday_total 		 			+=	Payroll2::payroll_number_format($restday,2);
 				$rendered_days_total	        +=	Payroll2::payroll_number_format($rendered_days,2);
+				$daily_rate_total	            +=	Payroll2::payroll_number_format($daily_rate,2);
 			}
 
 			if (isset($employee["cutoff_breakdown"]->_breakdown)) 
@@ -7344,6 +7373,7 @@ class Payroll2
 
 		}
 
+
 		// $data["total_cutoff_basic"]					= $total_cutoff_basic;
 		$data["total_gross_basic"]					= $total_gross_basic;
 		$data["total_basic"] 						= $total_basic;
@@ -7397,6 +7427,9 @@ class Payroll2
 		$data["nightdiff_total"] 		 			= $nightdiff_total;
 		$data["restday_total"] 		 				= $restday_total;
 		$data["rendered_days_total"]				= $rendered_days_total;
+		$data["daily_rate_total"]				    = $daily_rate_total;
+		$data["monthly_basic_total"]				= $monthly_basic_total;
+		$data["semimonthly_basic_total"]			= $semimonthly_basic_total;
 
 		$data["total_adjustment_allowance"]				= $total_adjustment_allowance;	
 		$data["total_adjustment_bonus"]					= $total_adjustment_bonus;		

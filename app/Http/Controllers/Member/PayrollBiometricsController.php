@@ -33,6 +33,8 @@ use App\Globals\Accounting;
 use App\Models\Tbl_payroll_biometric_record;
 use App\Models\Tbl_payroll_biometric_time_sheet;
 use App\Models\Tbl_payroll_employee_basic;
+use App\Models\Tbl_payroll_time_sheet;
+use App\Models\Tbl_payroll_time_sheet_record;
 
 
 
@@ -41,7 +43,6 @@ class PayrollBiometricsController
 {
 	public function save_data()
 	{
-		
 		if (Request::input("data_input") == 'null')
 		{
 			$return 	= "No Data Found!";
@@ -77,7 +78,7 @@ class PayrollBiometricsController
 
 
 	public function import_data_from_biometric($_time_in_out, $shop_id, $branch_id)
-	{	
+	{
 		$employee_in_out = null;
 		$insert = null;
 
@@ -152,7 +153,6 @@ class PayrollBiometricsController
 				}
 			}	
 		}
-
 	}
 
 
@@ -252,7 +252,111 @@ class PayrollBiometricsController
 			}	
 		}
 
-		dd($_insert, $_update);
+		dd($_insert, $_update);	
+	}
+
+	public function employee_login()
+	{
+		$mail = Request::input('email');
+		$tin_password = Request::input('password');
+		$employee_info = Tbl_payroll_employee_basic::where('payroll_employee_email', $mail)->where('payroll_employee_tin', $tin_password)->first();
+
+		echo $employee_info['payroll_employee_id'];
+	}
+
+	public function flexi_data_importation()
+	{
+		$_timesheet_data = collect(json_decode(Request::input('timesheet_data')))->groupBy('date');
+		$payroll_employee_id = Request::input('payroll_employee_id');
+		$employee_info = Tbl_payroll_employee_basic::where('payroll_employee_id', $payroll_employee_id)->first();
 		
+		if ($employee_info) //employee has record
+		{
+			$count = 0;
+			if (count($_timesheet_data) > 0) //_timesheet_data has data
+			{
+				foreach ($_timesheet_data as $key => $timesheet_data) 
+				{
+					$data = null;
+					$date = Carbon::parse($key)->format("Y-m-d");
+
+					$timesheet_already_exist = Tbl_payroll_time_sheet::where('payroll_employee_id',$payroll_employee_id)->where('payroll_time_date',$date)->first();
+					$payroll_timesheet_id = 0;
+
+					if ($timesheet_already_exist) // payroll_time_sheet already exist
+					{
+						$payroll_timesheet_id = $timesheet_already_exist['payroll_time_sheet_id'];
+					}
+					else
+					{
+						$data = null;
+						$data['payroll_time_date'] = $date;
+						$data['payroll_employee_id'] = $payroll_employee_id;
+						$payroll_timesheet_id = Tbl_payroll_time_sheet::insertGetId($data);
+					}
+
+					foreach ($timesheet_data as $key2 => $data_timesheet) 
+					{
+						$data_input = null;
+						$data_input['payroll_time_sheet_id'] 		= $payroll_timesheet_id;
+						$data_input['payroll_time_sheet_in'] 		= $data_timesheet->time_in;
+						$data_input['payroll_time_sheet_out'] 		= $data_timesheet->time_out;
+						$data_input['payroll_time_sheet_origin']	= 'Flexitime Software';
+						$data_input['payroll_company_id'] 			= $employee_info['payroll_employee_company_id'];
+
+						Tbl_payroll_time_sheet_record::insert($data_input);					
+					}
+				}
+				
+				echo "Import Timesheet Success" ;
+			}
+			else
+			{
+				echo "No Timesheet Imported!";
+			}
+		}
+		else
+		{
+			echo "Importation Failed";
+		}
+
+	}
+
+	public function flexi_data_importation_sample()
+	{
+		// $_timesheet_data = collect(json_decode('[{"payroll_employee_id":1365,"time_in":"20:03:40","time_out":"20:41:25","date":"2018-02-20T00:00:00"},{"payroll_employee_id":1365,"time_in":"20:41:29","time_out":"20:41:34","date":"2018-02-20T00:00:00"},{"payroll_employee_id":1365,"time_in":"20:41:34","time_out":"20:46:15","date":"2018-02-20T00:00:00"},{"payroll_employee_id":1365,"time_in":"20:48:48","time_out":"20:48:49","date":"2018-02-20T00:00:00"},{"payroll_employee_id":1365,"time_in":"20:49:19","time_out":"20:49:19","date":"2018-02-20T00:00:00"},{"payroll_employee_id":1365,"time_in":"20:49:45","time_out":"20:49:53","date":"2018-02-20T00:00:00"},{"payroll_employee_id":1365,"time_in":"21:36:05","time_out":"21:40:00","date":"2018-02-20T00:00:00"},{"payroll_employee_id":1365,"time_in":"21:45:00","time_out":"21:50:35","date":"2018-02-20T00:00:00"},{"payroll_employee_id":1365,"time_in":"21:55:00","time_out":"22:35:00","date":"2018-02-22T00:00:00"}]'))->groupBy('date');
+		
+
+		// $payroll_employee_id = 1365;
+		// $employee_info = Tbl_payroll_employee_basic::where('payroll_employee_id', $payroll_employee_id)->first();
+		
+		// foreach ($_timesheet_data as $key => $timesheet_data) 
+		// {
+			
+		// 	$data['payroll_time_date'] = Carbon::parse($key)->format("Y-m-d");
+		// 	$data['payroll_employee_id'] = $payroll_employee_id;
+		// 	$payroll_timesheet_id = Tbl_payroll_time_sheet::insertGetId($data);
+
+		// 	foreach ($timesheet_data as $key2 => $data_timesheet) 
+		// 	{
+		// 		$data_input['payroll_time_sheet_id'] 	= $payroll_timesheet_id;
+		// 		$data_input['payroll_time_sheet_in'] 	= $data_timesheet->time_in;
+		// 		$data_input['payroll_time_sheet_out'] = $data_timesheet->time_out;
+		// 		$data_input['payroll_company_id'] 	= $employee_info['payroll_employee_company_id'];
+
+		// 		Tbl_payroll_time_sheet_record::insert($data_input);
+		// 	}
+
+		// }
+			
+		echo "Import ";
+		
+	}
+
+
+
+	public function get_time()
+	{		
+		echo Carbon::now();
 	}
 }

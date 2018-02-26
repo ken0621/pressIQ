@@ -5398,7 +5398,7 @@ class Payroll2
 						$val["amount"] = (@($actual_gross_pay/$standard_gross_pay) * $allowances);
 
 					}
-		
+					
 					// dd($d);
 					// dd($a);
 					// dd($actual_gross_pay ." / " . $standard_gross_pay ." * " . $allowance_amount);

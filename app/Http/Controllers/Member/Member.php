@@ -22,6 +22,7 @@ use View;
 use Session;
 use Carbon\Carbon;
 use App\Globals\Mlm_seed;
+
 class Member extends Controller
 {
 	public $user_info;

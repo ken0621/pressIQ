@@ -42,6 +42,9 @@ use App\Globals\Mlm_slot_log;
 use App\Globals\Item_code;
 use App\Globals\Mlm_gc;
 
+use App\Models\Tbl_transaction_list;
+use App\Models\Tbl_country;
+
 // use App\Globals\Mlm_compute;
 use App\Globals\Mlm_complan_manager_repurchase;
 use App\Globals\Utilities;
@@ -106,7 +109,7 @@ class MemberSlotGenealogy
         return $data;
     }
 
-    public static function tree($shop_id, $slot_id, $mode = '')
+    public static function tree($shop_id, $slot_id, $mode = '',$customer_id = 0)
     {
         if($shop_id == 47)
         {
@@ -126,6 +129,26 @@ class MemberSlotGenealogy
             die('Invalid Slot');
         }
         $data['format'] = $mode;
+
+        //patrick
+        $data['_codes'] = Tbl_transaction_list::CodeVaultTransaction()
+                            ->where("tbl_transaction.transaction_reference_id",$customer_id)
+                            ->where("transaction_reference_table","tbl_customer")->where("item_in_use","unused")
+                            ->where("item_type_id",5)
+                            ->where("tbl_transaction.shop_id",$shop_id)
+                            ->get();
+        $data['shop_id'] = $shop_id;
+        $leads = Tbl_customer::where('customer_lead',$slot_id)->get();
+        foreach($leads as $key => $lead)
+        {
+            $slot = Tbl_mlm_slot::where('slot_owner',$lead->customer_id)->get();
+            if(count($slot)>0)
+            {
+                unset($leads[$key]);
+            }
+        }
+        $data['leads'] = $leads;
+        $data['country'] = Tbl_country::get();
 
         return $data;
     }

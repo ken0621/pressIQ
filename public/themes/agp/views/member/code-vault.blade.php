@@ -25,7 +25,7 @@
 		  		<table class="table">
 			  		<thead>
 			  			<tr>
-			  				<th class="text-center" width="300px"><b>TRANSACTION ID</b></th>
+			  				<th class="text-center" width="300px"><b>RECORD LOG ID</b></th>
 			  				<th class="text-center" width="300px"><b>ITEM NAME</b></th>
 			  				<th class="text-center" width="300px"><b>PIN</b></th>
 			  				<th class="text-center" width="300px"><b>ACTIVATION KEY</b></th>
@@ -36,7 +36,7 @@
 				  			@foreach($_codes as $code)
 				  			<tr pin="{{ $code->mlm_pin }}" activation="{{ $code->mlm_activation }}">
 				  				<td class="text-center">
-				  					<div><b>{{ $code->transaction_id }}</b></div>
+				  					<div><b>{{ $code->record_log_id }}</b></div>
 				  				</td>
 				  				<td class="text-center">
 				  					<div><b>{{ $code->item_name }}</b></div>

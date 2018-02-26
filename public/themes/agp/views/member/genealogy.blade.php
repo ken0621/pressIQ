@@ -48,7 +48,6 @@
 			$('.genealogy-frame').css('opacity', 1).show();
 		});
 	});
-
 	$(".select-slot").trigger("change");
 </script>
 @endsection

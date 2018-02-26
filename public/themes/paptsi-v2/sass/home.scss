@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 $display-text: 'Lato', sans-serif;
 $content-text: 'PT Sans', sans-serif;
 $light: 300;
@@ -13,31 +15,39 @@ body{
 	font-family: $display-text;
 
 }
-/* SLIDER */
-.slider-wrapper 
+
+.slider-wrapper
 {
-	position: relative;
-	width: 100%;
-	background-position: center;
-	background-attachment: fixed;
-	background-repeat: no-repeat;
-	background-size: cover;
-
-	.container 
+	overflow-y: hidden;
+	.top-banner
 	{
-		position: relative;
-		
-		.caption-container
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		height: 100vh;
+		background-attachment: fixed;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+		margin-top: -112px;
+
+		@media screen and (max-width: 768px)
 		{
-			padding-top: 200px;
-			padding-bottom: 150px;
+			margin-top: 0px;
+		}
 
-			.title-caption-white
+		.c-container
+		{
+			color: #fff;
+			max-width: 750px;
+			@media screen and (max-width: 425px)
 			{
-				color: #fff;
+				text-align: center;
+			}
+			:nth-child(1)
+			{
 				font-size: 45px;
 				font-weight: 700;
-
 				@media screen and (max-width: 768px)
 				{
 					font-size: 40px;
@@ -47,31 +57,32 @@ body{
 				{
 					font-size: 27px;
 				}
-			}
-			.title-caption-yellow
-			{
-				color: #fcc205;
-				font-size: 45px;
-				font-weight: 700;
-
-				@media screen and (max-width: 768px)
+				:nth-child(2)
 				{
-					font-size: 40px;
-				}
+					color: #fcc205;
+					font-size: 45px;
+					border-bottom: none;
+					@media screen and (max-width: 768px)
+					{
+						font-size: 40px;
+					}
 
-				@media screen and (max-width: 425px)
-				{
-					font-size: 27px;
+					@media screen and (max-width: 425px)
+					{
+						font-size: 27px;
+					}
 				}
 			}
-			.subtitle-container
+			:nth-child(2)
 			{
-				color: #fff;
+				border-bottom: 1px solid #fff;
 				font-size: 23px;
+				padding-bottom: 10px;
 
 				@media screen and (max-width: 425px)
 				{
 					font-size: 18px;
+					border-bottom: none;
 				}
 
 				@media screen and (max-width: 375px)
@@ -79,17 +90,7 @@ body{
 					padding-top: 10px;
 				}
 			}
-			.border-container
-			{
-				border-bottom: 1px solid #fff;
-				padding-top: 10px;
-
-				@media screen and (max-width: 425px)
-				{
-					display: none;
-				}
-			}
-			.details
+			:nth-child(3)
 			{
 				color: #fff;
 				padding-top: 10px;
@@ -101,63 +102,13 @@ body{
 					font-size: 13px;
 				}
 			}
-			.button-container
+			.t-button
 			{
+				background-color: transparent;
 				border: 2px solid #fff;
-				max-width: 130px;
 				text-align: center;
-				padding: 5px 10px;
-				a
-				{
-					color: #fff;
-					font-size: 15px;
-					font-weight: 700px;
-					text-decoration: none;
-				}
+				padding: 10px 40px;
 
-				@media screen and (max-width: 425px)
-				{
-					margin: auto;
-				}
-
-				@media screen and (max-width: 375px)
-				{
-					margin: auto;
-				}
-				
-			}
-
-			@media screen and (max-width: 768px)
-			{
-				max-width: 570px;
-			}
-
-			@media screen and (max-width: 425px)
-			{
-				text-align: center;
-			}
-
-			@media screen and (max-width: 375px)
-			{
-				text-align: center;
-				padding-top: 170px;
-			}
-		}
-
-		.scroll-down-container
-		{
-			padding-bottom: 45px;
-			text-align: center;
-			span 
-			{
-				color: #fff;
-				border: 1px solid #fff;
-				border-radius: 100%;
-				padding: 20px;
-				i 
-				{
-					font-size: 18px;
-				}
 			}
 		}
 	}
@@ -568,13 +519,14 @@ body{
 		padding: 20px 0px;
 		text-align: left;
 		width: 180px;
-		a
+		button
 		{
 			background-color: #316df9;
 			color: #fff;
 			font-size: 18px;
 			padding: 15px 50px;
 			text-decoration: none;
+			border: none;
 		}
 
 		@media screen and (max-width: 425px)

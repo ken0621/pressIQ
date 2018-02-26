@@ -136,6 +136,9 @@
                             <img src="\themes\paptsi-v2\img\paptsi-icon-footer.png">
                         </div>
                         <div><p>{!! get_content($shop_theme_info, "home", "home_company_description") !!}</div>
+                        <div class="footer-image">
+                            <img src="\themes\paptsi-v2\img\footer-image.jpg">
+                        </div>
                     </div>
                     <div class="col-md-4">
                          <div class="footer-title-container">

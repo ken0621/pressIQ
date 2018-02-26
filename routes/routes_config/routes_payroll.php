@@ -47,6 +47,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/*START payroll ledger*/
 	Route::any('/reports/payroll_ledger','Member\PayrollLedger@index');
 	Route::any('/reports/payroll_ledger/{employee_id}','Member\PayrollLedger@modal_ledger');
+	Route::any('/reports/payroll_ledger/export_excel_ledger/{employee_id}','Member\PayrollLedger@export_excel_ledger');
 	/*END payroll ledger/
 
 	/*START PAYROLL REGISTER REPORT*/
@@ -755,7 +756,13 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	//software controllers
 	Route::post('/biometrics/save_data','Member\PayrollBiometricsController@save_data');
 	Route::any('/biometrics/sample','Member\PayrollBiometricsController@sample');
-	/*END payroll biometrics*/
+
+	//Flexi Time Software
+	Route::any('/biometrics/employee_login', 'Member\PayrollBiometricsController@employee_login');
+	Route::any('/biometrics/flexi_data_importation', 'Member\PayrollBiometricsController@flexi_data_importation');
+	Route::get('/biometrics/flexi_data_importation_sample', 'Member\PayrollBiometricsController@flexi_data_importation_sample');
+	Route::any('/biometrics/get_time', 'Member\PayrollBiometricsController@get_time');
+	/*END Time Software*/
 
 	/*START payroll approve database manipulation*/
 	Route::any('/payroll_time_keeping_approve_manipulation/time_breakdown/{period_company_id}/{employee_id}','Member\PayrollTimeKeepingApproveManipulation@time_breakdown');

@@ -2984,7 +2984,7 @@ class ShopMemberController extends Shop
 
             if($check)
             {
-                $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode);
+                $data = MemberSlotGenealogy::tree($shop_id, $check->slot_id, $mode,Self::$customer_info->customer_id);
                 return Self::load_view_for_members('member.genealogy_tree', $data);            
             }
             else
@@ -3001,6 +3001,86 @@ class ShopMemberController extends Shop
     {
         $data = MemberSlotGenealogy::downline($request->x, $request->mode);
         return $data;
+    }
+    public function getAvailableSponsor()
+    {
+        $shop_id = request('shop_id');
+        $sponsor = request('sponsor');
+        $slot = Tbl_mlm_slot::where('shop_id',$shop_id)->where('slot_no',$sponsor)->first();
+        if($slot)
+        {
+            return 'true';
+        }
+        else
+        {
+            return 'false';
+        }
+    }
+    public function postCreateSlot(Request $request)
+    {
+        $data['page'] = "Create Slot";
+        //patrick
+        $codes = Tbl_transaction_list::CodeVaultTransaction()
+                            ->selectRaw('tbl_warehouse_inventory_record_log.mlm_pin,tbl_warehouse_inventory_record_log.mlm_activation,membership_id,tbl_warehouse_inventory_record_log.record_log_id')
+                            ->where('record_log_id',$request->codevault)
+                            ->first();
+        $response = 'error';
+        // $shop_id, $customer_id, $membership_id, $sponsor, $slot_no = null, $slot_type = "PS"
+        $shop_id        = $this->shop_info->shop_id;
+        $customer_id    = Self::$customer_info->customer_id;
+        $membership     = $codes->membership_id;
+        $sponsor_id     = Tbl_mlm_slot::where('slot_no',$request->sponsor)->first()->slot_id;
+        $sponsor        = $sponsor_id;
+        $slot_no        = Self::generate_slot_no_based_on_name(Self::$customer_info->first_name, Self::$customer_info->last_name);
+        if($request->owner == 'new')
+        {
+            $customer['shop_id']           = $shop_id;
+            $customer['country_id']        = $request->country;
+            $customer['first_name']        = $request->first_name;
+            $customer['middle_name']       = $request->middle_name;
+            $customer['last_name']         = $request->last_name;
+            $customer['email']             = $request->email;
+            $customer['password']          = Crypt::encrypt($request->password);
+            $customer['Iswalkin']          = 0;
+            $customer['created_date']      = Carbon::now();
+            $customer['ismlm']             = 1;
+            $customer['mlm_username']      = $request->username;
+            $customer['contact']           = $request->contact;
+
+            $customer_id = Tbl_customer::insertGetId($customer);
+            $new_customer_info = Tbl_customer::where('customer_id',$customer_id)->first();
+            $slot_no     = Self::generate_slot_no_based_on_name($new_customer_info->first_name, $new_customer_info->last_name);
+        }
+        if($request->owner == 'exist')
+        {
+            $customer_id = $request->leadlist;
+            $customer_info = Tbl_customer::where('customer_id',$customer_id)->first();
+            $slot_no     = Self::generate_slot_no_based_on_name($customer_info->first_name, $customer_info->last_name);
+        }
+
+        $slot_id        = MLM2::create_slot($shop_id,$customer_id,$membership,$sponsor,$slot_no);
+        $distributed['distributed'] = 1;
+        Tbl_mlm_slot::where('slot_id',$slot_id)->update($distributed);
+        // dd($slot_id);
+
+        if($slot_id)
+        {
+            $update['slot_placement']   = $request->placement;
+            $update['slot_position']    = strtolower($request->position);
+
+            Tbl_mlm_slot::where('slot_id',$slot_id)->update($update);
+
+            $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+            Mlm_tree::insert_tree_sponsor($slot_info_e, $slot_info_e, 1); 
+            Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+
+            MLM2::entry($shop_id,$slot_id);
+            $used['item_in_use'] = 'used';
+            Tbl_warehouse_inventory_record_log::where('record_log_id',$codes->record_log_id)->update($used);
+            $response = 'success';
+        }
+
+        return Redirect::back();
     }
     public function getNetwork()
     {
@@ -3145,6 +3225,7 @@ class ShopMemberController extends Shop
 
         $q = $query->where("tbl_transaction.transaction_reference_id",Self::$customer_info->customer_id);
         $data['_codes'] = $q->where("transaction_reference_table","tbl_customer")->where("item_in_use","unused")->where("item_type_id",5)->where("tbl_transaction.shop_id",$this->shop_info->shop_id)->paginate(10);
+        // dd($data['_codes']);
         return (Self::load_view_for_members("member.code-vault",$data));
     }
     public function getUsecode()
@@ -3426,6 +3507,11 @@ class ShopMemberController extends Shop
             {
                 $response["status_message"] .= $message;
             }
+        }
+        else if($request->amount)
+        {
+            $response["status"] = "error";
+            $response["status_message"] .= '<li style="list-style:none">You cannot transfer negative amount</li>';
         }
         else
         {

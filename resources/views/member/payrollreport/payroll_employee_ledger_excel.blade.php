@@ -1,31 +1,9 @@
-@extends('member.layout')
-@section('content')
-<div class="panel panel-default panel-block panel-title-block" id="top">
-    <div class="panel-heading">
-        <div>
-            <i class="fa fa-tags"></i>
-            <h1>
-                <span class="page-title">Payroll Ledger &raquo; {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }} {{ $employee->payroll_employee_last_name }}</span>
-                <small>
-               	Payroll Ledger Report
-                </small>
-            </h1>
-            {{-- <a href="#"><button type="button" class="btn btn-success pull-right"><i class="fa fa-file-excel-o" style="font-size:25px;color:white"></i> &nbsp;EXPORT TO EXCEL</button></a> --}}
-            <a href="/member/payroll/reports/payroll_ledger/export_excel_ledger/{{$employee_id}}" class="excel_tag"><button type="button" class="btn btn-success pull-right" style="margin-right:20px;margin-bottom: 20px"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
 
-       {{--      <button style="margin-right:  20px;" type="button" onclick="action_load_link_to_modal('/member/payroll/reports/payroll_ledger/modal_filter_ledger_columns', 'sm')" class="btn btn-def-white btn-custom-white pull-right"><i class="fa fa-cog" aria-hidden="true"></i> &nbsp;COLUMNS</button> --}}
-        </div>
-    </div>
-</div>
+    <h4 class="modal-title" style="font-weight: bold;"><b>{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }} {{ $employee->payroll_employee_last_name }}<br></h4>
 
-
-<div class="panel panel-default panel-block panel-title-block" style="overflow-x: scroll; ">
-    <div class="panel-body form-horizontal">
-        <div class="form-group tab-content panel-body employee-container">
-            <div id="all" class="tab-pane fade in active">
-                <div class="form-group order-tags"></div>
+    <div class="modal-body clearfix">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-condensed" style="table-layout: fixed;">
+                     <table class="table table-bordered table-striped table-condensed" style="table-layout: fixed;">
 					    <thead style="text-transform: uppercase">
 					        <tr>
 					            <th valign="center" rowspan="2" class="text-center" style="width: 200px">PERIOD DATE</th>
@@ -145,8 +123,32 @@
 					    </tbody>
 					</table>
                 </div>
-            </div>
-        </div> 
     </div>
-</div>
-@endsection
+<style type="text/css">
+
+table, td {
+    border: 6px solid #333333;
+    width:30px;
+    height:20px;
+    text-align:center;
+    background-color:#fff;
+    vertical-align:middle;
+}
+
+table {
+    border-collapse: collapse;
+}
+body{
+  background-color:#ededed;
+}
+.padding
+{
+    padding:300px 50px 100px 50px;
+}
+
+#title
+{
+    border: 2px solid #E5E5E5;
+}
+
+</style>

@@ -13,75 +13,66 @@
 	background-size: cover;
 	padding: 10px 0px;
 	min-height: 640px;
+	background-color: #f5f5f5;
 }
 .container
 {
-	background-color: #f5f5f5;
 	margin: 0px 230px;
-	padding: 40px 40px;
-	border-radius: 10px;
 	min-height: 640px;
-	width: 800px !important;
+	width: 900px !important;
+	padding-left: 0px;
+	padding-right: 0px;
 }	
-	
-.heading-container
+.header-container
 {
-	color: #cd3d35;
-	font-size: 30px;
+	background-color: #0466af;
 	text-align: center;
-	font-weight: 700;
-	font-family: 'PT Serif';
-	padding: 0px 20px 0px 20px;
+	padding: 20px;
+	font-family: 'Cantarell', sans-serif;
+	color: #fff;
+	font-size: 30px;
+	font-weight: 600;
 }
-.sender-container
+.greetings-container
 {
-	color: #404040;
+	background-color: inherit;
+	text-align: center;
+	font-family: 'Cantarell', sans-serif;
+	color: #0466af;
+	font-size: 25px;
+	padding: 20px 0;
+	font-weight: 600;
+}
+.details
+{
+	font-family: 'PT Sans', sans-serif;
+	color: #4a4c4d;
 	font-size: 18px;
 	text-align: center;
-	font-family: 'Lato';
-	padding-top: 5px;
-}
-.sender-name
-{
-	font-weight: 700;
-}
-.date-container
-{
-	color: #404040;
-	text-align: center;
-	padding-top: 8px;
-	padding-bottom: 10px;
-	font-size: 15px;
 }
 .content-container
 {
-	padding-bottom: 10px;
-	font-weight: 400;
-	text-indent: 50px;
-	color: #404040;
-	font-size: 15px;
-	font-family: 'PT Sans';
+	padding: 0 50px;
 }
-.border
+.info-container
 {
-	border-bottom: 1px solid #ededed;	
-}
-.title-about-container
-{
-	padding: 20px 0px 15px 0px;
+	font-size: 18px;
+	text-align: left;
+	font-family: 'PT Sans', sans-serif;
 	font-size: 20px;
-	color: #404040;
-	font-family: 'PT Sans';
+	margin-top: 10px;
+}
+.title
+{
 	font-weight: 700;
 }
-.logo-holder
+.contact-container
 {
-	text-align: center;
-	box-shadow: 0px 12px 25px -15px rgba(0,0,0,0.2);
-	padding: 15px 20px;
-	border: 1px solid #ededed;
-	width: 100%;
-	background-color: #fff;
+	font-size: 25px;
+	text-align: left;
+	font-family: 'PT Sans', sans-serif;
+	margin-top: 20px;
+	font-weight: 700;
 }
 </style>
 
@@ -94,19 +85,25 @@
 <body>
 	<div class="background-container">
 		<div class="container">
-			<div class="row">
-				<div class="col-xs-9" style="padding-left: 0px; padding-right: 0px;">
-					<div class="heading-container">Contact Us Messages From P4ward</div>
-				</div>
+			<div class="header-container">Get Intouch With Us</div>
+			<div class="greetings-container">Good Day P4WARD,</div>
+			<div class="content-container">
+				<div class="details">There is someone who emailed you</div>
+				<div class="info-container"><span class="title">From: </span><span class="info">{{$contactus_first_name}} {{$contactus_last_name}}</span></div>
+				<div class="info-container"><span class="title">Subject: </span><span class="info">{{$contactus_subject}}</span></div>
+				<div class="info-container"><span class="title">Message: </span><span class="info">{{$contactus_message}}</span></div>
+				<div class="contact-container">Contact Information:</div>
+				<div class="info-container"><span class="title">Email Address: </span><span class="info">{{$contactus_email}}</span></div>
+				<div class="info-container"><span class="title">Phone Number: </span><span class="info">{{$contactus_phone_number}}</span></div>
 			</div>
-			<div class="row">
+			{{-- <div class="row">
 				<div class="content-container"><p>Subject: {{$contactus_subject}}</p></div>
 				<div class="content-container"><p>First Name: {{$contactus_first_name}}</p></div>
 				<div class="content-container"><p>Last Name: {{$contactus_last_name}}</p></div>
 				<div class="content-container"><p>Phone Number: {{$contactus_phone_number}}</p></div>
 				<div class="content-container"><p>Email: {{$contactus_email}}</p></div>
 				<div class="content-container"><p>Message: {{$contactus_message}}</p></div>
-			</div>
+			</div> --}}
 		</div>
 	</div>
 </body>

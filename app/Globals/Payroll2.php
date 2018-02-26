@@ -5471,6 +5471,7 @@ class Payroll2
 				/*End Get Type of allowance*/
 				
 				array_push($return->_breakdown, $val);
+
 				$val = null;
 			}
 		}
@@ -5544,7 +5545,7 @@ class Payroll2
 		}
 		
 		$deduction = Payroll::getdeduction($employee_id, $start_date, $period_category_arr['period_category'], $period_category, $shop_id);
-			
+		
 		if(isset($deduction["deduction"]))
 		{
 			if(count($deduction["deduction"]) > 0)
@@ -5569,7 +5570,7 @@ class Payroll2
 		}
 
 		$deduction = Payroll::getdeductionv2($employee_id, $end_date, $period_category_arr['period_category'], $period_category, $shop_id);
-	
+		
 		if(isset($deduction["deduction"]))
 		{
 			if(count($deduction["deduction"]) > 0)

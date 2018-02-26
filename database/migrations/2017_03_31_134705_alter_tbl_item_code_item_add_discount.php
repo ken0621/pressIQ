@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterTblItemCodeItemAddDiscount extends Migration
+class AlterTblItemCodeItemAddDiscountv2 extends Migration
 {
     /**
      * Run the migrations.

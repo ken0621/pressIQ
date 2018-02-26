@@ -346,6 +346,17 @@ class ShopMemberController extends Shop
 
     public function pressuser_pressrelease()
     {  
+        // $country               = tbl_pressiq_user::where('user_email',session('user_email'))->get()->country;
+        // $explode_country = explode('/', $country);
+        // $array_country = array();
+        // foreach($explode_country as $key => $country)
+        // {
+        //     if($country != "")
+        //     {
+        //         array_push($array_country, $country);
+        //     }
+        // }
+        // $data['patrick'] = '1';
         $data['_country']              = Tbl_press_release_recipient::distinct()->get(['country']);
         $data['_industry_type']        = Tbl_press_release_recipient::distinct()->get(['industry_type']);
         $data['_title_of_journalist']  = Tbl_press_release_recipient::distinct()->get(['title_of_journalist']);
@@ -457,7 +468,7 @@ class ShopMemberController extends Shop
                 else
                 {
                     $pr_id = tbl_pressiq_press_releases::insertGetId($pr_info);
-                     Session::flash('email_sent', 'Press Release Successfully Sent!');
+                    Session::flash('email_sent', 'Press Release Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
                 }
                 
@@ -469,24 +480,33 @@ class ShopMemberController extends Shop
 
     public function send($pr_info)        
     {
-        // dd('Sorry, Website under Construction!');
-
-        // $campaigns = count(tbl_pressiq_press_releases::where('pr_from', session('user_email')->get()));
-        // $limit     = count(tbl_pressiq_press_releases::where('user_membership',session('user_email')->get()));    
-  
+        
         $to  = explode(",", $pr_info['pr_to']);
         $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
 
-        foreach ($to as $pr_info['pr_to']) 
+        $user_membership = tbl_pressiq_user::where('user_email',session('user_email'))->first()->user_membership;
+        $user_limit = count(tbl_pressiq_press_releases::where('pr_from',session('user_email'))->get());
+
+        if($user_membership>$user_limit)
+        {
+            foreach ($to as $pr_info['pr_to']) 
+            {
+
+                Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
+                {
+                    $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
+                    $message->to($pr_info['pr_to']);
+                    $message->subject($pr_info["pr_headline"]);
+                });
+            }
+        }
+        else
         {
 
-            Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
-            {
-                $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
-                $message->to($pr_info['pr_to']);
-                $message->subject($pr_info["pr_headline"]);
-            });
+          dd('Sorry,you have reached the maximum limit');
+
         }
+
     }  
    
     public function send_contact_us()

@@ -10,6 +10,11 @@
                 {{ session('message') }}
             </div>
           @endif
+          @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+          @endif
          <div class="press-release-container">
             <div class="tab"  style="border-style: none;">
                <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Create New Release</button>
@@ -138,6 +143,10 @@
                          @foreach($_country as $country_name)
                          <option value="{{$country_name->country}}">{{$country_name->country}}</option>
                          @endforeach
+                        {{--  @for($x=0;$x<count($country);$x++)
+                         <option value="{{$country[$x]}}">{{$country[$x]}}</option>
+                         @endfor
+                         {{ $patrick }} --}}
                     </select>
 
                     <div class="title">Industry Type:</div>
@@ -281,6 +290,7 @@
 <script src="/email_assets/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
 
 <script>
+  
   $('#button_load').click(function()
   {
     $('#img_load').show(); 

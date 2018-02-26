@@ -53,7 +53,7 @@
                 </div><br>
 
                 <div class="register-form ">
-                  <select class="chosen-select" id="user_country" name="user_country" data-placeholder="Select Country for User"  style="width: 740px" multiple> 
+                  <select class="chosen-select" id="user_country" name="user_country[]" data-placeholder="Select Country for User"  style="width: 740px" multiple="multiple"> 
                     <option value="Hong Kong">Hong Kong</option> 
                     <option value="Philippines">Philippines</option> 
                     <option value="China">China</option>
@@ -268,13 +268,11 @@ function openCity(evt, cityName)
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
 }
-
-// Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
 </script>
 
 <script>
-   document.getElementById("defaultOpen").click();
+   document.getElementById("user_country").click();
    $(".chosen-select").chosen({disable_search_threshold: 10});
 </script>
 

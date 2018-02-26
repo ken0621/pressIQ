@@ -1194,6 +1194,12 @@ class ShopMemberController extends Shop
                 $data["user_company_name"]               = $request->user_company_name;
                 $data["user_membership"]                 = $request->user_membership;
                 $data["user_country"]                    = $request->user_country;
+                $sample="";
+                foreach ($data['user_country'] as $country) 
+                {
+                    $sample = $sample . "/" . $country;
+                }
+                $data["user_country"]                    = $sample;
                 $data["user_level"]                      = "2";
                 if($path!="")
                 {

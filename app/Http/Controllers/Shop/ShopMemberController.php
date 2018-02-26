@@ -3427,6 +3427,11 @@ class ShopMemberController extends Shop
                 $response["status_message"] .= $message;
             }
         }
+        else if($request->amount)
+        {
+            $response["status"] = "error";
+            $response["status_message"] .= '<li style="list-style:none">You cannot transfer negative amount</li>';
+        }
         else
         {
             $count = count(Tbl_mlm_slot::where("slot_no",$request->recipient)->get());

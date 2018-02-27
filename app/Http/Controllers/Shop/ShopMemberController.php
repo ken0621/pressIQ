@@ -346,17 +346,17 @@ class ShopMemberController extends Shop
 
     public function pressuser_pressrelease()
     {  
-        // $country               = tbl_pressiq_user::where('user_email',session('user_email'))->get()->country;
-        // $explode_country = explode('/', $country);
-        // $array_country = array();
-        // foreach($explode_country as $key => $country)
-        // {
-        //     if($country != "")
-        //     {
-        //         array_push($array_country, $country);
-        //     }
-        // }
-        // $data['patrick'] = '1';
+        $country               = tbl_pressiq_user::where('user_email',session('user_email'))->first();
+        $explode_country       = explode('/', $country->user_country);
+        $array_country         = array();
+        foreach($explode_country as $key => $country)
+        {
+            if($country != "")
+            {  
+                array_push($array_country, $country);  
+            }
+        }
+        $data['country']               = $array_country;
         $data['_country']              = Tbl_press_release_recipient::distinct()->get(['country']);
         $data['_industry_type']        = Tbl_press_release_recipient::distinct()->get(['industry_type']);
         $data['_title_of_journalist']  = Tbl_press_release_recipient::distinct()->get(['title_of_journalist']);
@@ -393,21 +393,19 @@ class ShopMemberController extends Shop
         
     public function send_pr()
     {
-        $pr_info["pr_type"]         =request('pr_type');
-        $pr_info["pr_headline"]     =request('pr_headline');
-        $pr_info["pr_content"]      =request('pr_content');
-        $pr_info["pr_boiler_content"]=request('pr_boiler_content');
-        $pr_info["pr_from"]         =session('user_email');
-        $pr_info["pr_to"]           =request('pr_to');
-        $pr_info["pr_status"]       ="Sent";
-        $pr_info["pr_date_sent"]    =Carbon::now();
-        $pr_info["pr_sender_name"]  =session('user_first_name').' '.session('user_last_name');
-        $pr_info["pr_receiver_name"]=request('recipient_name_only');     
-        $pr_info["pr_co_name"]      =session('user_company_name');
-        $pr_info["pr_co_img"]       =session('user_company_image');
-        $pr_info["pr_send_limit"]   =request('hidden_number');
-
-        //dd(session('user_company_image'));
+        $pr_info["pr_type"]            =request('pr_type');
+        $pr_info["pr_headline"]        =request('pr_headline');
+        $pr_info["pr_content"]         =request('pr_content');
+        $pr_info["pr_boiler_content"]  =request('pr_boiler_content');
+        $pr_info["pr_from"]            =session('user_email');
+        $pr_info["pr_to"]              =request('pr_to');
+        $pr_info["pr_status"]          ="Sent";
+        $pr_info["pr_date_sent"]       =Carbon::now();
+        $pr_info["pr_sender_name"]     =session('user_first_name').' '.session('user_last_name');
+        $pr_info["pr_receiver_name"]   =request('recipient_name_only');     
+        $pr_info["pr_co_name"]         =session('user_company_name');
+        $pr_info["pr_co_img"]          =session('user_company_image');
+        $pr_info["pr_send_limit"]      =request('hidden_number');
         $pr_rules["pr_type"]           =['required'];
         $pr_rules["pr_headline"]       =['required'];
         $pr_rules["pr_content"]        =['required'];
@@ -422,24 +420,33 @@ class ShopMemberController extends Shop
         }
         else
         {    
-            $this->send($pr_info);
+            $user_membership = tbl_pressiq_user::where('user_email',session('user_email'))->first()->user_membership;
+            $user_limit = count(tbl_pressiq_press_releases::where('pr_from',session('user_email'))->get());
+            
+            if($user_membership>$user_limit )
+            {
+                $this->send($pr_info);
+            }
+            else
+            {   
+                echo "<script>alert('Sorry! You have reached the Maximum Sending Limit.')</script>";
+                $data["page"] = "Home";
+                return view("home", $data);
+            }
 
             if( count(Mail::failures()) > 0 ) 
-                {
+            {
 
-               Session::flash('message', "Error in sending the release!");
-
-               foreach(Mail::failures as $email_address) 
+                Session::flash('message', "Error in sending the release!");
+                foreach(Mail::failures as $email_address) 
                 {
                    echo " - $email_address <br />";
                 }
                 return Redirect::back()->with('message');
-
             }
             else 
             {
                 Session::flash('message', "Release Successfully Sent!");
-
                 if(Session::has('pr_edit'))
                 {
                     $date=Carbon::now();
@@ -473,6 +480,7 @@ class ShopMemberController extends Shop
                 }
                 
             }
+
             $data["page"] = "Press Release - Press Release";
             return view("press_user.press_user_pressrelease", $data);
         }
@@ -480,33 +488,18 @@ class ShopMemberController extends Shop
 
     public function send($pr_info)        
     {
-        
         $to  = explode(",", $pr_info['pr_to']);
         $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
 
-        $user_membership = tbl_pressiq_user::where('user_email',session('user_email'))->first()->user_membership;
-        $user_limit = count(tbl_pressiq_press_releases::where('pr_from',session('user_email'))->get());
-
-        if($user_membership>$user_limit)
+        foreach ($to as $pr_info['pr_to']) 
         {
-            foreach ($to as $pr_info['pr_to']) 
+            Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
             {
-
-                Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
-                {
-                    $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
-                    $message->to($pr_info['pr_to']);
-                    $message->subject($pr_info["pr_headline"]);
-                });
-            }
+                $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
+                $message->to($pr_info['pr_to']);
+                $message->subject($pr_info["pr_headline"]);
+            });
         }
-        else
-        {
-
-          dd('Sorry,you have reached the maximum limit');
-
-        }
-
     }  
    
     public function send_contact_us()

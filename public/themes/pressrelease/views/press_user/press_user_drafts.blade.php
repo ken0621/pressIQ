@@ -6,8 +6,7 @@
               <div class="alert alert-danger">
                  <center>{{ Session::get('delete') }}</center>
               </div>
-              @endif 
-         <!-- Drafts -->
+          @endif 
         <div class="drafts-holder-container">
           <div class="table-container">
             <table>

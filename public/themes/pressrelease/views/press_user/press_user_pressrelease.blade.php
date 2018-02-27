@@ -10,11 +10,6 @@
                 {{ session('message') }}
             </div>
           @endif
-          @if (session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-          @endif
          <div class="press-release-container">
             <div class="tab"  style="border-style: none;">
                <button class="tablinks" onclick="openCity(event, 'create_release')" id="defaultOpen">Create New Release</button>
@@ -31,7 +26,7 @@
                   <div class="title-container">New Release</div>
                     @if(session()->has("pr_edit"))
                       @foreach($edit as $edits)
-                  <div class="title">Type1:</div>
+                  <div class="title">Type:</div>
                    <select name="pr_type" id="pr_type" style="width: 80% !important;">
                      <option>--Select option--</option>
                      @if($edits->pr_type=="Media Release")
@@ -70,8 +65,8 @@
 
                     <div class="title">Country:</div>
                     <select data-placeholder="--Choose a country--" multiple class="chosen-select" id="choose_country" name="choose_country[]">
-                         @foreach($_country as $country_name)
-                         <option value="{{$country_name->country}}">{{$country_name->country}}</option>
+                         @foreach($country as $key => $value)
+                         <option value="{{$value}}">{{ $value }}</option>
                          @endforeach
                     </select>
 
@@ -126,7 +121,7 @@
                   <div class="title">Release Text Body:</div>
                         <textarea name="pr_content" id="pr_content"></textarea>
                   <div class="title">Boilerplate:</div>
-                        <textarea name="pr_boiler_content" id="pr_boiler_content"></textarea>
+                        <textarea name="pr_boiler_content" id="pr_boiler_content"></textarea><br>
                   <div class="button-container">
                     <span class="button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
                     <span class="preview-button"><a href="#" id="prev_btn">Preview</a></span>
@@ -140,13 +135,9 @@
                     <div class="title-container">Choose Recipient</div>
                     <div class="title">Country:</div>
                     <select data-placeholder="--Choose a country--" multiple class="chosen-select" id="choose_country" name="choose_country[]">
-                         @foreach($_country as $country_name)
-                         <option value="{{$country_name->country}}">{{$country_name->country}}</option>
+                         @foreach($country as $key => $value)
+                         <option value="{{$value}}">{{ $value }}</option>
                          @endforeach
-                        {{--  @for($x=0;$x<count($country);$x++)
-                         <option value="{{$country[$x]}}">{{$country[$x]}}</option>
-                         @endfor
-                         {{ $patrick }} --}}
                     </select>
 
                     <div class="title">Industry Type:</div>
@@ -334,7 +325,7 @@
         {
           alert('Choose Recipient First!'); 
         }
-  });        
+  });
 
   $('#prev_btn_send').click(function()
   {

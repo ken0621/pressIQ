@@ -3,7 +3,6 @@
 <div class="background-container">
     <div class="pressview">
         <div class="dashboard-container">
-            <!-- Dashboard -->
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="title-container">RECENT RELEASES</div>

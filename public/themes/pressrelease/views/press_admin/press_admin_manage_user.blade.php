@@ -42,19 +42,20 @@
                <form method="post" action="/pressadmin/add_user" enctype="multipart/form-data" >
                 {{csrf_field()}}
                 <div class="register-form" >
-                  <select class="form-control" name="user_membership" id="user_membership" style="width: 300px">
+                  <select class="form-control" name="user_membership" id="user_membership" style="width: 500px">
                     <option selected>--Costing Option--</option>
                      <option value="1">1 Time Sending</option>
                      <option value="3">3 Times Sending</option>
                      <option value="5">5 Times Sending</option>
-                     <option value="6">6 Months Contract</option>
-                     <option value="12">12 Months Contract</option>
+                     <option value="30">6 Months Contract / maximum 30 campaigns within 6 months</option>
+                     <option value="60">12 Months Contract / maximum 60 Campaigns within 6 months</option>
                   </select> 
                 </div><br>
 
                 <div class="register-form ">
                   <select class="chosen-select" id="user_country" name="user_country[]" data-placeholder="Select Country for User"  style="width: 740px" multiple="multiple"> 
-                    <option value="Hong Kong">Hong Kong</option> 
+                    <option value="Hong Kong">Hong Kong</option>
+                    <option value="Singapore">Singapore</option> 
                     <option value="Philippines">Philippines</option> 
                     <option value="China">China</option>
                     <option value="Indonesia">Indonesia</option>

@@ -20,7 +20,7 @@
 				<td class="text-center"><input onChange="action_employee_checkbox();" class="employee-checkbox" value="{{ $employee->employee_id }}" type="checkbox" name="employee[]"></td>
 				<td>{{ $employee->payroll_employee_atm_number }}</td>
 				<td>{{ number_format($employee->net_pay, 2) }}</td>
-				<td>{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }} {{ $employee->payroll_employee_last_name }}</td>
+				<td>{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</td>
 				<td>OK</td>
 			</tr>
 			@endforeach

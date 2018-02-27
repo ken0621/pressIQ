@@ -73,7 +73,8 @@ class Tbl_payroll_time_keeping_approved extends Model
 	}
 	public function scopeBasic($query)
 	{
-		$query->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id");
+		$query->join("tbl_payroll_employee_basic", "tbl_payroll_employee_basic.payroll_employee_id", "=", "tbl_payroll_time_keeping_approved.employee_id")
+			->orderBy("payroll_employee_last_name","ASC");
 		return $query;
 	}
 	//james

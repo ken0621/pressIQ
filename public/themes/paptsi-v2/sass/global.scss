@@ -299,10 +299,17 @@ button:hover{
 	margin: auto;
 	.footer-container
 	{
-		padding: 35px 0px 55px 0px;
+		padding: 35px 0px 35px 0px;
 		.footer-icon-container
 		{
 			padding-bottom: 20px;
+		}
+		.footer-image
+		{
+			img
+			{
+				max-width: 250px;
+			}
 		}
 		p 
 		{

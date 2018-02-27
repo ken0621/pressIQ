@@ -1,28 +1,25 @@
 @extends("layout")
 @section("content")
-<div class="content">
+<div class="content">{{-- {{ get_content($shop_theme_info, "home", "home_banner") }} --}}
     <!-- Media Slider -->
-    <div id="home" class="slider-wrapper" style="background-image: url('{{ get_content($shop_theme_info, "home", "home_banner") }}')">
-        <div class="container">
-            <div class="row clearfix">
-                <div class="col-md-8">
-                    <div class="caption-container">
-                        <span class="title-caption-white">We Aim For The Best</span><span class="title-caption-yellow"> Services</span>
-                        <div class="subtitle-container">In the Industry of Ports and Terminal Services</div>
-                        <div class="border-container"></div>
-                        <div class="details">{!! get_content($shop_theme_info, "home", "home_banner_description") !!}</div>
-                        <div class="button-container">
-                            <a href="#Read More">Read More</a>
-                        </div>
+    <section class="slider-wrapper">
+        <div class="top-banner" style="background-image: url('/themes/paptsi-v2/img/home-banner.jpg');">
+            <div class="container">
+                <div class="c-container">
+                    <div>
+                        <span>We Aim For The Best</span><span> Services</span>
                     </div>
+                    <div>
+                        In the Industry of Ports and Terminal Services
+                    </div>
+                    <div>
+                        {!! get_content($shop_theme_info, "home", "home_banner_description") !!}
+                    </div>
+                    <button class="t-button">Read More</button>
                 </div>
-                <div class="col-md-6"></div>
-            </div>
-            <div class="scroll-down-container">
-                <a href="#services" class="smoth-scroll"><span class="animated fadeInDown"><i class="fa fa-chevron-down" aria-hidden="true"></i></span></a>           
             </div>
         </div>
-    </div>
+    </section>
 
     <div id="services" class="wrapper-1">
         <div class="row-no-padding clearfix">
@@ -177,43 +174,50 @@
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="title-container">Get In Touch With Us</div>
-                     <div class="row clearfix">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="First Name*">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Last Name*">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                    <input type="phone" class="form-control" placeholder="Phone Number*">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="email" class="form-control" placeholder="Email Address*">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text area" class="form-control" placeholder="Subject*">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <textarea type="text" class="form-control text-message" placeholder="Message*"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="button-container">
-                                <a href="#Read More">SEND</a>
-                            </div>
-                        </div>
-                    </div>
+                    <form action="Post"> 
+                       @if (session('message_concern_p4ward'))
+                           <div class="alert alert-success">
+                               {{ session('message_concern_p4ward') }}
+                           </div>
+                       @endif
+                        <div class="row clearfix">
+                           <div class="col-md-6">
+                               <div class="form-group">
+                                   <input type="text" class="form-control" id="contactus_first_name" name="contactus_first_name" placeholder="First Name*" required>
+                               </div>
+                           </div>
+                           <div class="col-md-6">
+                               <div class="form-group">
+                                   <input type="text" class="form-control" id="contactus_last_name" name="contactus_last_name" placeholder="Last Name*" required>
+                               </div>
+                           </div>
+                           <div class="col-md-6">
+                               <div class="form-group">
+                                       <input type="phone" class="form-control" id="contactus_phone_number" name="contactus_phone_number" placeholder="Phone Number*" required>
+                               </div>
+                           </div>
+                           <div class="col-md-6">
+                               <div class="form-group">
+                                   <input type="email" class="form-control" id="contactus_email" name="contactus_email" placeholder="Email Address*" required>
+                               </div>
+                           </div>
+                           <div class="col-md-6">
+                               <div class="form-group">
+                                   <input type="text area" class="form-control" id="contactus_subject" name="contactus_subject" placeholder="Subject*" required> 
+                               </div>
+                           </div>
+                           <div class="col-md-12">
+                               <div class="form-group">
+                                   <textarea type="text" class="form-control text-message" id="contactus_message" name="contactus_message" placeholder="Message*" required></textarea>
+                               </div>
+                           </div>
+                           <div class="col-md-12">
+                               <div class="button-container">
+                                   <button type="submit" formaction="/contact_us/send">SEND</button>
+                               </div>
+                           </div>
+                       </div>
+                   </form>
                 </div>
                 <div class="col-md-6">
                     <div class="title-container">Location:</div>

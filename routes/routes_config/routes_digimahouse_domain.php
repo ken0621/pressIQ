@@ -65,8 +65,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/forgot/password/send', 'Shop\ShopLoginController@forgot_password_send');
 	Route::any('/forgot/password/change', 'Shop\ShopLoginController@forgot_password_change');
 	Route::any('/forgot/password/change/submit', 'Shop\ShopLoginController@forgot_password_change_submit');
-
-	
 	Route::any('/logout', 'Shop\ShopMemberController@logout');
 	Route::any('/thank_you','Shop\ShopLoginController@thank_you');//PRESS RELEASE
 	Route::post('/contactus', 'Shop\ShopContactController@contact_us');
@@ -77,12 +75,9 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/pressuser', 'Shop\ShopMemberController@pressuser'); //PRESS RELEASE
 	Route::get('/pressuser/mypressrelease/pressrelease/view/{pid}', 'Shop\ShopMemberController@pressuser_view'); //PRESS RELEASE
 	Route::get('/pressuser/dashboard', 'Shop\ShopMemberController@pressuser_dashboard'); //PRESS RELEASE
-
 	Route::any('/pressuser/pressrelease', 'Shop\ShopMemberController@pressuser_pressrelease'); //PRESS RELEASE
 	Route::any('/pressuser/pressrelease/recipient', 'Shop\ShopMemberController@pressuser_pressrelease_recipient'); //PRESS RELEASE
-
 	Route::any('/pressrelease/track/open', 'Shop\ShopMemberController@press_release_track_open');
-
 	Route::any('/pressuser/pressrelease/recipient/search', 'Shop\ShopMemberController@pressuser_pressrelease_recipient_search'); //PRESS RELEASE
 	Route::any('/pressuser/pressrelease/pr','Shop\ShopMemberController@send_pr');
 	Route::any('/pressuser/mypressrelease', 'Shop\ShopMemberController@pressuser_my_pressrelease'); //PRESS RELEASE
@@ -124,7 +119,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/pressadmin/pressreleases_deleterecipient/{id}', 'Shop\ShopMemberController@pressreleases_deleterecipient');//PRESS RELEASE
 	Route::any('/pressadmin/pressreleases_edit_recipient/{id}', 'Shop\ShopMemberController@pressreleases_edit_recipient');//PRESS RELEASE
 	Route::get('/pressadmin/import_recipient', 'Shop\ShopMemberController@press_admin_import_email');//PRESS RELEASE
-
+	
 	Route::get('importExport', 			'Shop\ShopMemberController@importExport');
 	Route::get('downloadExcel/{type}',  'Shop\ShopMemberController@downloadExcel');
 	Route::post('importExcel', 			'Shop\ShopMemberController@importExcel');

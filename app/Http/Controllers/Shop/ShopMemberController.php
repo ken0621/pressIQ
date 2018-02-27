@@ -1558,7 +1558,6 @@ class ShopMemberController extends Shop
         }
         if ($filter["country"]!="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["title_of_journalist"]=="")
         {
-            //dd($request->choose_country);
             $data['_recipient']   = Tbl_press_release_recipient::
                                 whereIn('country', $filter["country"])
                                  ->get();
@@ -1640,6 +1639,23 @@ class ShopMemberController extends Shop
                                 ->get();
         }
 
+        elseif ($filter["country"]!="" && $filter["industry_type"]=="" && $filter["media_type"]!="" && $filter["title_of_journalist"]!="") 
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('country', $filter["country"])
+                                ->whereIn('media_type', $filter["media_type"])
+                                ->whereIn('title_of_journalist', $filter["title_of_journalist"])
+                                ->get();
+        }
+        elseif ($filter["country"]!="" && $filter["industry_type"]!="" && $filter["media_type"]=="" && $filter["title_of_journalist"]!="") 
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::
+                                whereIn('country', $filter["country"])
+                                ->whereIn('industry_type', $filter["industry_type"])
+                                ->whereIn('title_of_journalist', $filter["title_of_journalist"])
+                                ->get();
+        }
+        
         else
         {
         $data['_recipient']   = Tbl_press_release_recipient::

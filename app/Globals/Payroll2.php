@@ -5390,7 +5390,7 @@ class Payroll2
 									else
 									{
 										$allowances += $allowance_amount;
-									}
+									}	
 								}
 							
 						}

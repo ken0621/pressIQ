@@ -5,9 +5,9 @@
                   <th valign="center" rowspan="2" class="text-center head" id="name" style="width: 200px">NAME</th>
                   <th valign="center" rowspan="2" class="text-center head" id="position" style="width: 200px">POSITION</th>
                   <th valign="center" rowspan="2" class="text-center head" id="taxstatus" style="width: 200px">PERSONAL TAX STATUS</th>
-                  <th valign="center" rowspan="2" class="text-center head" id="dailyrate" style="width: 200px">DAILY RATE</th>
-                  <th valign="center" rowspan="2" class="text-center head" id="monthlybasic" style="width: 200px">MONTHLY BASIC</th>
-                  <th valign="center" rowspan="2" class="text-center head" id="semimonthlybasic" style="width: 200px">SEMI MONTHLY BASIC</th>
+   {{--                <th valign="center" rowspan="2" class="text-center head" id="dailyrate" style="width: 200px">DAILY RATE</th> --}}
+{{--                   <th valign="center" rowspan="2" class="text-center head" id="monthlybasic" style="width: 200px">MONTHLY BASIC</th>
+                  <th valign="center" rowspan="2" class="text-center head" id="semimonthlybasic" style="width: 200px">SEMI MONTHLY BASIC</th> --}}
                   <th valign="center" rowspan="2" class="text-center head" id="gross_basic_pay" style="width: 120px">GROSS BASIC PAY</th>
                   <th valign="center" colspan="2" class="text-center head" id="absent" style="width: 150px">ABSENT</th>
                   <th valign="center" colspan="2" class="text-center head" id="late" style="width: 150px">LATE</th>
@@ -75,9 +75,9 @@
             <td class="text-center name_td_td" id="name_td">{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</td>
             <td class="text-center position_td_td" id="position_td">{{ $employee->payroll_jobtitle_name }}</td>
             <td class="text-center taxstatus_td_td" id="taxstatus_td">{{ $employee->payroll_employee_tax_status }}</td>
-            <td class="text-center dailyrate_td_td" id="dailyrate_td">{{ $employee->daily_rate }}</td>
-            <td class="text-center monthlybasic_td_td" id="monthlybasic_td">{{ $employee->payroll_employee_salary_monthly }}</td>
-            <td class="text-center semimonthlybasic_td_td" id="semimonthlybasic_td">{{ ($employee->payroll_employee_salary_monthly / 2) }}</td>
+  {{--           <td class="text-center dailyrate_td_td" id="dailyrate_td">{{ $employee->daily_rate }}</td>
+            <td class="text-center monthlybasic_td_td" id="monthlybasic_td">{{ $employee->payroll_employee_salary_monthly }}</td> --}}
+{{--             <td class="text-center semimonthlybasic_td_td" id="semimonthlybasic_td">{{ ($employee->payroll_employee_salary_monthly / 2) }}</td> --}}
             <td class="text-center gross_basic_pay_td_td" id="gross_basic_pay_td">{{ number_format($employee->gross_basic_pay,2) }}</td>
             <td class="text-center absent_td_no" id="absent_td">{{$employee->time_absent}}</td>
             <td class="text-center absent_td_td" id="absent_td">{{ number_format($employee->absent,2) }}</td>
@@ -130,9 +130,9 @@
             <td class="text-center" id="name_total"><b>Total</b></td>
             <td class="text-center" id="position_total"><b></b></td>
             <td class="text-center" id="taxstatus_total"><b></b></td>
-            <td class="text-center" id="dailyrate_total"><b>{{ number_format($daily_rate_total, 2) }}</b></td>
-            <td class="text-center" id="monthlybasic_total"><b>{{ number_format($monthly_basic_total,2)}}</b></td>
-            <td class="text-center" id="semimonthlybasic_total"><b>{{ number_format($semimonthly_basic_total,2)}}</b></td>
+        {{--     <td class="text-center" id="dailyrate_total"><b>{{ number_format($daily_rate_total, 2) }}</b></td> --}}
+{{--             <td class="text-center" id="monthlybasic_total"><b>{{ number_format($monthly_basic_total,2)}}</b></td>
+            <td class="text-center" id="semimonthlybasic_total"><b>{{ number_format($semimonthly_basic_total,2)}}</b></td> --}}
             <td class="text-center" id="gross_basic_pay_total"><b>{{ number_format($total_gross_basic, 2) }}</b></td>
             <td class="text-center" id="absent_total"><b>{{ number_format($time_total_absent,2)}}</b></td>
             <td class="text-center" id="absent_total_total"><b>({{ number_format($absent_total, 2) }})</b></td>

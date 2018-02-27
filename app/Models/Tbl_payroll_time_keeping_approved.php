@@ -130,7 +130,7 @@ class Tbl_payroll_time_keeping_approved extends Model
 		$query->join('tbl_payroll_employee_contract','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
 		->join('tbl_payroll_jobtitle','tbl_payroll_employee_contract.payroll_jobtitle_id','=','tbl_payroll_jobtitle.payroll_jobtitle_id')
 		->join('tbl_payroll_employee_salary','tbl_payroll_time_keeping_approved.employee_id','=','tbl_payroll_employee_salary.payroll_employee_id')
-		->where('payroll_employee_salary_effective_date','<=', $date)
+		->where('tbl_payroll_employee_salary.payroll_employee_salary_effective_date','<=', $date)
 		->where('tbl_payroll_employee_contract.payroll_employee_contract_archived',0)
 		->orderBy('payroll_employee_salary_id', 'desc');
 

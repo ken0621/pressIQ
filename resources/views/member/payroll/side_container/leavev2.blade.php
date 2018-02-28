@@ -7,8 +7,6 @@
 
 
 			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/modal_leave_history" style="margin-right:20px;">Leave Schedule History</a>
-
-			<a href="#" class="popup btn btn-custom-primary pull-right" link="/member/payroll/leave/v2/delete_leavev2" style="margin-right:20px;">DELETE</a>
 			</h4>
 		</div>
 	</div>

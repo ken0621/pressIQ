@@ -122,7 +122,6 @@ class TransactionController extends Member
     }
     public function void_transaction(Request $request, $pass)
     {
-        dd(123);
         $order_number = $request->order_number;
         $transaction = Transaction::get_transaction($this->user_info->shop_id, $order_number);
         if($pass == 'water123' && $transaction)

@@ -54,6 +54,13 @@
                 <span><i class="fa fa-envelope" aria-hidden="true"></i></span>
                 <span>{!! get_content($shop_theme_info, "contact_details", "contact_company_email_address") !!}</span>
             </div>
+            <div class="right-container">
+                <span>
+                    <input class="form-control" placeholder="Search">
+                </span>
+                <i class="fa fa-search" aria-hidden="true"></i>
+                
+            </div>
         </div>
     </div>
     <div class="header-container">

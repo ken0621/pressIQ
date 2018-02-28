@@ -53,20 +53,62 @@ button:hover{
 }
 
 /* HEADER */
-.subheader-container{
+.subheader-container
+{
 	background-color: #1c1c1c;
 	padding: 10px 0px 10px 0px;
 	font-size: 12px;
 	
-	.left-container {
+	.left-container 
+	{
 		float: left;
-		span {
+		padding-top: 10px;
+		span 
+		{
 			padding: 0px 5px;
 			color: #fff;
 		}
 		@media screen and (max-width: 475px)
 		{
 			display: none;
+		}
+	}
+	.right-container
+	{
+		float: right;
+		display: inline-block;
+		color: #fff;
+		span
+		{
+			display: inline-block;
+		}
+		input
+		{
+			background-color: #333333;
+			border-radius: 30px;
+			border: 1px solid #767676;
+			width: 250px;
+			position: relative;
+			color: #fff;
+		}
+		input::placeholder 
+		{
+		  color: #fff;
+		}
+		.fa
+		{
+			font-size: 16px;
+			position: absolute;
+			top: 18px;
+			right: 120px;
+			@media screen and (max-width: 768px)
+			{
+				right: 40px;
+			}
+			@media screen and (max-width: 425px)
+			{
+				right: 30px;
+			}
 		}
 	}
 	

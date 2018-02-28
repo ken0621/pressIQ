@@ -181,6 +181,7 @@ class TransactionController extends Member
                     {
                         Tbl_warehouse_inventory_record_log::where("record_consume_ref_name","transaction_list")
                                                           ->where("record_consume_ref_id", $transaction->transaction_list_id)
+                                                          ->update($update_inventory);
                     }
                 }
                 else

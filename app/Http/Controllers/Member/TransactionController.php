@@ -120,8 +120,9 @@ class TransactionController extends Member
             return $pdf;
         }
     }
-    public function void_transaction(Request $request, $pass)
+    public function void_transaction(Request $request)
     {
+        $pass = $request->pass;
         $order_number = $request->order_number;
         $transaction = Transaction::get_transaction($this->user_info->shop_id, $order_number);
         if($pass == 'water123' && $transaction)

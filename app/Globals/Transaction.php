@@ -41,7 +41,7 @@ class Transaction
 {
     public static function get_transaction($shop_id, $order_number)
     {
-        return Tbl_transaction_list::where("shop_id", $shop_id)->where("transaction_number", $order_number)->first();
+        return Tbl_transaction_list::transaction()->where("tbl_transaction_list.shop_id", $shop_id)->where("transaction_number", $order_number)->first();
     }
     public static function get_customer_name_transaction($transaction_list_id, $shop_id = null)
     {

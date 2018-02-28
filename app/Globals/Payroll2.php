@@ -30,9 +30,11 @@ use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_13th_month_basis;
 
+
 use App\Globals\PayrollLeave;
 
 use App\Models\Tbl_payroll_leave_schedule;
+use App\Models\Tbl_payroll_leave_schedulev2;
 use App\Models\Tbl_payroll_journal_tag;
 
 
@@ -471,6 +473,13 @@ class Payroll2
 			$_timesheet[$from]->record 						= Payroll2::timesheet_process_in_out($timesheet_db);
 			$_timesheet[$from]->is_holiday 					= Payroll2::timesheet_get_is_holiday($employee_id, $from); //$holiday["holiday_day_type"];
 			$_timesheet[$from]->is_leave					= Payroll2::timesheet_get_is_leave($employee_id, $from);
+			//checkv2leave
+			if($_timesheet[$from]->is_leave == false)
+			{
+
+				$_timesheet[$from]->is_leave				= Payroll2::timesheet_get_is_leavev2($employee_id, $from);
+			}
+
 			$_timesheet[$from]->branch_source_company_id 	= 0;
 
 			/*Start Get Timesheet Company Source of the day*/
@@ -1004,6 +1013,17 @@ class Payroll2
 	public static function timesheet_get_is_leave($employee_id, $date)
 	{
 		$leave_schedule = Tbl_payroll_leave_schedule::checkemployee($employee_id, $date)->get();
+
+		if (count($leave_schedule) > 0) 
+		{
+			return true;
+		}
+
+		return false;
+	}
+	public static function timesheet_get_is_leavev2($employee_id, $date)
+	{
+		$leave_schedule = Tbl_payroll_leave_schedulev2::checkemployee($employee_id, $date)->get();
 
 		if (count($leave_schedule) > 0) 
 		{

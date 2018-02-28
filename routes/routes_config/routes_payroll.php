@@ -407,6 +407,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* LEAVE END */
 
 	/* LEAVE V2 START */
+	Route::any('/leave/v2/delete_leavev2',"Member\PayrollController@delete_leavev2");
 	Route::any('/leave/v2',"Member\PayrollController@leaveV2");
 	Route::any('/leave/v2/modal_create_leave_type',"Member\PayrollController@modal_create_leave_type");
 	Route::any('/leave/v2/modal_create_leave_tempv2',"Member\PayrollController@modal_create_leave_tempv2");

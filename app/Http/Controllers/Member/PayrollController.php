@@ -4028,6 +4028,14 @@ class PayrollController extends Member
      /* LEAVE END */
 
      /* LEAVE V2 START */
+     public function delete_leavev2()
+     {
+          $leaveschedule = Tbl_payroll_leave_schedulev2::whereYear('payroll_schedule_leave', 2017)->where('shop_id',Self::shop_id())->delete();
+
+          $waras = Tbl_payroll_leave_schedule::whereYear('payroll_schedule_leave', 2017)->where('shop_id',Self::shop_id())->delete();
+
+          $wara = Tbl_payroll_leave_history::whereYear('payroll_leave_date_created', 2017)->where('shop_id',Self::shop_id())->delete();
+     }
      public function leaveV2()
      {
           $data['_active'] = Tbl_payroll_leave_tempv2::sel(Self::shop_id())->orderBy('payroll_leave_temp_name')->paginate($this->paginate_count);

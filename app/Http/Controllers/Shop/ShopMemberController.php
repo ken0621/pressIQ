@@ -498,18 +498,19 @@ class ShopMemberController extends Shop
 
     public function send($pr_info)        
     {
-        $to  = explode(",", $pr_info['pr_to']);
-        $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
+        dd('Sorry Website Underconstruction!')
+        // $to  = explode(",", $pr_info['pr_to']);
+        // $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
 
-        foreach ($to as $pr_info['pr_to']) 
-        {
-            Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
-            {
-                $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
-                $message->to($pr_info['pr_to']);
-                $message->subject($pr_info["pr_headline"]);
-            });
-        }
+        // foreach ($to as $pr_info['pr_to']) 
+        // {
+        //     Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
+        //     {
+        //         $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
+        //         $message->to($pr_info['pr_to']);
+        //         $message->subject($pr_info["pr_headline"]);
+        //     });
+        // }
     }  
    
     public function send_contact_us()
@@ -1678,7 +1679,7 @@ class ShopMemberController extends Shop
 
 
         $data['total_query'] = $data['_recipient']->count();
-        
+
         return view("press_user.choose_recipient", $data);
     }
 

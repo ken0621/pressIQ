@@ -1,11 +1,11 @@
 @extends("press_user.member")
 @section("pressview")
 <div class="background-container">
-      @if (Session::has('email_sent'))
-      <div class="alert alert-success">
-         <center>{{ Session::get('email_sent') }}</center>
-      </div>
-      @endif 
+        @if (Session::has('email_sent'))
+        <div class="alert alert-success">
+            <center>{{ Session::get('email_sent') }}</center>
+        </div>
+        @endif 
     <div class="pressview">
         <div class="my-press-release-container">
             @foreach ($pr as $prs)

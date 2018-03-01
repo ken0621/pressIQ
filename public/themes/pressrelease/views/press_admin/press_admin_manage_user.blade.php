@@ -31,26 +31,39 @@
             @endif   
           <div class="tab">
              <button class="tablinks" onclick="openCity(event, 'new_user_account')" id="defaultOpen">Add User Account</button>
-            <button class="tablinks" onclick="openCity(event, 'user_account')" >Users Account</button>
-            <button class="tablinks" onclick="openCity(event, 'admin_account')" >Admin Account</button>
+            <button class="tablinks"  onclick="openCity(event, 'user_account')" >Users Account</button>
+            <button class="tablinks"  onclick="openCity(event, 'admin_account')" >Admin Account</button>
           </div>    
 
         <div class="press-release-content">
            <div id="new_user_account" class="tabcontent user-media-container">
                <div class="title-container">Registration for New User</div><br>
-               <form method="post" action="/pressadmin/add_user" enctype="multipart/form-data">
+                
+               <form method="post" action="/pressadmin/add_user" enctype="multipart/form-data" >
                 {{csrf_field()}}
                 <div class="register-form" >
-                  <select class="form-control" name="user_membership" id="user_membership" style="width: 300px">
+                  <select class="form-control" name="user_membership" id="user_membership" style="width: 740px">
                     <option selected>--Costing Option--</option>
-                     <option value="1">1 Time Sending</option>
-                     <option value="3">3 Times Sending</option>
-                     <option value="5">5 Times Sending</option>
-                     <option value="6">6 Months Contract</option>
-                     <option value="12">12 Months Contract</option>
+                     <option value="1">1 Time sending</option>
+                     <option value="3">3 Times sending</option>
+                     <option value="5">5 times sending</option>
+                     <option value="30">6 Months Contract / maximum 30 campaigns within 6 months / 15,000 emails</option>
+                     <option value="60">12 Months Contract / maximum 60 Campaigns within 6 months / 30,000 emails</option>
+                  </select> 
+                </div><br>
+
+                <div class="register-form ">
+                  <select class="chosen-select" id="user_country" name="user_country[]" data-placeholder="Select Country for User"  style="width: 740px" multiple="multiple"> 
+                    <option value="Hong Kong">Hong Kong</option>
+                    <option value="Singapore">Singapore</option> 
+                    <option value="Philippines">Philippines</option> 
+                    <option value="China">China</option>
+                    <option value="Indonesia">Indonesia</option>
+                    <option value="Malaysia">Malaysia</option>
+                    <option value="India">India</option>
                   </select> 
                 </div>
-                
+             
                 <div class="register-form">
                 <input class="form-control" type="text" name="user_first_name" id="user_first_name" placeholder="First Name" >
                 </div>
@@ -73,7 +86,7 @@
                 <div class="register-form">
                  <input type="file" name="user_company_image" id="user_company_image" accept=".png, .jpg, .jpeg">
                 </div>
-
+                
                 @if(session()->has('message'))
                   <div class="details">
                   <span style="color: red;">
@@ -128,6 +141,7 @@
                          <th style="width: 15%;">Last Name</th>
                          <th style="width: 15%;">Email</th>
                          <th style="width: 15%;">Company Name</th>
+                         <th style="width: 15%;">Date Started</th>
                          <th style="width: 20%;">Action</th>
                      </tr>
                       @foreach($_user as $_user_account)
@@ -136,6 +150,7 @@
                            <td>{{$_user_account->user_last_name}}</td>
                            <td>{{$_user_account->user_email}}</td>
                            <td>{{$_user_account->user_company_name}}</td>
+                           <td>{{$_user_account->user_date_created}}</td>
                            <td>
                             <a id="edit" href="/pressadmin/edit_user/{{$_user_account->user_id}}"><button type="button"  class="btn btn-warning center"><i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>  Edit</button></a>
 
@@ -256,9 +271,12 @@ function openCity(evt, cityName)
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
 }
-
-// Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
+</script>
+
+<script>
+   document.getElementById("user_country").click();
+   $(".chosen-select").chosen({disable_search_threshold: 10});
 </script>
 
 @endsection

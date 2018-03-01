@@ -65,8 +65,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/forgot/password/send', 'Shop\ShopLoginController@forgot_password_send');
 	Route::any('/forgot/password/change', 'Shop\ShopLoginController@forgot_password_change');
 	Route::any('/forgot/password/change/submit', 'Shop\ShopLoginController@forgot_password_change_submit');
-
-	
 	Route::any('/logout', 'Shop\ShopMemberController@logout');
 	Route::any('/thank_you','Shop\ShopLoginController@thank_you');//PRESS RELEASE
 	Route::post('/contactus', 'Shop\ShopContactController@contact_us');
@@ -75,14 +73,17 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/newsletter/send', 	  'Shop\ShopMemberController@send_newsletter');
 	Route::any('/sign_up', 'Shop\ShopRegisterController@press_signup'); //PRESS RELEASE
 	Route::get('/pressuser', 'Shop\ShopMemberController@pressuser'); //PRESS RELEASE
+	Route::get('/newsroom',			'Shop\ShopNewsRoomController@index');//PRESS RELEASE
+	Route::any('/newsroom/search',	'Shop\ShopNewsRoomController@newsroom_search');//PRESS RELEASE
+	Route::any('/mediacontacts/search',	'Shop\ShopMemberController@mediacontacts_search');//PRESS RELEASE
+	Route::get('/newsroom/view/{pid}','Shop\ShopNewsRoomController@news_room_view');//PRESS RELEASE
+	Route::get('/pressuser/choose_recipient', 'Shop\ShopMemberController@pressuser_choose_recipient');
+	Route::get('/pressuser/choose_recipient_view', 'Shop\ShopMemberController@choose_recipient_view');
 	Route::get('/pressuser/mypressrelease/pressrelease/view/{pid}', 'Shop\ShopMemberController@pressuser_view'); //PRESS RELEASE
 	Route::get('/pressuser/dashboard', 'Shop\ShopMemberController@pressuser_dashboard'); //PRESS RELEASE
-
 	Route::any('/pressuser/pressrelease', 'Shop\ShopMemberController@pressuser_pressrelease'); //PRESS RELEASE
 	Route::any('/pressuser/pressrelease/recipient', 'Shop\ShopMemberController@pressuser_pressrelease_recipient'); //PRESS RELEASE
-
 	Route::any('/pressrelease/track/open', 'Shop\ShopMemberController@press_release_track_open');
-
 	Route::any('/pressuser/pressrelease/recipient/search', 'Shop\ShopMemberController@pressuser_pressrelease_recipient_search'); //PRESS RELEASE
 	Route::any('/pressuser/pressrelease/pr','Shop\ShopMemberController@send_pr');
 	Route::any('/pressuser/mypressrelease', 'Shop\ShopMemberController@pressuser_my_pressrelease'); //PRESS RELEASE
@@ -119,27 +120,16 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/pressuser/media_contacts', 'Shop\ShopMemberController@pressuser_media_contacts');
 	Route::any('/pressuser/media_contacts/add', 'Shop\ShopMemberController@pressuser_media_contacts_add');
 	Route::any('/pressuser/media_contacts/delete/{id}', 'Shop\ShopMemberController@pressuser_media_contacts_delete');
-
-
 	Route::post('/pressadmin/pressreleases/recipient', 'Shop\ShopMemberController@pressadmin_pressreleases_recipient'); //PRESS RELEASE
 	Route::any('/pressadmin/pressreleases_addrecipient', 'Shop\ShopMemberController@pressadmin_pressrelease_addrecipient');//PRESS RELEASE
 	Route::any('/pressadmin/pressreleases_deleterecipient/{id}', 'Shop\ShopMemberController@pressreleases_deleterecipient');//PRESS RELEASE
 	Route::any('/pressadmin/pressreleases_edit_recipient/{id}', 'Shop\ShopMemberController@pressreleases_edit_recipient');//PRESS RELEASE
 	Route::get('/pressadmin/import_recipient', 'Shop\ShopMemberController@press_admin_import_email');//PRESS RELEASE
-
+	
 	Route::get('importExport', 			'Shop\ShopMemberController@importExport');
 	Route::get('downloadExcel/{type}',  'Shop\ShopMemberController@downloadExcel');
 	Route::post('importExcel', 			'Shop\ShopMemberController@importExcel');
-
-
-	Route::get('/newsroom',			'Shop\ShopNewsRoomController@index');//PRESS RELEASE
-	Route::any('/newsroom/search',	'Shop\ShopNewsRoomController@newsroom_search');//PRESS RELEASE
-	Route::any('/mediacontacts/search',	'Shop\ShopMemberController@mediacontacts_search');//PRESS RELEASE
-	Route::get('/newsroom/view/{pid}','Shop\ShopNewsRoomController@news_room_view');//PRESS RELEASE
-
-	Route::get('/pressuser/choose_recipient', 'Shop\ShopMemberController@pressuser_choose_recipient');
 	// Route::get('/pressrelease/view','Shop\ShopMemberController@press_email');//PRESS RELEASE
-
 	Route::get('/announcement', 'Shop\ShopAboutController@announcement'); //Alternative
 
 	

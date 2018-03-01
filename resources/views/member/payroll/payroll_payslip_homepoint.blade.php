@@ -37,6 +37,7 @@
 		    padding: 0px;
 		    font-size: 7px;
 		    page-break-inside: avoid;
+        font-weight: bold;
 		}
 		th {
 		    border: 1px solid #dddddd;
@@ -69,21 +70,21 @@
 			<table>
 				  <tr>
 				    <th width="15%"><br>{{ $employee->payroll_employee_number }}</th>
-				    <th width="48%"><br>{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</th>
+				    <th width="48%" style="border-right-color: black;"><br>{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</th>
 				    <th width="30%"><br>{{ $show_period_start }} - {{ $show_period_end }}</th>
 				    <th width="17%"><br>@if($show_release_date != 'not specified') {{ $show_release_date }}
                         @endif</th>
 				  </tr>
                       <tr>
                       <td style="font-weight: bold;">{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</td>
-                      <td></td>
+                      <td style="border-right-color: black;"></td>
                       <td style="font-weight: bold;">{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</td>
                       <td></td>
                    </tr>
 				   <tr>
 
                       <td style="font-weight: bold;">BASIC PAY</td>
-                      <td style="font-weight: bold">{{ payroll_currency($employee->net_basic_pay) }}</td>
+                      <td style="font-weight: bold;border-right-color: black;">{{ payroll_currency($employee->net_basic_pay) }}</td>
                       <td style="font-weight: bold">BASIC PAY</td>
                        <td style="font-weight: bold">{{ payroll_currency($employee->net_basic_pay) }}</td>
                    </tr>
@@ -91,7 +92,7 @@
                     @if(strtoupper($breakdown["label"]) != 'COLA')
                       <tr>
                           <td>{{ strtoupper($breakdown["label"]) }}</td>
-                          <td>{{ payroll_currency($breakdown["amount"]) }}</td>
+                          <td style="border-right-color: black;">{{ payroll_currency($breakdown["amount"]) }}</td>
                           <td>{{ strtoupper($breakdown["label"]) }}</td>
                            <td>{{ payroll_currency($breakdown["amount"]) }}</td>
                       </tr>
@@ -111,7 +112,7 @@
                                     @else
                                       <tr>
                                           <td>{{ strtoupper($breakdown["label"]) }}</td>
-                                          <td >{{ payroll_currency($breakdown["amount"]) }}</td>
+                                          <td style="border-right-color: black;">{{ payroll_currency($breakdown["amount"]) }}</td>
                                           <td>{{ strtoupper($breakdown["label"]) }}</td>
                                            <td >{{ payroll_currency($breakdown["amount"]) }}</td>
                                       </tr>
@@ -124,7 +125,7 @@
                                     @else
                                       <tr>
                                           <td>{{ strtoupper($breakdown["label"]) }}</td>
-                                          <td >{{ payroll_currency($breakdown["amount"]) }}</td>
+                                          <td style="border-right-color: black;">{{ payroll_currency($breakdown["amount"]) }}</td>
                                           <td >{{ strtoupper($breakdown["label"]) }}</td>
                                            <td >{{ payroll_currency($breakdown["amount"]) }}</td>
                                       </tr>
@@ -134,14 +135,14 @@
 
                                   <tr>
                                       <td>TOTAL DEDUCTION</td>
-                                      <td>{{ payroll_currency($employee->total_deduction) }}</td>
+                                      <td style="border-right-color: black;">{{ payroll_currency($employee->total_deduction) }}</td>
                                        <td>TOTAL DEDUCTION</td>
                                         <td >{{ payroll_currency($employee->total_deduction) }}</td>
                                   </tr> 
 
                                   <tr>
                                       <td style="font-weight: bold;">TAKE HOME PAY</td>
-                                      <td style="font-weight: bold">{{ payroll_currency($employee->net_pay) }}</td>
+                                      <td style="font-weight: bold;border-right-color: black;">{{ payroll_currency($employee->net_pay) }}</td>
                                        <td style="font-weight: bold">TAKE HOME PAY</td>
                                         <td style="font-weight: bold">{{ payroll_currency($employee->net_pay) }}</td>
                                   </tr>

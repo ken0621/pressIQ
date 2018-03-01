@@ -48,6 +48,9 @@
 											<li>
 												<a href="#" class="popup" link="/member/payroll/leave/v2/modal_leave_action/{{$dat->payroll_leave_employee_id}}/resethistory/{{$dat->remaining_leave}}" size="sm"><i class="fa fa-history"></i>&nbsp;Reset history</a>
 											</li>
+											<li>
+												<a href="#" class="popup" link="/member/payroll/leave/v2/view_used_leave_v2/{{$dat->payroll_leave_employee_id}}" size="lg"><i class="fa fa-search"></i>&nbsp;View Used Leave</a>
+											</li>
 										</ul>
 									</div>
 				  				</td>

@@ -34,7 +34,5 @@
 				$('.modal-content-global .close').trigger("click");
 				data.element.modal("hide");
 		});
-	
-
 	}
 </script>	

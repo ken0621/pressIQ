@@ -3486,6 +3486,7 @@ class ShopMemberController extends Shop
             $total_payout           = MLM2::customer_total_payout(Self::$customer_info->customer_id);
             $data["total_payout"]   = Currency::format($total_payout);
             $data["_category"]      = Ecom_Product::getAllCategory($this->shop_info->shop_id); // kolorete
+            
             return (Self::load_view_for_members("member.wallet_encashment", $data));
         }
         else

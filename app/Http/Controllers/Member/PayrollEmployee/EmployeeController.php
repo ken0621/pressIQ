@@ -69,7 +69,7 @@ class EmployeeController extends PayrollMember
 	public static function authorized_access($employee_id)
 	{
 		$shop_id = Tbl_payroll_employee_basic::select('shop_id')->where('payroll_employee_id',$employee_id)->first();
-
+		
 		if($shop_id['shop_id'] == 21)
 		{
 			echo view('member.payroll2.employee_dashboard.authorized_yangming_access');
@@ -508,7 +508,7 @@ class EmployeeController extends PayrollMember
 
 		$employee_contract = Tbl_payroll_employee_contract::EmployeePayrollGroup($this->employee_info->payroll_employee_id)->first();
 
-		if ($employee_contract->payroll_group_code == 'Flate Rate')
+		if ($employee_contract->payroll_group_code == 'Flat Rate')
 		{
 			echo "<div style='padding: 100px; text-align: center;'>FLAT RATE COMPUTATION DOES'T HAVE TIMESHEET</div>";
 		}

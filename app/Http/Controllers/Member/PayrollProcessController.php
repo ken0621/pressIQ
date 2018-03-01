@@ -27,7 +27,6 @@ class PayrollProcessController extends Member
 	{
 		$data["period_company_id"] = $period_company_id;
 		$data["step"] = Request::input("step");
-
 		if(Request::isMethod("post"))
 		{
 			$data["_employee"] = Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_company_id)->basic()->get();
@@ -84,6 +83,7 @@ class PayrollProcessController extends Member
 		}
 		else
 		{
+			
 			$data["company"] = Tbl_payroll_period_company::where("payroll_period_company_id", $period_company_id)->company()->companyperiod()->first();
 			return view("member.payroll2.payroll_process", $data);
 		}

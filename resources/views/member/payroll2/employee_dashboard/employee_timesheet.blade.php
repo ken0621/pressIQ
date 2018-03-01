@@ -2,8 +2,8 @@
     <h4 class="modal-title timesheet-title">{{ $period_record->payroll_employee_first_name }} {{ $period_record->payroll_employee_last_name }}</h4>
     <button type="button" class="close" data-dismiss="modal">×</button></div>
 
-<div class="col-md-12 timesheet-time-record">TIME RECORD</div>
-<div class="col-md-12 timesheet-period"> {{ $period_record_start." - ".$period_record_end }} </div>
+<h5 style="text-align: center;">TIME RECORD</h5>
+<h5 style="text-align:center;"> {{ $period_record_start." - ".$period_record_end }} </h5>
 <div class="modal-body clearfix">
        
         <div class="col-md-12">

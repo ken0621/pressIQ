@@ -74,6 +74,12 @@
 				    <th width="17%"><br>@if($show_release_date != 'not specified') {{ $show_release_date }}
                         @endif</th>
 				  </tr>
+                      <tr>
+                      <td style="font-weight: bold;">{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</td>
+                      <td></td>
+                      <td style="font-weight: bold;">{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</td>
+                      <td></td>
+                   </tr>
 				   <tr>
 
                       <td style="font-weight: bold;">BASIC PAY</td>

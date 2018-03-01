@@ -35,7 +35,7 @@
 		    border: 1px solid #dddddd;
 		    text-align: center;
 		    padding: 0px;
-		    font-size: 7px;
+		    font-size: 10px;
 		    page-break-inside: avoid;
         font-weight: bold;
 		}

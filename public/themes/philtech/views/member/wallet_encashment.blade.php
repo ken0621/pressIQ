@@ -62,11 +62,11 @@
 							@if($encashment->wallet_log_plan == 'WALLET_TRANSFER') 
 							{!! str_replace('You earned ', 'Deducted ', $encashment->log) !!}
 							@else
-							{!! $encashment->log !!}
+							{!! str_replace('V-Money', 'E-Money', $encashment->log) !!}
 							@endif
 						</td>
 						<td class="text-center"><b>{{ $encashment->wallet_log_payout_status }}</b></td>
-						<td class="text-center">{{ strtoupper(str_replace("_", " ", $encashment->wallet_log_plan)) }}</td>
+						<td class="text-center">{{ strtoupper(str_replace("vmoney", "e-money", str_replace("_", " ", $encashment->wallet_log_plan))) }}</td>
 						<td class="text-right"><b>{!! $encashment->display_wallet_log_request !!}</b></td>
 						<td class="text-right">{!! $encashment->display_wallet_log_tax !!}</td>
 						<td class="text-right">{!! $encashment->display_wallet_log_service_charge !!}</td>

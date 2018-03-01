@@ -3010,7 +3010,7 @@ class Payroll2
 			/*Start Undertime Deduction Computation*/
 			if ($undertime_float != 0) 
 			{
-				$undertime_rate = Self::compute_undertime_deduction($_time['undertime'], $group->payroll_under_time_category, $undertime_float, $daily_rate, $hourly_rate, $hourly_rate_employee_salary, $additional_percentage, $group);
+				$undertime_rate = Self::compute_undertime_deduction($_time['undertime'], $group->payroll_under_time_category, $undertime_float, $daily_rate, $hourly_rate, $hourly_rate_employee_salary, $additional_percentage, $group, $special_param['payroll_overtime_regular'],$_time['is_holiday']);
 				
 				// if ($compute_type == "hourly") 
 				// {
@@ -3073,7 +3073,7 @@ class Payroll2
 	}
 
 
-	public static function compute_undertime_deduction($undertime_hours = "00:00:00", $undertime_category = "Base on Salary", $undertime_float = 0, $daily_rate = 0, $hourly_rate = 0, $hourly_rate_employee_salary = 0, $additional_percentage = 0, $group)
+	public static function compute_undertime_deduction($undertime_hours = "00:00:00", $undertime_category = "Base on Salary", $undertime_float = 0, $daily_rate = 0, $hourly_rate = 0, $hourly_rate_employee_salary = 0, $additional_percentage = 0, $group, $special_holiday_percentage, $special_holiday)
 	{
 		$undertime_rate = 0;
 
@@ -3086,6 +3086,11 @@ class Payroll2
 			if ($group->payroll_group_salary_computation == "Monthly Rate" && $hourly_rate_employee_salary != 0) 
 			{
 				$undertime_rate = ($undertime_float * $hourly_rate_employee_salary)  * $additional_percentage;
+			}
+
+			if($special_holiday == 'special')
+			{
+				$undertime_rate = ($undertime_float * $hourly_rate) * $special_holiday_percentage;
 			}
 		}
 		else if ($undertime_category == 'Custom')

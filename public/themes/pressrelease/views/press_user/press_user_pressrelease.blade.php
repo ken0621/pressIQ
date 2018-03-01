@@ -27,7 +27,7 @@
                     @if(session()->has("pr_edit"))
                       @foreach($edit as $edits)
                   <div class="title">Type:</div>
-                   <select name="pr_type" id="pr_type" style="width: 80% !important;">
+                   <select name="pr_type" id="pr_type" class="form-control" style="width: 80% !important;">
                      <option>--Select option--</option>
                      @if($edits->pr_type=="Media Release")
                      <option selected value="Media Release">Media Release</option>
@@ -52,7 +52,7 @@
                   <div class="title">Release Text Body:</div>
                         <textarea name="pr_content" id="pr_content">{!!$edits->pr_content!!}</textarea>
                   <div class="title">Boilerplate:</div>
-                        <textarea name="pr_boiler_content" id="pr_boiler_content">{!!$edits->pr_boiler_content!!}</textarea>
+                        <textarea name="pr_boiler_content" id="pr_boiler_content">{!!$edits->pr_boiler_content!!}</textarea><br>
                   <div class="button-container">
                     <span class="button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
                     <span class="preview-button"><a href="#" id="prev_btn">Preview</a></span>
@@ -98,7 +98,8 @@
                     <input type="hidden" class="hidden_number" id="hidden_number" name="hidden_number" readonly>
                     <input type="hidden"  id="recipient_name" name="recipient_name"  class="form-control" value="{{$edits->pr_receiver_name}}" multiple readonly>
                     <input type="hidden"  id="recipient_name_only" name="recipient_name_only" class="form-control"  multiple readonly>
-
+                    <input type="hidden" id="recipient_id" name="recipient_id"  class="form-control" multiple readonly> 
+                    
                     <span class="button"><button class="tablinks" type="button" onclick="openCity(event, 'create_release')" id="defaultOpen"><a>&laquo; Back to Release</a></button></span>
                     
                     {{-- POPUP CHOOSE RECIPIENT --}}
@@ -164,9 +165,11 @@
                     <div class="title">Send To:
                     <span class="result-container" style="font-size:15px"><span id="results_number" name="results_number" style="font-size:15px"></span></span>
                     </div>
-                    <input type="hidden" class="hidden_number" id="hidden_number" name="hidden_number" readonly>
+                    <input type="hidden" id="hidden_number" name="hidden_number" class="hidden_number" readonly>
                     <input type="hidden" id="recipient_name" name="recipient_name"  class="form-control" multiple readonly> 
-                    <input type="hidden" id="recipient_name_only" name="recipient_name_only"  class="form-control" multiple readonly>           
+                    <input type="hidden" id="recipient_name_only" name="recipient_name_only"  class="form-control" multiple readonly> 
+                    <input type="hidden" id="recipient_email" name="pr_to"  class="form-control" readonly>
+                    <input type="hidden" id="recipient_id" name="recipient_id"  class="form-control" multiple readonly> 
 
                     <span class="button"><button class="tablinks" type="button" onclick="openCity(event, 'create_release')" id="defaultOpen"><a>&laquo; Back to Release</a></button></span>
                     
@@ -174,7 +177,6 @@
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="button"><button type="button" id="btnnextSend" class="tablinks"><a>Continue &raquo;</a></button></span>
-                      <input type="hidden" name="pr_to" id="recipient_email" class="form-control" readonly >
                       @endif
                     <div class="button-container"></div>
                 </div>
@@ -249,6 +251,21 @@
   </div>
 </div>
 
+<div class="popup-view">
+  <div class="modal" id="viewPopup" name="viewPopup" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Chosen Recipients</h4>
+          </div>
+          <div class="table_recipient">
+          </div>  
+      </div>
+    </div>
+  </div>
+</div>
+
 
 @endsection
 @section("css")
@@ -274,6 +291,7 @@
    document.getElementById("defaultOpen").click();
    
    $(".chosen-select").chosen({disable_search_threshold: 10});
+   
 </script>
 
 <script src="/email_assets/tinymce/js/tinymce/tinymce.min.js"></script>
@@ -281,7 +299,28 @@
 <script src="/email_assets/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
 
 <script>
-  
+  $('#pop_chosen_recipient_btn').click(function()
+  {
+    $('#viewPopup').modal('show');
+
+      var id_recipients;
+      $('#recipient_id').each(function()
+      {
+        id_recipients = $(this).text();
+      });
+      $.ajax({
+        url: '/pressuser/choose_recipient_view',
+        type: 'GET',
+        data: {'id': id_recipients},
+        success: function (data)
+        {
+            $('.table_recipient').html(data);
+        }
+      });
+  });
+</script>
+
+<script>
   $('#button_load').click(function()
   {
     $('#img_load').show(); 
@@ -401,15 +440,5 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
     var data = $('.recipient_form').serialize();
     action_load_link_to_modal('/pressuser/choose_recipient?'+data, 'md');
 });
-</script>
-
-<script>
-  $('#pop_chosen_recipient_btn').click(function()
-  {
-    $('#recipient_name').each(function()
-    {
-      alert($(this).text())
-    });
-  });
 </script>
 @endsection

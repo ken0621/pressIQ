@@ -54,14 +54,26 @@ $(document).ready(function(){
 	{
     	var name_array = [];
     	var email_array = [];
+    	var position_array = [];
+    	var company_array = [];
+    	var industry_array = [];
+    	var id_array = [];
     	var ctr = 0;
 	   $('input.recipient_checkbox:checkbox:checked').each(function ()
 	    {
 	    	var data = $(this).val();
 	    	var name =$('.rec_name_'+data).text();
 	    	var email =$('.rec_email_'+data).text();
-	    	name_array[ctr] = name;
-	    	email_array[ctr] = email;
+	    	var position =$('.rec_position_'+data).text();
+	    	var company =$('.rec_company_'+data).text();
+	    	var industry =$('.rec_industry_'+data).text();
+	    	var id =$('.rec_id_'+data).text();
+	    	name_array[ctr] 		= name;
+	    	email_array[ctr]	    = email;
+	    	position_array[ctr]		= position;	
+	    	company_array[ctr] 		= company;
+	    	industry_array[ctr] 	= industry;
+	    	id_array[ctr] 	= id;
 	    	ctr++; 
 
   		});
@@ -71,6 +83,10 @@ $(document).ready(function(){
 	    	$('#recipient_name').text(name_array);
 	    	$('#recipient_name_only').val(name_array);
 	    	$('#recipient_email').val(email_array);
+	    	$('#recipient_position').val(position_array);
+	    	$('#recipient_company').val(company_array);
+	    	$('#recipient_industry').val(industry_array);
+	    	$('#recipient_id').text(id_array);
 	    	$("#global_modal").modal('hide');
 	    	 
     });

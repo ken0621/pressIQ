@@ -42,13 +42,13 @@
                <form method="post" action="/pressadmin/add_user" enctype="multipart/form-data" >
                 {{csrf_field()}}
                 <div class="register-form" >
-                  <select class="form-control" name="user_membership" id="user_membership" style="width: 500px">
+                  <select class="form-control" name="user_membership" id="user_membership" style="width: 740px">
                     <option selected>--Costing Option--</option>
-                     <option value="1">1 Time Sending</option>
-                     <option value="3">3 Times Sending</option>
-                     <option value="5">5 Times Sending</option>
-                     <option value="30">6 Months Contract / maximum 30 campaigns within 6 months</option>
-                     <option value="60">12 Months Contract / maximum 60 Campaigns within 6 months</option>
+                     <option value="1">1 Time sending</option>
+                     <option value="3">3 Times sending</option>
+                     <option value="5">5 times sending</option>
+                     <option value="30">6 Months Contract / maximum 30 campaigns within 6 months / 15,000 emails</option>
+                     <option value="60">12 Months Contract / maximum 60 Campaigns within 6 months / 30,000 emails</option>
                   </select> 
                 </div><br>
 
@@ -141,6 +141,7 @@
                          <th style="width: 15%;">Last Name</th>
                          <th style="width: 15%;">Email</th>
                          <th style="width: 15%;">Company Name</th>
+                         <th style="width: 15%;">Date Started</th>
                          <th style="width: 20%;">Action</th>
                      </tr>
                       @foreach($_user as $_user_account)
@@ -149,6 +150,7 @@
                            <td>{{$_user_account->user_last_name}}</td>
                            <td>{{$_user_account->user_email}}</td>
                            <td>{{$_user_account->user_company_name}}</td>
+                           <td>{{$_user_account->user_date_created}}</td>
                            <td>
                             <a id="edit" href="/pressadmin/edit_user/{{$_user_account->user_id}}"><button type="button"  class="btn btn-warning center"><i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>  Edit</button></a>
 

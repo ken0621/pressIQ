@@ -3,7 +3,7 @@
             <thead style="text-transform: uppercase">
             <tr>  
                   <th valign="center" rowspan="2" class="text-center head" id="name" style="width: 200px">NAME</th>
-                  <th valign="center" rowspan="2" class="text-center head" id="position" style="width: 200px">POSITION</th>
+{{--                   <th valign="center" rowspan="2" class="text-center head" id="position" style="width: 200px">POSITION</th> --}}
                   <th valign="center" rowspan="2" class="text-center head" id="taxstatus" style="width: 200px">PERSONAL TAX STATUS</th>
    {{--                <th valign="center" rowspan="2" class="text-center head" id="dailyrate" style="width: 200px">DAILY RATE</th> --}}
 {{--                   <th valign="center" rowspan="2" class="text-center head" id="monthlybasic" style="width: 200px">MONTHLY BASIC</th>
@@ -73,7 +73,7 @@
       @foreach($_employee as $lbl => $employee)
             <tr>                
             <td class="text-center name_td_td" id="name_td">{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</td>
-            <td class="text-center position_td_td" id="position_td">{{ $employee->payroll_jobtitle_name }}</td>
+{{--             <td class="text-center position_td_td" id="position_td">{{ $employee->payroll_jobtitle_name }}</td> --}}
             <td class="text-center taxstatus_td_td" id="taxstatus_td">{{ $employee->payroll_employee_tax_status }}</td>
   {{--           <td class="text-center dailyrate_td_td" id="dailyrate_td">{{ $employee->daily_rate }}</td>
             <td class="text-center monthlybasic_td_td" id="monthlybasic_td">{{ $employee->payroll_employee_salary_monthly }}</td> --}}
@@ -128,7 +128,7 @@
 
             <tr>
             <td class="text-center" id="name_total"><b>Total</b></td>
-            <td class="text-center" id="position_total"><b></b></td>
+{{--             <td class="text-center" id="position_total"><b></b></td> --}}
             <td class="text-center" id="taxstatus_total"><b></b></td>
         {{--     <td class="text-center" id="dailyrate_total"><b>{{ number_format($daily_rate_total, 2) }}</b></td> --}}
 {{--             <td class="text-center" id="monthlybasic_total"><b>{{ number_format($monthly_basic_total,2)}}</b></td>

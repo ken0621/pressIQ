@@ -58,9 +58,9 @@ body{
     @if($columns[0]->name == 1)
     <td class="head" rowspan="2" id="name">NAME</td>
     @endif
-    @if($columns[0]->position == 1)
+{{--     @if($columns[0]->position == 1)
     <td class="head" rowspan="2" id="position" >POSITION</td>
-    @endif
+    @endif --}}
     @if($columns[0]->taxstatus == 1)
     <td class="head" rowspan="2" id="taxstatus">PERSONAL TAX STATUS</td>
     @endif
@@ -137,9 +137,9 @@ body{
     @if($columns[0]->name == 1)
     <td class="head" id="name_one"></td>
     @endif
-    @if($columns[0]->position == 1)
+{{--     @if($columns[0]->position == 1)
     <td class="head" id="position_one"></td>
-    @endif
+    @endif --}}
     @if($columns[0]->taxstatus == 1)
     <td class="head" id="taxstatus_one"></td>
     @endif
@@ -237,9 +237,9 @@ body{
     @if($columns[0]->name == 1)
     <td class="text-center name_td_td" id="name_td">{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_last_name }}</td>
     @endif
-    @if($columns[0]->position == 1)
+{{--     @if($columns[0]->position == 1)
     <td class="text-center position_td_td" id="position_td"> {{ $employee->payroll_jobtitle_name }}</td>
-    @endif
+    @endif --}}
     @if($columns[0]->taxstatus == 1)
     <td class="text-center taxstatus_td_td" id="taxstatus_td">{{ $employee->payroll_employee_tax_status }}</td>
     @endif
@@ -339,9 +339,9 @@ body{
     @if($columns[0]->name == 1)
     <td class="text-center" id="name_total"><b>Total</b></td>
     @endif
-    @if($columns[0]->position == 1)
+{{--     @if($columns[0]->position == 1)
     <td class="text-center" id="position_total"><b></b></td>
-    @endif
+    @endif --}}
     @if($columns[0]->taxstatus == 1)
     <td class="text-center" id="taxstatus_total"><b></b></td>
     @endif

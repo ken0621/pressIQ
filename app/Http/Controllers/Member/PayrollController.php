@@ -192,7 +192,8 @@ class PayrollController extends Member
 
 
           $data["_period"] = $query->get();
-       
+          $data["shop_id"] = Self::shop_id();
+          
           switch ($mode)
           {
                case 'pending':

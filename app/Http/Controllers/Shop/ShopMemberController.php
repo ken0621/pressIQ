@@ -498,7 +498,7 @@ class ShopMemberController extends Shop
 
     public function send($pr_info)        
     {
-        dd('Sorry Website Underconstruction!')
+        dd('Sorry Website Underconstruction!');
         // $to  = explode(",", $pr_info['pr_to']);
         // $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
 

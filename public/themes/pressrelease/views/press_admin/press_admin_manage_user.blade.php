@@ -46,7 +46,7 @@
                     <option selected>--Costing Option--</option>
                      <option value="1">1 Time sending</option>
                      <option value="3">3 Times sending</option>
-                     <option value="5">5 times sending</option>
+                     <option value="5">5 Times sending</option>
                      <option value="30">6 Months Contract / maximum 30 campaigns within 6 months / 15,000 emails</option>
                      <option value="60">12 Months Contract / maximum 60 Campaigns within 6 months / 30,000 emails</option>
                   </select> 

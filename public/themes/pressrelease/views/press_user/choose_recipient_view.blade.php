@@ -10,11 +10,11 @@
       </tr>
       @foreach($_recipients as $recipients)
       <tr>
-          <td>{{$recipients->name}}</td>
-          <td>{{$recipients->company_name}}</td>
-          <td>{{$recipients->title_of_journalist}}</td>
-          <td>{{$recipients->industry_type}}</td>
-          <td>{{$recipients->media_type}}</td>
+          <td style="width: 15%;text-align: center;">{{$recipients->name}}</td>
+          <td style="width: 15%;text-align: center;">{{$recipients->company_name}}</td>
+          <td style="width: 15%;text-align: center;">{{$recipients->title_of_journalist}}</td>
+          <td style="width: 15%;text-align: center;">{{$recipients->industry_type}}</td>
+          <td style="width: 15%;text-align: center;">{{$recipients->media_type}}</td>
       </tr>
        @endforeach
    </table>

@@ -305,7 +305,6 @@ class ShopMemberController extends Shop
         }   
     }
 
-
      public function pressuser_dashboard()
     {
         if(Session::exists('user_email'))
@@ -498,7 +497,7 @@ class ShopMemberController extends Shop
 
     public function send($pr_info)        
     {
-        dd('Sorry Website Underconstruction!');
+        dd('Sorry Website Under Construction!');
         // $to  = explode(",", $pr_info['pr_to']);
         // $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
 
@@ -1417,7 +1416,7 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }
 
-    }    
+    }      
 
      public function importExcel(Request $request)     
     {  
@@ -1426,7 +1425,7 @@ class ShopMemberController extends Shop
         {
             Excel::load($request->file('import_file')->getRealPath(), function ($reader) 
             {
-                foreach ($reader->toArray() as $key => $rows) 
+                foreach ($reader->toArray() as $key => $row) 
                 {
 
                     $data['research_email_address']  = $row['research_email_address'] != null ? $row['research_email_address']:'';
@@ -1480,7 +1479,8 @@ class ShopMemberController extends Shop
         {
             return Redirect::to("/"); 
         }
-    }
+    } 
+    
     public function pressadmin_email_save(Request $request)
     {   
         DB::table('tbl_pressiq_press_releases')
@@ -1555,7 +1555,7 @@ class ShopMemberController extends Shop
         return Redirect::back();
     }
   
-    public function pressuser_choose_recipient(Request $request)
+    public function pressuser_choose_recipient(Request $request)  
     {
         $filter["country"]             = $request->choose_country;
         $filter["industry_type"]       = $request->industry_type;
@@ -1565,7 +1565,7 @@ class ShopMemberController extends Shop
         
         if($filter["country"]=="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["title_of_journalist"]=="")
         {
-            dd("Select a filter data");           
+            dd("Select Data Required!");           
         }
         if ($filter["country"]!="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["title_of_journalist"]=="")
         {

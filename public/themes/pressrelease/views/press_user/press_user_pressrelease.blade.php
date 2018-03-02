@@ -142,7 +142,7 @@
                     </select>
 
                     <div class="title">Industry Type:</div>
-                    <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select" id="industry_type" name="industry_type[]">
+                    <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select" id="industry_type" name="industry_type[]" >
                           @foreach($_industry_type as $industry)
                         <option value="{{$industry->industry_type}}">{{$industry->industry_type}}</option>
                           @endforeach
@@ -236,12 +236,9 @@
           <div id="preview_boiler_content"></div>
             <div>
               &nbsp; <a href="https://twitter.com/Press_IQ?lang=en" class="twitter-share-button" data-url="" data-size="small">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-              
               <iframe src="https://www.facebook.com/plugins/like.php?href=https://www.facebook.com/Press-IQ-153736705433100&width=74&layout=button_count&action=like&size=small&show_faces=false&share=false&height=21&appId" width="61" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-              
               <script src="//platform.linkedin.com/in.js" type="text/javascript" >lang: en_US</script>
               <script type="IN/Share" data-url="https://www.linkedin.com/company/press-iq"></script>
-
             </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -265,7 +262,6 @@
     </div>
   </div>
 </div>
-
 
 @endsection
 @section("css")
@@ -320,7 +316,47 @@
   });
 </script>
 
-<script>
+<script>  
+   $('#industry_type').change(function() 
+   {
+     if(choose_country.value =="")
+        {
+          alert('Please Choose Country First!');
+          $('#industry_type').attr('disabled', 'disabled');
+        }
+    else
+        {
+          $('#industry_type').attr('disabled', false)
+        }
+   });
+
+   $('#media_type').change(function() 
+   {
+     if(choose_country.value =="")
+        {
+          alert('Please Choose Country First!');
+          $('#media_type').attr('disabled', 'disabled');
+        }
+    else
+        {
+           $('#media_type').attr('disabled', false);
+        }
+   });
+
+   $('#title_of_journalist').change(function() 
+   {
+     if(choose_country.value =="")
+        {
+          alert('Please Choose Country First!');
+          $('#title_of_journalist').attr('disabled', 'disabled');
+        }
+    else
+        {
+           $('#title_of_journalist').attr('disabled', false);
+        }
+   });
+
+
   $('#button_load').click(function()
   {
     $('#img_load').show(); 

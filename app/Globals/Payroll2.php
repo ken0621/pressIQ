@@ -2421,6 +2421,7 @@ class Payroll2
  
 	public static function compute_income_day_pay($_time = array(), $daily_rate = 0, $hourly_rate_employee_salary = 0, $group_id = 0, $cola = 0, $compute_type="", $time_compute_mode="regular")
 	{
+
 		$return = new stdClass();
 
 		$time_spent = Self::time_float($_time['time_spent']);
@@ -4520,7 +4521,8 @@ class Payroll2
 
 				foreach($_cutoff as $cutoff)
 				{
-					$total_cutoff += $cutoff->sss_ee;
+					$rounded_sss = round($cutoff->sss_ee,2);
+					$total_cutoff += $rounded_sss;
 				}
 
 				if($total_cutoff >= $sss_contribution["ee"])
@@ -4531,11 +4533,12 @@ class Payroll2
 					$sss_contribution["ec"] = 0;
 				}
 				else
-				{
-					$sss_contribution["ee"] = round($sss_contribution["ee"] / $divisor,2);
+				{	
+					$sss_contribution["ee"] = $sss_contribution["ee"] - $total_cutoff;
 					$sss_contribution["er"] = round($sss_contribution["er"] / $divisor,2);
 					$sss_contribution["ec"] = round($sss_contribution["ec"] / $divisor,2);
-				}
+				}					
+
 			}
 			else
 			{
@@ -4698,7 +4701,8 @@ class Payroll2
 				$total_cutoff = 0;
 				foreach($_cutoff as $cutoff)
 				{
-					$total_cutoff += $cutoff->philhealth_ee;
+					$rounded_philhealth = round($cutoff->philhealth_ee,2);
+					$total_cutoff += $rounded_philhealth;
 				}
 
 				if($total_cutoff >= $philhealth_contribution["ee"])
@@ -4709,7 +4713,7 @@ class Payroll2
 				}
 				else
 				{
-					$philhealth_contribution["ee"] = round($philhealth_contribution["ee"] / $divisor,2);
+					$philhealth_contribution["ee"] = $philhealth_contribution["ee"] - $total_cutoff;
 					$philhealth_contribution["er"] = round($philhealth_contribution["er"] / $divisor,2);
 				}
 			}

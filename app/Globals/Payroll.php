@@ -2745,10 +2745,9 @@ class Payroll
 		return $data;
 	}
 
-	public static function getperiodcount($shop_id = 0, $date = '0000-00-00', $payroll_period_category = '', $start = '0000-00-00')
+	public static function getperiodcount($shop_id = 0, $date = '0000-00-00', $payroll_period_category = '', $start = '0000-00-00', $period_type = '')
 	{
 		$strtotime 		= strtotime($date);
-
 		$datearr[0] 	= date('Y-m-01', $strtotime);
 		$datearr[1] 	= date('Y-m-t', $strtotime);
 		$date_end_count = date('t', $strtotime);
@@ -2759,6 +2758,9 @@ class Payroll
 		$current_month 	= date('m', $strtotime);
 
 		$current_count 	= 0;
+
+		$date_month_start = date('m',strtotime($start));
+	
 
 		// dd($date_end_count);
 
@@ -2786,9 +2788,13 @@ class Payroll
 
 		if($payroll_period_category == 'Weekly')
 		{
+		
 			$next_month 	= date('m', strtotime("+7 day", $strtotime));
-
-			if($index_count  == 1)
+			
+			if ($period_type == 'last_period') {
+				$period_category = 'Last Period';
+			}
+			else if($index_count  == 1)
 			{
 				$period_category = 'First Period';
 			}
@@ -2818,7 +2824,14 @@ class Payroll
 		}
 		else if($payroll_period_category == 'Semi-monthly')
 		{
-			$next_month 	= date('m', strtotime("+15 day", $strtotime));
+			if (date('m') == '02' ) //if date month is february
+			{
+				$next_month = date('m', strtotime("+12 day", $strtotime));
+			}
+			else
+			{
+				$next_month = date('m', strtotime("+15 day", $strtotime));
+			}
 			// dd($next_month);
 			if($index_count == 1)
 			{
@@ -2842,7 +2855,7 @@ class Payroll
 		$data['period_count']	  	= $period_count;
 		$data['count_per_period'] 	= $count_per_period;
 		$data['current_count']		= $current_count;
-
+		
 		return $data;
 
 	}
@@ -3192,10 +3205,21 @@ class Payroll
 	}
 
 
-	public static function getdeductionv2($employee_id = 0, $date = '0000-00-00', $period = '', $payroll_period_category = '', $shop_id = 0)
+	public static function getdeductionv2($employee_id = 0, $date_start = '0000-00-00', $date_end = '0000-00-00', $period = '', $payroll_period_category = '', $shop_id = 0)
 	{
-		$month[0] = date('Y-m-01', strtotime($date));
-		$month[1] = date('Y-m-t', strtotime($date));
+		if (date('m',strtotime($date_start)) == '02') //check if february date start
+		{
+			$month[0] = date('Y-m-01', strtotime($date_start));
+			$month[1] = date('Y-m-t', strtotime($date_start));
+			$date = $date_start;
+		}
+		else
+		{
+			$month[0] = date('Y-m-01', strtotime($date_end));
+			$month[1] = date('Y-m-t', strtotime($date_end));
+			$date = $date_end;
+		}
+		
 		
 		$_deduction = Tbl_payroll_deduction_employee_v2::getdeduction($employee_id, $date, $period, $month)->get();
 		$payroll_record_id = Tbl_payroll_record::getperiod($shop_id, $payroll_period_category)->pluck('payroll_record_id');
@@ -3214,7 +3238,7 @@ class Payroll
 			$payroll_total_payment_amount = Tbl_payroll_deduction_payment_v2::gettotaldeductionpayment($employee_id, $temp['payroll_deduction_id'], $temp['deduction_name'])->first();
 			
 			$payroll_month_payment_amount = Tbl_payroll_deduction_payment_v2::getmonthdeductionpayment($employee_id, $temp['payroll_deduction_id'], $temp['deduction_name'], $month)->first();
-						
+			
 			/*Check Total payment of the month and if total payment and deduction is greater than monthly amortization*/
 			if (($payroll_month_payment_amount["total_payment"] + $deduction->payroll_periodal_deduction) > $deduction->payroll_monthly_amortization) 
 			{
@@ -3223,6 +3247,7 @@ class Payroll
 
 			if($temp == 'Last Period')
 			{
+				
 				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $payroll_total_payment_amount["total_payment"];
 			}
 

@@ -3947,6 +3947,7 @@ class Payroll2
 
 		/* GET PERIOD DETAILS */
 		$data["date_query"] 			= $date_query 			= Tbl_payroll_period_company::sel($payroll_period_company_id)->first();
+		
 		$data["start_date"] 			= $start_date 			= $date_query->payroll_period_start;
 		$data["end_date"] 				= $end_date 			= $date_query->payroll_period_end;
 		$data["period_category"] 		= $period_category 		= $date_query->payroll_period_category;
@@ -3957,7 +3958,7 @@ class Payroll2
 		$data["shop_id"]				= $shop_id				= $group->shop_id;
 
 		/* GET PERIOD CATEGORY ARR */
-		$data["period_category_arr"] 	= $period_category_arr	= Payroll::getperiodcount($shop_id, $end_date, $period_category, $start_date);
+		$data["period_category_arr"] 	= $period_category_arr	= Payroll::getperiodcount($shop_id, $end_date, $period_category, $start_date, $date_query['period_count']);
 		
 		$return->_breakdown = array();
 
@@ -5599,7 +5600,7 @@ class Payroll2
 			}
 		}
 
-		$deduction = Payroll::getdeductionv2($employee_id, $end_date, $period_category_arr['period_category'], $period_category, $shop_id);
+		$deduction = Payroll::getdeductionv2($employee_id, $start_date, $end_date, $period_category_arr['period_category'], $period_category, $shop_id);
 		
 		if(isset($deduction["deduction"]))
 		{

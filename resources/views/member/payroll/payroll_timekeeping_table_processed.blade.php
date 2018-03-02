@@ -1,7 +1,7 @@
 <table class="table table-bordered table-striped table-condensed">
     <thead style="text-transform: uppercase">
         <tr>
-            <th class="text-center">Date Covered</th>
+            <th class="text-center">Date Covereds</th>
             <th class="text-center">Period</th>
             <th class="text-center">Company</th>
             <th class="text-center">Total Net Salary</th>

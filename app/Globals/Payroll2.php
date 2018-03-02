@@ -4868,7 +4868,8 @@ class Payroll2
 			$total_cutoff = 0;
 			foreach($_cutoff as $cutoff)
 			{
-				$total_cutoff += $cutoff->pagibig_ee;
+				$rounded_pagibig = round($cutoff->pagibig_ee,2);
+				$total_cutoff += $rounded_pagibig;
 			}
 			if($total_cutoff >= $pagibig_contribution["ee"])
 			{
@@ -4878,7 +4879,7 @@ class Payroll2
 			}
 			else
 			{
-				$pagibig_contribution["ee"] = round($pagibig_contribution["ee"] / $divisor,2);
+				$pagibig_contribution["ee"] = $pagibig_contribution["ee"] - $total_cutoff;
 				$pagibig_contribution["er"] = round(@($pagibig_tbl["payroll_pagibig_er_share"] / $divisor),2);
 			}
 		}

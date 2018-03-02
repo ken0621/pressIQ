@@ -2771,7 +2771,7 @@ class Payroll
 									->orderBy('payroll_period_end')
 									->get()
 									->toArray();
-		
+
 		$period_count = count($_period);
 		$index_count = 1;
 
@@ -2804,7 +2804,6 @@ class Payroll
 			/* get total number of weeks per month */
 			for($i = 1; $i <= $date_end_count; $i++)
 			{
-
 				$istr = $i;
 				if($i <= 9)
 				{
@@ -2816,14 +2815,11 @@ class Payroll
 					$count_per_period++;
 				}
 			}
-
 		}
 		else if($payroll_period_category == 'Semi-monthly')
 		{
 			$next_month 	= date('m', strtotime("+15 day", $strtotime));
-
 			// dd($next_month);
-
 			if($index_count == 1)
 			{
 				$period_category = 'First Period';
@@ -2833,7 +2829,6 @@ class Payroll
 				// dd($current_month);
 				$period_category = 'Last Period';
 			}
-
 			$count_per_period = 2;
 		}
 		else if($payroll_period_category == 'Monthly')

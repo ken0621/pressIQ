@@ -192,7 +192,8 @@ class PayrollController extends Member
 
 
           $data["_period"] = $query->get();
-       
+          $data["shop_id"] = Self::shop_id();
+          
           switch ($mode)
           {
                case 'pending':
@@ -4252,6 +4253,7 @@ class PayrollController extends Member
           }
    
           $data['emp'] = $datas;
+          $data['payroll_leave_temp_id'] = $payroll_leave_temp_id;
           return view('member.payroll.modal.modal_view_leave_employee',$data);
      }
 
@@ -4284,6 +4286,20 @@ class PayrollController extends Member
           $return['function_name']      = 'payrollconfiguration.reload_leavev2_temp';
 
           return json_encode($return);
+     }
+
+     public function view_used_leave_v2($payroll_leave_employee_id)
+     {
+          $date = date('Y-m-d');
+
+          $upcoming_leave = Tbl_payroll_leave_schedulev2::where('payroll_leave_employee_id',$payroll_leave_employee_id)->where('shop_id',Self::shop_id())->where('payroll_schedule_leave','>', $date)->get();
+          $used_leave = Tbl_payroll_leave_schedulev2::where('payroll_leave_employee_id',$payroll_leave_employee_id)->where('shop_id',Self::shop_id())->where('payroll_schedule_leave','<', $date)->get();
+          
+          $data['name'] = Tbl_payroll_leave_employeev2::employee($payroll_leave_employee_id)->value('payroll_employee_display_name');
+
+          $data['upcoming_leave'] = $upcoming_leave;
+          $data['used_leave'] = $used_leave;
+          return view('member.payroll.modal.modal_view_used_leave_v2',$data);
      }
 
      //leave v2 reporting
@@ -5019,11 +5035,30 @@ class PayrollController extends Member
                $data['id']         = $payroll_leave_employee_id;
                $data['remaining_leave'] = $remaining_leave;  
           }
+          else if($action == 'delete_schedule_v2')
+          {
+               $action = 'delete this leave schedule?';
+               $data['title']      = 'Do you really want to '.$action.'';
+               $data['html']       = '';
+               $data['action']     = '/member/payroll/leave/v2/delete_schedule_v2';
+               $data['id']         = $payroll_leave_employee_id;
+               $data['remaining_leave'] = $remaining_leave;  
+          }
 
           return view('member.payroll.modal.modal_leave_reset_confirm',$data);
 
      }
 
+     public function delete_schedule_v2()
+     {
+          $schedule_leave_id = Request::input('id');
+          Tbl_payroll_leave_schedulev2::where('payroll_leave_schedule_id', $schedule_leave_id)->delete();
+
+          $response['call_function'] = 'reload';
+          $response['status'] = 'success';
+          return $response;
+     }
+     
      public function reset_leave_schedulev2()
      {
           $id                                             = Request::input('id');
@@ -5116,7 +5151,6 @@ class PayrollController extends Member
           
           return $response;
  
-          return json_encode($return);
      }
 
      public function reset_leave_schedule_history()

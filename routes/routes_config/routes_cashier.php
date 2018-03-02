@@ -30,6 +30,7 @@ Route::group(array('prefix' => '/member/cashier'), function()
 	Route::any('/transactions_list/view/{id}','Member\TransactionController@view_pdf');
 	Route::any('/transactions_list/view_receipt/{id}','Member\TransactionController@view_receipt');
 
+	Route::any('/void_receipt','Member\TransactionController@void_transaction');
 
 	/* COMMISSION CALCULATOR */
 	AdvancedRoute::controller('/commission_calculator', 'Member\CommissionCalculatorController');

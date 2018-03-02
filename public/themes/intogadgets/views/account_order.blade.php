@@ -39,7 +39,7 @@
                             <!-- <td data-title="Proof Image"><a order-id="1" class="add-proof">Add</a></td> -->
                             @if($order->tracking_no)
                                 <td>
-                                    <div class="as-track-button" data-size="small" data-domain="intogadgetstore.aftership.com"  data-tracking-number="{{ $order->tracking_no }}"  data-hide-tracking-number="true">
+                                    <div class="as-track-button" data-size="small" data-domain="intogadgets.aftership.com"  data-tracking-number="{{ $order->tracking_no }}"  data-hide-tracking-number="true">
                                     </div>
                                 </td>
                             @else

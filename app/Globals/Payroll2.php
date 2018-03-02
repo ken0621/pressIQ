@@ -30,9 +30,11 @@ use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_13th_month_basis;
 
+
 use App\Globals\PayrollLeave;
 
 use App\Models\Tbl_payroll_leave_schedule;
+use App\Models\Tbl_payroll_leave_schedulev2;
 use App\Models\Tbl_payroll_journal_tag;
 
 
@@ -471,6 +473,13 @@ class Payroll2
 			$_timesheet[$from]->record 						= Payroll2::timesheet_process_in_out($timesheet_db);
 			$_timesheet[$from]->is_holiday 					= Payroll2::timesheet_get_is_holiday($employee_id, $from); //$holiday["holiday_day_type"];
 			$_timesheet[$from]->is_leave					= Payroll2::timesheet_get_is_leave($employee_id, $from);
+			//checkv2leave
+			if($_timesheet[$from]->is_leave == false)
+			{
+
+				$_timesheet[$from]->is_leave				= Payroll2::timesheet_get_is_leavev2($employee_id, $from);
+			}
+
 			$_timesheet[$from]->branch_source_company_id 	= 0;
 
 			/*Start Get Timesheet Company Source of the day*/
@@ -1004,6 +1013,17 @@ class Payroll2
 	public static function timesheet_get_is_leave($employee_id, $date)
 	{
 		$leave_schedule = Tbl_payroll_leave_schedule::checkemployee($employee_id, $date)->get();
+
+		if (count($leave_schedule) > 0) 
+		{
+			return true;
+		}
+
+		return false;
+	}
+	public static function timesheet_get_is_leavev2($employee_id, $date)
+	{
+		$leave_schedule = Tbl_payroll_leave_schedulev2::checkemployee($employee_id, $date)->get();
 
 		if (count($leave_schedule) > 0) 
 		{
@@ -2401,6 +2421,7 @@ class Payroll2
  
 	public static function compute_income_day_pay($_time = array(), $daily_rate = 0, $hourly_rate_employee_salary = 0, $group_id = 0, $cola = 0, $compute_type="", $time_compute_mode="regular")
 	{
+
 		$return = new stdClass();
 
 		$time_spent = Self::time_float($_time['time_spent']);
@@ -2990,7 +3011,7 @@ class Payroll2
 			/*Start Undertime Deduction Computation*/
 			if ($undertime_float != 0) 
 			{
-				$undertime_rate = Self::compute_undertime_deduction($_time['undertime'], $group->payroll_under_time_category, $undertime_float, $daily_rate, $hourly_rate, $hourly_rate_employee_salary, $additional_percentage, $group);
+				$undertime_rate = Self::compute_undertime_deduction($_time['undertime'], $group->payroll_under_time_category, $undertime_float, $daily_rate, $hourly_rate, $hourly_rate_employee_salary, $additional_percentage, $group, $special_param['payroll_overtime_regular'],$_time['is_holiday']);
 				
 				// if ($compute_type == "hourly") 
 				// {
@@ -3053,7 +3074,7 @@ class Payroll2
 	}
 
 
-	public static function compute_undertime_deduction($undertime_hours = "00:00:00", $undertime_category = "Base on Salary", $undertime_float = 0, $daily_rate = 0, $hourly_rate = 0, $hourly_rate_employee_salary = 0, $additional_percentage = 0, $group)
+	public static function compute_undertime_deduction($undertime_hours = "00:00:00", $undertime_category = "Base on Salary", $undertime_float = 0, $daily_rate = 0, $hourly_rate = 0, $hourly_rate_employee_salary = 0, $additional_percentage = 0, $group, $special_holiday_percentage, $special_holiday)
 	{
 		$undertime_rate = 0;
 
@@ -3066,6 +3087,11 @@ class Payroll2
 			if ($group->payroll_group_salary_computation == "Monthly Rate" && $hourly_rate_employee_salary != 0) 
 			{
 				$undertime_rate = ($undertime_float * $hourly_rate_employee_salary)  * $additional_percentage;
+			}
+
+			if($special_holiday == 'special')
+			{
+				$undertime_rate = ($undertime_float * $hourly_rate) * $special_holiday_percentage;
 			}
 		}
 		else if ($undertime_category == 'Custom')
@@ -4495,7 +4521,8 @@ class Payroll2
 
 				foreach($_cutoff as $cutoff)
 				{
-					$total_cutoff += $cutoff->sss_ee;
+					$rounded_sss = round($cutoff->sss_ee,2);
+					$total_cutoff += $rounded_sss;
 				}
 
 				if($total_cutoff >= $sss_contribution["ee"])
@@ -4506,11 +4533,12 @@ class Payroll2
 					$sss_contribution["ec"] = 0;
 				}
 				else
-				{
-					$sss_contribution["ee"] = round($sss_contribution["ee"] / $divisor,2);
+				{	
+					$sss_contribution["ee"] = $sss_contribution["ee"] - $total_cutoff;
 					$sss_contribution["er"] = round($sss_contribution["er"] / $divisor,2);
 					$sss_contribution["ec"] = round($sss_contribution["ec"] / $divisor,2);
-				}
+				}					
+
 			}
 			else
 			{
@@ -4673,7 +4701,8 @@ class Payroll2
 				$total_cutoff = 0;
 				foreach($_cutoff as $cutoff)
 				{
-					$total_cutoff += $cutoff->philhealth_ee;
+					$rounded_philhealth = round($cutoff->philhealth_ee,2);
+					$total_cutoff += $rounded_philhealth;
 				}
 
 				if($total_cutoff >= $philhealth_contribution["ee"])
@@ -4684,7 +4713,7 @@ class Payroll2
 				}
 				else
 				{
-					$philhealth_contribution["ee"] = round($philhealth_contribution["ee"] / $divisor,2);
+					$philhealth_contribution["ee"] = $philhealth_contribution["ee"] - $total_cutoff;
 					$philhealth_contribution["er"] = round($philhealth_contribution["er"] / $divisor,2);
 				}
 			}
@@ -4839,7 +4868,8 @@ class Payroll2
 			$total_cutoff = 0;
 			foreach($_cutoff as $cutoff)
 			{
-				$total_cutoff += $cutoff->pagibig_ee;
+				$rounded_pagibig = round($cutoff->pagibig_ee,2);
+				$total_cutoff += $rounded_pagibig;
 			}
 			if($total_cutoff >= $pagibig_contribution["ee"])
 			{
@@ -4849,7 +4879,7 @@ class Payroll2
 			}
 			else
 			{
-				$pagibig_contribution["ee"] = round($pagibig_contribution["ee"] / $divisor,2);
+				$pagibig_contribution["ee"] = $pagibig_contribution["ee"] - $total_cutoff;
 				$pagibig_contribution["er"] = round(@($pagibig_tbl["payroll_pagibig_er_share"] / $divisor),2);
 			}
 		}
@@ -5390,7 +5420,7 @@ class Payroll2
 									else
 									{
 										$allowances += $allowance_amount;
-									}
+									}	
 								}
 							
 						}

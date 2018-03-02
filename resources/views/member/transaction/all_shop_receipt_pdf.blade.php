@@ -39,7 +39,7 @@
                                 <tbody>
                                     <tr>
                                         <td class="do-label" style="width: 60px;">NO.</td>
-                                        <td class="do-value">: {{ $list->transaction_number }}</td>
+                                        <td class="do-value">: {{ $list->transaction_status != 'open' ? $list->transaction_status : $list->transaction_number }}</td>
                                     </tr>
                                     <tr>
                                         <td class="do-label">DATE.</td>

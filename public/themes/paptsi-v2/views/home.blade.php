@@ -21,7 +21,7 @@
         </div>
     </section>
 
-    <div id="services" class="wrapper-1">
+    {{-- <div id="services" class="wrapper-1">
         <div class="row-no-padding clearfix">
             <div class="col-md-3">
                 <div class="service-1-3-container match-height">
@@ -52,7 +52,69 @@
                 </div>
             </div> 
         </div>
-    </div>
+    </div> --}}
+
+    <section id="services" class="wrapper-1">
+        <div class="container">
+            <div class="service-container services-carousel">
+                <div class="holder">
+                    <div image-holder>
+                        <img src="/themes/paptsi-v2/img/wrapper-image-1.png">
+                    </div>
+                    <div class="title">
+                        Services 1
+                    </div>
+                    <div class="details">
+                        Lorem, ipsum, dolor, sit amet
+                    </div>
+                </div>
+                <div class="holder">
+                    <div image-holder>
+                        <img src="/themes/paptsi-v2/img/wrapper-image-2.png">
+                    </div>
+                    <div class="title">
+                        Services 1
+                    </div>
+                    <div class="details">
+                        Lorem, ipsum, dolor, sit amet
+                    </div>
+                </div>
+                <div class="holder">
+                    <div image-holder>
+                        <img src="/themes/paptsi-v2/img/wrapper-image-3.png">
+                    </div>
+                    <div class="title">
+                        Services 1
+                    </div>
+                    <div class="details">
+                        Lorem, ipsum, dolor, sit amet
+                    </div>
+                </div>
+                <div class="holder">
+                    <div image-holder>
+                        <img src="/themes/paptsi-v2/img/wrapper-image-4.png">
+                    </div>
+                    <div class="title">
+                        Services 1
+                    </div>
+                    <div class="details">
+                        Lorem, ipsum, dolor, sit amet
+                    </div>
+                </div>
+                <div class="holder">
+                    <div image-holder>
+                        <img src="/themes/paptsi-v2/img/wrapper-image-1.png">
+                    </div>
+                    <div class="title">
+                        Services 1
+                    </div>
+                    <div class="details">
+                        Lorem, ipsum, dolor, sit amet
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <div id="aboutus" class="wrapper-2">
         <div class="container">
@@ -241,6 +303,8 @@
 @endsection
 
 @section("script")
+
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
 
 <script type="text/javascript">
 /*$(document).ready(function($) {

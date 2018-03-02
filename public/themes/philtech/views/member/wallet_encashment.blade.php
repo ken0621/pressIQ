@@ -43,6 +43,7 @@
 						<th class="text-center">SLOT</th>
 						<th class="text-center" width="100px">Method</th>
 						<th class="text-center" width="200px">Status</th>
+						<th class="text-center" width="100px">Type</th>
 						<th class="text-right" width="180px">Amount</th>
 						<th class="text-right" width="150px">Tax</th>
 						<th class="text-right" width="150px">Fee</th>
@@ -56,8 +57,16 @@
 						<td class="text-center">
 							<div>{{ $encashment->slot_no }}</div>
 						</td>
-						<td class="text-center">{!! $encashment->log !!}</td>
+						<td class="text-center">
+							
+							@if($encashment->wallet_log_plan == 'WALLET_TRANSFER') 
+							{!! str_replace('You earned ', 'Deducted ', $encashment->log) !!}
+							@else
+							{!! str_replace('V-Money', 'E-Money', $encashment->log) !!}
+							@endif
+						</td>
 						<td class="text-center"><b>{{ $encashment->wallet_log_payout_status }}</b></td>
+						<td class="text-center">{{ strtoupper(str_replace("vmoney", "e-money", str_replace("_", " ", $encashment->wallet_log_plan))) }}</td>
 						<td class="text-right"><b>{!! $encashment->display_wallet_log_request !!}</b></td>
 						<td class="text-right">{!! $encashment->display_wallet_log_tax !!}</td>
 						<td class="text-right">{!! $encashment->display_wallet_log_service_charge !!}</td>

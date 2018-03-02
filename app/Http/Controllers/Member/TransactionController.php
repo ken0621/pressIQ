@@ -7,6 +7,8 @@ use App\Models\Tbl_transaction;
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_transaction_item;
 use App\Models\Tbl_payment_logs;
+use App\Models\Tbl_transaction_payment;
+use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Globals\Currency;
 use App\Globals\Transaction;
 use App\Globals\Pdf_global;
@@ -118,6 +120,97 @@ class TransactionController extends Member
             $html = view("member.transaction.all_shop_receipt_pdf", $data);
             $pdf = Pdf_global::show_pdfv2($html);
             return $pdf;
+        }
+    }
+    public function void_transaction(Request $request)
+    {
+        $pass = $request->pass;
+        $order_number = $request->order_number;
+        $transaction = Transaction::get_transaction($this->user_info->shop_id, $order_number);
+        if($pass == 'water123' && $transaction)
+        {
+            $transaction_id = $transaction->transaction_id;
+            $get_order = Tbl_transaction_list::where("transaction_id",$transaction->transaction_id)
+                                             ->where("transaction_type","ORDER")
+                                             ->first();
+            $get_receipt = Tbl_transaction_list::where("transaction_id",$transaction->transaction_id)
+                                             ->where("transaction_type","RECEIPT")
+                                             ->first();
+
+            $transaction_list_id = $get_order->transaction_list_id;
+            if($transaction->payment_method != 'pos')
+            {
+                $transaction_list_id = $get_receipt->transaction_list_id;
+            }
+            $get_payment = Tbl_transaction_payment::where("transaction_id", $transaction_id)->get();
+            /* VOID INVENTORY TOO */
+            $get_item = Tbl_warehouse_inventory_record_log::item()
+                                                    ->where("record_shop_id", $this->user_info->shop_id)
+                                                    ->where("record_consume_ref_name","transaction_list")
+                                                    ->where("record_consume_ref_id", $transaction_list_id)
+                                                    ->get();
+            $ctr = 0;
+            foreach ($get_payment as $key => $value) 
+            {
+                if($value->transaction_payment_type == 'wallet')
+                {
+                    $ctr++;
+                }
+            }
+            $ctr_used = 0;
+            foreach ($get_item as $key => $value) 
+            {
+                if($value->item_in_use == 'used')
+                {
+                    $ctr_used++;
+                }
+            }
+            if($ctr_used == 0)
+            {
+                if($ctr == 0)
+                {
+                    /* VOID TRANSACTION HERE */
+                    $update_list['transaction_status'] = "VOID-".$get_order->transaction_number;
+                    Tbl_transaction_list::where("transaction_id", $transaction->transaction_id)
+                                        ->update($update_list);
+
+                    $update_prices['transaction_posted'] = 0;
+                    $update_prices['transaction_subtotal'] = 0;
+                    $update_prices['transaction_total'] = 0;
+                    Tbl_transaction_list::where("transaction_id", $transaction_id)->update($update_prices);
+
+                    $udpate_payment['transaction_payment_amount'] = 0;
+                    Tbl_transaction_payment::where("transaction_id", $transaction_id)->update($udpate_payment);
+
+                    foreach ($get_item as $keyi => $valuei) 
+                    {
+                        $update_inventory['record_consume_ref_name'] = "";
+                        $update_inventory['record_consume_ref_id'] = 0;
+                        $update_inventory['record_inventory_status'] = 0;
+                        if($value->item_type_id == 2)
+                        {
+                            $update_inventory['record_inventory_status'] = 1;
+                        }
+                        Tbl_warehouse_inventory_record_log::where("record_consume_ref_name","transaction_list")
+                                                          ->where("record_consume_ref_id", $transaction_list_id)
+                                                          ->update($update_inventory);
+                    }
+
+                    dd("Successfully void transaction number ".$transaction->transaction_number);
+                }
+                else
+                {
+                    dd("This transaction should be manually void.");
+                }
+            }
+            else
+            {
+                dd("Items included in this transaction has been use.");
+            }
+        }
+        else
+        {
+            dd("Something wen't wrong.");
         }
     }
 }

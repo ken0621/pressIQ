@@ -32,6 +32,13 @@ class Tbl_payroll_leave_schedulev2 extends Model
 		return $query;
 	}
 
+	public function scopegetemployee($query)
+	{
+		$query->join('tbl_payroll_leave_employee_v2','tbl_payroll_leave_schedulev2.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
+			  ->join('tbl_payroll_employee_basic','tbl_payroll_leave_employee_v2.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id');
+
+		return $query;
+	}
 
 	public function scopecheckemployee($query, $payroll_employee_id = 0, $payroll_schedule_leave = '0000-00-00')
 	{

@@ -58,13 +58,13 @@ body{
     @if($columns[0]->name == 1)
     <td class="head" rowspan="2" id="name">NAME</td>
     @endif
-    @if($columns[0]->position == 1)
+{{--     @if($columns[0]->position == 1)
     <td class="head" rowspan="2" id="position" >POSITION</td>
-    @endif
+    @endif --}}
     @if($columns[0]->taxstatus == 1)
     <td class="head" rowspan="2" id="taxstatus">PERSONAL TAX STATUS</td>
     @endif
-    @if($columns[0]->dailyrate == 1)
+{{--     @if($columns[0]->dailyrate == 1)
     <td class="head" rowspan="2" id="dailyrate">DAILY RATE</td>
     @endif
     @if($columns[0]->monthlybasic == 1)
@@ -72,7 +72,7 @@ body{
     @endif
     @if($columns[0]->semimonthlybasic == 1)
     <td class="head" rowspan="2" id="semimonthlybasic">SEMI MONTHLY BASIC</td>
-    @endif
+    @endif --}}
     @if($columns[0]->gross_basic_pay == 1)
     <td class="head" rowspan="2" id="gross_basic_pay">GROSS BASIC PAY</td>
     @endif
@@ -137,13 +137,13 @@ body{
     @if($columns[0]->name == 1)
     <td class="head" id="name_one"></td>
     @endif
-    @if($columns[0]->position == 1)
+{{--     @if($columns[0]->position == 1)
     <td class="head" id="position_one"></td>
-    @endif
+    @endif --}}
     @if($columns[0]->taxstatus == 1)
     <td class="head" id="taxstatus_one"></td>
     @endif
-    @if($columns[0]->dailyrate == 1)
+{{--     @if($columns[0]->dailyrate == 1)
     <td class="head" id="dailyrate_one"></td>
     @endif
     @if($columns[0]->monthlybasic == 1)
@@ -151,7 +151,7 @@ body{
     @endif
     @if($columns[0]->semimonthlybasic == 1)
     <td class="head" id="semimonthlybasic_one"></td>
-    @endif
+    @endif --}}
     @if($columns[0]->gross_basic_pay == 1)
     <td class="head" id="gross_basic_pay_one"></td>
     @endif
@@ -237,13 +237,13 @@ body{
     @if($columns[0]->name == 1)
     <td class="text-center name_td_td" id="name_td">{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_last_name }}</td>
     @endif
-    @if($columns[0]->position == 1)
+{{--     @if($columns[0]->position == 1)
     <td class="text-center position_td_td" id="position_td"> {{ $employee->payroll_jobtitle_name }}</td>
-    @endif
+    @endif --}}
     @if($columns[0]->taxstatus == 1)
     <td class="text-center taxstatus_td_td" id="taxstatus_td">{{ $employee->payroll_employee_tax_status }}</td>
     @endif
-    @if($columns[0]->dailyrate == 1)
+    {{-- @if($columns[0]->dailyrate == 1)
     <td class="text-center dailyrate_td_td" id="dailyrate_td" >{{ $employee->daily_rate }}</td>
     @endif
     @if($columns[0]->monthlybasic == 1)
@@ -251,7 +251,7 @@ body{
     @endif
     @if($columns[0]->semimonthlybasic == 1)
     <td class="text-center semimonthlybasic_td_td" id="semimonthlybasic_td">{{ ($employee->payroll_employee_salary_monthly / 2) }}</td>
-    @endif
+    @endif --}}
     @if($columns[0]->gross_basic_pay == 1)
     <td class="text-center gross_basic_pay_td_td" id="gross_basic_pay_td">{{ number_format($employee->gross_basic_pay,2) }}</td>
     @endif
@@ -339,13 +339,13 @@ body{
     @if($columns[0]->name == 1)
     <td class="text-center" id="name_total"><b>Total</b></td>
     @endif
-    @if($columns[0]->position == 1)
+{{--     @if($columns[0]->position == 1)
     <td class="text-center" id="position_total"><b></b></td>
-    @endif
+    @endif --}}
     @if($columns[0]->taxstatus == 1)
     <td class="text-center" id="taxstatus_total"><b></b></td>
     @endif
-    @if($columns[0]->dailyrate == 1)
+   {{--  @if($columns[0]->dailyrate == 1)
     <td class="text-center" id="dailyrate_total"><b>{{ number_format($daily_rate_total, 2) }}</b></td>
     @endif
     @if($columns[0]->monthlybasic == 1)
@@ -353,7 +353,7 @@ body{
     @endif
     @if($columns[0]->semimonthlybasic == 1)
     <td class="text-center" id="semimonthlybasic_total"><b>{{ number_format($semimonthly_basic_total,2)}}</b></td>
-    @endif
+    @endif --}}
     @if($columns[0]->gross_basic_pay == 1)
     <td class="text-center" id="gross_basic_pay_total"><b>{{ number_format($total_gross_basic, 2) }}</b></td>
     @endif

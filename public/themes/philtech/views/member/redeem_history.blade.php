@@ -47,7 +47,7 @@
 				<tfoot style="background-color: #f3f3f3; font-size: 15px;">
 				@foreach($redeem_history as $history)
 				<tr>
-					<td class="text-left">{{ $history->date_created }}</td>
+					<td class="text-left">{!! date("m/d/Y", strtotime($history->date_created))."<br>".date("h:i:s A", strtotime($history->date_created)) !!}</td>
 					<td class="text-left">{{ $history->slot_no }}</td>
 					<td class="text-left"><b>{{ $history->log }}</b></td>
 					<td class="text-center"> {{ $history->log_type }} </td>

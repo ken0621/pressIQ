@@ -4470,7 +4470,6 @@ class Payroll2
 
 		// dd($data);
 		extract($data);
-
 		/* GET INITIAL SETTINGS */
 		$payroll_period_category = $date_query->payroll_period_category; //Semi-monthly, Monthly, Weekly, Daily
 		$period_count = $date_query->period_count; //first_period, last_period, middle_period
@@ -4532,12 +4531,16 @@ class Payroll2
 					$sss_contribution["er"] = 0;
 					$sss_contribution["ec"] = 0;
 				}
+				else if($period_count == 'last_period')
+				{
+					$sss_contribution["ee"] = $sss_contribution["ee"] - $total_cutoff;
+				}
 				else
 				{	
-					$sss_contribution["ee"] = $sss_contribution["ee"] - $total_cutoff;
+					$sss_contribution["ee"] = $sss_contribution["ee"] / $divisor;
 					$sss_contribution["er"] = round($sss_contribution["er"] / $divisor,2);
 					$sss_contribution["ec"] = round($sss_contribution["ec"] / $divisor,2);
-				}					
+				}				
 
 			}
 			else
@@ -4711,9 +4714,13 @@ class Payroll2
 					$philhealth_contribution["ee"] = 0;
 					$philhealth_contribution["er"] = 0;
 				}
-				else
+				else if($period_count == 'last_period')
 				{
 					$philhealth_contribution["ee"] = $philhealth_contribution["ee"] - $total_cutoff;
+				}
+				else
+				{
+					$philhealth_contribution["ee"] = $philhealth_contribution["ee"] / $divisor;
 					$philhealth_contribution["er"] = round($philhealth_contribution["er"] / $divisor,2);
 				}
 			}
@@ -4877,9 +4884,13 @@ class Payroll2
 				$pagibig_contribution["ee"] = 0;
 				$pagibig_contribution["er"] = 0;
 			}
-			else
+			else if($period_count == 'last_period')
 			{
 				$pagibig_contribution["ee"] = $pagibig_contribution["ee"] - $total_cutoff;
+			}
+			else
+			{
+				$pagibig_contribution["ee"] = $pagibig_contribution["ee"] / $divisor;
 				$pagibig_contribution["er"] = round(@($pagibig_tbl["payroll_pagibig_er_share"] / $divisor),2);
 			}
 		}

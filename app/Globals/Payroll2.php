@@ -5611,7 +5611,7 @@ class Payroll2
 					$val["label"] = $breakdown["deduction_name"];
 					$val["type"] = "deductions";
 					$val["record_type"] = $breakdown['payroll_deduction_type'];
-					$val["amount"] = $breakdown["payroll_periodal_deduction"];
+					$val["amount"] = round($breakdown["payroll_periodal_deduction"],2);
 					$val["add.gross_pay"] = false;
 					$val["deduct.gross_pay"] = false;
 					$val["add.taxable_salary"] = false;

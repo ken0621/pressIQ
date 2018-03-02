@@ -663,7 +663,6 @@ class PayrollTimeSheet2Controller extends Member
 		
 		$return->value_html = $this->timesheet_daily_income_to_string($return->compute_type, $payroll_time_sheet_id, $return->compute, $return->shift_approved, $payroll_period_company_id, $time_keeping_approved);
 		
-
 		return $return;
 	}
 	public function timesheet_get_day_type($shift_rest_day, $shift_extra_day)

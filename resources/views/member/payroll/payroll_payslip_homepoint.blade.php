@@ -25,11 +25,11 @@
 		    border-collapse: collapse;
 		    width: 100%;
         margin-bottom: 0;
-		    page-break-inside: avoid; 
+		    page-break-inside: avoid !important; 
 		    margin-top: 0;
 		    margin-left: 0;
 		    margin-right: 0;
-		}
+	 	}
 
 		td {
 		    border: 1px solid #dddddd;
@@ -59,108 +59,448 @@
       margin: 0;
       page-break-inside: avoid;
     }
-
+.div1 {
+ height: 50px;
+ width: 100px;
+ float: left;
+ page-break-inside: avoid;
+}
           /*div.breakNow { page-break-inside:avoid; page-break-after:always; }*/
         </style>
     </head>
     <body>
 
-			@foreach($_employee as $key => $employee)
+		@foreach($_employee as $key => $employee)
+          @php
+          $dayswork = 1;
+          $late = 1;
+          $holiday = 1;
+          $allowance = 1;
+          $daysworks = 1;
+          $holidays = 1;
+          $additions = 0;
+          $deductions = 0;
+          $leave = 1;
+
+          foreach($employee->cutoff_breakdown->_breakdown as $add)
+          {
+            if($add["type"] == 'additions')
+            {
+              $additions += $add["amount"];
+            }
+          }
+
+          foreach($employee->cutoff_breakdown->_breakdown as $ded)
+          {
+            if($ded["type"] == 'deductions')
+            {
+              $deductions += $ded["amount"];
+            }
+          }
+          @endphp
       <div class="tablecontainer">
-			<table>
-				  <tr>
-				    <th width="15%"><br>{{ $employee->payroll_employee_number }}</th>
-				    <th width="48%" style="border-right-color: black;"><br>{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</th>
-				    <th width="30%"><br>{{ $show_period_start }} - {{ $show_period_end }}</th>
-				    <th width="17%"><br>@if($show_release_date != 'not specified') {{ $show_release_date }}
+      <table>
+          <tr>
+            <th width="15%" colspan="2"><br>{{ $employee->payroll_employee_number }}</th>
+            <th width="48%" colspan="2" style="border-right-color: black;"><br>{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</th>
+            <th width="30%"><br>{{ $show_period_start }} - {{ $show_period_end }}</th>
+            <th width="17%"><br>@if($show_release_date != 'not specified') {{ $show_release_date }}
                         @endif</th>
-				  </tr>
-                      <tr>
-                      <td style="font-weight: bold;">{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</td>
+          </tr>
+
+                    <tr>
+                      <td style="font-weight: bold;"></td>
+                      <td style=""></td>
+                      <td style="font-weight: bold;"></td>
                       <td style="border-right-color: black;"></td>
-                      <td style="font-weight: bold;">{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</td>
+                      <td>{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</td>
                       <td></td>
                    </tr>
-				   <tr>
+    </table>
+<div class="div1">
+  <table style="width:100%;float:left !important;margin: 0 !important;">
+    <tr>
+       <td>
+          DAYS WORKED
+       </td>
+    </tr>
+    <tr>
+      <td>
+         GROSS PAY
+      </td>
+    </tr>
+    <tr>
+       <td>
+          LATES
+        </td>
+    </tr>
+    <tr>
+       <td>
+          HOLIDAY PAY
+       </td>
+    </tr>
+    <tr>
+      <td>
+          BASIC PAY
+      </td>
+    </tr>
+    @foreach($employee->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
+      @if($breakdown["type"] == 'government_contributions')
+        <tr>
+          <td>
+            @if($breakdown["label"] == 'PHILHEALTH EE')
+            PHILHEATH 
+            @else 
+             {{$breakdown["label"]}}
+            @endif
+          </td>
+        </tr>
+      @endif
+    @endforeach
+    <tr>
+      <td>
+        ALLOWANCE
+      </td>
+    </tr>
+  </table>
+</div>
 
-                      <td style="font-weight: bold;">BASIC PAY</td>
-                      <td style="font-weight: bold;border-right-color: black;">{{ payroll_currency($employee->net_basic_pay) }}</td>
-                      <td style="font-weight: bold">BASIC PAY</td>
-                       <td style="font-weight: bold">{{ payroll_currency($employee->net_basic_pay) }}</td>
-                   </tr>
-                 @foreach($employee->cutoff_breakdown->_gross_pay_breakdown as $breakdown)
-                    @if(strtoupper($breakdown["label"]) != 'COLA')
-                      <tr>
-                          <td>{{ strtoupper($breakdown["label"]) }}</td>
-                          <td style="border-right-color: black;">{{ payroll_currency($breakdown["amount"]) }}</td>
-                          <td>{{ strtoupper($breakdown["label"]) }}</td>
-                           <td>{{ payroll_currency($breakdown["amount"]) }}</td>
-                      </tr>
-                    @else
+<div class="div1">
+  <table style="width:100%;float:left !important;margin: 0 !important;">
+   @foreach($employee->cutoff_breakdown->_time_breakdown as $key => $time)
+      <tr>
+           @if($dayswork == 1)
+           <td>{{ $time["float"]}}</td>
+           @endif
+      </tr>
+          @php
+            $dayswork++;
+          @endphp
+    @endforeach
+      <tr>
+        <td>
+           {{ $employee->gross_pay }}
+        </td>
+      </tr>
+
+     @foreach($employee->cutoff_breakdown->_breakdown as $breakdown)
+          @if($breakdown["label"] == 'late')
+              @if($late == 1)
+                  <tr>
+                    <td>
+                       {{round($breakdown["amount"],2)}}
+                    </td>
+                  </tr>
+                 @php
+                    $late++;
+                 @endphp
+              @endif
+          @endif
+    @endforeach
+
+    @if($late == 1)
+      <tr>
+        <td>-</td>
+      </tr>
+    @endif
+
+    @foreach($employee->cutoff_breakdown->_breakdown as $breakdown)
+          @if($breakdown["label"] == 'Special Holiday')
+              @if($holiday == 1)
+                  <tr>
+                    <td>
+                       {{round($breakdown["amount"],2)}}
+                    </td>
+                  </tr>
+                 @php
+                    $holiday++;
+                 @endphp
+              @endif
+          @endif
+    @endforeach
+
+    @if($holiday == 1)
+      <tr>
+        <td>-</td>
+      </tr>
+    @endif
+
+
+      <tr>
+        <td>
+            {{$employee->cutoff_breakdown->basic_pay_total }}
+        </td>
+      </tr>
+
+    @foreach($employee->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
+      @if($breakdown["type"] == 'government_contributions')
+        <tr>
+          <td>
+             {{$breakdown["amount"]}}
+          </td>
+        </tr>
+      @endif
+    @endforeach
+
+    @foreach($employee->cutoff_breakdown->_breakdown as $breakdown)
+      @if(isset($breakdown["record_type"]))
+          @if($breakdown["record_type"] == 'allowance')
+              @if($allowance == 1)
+                  <tr>
+                    <td>
+                       {{round($breakdown["amount"],2)}}
+                    </td>
+                  </tr>
+                 @php
+                    $allowance++;
+                 @endphp
+              @endif
+          @endif
+      @endif
+    @endforeach
+
+    @if($allowance == 1)
+      <tr>
+        <td>-</td>
+      </tr>
+    @endif
+
+  </table>
+</div>
+
+<div class="div1">
+    <table style="width:100%;float:left !important;margin: 0 !important;">
+      @foreach($employee->cutoff_breakdown->_breakdown as $breakdown)
+        @if($breakdown["type"] != 'government_contributions' && strtoupper($breakdown["label"]) != 'COLA' && $breakdown["label"] != 'absent' && $breakdown["label"] != 'undertime' && $breakdown["label"] != 'late')
+          <tr>
+              <td style="font-weight: bold;">
+                  @if(isset($breakdown["record_type"]))
+                    @if($breakdown["record_type"] != 'allowance')
+                      @php
+                      $exploded = explode( '-', $breakdown["label"]);
+                      @endphp
+                      {{strtoupper($exploded[0])}}
                     @endif
-                  @endforeach
-{{-- 
-                              <tr>
-                                  <td></td>
-                                  <td style="font-weight: bold;">GROSS SALARY</td>
-                                  <td style="font-weight: bold">{{ payroll_currency($employee->gross_pay) }}</td>
-                                   <td ></td>
-                               </tr> --}}
+                  @else
+                    {{ strtoupper($breakdown["label"]) }}
+                  @endif
+              </td>
+          </tr>
+        @endif
+      @endforeach
+      <tr>
+        <td style="font-weight: bold;">
+            TAKE HOME PAY
+        </td>
+      </tr>
+    </table>
+  </div>
 
-                  @foreach($employee->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
-                                    @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
-                                    @else
-                                      <tr>
-                                          <td>{{ strtoupper($breakdown["label"]) }}</td>
-                                          <td style="border-right-color: black;">{{ payroll_currency($breakdown["amount"]) }}</td>
-                                          <td>{{ strtoupper($breakdown["label"]) }}</td>
-                                           <td >{{ payroll_currency($breakdown["amount"]) }}</td>
-                                      </tr>
-                                    @endif
-                    @endforeach
+<div class="div1">
+      <table style="width:100%;display: inline-block;">
+      @foreach($employee->cutoff_breakdown->_breakdown as $breakdown)
+        @if($breakdown["type"] != 'government_contributions' && strtoupper($breakdown["label"]) != 'COLA' && $breakdown["label"] != 'absent' && $breakdown["label"] != 'undertime' && $breakdown["label"] != 'late')
+          <tr>
+              <td style="font-weight: bold;">
+                @if(isset($breakdown["record_type"]))
+                  @if($breakdown["record_type"] != 'allowance')
+                   {{ strtoupper($breakdown["amount"]) }}
+                  @endif
+                @else
+                   {{ strtoupper($breakdown["amount"]) }}
+                @endif
+              </td>
+          </tr>
+        @endif
+      @endforeach
+      <tr>
+        <td style="font-weight: bold;">
+            {{ $employee->net_pay }}
+        </td>
+      </tr>
+    </table>
+  </div>
+
+    <div class="div1" style="width:40px !important;">
+    <table style="width:100%;float:left !important;margin: 0 !important;">
+      <tr>
+        <td>
+        </td>
+      <tr>
+    </table>
+  </div>
 
 
-                      @foreach($employee->cutoff_breakdown->_net_pay_breakdown as $breakdown)
-                                    @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
-                                    @else
-                                      <tr>
-                                          <td>{{ strtoupper($breakdown["label"]) }}</td>
-                                          <td style="border-right-color: black;">{{ payroll_currency($breakdown["amount"]) }}</td>
-                                          <td >{{ strtoupper($breakdown["label"]) }}</td>
-                                           <td >{{ payroll_currency($breakdown["amount"]) }}</td>
-                                      </tr>
-                                    @endif
-                    @endforeach
+  <div class="div1" style="width: 200px;">
+  <table style="width:100%;float:left !important;margin: 0 !important;">
+    <tr>
+       <td>
+          DAYS WORKED
+       </td>
+    </tr>
+    <tr>
+      <td>
+         GROSS PAY
+      </td>
+    </tr>
+    <tr>
+       <td>
+          HOLIDAY PAY
+       </td>
+    </tr>
+    <tr>
+      <td>
+          BASIC PAY
+      </td>
+    </tr>
+    <tr>
+      <td>
+          LEAVE PAY
+      </td>
+    </tr>
+    @foreach($employee->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
+      @if($breakdown["type"] == 'government_contributions')
+        <tr>
+          <td>
+            @if($breakdown["label"] == 'PHILHEALTH EE')
+            PHILHEATH 
+            @else 
+             {{$breakdown["label"]}}
+            @endif
+          </td>
+        </tr>
+      @endif
+    @endforeach
+    <tr>
+        <td>
+            ADDITIONS
+        </td>
+    </tr>
+    <tr>
+        <td>
+            DEDUCTIONS
+        </td>
+    </tr>
+    <tr>
+        <td>
+            TAKE HOME PAY
+        </td>
+    </tr>
+  </table>
+</div>
+
+<div class="div1">
+  <table style="width:100%;float:left !important;margin: 0 !important;">
+   @foreach($employee->cutoff_breakdown->_time_breakdown as $key => $time)
+      <tr>
+           @if($daysworks == 1)
+           <td>{{ $time["float"]}}</td>
+           @endif
+      </tr>
+          @php
+            $daysworks++;
+          @endphp
+    @endforeach
+      <tr>
+        <td>
+           {{ $employee->gross_pay }}
+        </td>
+      </tr>
+
+    @foreach($employee->cutoff_breakdown->_breakdown as $breakdown)
+          @if($breakdown["label"] == 'Special Holiday')
+              @if($holidays == 1)
+                  <tr>
+                    <td>
+                       {{round($breakdown["amount"],2)}}
+                    </td>
+                  </tr>
+                 @php
+                    $holidays++;
+                 @endphp
+              @endif
+          @endif
+    @endforeach
+
+    @if($holidays == 1)
+      <tr>
+        <td>-</td>
+      </tr>
+    @endif
 
 
-                                  <tr>
-                                      <td>TOTAL DEDUCTION</td>
-                                      <td style="border-right-color: black;">{{ payroll_currency($employee->total_deduction) }}</td>
-                                       <td>TOTAL DEDUCTION</td>
-                                        <td >{{ payroll_currency($employee->total_deduction) }}</td>
-                                  </tr> 
+      <tr>
+        <td>
+            {{$employee->cutoff_breakdown->basic_pay_total }}
+        </td>
+      </tr>
 
-                                  <tr>
-                                      <td style="font-weight: bold;">TAKE HOME PAY</td>
-                                      <td style="font-weight: bold;border-right-color: black;">{{ payroll_currency($employee->net_pay) }}</td>
-                                       <td style="font-weight: bold">TAKE HOME PAY</td>
-                                        <td style="font-weight: bold">{{ payroll_currency($employee->net_pay) }}</td>
-                                  </tr>
+    @foreach($employee->cutoff_breakdown->_breakdown as $breakdown)
+          @if($breakdown["label"] == 'Leave Pay')
+              @if($leave == 1)
+                  <tr>
+                    <td>
+                       {{round($breakdown["amount"],2)}}
+                    </td>
+                  </tr>
+                 @php
+                    $leave++;
+                 @endphp
+              @endif
+          @endif
+    @endforeach
+
+    @if($leave == 1)
+      <tr>
+        <td>-</td>
+      </tr>
+    @endif
 
 
-			</table>
+    @foreach($employee->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
+      @if($breakdown["type"] == 'government_contributions')
+        <tr>
+          <td>
+             {{$breakdown["amount"]}}
+          </td>
+        </tr>
+      @endif
+    @endforeach
+
+    <tr>
+      <td>
+        {{$additions}}
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        {{$deductions}}
+      </td>
+    </tr>
+
+       <tr>
+      <td>
+        {{ $employee->net_pay }}
+      </td>
+    </tr>
+
+  </table>
+</div>
+
+<div class="div1" style="width:50px;margin-bottom: 45px;">
+      <table style="width:100%;display: inline-block;">
+          <tr>
+            <td style="padding-bottom: 122px;"><span>Employee Sign</span></td>
+          </tr>
+    </table>
+  </div>
+
+
+
     </div>
-{{--         <ul>
-          <li>BASIC PAY : &nbsp; {{ payroll_currency($employee->net_basic_pay) }}</li>
-          @foreach($employee->cutoff_breakdown->_gross_pay_breakdown as $breakdown)
-              <li>{{ strtoupper($breakdown["label"]) }} : &nbsp; {{ payroll_currency($breakdown["amount"]) }}</li>
-          @endforeach
-        </ul> --}}
+      @endforeach
 
-    {{--     <ul>
-          <li>GROSS SALARY : &nbsp; {{ payroll_currency($employee->gross_pay) }}</li>
-        </ul> --}}
-			@endforeach
 
     </body>
 </html>

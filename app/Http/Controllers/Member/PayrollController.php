@@ -4292,8 +4292,8 @@ class PayrollController extends Member
      {
           $date = date('Y-m-d');
 
-          $upcoming_leave = Tbl_payroll_leave_schedulev2::where('payroll_leave_employee_id',$payroll_leave_employee_id)->where('shop_id',Self::shop_id())->where('payroll_schedule_leave','>', $date)->get();
-          $used_leave = Tbl_payroll_leave_schedulev2::where('payroll_leave_employee_id',$payroll_leave_employee_id)->where('shop_id',Self::shop_id())->where('payroll_schedule_leave','<', $date)->get();
+          $upcoming_leave = Tbl_payroll_leave_schedulev2::where('payroll_leave_employee_id',$payroll_leave_employee_id)->where('shop_id',Self::shop_id())->where('payroll_schedule_leave','>', $date)->where('payroll_leave_schedule_archived',0)->get();
+          $used_leave = Tbl_payroll_leave_schedulev2::where('payroll_leave_employee_id',$payroll_leave_employee_id)->where('shop_id',Self::shop_id())->where('payroll_schedule_leave','<', $date)->where('payroll_leave_schedule_archived',0)->get();
           
           $data['name'] = Tbl_payroll_leave_employeev2::employee($payroll_leave_employee_id)->value('payroll_employee_display_name');
 
@@ -5056,7 +5056,7 @@ class PayrollController extends Member
 
           $response['call_function'] = 'reload';
           $response['status'] = 'success';
-          return $response;
+          return json_encode($response);
      }
      
      public function reset_leave_schedulev2()
@@ -5083,8 +5083,7 @@ class PayrollController extends Member
           
           $response['call_function'] = 'reload';
           $response['status'] = 'success';
-
-          return $response;
+          return json_encode($response);
      }
 
      public function reset_and_accumulate_leave_schedulev2()
@@ -5118,8 +5117,7 @@ class PayrollController extends Member
 
           $response['call_function'] = 'reload';
           $response['status'] = 'success';
-          
-          return $response;
+          return json_encode($response);
      }
 
      public function convert_to_cash_leave_schedulev2()
@@ -5148,8 +5146,7 @@ class PayrollController extends Member
 
           $response['call_function'] = 'reload';
           $response['status'] = 'success';
-          
-          return $response;
+          return json_encode($response);
  
      }
 
@@ -5160,8 +5157,7 @@ class PayrollController extends Member
 
           $response['call_function'] = 'reload';
           $response['status'] = 'success';
-          
-          return $response;
+          return json_encode($response);
      }
 
      public function archived_leave_tempv2()
@@ -5312,10 +5308,9 @@ class PayrollController extends Member
                }
           }    
 
-          $data['status']         = 'success';
-          $data['function_name']   = 'payrollconfiguration.reload_leavev2_temp';
-
-          return collect($data)->toJson();
+          $return['status']             = 'success';
+          $return['function_name']      = 'payrollconfiguration.reload_leavev2_temp';
+          return json_encode($return);
          
      }
 

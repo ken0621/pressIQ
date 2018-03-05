@@ -39,6 +39,19 @@ class Tbl_payroll_employee_basic extends Model
 	// [VARCHAR] 		payroll_employee_philhealth
 	// [TEXT] 			payroll_employee_remarks
 
+    public function scopeGetEmployee($query,$employee_id,$shop_id)
+    {
+    	$date = date('Y-m-d');
+		$query->leftjoin('tbl_payroll_company as company','company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
+			  ->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
+			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
+			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')
+			  ->where('contract.payroll_employee_contract_date_end','<=',$date)
+			  ->whereIn('tbl_payroll_employee_basic.payroll_employee_id',$employee_id)
+			  ->where('company.shop_id',$shop_id);
+
+		return $query;
+    }	
 
 	public function scopeselemployee($query, $parameter)
 	{

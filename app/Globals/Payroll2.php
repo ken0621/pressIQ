@@ -50,6 +50,7 @@ class Payroll2
 		
 
 		$data["_employee"] = Tbl_payroll_period::getContributions($shop_id, $month, $year)->get();
+
 		$_contribution 					= null;
 		$count 							= 0;
 
@@ -5052,7 +5053,7 @@ class Payroll2
 				{
 					$val["label"] = $breakdown["name"];
 					$val["type"] = "non_taxable_allowance";
-					$val["amount"] = $breakdown["amount"];
+					$val["amount"] = round($breakdown["amount"],2);
 					$val["add.gross_pay"] = true;
 					$val["deduct.gross_pay"] = false;
 					$val["add.taxable_salary"] = false;
@@ -5091,7 +5092,7 @@ class Payroll2
 					$val["description"] = $data["cutoff_compute"]->_breakdown_addition_summary_time[$key];
 				}
 				
-				$val["amount"] = $breakdown;
+				$val["amount"] = round($breakdown,2);
 				$val["add.gross_pay"] = true;
 				$val["deduct.gross_pay"] = false;
 				$val["add.taxable_salary"] = false;
@@ -5415,7 +5416,7 @@ class Payroll2
 					}
 
 					$standard_gross_pay += $actual_gross_pay;
-					$val["amount"] = (@($actual_gross_pay/$standard_gross_pay) * $allowance_amount) * $return->_time_breakdown["day_spent"]["float"];
+					$val["amount"] = round((@($actual_gross_pay/$standard_gross_pay) * $allowance_amount) * $return->_time_breakdown["day_spent"]["float"],2);
 
 					if($return->_time_breakdown["special_holiday"]["float"] != 0)
 					{
@@ -5437,7 +5438,7 @@ class Payroll2
 							
 						}
 
-						$val["amount"] = (@($actual_gross_pay/$standard_gross_pay) * $allowances);
+						$val["amount"] = round((@($actual_gross_pay/$standard_gross_pay) * $allowances),2);
 
 					}
 					// dd($d);
@@ -5452,7 +5453,7 @@ class Payroll2
 
 				else if ($allowance->payroll_allowance_type == 'daily') 
 				{
-					$val["amount"] = $allowance_amount * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]);
+					$val["amount"] = round($allowance_amount * ($return->_time_breakdown["day_spent"]["float"] + $return->_time_breakdown["absent"]["float"]),2);
 				}
 
 				$val["label"] 	= $allowance_name;
@@ -5495,12 +5496,12 @@ class Payroll2
 						{
 							$val["record_type"] 		 = "allowance_de_minimis";
 							$excess_de_minimis_allowance = ($total_allowance_year_non_taxable + $val['amount']) - $deminimis_limit_allowance;
-							$val['amount'] 				 = $val['amount'] - $excess_de_minimis_allowance;
+							$val['amount'] 				 = round($val['amount'] - $excess_de_minimis_allowance,2);
 							$total_allowance_year_non_taxable += $val['amount'];
 							array_push($return->_breakdown, $val);
 							
 							$val["record_type"] 		 = "allowance";
-							$val['amount'] 				 = $excess_de_minimis_allowance;
+							$val['amount'] 				 = round($excess_de_minimis_allowance,2);
 						}
 						else
 						{
@@ -5557,7 +5558,7 @@ class Payroll2
 
 				$val["label"] = $key;
 				$val["type"] = "deductions";
-				$val["amount"] = $breakdown;
+				$val["amount"] = round($breakdown,2);
 				$val["add.gross_pay"] = false;
 				$val["deduct.gross_pay"] = false;
 				$val["add.taxable_salary"] = false;
@@ -5574,7 +5575,7 @@ class Payroll2
 		{
 			$val["label"] = "Agency Fee";
 			$val["type"] = "deductions";
-			$val["amount"] = $group->payroll_group_agency_fee;
+			$val["amount"] = round($group->payroll_group_agency_fee,2);
 			$val["add.gross_pay"] = false;
 			$val["deduct.gross_pay"] = false;
 			$val["add.taxable_salary"] = false;
@@ -5597,7 +5598,7 @@ class Payroll2
 
 					$val["label"] = $breakdown["deduction_name"];
 					$val["type"] = "deductions";
-					$val["amount"] = $breakdown["payroll_periodal_deduction"];
+					$val["amount"] = round($breakdown["payroll_periodal_deduction"],2);
 					$val["add.gross_pay"] = false;
 					$val["deduct.gross_pay"] = false;
 					$val["add.taxable_salary"] = false;

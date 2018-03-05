@@ -20,6 +20,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/government_forms_sss_export_excel/{id}/{id2}/{year}/{branch_id}','Member\PayrollReportController@government_forms_sss_export_excel');
 	Route::any('/reports/government_forms_philhealth_export_excel/{id}/{id2}/{year}/{branch_id}','Member\PayrollReportController@government_forms_philhealth_export_excel');
 
+	/*COE START */
+	Route::any('/reports/coe_report',"Member\PayrollReportController@coe_report");
+	Route::any('/reports/coe_export_pdf/download',"Member\PayrollReportController@coe_export_pdf");
+	/*END COE */
+
 	/*manpowereport*/
 	Route::any('/reports/manpower_report',"Member\PayrollReportController@manpower_report");
 	Route::any('/reports/manpower_report_filter',"Member\PayrollReportController@manpower_report_filter");
@@ -48,6 +53,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/reports/payroll_ledger','Member\PayrollLedger@index');
 	Route::any('/reports/payroll_ledger/{employee_id}','Member\PayrollLedger@modal_ledger');
 	Route::any('/reports/payroll_ledger/export_excel_ledger/{employee_id}','Member\PayrollLedger@export_excel_ledger');
+	Route::any('/reports/payroll_ledger_filter','Member\PayrollLedger@payroll_ledger_filter');
 	/*END payroll ledger/
 
 	/*START PAYROLL REGISTER REPORT*/
@@ -728,7 +734,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_reports/download_excel_report','Member\PayrollController@download_excel_report');
 	Route::any('/payroll_reports/date_change_report','Member\PayrollController@date_change_report');
 	/* PAYROLL REPORTS END */
-
 
 	/* GENERATE BANK UPLOAD START */
 	Route::any('/generate_bank','Member\PayrollController@generate_bank');

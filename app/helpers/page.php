@@ -1038,6 +1038,14 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
 
+        $code = "Coe-Report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "COE Reports";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/reports/coe_report";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "John Kenneth de Lara";
+
     $segment = "admin-dashboard";
     $nav[$page]['submenu'][$segment]['name']   = "Admin Dashboard";
     $nav[$page]['submenu'][$segment]['segment']= $segment;

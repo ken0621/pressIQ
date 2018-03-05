@@ -80,7 +80,7 @@
                                   <tr>
                                       <td>{{ strtoupper($breakdown["label"]) }}</td>
                                       <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
-                                      <td></td>
+                                      <td></td>-
                                   </tr>
                                   @endforeach
 

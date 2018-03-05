@@ -1,19 +1,19 @@
 ## INFO ##
 username="root";
 password="";
-database="digimahouse";
+database="payroll";
 
 ## LOGIN SSH ##
 rm database/digimahouse_latest_backup.sql.gz
 rm database/digimahouse_latest_backup.sql
 
-plink -pw "digima2018" digima@digimahouse.com "~/export.sh"
+plink -pw "digima2018" digima@payrolldigima.com "~/export.sh"
 
 ## DATABASE ##
 mysql -u$username -e "DROP DATABASE $database"
 mysql -u$username -e "CREATE DATABASE $database"
 
-curl --insecure "http://digimahouse.com/digimahouse_latest_backup.sql.gz" -o database/digimahouse_latest_backup.sql.gz
+curl --insecure "http://payrolldigima.com/digimahouse_latest_backup.sql.gz" -o database/digimahouse_latest_backup.sql.gz
 gunzip database/digimahouse_latest_backup.sql.gz
 mysql -u $username $database < database/digimahouse_latest_backup.sql
 

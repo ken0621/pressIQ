@@ -115,6 +115,11 @@ class MlmLoginController extends Controller
             {
                 $data["register_button"] = 0;
             }
+            elseif($check_shop->shop_key == "sovereign")
+            {
+                header("Location: http://sovereign-world.net"); /* Redirect browser */
+                exit();
+            }
             else
             {
                 $data["register_button"] = 1;

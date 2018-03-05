@@ -63,6 +63,7 @@ class PayrollLedger extends Member
 		$parameter['employement_status']	= 0;
 		$parameter['shop_id'] 				= $this->shop_id();
 		$data["_employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
+		$data["_company"] = Payroll::company_heirarchy(Self::shop_id());
 		// dd($data["_employee"]);
 		return view("member.payrollreport.payroll_ledger",$data);
 	}
@@ -94,6 +95,18 @@ class PayrollLedger extends Member
 				$sheet->loadView('member.payrollreport.payroll_employee_ledger_excel',$data);
 			});
 		})->download('xls');
+	}
+
+	public function payroll_ledger_filter()
+	{
+		$parameter['date']					= date('Y-m-d');
+		$parameter['company_id']			= Request::input('company_id');
+		$parameter['employement_status']	= 0;
+		$parameter['shop_id'] 				= $this->shop_id();
+		$data["_employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
+		$data["_company"] = Payroll::company_heirarchy(Self::shop_id());
+		// dd($data["_employee"]);
+		return view("member.payrollreport.payroll_ledger_filter",$data);
 	}
 
 }

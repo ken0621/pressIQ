@@ -33,6 +33,14 @@
 				$('.modal-loader').addClass("hidden");
 				$('.modal-content-global .close').trigger("click");
 				data.element.modal("hide");
+				if(data.status == "success")
+				{
+					toastr.success("Success");
+				}
+				else 
+			    {
+			    	toastr.warning("Error");
+			    }
 		});
 	}
 </script>	

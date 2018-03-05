@@ -23,16 +23,20 @@
           height: : 600px;
           width: 600px;
           margin-left:50px;
-          padding-top: 180px;
+          padding-top: 140px;
+        }
+        .break {
+          page-break-inside: avoid; 
         }
         </style>
     </head>
     <body>
 
       @foreach($_employee as $employee)
+      <div class="break">
+      <img src="{{$employee->payroll_company_logo}}" style="max-height: 150px;">
       <div class="container">
         <h4 style="font-weight: regular;margin-bottom: 50px;">{{$date_today}}</h4>
-
         <h4 style="text-decoration: underline;text-align: center;letter-spacing: 2px;"><strong>CERTIFICATE OF EMPLOYEMENT</strong></h4>
         <p style="line-height: 25px;">This is to certify that @if($employee->payroll_employee_gender == "Male")
         He @else She @endif<span style="font-weight: bold;text-decoration: underline;">{{$employee->payroll_employee_display_name}}</span> was currently employed with <span style="font-weight: bold;text-decoration: underline;">{{$employee->payroll_company_name}}</span> since {{date("F j, Y",strtotime($employee->payroll_employee_contract_date_hired))}} up to present. @if($employee->payroll_employee_gender == "Male")
@@ -46,6 +50,7 @@ This certification is being issued upon her request for whatever legal purpose i
             <h5 style="text-align: center;margin: 0 auto;font-weight: regular;">CEO</h5>
           </div>
       </div>
+    </div>
       @endforeach
 
     </body>

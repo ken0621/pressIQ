@@ -1303,6 +1303,37 @@ class PayrollReportController extends Member
 		return view("member.payrollreport.view_bir_forms",$data);
 	}
 
+	public function coe_report()
+	{
+		$parameter['date']					= date('Y-m-d');
+		$parameter['company_id']			= 0;
+		$parameter['employement_status']	= 0;
+		$parameter['shop_id'] 				= $this->shop_id();
+		$data["_employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
+		// dd($data["_employee"]);
+		return view("member.payrollreport.coe_report",$data);
+	}
+
+	public function coe_export_pdf()
+	{
+		if (isJson(Request::input("employee"))) 
+        {
+            $employee = json_decode(Request::input("employee"));
+        }
+        else
+        {
+            $employee = [];
+        }
+
+        $data["_employee"] = Tbl_payroll_employee_basic::GetEmployee($employee,Self::shop_id())->get();
+        $data['date_today'] = date("F j, Y");
+		$format["format"] = "A4";
+		$format["default_font"] = "sans-serif";
+		$pdf = PDF2::loadView('member.payrollreport.coe_pdf', $data, [], $format);
+		return $pdf->stream('document.pdf');
+
+	}
+
 	public static function compute_bir($year,$month,$company,$shop_id)
 	{
 		$bir_report           = array();

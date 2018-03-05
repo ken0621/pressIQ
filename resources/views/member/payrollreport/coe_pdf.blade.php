@@ -40,11 +40,11 @@
 This certification is being issued upon her request for whatever legal purpose it may serve her best.
         </p>
         <p>Issued at Makati City, Philippines. </p>
-{{-- 
+
           <div class="jobtitle" style="width: 200px;margin-top: 80px;">
                <h5 style="text-decoration: underline;text-align: center;margin-bottom: 0px;"><strong>PRESIDENT</strong></h5>
             <h5 style="text-align: center;margin: 0 auto;font-weight: regular;">CEO</h5>
-          </div> --}}
+          </div>
       </div>
       @endforeach
 

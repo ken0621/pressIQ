@@ -136,6 +136,11 @@ class MlmLoginController extends Controller
                     $data["shop_theme"] = $shop->shop_theme;
                     return view("login", $data);
                 break;
+
+                case 'sovereign':
+                    header("Location: http://sovereign-world.net"); /* Redirect browser */
+                    exit();
+                break;
                 
                 default:
                     return view("mlm.login", $data);

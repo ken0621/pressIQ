@@ -3532,7 +3532,7 @@ class ShopMemberController extends Shop
                 $response["status_message"] .= $message;
             }
         }
-        else if($request->amount)
+        else if($request->amount < 0)
         {
             $response["status"] = "error";
             $response["status_message"] .= '<li style="list-style:none">You cannot transfer negative amount</li>';

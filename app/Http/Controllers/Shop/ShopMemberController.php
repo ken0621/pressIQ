@@ -3164,6 +3164,12 @@ class ShopMemberController extends Shop
         $slot_info           = Tbl_mlm_slot::where("slot_no", $slot)->membership()->first();
         return  currency('',$this->redeem_points_sum($slot_info->slot_id));
     }
+    public function getSlotPointsNumber()
+    {
+        $slot = request('slot_no');
+        $slot_info           = Tbl_mlm_slot::where("slot_no", $slot)->membership()->first();
+        return  $this->redeem_points_sum($slot_info->slot_id);
+    }
     public function postRedeemItem(Request $request)
     {
 

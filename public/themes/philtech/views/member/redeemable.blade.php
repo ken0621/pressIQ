@@ -141,6 +141,7 @@
     var redeemable_points = $(".hidden_points_redeemable").val();
     $(".redeem_item").click(function()
     {
+        var redeemable_points = $(".hidden_points_redeemable").val();
         $remaining_points = redeemable_points - $(this).attr("redeemable_points");
 
         $(".hidden_item_redeemable_id").val($(this).attr("item_redeem_id"));
@@ -161,6 +162,30 @@
         }
     });
 
+    // $('.slot-owner').change(function(event) 
+    // {
+    //     var slot_no = $(this).val();
+
+    //     $.ajax({
+    //         url: '/members/slot-points-number',
+    //         type: 'get',
+    //         dataType: 'html',
+    //         data: {slot_no: slot_no},
+    //     })
+    //     .done(function(result) 
+    //     {
+    //         $(".hidden_points_redeemable").val(result);
+    //     })
+    //     .fail(function() 
+    //     {
+    //         console.log("error");
+    //     })
+    //     .always(function() 
+    //     {
+    //         console.log("complete");
+    //     });
+        
+    // });
 </script>
 <script type="text/javascript">
     @if(Session::get("response")=='success')
@@ -169,7 +194,7 @@
     toastr.error("no stock available");
     @endif
 </script>
-<script type="text/javascript" src="/themes/philtech/js/redeemable.js"></script>
+<script type="text/javascript" src="/themes/philtech/js/redeemable.js?version=1"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 @endsection
 

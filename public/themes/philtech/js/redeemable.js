@@ -48,5 +48,16 @@ function redeemable()
 				$('.points-here').html('<h4><b>Remaining Points: <span style="font-weight: 300;">'+data+' POINT(S)</span></b></h4>');
 			}
 		});
+
+		$.ajax(
+		{
+			url: '/members/slot-points-number',
+			type: 'get',
+			data: 'slot_no='+slot_no,
+			success: function(data)
+			{
+				$(".hidden_points_redeemable").val(data);
+			}
+		});
 	}
 }

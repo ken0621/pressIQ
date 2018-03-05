@@ -37,8 +37,14 @@
 
         <div class="press-release-content">
            <div id="new_user_account" class="tabcontent user-media-container">
-               <div class="title-container">Registration for New User</div><br>
-                
+               <div class="title-container">Registration for New User</div>
+               @if(session()->has('message'))
+                  <div class="details">
+                  <span style="color: red;">
+                    <strong>Error!</strong> {{ session('message') }}<br>
+                  </span>
+                  </div>
+                @endif<br>
                <form method="post" action="/pressadmin/add_user" enctype="multipart/form-data" >
                 {{csrf_field()}}
                 <div class="register-form" >
@@ -86,14 +92,6 @@
                 <div class="register-form">
                  <input type="file" name="user_company_image" id="user_company_image" accept=".png, .jpg, .jpeg">
                 </div>
-                
-                @if(session()->has('message'))
-                  <div class="details">
-                  <span style="color: red;">
-                    <strong>Error!</strong> {{ session('message') }}<br>
-                  </span>
-                  </div>
-                @endif
 
                 <div class="button-container">
                     <button type="submit">Submit</button>

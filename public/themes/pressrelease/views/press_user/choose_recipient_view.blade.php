@@ -3,7 +3,7 @@
    <table  class="table table-bordered">
       <tr>
           <th style="width: 15%;text-align: center;">Journalist Name</th>
-          <th style="width: 15%;text-align: center;">Comapany Name</th>
+          <th style="width: 15%;text-align: center;">Company Name</th>
           <th style="width: 15%;text-align: center;">Job Title</th>
           <th style="width: 15%;text-align: center;">Industry Type</th>
           <th style="width: 15%;text-align: center;">Media Type</th>

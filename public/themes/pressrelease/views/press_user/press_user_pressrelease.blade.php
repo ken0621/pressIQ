@@ -356,7 +356,6 @@
         }
    });
 
-
   $('#button_load').click(function()
   {
     $('#img_load').show(); 

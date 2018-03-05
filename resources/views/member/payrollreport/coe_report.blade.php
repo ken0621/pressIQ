@@ -15,6 +15,7 @@
         </div>
     </div>
 </div>
+
 <div class="form-group order-tags load-data" target="value-id-1"></div>
     <div class="clearfix">
         <div class="col-md-12">

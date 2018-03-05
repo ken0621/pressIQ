@@ -244,8 +244,12 @@ function payrollconfiguration()
 		reload_configuration("/member/payroll/leave");
 	}
 
-	this.reload_leavev2_temp = function()
+	this.reload_leavev2_temp = function(data)
 	{
+		if(data.status == "success")
+		{
+			toastr.success("Success");
+		}
 		reload_configuration("/member/payroll/leave/v2");
 	}
 	

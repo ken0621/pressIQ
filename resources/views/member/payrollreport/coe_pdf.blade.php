@@ -34,7 +34,7 @@
 
       @foreach($_employee as $employee)
       <div class="break">
-      <img src="/var/www/html/digimahouse/public{{$employee->payroll_company_logo}}" style="max-height: 150px;">
+      <img src="{{$employee->payroll_company_logo}}" style="max-height: 150px;">
       <div class="container">
         <h4 style="font-weight: regular;margin-bottom: 50px;">{{$date_today}}</h4>
         <h4 style="text-decoration: underline;text-align: center;letter-spacing: 2px;"><strong>CERTIFICATE OF EMPLOYEMENT</strong></h4>

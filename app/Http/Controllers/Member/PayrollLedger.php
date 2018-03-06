@@ -38,7 +38,7 @@ use App\Globals\Payroll;
 use App\Globals\PayrollLeave;
 use App\Globals\Utilities;
 use App\Models\Tbl_payroll_company;
-
+use App\Models\Tbl_payroll_branch_location;
 
 
 use App\Models\Tbl_payroll_deduction_v2;
@@ -61,8 +61,10 @@ class PayrollLedger extends Member
 		$parameter['date']					= date('Y-m-d');
 		$parameter['company_id']			= 0;
 		$parameter['employement_status']	= 0;
+		$parameter['branch_id']				= 0;
 		$parameter['shop_id'] 				= $this->shop_id();
 		$data["_employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
+		$data['_branch'] = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
 		$data["_company"] = Payroll::company_heirarchy(Self::shop_id());
 		// dd($data["_employee"]);
 		return view("member.payrollreport.payroll_ledger",$data);
@@ -101,6 +103,7 @@ class PayrollLedger extends Member
 	{
 		$parameter['date']					= date('Y-m-d');
 		$parameter['company_id']			= Request::input('company_id');
+		$parameter['branch_id']				= Request::input('branch_id');
 		$parameter['employement_status']	= 0;
 		$parameter['shop_id'] 				= $this->shop_id();
 		$data["_employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
@@ -108,5 +111,6 @@ class PayrollLedger extends Member
 		// dd($data["_employee"]);
 		return view("member.payrollreport.payroll_ledger_filter",$data);
 	}
+
 
 }

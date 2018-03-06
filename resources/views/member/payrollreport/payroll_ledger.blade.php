@@ -4,14 +4,17 @@
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
+            <div class="col-md-6">
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Payroll Reports &raquo; Payroll Ledger</span>
+                <span class="page-title">Payroll Reports &raquo; Payroll Ledger&nbsp;</span>
                 <small>
                	select employee
                 </small>
             </h1>
+            </div>
 
+            <div class="col-md-3">
               <select class="select-company-name pull-right form-control" style="width: 300px">    
                 <option value="0">All Company</option>
                   @foreach($_company as $company)
@@ -21,7 +24,16 @@
                     @endforeach
                   @endforeach
             </select>
+        </div>
 
+        <div class="col-md-3">
+            <select class="form-control filter-by-branch" name="branch_location_id">
+              <option value="0">Select Branch</option>
+              @foreach($_branch as $branch)
+              <option value="{{$branch->branch_location_id}}">{{$branch->branch_location_name}}</option>
+              @endforeach
+            </select>
+        </div>
         </div>
     </div>
 </div>
@@ -68,7 +80,35 @@
 	     $(".select-company-name").on("change", function(e)
         {
             var company         = $(this).val();
+            var branch         = $(".filter-by-branch").val();
             ajaxdata.company_id    = company;
+            ajaxdata.branch_id    = branch;
+            ajaxdata._token     = $("._token").val();
+            $('#spinningLoaders').show();
+            $(".load-filter-datas").hide();
+            setTimeout(function(e){
+            $.ajax(
+            {
+                url:"/member/payroll/reports/payroll_ledger_filter",
+                type:"post",
+                data: ajaxdata,
+                
+                success: function(data)
+                {
+                    $('#spinningLoaders').hide();
+                    $(".load-filter-datas").show();
+                    $(".load-filter-datas").html(data);
+                }
+            });
+            }, 700);
+        });
+
+         $(".filter-by-branch").on("change", function(e)
+        {
+            var branch         = $(this).val();
+            var company         = $(".select-company-name").val();
+            ajaxdata.company_id    = company;
+            ajaxdata.branch_id    = branch;
             ajaxdata._token     = $("._token").val();
             $('#spinningLoaders').show();
             $(".load-filter-datas").hide();

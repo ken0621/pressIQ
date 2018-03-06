@@ -59,7 +59,8 @@ class Tbl_payroll_employee_basic extends Model
 		$company_id 		= $parameter['company_id'];
 		$employment_status 	= $parameter['employement_status'];
 		$shop_id 			= $parameter['shop_id'];
-		
+		$branch_id 			= $parameter['branch_id'];
+
 		if($date == '0000-00-00')
 		{
 			$date = date('Y-m-d');
@@ -75,6 +76,11 @@ class Tbl_payroll_employee_basic extends Model
 			  if($company_id != 0)
 			  {
 			  	$query->where('company.payroll_company_id',$company_id);
+			  }
+
+			  if($branch_id != 0)
+			  {
+				$query->where("tbl_payroll_employee_basic.branch_location_id", $branch_id);
 			  }
 
 			  if($employment_status == 0)

@@ -54,6 +54,10 @@ function mlm_developer_import()
 		import_data["last_name"] = $target_source.attr("last_name");
 		import_data["password"] = $target_source.attr("password");
 		import_data["date_created"] = $target_source.attr("date_created");
+		import_data["address"] = $target_source.attr("address");
+		import_data["contact_number"] = $target_source.attr("contact_number");
+		import_data["gender"] = $target_source.attr("gender");
+		import_data["birthday"] = $target_source.attr("birthday");
 		import_data["_token"] = $(".import-token").val();
 
 		$target_source.find(".status").html("<span><i class='fa fa-spinner fa-pulse fa-fw'></i></span>");
@@ -135,7 +139,7 @@ function mlm_developer_import()
     	$.each(result_import, function(key, val)
     	{
 
-    		$append = 		"<tr class='tr-slot-import-data' key='" + key + "' email='" + val["EMAIL"] + "' first_name='" + val["FIRST NAME"] + "' last_name='" + val["LAST NAME"] + "' date_created='" + val["DATE CREATED"] + "' slot_no='" + val["SLOT NO"] + "' sponsor='" + val["SPONSOR"] + "' placement='" + val["PLACEMENT"] + "' position ='" + val["POSITION"] + "' package_number='" + val["PACKAGE NUMBER"] + "' status='pending' password='"+val["PASSWORD"]+"'>" +
+    		$append = 		"<tr class='tr-slot-import-data' key='" + key + "' email='" + val["EMAIL"] + "' first_name='" + val["FIRST NAME"] + "' last_name='" + val["LAST NAME"] + "' date_created='" + val["DATE CREATED"] + "' slot_no='" + val["SLOT NO"] + "' sponsor='" + val["SPONSOR"] + "' placement='" + val["PLACEMENT"] + "' position ='" + val["POSITION"] + "' package_number='" + val["PACKAGE NUMBER"] + "' status='pending' password='"+val["PASSWORD"]+"' address='"+val["ADDRESS"]+"' contact_number='"+val["CONTACT NUMBER"]+"' gender='"+val["GENDER"]+"' birthday='"+val["BIRTHDAY"]+"'>" +
     							"<td class='text-center'>" + val["EMAIL"] + "</td>" +
     							"<td class='text-center'>" + val["FIRST NAME"] + "</td>" +
     							"<td class='text-center'>" + val["LAST NAME"] + "</td>" +
@@ -145,6 +149,10 @@ function mlm_developer_import()
     							"<td class='text-center'>" + val["POSITION"] + " OF " + val["PLACEMENT"] + "</td>" +
     							"<td class='text-center'>" + val["PACKAGE NUMBER"] + "</td>" +
     							"<td class='text-center'>" + val["PASSWORD"] + "</td>" +
+    							"<td class='text-center'>" + val["ADDRESS"] + "</td>" +
+    							"<td class='text-center'>" + val["CONTACT NUMBER"] + "</td>" +
+    							"<td class='text-center'>" + val["GENDER"] + "</td>" +
+    							"<td class='text-center'>" + val["BIRTHDAY"] + "</td>" +
     							"<td class='text-center status'><span style='color: green;'>PENDING</span></td>" +
     					+	"</tr>";
 

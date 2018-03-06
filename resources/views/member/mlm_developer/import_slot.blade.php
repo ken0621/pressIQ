@@ -32,12 +32,16 @@
                             <th class="text-center">PLACEMENT</th>
                             <th class="text-center">PACKAGE<br>NUMBER</th>
                             <th class="text-center">PASSWORD</th>
+                            <th class="text-center">ADDRESS</th>
+                            <th class="text-center">CONTACT NUMBER</th>
+                            <th class="text-center">GENDER</th>
+                            <th class="text-center">BIRTHDAY</th>
                             <th width="200px;" class="text-center">STATUS</th>
                         </tr>
                     </thead>
                     <tbody class="import-slot-list">
                         <tr>
-                            <td class="text-center" colspan="10">NO SLOT TO IMPORT YET</td>
+                            <td class="text-center" colspan="14">NO SLOT TO IMPORT YET</td>
                         </tr>
                     </tbody>
                 </table>
@@ -61,4 +65,4 @@
 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script> -->
 <script src="/assets/external/xlsx.core.min.js"></script>
-<script src="/assets/member/js/mlm/mlm_developer_import.js?version=10"></script>
+<script src="/assets/member/js/mlm/mlm_developer_import.js?version=12"></script>

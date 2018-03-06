@@ -615,8 +615,33 @@ class MlmDeveloperController extends Member
             $insert_customer["mlm_username"]   = Request::input("slot_no");
             $insert_customer["password"]       = (Request::input("password") == "undefined" ? Crypt::encrypt(randomPassword()) : Crypt::encrypt(Request::input("password")));
             $insert_customer["created_date"]   = $slot_date_created;
-            
+            $insert_customer["b_day"]          = date("Y-m-d", strtotime(Request::input("birthday")));
+            $insert_customer["birthday"]       = date("Y-m-d", strtotime(Request::input("birthday")));
+            $insert_customer["contact"]        = Request::input("contact_number");
+            $insert_customer["gender"]         = strtolower(Request::input("gender"));
+
             $customer_id = Tbl_customer::insertGetId($insert_customer);
+
+            /* Insert Customer Address */
+            $address_purpose[0] = "permanent";
+            $address_purpose[1] = "billing";
+            $address_purpose[2] = "shipping";
+
+            foreach ($address_purpose as $key => $value) 
+            {
+                $insert_customer_address["customer_id"] = $customer_id;
+                $insert_customer_address["country_id"] = 420;
+                $insert_customer_address["customer_state"] = "";
+                $insert_customer_address["customer_city"] = "";
+                $insert_customer_address["customer_zipcode"] = "";
+                $insert_customer_address["customer_street"] = Request::input("address");
+                $insert_customer_address["purpose"] = $value;
+                $insert_customer_address["archived"] = 0;
+                $insert_customer_address["created_at"] = Carbon::now();
+                $insert_customer_address["updated_at"] = Carbon::now();
+
+                Tbl_customer_address::insert($insert_customer_address);
+            }
         }
 
         if($membership_package_id == "undefined")

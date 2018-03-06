@@ -533,7 +533,7 @@ class PayrollDeductionController extends Member
           $_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_start'], $period_info['payroll_period_end'], $period_info['period_count'], $period_info['payroll_period_category'], $period_info['shop_id']);
 
           foreach ($_deduction['deduction'] as $deduction) 
-          {\
+          {
 
                 /*changes 2nd statement of query $deduction_employee   ->where('tbl_payroll_deduction_v2.payroll_deduction_name',$deduction['deduction_name'])*/
                 $deduction_employee = Tbl_payroll_deduction_employee_v2::where('tbl_payroll_deduction_employee_v2.payroll_employee_id',$employee_id)

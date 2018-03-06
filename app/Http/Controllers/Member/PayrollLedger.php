@@ -58,6 +58,12 @@ class PayrollLedger extends Member
 
 	public function index()
 	{
+		$_month = array();
+		for($ctr = 1; $ctr <= 12; $ctr++)
+		{
+			$_month[$ctr]["month_name"] = DateTime::createFromFormat('!m', $ctr)->format('F');
+		}
+
 		$parameter['date']					= date('Y-m-d');
 		$parameter['company_id']			= 0;
 		$parameter['employement_status']	= 0;
@@ -66,26 +72,29 @@ class PayrollLedger extends Member
 		$data["_employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
 		$data['_branch'] = Tbl_payroll_branch_location::getdata(Self::shop_id())->orderBy('branch_location_name')->get();
 		$data["_company"] = Payroll::company_heirarchy(Self::shop_id());
+		$data["_month"] = $_month; 
 		// dd($data["_employee"]);
 		return view("member.payrollreport.payroll_ledger",$data);
 	}
 
-	public function modal_ledger($employee_id)
+	public function modal_ledger($employee_id,$month)
 	{
 		$data["employee"] = Tbl_payroll_employee_basic::where("tbl_payroll_employee_basic.payroll_employee_id",$employee_id)->first();
-		$data["_employee"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee_id)
+
+		$data["_employee"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee_id,$month)
 		->where("tbl_payroll_period_company.payroll_period_status","!=","pending")
 		->get();
 		$data["employee_id"] = $employee_id;
+		$data["month"] = $month;
 		$data = Payroll2::get_total_payroll_register($data);
 		
 		return view("member.payrollreport.payroll_employee_ledger",$data);
 	}
 
-	public function export_excel_ledger($employee_id)
+	public function export_excel_ledger($employee_id,$month)
 	{
 		$data["employee"] = Tbl_payroll_employee_basic::where("tbl_payroll_employee_basic.payroll_employee_id",$employee_id)->first();
-		$data["_employee"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee_id)
+		$data["_employee"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee_id,$month)
 		->where("tbl_payroll_period_company.payroll_period_status","!=","pending")
 		->get();
 		$data = Payroll2::get_total_payroll_register($data);
@@ -106,8 +115,9 @@ class PayrollLedger extends Member
 		$parameter['branch_id']				= Request::input('branch_id');
 		$parameter['employement_status']	= 0;
 		$parameter['shop_id'] 				= $this->shop_id();
-		$data["_employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
-		$data["_company"] = Payroll::company_heirarchy(Self::shop_id());
+		$data["_employee"]                  = Tbl_payroll_employee_basic::selemployee($parameter)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->get();
+		$data["_company"]                   = Payroll::company_heirarchy(Self::shop_id());
+		$data['month']                      = Request::input('month');
 		// dd($data["_employee"]);
 		return view("member.payrollreport.payroll_ledger_filter",$data);
 	}

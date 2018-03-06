@@ -18,7 +18,7 @@
 				           			<td class="text-center">{{ $employee->payroll_employee_number }}</td>
 				           			<td class="text-center">{{$employee->payroll_employee_first_name}} {{$employee->payroll_employee_last_name}}</td>
 				           			<td class="text-center">{{ $employee->payroll_company_name }}</td>
-				           			<td class="text-center"><a href="/member/payroll/reports/payroll_ledger/{{$employee->payroll_employee_id}}">View Employee</a></td>
+				           			<td class="text-center"><a href="/member/payroll/reports/payroll_ledger/{{$employee->payroll_employee_id}}/{{$month}}">View Employee</a></td>
 				           		</tr>
 				           	@endforeach
 				        </tbody>

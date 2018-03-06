@@ -14,6 +14,7 @@ use App\Models\Tbl_terms;
 use App\Globals\Tablet_global;
 use App\Globals\Mlm_plan;
 use App\Globals\CommissionCalculator;
+use App\Globals\Sms;
 use DB;
 use Carbon\Carbon;
 use Request;
@@ -37,10 +38,16 @@ class Customer
 			
 			session()->forget("lead_sponsor");
 		}
-		
 
-		//dd($info);
-		Tbl_customer::insert($info);
+		$register = Tbl_customer::insert($info);
+
+		if ($shop_id == 1 && $register) 
+		{
+			$txt[0]["txt_to_be_replace"] = "[name]";
+			$txt[0]["txt_to_replace"]    = $info['first_name'];
+			$result                      = Sms::SendSms($info['contact'], "success_register", $txt, $shop_id);
+		}
+
 		return true;	
 	}
 	public static function getTerms($shop_id, $archived = 0)

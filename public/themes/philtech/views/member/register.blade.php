@@ -114,7 +114,7 @@
                                     <div class="form-group">
                                         <div class="register-label">CONTACT NUMBER</div>
                                         <div class="form-input">
-                                            <input required class="form-control input-sm" type="text" name="contact" value="{{ $dummy['contact'] or old('contact') }}">
+                                            <input required class="form-control input-sm" type="text" name="contact" value="{{ old('contact') ? old('contact') : '+63' }}">
                                         </div>
                                     </div>
                                     

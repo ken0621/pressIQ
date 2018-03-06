@@ -172,7 +172,7 @@ class PayrollTimeSheet2Controller extends Member
 			$employee_id = Request::input("employee_id");
 			$payroll_period_id = Request::input("payroll_period_id");
 		}
-		
+
 		$compute_cutoff 						= $this->compute_whole_cutoff($period_id, $employee_id);
 		$check_approved 						= Tbl_payroll_time_keeping_approved::where("payroll_period_company_id", $period_id)->where("employee_id", $employee_id)->first();
 		$company_id 							= Tbl_payroll_employee_basic::where('payroll_employee_id',$employee_id)->value('payroll_employee_company_id');

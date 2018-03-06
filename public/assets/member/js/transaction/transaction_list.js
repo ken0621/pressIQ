@@ -20,6 +20,7 @@ function transaction_list()
 		event_initialize_select();
 		event_load_search();
 		action_onload_view_receipt();
+		event_filter_date();
 	}
 	function action_onload_view_receipt()
 	{
@@ -67,6 +68,15 @@ function transaction_list()
 	    load_table_data.page = 1;
 	    action_load_table();
 	}
+	function action_filter_date(from, to)
+	{
+		load_table_data.from_date = from;
+		load_table_data.to_date = to;
+	    load_table_data.page = 1;
+	    action_load_table();
+
+	    $('#filter-date-modal').modal('hide');
+	}
 	function add_event_pagination()
 	{
 		$("body").on("click", ".pagination a", function(e)
@@ -109,6 +119,17 @@ function transaction_list()
 	this.action_load_table = function()
 	{
 		action_load_table();
+	}
+
+	function event_filter_date()
+	{
+		$('.filter-date-form').submit(function(event) 
+		{
+			event.preventDefault();
+			event.stopPropagation();
+
+			action_filter_date($('.filter-date-form').find('input[name="from_date"]').val(), $('.filter-date-form').find('input[name="to_date"]').val())
+		});
 	}
 }
 function click_status(status)

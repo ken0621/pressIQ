@@ -611,12 +611,18 @@ class Transaction
         $store["get_transaction_customer_details_v2"] = true;
         session($store);
     }
-    public static function get_transaction_list($shop_id, $transaction_type = 'all', $search_keyword = '', $paginate = 5, $transaction_id = 0)
+    public static function get_transaction_list($shop_id, $transaction_type = 'all', $search_keyword = '', $paginate = 5, $transaction_id = 0, $from_date = null, $to_date = null)
     {
         $data = Tbl_transaction_list::where('tbl_transaction_list.shop_id',$shop_id);
         if($transaction_id != 0)
         {
             $data = Tbl_transaction_list::where('tbl_transaction_list.transaction_id',$transaction_id)->where('tbl_transaction_list.shop_id',$shop_id);
+        }
+
+        /* Filter Date */
+        if ($from_date && $to_date) 
+        {
+            $data->whereBetween("tbl_transaction_list.transaction_date", [date("Y-m-d", strtotime($from_date)), date("Y-m-d", strtotime($to_date))]);
         }
         
         $data->transaction(); //join table transaction

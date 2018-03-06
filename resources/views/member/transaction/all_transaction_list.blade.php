@@ -13,8 +13,8 @@
             </small>
             </h1>
             <div class="dropdown pull-right">
-                <a href="javascript:" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Secondary Command</a>
-                <a href="javascript:" target="_blank" class="btn btn-primary"><i class="fa fa-star"></i> Primary Command</a>
+                {{-- <a href="javascript:" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Secondary Command</a> --}}
+                <a data-toggle="modal" data-target="#filter-date-modal" href="javascript:" target="_blank" class="btn btn-primary"><i class="fa fa-search"></i> &nbsp;Filter Date</a>
             </div>
         </div>
     </div>
@@ -57,6 +57,35 @@
         </div>
     </div>
 </div>
+</div>
+
+<!-- Modal -->
+<div id="filter-date-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Filter Date</h4>
+            </div>
+            <form method="get" class="filter-date-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>From</label>
+                        <input class="form-control datepicker" type="text" name="from_date">
+                    </div>
+                    <div class="form-group">
+                        <label>To</label>
+                        <input class="form-control datepicker" type="text" name="to_date">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 @endsection
 @section('script')

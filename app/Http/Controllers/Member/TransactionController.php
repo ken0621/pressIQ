@@ -62,7 +62,7 @@ class TransactionController extends Member
     }
     public function transaction_list_table(Request $request)
     {
-        $data['_list'] = Transaction::get_transaction_list($this->user_info->shop_id, $request->transaction_type, $request->search_keyword);
+        $data['_list'] = Transaction::get_transaction_list($this->user_info->shop_id, $request->transaction_type, $request->search_keyword, 5, 0, request('from_date'), request('to_date'));
         return view("member.transaction.all_transaction_list_table", $data);
     }
     public function view_pdf(Request $request, $transaction_list_id)

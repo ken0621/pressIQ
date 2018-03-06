@@ -51,8 +51,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/*START payroll ledger*/
 	Route::any('/reports/payroll_ledger','Member\PayrollLedger@index');
-	Route::any('/reports/payroll_ledger/{employee_id}','Member\PayrollLedger@modal_ledger');
-	Route::any('/reports/payroll_ledger/export_excel_ledger/{employee_id}','Member\PayrollLedger@export_excel_ledger');
+	Route::any('/reports/payroll_ledger/{employee_id}/{month}','Member\PayrollLedger@modal_ledger');
+	Route::any('/reports/payroll_ledger/export_excel_ledger/{employee_id}/{month}','Member\PayrollLedger@export_excel_ledger');
 	Route::any('/reports/payroll_ledger_filter','Member\PayrollLedger@payroll_ledger_filter');
 	/*END payroll ledger/
 

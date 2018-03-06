@@ -907,6 +907,36 @@ function page_list($pis = 0)
     // $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     // $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
+     $segment = "overtime-module";
+    $nav[$page]['submenu'][$segment]['name']   = "Overtime";
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+          /* -- REPORT => PRODUCTS  */
+        $code = "timekeeping-overtime";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Timekeeping";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "John Kenneth de Lara";
+
+        /* -- REPORT => PRODUCTS  */
+        $code = "processing-overtime";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Processing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "John Kenneth de Lara";
+
+
+         /* -- REPORT => PRODUCTS  */
+        $code = "report-overtime";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Reports";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "John Kenneth de Lara";
+
 
     /* PAYROLL REPORTS */
     $segment = "submenu-payroll-entries";

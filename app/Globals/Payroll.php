@@ -3221,7 +3221,6 @@ class Payroll
 			$date = $date_end;
 		}
 		
-		
 		$_deduction = Tbl_payroll_deduction_employee_v2::getdeduction($employee_id, $date, $period, $month)->get();
 		$payroll_record_id = Tbl_payroll_record::getperiod($shop_id, $payroll_period_category)->pluck('payroll_record_id');
 
@@ -3244,6 +3243,7 @@ class Payroll
 			if (($payroll_month_payment_amount["total_payment"] + $deduction->payroll_periodal_deduction) > $deduction->payroll_monthly_amortization) 
 			{
 				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $payroll_month_payment_amount["total_payment"];
+
 			}
 
 			if($temp == 'Last Period')
@@ -3257,6 +3257,7 @@ class Payroll
 				if (($temp["payroll_periodal_deduction"] + $payroll_month_payment_amount["total_payment"]) <=  $deduction->payroll_monthly_amortization) 
 				{
 					$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $payroll_month_payment_amount["total_payment"];
+
 				}
 			}
 			

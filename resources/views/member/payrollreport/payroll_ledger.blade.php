@@ -4,15 +4,27 @@
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
+            <div class="col-md-5">
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Payroll Reports &raquo; Payroll Ledger</span>
+                <span class="page-title">Payroll Reports &raquo; Payroll Ledger&nbsp;</span>
                 <small>
                	select employee
                 </small>
             </h1>
+            </div>
 
-              <select class="select-company-name pull-right form-control" style="width: 300px">    
+            <div class="col-md-2">
+            <select class="form-control filter-by-month" name="month">
+              <option value="none">Select Month</option>
+              @foreach($_month as $month)
+              <option value="{{$month['month_name']}}">{{$month['month_name']}}</option>
+              @endforeach
+            </select>
+            </div>
+
+            <div class="col-md-3">
+              <select class="select-company-name pull-right form-control" style="width: 250px">    
                 <option value="0">All Company</option>
                   @foreach($_company as $company)
                   <option value="{{$company['company']->payroll_company_id}}">{{$company['company']->payroll_company_name}}</option> 
@@ -21,7 +33,16 @@
                     @endforeach
                   @endforeach
             </select>
+        </div>
 
+        <div class="col-md-2">
+            <select class="form-control filter-by-branch" name="branch_location_id">
+              <option value="0">Select Branch</option>
+              @foreach($_branch as $branch)
+              <option value="{{$branch->branch_location_id}}">{{$branch->branch_location_name}}</option>
+              @endforeach
+            </select>
+        </div>
         </div>
     </div>
 </div>
@@ -50,7 +71,7 @@
 				           			<td class="text-center">{{ $employee->payroll_employee_number }}</td>
 				           			<td class="text-center">{{$employee->payroll_employee_first_name}} {{$employee->payroll_employee_last_name}}</td>
 				           			<td class="text-center">{{ $employee->payroll_company_name }}</td>
-				           			<td class="text-center"><a href="/member/payroll/reports/payroll_ledger/{{$employee->payroll_employee_id}}">View Employee</a></td>
+				           			<td class="text-center"><a href="/member/payroll/reports/payroll_ledger/{{$employee->payroll_employee_id}}/none">View Employee</a></td>
 				           		</tr>
 				           	@endforeach
 				        </tbody>
@@ -65,10 +86,71 @@
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 <script>
 	var ajaxdata = {};
-	     $(".select-company-name").on("change", function(e)
+	   $(".select-company-name").on("change", function(e)
         {
-            var company         = $(this).val();
-            ajaxdata.company_id    = company;
+            var company          = $(this).val();
+            var month            = $(".filter-by-month").val();
+            var branch           = $(".filter-by-branch").val();
+            ajaxdata.month       = month;
+            ajaxdata.company_id  = company;
+            ajaxdata.branch_id   = branch;
+            ajaxdata._token      = $("._token").val();
+            $('#spinningLoaders').show();
+            $(".load-filter-datas").hide();
+            setTimeout(function(e){
+            $.ajax(
+            {
+                url:"/member/payroll/reports/payroll_ledger_filter",
+                type:"post",
+                data: ajaxdata,
+                
+                success: function(data)
+                {
+                    $('#spinningLoaders').hide();
+                    $(".load-filter-datas").show();
+                    $(".load-filter-datas").html(data);
+                }
+            });
+            }, 700);
+        });
+
+        $(".filter-by-branch").on("change", function(e)
+        {
+            var branch          = $(this).val();
+            var month           = $(".filter-by-month").val();
+            var company         = $(".select-company-name").val();
+            ajaxdata.company_id = company;
+            ajaxdata.branch_id  = branch;
+            ajaxdata.month      = month;
+            ajaxdata._token     = $("._token").val();
+            $('#spinningLoaders').show();
+            $(".load-filter-datas").hide();
+            setTimeout(function(e){
+            $.ajax(
+            {
+                url:"/member/payroll/reports/payroll_ledger_filter",
+                type:"post",
+                data: ajaxdata,
+                
+                success: function(data)
+                {
+                    $('#spinningLoaders').hide();
+                    $(".load-filter-datas").show();
+                    $(".load-filter-datas").html(data);
+                }
+            });
+            }, 700);
+        });
+
+
+        $(".filter-by-month").on("change", function(e)
+        {
+            var month           = $(this).val();
+            var branch          = $(".filter-by-branch").val();
+            var company         = $(".select-company-name").val();
+            ajaxdata.company_id = company;
+            ajaxdata.branch_id  = branch;
+            ajaxdata.month      = month;
             ajaxdata._token     = $("._token").val();
             $('#spinningLoaders').show();
             $(".load-filter-datas").hide();

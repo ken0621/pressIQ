@@ -6,7 +6,7 @@
             <!-- Dashboard -->
             <div class="row clearfix">
                 <div class="col-md-6">
-                    <div class="title-container">Overall Analytic Results</div>
+                    <div class="title-container">Overall Analytics Result</div>
                 </div>
                 <div class="pull-right">
                     <div class="button-container">

@@ -22,7 +22,7 @@
                             <a href="/pressadmin/email_edit/{{$email->pr_id}}"><button type="button"  class="btn btn-warning center">
                             <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button>
 
-                            <a href="/pressadmin/email_delete/{{$email->pr_id}}"><button type="button"  class="btn btn-danger center">
+                            <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/email_delete/{{$email->pr_id}}"><button type="button"  class="btn btn-danger center">
                             <i class="fa fa-trash" name="" aria-hidden="true"></i>Delete</button>
                         </td>
 

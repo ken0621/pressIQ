@@ -152,10 +152,10 @@
                            <td>
                             <a id="edit" href="/pressadmin/edit_user/{{$_user_account->user_id}}"><button type="button"  class="btn btn-warning center"><i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>  Edit</button></a>
 
-                            <a href="/pressadmin/delete_user/{{$_user_account->user_id}}"><button type="button" class="btn btn-danger center">
+                            <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/delete_user/{{$_user_account->user_id}}"><button type="button" class="btn btn-danger center">
                             <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>  Delete</button></a>
 
-                            <a href="/pressadmin/manage_force_login/{{$_user_account->user_id}}"><button type="button" class="btn btn-success center">
+                            <a onclick="return confirm('Force to Login?');" href="/pressadmin/manage_force_login/{{$_user_account->user_id}}"><button type="button" class="btn btn-success center">
                             <i class="fa fa-vcard-o" name="recipient_id" aria-hidden="true"></i>  Force Login</button></a>
                            </td>
                         </tr>
@@ -183,7 +183,7 @@
                             <a href="/pressadmin/edit_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-warning center">
                             <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>  Edit</button>
 
-                            <a href="/pressadmin/manage_user/delete_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-danger center">
+                            <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/manage_user/delete_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-danger center">
                             <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>  Delete</button>
                            </td>
                         </tr>

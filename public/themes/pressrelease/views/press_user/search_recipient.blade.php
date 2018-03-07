@@ -18,6 +18,9 @@
          <td class="rec_name_{{$recipients->recipient_id}}" style="text-align: center;">{{$recipients->name}}</td>
          <td style="text-align: center;">{{$recipients->position}}</td>
          <td class="rec_email_{{$recipients->recipient_id}}" style="display:none;">{{$recipients->research_email_address}}</td>
+
+         <td class="rec_id_{{$recipients->recipient_id}}" style="display:none;">{{$recipients->recipient_id}}</td>
+
      </tr>
      @endforeach
   </tbody>   

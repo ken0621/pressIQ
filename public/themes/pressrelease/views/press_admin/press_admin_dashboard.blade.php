@@ -18,7 +18,7 @@
                   <td>{{$view-> subject}}</td>
                   <td>{{$view-> sender}}</td>
                   <td>
-                      <span class="create-button" ><a href="/pressadmin/dashboard/view?subject={{ Crypt::encrypt($view->subject)}}">VIEW</a>
+                      <span class="create-button" ><a href="/pressadmin/dashboard/view?subject={{ Crypt::encrypt($view->subject)}}"><button type="button" class="btn btn-success center"><i class="fa fa-search" name="recipient_id" aria-hidden="true">&nbsp;</i>VIEW</button></a>
                   </td>
                 </tr>
                 @endforeach

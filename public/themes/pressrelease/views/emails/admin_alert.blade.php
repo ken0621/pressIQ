@@ -95,15 +95,13 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-9" style="padding-left: 0px; padding-right: 0px;">
-					<div class="heading-container">Account already expired</div>
+					<div class="heading-container">Account Already Expired</div>
 				</div>
 			</div>
 			<div class="row">
-				<div class="content-container"><p>Account Information</p></div>
 				<div class="content-container"><p>Name: {{$pr_sender_name}}</p></div>
 				<div class="content-container"><p>Company: {{$pr_co_name}}</p></div>
 				<div class="content-container"><p>Email: {{$pr_from}}</p></div>
-				
 			</div>
 		</div>
 	</div>

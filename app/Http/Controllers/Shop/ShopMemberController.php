@@ -3183,37 +3183,45 @@ class ShopMemberController extends Shop
             $stock = ($redeemable_item->quantity)-($redeemable_item->number_of_redeem);
             if($stock>0)
             {
-                $remaining_points = $this->redeem_points_sum($slot_info->slot_id);
-                $compute_points   = $remaining_points - $redeemable_item->redeemable_points;
-                if($compute_points >= 0)
+                if ($slot_info) 
                 {
-                    $insert["amount"]       = -1 * $redeemable_item->redeemable_points;
-                    $insert["shop_id"]      = $this->shop_info->shop_id;
-                    $insert["slot_id"]      = $slot_info->slot_id;
-                    $insert["date_created"] = Carbon::now();
-                    Tbl_item_redeemable_points::insert($insert);
+                    $remaining_points = $this->redeem_points_sum($slot_info->slot_id);
+                    $compute_points   = $remaining_points - $redeemable_item->redeemable_points;
+                    if($compute_points >= 0)
+                    {
+                        $insert["amount"]       = -1 * $redeemable_item->redeemable_points;
+                        $insert["shop_id"]      = $this->shop_info->shop_id;
+                        $insert["slot_id"]      = $slot_info->slot_id;
+                        $insert["date_created"] = Carbon::now();
+                        Tbl_item_redeemable_points::insert($insert);
 
-                    //not yet done
-                    $insert_report['slot_id'] = $slot_info->slot_id;
-                    $insert_report["shop_id"] = $this->shop_info->shop_id;
-                    $insert_report["amount"] = -1 * $redeemable_item->redeemable_points;
-                    $insert_report['log_type'] = 'Request';
-                    // you redeem <item> for <cost>. Please wait for admin's approval.
-                    $insert_report['log'] = 'You redeemed '.$redeemable_item->item_name.' for '.currency("",$redeemable_item->redeemable_points)." POINTS. Please wait for admin's approval.";
-                    $insert_report['date_created'] = Carbon::now();
-                    $insert_report['slot_owner'] = Self::$customer_info->customer_id;
-                    Tbl_item_redeemable_report::insert($insert_report);
-                    Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->increment('number_of_redeem');
+                        //not yet done
+                        $insert_report['slot_id'] = $slot_info->slot_id;
+                        $insert_report["shop_id"] = $this->shop_info->shop_id;
+                        $insert_report["amount"] = -1 * $redeemable_item->redeemable_points;
+                        $insert_report['log_type'] = 'Request';
+                        // you redeem <item> for <cost>. Please wait for admin's approval.
+                        $insert_report['log'] = 'You redeemed '.$redeemable_item->item_name.' for '.currency("",$redeemable_item->redeemable_points)." POINTS. Please wait for admin's approval.";
+                        $insert_report['date_created'] = Carbon::now();
+                        $insert_report['slot_owner'] = Self::$customer_info->customer_id;
+                        Tbl_item_redeemable_report::insert($insert_report);
+                        Tbl_item_redeemable::where("item_redeemable_id",$item_redeemable_id)->where("shop_id",$this->shop_info->shop_id)->increment('number_of_redeem');
 
-                    $insert_request["item_redeemable_id"]    = $redeemable_item->item_redeemable_id;
-                    $insert_request["amount"]                = $redeemable_item->redeemable_points;
-                    $insert_request["shop_id"]               = $this->shop_info->shop_id;
-                    $insert_request["slot_id"]               = $slot_info->slot_id;
-                    $insert_request["status"]                = "PENDING";
-                    $insert_request["date_created"]          = Carbon::now();
-                    Tbl_item_redeemable_request::insert($insert_request);
-                    $response='success';
-                    return Redirect::back()->with("response",$response);
+                        $insert_request["item_redeemable_id"]    = $redeemable_item->item_redeemable_id;
+                        $insert_request["amount"]                = $redeemable_item->redeemable_points;
+                        $insert_request["shop_id"]               = $this->shop_info->shop_id;
+                        $insert_request["slot_id"]               = $slot_info->slot_id;
+                        $insert_request["status"]                = "PENDING";
+                        $insert_request["date_created"]          = Carbon::now();
+                        Tbl_item_redeemable_request::insert($insert_request);
+                        $response='success';
+                        return Redirect::back()->with("response",$response);
+                    }
+                }
+                else
+                {
+                    $response = "error";
+                    return Redirect::back()->with('response',$response);
                 }
             }
             else

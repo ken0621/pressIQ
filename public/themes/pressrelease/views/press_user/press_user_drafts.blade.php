@@ -18,10 +18,10 @@
                 </tr>
                 @foreach($drafts as $draft)
                 <tr>
-                    <td>{{$draft->pr_headline}}</td>
-                    <td>Draft</td>
-                    <td><a href="/pressuser/pressrelease/edit_draft/{{$draft->pr_id}}">Edit</a></td>
-                    <td><a href="/pressuser/pressrelease/delete_draft/{{$draft->pr_id}}">Delete</a></td>
+                    <td style="width: 50%;">{{$draft->pr_headline}}</td>
+                    <td style="width: 20%;">Draft</td>
+                    <td style="width: 10%;"><a href="/pressuser/pressrelease/edit_draft/{{$draft->pr_id}}"><button type="button" class="btn btn-success center"><i class="fa fa-wrench" name="recipient_id" aria-hidden="true">&nbsp;</i>Edit</button></a></td>
+                    <td style="width: 10%;"><a onclick="return confirm('Are you sure you want to Delete?');" href="/pressuser/pressrelease/delete_draft/{{$draft->pr_id}}"><button type="button" class="btn btn-danger center"><i class="fa fa-trash" name="recipient_id" aria-hidden="true">&nbsp;</i>Delete</button></a></td>
                 </tr>
                 @endforeach
             </table>

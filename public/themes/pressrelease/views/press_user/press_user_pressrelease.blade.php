@@ -288,8 +288,8 @@
    
    $(".chosen-select").chosen({disable_search_threshold: 10});
    
-</script>
-
+</script> 
+       
 <script src="/email_assets/tinymce/js/tinymce/tinymce.min.js"></script>
 <script src="/email_assets/tinymce/js/tinymce/tinymce.js"></script>
 <script src="/email_assets/tinymce/js/tinymce/jquery.tinymce.min.js"></script>

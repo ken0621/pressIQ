@@ -81,7 +81,7 @@ class PayrollLedger extends Member
 	{
 		$data["employee"] = Tbl_payroll_employee_basic::where("tbl_payroll_employee_basic.payroll_employee_id",$employee_id)->first();
 
-		$data["_employee"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee_id,$month)
+		$data["_employee"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee_id,$month,0,0)
 		->where("tbl_payroll_period_company.payroll_period_status","!=","pending")
 		->get();
 		$data["employee_id"] = $employee_id;
@@ -94,7 +94,7 @@ class PayrollLedger extends Member
 	public function export_excel_ledger($employee_id,$month)
 	{
 		$data["employee"] = Tbl_payroll_employee_basic::where("tbl_payroll_employee_basic.payroll_employee_id",$employee_id)->first();
-		$data["_employee"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee_id,$month)
+		$data["_employee"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords($employee_id,$month,0,0)
 		->where("tbl_payroll_period_company.payroll_period_status","!=","pending")
 		->get();
 		$data = Payroll2::get_total_payroll_register($data);
@@ -122,5 +122,20 @@ class PayrollLedger extends Member
 		return view("member.payrollreport.payroll_ledger_filter",$data);
 	}
 
+	public function export_excel_ledgerv2($company,$month,$branch)
+	{
+		$data["_employee"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords(0,$month,$branch,$company)
+		->where("tbl_payroll_period_company.payroll_period_status","!=","pending")->where('tbl_payroll_period.shop_id',Self::shop_id())
+		->get();
+		$data = Payroll2::get_total_payroll_register($data);
+		$data["v2"] = 1;
+		Excel::create("Employee Ledger",function($excel) use ($data)
+		{
+			$excel->sheet('clients',function($sheet) use ($data)
+			{
+				$sheet->loadView('member.payrollreport.payroll_employee_ledger_excel',$data);
+			});
+		})->download('xls');
+	}
 
 }

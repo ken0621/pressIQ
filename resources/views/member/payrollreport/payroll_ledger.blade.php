@@ -4,8 +4,7 @@
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
-            <div class="col-md-5">
-            <i class="fa fa-tags"></i>
+            <div class="col-md-4.5">
             <h1>
                 <span class="page-title">Payroll Reports &raquo; Payroll Ledger&nbsp;</span>
                 <small>
@@ -34,7 +33,6 @@
                   @endforeach
             </select>
         </div>
-
         <div class="col-md-2">
             <select class="form-control filter-by-branch" name="branch_location_id">
               <option value="0">Select Branch</option>
@@ -42,6 +40,9 @@
               <option value="{{$branch->branch_location_id}}">{{$branch->branch_location_name}}</option>
               @endforeach
             </select>
+        </div>
+        <div class="col-md-2">
+              <a href="/member/payroll/reports/payroll_ledger/export_excel_ledgerv2/0/none/0" class="excel_tag"><button type="button" class="btn btn-success pull-right" style="margin-right:20px;margin-bottom: 20px"><i class="fa fa-file-excel-o" ></i> &nbsp;EXPORT TO EXCEL</button></a>
         </div>
         </div>
     </div>
@@ -88,6 +89,9 @@
 	var ajaxdata = {};
 	   $(".select-company-name").on("change", function(e)
         {
+            var href = "/member/payroll/reports/payroll_ledger/export_excel_ledgerv2/" + $(this).val() +"/" + $(".filter-by-month").val() +"/" + $(".filter-by-branch").val();
+             $(".excel_tag").attr('href',href);
+
             var company          = $(this).val();
             var month            = $(".filter-by-month").val();
             var branch           = $(".filter-by-branch").val();
@@ -116,6 +120,9 @@
 
         $(".filter-by-branch").on("change", function(e)
         {
+            var href = "/member/payroll/reports/payroll_ledger/export_excel_ledgerv2/" + $(".select-company-name").val() +"/" + $(".filter-by-month").val() +"/" + $(this).val();
+             $(".excel_tag").attr('href',href);
+
             var branch          = $(this).val();
             var month           = $(".filter-by-month").val();
             var company         = $(".select-company-name").val();
@@ -145,6 +152,9 @@
 
         $(".filter-by-month").on("change", function(e)
         {
+            var href = "/member/payroll/reports/payroll_ledger/export_excel_ledgerv2/" + $(".select-company-name").val() +"/" + $(this).val() +"/" + $(".filter-by-branch").val();
+             $(".excel_tag").attr('href',href);
+
             var month           = $(this).val();
             var branch          = $(".filter-by-branch").val();
             var company         = $(".select-company-name").val();

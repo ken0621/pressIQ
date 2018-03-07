@@ -12,199 +12,243 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/initializr/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/initializr/css/bootstrap-theme.min.css">
     <!--<link rel="stylesheet" href="/assets/initializr/css/main.css">-->
     {{-- <link rel="stylesheet" href="/assets/front/css/global.css"> --}}
 
     <style type="text/css">
-      td
-      {
-        padding: 5px !important;
-        font-size: 10px;
-        line-height: 11px;
-      }
-      .payslip-wrapper
-      {
-        page-break-inside: avoid; 
-        /*width: 48.5%; */
-        padding: 10px; 
-        border: 1px solid #bbb; 
-        /*display: inline-block; */
-        vertical-align: top; 
-        top: 0; 
-        background-color: #fff; 
-        margin: 5px;
-        /*float: left;*/
-      }
-      .col-md-6
-      {
-        padding: 0;
-      }
-
+    html{
+        margin:100 100px;
       /*div.breakNow { page-break-inside:avoid; page-break-after:always; }*/
+    }
+    h1 {
+        color:#585858;
+        font-size: 40px;
+        font-weight: 650px;
+    }
+    .period {
+        width: 100%;
+        height: 50px;
+        border-top:1px solid gray;
+        border-bottom:1px solid gray;
+        padding: 5px;
+    }
+    .left {
+        float:left;
+        height: 100%;
+        width: 280px;
+        border-right:1px solid gray;
+    }
+    .right {
+        float:left;
+        height: 100%;
+        width: 436px;
+    }
+    .employee {
+        height: 150px;
+        width: inherit;
+        padding: 20px;
+    }
+     .contri {
+        height: 150px;
+        width: inherit;
+
+    }
+     .yeartodate {
+        height: 350px;
+        width: inherit;
+    }
     </style>
 </head>
 <body>
-    <div style="vertical-align: top;">
-        <div class="row" style="margin-top: 10px;">
-            <div class="col-md-6 text-center">
-                <div>
-                    <img src="{{ $employee_company->payroll_company_logo }}" class="rounded float-right" alt="{{ $employee_company->payroll_company_name }}" height="150" width="150">
-                </div>
-             </div>
-            <div class="col-md-6" >
-                <div> </div>
-                <div style="font-weight: bold; font-size: 18px; text-transform:uppercase;">{{ $employee_company->payroll_company_name }}</div>
-                <div style="font-weight: bold; font-size: 16px;">{{ $period_record->payroll_employee_display_name }}</div>
-                <div style="font-weight: font-size: 12px;">{{ $period_record_start." - ".$period_record_end }}</div>
-                <div style="font-weight: font-size: 12px;">{{ "Release Date: ".$period_record_release_date }}</div>
+    @php
+    $att = 1;
+    @endphp
+    <h1>Payslip</h1>
+    <div class="period">
+        <div class="header">
+            <div class="sa" style="width:230px;text-align: center;float:left;font-size: 14px;color:#383838;">
+                PAY RUN
+            </div>
+            <div class="sa" style="width:230px;text-align: center;float:left;font-size: 14px;color:#383838;">
+                PAY PERIOD
+            </div>
+            <div class="sa" style="width:230px;text-align: center;float:left;font-size: 14px;color:#383838;">
+                DAYS WORK
+            </div>
+                  <div class="sa" style="width:230px;text-align: center;float:left;font-size: 14px;color:#383838;font-weight: bold;">
+                {{$period_record_release_date}}
+            </div>
+            <div class="sa" style="width:230px;text-align: center;float:left;font-size: 14px;color:#383838;font-weight: bold;">
+                {{$period_record_start}} - {{$period_record_end}}
+            </div>
+            <div class="sa" style="width:230px;text-align: center;float:left;font-size: 14px;color:#383838;font-weight: bold;">
+                @foreach($period_record->cutoff_breakdown->_time_breakdown as $key => $time)
+                    @if($att == 1)
+                        {{$time["float"]}} Days
+                    @endif
+                     @php
+                        $att++;
+                      @endphp
+                @endforeach
             </div>
         </div>
-        <br>
-        <div class="clearfix">   
-            <div class="col-md-12">
-            {{--<div class="payslip-wrapper page">--}}
-                    <div class="main-content-holder">
-                        <div class="row" >
-                            <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 15px;">
-                                SALARY COMPUTATION
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <table style="width: 100%;" class="table table-bordered">
-                                <tbody>
-                                
-                                    <tr>
-                                        <td width="40%" style="font-weight: bold;">BASIC PAY</td>
-                                        <td width="30%" style="font-weight: bold;" class="text-right">{{ payroll_currency($period_record->net_basic_pay) }}</td>
-                                        <td width="30%" style="font-weight: bold;"></td>
-                                    </tr>
-                                    
-                                    <!-- ADDITION TO GET GROSS -->
-                                    @foreach($period_record->cutoff_breakdown->_gross_pay_breakdown as $breakdown)
-                                    <tr>
-                                        <td>{{ strtoupper($breakdown["label"]) }}</td>
-                                        <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
-                                        <td></td>
-                                    </tr>
-                                    @endforeach
-                                    
-                                    <tr style="font-weight: bold;">
-                                        <td style="font-weight: bold;">GROSS SALARY</td>
-                                        <td style="font-weight: bold;"></td>
-                                        <td style="font-weight: bold;" class="text-right">{{ payroll_currency($period_record->gross_pay) }}</td>
-                                    </tr>
+    </div>
+    <div class="left">
+        <div class="employee">
+            <h4 style="color:#585858;font-weight: bold;text-align: center;">{{$period_record->payroll_employee_display_name}}</h4>
 
-                                    <!-- SSS, PHILHEALTH AND PAGIBIG -->
-                                    @foreach($period_record->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
-                                    @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
-                                    @else
-                                    <tr>
-                                        <td>{{ strtoupper($breakdown["label"]) }}</td>
-                                        <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
-                                        <td></td>
-                                    </tr>
-                                    @endif
-                                    @endforeach
+         <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                Employee ID
+        </div>
+         <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+                {{$period_record->payroll_employee_number}}
+        </div>
+          <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                Gender
+        </div>
+         <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold;">
+               {{$period_record->payroll_employee_gender}}
+        </div>
+          <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                Date Hired
+        </div>
+         <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+ 
+        </div>
+        </div>
 
-                                    <!-- WITHOLDING TAX -->
-                                    @foreach($period_record->cutoff_breakdown->_net_pay_breakdown as $breakdown)
-                                    @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
-                                    @else
-                                    <tr>
-                                        <td>{{ strtoupper($breakdown["label"]) }}</td>
-                                        <td class="text-right">{{ payroll_currency($breakdown["amount"]) }}</td>
-                                        <td></td>
-                                    </tr>
-                                    @endif
-                                    @endforeach
-                                    
-                                    <tr>
-                                        <td>TOTAL DEDUCTION</td>
-                                        <td></td>
-                                        <td class="text-right">{{ payroll_currency($period_record->total_deduction) }}</td>
-                                    </tr>
-
-                                    <tr style="font-weight: bold;">
-                                        <td style="font-weight: bold;">TAKE HOME PAY</td>
-                                        <td style="font-weight: bold;"></td>
-                                        <td style="font-weight: bold;" class="text-right">{{ payroll_currency($period_record->net_pay) }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="row" >
-                            <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 15px;">
-                                YEAR-END SUMMARY
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <table style="width: 100%;" class="table table-bordered">
-                                <tbody>
-                                  
-                                    <tr>
-                                        <td style="text-transform:uppercase">NET PAY</td>
-                                        <td style="font-weight: bold;" class="text-right">{{ payroll_currency($total_net_pay) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-transform:uppercase">WITHHOLDING TAX</td>
-                                        <td style="font-weight: bold;" class="text-right">{{ payroll_currency($total_tax_ee) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-transform:uppercase">SSS PREMIUM</td>
-                                        <td style="font-weight: bold;" class="text-right">{{ payroll_currency($total_sss_ee) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-transform:uppercase">PHIC PREMIUM</td>
-                                        <td style="font-weight: bold;" class="text-right">{{ payroll_currency($total_philhealth_ee) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-transform:uppercase">HDMF PREMIUM</td>
-                                        <td style="font-weight: bold;" class="text-right">{{ payroll_currency($total_pagibig_ee) }}</td>
-                                    </tr>
-                                   
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="row" >
-                            <div class="col-md-12 pull-left" style="font-weight: bold; font-size: 15px;">
-                                PERFORMANCE SUMMARY
-                            </div>
-                        </div>    
-                        <div class="col-md-12">
-                            <table style="width: 100%;" class="table table-bordered">
-                                <tbody>
-                                @foreach($period_record->cutoff_breakdown->_time_breakdown as $key => $time_breakdown)
-                                  <tr>
-                                      <td style="text-transform:uppercase">{{ str_replace("_"," ",$key) }}</td>
-                                      <td class="text-right">{{ $time_breakdown["time"] }}</td>
-                                  </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-md-12 row" >
-                            <div style="font-size: 12px;" class="text-center">
-                                I agree with the above salary computation and acknowledge receipt of the same.
-                            </div>
-                            <br>
-                            <br>
-                        </div>
-                        <div class="col-md-12 row" >
-                            <div class="text-right">
-                                _____________________
-                            </div>
-                        </div>
-                        <div class="col-md-12 row" >
-                            <div style="font-size: 12px;" class="text-right">
-                                Signature Over Printed Name
-                            </div>
-                        </div>
+        <div class="contri">
+            <h4 style="color:#585858;font-weight: bold;text-align: center;margin: 0;">Employer Contribution</h4>
+            <hr>
+            @foreach($period_record->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
+                    @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
+                        @else
+                    <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                        {{ strtoupper($breakdown["label"]) }}
                     </div>
-                </div>
-            </div>  
+                     <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+                           {{ payroll_currency($breakdown["amount"]) }}
+                    </div>
+                @endif
+           @endforeach
+
+        </div>
+
+        <div class="yeartodate">
+            <h4 style="color:#585858;font-weight: bold;text-align: center;margin: 0;">Year To Date Figures</h4>
+            <hr>
+         <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                Gross Salary
+            </div>
+             <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+                    {{$total_gross_pay}}
+            </div>
+                 <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                Taxable Income
+            </div>
+             <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+                    {{$total_tax_pay}}
+            </div>
+                 <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                Withholding Tax
+            </div>
+             <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+                    {{$total_tax_ee}}
+            </div>
+                 <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                Net Pay
+            </div>
+             <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+                    {{$total_net_pay}}
+            </div>
+            <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                SSS Employer
+            </div>
+             <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+                    {{$total_sss_ee}}
+            </div>
+                 <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                Philhealth Employer
+            </div>
+             <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+                    {{$total_philhealth_ee}}
+            </div>
+            <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                Pagibig Employer
+            </div>
+             <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+                    {{$total_pagibig_ee}}
+            </div>
         </div>
     </div>
+
+    <div class="right">
+        <br>
+        <br>
+        <div class="line" style="height: 1px;background-color: #909090;width: 100%;">
+        </div>
+            <div class="sa" style="width:50%;text-align: center;float:left;color:#383838;margin-bottom: 5px;font-size:13px;font-weight: bold;">
+                BASIC SALARY
+            </div>
+            <div class="sa" style="width:50%;text-align: center;float:left;color:#383838;margin-bottom: 5px;font-weight: bold;font-size: 13px;">
+                {{ payroll_currency($period_record->net_basic_pay) }}
+            </div>
+        <div class="line" style="height: 1px;background-color: #909090;width: 100%;">
+      </div>
+      <br>
+     @foreach($period_record->cutoff_breakdown->_gross_pay_breakdown as $breakdown)
+        <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+            {{ strtoupper($breakdown["label"]) }}
+        </div>
+        <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+            {{ payroll_currency($breakdown["amount"]) }}
+        </div>
+      @endforeach 
+      <br>
+      <div class="line" style="height: 1px;background-color: #909090;width: 100%;">
+      </div>
+        <div class="sa" style="width:50%;text-align: center;float:left;color:#383838;margin-bottom: 5px;font-size:13px;font-weight: bold;">
+            GROSS SALARY
+        </div>
+        <div class="sa" style="width:50%;text-align: center;float:left;color:#383838;margin-bottom: 5px;font-weight: bold;font-size: 13px;">
+            {{ payroll_currency($period_record->gross_pay) }}
+        </div>
+    <div class="line" style="height: 1px;background-color:  #909090;width: 100%;">
+      </div>
+      <br>
+
+   @foreach($period_record->cutoff_breakdown->_net_pay_breakdown as $breakdown)
+        @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
+        @else
+     <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+            {{ strtoupper($breakdown["label"]) }}
+        </div>
+        <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+            {{ payroll_currency($breakdown["amount"]) }}
+        </div>
+          @endif
+
+    @endforeach
+    <br>
+        <div class="line" style="height: 1px;background-color:  #909090;width: 100%;">
+      </div>
+      <div class="sa" style="width:50%;text-align: center;float:left;color:#383838;margin-bottom: 5px;font-size:13px;font-weight: bold;">
+            TOTAL DEDUCTION
+        </div>
+        <div class="sa" style="width:50%;text-align: center;float:left;color:#383838;margin-bottom: 5px;font-weight: bold;font-size: 13px;">
+            {{ payroll_currency($period_record->total_deduction) }}
+        </div>
+
+        <div class="sa" style="width:50%;text-align: center;float:left;color:#383838;margin-bottom: 5px;font-size:13px;font-weight: bold;">
+            TAKE HOME PAY
+        </div>
+        <div class="sa" style="width:50%;text-align: center;float:left;color:#383838;margin-bottom: 5px;font-weight: bold;font-size: 13px;">
+            {{ payroll_currency($period_record->net_pay) }}
+        </div>
+        <div class="line" style="height: 1px;background-color:  #909090;width: 100%;">
+      </div>
+
+    </div>
+
 </body>
 </html>

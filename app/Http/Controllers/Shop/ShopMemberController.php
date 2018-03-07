@@ -3512,14 +3512,21 @@ class ShopMemberController extends Shop
     }
     public function getWalletTransfer()
     {
-        // dd("This page is under maintenance");
-        $data['page'] = "Wallet Transfer";
-        $data['customer_id'] = Self::$customer_info->customer_id;
-        // $slot_no = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
-        // $id = $slot_no->slot_id;
-        // $data['transfer_history'] = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","wallet_transfer")->where("wallet_log_slot",$id)->paginate(8);
-        $data['transfer_history'] = Tbl_mlm_slot_wallet_log::Slot()->where("wallet_log_plan","wallet_transfer")->where("slot_owner",Self::$customer_info->customer_id)->orderBy('wallet_log_date_created','DESC')->paginate(8);
-        return (Self::load_view_for_members("member.wallet_transfer", $data));
+        if (Self::$customer_info) 
+        {
+            // dd("This page is under maintenance");
+            $data['page'] = "Wallet Transfer";
+            $data['customer_id'] = Self::$customer_info->customer_id;
+            // $slot_no = Tbl_mlm_slot::where("slot_owner",Self::$customer_info->customer_id)->get();
+            // $id = $slot_no->slot_id;
+            // $data['transfer_history'] = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","wallet_transfer")->where("wallet_log_slot",$id)->paginate(8);
+            $data['transfer_history'] = Tbl_mlm_slot_wallet_log::Slot()->where("wallet_log_plan","wallet_transfer")->where("slot_owner",Self::$customer_info->customer_id)->orderBy('wallet_log_date_created','DESC')->paginate(8);
+            return (Self::load_view_for_members("member.wallet_transfer", $data));
+        }
+        else
+        {
+            return Redirect::to('/members/login');
+        }
     }
     public function postWalletTransfer(Request $request)
     {

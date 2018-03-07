@@ -277,12 +277,12 @@
                   @if(isset($breakdown["record_type"]))
                     @if($breakdown["record_type"] != 'allowance')
                       @php
-                      $exploded = explode( '-', $breakdown["label"]);
+                      $exploded = explode( ' ', $breakdown["label"]);
                       @endphp
                       {{strtoupper($exploded[0])}}
                     @endif
                   @else
-                    {{ strtoupper($breakdown["label"]) }}
+                    {{ strtoupper(substr($breakdown["label"], 0, 10)) }}
                   @endif
               </td>
           </tr>

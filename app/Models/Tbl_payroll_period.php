@@ -90,7 +90,7 @@ class Tbl_payroll_period extends Model
 		return $query;
 	}
 
-	public function scopeGetEmployeeAllPeriodRecords($query, $employee_id, $month)
+	public function scopeGetEmployeeAllPeriodRecords($query, $employee_id, $month, $branch, $company)
 	{
 		$query->join("tbl_payroll_period_company","tbl_payroll_period_company.payroll_period_id","=","tbl_payroll_period.payroll_period_id")
 		->join("tbl_payroll_time_keeping_approved","tbl_payroll_time_keeping_approved.payroll_period_company_id","=","tbl_payroll_period_company.payroll_period_company_id")
@@ -106,6 +106,17 @@ class Tbl_payroll_period extends Model
 		{
 			$query->where("month_contribution",$month);
 		}
+
+		if($branch != 0)
+		{
+			$query->where("tbl_payroll_employee_basic.branch_location_id", $branch);
+		}
+
+		if($company != 0)
+		{
+			$query->where("tbl_payroll_employee_basic.payroll_employee_company_id", $company);
+		}
+		
 		return $query;
 	}   
 

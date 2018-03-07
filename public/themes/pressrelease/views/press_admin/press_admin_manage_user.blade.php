@@ -37,8 +37,14 @@
 
         <div class="press-release-content">
            <div id="new_user_account" class="tabcontent user-media-container">
-               <div class="title-container">Registration for New User</div><br>
-                
+               <div class="title-container">Registration for New User</div>
+               @if(session()->has('message'))
+                  <div class="details">
+                  <span style="color: red;">
+                    <strong>Error!</strong> {{ session('message') }}<br>
+                  </span>
+                  </div>
+                @endif<br>
                <form method="post" action="/pressadmin/add_user" enctype="multipart/form-data" >
                 {{csrf_field()}}
                 <div class="register-form" >
@@ -46,7 +52,7 @@
                     <option selected>--Costing Option--</option>
                      <option value="1">1 Time sending</option>
                      <option value="3">3 Times sending</option>
-                     <option value="5">5 times sending</option>
+                     <option value="5">5 Times sending</option>
                      <option value="30">6 Months Contract / maximum 30 campaigns within 6 months / 15,000 emails</option>
                      <option value="60">12 Months Contract / maximum 60 Campaigns within 6 months / 30,000 emails</option>
                   </select> 
@@ -86,14 +92,6 @@
                 <div class="register-form">
                  <input type="file" name="user_company_image" id="user_company_image" accept=".png, .jpg, .jpeg">
                 </div>
-                
-                @if(session()->has('message'))
-                  <div class="details">
-                  <span style="color: red;">
-                    <strong>Error!</strong> {{ session('message') }}<br>
-                  </span>
-                  </div>
-                @endif
 
                 <div class="button-container">
                     <button type="submit">Submit</button>

@@ -95,7 +95,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-9" style="padding-left: 0px; padding-right: 0px;">
-					<div class="heading-container">PRESSIQ - Account already expired</div>
+					<div class="heading-container">Account already expired</div>
 				</div>
 			</div>
 			<div class="row">

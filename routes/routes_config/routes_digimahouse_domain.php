@@ -60,80 +60,77 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
  
 
 
-	Route::any('/signin', 'Shop\ShopLoginController@signin');
-	Route::any('/forgot/password', 'Shop\ShopLoginController@forgot_password'); //ROMMEL C.
-	Route::any('/forgot/password/send', 'Shop\ShopLoginController@forgot_password_send');
-	Route::any('/forgot/password/change', 'Shop\ShopLoginController@forgot_password_change');
-	Route::any('/forgot/password/change/submit', 'Shop\ShopLoginController@forgot_password_change_submit');
-	Route::any('/logout', 'Shop\ShopMemberController@logout');
-	Route::any('/thank_you','Shop\ShopLoginController@thank_you');//PRESS RELEASE
-	Route::post('/contactus', 'Shop\ShopContactController@contact_us');
-	Route::any('/contactus/send', 'Shop\ShopMemberController@send_contact_us');
-	Route::any('/demo/send', 	  'Shop\ShopMemberController@send_demo');
-	Route::any('/newsletter/send', 	  'Shop\ShopMemberController@send_newsletter');
-	Route::any('/sign_up', 'Shop\ShopRegisterController@press_signup'); //PRESS RELEASE
-	Route::get('/pressuser', 'Shop\ShopMemberController@pressuser'); //PRESS RELEASE
-	Route::get('/newsroom',			'Shop\ShopNewsRoomController@index');//PRESS RELEASE
-	Route::any('/newsroom/search',	'Shop\ShopNewsRoomController@newsroom_search');//PRESS RELEASE
-	Route::any('/mediacontacts/search',	'Shop\ShopMemberController@mediacontacts_search');//PRESS RELEASE
-	Route::get('/newsroom/view/{pid}','Shop\ShopNewsRoomController@news_room_view');//PRESS RELEASE
-	Route::get('/pressuser/choose_recipient', 'Shop\ShopMemberController@pressuser_choose_recipient');
-	Route::get('/pressuser/choose_recipient_view', 'Shop\ShopMemberController@choose_recipient_view');
+	Route::any('/signin',	 										'Shop\ShopLoginController@signin');
+	Route::any('/forgot/password',				    				'Shop\ShopLoginController@forgot_password'); //ROMMEL C.
+	Route::any('/forgot/password/send',								'Shop\ShopLoginController@forgot_password_send');
+	Route::any('/forgot/password/change', 							'Shop\ShopLoginController@forgot_password_change');
+	Route::any('/forgot/password/change/submit', 					'Shop\ShopLoginController@forgot_password_change_submit');
+	Route::any('/logout', 											'Shop\ShopMemberController@logout');
+	Route::any('/thank_you',										'Shop\ShopLoginController@thank_you');//PRESS RELEASE
+	Route::post('/contactus', 										'Shop\ShopContactController@contact_us');
+	Route::any('/contactus/send', 									'Shop\ShopMemberController@send_contact_us');
+	Route::any('/demo/send', 	  				  					'Shop\ShopMemberController@send_demo');
+	Route::any('/newsletter/send', 	 			  					'Shop\ShopMemberController@send_newsletter');
+	Route::any('/sign_up', 											'Shop\ShopRegisterController@press_signup'); //PRESS RELEASE
+	Route::get('/pressuser', 										'Shop\ShopMemberController@pressuser'); //PRESS RELEASE
+	Route::get('/newsroom',											'Shop\ShopNewsRoomController@index');//PRESS RELEASE
+	Route::any('/newsroom/search',									'Shop\ShopNewsRoomController@newsroom_search');//PRESS RELEASE
+	Route::any('/mediacontacts/search',								'Shop\ShopMemberController@mediacontacts_search');//PRESS RELEASE
+	Route::get('/newsroom/view/{pid}',								'Shop\ShopNewsRoomController@news_room_view');//PRESS RELEASE
+	Route::get('/pressuser/choose_recipient', 						'Shop\ShopMemberController@pressuser_choose_recipient');
+	Route::get('/pressuser/choose_recipient_view',  				'Shop\ShopMemberController@choose_recipient_view');
 	Route::get('/pressuser/mypressrelease/pressrelease/view/{pid}', 'Shop\ShopMemberController@pressuser_view'); //PRESS RELEASE
-	Route::get('/pressuser/dashboard', 'Shop\ShopMemberController@pressuser_dashboard'); //PRESS RELEASE
-	Route::any('/pressuser/pressrelease', 'Shop\ShopMemberController@pressuser_pressrelease'); //PRESS RELEASE
-	Route::any('/pressuser/pressrelease/recipient', 'Shop\ShopMemberController@pressuser_pressrelease_recipient'); //PRESS RELEASE
-	Route::any('/pressrelease/track/open', 'Shop\ShopMemberController@press_release_track_open');
-	Route::any('/pressuser/pressrelease/recipient/search', 'Shop\ShopMemberController@pressuser_pressrelease_recipient_search'); //PRESS RELEASE
-	Route::any('/pressuser/pressrelease/pr','Shop\ShopMemberController@send_pr');
-	Route::any('/pressuser/mypressrelease', 'Shop\ShopMemberController@pressuser_my_pressrelease'); //PRESS RELEASE
-	Route::any('/pressuser/pressrelease/delete_draft/{pid}','Shop\ShopMemberController@pressuser_delete_draft');
-	Route::any('/pressuser/pressrelease/edit_draft/{pid}','Shop\ShopMemberController@pressuser_edit_draft');
-	Route::any('/pressuser/pressrelease/draft','Shop\ShopMemberController@press_release_save_as_draft');
-	Route::any('/pressuser/drafts','Shop\ShopMemberController@press_user_drafts');
-	Route::any('/pressuser/manage_user','Shop\ShopMemberController@press_user_manage_user');
-	Route::any('/pressuser/image_upload', 'Shop\ShopMemberController@pressreleases_image_upload');//PRESS RELEASE
-	Route::any('/pressuser/manage_user','Shop\ShopMemberController@press_user_manage_user'); 
-	Route::any('/pressuser/manage_user/update','Shop\ShopMemberController@press_user_manage_user_update');
-	Route::get('/pressadmin', 'Shop\ShopMemberController@pressadmin'); //PRESS RELEASE
-	Route::get('/pressadmin/dashboard', 'Shop\ShopMemberController@pressadmin_dashboard'); //PRESS RELEASE
-	Route::get('/pressadmin/dashboard/view', 'Shop\ShopMemberController@pressadmin_dashboard_view'); //PRESS RELEASE
-	Route::get('/pressadmin/mediacontacts', 'Shop\ShopMemberController@pressadmin_media_contacts'); //PRESS RELEASE
-	Route::any('/pressadmin/manage_user/add_admin', 'Shop\ShopMemberController@manage_user_add_admin'); //PRESS RELEASE
-	Route::any('/pressadmin/manage_user/delete_admin/{id}', 'Shop\ShopMemberController@manage_user_delete_admin'); //PRESS RELEASE
-	Route::any('/pressadmin/manage_user', 'Shop\ShopMemberController@manage_user'); //PRESS RELEASE
-	Route::get('/pressadmin/email',				'Shop\ShopMemberController@pressadmin_email'); //PRESS RELEASE
-	Route::any('/pressadmin/manage_user_search',	'Shop\ShopMemberController@manage_user_search');//PRESS RELEASE
-	Route::any('/pressadmin/add_user',		'Shop\ShopMemberController@add_user');   
-	Route::get('/pressadmin/edit_user/{id}','Shop\ShopMemberController@edit_user'); //PRESS RELEASE
-	Route::any('/pressadmin/manage_user_edit','Shop\ShopMemberController@pressadmin_manage_user_edit'); //PRESS RELEASE
-	Route::get('/pressadmin/delete_user/{id}','Shop\ShopMemberController@manage_user_delete_user'); //PRESS RELEASE
-	Route::any('/pressadmin/manage_force_login/{id}','Shop\ShopMemberController@pressadmin_manage_force_login'); //PRESS RELEASE
-	Route::get('/pressadmin/edit_admin/{id}','Shop\ShopMemberController@edit_admin'); //PRESS RELEASE
-	Route::any('/pressadmin/manage_admin_edit','Shop\ShopMemberController@pressadmin_manage_admin_edit'); //PRESS RELEASE
-	Route::any('/pressadmin/email_save','Shop\ShopMemberController@pressadmin_email_save'); //PRESS RELEASE
-	Route::any('/pressadmin/email_edit/{id}','Shop\ShopMemberController@pressadmin_email_edit'); //PRESS RELEASE
-	Route::get('/pressadmin/email_delete/{id}', 'Shop\ShopMemberController@email_delete'); //PRESS RELEASE
-	Route::get('/pressuser/analytics', 'Shop\ShopMemberController@press_release_analytics');
-	Route::get('/pressuser/analytics/view', 'Shop\ShopMemberController@press_release_analytics_campaign');
-	Route::get('/pressuser/analytics/view/all', 'Shop\ShopMemberController@press_release_analytics_view_all');
-	Route::get('/pressuser/media_contacts', 'Shop\ShopMemberController@pressuser_media_contacts');
-	Route::any('/pressuser/media_contacts/add', 'Shop\ShopMemberController@pressuser_media_contacts_add');
-	Route::any('/pressuser/media_contacts/delete/{id}', 'Shop\ShopMemberController@pressuser_media_contacts_delete');
-	Route::post('/pressadmin/pressreleases/recipient', 'Shop\ShopMemberController@pressadmin_pressreleases_recipient'); //PRESS RELEASE
-	Route::any('/pressadmin/pressreleases_addrecipient', 'Shop\ShopMemberController@pressadmin_pressrelease_addrecipient');//PRESS RELEASE
-	Route::any('/pressadmin/pressreleases_deleterecipient/{id}', 'Shop\ShopMemberController@pressreleases_deleterecipient');//PRESS RELEASE
-	Route::any('/pressadmin/pressreleases_edit_recipient/{id}', 'Shop\ShopMemberController@pressreleases_edit_recipient');//PRESS RELEASE
-	Route::get('/pressadmin/import_recipient', 'Shop\ShopMemberController@press_admin_import_email');//PRESS RELEASE
+	Route::get('/pressuser/dashboard', 								'Shop\ShopMemberController@pressuser_dashboard'); //PRESS RELEASE
+	Route::any('/pressuser/pressrelease', 							'Shop\ShopMemberController@pressuser_pressrelease'); //PRESS RELEASE
+	Route::any('/pressuser/pressrelease/recipient',					'Shop\ShopMemberController@pressuser_pressrelease_recipient'); //PRESS RELEASE
+	Route::any('/pressrelease/track/open', 							'Shop\ShopMemberController@press_release_track_open');
+	Route::any('/pressuser/pressrelease/recipient/search', 			'Shop\ShopMemberController@pressuser_pressrelease_recipient_search'); //PRESS RELEASE
+	Route::any('/pressuser/pressrelease/pr',						'Shop\ShopMemberController@send_pr');
+	Route::any('/pressuser/mypressrelease', 						'Shop\ShopMemberController@pressuser_my_pressrelease'); //PRESS RELEASE
+	Route::any('/pressuser/pressrelease/delete_draft/{pid}',		'Shop\ShopMemberController@pressuser_delete_draft');
+	Route::any('/pressuser/pressrelease/edit_draft/{pid}',			'Shop\ShopMemberController@pressuser_edit_draft');
+	Route::any('/pressuser/pressrelease/draft', 					'Shop\ShopMemberController@press_release_save_as_draft');
+	Route::any('/pressuser/drafts',									'Shop\ShopMemberController@press_user_drafts');
+	Route::any('/pressuser/manage_user',							'Shop\ShopMemberController@press_user_manage_user');
+	Route::any('/pressuser/image_upload', 							'Shop\ShopMemberController@pressreleases_image_upload');//PRESS RELEASE
+	Route::any('/pressuser/manage_user',							'Shop\ShopMemberController@press_user_manage_user'); 
+	Route::any('/pressuser/manage_user/update',						'Shop\ShopMemberController@press_user_manage_user_update');
+	Route::get('/pressadmin', 										'Shop\ShopMemberController@pressadmin'); //PRESS RELEASE
+	Route::get('/pressadmin/dashboard', 							'Shop\ShopMemberController@pressadmin_dashboard'); //PRESS RELEASE
+	Route::get('/pressadmin/dashboard/view', 						'Shop\ShopMemberController@pressadmin_dashboard_view'); //PRESS RELEASE
+	Route::get('/pressadmin/mediacontacts', 						'Shop\ShopMemberController@pressadmin_media_contacts'); //PRESS RELEASE
+	Route::any('/pressadmin/manage_user/add_admin', 				'Shop\ShopMemberController@manage_user_add_admin'); //PRESS RELEASE
+	Route::any('/pressadmin/manage_user/delete_admin/{id}', 		'Shop\ShopMemberController@manage_user_delete_admin'); //PRESS RELEASE
+	Route::any('/pressadmin/manage_user',							'Shop\ShopMemberController@manage_user'); //PRESS RELEASE
+	Route::get('/pressadmin/email',									'Shop\ShopMemberController@pressadmin_email'); //PRESS RELEASE
+	Route::any('/pressadmin/manage_user_search',					'Shop\ShopMemberController@manage_user_search');//PRESS RELEASE
+	Route::any('/pressadmin/add_user',								'Shop\ShopMemberController@add_user');   
+	Route::get('/pressadmin/edit_user/{id}',						'Shop\ShopMemberController@edit_user'); //PRESS RELEASE
+	Route::any('/pressadmin/manage_user_edit',						'Shop\ShopMemberController@pressadmin_manage_user_edit'); //PRESS RELEASE
+	Route::get('/pressadmin/delete_user/{id}',						'Shop\ShopMemberController@manage_user_delete_user'); //PRESS RELEASE
+	Route::any('/pressadmin/manage_force_login/{id}',				'Shop\ShopMemberController@pressadmin_manage_force_login'); //PRESS RELEASE
+	Route::get('/pressadmin/edit_admin/{id}',						'Shop\ShopMemberController@edit_admin'); //PRESS RELEASE
+	Route::any('/pressadmin/manage_admin_edit',						'Shop\ShopMemberController@pressadmin_manage_admin_edit'); //PRESS RELEASE
+	Route::any('/pressadmin/email_save',							'Shop\ShopMemberController@pressadmin_email_save'); //PRESS RELEASE
+	Route::any('/pressadmin/email_edit/{id}',						'Shop\ShopMemberController@pressadmin_email_edit'); //PRESS RELEASE
+	Route::get('/pressadmin/email_delete/{id}',					 	'Shop\ShopMemberController@email_delete'); //PRESS RELEASE
+	Route::get('/pressuser/analytics', 								'Shop\ShopMemberController@press_release_analytics');
+	Route::get('/pressuser/analytics/view', 						'Shop\ShopMemberController@press_release_analytics_campaign');
+	Route::get('/pressuser/analytics/view/all', 					'Shop\ShopMemberController@press_release_analytics_view_all');
+	Route::get('/pressuser/media_contacts', 						'Shop\ShopMemberController@pressuser_media_contacts');
+	Route::any('/pressuser/media_contacts/add',						'Shop\ShopMemberController@pressuser_media_contacts_add');
+	Route::any('/pressuser/media_contacts/delete/{id}', 			'Shop\ShopMemberController@pressuser_media_contacts_delete');
+	Route::post('/pressadmin/pressreleases/recipient',				'Shop\ShopMemberController@pressadmin_pressreleases_recipient'); //PRESS RELEASE
+	Route::any('/pressadmin/pressreleases_addrecipient',		    'Shop\ShopMemberController@pressadmin_pressrelease_addrecipient');//PRESS RELEASE
+	Route::any('/pressadmin/pressreleases_deleterecipient/{id}', 	'Shop\ShopMemberController@pressreleases_deleterecipient');//PRESS RELEASE
+	Route::any('/pressadmin/pressreleases_edit_recipient/{id}', 	'Shop\ShopMemberController@pressreleases_edit_recipient');//PRESS RELEASE
+	Route::get('/pressadmin/import_recipient', 						'Shop\ShopMemberController@press_admin_import_email');//PRESS RELEASE
+	Route::get('importExport', 										'Shop\ShopMemberController@importExport');
+	Route::get('downloadExcel/{type}',  							'Shop\ShopMemberController@downloadExcel');
+	Route::post('importExcel', 										'Shop\ShopMemberController@importExcel');
 	
-	Route::get('importExport', 			'Shop\ShopMemberController@importExport');
-	Route::get('downloadExcel/{type}',  'Shop\ShopMemberController@downloadExcel');
-	Route::post('importExcel', 			'Shop\ShopMemberController@importExcel');
-	// Route::get('/pressrelease/view','Shop\ShopMemberController@press_email');//PRESS RELEASE
-	Route::get('/announcement', 'Shop\ShopAboutController@announcement'); //Alternative
 
-	
-	
+	Route::get('/announcement', 'Shop\ShopAboutController@announcement'); //Alternative
 	Route::get('/blog', 'Shop\ShopBlogController@index');
 	Route::get('/blog/content', 'Shop\ShopBlogContentController@index');
 	Route::get('/payment', 'Shop\ShopPaymentController@index');

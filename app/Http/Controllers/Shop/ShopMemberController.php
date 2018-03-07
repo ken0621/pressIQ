@@ -279,9 +279,7 @@ class ShopMemberController extends Shop
     // }
     public function logout()
     {
-        Session::flush();
-
-       
+        Session::flush();    
         return Redirect::to("/");
     }
     public function pressuser()
@@ -304,7 +302,6 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }   
     }
-
 
      public function pressuser_dashboard()
     {
@@ -493,12 +490,12 @@ class ShopMemberController extends Shop
 
             $data["page"] = "Press Release - Press Release";
             return view("press_user.press_user_pressrelease", $data);
-        }
-    }
+        } 
+    }    
 
     public function send($pr_info)        
     {
-        dd('Sorry Website Underconstruction!');
+        dd('Sorry Website Under Construction!');
         // $to  = explode(",", $pr_info['pr_to']);
         // $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
 
@@ -878,7 +875,6 @@ class ShopMemberController extends Shop
             }
             else
             {
-                
                 $analytics_view = json_decode($response);
                 $new_analytic_view = [];
                 foreach ($analytics_view as $key => $value) 
@@ -893,12 +889,12 @@ class ShopMemberController extends Shop
                 $data["page"] = "Campaign Detail";
                 return view("press_user.press_user_analytics_view",$data);
             }
-        }
+        }    
         else
         {
            return Redirect::to("/"); 
         }
-    }
+    }   
 
     public function press_release_analytics_view_all()
     {
@@ -953,7 +949,7 @@ class ShopMemberController extends Shop
            return Redirect::to("/"); 
         }  
     }
-
+   
     /* Tracking Press Release */
     public function press_release_track_open()
     {
@@ -990,9 +986,9 @@ class ShopMemberController extends Shop
         else
         {
             return Redirect::to("/"); 
-        }
-    }  
-
+        }        
+    }    
+ 
     public function pressuser_media_contacts_add(Request $request)
     {
       $data["name"]                      = $request->name;
@@ -1176,28 +1172,28 @@ class ShopMemberController extends Shop
       return view("press_admin.search_press_admin_media_contacts", $data);
     }
 
-    public function add_user(Request $request)
+    public function add_user(Request $request)  
     {
 
         if(request()->isMethod("post"))
         {       
-            $value["user_first_name"]=request('user_first_name');
-            $rules["user_first_name"]=['required'];
-            $value["user_last_name"]=request('user_last_name'); 
-            $rules["user_last_name"]=['required'];
-            $value["user_email"]=request('user_email');
-            $rules["user_email"]=['required','min:5','unique:tbl_pressiq_user,user_email'];
-            $value["password"] = request('user_password');
+            $value["user_first_name"]       = request('user_first_name');
+            $rules["user_first_name"]       = ['required'];
+            $value["user_last_name"]        = request('user_last_name'); 
+            $rules["user_last_name"]        = ['required'];
+            $value["user_email"]            = request('user_email');
+            $rules["user_email"]            = ['required','min:5','unique:tbl_pressiq_user,user_email'];
+            $value["password"]              = request('user_password');
             $value["password_confirmation"] = request("user_password_confirmation");
-            $rules["password"] = ['required','min:5','confirmed'];
-            $value["user_company_name"] = request("user_company_name");
-            $rules["user_company_name"] = ['required'];
-            $value["user_country"]=request('user_country');
-            $rules["user_country"]=['required'];
-            $value["user_company_image"] = request("user_company_image");
-            $rules["user_company_image"] = ['required'];
-            $validator = Validator::make($value, $rules);
-
+            $rules["password"]              = ['required','min:5','confirmed'];
+            $value["user_company_name"]     = request("user_company_name");
+            $rules["user_company_name"]     = ['required'];
+            $value["user_country"]          = request('user_country');
+            $rules["user_country"]          = ['required'];
+            $value["user_company_image"]    = request("user_company_image");   
+            $rules["user_company_image"]    = ['required'];  
+            $validator                      = Validator::make($value, $rules);         
+  
             if ($validator->fails()) 
             {
                 return Redirect::to("/pressadmin/manage_user")->with('message', $validator->errors()->first())->withInput();
@@ -1372,7 +1368,6 @@ class ShopMemberController extends Shop
    
     public function pressadmin_email()
     {   
-
         $data['_email'] = Tbl_pressiq_press_releases::orderByRaw('pr_date_sent DESC')
                           ->paginate(10);
 
@@ -1417,7 +1412,7 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }
 
-    }    
+    }      
 
      public function importExcel(Request $request)     
     {  
@@ -1426,7 +1421,7 @@ class ShopMemberController extends Shop
         {
             Excel::load($request->file('import_file')->getRealPath(), function ($reader) 
             {
-                foreach ($reader->toArray() as $key => $rows) 
+                foreach ($reader->toArray() as $key => $row) 
                 {
 
                     $data['research_email_address']  = $row['research_email_address'] != null ? $row['research_email_address']:'';
@@ -1480,7 +1475,8 @@ class ShopMemberController extends Shop
         {
             return Redirect::to("/"); 
         }
-    }
+    } 
+    
     public function pressadmin_email_save(Request $request)
     {   
         DB::table('tbl_pressiq_press_releases')
@@ -1555,7 +1551,7 @@ class ShopMemberController extends Shop
         return Redirect::back();
     }
   
-    public function pressuser_choose_recipient(Request $request)
+    public function pressuser_choose_recipient(Request $request)  
     {
         $filter["country"]             = $request->choose_country;
         $filter["industry_type"]       = $request->industry_type;
@@ -1565,7 +1561,7 @@ class ShopMemberController extends Shop
         
         if($filter["country"]=="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["title_of_journalist"]=="")
         {
-            dd("Select a filter data");           
+            dd("Select Data Required!");           
         }
         if ($filter["country"]!="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["title_of_journalist"]=="")
         {

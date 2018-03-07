@@ -1006,6 +1006,7 @@ class Transaction
     }
     public static function consume_payment($shop_id, $transaction_list_id, $slot_id)
     {        
+        $return = null;
         $amount = Customer::get_points_wallet_per_slot($slot_id);
         $cart_wallet_amount = Cart2::cart_payment_amount($shop_id,'wallet');
         $cart_gc_amount = Cart2::cart_payment_amount($shop_id,'gc');

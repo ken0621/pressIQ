@@ -1,11 +1,14 @@
-
+	@if(!isset($v2))
     <h4 class="modal-title" style="font-weight: bold;"><b>{{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }} {{ $employee->payroll_employee_last_name }}<br></h4>
-
+    @endif	
     <div class="modal-body clearfix">
                 <div class="table-responsive">
                      <table class="table table-bordered table-striped table-condensed" style="table-layout: fixed;">
 					    <thead style="text-transform: uppercase">
 					        <tr>
+					        	@if(isset($v2))
+					        	<th valign="center" rowspan="2" class="text-center" style="width: 200px">Name</th>
+					        	@endif
 					            <th valign="center" rowspan="2" class="text-center" style="width: 200px">PERIOD DATE</th>
 					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">BASIC PAY</th>
 					            <th valign="center" rowspan="2" class="text-center" style="width: 120px">Over Time PAY</th>
@@ -54,6 +57,9 @@
 					    <tbody>
 					    	 @foreach($_employee as $lbl => $period)
 						    	<tr>
+						    		@if(isset($v2))
+						        	<td class="text-center">{{$period->payroll_employee_display_name}}</td>
+						        	@endif
 						    	 	<td class="text-center">{{$period->payroll_period_start}} - {{$period->payroll_period_end}}</td>
 						    	 	<td class="text-center">{{number_format($period->net_basic_pay,2)}}</td>
 						    	 	<td class="text-center" >{{ number_format($period->overtime,2) }}</td>
@@ -89,6 +95,9 @@
 					    	 @endforeach
 					    	  	<tr >
 							   		<td class="text-center" ><b>Total</b></td>
+							   		@if(isset($v2))
+						        	<td class="text-center" ></td>
+						        	@endif
 							    	<td class="text-center" ><b>{{ number_format($total_basic,2) }}</b></td>
 							    	<td class="text-center" ><b>{{ number_format($overtime_total,2) }}</b></td>
 							    	<td class="text-center" ><b>{{ number_format($nightdiff_total,2) }}</b></td>

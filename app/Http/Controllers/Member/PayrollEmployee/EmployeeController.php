@@ -444,8 +444,8 @@ class EmployeeController extends PayrollMember
     	$data["employee_company"] 	= Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
     	$data['period_record'] 		= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
 
-    	$data["period_record_start"]		= date("F d, Y", strtotime($data["period_record"]->payroll_period_start));
-		$data["period_record_end"]			= date("F d, Y", strtotime($data["period_record"]->payroll_period_end));
+    	$data["period_record_start"]		= date("F d", strtotime($data["period_record"]->payroll_period_start));
+		$data["period_record_end"]			= date("F d", strtotime($data["period_record"]->payroll_period_end));
 		$data["period_record_release_date"]	= date("F d, Y", strtotime($data["period_record"]->payroll_release_date));
 
 		//dd(unserialize($data["period_record"]->cutoff_input));
@@ -476,10 +476,13 @@ class EmployeeController extends PayrollMember
 		$data['total_sss_ee'] = 0 ;
 		$data['total_philhealth_ee'] = 0 ;
 		$data['total_pagibig_ee'] = 0 ;
-
+		$data['total_gross_pay'] = 0;
+		$data['total_tax_pay'] = 0;
 
 		foreach($data['total_period_record'] as $total)	
-		{
+		{	
+			$data['total_tax_pay'] += $total->taxable_salary;
+			$data['total_gross_pay'] += $total->gross_pay;
 			$data['total_net_pay'] += $total->net_pay;
 			$data['total_tax_ee'] += $total->tax_ee;
 			$data['total_sss_ee'] += $total->sss_ee;
@@ -487,9 +490,12 @@ class EmployeeController extends PayrollMember
 			$data['total_pagibig_ee'] += $total->pagibig_ee;
 		}
 
+		$format["title"] = "A4";
+		$format["format"] = "A4";
+		$format["default_font"] = "sans-serif";		
 		//return view('member.payroll2.employee_dashboard.employee_payslip', $data);
-		$pdf = view('member.payroll2.employee_dashboard.employee_payslip_pdf', $data);
-        return Pdf_global::show_pdf($pdf);
+        $pdf = PDF2::loadView('member.payroll2.employee_dashboard.employee_payslip_pdf', $data, [], $format);
+		return $pdf->stream('document.pdf');
         
     }
 

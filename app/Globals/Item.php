@@ -244,21 +244,24 @@ class Item
 
             Tbl_item::where("shop_id", $shop_id)->where("item_id", $item_id)->update($update);
 
-            //patrick
-            $check = Tbl_item_token::where('item_id',$item_id)->first();
-            if($check)
+            // Patrick
+            if ($token) 
             {
-                Tbl_item_token::where('item_id',$item_id)->update($token);
-            }
-            else
-            {
-                $insert['item_id']      = $item_id;
-                $insert['token_id']     = $token['token_id'];
-                $insert['amount']       = $token['amount'];
-                Tbl_item_token::insert($insert);
+                $check = Tbl_item_token::where('item_id',$item_id)->first();
+
+                if($check)
+                {
+                    Tbl_item_token::where('item_id',$item_id)->update($token);
+                }
+                else
+                {
+                    $insert['item_id']      = $item_id;
+                    $insert['token_id']     = $token['token_id'];
+                    $insert['amount']       = $token['amount'];
+                    Tbl_item_token::insert($insert);
+                }
             }
             
-
             $return['item_id']       = $item_id;
             $return['status']        = 'success';
             $return['message']       = 'Item successfully updated.';

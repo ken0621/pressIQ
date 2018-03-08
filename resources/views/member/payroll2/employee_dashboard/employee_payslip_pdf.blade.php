@@ -104,17 +104,18 @@
                 {{$period_record->payroll_employee_number}}
         </div>
           <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
-                Gender
+                Position
         </div>
          <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold;">
-               {{$period_record->payroll_employee_gender}}
+               {{$position[0]["payroll_jobtitle_name"]}}
         </div>
-          <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
-                Date Hired
+        <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                Department
         </div>
-         <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
- 
+         <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold;">
+               {{$position[0]["payroll_department_name"]}}
         </div>
+
         </div>
 
         <div class="contri">
@@ -275,7 +276,19 @@
         </div>
         <div class="line" style="height: 1px;background-color:  #909090;width: 100%;">
       </div>
+      <br>
 
+
+          <h4 style="color:#585858;font-weight: bold;text-align: center;margin: 0;">Performance Summary</h4>
+          <hr>
+           @foreach($period_record->cutoff_breakdown->_time_breakdown as $key => $time_breakdown)
+                       <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                            {{ strtoupper(str_replace("_"," ",$key)) }}
+                        </div>
+                        <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+                         {{ $time_breakdown["time"] }}
+                     </div>
+           @endforeach  
     </div>
 
 </body>

@@ -250,6 +250,7 @@ class RequestForPaymentController extends PayrollMember
 		$parameter['date']					= date('Y-m-d');
 		$parameter['company_id']			= 0;
 		$parameter['employement_status']	= 0;
+		$parameter['branch_id']				= 0;
 		$parameter['shop_id'] 				= $this->employee_info->shop_id;
 
 		$data['request_payment_info'] 		= Tbl_payroll_request_payment::where('payroll_request_payment_id',$request_id)->first();

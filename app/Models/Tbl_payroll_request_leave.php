@@ -66,4 +66,30 @@ class Tbl_payroll_request_leave extends Model
 
       return $query;
     }
+
+    public function scopeGetLeaveInfo($query, $payroll_employee_id, $leaveemployeeid)
+    {
+      $query->join('tbl_payroll_leave_employee_v2','tbl_payroll_request_leave.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
+             ->select(DB::raw('tbl_payroll_leave_employee_v2.payroll_leave_temp_hours, sum(tbl_payroll_request_leave.consume) as total_leave_consume, (tbl_payroll_leave_employee_v2.payroll_leave_temp_hours - sum(tbl_payroll_request_leave.consume)) as remaining_leave'))
+             ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
+       ->where('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id)
+       ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id', $leaveemployeeid)
+       ->where('tbl_payroll_request_leave.payroll_leave_employee_id', $leaveemployeeid)
+       ->where('tbl_payroll_request_leave.archived',0)->where('payroll_request_leave_status','approved');
+
+       return $query;
+    }
+
+    public function scopeGetLeaveInfoV2($query, $payroll_employee_id, $leaveemployeeid)
+    {
+      $query->join('tbl_payroll_leave_employee_v2','tbl_payroll_request_leave.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
+             ->select(DB::raw('tbl_payroll_request_leave.payroll_request_leave_type, tbl_payroll_leave_employee_v2.payroll_leave_temp_hours, sum(tbl_payroll_request_leave.consume) as total_leave_consume, (tbl_payroll_leave_employee_v2.payroll_leave_temp_hours - sum(tbl_payroll_request_leave.consume)) as remaining_leave'))
+             ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
+       ->where('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id)
+       ->whereIn('tbl_payroll_leave_employee_v2.payroll_leave_employee_id', $leaveemployeeid)
+       ->whereIn('tbl_payroll_request_leave.payroll_leave_employee_id', $leaveemployeeid)
+       ->where('tbl_payroll_request_leave.archived',0)->where('payroll_request_leave_status','approved');
+
+       return $query;
+    }
 }

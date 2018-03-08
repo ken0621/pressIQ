@@ -20,6 +20,8 @@ use App\Models\Tbl_payroll_shift_day;
 use App\Models\Tbl_payroll_approver_group;
 use App\Models\Tbl_payroll_request_overtime;
 use App\Models\Tbl_payroll_approver_employee;
+use App\Models\Tbl_payroll_leave_employeev2;
+use App\Models\Tbl_payroll_request_leave;
 use App\Globals\Payroll2;
 use App\Globals\Payroll;
 use App\Globals\Utilities;
@@ -112,10 +114,16 @@ class EmployeeController extends PayrollMember
 		$parameter['employement_status']	= 0;
 		$parameter['branch_id']				= 0;
 		$parameter['shop_id'] 				= $this->employee_info->shop_id;
-		$data["employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->where('tbl_payroll_employee_basic.payroll_employee_id',$this->employee_info->payroll_employee_id)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->first();
+		$payroll_employee_id 				= Self::employee_id();
+		$data["employee"] = Tbl_payroll_employee_basic::selemployee($parameter)->where('tbl_payroll_employee_basic.payroll_employee_id',$payroll_employee_id)->orderby("tbl_payroll_employee_basic.payroll_employee_number")->first();
 		$data["company"] = Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
-		$data["startdate"] = Tbl_payroll_employee_contract::where("tbl_payroll_employee_contract.payroll_employee_id", $this->employee_info->payroll_employee_id)->first();
-		
+		$data["startdate"] = Tbl_payroll_employee_contract::where("tbl_payroll_employee_contract.payroll_employee_id", $payroll_employee_id)->first();
+
+
+		$leaveemployeeid = Tbl_payroll_leave_employeev2::select('payroll_leave_employee_id')->where('payroll_employee_id',$payroll_employee_id)->where('payroll_leave_employee_is_archived',0)->get();
+
+		$data['leave_records'] = Tbl_payroll_request_leave::GetLeaveInfoV2($payroll_employee_id,$leaveemployeeid)->get();
+
 		return view('member.payroll2.employee_dashboard.employee_profile',$data);
 	}
 
@@ -281,6 +289,7 @@ class EmployeeController extends PayrollMember
 		$parameter['date']					= date('Y-m-d');
 		$parameter['company_id']			= 0;
 		$parameter['employement_status']	= 0;
+		$parameter['branch_id']				= 0;
 		$parameter['shop_id'] 				= $this->employee_info->shop_id;
 
 		$data['request_info'] = Tbl_payroll_request_overtime::where('payroll_request_overtime_id',$request_id)->EmployeeInfo()->first();
@@ -463,6 +472,8 @@ class EmployeeController extends PayrollMember
     	$data["employee_company"] 	= Tbl_payroll_company::where("tbl_payroll_company.payroll_company_id", $this->employee_info->payroll_employee_company_id)->first();
     	$data['period_record'] 		= Tbl_payroll_time_keeping_approved::employeePeriod($this->employee_info->payroll_employee_id)->where('tbl_payroll_period.payroll_period_id',$payroll_period_id)->first();
 
+    	$data["position"] = Tbl_payroll_employee_contract::selemployee($this->employee_info->payroll_employee_id)->contractlist($this->employee_info->payroll_employee_id,0)->get();
+
     	$data["period_record_start"]		= date("F d", strtotime($data["period_record"]->payroll_period_start));
 		$data["period_record_end"]			= date("F d", strtotime($data["period_record"]->payroll_period_end));
 		$data["period_record_release_date"]	= date("F d, Y", strtotime($data["period_record"]->payroll_release_date));
@@ -508,7 +519,6 @@ class EmployeeController extends PayrollMember
 			$data['total_philhealth_ee'] += $total->philhealth_ee;
 			$data['total_pagibig_ee'] += $total->pagibig_ee;
 		}
-
 		$format["title"] = "A4";
 		$format["format"] = "A4";
 		$format["default_font"] = "sans-serif";		

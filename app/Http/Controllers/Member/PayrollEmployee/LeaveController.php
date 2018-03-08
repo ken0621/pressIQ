@@ -331,13 +331,7 @@ class LeaveController extends PayrollMember
 
 			$leaveemployeeid = Tbl_payroll_leave_employeev2::where('payroll_employee_id',$payroll_employee_id)->where('payroll_leave_temp_id',$leave_temp_id)->value('payroll_leave_employee_id');
 
-			$empdata = Tbl_payroll_request_leave::join('tbl_payroll_leave_employee_v2','tbl_payroll_request_leave.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
-             ->select(DB::raw('tbl_payroll_leave_employee_v2.payroll_leave_temp_hours, sum(tbl_payroll_request_leave.consume) as total_leave_consume, (tbl_payroll_leave_employee_v2.payroll_leave_temp_hours - sum(tbl_payroll_request_leave.consume)) as remaining_leave'))
-             ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
-			 ->where('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id)
-			 ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id', $leaveemployeeid)
-			 ->where('tbl_payroll_request_leave.payroll_leave_employee_id', $leaveemployeeid)
-			 ->where('tbl_payroll_request_leave.archived',0)->where('payroll_request_leave_status','approved')->get();
+			$empdata = Tbl_payroll_request_leave::GetLeaveInfo($payroll_employee_id,$leaveemployeeid)->get();
 
 			 if(count($empdata) == 0)
 			 {
@@ -376,6 +370,7 @@ class LeaveController extends PayrollMember
 			$parameter['date']					= date('Y-m-d');
 			$parameter['company_id']			= 0;
 			$parameter['employement_status']	= 0;
+			$parameter['branch_id']				= 0;
 			$parameter['shop_id'] 				= $this->employee_info->shop_id;
 			$leave_temp_id_sick = Tbl_payroll_leave_tempv2::where('shop_id',Self::employee_shop_id())->where('payroll_leave_temp_name','Sick Leave')->value('payroll_leave_temp_id');
 			$payroll_employee_id = Self::employee_id();
@@ -384,13 +379,8 @@ class LeaveController extends PayrollMember
 
 			$leaveemployeeidsick = Tbl_payroll_leave_employeev2::where('payroll_employee_id',$payroll_employee_id)->where('payroll_leave_temp_id',$leave_temp_id_sick)->value('payroll_leave_employee_id');
 
-			$data['sickleave'] = Tbl_payroll_request_leave::join('tbl_payroll_leave_employee_v2','tbl_payroll_request_leave.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
-             ->select(DB::raw('tbl_payroll_leave_employee_v2.payroll_leave_temp_hours, sum(tbl_payroll_request_leave.consume) as total_leave_consume, (tbl_payroll_leave_employee_v2.payroll_leave_temp_hours - sum(tbl_payroll_request_leave.consume)) as remaining_leave'))
-             ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
-			 ->where('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id)
-			 ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id', $leaveemployeeidsick)
-			 ->where('tbl_payroll_request_leave.payroll_leave_employee_id', $leaveemployeeidsick)
-			 ->where('tbl_payroll_request_leave.archived',0)->where('payroll_request_leave_status','approved')->get();
+			$data['sickleave'] = Tbl_payroll_request_leave::GetLeaveInfo($payroll_employee_id,$leaveemployeeidsick)->get();
+
 
 
 			 $leave_temp_id_vacation = Tbl_payroll_leave_tempv2::where('shop_id',Self::employee_shop_id())->where('payroll_leave_temp_name','Vacation Leave')->value('payroll_leave_temp_id');
@@ -399,14 +389,7 @@ class LeaveController extends PayrollMember
 
 			 $leavevacation = Tbl_payroll_leave_employeev2::where('payroll_employee_id',$payroll_employee_id)->where('payroll_leave_temp_id',$leave_temp_id_vacation)->value('payroll_leave_employee_id');
 
-
-			 $data['vacationleave'] = Tbl_payroll_request_leave::join('tbl_payroll_leave_employee_v2','tbl_payroll_request_leave.payroll_leave_employee_id','=','tbl_payroll_leave_employee_v2.payroll_leave_employee_id')
-             ->select(DB::raw('tbl_payroll_leave_employee_v2.payroll_leave_temp_hours, sum(tbl_payroll_request_leave.consume) as total_leave_consume, (tbl_payroll_leave_employee_v2.payroll_leave_temp_hours - sum(tbl_payroll_request_leave.consume)) as remaining_leave'))
-             ->groupBy('tbl_payroll_leave_employee_v2.payroll_leave_temp_id')
-			 ->where('tbl_payroll_leave_employee_v2.payroll_employee_id', $payroll_employee_id)
-			 ->where('tbl_payroll_leave_employee_v2.payroll_leave_employee_id', $leavevacation)
-			 ->where('tbl_payroll_request_leave.payroll_leave_employee_id', $leavevacation)
-			 ->where('tbl_payroll_request_leave.archived',0)->where('payroll_request_leave_status','approved')->get();
+			 $data['vacationleave'] = Tbl_payroll_request_leave::GetLeaveInfo($payroll_employee_id,$leavevacation)->get();
 
 
 			$leaveemployeeid = Tbl_payroll_leave_employeev2::where('payroll_employee_id',$payroll_employee_id)->where('payroll_leave_temp_id',$leave_temp_id_sick)->value('payroll_leave_employee_id');

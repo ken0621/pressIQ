@@ -39,6 +39,9 @@
 	<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#government_information" role="tab" aria-controls="government_information" aria-selected="false">Government Information</a>
 	</li>
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#others" role="tab" aria-controls="others" aria-selected="false">Others</a>
+	</li>
 </ul>
 <div class="tab-content">
 	<div class="tab-pane active" id="personal_information" role="tabpanel" aria-labelledby="personal_information">
@@ -132,6 +135,33 @@
 			<div class="col-md-6">
 				<small>PHILHEATH No.</small>
 				<input class="form-control" value="{{ $employee->payroll_employee_philhealth }}" disabled>
+			</div>
+		</div>
+	</div>
+	<div class="tab-pane" id="others" role="tabpanel"  aria-labelledby="others">
+		<div class="row">
+			<div class="col-md-12">
+
+		 <table class="table table-bordered" style="font-size:12px;">
+            <thead>
+   				<tr>
+					<td style="text-align: center;">Leave Name</td>
+					<td style="text-align: center;">Leave Total</td>
+					<td style="text-align: center;">Used Leave</td>
+					<td style="text-align: center;">Remaing Leave</td>
+				</tr>
+            </thead>
+            <tbody class="tbl-tag">
+       		@foreach($leave_records as $leave)
+       			<tr>
+       				<td style="text-align: center;">{{$leave->payroll_request_leave_type}}</td>
+					<td style="text-align: center;">{{$leave->payroll_leave_temp_hours}}</td>
+					<td style="text-align: center;">{{$leave->total_leave_consume}}</td>
+					<td style="text-align: center;">{{$leave->remaining_leave}}</td>
+       			</tr>
+       		@endforeach           
+            </tbody>
+          </table>
 			</div>
 		</div>
 	</div>

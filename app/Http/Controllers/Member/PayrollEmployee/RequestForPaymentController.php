@@ -94,6 +94,19 @@ class RequestForPaymentController extends PayrollMember
 		
 		$request_payment_id = Tbl_payroll_request_payment::insertGetId($insert);
 
+       	$data['request_info'] = Tbl_payroll_request_payment::where('payroll_request_payment_id',$request_payment_id)->EmployeeInfo()->first();
+
+        $data['_group_approver'] = EmployeeController::get_group_approver_grouped_by_level(Self::employee_shop_id(),$data['request_info']['payroll_approver_group_id'], 'rfp');	
+
+        foreach($data['_group_approver'] as $level => $group_approver)
+        {
+       	 	foreach($group_approver as $key => $employee_approver)
+       	 	{
+   		    	EmployeeController::send_email_employee('request_rfp',$employee_approver->payroll_employee_email,Self::employee_shop_id(),$data['request_info']['payroll_employee_display_name']);
+       	 	}
+        }
+
+
 		$_request_payment_description = Request::input('request_payment_description');
 		$_request_payment_amount 	  = Request::input('request_payment_amount');
 
@@ -169,6 +182,8 @@ class RequestForPaymentController extends PayrollMember
 		if (Request::method() == 'POST') 
 		{
 			$request_info = Tbl_payroll_request_payment::where('payroll_request_payment_id',$request_id)->EmployeeInfo()->first();
+
+ 			$employee_email = Tbl_payroll_employee_basic::where('payroll_employee_id',$request_info['payroll_employee_id'])->value('payroll_employee_email');
 			
 			$_approver_group = collect(Tbl_payroll_approver_group::where('tbl_payroll_approver_group.payroll_approver_group_id', $request_info['payroll_approver_group_id'])
 										->EmployeeApproverInfo()->get())
@@ -181,6 +196,8 @@ class RequestForPaymentController extends PayrollMember
 			{
 				$update['payroll_request_payment_status'] = "approved";
 				Tbl_payroll_request_payment::where('payroll_request_payment_id',$request_id)->update($update);
+
+				EmployeeController::send_email_employee('rfp',$employee_email,Self::employee_shop_id(),null);
 			}
 			else
 			{

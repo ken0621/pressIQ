@@ -84,7 +84,6 @@ class LeaveController extends PayrollMember
 
 	public function employee_leave_application()
 	{
-
 		$shop_id = Self::employee_shop_id();
 		$employee_id = Self::employee_id();
 
@@ -209,6 +208,20 @@ class LeaveController extends PayrollMember
 		if(!empty($insert)) 
         {  
            	Tbl_payroll_request_leave::insert($insert);
+           	$request_id = Tbl_payroll_request_leave::orderBy('payroll_request_leave_id','desc')->first()->value('payroll_request_leave_id');
+
+           	$data['request_info'] = Tbl_payroll_request_leave::where('payroll_request_leave_id',$request_id)->EmployeeInfo()->first();
+
+            $data['_group_approver'] = Self::get_group_approver_grouped_by_level(Self::employee_shop_id(),$data['request_info']['payroll_approver_group_id'], 'leave');	
+
+           foreach($data['_group_approver'] as $level => $group_approver)
+           {
+           	 	foreach($group_approver as $key => $employee_approver)
+           	 	{
+       		    	EmployeeController::send_email_employee('request_leave',$employee_approver->payroll_employee_email,Self::employee_shop_id(),$data['request_info']['payroll_employee_display_name']);
+           	 	}
+           }
+
         }
 
 	   	$response['call_function'] = 'reload';
@@ -272,7 +285,9 @@ class LeaveController extends PayrollMember
 		if (Request::method() == 'POST') 
 		{
 			$request_info = Tbl_payroll_request_leave::where('payroll_request_leave_id',$request_id)->EmployeeInfo()->first();
-			
+
+ 			$employee_email = Tbl_payroll_employee_basic::where('payroll_employee_id',$request_info['payroll_employee_id'])->value('payroll_employee_email');
+
 			$_approver_group = collect(Tbl_payroll_approver_group::where('tbl_payroll_approver_group.payroll_approver_group_id', $request_info['payroll_approver_group_id'])
 										->EmployeeApproverInfo()->get())
 										->groupBy('payroll_approver_group_level');
@@ -284,6 +299,8 @@ class LeaveController extends PayrollMember
 			{
 				$update['payroll_request_leave_status'] = "approved";
 				Tbl_payroll_request_leave::where('payroll_request_leave_id',$request_id)->update($update);
+
+				EmployeeController::send_email_employee('leave',$employee_email,Self::employee_shop_id(),null);
 			}
 			else
 			{

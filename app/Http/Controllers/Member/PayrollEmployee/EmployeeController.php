@@ -31,6 +31,7 @@ use Session;
 use DB;
 use Request;
 use App\Http\Controllers\Member\PayrollMember;
+use App\Globals\Mail_global;
 
 use PDF2;
 use App\Globals\Pdf_global;
@@ -244,6 +245,20 @@ class EmployeeController extends PayrollMember
 		
 		Tbl_payroll_request_overtime::insert($insert);
 
+	   	$request_id = Tbl_payroll_request_overtime::orderBy('payroll_request_overtime_id','desc')->first()->value('payroll_request_overtime_id');
+
+       	$data['request_info'] = Tbl_payroll_request_overtime::where('payroll_request_overtime_id',$request_id)->EmployeeInfo()->first();
+
+        $data['_group_approver'] = Self::get_group_approver_grouped_by_level(Self::employee_shop_id(),$data['request_info']['payroll_approver_group_id'], 'overtime');	
+
+        foreach($data['_group_approver'] as $level => $group_approver)
+        {
+       	 	foreach($group_approver as $key => $employee_approver)
+       	 	{
+   		    	Self::send_email_employee('request_overtime',$employee_approver->payroll_employee_email,Self::employee_shop_id(),$data['request_info']['payroll_employee_display_name']);
+       	 	}
+        }
+
 		$response['status'] = 'success';
 		$response['call_function'] = 'reload_overtime_management';
 
@@ -348,6 +363,8 @@ class EmployeeController extends PayrollMember
 		{
 			$request_info = Tbl_payroll_request_overtime::where('payroll_request_overtime_id',$request_id)->EmployeeInfo()->first();
 			
+			$employee_email = Tbl_payroll_employee_basic::where('payroll_employee_id',$request_info['payroll_employee_id'])->value('payroll_employee_email');
+
 			$_approver_group = collect(Tbl_payroll_approver_group::where('tbl_payroll_approver_group.payroll_approver_group_id', $request_info['payroll_approver_group_id'])
 										->EmployeeApproverInfo()->get())
 										->groupBy('payroll_approver_group_level');
@@ -359,6 +376,8 @@ class EmployeeController extends PayrollMember
 			{
 				$update['payroll_request_overtime_status'] = "approved";
 				Tbl_payroll_request_overtime::where('payroll_request_overtime_id',$request_id)->update($update);
+
+				Self::send_email_employee('overtime',$employee_email,Self::employee_shop_id(),null);
 			}
 			else
 			{
@@ -587,6 +606,79 @@ class EmployeeController extends PayrollMember
 		return $_approver_group;
 	}
 
+	public static function send_email_employee($type,$email,$shop_id,$name)
+	{
+		switch ($type) {
+			case 'leave':
+						     $return["subject"] = "Leave Request";
+							 $return["content"] =  "Greetings!
+								<br>
+						       We would like to inform you that your application for leave has been APPROVED.
+						        <br>
+							   Thank you and have a nice day.
+							   <br>
+							   	<br>
+							   Respectfully,
+							   	<br>
+							   Admin";
+				Mail_global::send_email(null,$return,$shop_id,$email);
+				break;
+
+			case 'request_leave':
+						     $return["subject"] = "Leave Request awaiting for your approval";
+							 $return["content"] =  $name." has submitted a leave request";
+																
+				Mail_global::send_email(null,$return,$shop_id,$email);
+				break;
+
+			case 'overtime':
+						     $return["subject"] = "Leave Request";
+							 $return["content"] =  "Greetings!
+								<br>
+						       We would like to inform you that your application for overtime has been APPROVED.
+						        <br>
+							   Thank you and have a nice day.
+							   <br>
+							   	<br>
+							   Respectfully,
+							   	<br>
+							   Admin";
+				Mail_global::send_email(null,$return,$shop_id,$email);
+				break;
+
+			case 'request_overtime':
+						     $return["subject"] = "Overtime request awaiting for your approval";
+							 $return["content"] =  $name." has submitted an overtime request";
+																
+				Mail_global::send_email(null,$return,$shop_id,$email);
+				break;
+
+			case 'rfp':
+						     $return["subject"] = "RFP Request";
+							 $return["content"] =  "Greetings!
+								<br>
+						       We would like to inform you that your application for rfp has been APPROVED.
+						        <br>
+							   Thank you and have a nice day.
+							   <br>
+							   	<br>
+							   Respectfully,
+							   	<br>
+							   Admin";
+				Mail_global::send_email(null,$return,$shop_id,$email);
+				break;
+
+			case 'request_rfp':
+						     $return["subject"] = "RFP request awaiting for your approval";
+							 $return["content"] =  $name." has submitted an rfp request";
+																
+				Mail_global::send_email(null,$return,$shop_id,$email);
+				break;
+		}
+
+		return "success";
+
+	}
 
 	public function get_group_approver_list()
 	{

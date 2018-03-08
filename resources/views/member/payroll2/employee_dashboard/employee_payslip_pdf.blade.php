@@ -67,10 +67,10 @@
     <div class="period">
         <div class="header">
             <div class="sa" style="width:230px;text-align: center;float:left;font-size: 14px;color:#383838;">
-                PAY RUN
+                RELEASE DATE
             </div>
             <div class="sa" style="width:230px;text-align: center;float:left;font-size: 14px;color:#383838;">
-                PAY PERIOD
+                PAYROLL PERIOD
             </div>
             <div class="sa" style="width:230px;text-align: center;float:left;font-size: 14px;color:#383838;">
                 DAYS WORK
@@ -120,22 +120,36 @@
         <div class="contri">
             <h4 style="color:#585858;font-weight: bold;text-align: center;margin: 0;">Employer Contribution</h4>
             <hr>
-            @foreach($period_record->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
-                    @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
-                        @else
                     <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
-                        {{ strtoupper($breakdown["label"]) }}
+                        SSS ER
                     </div>
                      <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
-                           {{ payroll_currency($breakdown["amount"]) }}
+                           {{$period_record->sss_er}}
                     </div>
-                @endif
-           @endforeach
+                    <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                        SSS EC
+                    </div>
+                     <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+                           {{$period_record->sss_ec}}
+                    </div>
+                    <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                        PHILHEALTH ER
+                    </div>
+                     <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+                           {{$period_record->philhealth_er}}
+                    </div>
+                    <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+                        PAGIBIG ER
+                    </div>
+                     <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+                           {{$period_record->pagibig_er}}
+                    </div>
+
 
         </div>
 
         <div class="yeartodate">
-            <h4 style="color:#585858;font-weight: bold;text-align: center;margin: 0;">Year To Date Figures</h4>
+            <h4 style="color:#585858;font-weight: bold;text-align: center;margin: 0;">Year to Date Summary</h4>
             <hr>
          <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
                 Gross Salary
@@ -216,6 +230,20 @@
     <div class="line" style="height: 1px;background-color:  #909090;width: 100%;">
       </div>
       <br>
+
+
+        @foreach($period_record->cutoff_breakdown->_taxable_salary_breakdown as $breakdown)
+        @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
+        @else
+      <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
+            {{ strtoupper($breakdown["label"]) }}
+        </div>
+        <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
+            {{ payroll_currency($breakdown["amount"]) }}
+        </div>
+        @endif
+        @endforeach
+
 
    @foreach($period_record->cutoff_breakdown->_net_pay_breakdown as $breakdown)
         @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)

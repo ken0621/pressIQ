@@ -388,7 +388,7 @@ class ShopMemberController extends Shop
         }
     }
         
-    public function send_pr()    
+    public function send_pr()
     {
         $pr_info["pr_type"]            = request('pr_type');
         $pr_info["pr_headline"]        = request('pr_headline');
@@ -594,7 +594,7 @@ class ShopMemberController extends Shop
                     'pr_boiler_content' =>request('pr_boiler_content'),
                     'pr_from'           =>session('user_email'),
                     'pr_to'             =>request('pr_to'),
-                    'pr_status'         =>"draft",
+                    'pr_status'         =>"Draft",
                     'pr_date_sent'      =>$date,
                     'pr_sender_name'    =>session('user_first_name').' '.session('user_last_name'),
                     'pr_receiver_name'  =>request('recipient_name'),
@@ -1329,13 +1329,13 @@ class ShopMemberController extends Shop
     public function pressadmin_manage_admin_edit()
     {
         DB::table('tbl_pressiq_user')
-        ->where('user_id', session('edit_admin'))
-        ->update([
-            'user_first_name'     =>request('first_name'),
-            'user_last_name'      =>request('last_name'),
-            'user_email'          =>request('email'),
-            'user_company_name'   =>request('company_name')
-            ]);
+                        ->where('user_id', session('edit_admin'))
+                        ->update([
+                            'user_first_name'     =>request('first_name'),
+                            'user_last_name'      =>request('last_name'),
+                            'user_email'          =>request('email'),
+                            'user_company_name'   =>request('company_name')
+                            ]);
         Session::forget('edit_admin');
         Session::flash('success_admin', 'Admin Successfully Updated!');
         return redirect()->back();
@@ -1394,6 +1394,7 @@ class ShopMemberController extends Shop
 
      public function press_admin_import_email()    
     {
+      
         if(Session::exists('user_email'))
         {
            $level=session('pr_user_level');
@@ -1411,16 +1412,19 @@ class ShopMemberController extends Shop
         {
             return Redirect::to("/"); 
         }
+
     }      
 
      public function importExcel(Request $request)     
     {  
+
         if($request->hasFile('import_file'))          
         {
             Excel::load($request->file('import_file')->getRealPath(), function ($reader) 
             {
                 foreach ($reader->toArray() as $key => $row) 
                 {
+
                     $data['research_email_address']  = $row['research_email_address'] != null ? $row['research_email_address']:'';
                     $data['company_name']            = $row['company_name'] != null ? $row['company_name']:'';
                     $data['name']                    = $row['name'] != null ? $row['name']:'';
@@ -1511,17 +1515,17 @@ class ShopMemberController extends Shop
             DB::table('tbl_press_release_recipients')
             ->where('recipient_id', session('r_edit'))
             ->update([
-                        'name'                  =>$data["name"],
-                        'position'              =>$data["position"],
-                        'company_name'          =>$data["company_name"],
-                        'country'               =>$data["country"],
-                        'research_email_address'=>$data["research_email_address"],
-                        'website'               =>$data["website"],
-                        'media_type'            =>$data["media_type"],
-                        'industry_type'         =>$data["industry_type"],
-                        'title_of_journalist'   =>$data["title_of_journalist"],
-                        'description'           =>$data["description"]
-                        ]);
+                    'name'                  =>$data["name"],
+                    'position'              =>$data["position"],
+                    'company_name'          =>$data["company_name"],
+                    'country'               =>$data["country"],
+                    'research_email_address'=>$data["research_email_address"],
+                    'website'               =>$data["website"],
+                    'media_type'            =>$data["media_type"],
+                    'industry_type'         =>$data["industry_type"],
+                    'title_of_journalist'   =>$data["title_of_journalist"],
+                    'description'           =>$data["description"]
+                    ]);
             Session::forget('r_edit');
             Session::flash('success_merchant', 'Recipient Successfully Updated!');
         }

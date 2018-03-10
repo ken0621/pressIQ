@@ -233,7 +233,6 @@ function payrollconfiguration()
 		reload_configuration("/member/payroll/allowance");
 	}
 
-
 	this.reload_allowancev2 = function()
 	{
 		reload_configuration("/member/payroll/allowance/v2");
@@ -246,10 +245,6 @@ function payrollconfiguration()
 
 	this.reload_leavev2_temp = function(data)
 	{
-		if(data.status == "success")
-		{
-			toastr.success("Success");
-		}
 		reload_configuration("/member/payroll/leave/v2");
 	}
 	

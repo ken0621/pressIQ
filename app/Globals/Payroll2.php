@@ -4535,11 +4535,11 @@ class Payroll2
 				}
 				else if($period_count == 'last_period')
 				{
-					$sss_contribution["ee"] = $sss_contribution["ee"] - $total_cutoff;
+					$sss_contribution["ee"] = round($sss_contribution["ee"] - $total_cutoff,2);
 				}
 				else
 				{	
-					$sss_contribution["ee"] = $sss_contribution["ee"] / $divisor;
+					$sss_contribution["ee"] = round($sss_contribution["ee"] / $divisor,2);
 					$sss_contribution["er"] = round($sss_contribution["er"] / $divisor,2);
 					$sss_contribution["ec"] = round($sss_contribution["ec"] / $divisor,2);
 				}				
@@ -4718,11 +4718,11 @@ class Payroll2
 				}
 				else if($period_count == 'last_period')
 				{
-					$philhealth_contribution["ee"] = $philhealth_contribution["ee"] - $total_cutoff;
+					$philhealth_contribution["ee"] = round($philhealth_contribution["ee"] - $total_cutoff,2);
 				}
 				else
 				{
-					$philhealth_contribution["ee"] = $philhealth_contribution["ee"] / $divisor;
+					$philhealth_contribution["ee"] = round($philhealth_contribution["ee"] / $divisor,2);
 					$philhealth_contribution["er"] = round($philhealth_contribution["er"] / $divisor,2);
 				}
 			}
@@ -4888,11 +4888,11 @@ class Payroll2
 			}
 			else if($period_count == 'last_period')
 			{
-				$pagibig_contribution["ee"] = $pagibig_contribution["ee"] - $total_cutoff;
+				$pagibig_contribution["ee"] = round($pagibig_contribution["ee"] - $total_cutoff,2);
 			}
 			else
 			{
-				$pagibig_contribution["ee"] = $pagibig_contribution["ee"] / $divisor;
+				$pagibig_contribution["ee"] = round($pagibig_contribution["ee"] / $divisor,2);
 				$pagibig_contribution["er"] = round(@($pagibig_tbl["payroll_pagibig_er_share"] / $divisor),2);
 			}
 		}
@@ -5612,7 +5612,7 @@ class Payroll2
 			}
 		}
 
-		$deduction = Payroll::getdeductionv2($employee_id, $start_date, $end_date, $period_category_arr['period_category'], $period_category, $shop_id);
+		$deduction = Payroll::getdeductionv2($employee_id, $start_date, $end_date, $period_category_arr['period_category'], $period_category, $shop_id, $period_info['month_contribution']);
 		
 		if(isset($deduction["deduction"]))
 		{

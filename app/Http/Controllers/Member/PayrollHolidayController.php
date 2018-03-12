@@ -228,6 +228,7 @@ class PayrollHolidayController extends Member
         $parameter['date']                  = date('Y-m-d');
         $parameter['company_id']            = $company_id;
         $parameter['employement_status']    = 0;
+        $parameter['branch_id']             = 0;
         $parameter['shop_id']               = Self::shop_id();
 
         $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_company_id',$company_id)->first();

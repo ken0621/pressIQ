@@ -625,6 +625,18 @@ function limit_foreach($iterable, $limit)
         yield $key => $value;
     }
 }
+function limit_foreach2($iterable, $limit) 
+{
+    $return = null;
+    foreach ($iterable as $key => $value)
+    {
+        if($key <= $limit)
+        {
+            $return[$key] = $value;
+        }
+    }
+    return $return;
+}
 function payout_getway()
 {
     $data[0] = 'Bank Deposit';

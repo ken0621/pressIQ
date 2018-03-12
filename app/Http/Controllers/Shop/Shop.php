@@ -34,7 +34,6 @@ class Shop extends Controller
     public static $slot_now;
 
     public static $lead;
-
     public function __construct()
     {
     	$domain = get_domain();

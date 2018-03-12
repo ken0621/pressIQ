@@ -283,7 +283,7 @@
 				<div class="col-md-8 col-sm-8 col-xs-12 events-holder">
 					<div class="per-event-container">
 						@if(count(get_front_news($shop_id)) > 0)
-							@foreach(limit_foreach(get_front_news($shop_id), 3) as $news)
+							@foreach(limit_foreach2(get_front_news($shop_id), 3) as $news)
 									<div class="per-event desk row clearfix">
 										<div class="col-md-4 col-sm-4 col-xs-4">
 											<div class="event-image-container">

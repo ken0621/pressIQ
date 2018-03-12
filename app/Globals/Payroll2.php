@@ -4536,6 +4536,8 @@ class Payroll2
 				else if($period_count == 'last_period')
 				{
 					$sss_contribution["ee"] = round($sss_contribution["ee"] - $total_cutoff,2);
+					$sss_contribution["er"] = round($sss_contribution["er"] / $divisor,2);
+					$sss_contribution["ec"] = round($sss_contribution["ec"] / $divisor,2);
 				}
 				else
 				{	
@@ -4719,6 +4721,7 @@ class Payroll2
 				else if($period_count == 'last_period')
 				{
 					$philhealth_contribution["ee"] = round($philhealth_contribution["ee"] - $total_cutoff,2);
+					$philhealth_contribution["er"] = round($philhealth_contribution["er"] / $divisor,2);
 				}
 				else
 				{
@@ -4889,6 +4892,7 @@ class Payroll2
 			else if($period_count == 'last_period')
 			{
 				$pagibig_contribution["ee"] = round($pagibig_contribution["ee"] - $total_cutoff,2);
+				$pagibig_contribution["er"] = round(@($pagibig_tbl["payroll_pagibig_er_share"] / $divisor),2);
 			}
 			else
 			{

@@ -3206,7 +3206,7 @@ class Payroll
 	}
 
 
-	public static function getdeductionv2($employee_id = 0, $date_start = '0000-00-00', $date_end = '0000-00-00', $period = '', $payroll_period_category = '', $shop_id = 0, $month_contri = '')
+	public static function getdeductionv2($employee_id = 0, $date_start = '0000-00-00', $date_end = '0000-00-00', $period = '', $payroll_period_category = '', $shop_id = 0, $month_contri = '', $period_count = '')
 	{
 		if (date('m',strtotime($date_start)) == '02') //check if february date start
 		{
@@ -3261,7 +3261,7 @@ class Payroll
 				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $payroll_total_payment_amount["total_payment"];
 			}
 
-			if ($period == "Last Period") 
+			if ($period == "Last Period" && $period_count != "middle_period") 
 			{
 
 				if (($temp["payroll_periodal_deduction"] + $payroll_month_payment_amount["total_payment"]) <=  $deduction->payroll_monthly_amortization) 

@@ -530,7 +530,7 @@ class PayrollDeductionController extends Member
           }
           
           // dd($employee_id, $period_info['payroll_period_end'], $period_info['period_count'], $period_info['payroll_period_category'], $period_info['shop_id']);
-          $_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_start'], $period_info['payroll_period_end'], $period_info['period_count'], $period_info['payroll_period_category'], $period_info['shop_id'], $period_info['month_contribution']);
+          $_deduction = Payroll::getdeductionv2($employee_id, $period_info['payroll_period_start'], $period_info['payroll_period_end'], $period_info['period_count'], $period_info['payroll_period_category'], $period_info['shop_id'], $period_info['month_contribution'], $period_info['period_count']);
 
           foreach ($_deduction['deduction'] as $deduction) 
           {

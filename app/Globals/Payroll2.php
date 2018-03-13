@@ -206,6 +206,7 @@ class Payroll2
 	}
 	public static function get_contribution_information_for_a_month_filter($shop_id, $month, $year,$company_id,$branch_id)
 	{	
+
 		$month_number = $month;
 		$month = DateTime::createFromFormat('!m', $month)->format('F');
 
@@ -259,6 +260,7 @@ class Payroll2
 
 					$total_philhealth_ee = $employee->philhealth_ee;
 					$total_philhealth_er = $employee->philhealth_er;
+
 				}
 				else
 				{
@@ -4519,10 +4521,14 @@ class Payroll2
 				/* CHECK EXCEED MONTH */
 				$_cutoff = Tbl_payroll_time_keeping_approved::periodCompany($payroll_company_id)->where("tbl_payroll_time_keeping_approved.payroll_period_company_id", "!=", $payroll_period_company_id)->where("tbl_payroll_time_keeping_approved.employee_id", $employee_id)->where("month_contribution", $period_month)->where("year_contribution", $period_year)->orderBy("time_keeping_approve_id", "desc")->get();
 				$total_cutoff = 0;
+				$total_cutoff_er = 0;
 
 				foreach($_cutoff as $cutoff)
 				{
 					$rounded_sss = round($cutoff->sss_ee,2);
+					$rounded_ser = round($cutoff->sss_er,2);
+
+					$total_cutoff_er += $rounded_ser;
 					$total_cutoff += $rounded_sss;
 				}
 
@@ -4536,7 +4542,7 @@ class Payroll2
 				else if($period_count == 'last_period')
 				{
 					$sss_contribution["ee"] = round($sss_contribution["ee"] - $total_cutoff,2);
-					$sss_contribution["er"] = round($sss_contribution["er"] / $divisor,2);
+					$sss_contribution["er"] = round($sss_contribution["er"] - $total_cutoff_er,2);
 					$sss_contribution["ec"] = round($sss_contribution["ec"] / $divisor,2);
 				}
 				else

@@ -104,7 +104,7 @@ $content-text: 'Roboto', sans-serif;
 		.right
 		{
 			font-family: $content-text;
-			font-weight: 7 00;
+			font-weight: 700;
 			font-size: 15px;
 			color: #768997;
 		}
@@ -152,7 +152,7 @@ $content-text: 'Roboto', sans-serif;
 		.right
 		{
 			font-family: $content-text;
-			font-weight: 7 00;
+			font-weight: 700;
 			font-size: 15px;
 			color: #768997;
 		}	
@@ -195,7 +195,7 @@ $content-text: 'Roboto', sans-serif;
 		.right
 		{
 			font-family: $content-text;
-			font-weight: 7 00;
+			font-weight: 700;
 			font-size: 15px;
 			color: #768997;
 		}	
@@ -207,6 +207,12 @@ $content-text: 'Roboto', sans-serif;
 	.slot-holder
 	{
 		border-bottom:  1px solid #e3e3e3;
+
+		&:last-of-type
+		{
+			border-bottom: 0px;
+		}
+
 		.left
 		{
 			flex: 1;
@@ -330,6 +336,11 @@ $content-text: 'Roboto', sans-serif;
 	{
 		border-bottom:  1px solid #e3e3e3;
 
+		&:last-of-type
+		{
+			border-bottom: 0px;
+		}
+
 		.left
 		{
 			flex: 1;
@@ -387,6 +398,11 @@ $content-text: 'Roboto', sans-serif;
 	.rewards-holder
 	{
 		border-bottom:  1px solid #e3e3e3;
+
+		&:last-of-type
+		{
+			border-bottom: 0px;
+		}
 
 		.bullet
 		{

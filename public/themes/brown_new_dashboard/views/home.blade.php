@@ -371,12 +371,12 @@
 											<div class="bullet d-flex align-items-center">
 												<div class="square bp"></div>
 												<div class="left ml-3">Builder Points</div>
-												<div class="right ml-auto">PHP 0.00</div>
+												<div class="right ml-auto">0.00 PTS</div>
 											</div>
 											<div class="bullet d-flex align-items-center">
 												<div class="square lp"></div>
 												<div class="left ml-3">Leader Points</div>
-												<div class="right ml-auto">PHP 0.00</div>
+												<div class="right ml-auto">0.00 PTS</div>
 											</div>
 										</div>
 									</div>
@@ -659,36 +659,8 @@
 									</div>
 									<div class="section-title ml-2">Upcoming Events</div>
 								</div>
-								<div class="bottom-section-content" style="overflow-y: auto; overflow-x: hidden; max-height: 300px;">
+								<div class="bottom-section-content" style="overflow-y: auto; overflow-x: hidden; max-height: 280px;">
 								<!-- <div class="bottom-section-content scrollbar scrollbar-default force-overflow"> -->
-									<div class="event-holder d-flex mt-2">
-										<div class="left">
-											<div class="view overlay">
-											    <img src="/themes/brown_new_dashboard/assets/img/event-1.png" class="img-fluid " alt="">
-											    <div class="mask flex-center rgba-black-strong">
-											        <!-- <p class="white-text">Strong overlay</p> -->
-											        <div class="date-month text-center">
-										        		<div class="date white-text">17</div>
-										        		<div class="month white-text">March</div>
-											        </div>
-											    </div>
-											</div>
-										</div>
-										<div class="right d-flex flex-column ml-3">
-											<div class="top ml-2">
-												<div class="title">MCE MARCH</div>
-												<div class="description">Masterclass in creative Entrepreneurship</div>
-											</div>
-											<div class="bottom d-flex align-items-center">
-												<div class="m-2">
-													<button class="btn-cust-brown w-100">Details</button>
-												</div>
-												<div class="m-2">
-													<button class="btn-cust-brown w-100">Reserve a Seat</button>
-												</div>
-											</div>
-										</div>
-									</div>
 									<div class="event-holder d-flex mt-2">
 										<div class="left">
 											<div class="view overlay">

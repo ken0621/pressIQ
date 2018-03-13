@@ -72,21 +72,6 @@
 					</div>
 				</div>
 			</div>
-			<!-- <div class="right flex-wrap">
-				<div class="profile-dropdown">
-					<div class="dropdown">
-						<a class="dropbtn" href="javascript:">
-							<img src="//themes/brown_new_dashboard/assets/aeolus/img/member/user-icon.png" alt="" width="24" height="24" style="border-radius: 100%">
-							<span class="name">LOREM IPSUM</span>
-							<i class="fa fa-angle-down" aria-hidden="true"></i>
-						</a>
-						<div class="dropdown-content">
-							<a href="/profile_settings">Settings</a>
-							<a href="/logout">Logout</a>
-						</div>
-					</div>
-				</div>
-			</div> -->
 		</div>
 		<div class="subnav">
 			<div class="container">

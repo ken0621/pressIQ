@@ -1,138 +1,203 @@
-.product-container
-{
-	background-color: #fff;
-	padding: 50px 0;
-	.left-container
-	{
-		text-align: center;
-		.image-holder
-		{
-			img
-			{
-				width: 70%;
-			}
-			@media screen and (max-width: 425px)
-			{
-				img
-				{
-					width: 100%;
-				}
-			}
-		}
-	}
-	.right-container
-	{
-		margin-top: 20px;
-		.title-container
-		{
-			text-align: center;
-			.icon-container
-			{
-				margin-left: 20px;
-				vertical-align: middle;
-				img
-				{
-					width: 85%;
-					@media screen and (max-width: 375px)
-					{
-						width: 60%;
-					}
-				}
-			}
-			.title
-			{
+@import "../../../assets/front/sass/mixin";
 
-				font-family: 'PT Serif', serif;
-				color: #474747;
-				font-weight: 700;
-				font-size: 25px;
-				@media screen and (max-width: 375px)
-				{
-					font-size: 20px;
-				}
-				@media screen and (max-width: 320px)
-				{
-					font-size: 17px;
-				}
-			}
-			span
-			{
-				vertical-align: middle;
-				display: inline-block;
-				margin-bottom: 20px;
-				@media screen and (max-width: 768px)
-				{
-					margin-bottom: 0px;
-				}
-			}
-		}
-		.description-container
-		{
-			font-size: 17px;
-			font-family: 'PT Sans', sans-serif;
-			color: #575757;
-			margin-top: 20px;
-			@media screen and (max-width: 320px)
-			{
-				font-size: 15px;
-			}
-			ul
-			{
-				li
-				{
-					margin-bottom: 15px;
-				}
-			}	
-		}
-	}
-	.other-info-container
-	{
-		padding: 20px 40px;
-		@media screen and (max-width: 768px)
-		{
-			padding: 20px 0;
-		}
-		.header
-		{
-			font-family: 'PT Serif', serif;
-			color: #474747;
-			font-weight: 700;
-			font-size: 20px;
-			text-align: center;
-			margin-bottom: 20px;
-			@media screen and (max-width: 375px)
-			{
-				font-size: 18px;
-			}
-			@media screen and (max-width: 320px)
-			{
-				font-size: 15px;
-			}
-		}
-		.title
-		{
-			font-family: 'PT Serif', sans-serif;
-			color: #575757;
-			font-weight: 700;
-			font-size: 15px;
-			@media screen and (max-width: 375px)
-			{
-				font-size: 13px;
-			}
-		}
-		.list-container
-		{
-			// font-size: 17px;
-			font-family: 'PT Sans', sans-serif;
-			color: #575757;
-			margin-top: 10px;
-			ul
-			{
-				li
-				{
-					margin-bottom: 10px;
-				}
-			}	
-		}
-	}
+$display-text: 'Ubuntu', sans-serif;
+$content-text: 'Open Sans', sans-serif;
+
+body 
+{
+    font-family: $content-text;
+    background-color: #f6f6f6;
+    color: #747474;
+}
+
+.top-1-container 
+{
+    padding: 50px 0;
+
+    @media screen and (max-width: 800px)
+    {
+        padding: 30px 0px 40px 0px;
+    }
+
+    .prod-container 
+    {
+        .cat-promo-holder 
+        {
+            @media screen and (max-width: 991px) 
+            {
+                display: none;
+            }
+
+            /* CATEGORIES */
+            .cat-container 
+            {
+                .cat-title-container 
+                {
+                    padding: 10px 10px 10px 15px;
+                    background-color: #000;
+                    border-radius: 5px 5px 0px 0px;
+
+                    span 
+                    {
+                        color: white;
+                        font-size: 18px;
+                        font-weight: 600;
+                        margin-left: 5px;
+                    }
+                }
+
+                .cat-list-container 
+                {
+                    background-color: #fff;
+
+                    .cat-list 
+                    {
+                        color: #1c1c1c;
+                        font-size: 13px;
+                        font-weight: 400;
+                        padding: 18px;
+                        border-bottom: 1px solid #ededed;
+
+                        &:last-child 
+                        {
+                            border-bottom: none;
+                        }
+
+                        &:hover, &.active 
+                        {
+                            cursor: pointer;
+                            color: #585858;
+                        }
+                    }
+                }
+            }
+
+            /* PROMOS */
+            .promo-container 
+            {
+                margin-top: 20px;
+
+                .title-container 
+                {
+                    padding: 10px 10px 10px 15px;
+                    border-radius: 5px 5px 0px 0px;
+                    background-color: #585858;
+                    color: white;
+                    font-size: 18px;
+                    font-weight: 600;
+                }
+
+                .promo-content 
+                {
+                    position: relative;
+                    border-radius: 0px 0px 5px 5px;
+
+                    img 
+                    {
+                        width: 100%;
+                    }
+
+                    .learn-more-button 
+                    {
+                        position: absolute;
+                        bottom: 10px;
+                        right: 10px;
+                        width: 40%;
+                        background-color: #585858;
+                        padding: 10px 0px 10px 0px;
+                        text-align: center;
+                        font-size: 13px;
+                        font-weight: 600;
+                        color: white;
+
+                        &:hover 
+                        {
+                            cursor: pointer;
+                            background-color: #2869d1;
+                        }
+                    }
+                }
+            }
+        }
+
+        .product-list-holder 
+        {
+            @media screen and (max-width: 414px) 
+            {
+                width: 100%;
+            }
+
+            /* PRODUCT LISTING */
+            .prod-list-container 
+            {
+                .title-container 
+                {
+                    position: relative;
+                    padding: 10px 10px 10px 0px;
+                    font-size: 18px;
+                    font-weight: 600;
+                    color: #1c1c1c;
+                    font-family: 'PT Serif', sans-serif;
+                    border-bottom: 1px solid #d1d1d1;
+
+                    .line-bot 
+                    {
+                        position: absolute;
+                        width: 5%;
+                        height: 1px;
+                        bottom: -1px;
+                        left: 0px;
+                        background-color: #585858;
+                    }
+
+                    @media screen and (max-width: 500px)
+                    {
+                        padding: 10px;
+                    }
+                }
+
+                .prod-list 
+                {
+                    width: 100%;
+                    padding: 20px 0px 20px 0px;
+
+                    @media screen and (max-width: 600px) 
+                    {
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+                    .per-album-container 
+                    {
+                        margin-top: 20px;
+                        width: 100%;
+                        background-color: white;
+                        padding: 5px;
+                        border: 1px solid #dedede;
+                        background-color: #fff;
+                        &:hover 
+                        {
+                            cursor: pointer;
+                            img 
+                            {
+                                opacity: 0.7;
+                                transition: 0.3s all ease;
+                            }
+                        }
+                        .img-container 
+                        {
+                            width: 100%;
+                            height: 194px;
+                            overflow: hidden;
+                            text-align: center;
+                            vertical-align: middle;
+                            img 
+                            {
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

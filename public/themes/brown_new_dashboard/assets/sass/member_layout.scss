@@ -1,0 +1,512 @@
+@mixin transition($transition)
+{
+    -webkit-transition: all $transition ease-in-out;
+    -moz-transition: all $transition ease-in-out;
+    -o-transition: all $transition ease-in-out;
+    transition: all $transition ease-in-out;
+}
+
+$display-text: 'Rubik', sans-serif;
+$content-text: 'Roboto', sans-serif;
+
+@import 'brown';
+@import 'scrollbars';
+
+html, body
+{
+	background-color: #F3F3F3;
+}
+
+// .header-bg
+// {
+//     background: rgba(97,112,245,1);
+//     background: -moz-linear-gradient(left, rgba(97,112,245,1) 0%, rgba(97,112,245,1) 0%, rgba(97,112,245,1) 0%, rgba(97,112,245,1) 0%, rgba(62,149,246,1) 100%);
+//     background: -webkit-gradient(left top, right top, color-stop(0%, rgba(97,112,245,1)), color-stop(0%, rgba(97,112,245,1)), color-stop(0%, rgba(97,112,245,1)), color-stop(0%, rgba(97,112,245,1)), color-stop(100%, rgba(62,149,246,1)));
+//     background: -webkit-linear-gradient(left, rgba(97,112,245,1) 0%, rgba(97,112,245,1) 0%, rgba(97,112,245,1) 0%, rgba(97,112,245,1) 0%, rgba(62,149,246,1) 100%);
+//     background: -o-linear-gradient(left, rgba(97,112,245,1) 0%, rgba(97,112,245,1) 0%, rgba(97,112,245,1) 0%, rgba(97,112,245,1) 0%, rgba(62,149,246,1) 100%);
+//     background: -ms-linear-gradient(left, rgba(97,112,245,1) 0%, rgba(97,112,245,1) 0%, rgba(97,112,245,1) 0%, rgba(97,112,245,1) 0%, rgba(62,149,246,1) 100%);
+//     background: linear-gradient(to right, rgba(97,112,245,1) 0%, rgba(97,112,245,1) 0%, rgba(97,112,245,1) 0%, rgba(97,112,245,1) 0%, rgba(62,149,246,1) 100%);
+//     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6170f5', endColorstr='#3e95f6', GradientType=1 );
+// }
+
+.header-bg
+{
+    background-color: #fff;
+}
+
+.scroll-to-fixed-fixed
+{
+    min-height: 100vh !important;
+
+    @media screen and (max-width: 800px)
+    {
+
+        display: none;
+        
+    }
+}
+
+.member
+{
+    background-color: #F3F3F3;
+
+    @media screen and (max-width: 800px)
+    {
+        padding-top: 0;
+    }
+
+    .members
+    {
+        background-color: #f3f3f3;
+        position: relative;
+        height: auto;
+        min-height: 100vh;
+
+        .header
+        {
+            //background-color: #e7d9bc;
+            @extend .header-bg;
+            //border-bottom: 2px solid #e3e3e3;
+            margin-left: 80px;
+
+            @media screen and (max-width: 768px)
+            {
+                margin-left: auto;
+            }
+
+			.left
+			{
+                border-bottom: 2px solid #e3e3e3;
+                padding: 15px;
+                flex: 3;
+
+                .bold-1
+                {
+                    font-family: $content-text;
+                    font-weight: 700;
+                    font-size: 14px;
+                    color: #271308;
+                }
+
+                .bold-2
+                {
+                    @extend .bold-1;
+                    color: #562b15;
+                }
+
+                .reminder-holder
+                {
+                    background-color: #e7d9bc;
+                    border-top-right-radius: 4px;
+                    border-bottom-right-radius: 4px;
+
+                    .reminder
+                    {
+                        font-family: $content-text;
+                        font-weight: 400;
+                        font-size: 14px;
+                        color: #562b15;
+                        padding: 10px;
+                        border-left: 5px solid #a87852;
+                    }
+                }
+			}
+
+			.right
+			{
+                flex: 2;
+
+                .wallet-and-balance-holder
+                {
+                    .current-wallet
+                    {
+                        border-bottom: 2px solid #1eb5b3;
+                        padding: 20px;
+                        flex: 3;
+
+                        .value
+                        {
+                            font-family: $content-text;
+                            font-weight: 700;
+                            color: #404040;
+                            font-size: 1.375rem;
+                        }
+
+                        .label
+                        {
+                            @extend .value;
+                            font-size: 13px;
+                            color: #1eb5b3;
+                        }
+                    }
+
+                    .ez-plan-balance
+                    {
+                        border-bottom: 2px solid #ec4e2f;
+                        padding: 20px;
+                        flex: 2;
+
+                        .value
+                        {
+                            font-family: $content-text;
+                            font-weight: 400;
+                            font-size: 14px;
+                            color: #404040;
+                        }
+
+                        .label
+                        {
+                            @extend .value;
+                            font-weight: 700;
+                            font-size: 13px;
+                            color: #ec4e2f;
+                        }
+                    }
+                }
+			}
+        }
+
+        .stay-aside
+        {
+           background-color: #110702;
+           width: 80px;
+        }
+
+        .sidebar
+        {
+            background-color: #110702;
+            width: 300px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            z-index: 10;
+            transition: 0.3s all ease;
+            // overflow: hidden;
+
+            @media screen and (max-width: 768px)
+            {
+                display: none;
+            }
+
+            .shadow
+            {
+                position: absolute;
+                left: 288px;
+                height: 100%;
+                width: 12px;
+                z-index: 11;
+            }
+
+            .side-nav
+            {
+                transition: 0.3s all ease;
+
+                ul
+                {
+                    margin: 0;
+                    padding: 0;
+
+                    li
+                    {
+                        display: block;
+                        position: relative;
+                        background-color: #110702;
+                        vertical-align: middle;
+
+                        a
+                        {
+                            display: block;
+                            width: 300px;
+                            transition: 0.3s all ease;
+                            overflow: hidden;
+                            text-decoration: none;
+
+                            .nav-holder
+                            {
+                            	@include transition(0.3s);
+                                padding: 20px 15px;
+                                color: #e7d9bc;
+                                font-family: $content-text;
+                                font-size: 13px;
+                                font-weight: 300;
+                                letter-spacing: 0.5px;
+                                // border-bottom: 1px solid rgba(255,255,255,0.1);
+                                border-bottom: 1px solid #261d19;
+                                padding-left: 25px;
+                                width: 300px;
+
+                                .icon
+                                {
+                                    display: inline-block;
+                                    width: 20px;
+                                    margin-right: 15px;
+                                    text-align: center;
+                                    font-size: 18px;
+                                    color: #e7d9bc;
+                                    //opacity: 0.5;
+
+                                    img
+                                    {
+                                    	//max-width: 20px;
+                                    }
+                                }
+
+                                span
+                                {
+                                	margin-left: 20px;
+                                    //opacity: 0.5;
+                                }
+
+                                .menu
+                                {
+                                    margin-left: -10px;
+                                    padding: 5px 0;
+
+                                    .image
+                                    {
+
+                                    }
+
+                                    .label
+                                    {
+                                        font-family: $content-text;
+                                        font-weight: 700;
+                                        font-size: 13px;
+                                        color: #e7d9bc;
+                                    }
+                                }
+
+                                .profile
+                                {
+                                    .image
+                                    {
+                                        margin-left: -10px;
+                                    }
+
+                                    .label
+                                    {
+                                        .name
+                                        {
+                                            max-width: 195px;
+                                            font-family: $content-text;
+                                            font-weight: 400;
+                                            font-size: 13px;
+                                            color: #e7d9bc;
+                                            word-wrap: break-word;
+                                        }
+
+                                        .email
+                                        {
+                                            @extend .name;
+                                            font-weight: 300;
+                                        }
+                                    }
+                                }
+                            }
+
+                            &:hover
+                            {
+                                .nav-holder
+                                {
+                                    // background-color: rgba(255,255,255,0.1);
+                                    background-color: #180f0a;
+                                    color: #fff;
+                                    text-decoration: none;
+                                    position: relative;
+
+                                    .hover-with-border-left
+                                    {
+                                    	position: absolute;
+                                    	left: 0;
+                                    	border-left: 5px solid #e7d9bc;
+                                    	height: 70px;
+                                    	vertical-align: middle;
+                                    	top: 0;
+                                    }
+
+                                    .icon
+                                    {
+                                        color: #e7d9bc;
+                                        opacity: 1;
+                                    }
+
+                                    img
+                                    {
+                                        opacity: 1;
+                                    }
+
+                                    span
+                                    {
+                                        opacity: 1;
+                                    }
+                                }
+                            }
+                        }
+
+                        &.active
+                        {
+                            > a
+                            {
+                                > .nav-holder
+                                {
+                                    // background-color: rgba(255,255,255,0.2);
+                                    background-color: #180f0a;
+                                    color: #fff;
+                                    text-decoration: none;
+                                    // border-color: #1F262C;
+
+                                    .icon
+                                    {
+                                        color: #fff;
+                                        opacity: 1;
+                                    }
+
+                                    img
+                                    {
+                                        opacity: 1;
+                                    }
+
+                                    span
+                                    {
+                                        opacity: 1;
+                                    }
+                                }
+                            }
+                        }
+
+                        > ul
+                        {
+                            display: none;
+                            position: absolute;
+                            left: 100%;
+                            top: 0;
+                            z-index: 12;
+                            //margin-left: -12px;
+
+                            &:hover
+                            {
+                                display: block;
+                            }
+
+                            > li
+                            {
+                                > a
+                                {
+                                    .nav-holder
+                                    {
+                                        background-color: #110702;
+                                        border-bottom: none;
+                                        padding: 10px 15px;
+
+                                        span, &:before
+                                        {
+                                            // opacity: 0.5;
+                                        }
+
+                                        &:hover
+                                        {
+                                            span, &:before
+                                            {
+                                                // opacity: 1;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        > a
+                        {
+                            &:hover + ul
+                            {
+                                display: block;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.small
+            {
+                width: 80px;
+                background-color: #110702;
+
+                .shadow
+                {
+                    display: none;
+                }
+
+                .side-nav
+                {
+                    ul
+                    {
+                        li
+                        {
+                            a
+                            {
+                                text-align: left !important;
+                                width: 80px;
+
+                                .nav-holder
+                                {
+                                    span
+                                    {
+                                        // opacity: 0;
+                                        transition: 0.3s all ease;
+                                    }
+
+                                    text-align: left;
+
+                                    .icon
+                                    {
+                                        img
+                                        {
+                                            
+                                            // opacity: 0.5;
+                                        }
+                                    }
+                                }
+                            }
+
+                            &.active
+                            {
+                                a
+                                {
+                                    .nav-holder
+                                    {
+                                        background-color: #180f0a;
+
+                                        .icon
+                                        {
+                                            img
+                                            {
+                                                opacity: 1;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .members-content
+        {
+            margin-left: 80px;
+            padding: 15px;
+            //overflow: auto;
+            background-color: #f3f3f3;
+            height: auto;
+
+            @media screen and (max-width: 768px)
+            {
+                margin-left: 0;
+            }
+
+            @import 'dashboard';
+        }
+    }
+}

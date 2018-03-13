@@ -1,0 +1,507 @@
+$display-text: 'Rubik', sans-serif;
+$content-text: 'Roboto', sans-serif;
+
+@import 'brown';
+
+.section-holder
+{
+	background-color: #fff;
+
+	.top-section-header
+	{
+		padding: 10px 15px;
+
+		.icon
+		{
+
+		}
+
+		.section-title
+		{
+			font-family: $content-text;
+			font-weight: 700;
+			font-size: 17px;
+			color: #404040;
+		}
+	}
+
+	.bottom-section-content
+	{
+		padding: 10px 15px;
+	}
+}
+
+.reward-summary
+{
+	min-height: 336px !important;
+
+	.rewards
+	{
+		.bullet
+		{
+			padding: 8px 0;
+
+			.square
+			{
+				width: 6px;
+				height: 6px;
+			}	
+
+			.pr
+			{
+				background-color: #2bb3cd;
+			}
+
+			.deb
+			{
+				background-color: #2276bc;
+			}
+
+			.ez
+			{
+				background-color: #612d82;
+			}
+
+			.br
+			{
+				background-color: #6f1e49;
+			}
+
+			.lr
+			{
+				background-color: #e3482c;
+			}
+
+			.tp
+			{
+				background-color: #8fc23f;
+			}
+
+			.ob
+			{
+				background-color: #ec4e2f;
+			}
+
+			.ed
+			{
+				background-color: #ec7523;
+			}
+
+			.ezpb
+			{
+				background-color: #febe40;
+			}
+		}
+
+		.left
+		{
+			font-family: $content-text;
+			font-weight: 400;
+			font-size: 15px;
+			color: #404040;
+		}
+
+		.right
+		{
+			font-family: $content-text;
+			font-weight: 7 00;
+			font-size: 15px;
+			color: #768997;
+		}
+	}
+}
+
+.ez-plan-balance
+{
+	.balance
+	{
+		.bullet
+		{
+			padding: 8px 0;
+
+			.square
+			{
+				width: 6px;
+				height: 6px;
+			}	
+
+			.ob
+			{
+				background-color: #ec4e2f;
+			}
+
+			.ed
+			{
+				background-color: #ec7523;
+			}
+
+			.ezpb
+			{
+				background-color: #febe40;
+			}
+		}
+
+		.left
+		{
+			font-family: $content-text;
+			font-weight: 400;
+			font-size: 15px;
+			color: #404040;
+		}
+
+		.right
+		{
+			font-family: $content-text;
+			font-weight: 7 00;
+			font-size: 15px;
+			color: #768997;
+		}	
+	}
+}
+
+.reward-points
+{
+	.points
+	{
+		.bullet
+		{
+			padding: 8px 0;
+
+			.square
+			{
+				width: 6px;
+				height: 6px;
+			}	
+
+			.bp
+			{
+				background-color: #612d82;
+			}
+
+			.lp
+			{
+				background-color: #b557a1;
+			}
+		}
+
+		.left
+		{
+			font-family: $content-text;
+			font-weight: 400;
+			font-size: 15px;
+			color: #404040;
+		}
+
+		.right
+		{
+			font-family: $content-text;
+			font-weight: 7 00;
+			font-size: 15px;
+			color: #768997;
+		}	
+	}
+}
+
+.my-slots
+{
+	.slot-holder
+	{
+		border-bottom:  1px solid #e3e3e3;
+		.left
+		{
+			flex: 1;
+
+			.replicated-link
+			{
+				flex: 1;
+
+				.label-bld
+				{
+					font-family: $content-text;
+					font-weight: 700;
+					font-size: 15px;
+					color: #404040;
+				}
+			}
+
+			.slot-wallet
+			{
+				flex: 1;
+
+				.label-reg
+				{
+					font-family: $content-text;
+					font-weight: 400;
+					font-size: 15px;
+					color: #404040;
+				}
+
+				.value
+				{
+					font-family: $content-text;
+					font-weight: 700;
+					font-size: 18px;
+					color: #768997;
+				}
+			}
+		}
+
+		.right
+		{
+			flex: 1;
+
+			.top
+			{
+				.label
+				{
+					font-family: $content-text;
+					font-weight: 400;
+					font-size: 15px;
+					color: #404040;
+				}
+			}
+
+			.bottom
+			{
+				.direct
+				{
+					flex: 1;
+					background-color: #a87852;
+					position: relative;
+					padding: 8px 15px;
+
+					span
+					{
+						position: relative;
+						font-family: $content-text;
+						font-weight: 700;
+						font-size: 13px;
+						color: #fff;
+						z-index: 2;
+					}
+
+					.gauge-1
+					{
+						background-color: #562b15;
+						position: absolute;
+						left: 0;
+						top: 0;
+						min-height: 40px;
+						min-width: 83px;
+						z-index: 1;
+					}
+
+				}
+
+				.group
+				{
+					@extend .direct;
+
+					.gauge-2
+					{
+						background-color: #562b15;
+						position: absolute;
+						left: 0;
+						top: 0;
+						min-height: 40px;
+						min-width: 70px;
+						z-index: 1;
+					}
+
+					.gauge-3
+					{
+						background-color: #562b15;
+						position: absolute;
+						left: 0;
+						top: 0;
+						min-height: 40px;
+						min-width: 10px;
+						z-index: 1;
+					}
+				}
+			}
+		}
+	}
+}
+
+.newest-enrollees
+{
+	.enrollees-holder
+	{
+		border-bottom:  1px solid #e3e3e3;
+
+		.left
+		{
+			flex: 1;
+
+			.profile-pic
+			{
+				img
+				{
+
+				}
+			}
+
+			.name-and-hour
+			{
+				.name
+				{
+					font-family: $content-text;
+					font-weight: 400;
+					font-size: 13px;
+					color: #404040;
+				}
+
+				.hour
+				{
+					@extend .name;
+				}
+			}
+		}
+
+		.right
+		{
+			flex: 1;
+
+			.uname
+			{
+				font-family: $content-text;
+				font-weight: 700;
+				font-size: 15px;
+				color: #404040;
+			}
+
+			.view
+			{
+				button
+				{
+
+				}
+			}
+		}
+	}
+}
+
+.recent-rewards
+{
+	.rewards-holder
+	{
+		border-bottom:  1px solid #e3e3e3;
+
+		.bullet
+		{
+			padding: 8px 0;
+
+			.square
+			{
+				width: 6px;
+				height: 6px;
+			}
+
+			.gr
+			{
+				background-color: #50b86b;
+			}	
+		}
+	}
+
+	.earned
+	{
+		.top
+		{
+			font-family: $content-text;
+			font-weight: 400;
+			font-size: 14px;
+			color: #404040;
+		}
+
+		.bottom
+		{
+			.hours
+			{
+				font-family: $content-text;
+				font-weight: 400;
+				font-size: 13px;
+				color: #404040;
+			}
+
+			.earned-by
+			{
+				@extend .hours;
+				font-weight: 700;
+			}
+		}
+	}
+}
+
+//RIGHT-SIDE
+.adds-and-events
+{
+	//background-color: #fff;
+
+	.slick-prev
+	{
+		left: 0;
+		z-index: 1;
+	}
+
+	.slick-next
+	{
+		right: 0;
+		z-index: 1;
+	}
+
+	.upcoming-events
+	{
+		.event-holder
+		{
+			.left
+			{
+				.date-month
+				{
+
+					.date
+					{
+						font-family: $content-text;
+						font-weight: 700;
+						font-size: 50px;
+						margin-top: -10px;
+					}
+
+					.month
+					{
+						font-family: $content-text;
+						font-weight: 400;
+						font-size: 14px;
+						margin-top: -15px;
+					}
+				}
+			}
+
+			.right
+			{
+				.top
+				{
+					.title
+					{
+						font-family: $content-text;
+						font-weight: 700;
+						font-size: 18px;
+					}
+
+					.description
+					{
+						font-family: $content-text;
+						font-weight: 400;
+						font-size: 14px;
+					}
+				}
+
+				.bottom
+				{
+
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,168 @@
+$display-text: 'Rubik', sans-serif;
+$content-text: 'Roboto', sans-serif;
+
+.decor-none
+{
+	text-decoration: none !important;
+}
+
+header
+{
+	.topnav
+	{
+		background-color: #110702;
+
+		.right
+		{
+			padding: 5px 0;
+
+			// a
+			// {
+			// 	font-family: $display-text;
+			// 	font-weight: 300;
+			// 	font-size: 11px;
+			// 	color: #e7d9bc;
+			// }
+
+			.profile-dropdown
+			{
+			    a
+			    {
+			        text-decoration: none;
+			        color: #e7d9bc;
+
+			        img
+			        {
+			            margin-right: 10px;
+	                    object-fit: cover;
+			        }
+
+			        .fa
+			        {
+			            margin-left: 10px;
+			        }
+			    }
+
+			    .name
+			    {
+			        color: #e7d9bc;
+			        font-family: $display-text;
+			        font-size: 11px;
+			        font-weight: 400;
+			    }
+
+			    //dropdown
+
+			    .dropdown
+			    {
+			        position: relative;
+			        display: inline-block;
+			        cursor: pointer;
+			    }
+
+			    .dropdown-content
+			    {
+			        display: none;
+			        position: absolute;
+			        background-color: #fff;
+			        min-width: 140px;
+			        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+			        z-index: 1;
+			        right: 1px;
+			        border-radius: 4px;
+
+			        .top
+			        {
+			        	border-bottom: 1px solid #e1e1e1;
+			        	
+			        	.profile-pic
+			        	{
+
+			        	}
+
+			        	.name-email
+			        	{
+							.uname
+							{
+								font-family: $content-text;
+								font-weight: 700;
+								font-size: 14px;
+								color: #404040;
+							}
+
+							.email
+							{
+								@extenc .uname;
+								font-weight: 400;
+								font-size: 13px;
+							}
+			        	}
+			        }
+			    }
+
+			    .dropdown:hover
+			    {
+			        .dropdown-content
+			        {
+			            display: block;
+			        }
+
+			        .dropbtn
+			        {
+			            // background-color: #3e8e41;
+			        }
+			    }
+
+			    @media screen and (max-width: 1024px)
+			    {
+			        a
+			        {
+			            .fa
+			            {
+			                margin-left: 8px;
+			            }
+			        }
+			    }
+			}
+		}
+	}
+
+	.subnav
+	{
+		background-color: #271308;
+
+		.left
+		{
+			a
+			{
+				font-family: $display-text;
+				font-weight: 300;
+				font-size: 13px;
+				padding: 20px;
+				color: #e7d9bc;
+			}
+		}
+
+		.right
+		{
+			.cart-holder
+			{
+				a
+				{
+					img
+					{
+
+					}
+
+					span
+					{
+						font-family: $display-text;
+						font-weight: 300; 
+						font-size: 13px;
+						color: #e7d9bc;
+					}
+				}
+			}
+		}
+	}
+}

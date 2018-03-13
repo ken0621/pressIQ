@@ -1,0 +1,63 @@
+@mixin transition($transition)
+{
+    -webkit-transition: all $transition ease-in-out;
+    -moz-transition: all $transition ease-in-out;
+    -o-transition: all $transition ease-in-out;
+    transition: all $transition ease-in-out;
+}
+
+$display-text: 'Rubik', sans-serif;
+$content-text: 'Roboto', sans-serif;
+
+.btn-cust-brown
+{
+	background-color: #562b15;
+	color: #e7d9bc;
+	padding: 8px 15px;
+	border: none;
+	border-bottom: 4px solid #271308;
+	cursor: pointer;
+	font-family: $content-text;
+	font-weight: 700;
+	font-size: 13px;
+}
+
+.btn-profile
+{
+	background-color: #562b15;
+	color: #e7d9bc;
+	padding: 8px 15px;
+	border: 1px solid #562b15;
+	cursor: pointer;
+	font-family: $content-text;
+	font-weight: 700;
+	font-size: 13px;
+}
+
+.btn-signout
+{
+	background-color: inherit;
+	color: #404040;
+	padding: 8px 15px;
+	border: 1px solid #404040;
+	cursor: pointer;
+	font-family: $content-text;
+	font-weight: 700;
+	font-size: 13px;
+}
+
+.btn-cust-brown-success
+{
+	background-color: #50b86b;
+	color: #fff;
+	padding: 3px 15px;
+	border: none;
+	border-top: 4px solid #50b86b;
+	border-bottom: 4px solid #398f4f;
+	cursor: pointer;
+	font-family: $content-text;
+	font-weight: 700;
+	font-size: 13px;
+}
+
+

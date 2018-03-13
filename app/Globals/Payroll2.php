@@ -7105,11 +7105,6 @@ class Payroll2
 						{
 							$adjustment_deduction += Payroll2::payroll_number_format($breakdown["amount"], 2);
 						}
-						else
-						{
-							$adjustment_allowance += Payroll2::payroll_number_format($breakdown["amount"], 2);
-						}
-
 
 						if (isset($breakdown["category"])) 
 						{

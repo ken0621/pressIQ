@@ -662,7 +662,7 @@
 								<!-- <div class="bottom-section-content scrollbar scrollbar-default force-overflow"> -->
 									<div class="event-holder d-flex mt-2">
 										<div class="left">
-											<div class="view overlay">
+											<div class="view">
 											    <img src="/themes/brown_new_dashboard/assets/img/event-1.png" class="img-fluid " alt="">
 											    <div class="mask flex-center rgba-black-strong">
 											        <!-- <p class="white-text">Strong overlay</p> -->
@@ -690,7 +690,7 @@
 									</div>
 									<div class="event-holder d-flex mt-2">
 										<div class="left">
-											<div class="view overlay">
+											<div class="view">
 											    <img src="/themes/brown_new_dashboard/assets/img/event-1.png" class="img-fluid " alt="">
 											    <div class="mask flex-center rgba-black-strong">
 											        <!-- <p class="white-text">Strong overlay</p> -->
@@ -718,7 +718,7 @@
 									</div>
 									<div class="event-holder d-flex mt-2">
 										<div class="left">
-											<div class="view overlay">
+											<div class="view">
 											    <img src="/themes/brown_new_dashboard/assets/img/event-1.png" class="img-fluid " alt="">
 											    <div class="mask flex-center rgba-black-strong">
 											        <!-- <p class="white-text">Strong overlay</p> -->

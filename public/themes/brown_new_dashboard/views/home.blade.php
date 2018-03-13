@@ -440,6 +440,68 @@
 												</div>
 											</div>
 										</div>
+										<div class="slot-holder d-flex flex-wrap align-items-center">
+											<div class="left d-flex align-items-center p-3">
+												<div class="replicated-link">
+													<div class="top">
+														<div class="label-bld">BADPUPP</div>
+														<div class="btn-holder">
+															<button class="btn-cust-brown"><img src="/themes/brown_new_dashboard/assets/img/replicated.png" alt=""> Replicated Link</button>
+														</div>
+													</div>
+												</div>
+												<div class="slot-wallet">
+													<div class="label-reg">SLOT WALLET</div>
+													<div class="value">PHP 2,500.00</div>
+												</div>
+											</div>
+											<div class="right d-flex flex-column p-3">
+												<div class="top d-flex align-items-center justify-content-center">
+													<div class="label">ROAD TO BUILDER</div>
+												</div>
+												<div class="bottom d-flex align-items-center justify-content-between">
+													<div class="direct text-center m-1">
+														<span>DIRECT 1/2</span>
+														<div class="gauge-1"></div>
+													</div>
+													<div class="group text-center m-1">
+														<div class="gauge-2"></div>
+														<span>GROUP 4/12</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="slot-holder d-flex flex-wrap align-items-center">
+											<div class="left d-flex align-items-center p-3">
+												<div class="replicated-link">
+													<div class="top">
+														<div class="label-bld">BADPUPP</div>
+														<div class="btn-holder">
+															<button class="btn-cust-brown"><img src="/themes/brown_new_dashboard/assets/img/replicated.png" alt=""> Replicated Link</button>
+														</div>
+													</div>
+												</div>
+												<div class="slot-wallet">
+													<div class="label-reg">SLOT WALLET</div>
+													<div class="value">PHP 2,500.00</div>
+												</div>
+											</div>
+											<div class="right d-flex flex-column p-3">
+												<div class="top d-flex align-items-center justify-content-center">
+													<div class="label">ROAD TO BUILDER</div>
+												</div>
+												<div class="bottom d-flex align-items-center justify-content-between">
+													<div class="direct text-center m-1">
+														<!-- <div class="gauge"></div> -->
+														<span>DIRECT 0/2</span>
+													</div>
+													<div class="group text-center m-1">
+														<div class="gauge-3"></div>
+														<span>GROUP 1/12</span>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>

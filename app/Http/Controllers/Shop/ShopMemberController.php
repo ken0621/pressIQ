@@ -2801,9 +2801,9 @@ class ShopMemberController extends Shop
             $insert_customer_address["customer_city"] = isset($city_name)  ? $city_name->locale_name : '';
             $insert_customer_address["customer_zipcode"] = isset($barangay_name) ? $barangay_name->locale_name : '';
             $insert_customer_address["customer_street"] = $request->customer_street;
-            $insert_customer_address["state_id"] = $request->customer_state;
-            $insert_customer_address["city_id"] = $request->customer_city;
-            $insert_customer_address["barangay_id"] = $request->customer_zipcode;
+            $insert_customer_address["state_id"] = $request->customer_state ? $request->customer_state : null;
+            $insert_customer_address["city_id"] = $request->customer_city ? $request->customer_city : null;
+            $insert_customer_address["barangay_id"] = $request->customer_zipcode ? $request->customer_zipcode : null;
             
             $exist = Tbl_customer_address::where("customer_id", Self::$customer_info->customer_id)->where("purpose", "permanent")->first();
             

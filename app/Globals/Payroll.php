@@ -3250,8 +3250,21 @@ class Payroll
 			$temp['payroll_deduction_type']		= $deduction->payroll_deduction_type;
 
 			$payroll_total_payment_amount = Tbl_payroll_deduction_payment_v2::gettotaldeductionpayment($employee_id, $temp['payroll_deduction_id'], $temp['deduction_name'])->first();
+
 			$payroll_month_payment_amount = Tbl_payroll_deduction_payment_v2::getmonthdeductionpayment($employee_id, $temp['payroll_deduction_id'], $temp['deduction_name'], $month)->first();
 
+			$count = 1;
+			while($payroll_total_payment_amount["total_payment"] == $payroll_month_payment_amount["total_payment"])
+			{
+				$temp_payment = Tbl_payroll_deduction_payment_v2::getmonthdeductionpayment($employee_id, $temp['payroll_deduction_id'], $temp['deduction_name'], $month)->first();
+
+				$payroll_month_payment_amount["total_payment"] = $temp_payment["total_payment"];
+
+				$month[0] = date('Y-m-'.$count++, strtotime($date_end));
+
+			}
+
+			
 			if($period_count == "middle_period" && $deduction->payroll_deduction_period == "Last Period")
 			{
 				continue;
@@ -3260,18 +3273,12 @@ class Payroll
 			/*Check Total payment of the month and if total payment and deduction is greater than monthly amortization*/
 			if (($payroll_month_payment_amount["total_payment"] + $deduction->payroll_periodal_deduction) > $deduction->payroll_monthly_amortization) 
 			{
-
 				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $payroll_month_payment_amount["total_payment"];
-
-
 			}
 
 			if($temp == 'Last Period')
 			{
-				
 				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $payroll_total_payment_amount["total_payment"];
-
-		
 			}
 
 			if ($period == "Last Period") 

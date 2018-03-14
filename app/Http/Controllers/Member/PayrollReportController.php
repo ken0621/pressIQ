@@ -81,7 +81,7 @@ class PayrollReportController extends Member
 		$data["month"] = $month;
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 		$data["year"] = $year;
-		$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
+		$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->where('payroll_company_archived',0)->get();
 		return view("member.payrollreport.government_forms_hdmf", $data);
 	}
 	public function government_forms_sss($month,$year)
@@ -95,7 +95,7 @@ class PayrollReportController extends Member
 		$data["month"] = $month;
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 		$data["year"] = $year;
-		$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
+		$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->where('payroll_company_archived',0)->get();
 		return view("member.payrollreport.government_forms_sss", $data);
 	}
 	public function government_forms_philhealth($month,$year)
@@ -109,7 +109,7 @@ class PayrollReportController extends Member
 		$data["month"] = $month;
 		$data["month_name"] = DateTime::createFromFormat('!m', $month)->format('F');
 		$data["year"] = $year;
-		$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->get();
+		$data['_company'] = Tbl_payroll_company::where('shop_id',$shop_id)->where('payroll_company_archived',0)->get();
 
 		return view("member.payrollreport.government_forms_philhealth", $data);
 	}
@@ -482,21 +482,7 @@ class PayrollReportController extends Member
 		$data["page"] = "Loan Summary";
 		$deduction_type = str_replace("_"," ",$deduction_type);
 
-		$checkcompany = Tbl_payroll_company::where('payroll_company_id',$company)->first();
-
-		$branchcompany = array();
-		if($checkcompany['payroll_parent_company_id'] == 0)
-		{
-			$tempbranchcompany = Tbl_payroll_company::where('payroll_parent_company_id',$checkcompany['payroll_company_id'])->get();
-
-			foreach($tempbranchcompany as $branch)
-			{
-				$temp['payroll_company_id'] = $branch['payroll_company_id'];
-				array_push($branchcompany,$temp);
-			}
-		}
-
-		$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type,$company,$branchcompany);
+		$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type,$company);
 
 		if($company == 0)
 		{
@@ -504,14 +490,7 @@ class PayrollReportController extends Member
 		}
 		else
 		{
-			if($branchcompany == null) 
-			{
-					$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
-			}
-			else
-			{
-					$data['company']	= Tbl_payroll_company::selcompanybranch($branchcompany)->get();
-			}
+			$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
 		}
 		
 		$data['totals']	= $this->get_totals_loan_summary($data);
@@ -523,21 +502,7 @@ class PayrollReportController extends Member
 	{
 		$data['company_id'] = Request::input('company_id');
 
-		$checkcompany = Tbl_payroll_company::where('payroll_company_id',$data['company_id'])->first();
-
-		$branchcompany = array();
-		if($checkcompany['payroll_parent_company_id'] == 0)
-		{
-			$tempbranchcompany = Tbl_payroll_company::where('payroll_parent_company_id',$checkcompany['payroll_company_id'])->get();
-
-			foreach($tempbranchcompany as $branch)
-			{
-				$temp['payroll_company_id'] = $branch['payroll_company_id'];
-				array_push($branchcompany,$temp);
-			}
-		}
-
-		$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$data['company_id'],0,$branchcompany)->get();
+		$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$data['company_id'],0)->get();
 
 		if($data['company_id'] == 0)
 		{
@@ -545,14 +510,7 @@ class PayrollReportController extends Member
 		}
 		else
 		{
-			if($branchcompany == null) 
-			{
-					$data['company']	= Tbl_payroll_company::selcompanybyid($data['company_id'])->get();
-			}
-			else
-			{
-					$data['company']	= Tbl_payroll_company::selcompanybranch($branchcompany)->get();
-			}
+			$data['company']	= Tbl_payroll_company::selcompanybyid($data['company_id'])->get();
 			
 		}
 
@@ -578,23 +536,10 @@ class PayrollReportController extends Member
 		$data["_company"] = Payroll::company_heirarchy(Self::shop_id());
 		$data['company']	= Tbl_payroll_company::selcompany($this->shop_id())->get();
 
-		$checkcompany = Tbl_payroll_company::where('payroll_company_id',$company)->first();
-
-		$branchcompany = array();
-		if($checkcompany['payroll_parent_company_id'] == 0)
-		{
-			$tempbranchcompany = Tbl_payroll_company::where('payroll_parent_company_id',$checkcompany['payroll_company_id'])->get();
-
-			foreach($tempbranchcompany as $branch)
-			{
-				$temp['payroll_company_id'] = $branch['payroll_company_id'];
-				array_push($branchcompany,$temp);
-			}
-		}
 		
 		if($company != 0 && $deduction_type == 'noval')
 		{
-			$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$company,0,$branchcompany)->get();
+			$data['_loan_data'] = Tbl_payroll_deduction_payment_v2::getallinfo($this->shop_id(),$company,0)->get();
 
 			if($company == 0)
 			{
@@ -602,14 +547,9 @@ class PayrollReportController extends Member
 			}
 			else
 			{
-				if($branchcompany == null) 
-				{
-						$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
-				}
-				else
-				{
-						$data['company']	= Tbl_payroll_company::selcompanybranch($branchcompany)->get();
-				}
+
+				$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
+			
 				
 			}
 
@@ -617,21 +557,15 @@ class PayrollReportController extends Member
 		else if($deduction_type != 'noval')
 		{
 			$deduction_type = str_replace("_"," ",$deduction_type);
-			$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type,$company,$branchcompany);
+			$data["_loan_data"] = PayrollDeductionController::get_deduction_by_type($this->shop_id(),$deduction_type,$company);
 			if($company == 0)
 			{
 				$data['company']	= Tbl_payroll_company::selcompany($this->shop_id())->get();
 			}
 			else
 			{
-				if($branchcompany == null) 
-				{
-						$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
-				}
-				else
-				{
-						$data['company']	= Tbl_payroll_company::selcompanybranch($branchcompany)->get();
-				}
+				$data['company']	= Tbl_payroll_company::selcompanybyid($company)->get();
+				
 			}
 		}
 

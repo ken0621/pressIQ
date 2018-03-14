@@ -210,28 +210,7 @@ class Payroll2
 		$month_number = $month;
 		$month = DateTime::createFromFormat('!m', $month)->format('F');
 
-		$checkcompany = Tbl_payroll_company::where('payroll_company_id',$company_id)->first();
-
-		$branchcompany = array();
-		if($checkcompany['payroll_parent_company_id'] == 0)
-		{
-			$tempbranchcompany = Tbl_payroll_company::where('payroll_parent_company_id',$checkcompany['payroll_company_id'])->get();
-
-			foreach($tempbranchcompany as $branch)
-			{
-				$temp['payroll_company_id'] = $branch['payroll_company_id'];
-				array_push($branchcompany,$temp);
-			}
-
-			if(count($tempbranchcompany) > 1)
-			{
-				$company_id = 0;
-			}
-
-		}
-
-		$data["_employee"] = Tbl_payroll_period::getContributions_filter($shop_id, $month, $year,$company_id,$branchcompany,$branch_id)->get();
-
+		$data["_employee"] = Tbl_payroll_period::getContributions_filter($shop_id, $month, $year,$company_id,$branch_id)->get();
 
 		$_contribution = null;
 		$count = 0;

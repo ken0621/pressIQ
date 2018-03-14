@@ -23,7 +23,7 @@
                     <td class="text-center">{!! $employee->payroll_employee_number == "" ? "<span style='color: red;'>00</span>" : $employee->payroll_employee_number !!}</td>
                     <!-- EMPLOYEE NAME -->
                     <td class="text-center">{{$employee->payroll_employee_last_name}}, {{$employee->payroll_employee_first_name}} {{ substr($employee->payroll_employee_middle_name, 0, -(strlen($employee->payroll_employee_middle_name))+1) }}.</td>
-       {{--              @if($employee->net_pay != "") --}}
+                    @if($employee->net_pay != "")
                         @if($access==1)
                         <td class="text-center">{{ payroll_currency($employee->net_basic_pay) }}</td>
                         <td class="text-center">{{ payroll_currency($employee->gross_pay) }}</td>
@@ -31,15 +31,15 @@
                         @endif
                         <td class="text-center"><a href="javascript: timesheet_employee_list.action_set_to_unapprove('{{ $company->payroll_period_company_id }}','{{ $employee->payroll_employee_id }}')">UN-READY</a></td>
                         <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/company_timesheet2/income_summary/{{ $company->payroll_period_company_id }}/{{ $employee->payroll_employee_id }}', 'lg')">SUMMARY</a></td>
-  {{--                   @else
+                    @else
                         @if($access==1)
                         <td class="text-center">{{ payroll_currency(0) }}</td>
                         <td class="text-center">{{ payroll_currency(0) }}</td>
                         <td class="text-center">{{ payroll_currency(0) }}</td>
                          @endif
                         <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/company_timesheet2/{{ $company->payroll_period_company_id }}/{{ $employee->payroll_employee_id }}', 'lg')" >TIMESHEET</a></td>
-                        <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/company_timesheet2/income_summary/{{ $company->payroll_period_company_id }}/{{ $employee->payroll_employee_id }}', 'lg')">SUMMARY</a></td> --}}
-             {{--        @endif --}}
+                        <td class="text-center"><a href="javascript: action_load_link_to_modal('/member/payroll/company_timesheet2/income_summary/{{ $company->payroll_period_company_id }}/{{ $employee->payroll_employee_id }}', 'lg')">SUMMARY</a></td>
+                    @endif
                 </tr>
                 @endif
             @endforeach

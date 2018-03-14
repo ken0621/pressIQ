@@ -101,7 +101,7 @@
       <div class="tablecontainer">
       <table>
           <tr>
-            <th width="15%" colspan="2" style="text-align: left;"><br>{{ $employee->payroll_employee_number }}</th>
+            <th width="15%" colspan="2"><br>{{ $employee->payroll_employee_number }}</th>
             <th width="48%" colspan="2" style="border-right-color: black;text-align: left;"><br>{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</th>
             <th width="30%"><br>{{ $show_period_start }} - {{ $show_period_end }}</th>
             <th width="17%"><br>@if($show_release_date != 'not specified') {{ $show_release_date }}

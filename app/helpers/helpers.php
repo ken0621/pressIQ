@@ -624,7 +624,7 @@ function limit_foreach($iterable, $limit)
     {
         foreach ($iterable as $key => $value)
         {
-            if($key <= $limit)
+            if($key < $limit)
             {
                 $return[$key] = $value;
             }

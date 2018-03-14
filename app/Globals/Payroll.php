@@ -3252,7 +3252,6 @@ class Payroll
 			$payroll_total_payment_amount = Tbl_payroll_deduction_payment_v2::gettotaldeductionpayment($employee_id, $temp['payroll_deduction_id'], $temp['deduction_name'])->first();
 			$payroll_month_payment_amount = Tbl_payroll_deduction_payment_v2::getmonthdeductionpayment($employee_id, $temp['payroll_deduction_id'], $temp['deduction_name'], $month)->first();
 
-
 			if($month[0] == $payroll_month_payment_amount["payroll_payment_period"])
 			{
 				$payroll_month_payment_amount = 0;

@@ -595,10 +595,10 @@ class PayrollDeductionController extends Member
           return $data;
      }
 
-     public static function get_deduction_by_type($shop_id = 0, $deduction_type='',$company)
+     public static function get_deduction_by_type($shop_id = 0, $deduction_type='',$company,$branch)
      {
 
-          $query = Tbl_payroll_deduction_payment_v2::getallinfo($shop_id,$company,0);
+          $query = Tbl_payroll_deduction_payment_v2::getallinfo($shop_id,$company,0,$branch);
 
           if ($deduction_type != '0') 
           {

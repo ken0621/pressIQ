@@ -3210,19 +3210,10 @@ class Payroll
 	{
 		if (date('m',strtotime($date_start)) == '02') //check if february date start
 		{
-			if($month_contri != 'February')
-			{
-				$month[0] = date('Y-m-01', strtotime($date_end));
-				$month[1] = date('Y-m-t', strtotime($date_end));
-				$date = $date_end;
-			}
-			else
-			{
 				$month[0] = date('Y-m-01', strtotime($date_start));
 				$month[1] = date('Y-m-t', strtotime($date_start));
 				$date = $date_start;
-			}
-	
+			
 		}
 		else
 		{
@@ -3244,9 +3235,10 @@ class Payroll
 			$period = 'Last Period';
 		}
 
-
 		$_deduction = Tbl_payroll_deduction_employee_v2::getdeduction($employee_id, $date, $period, $month)->get();
+
 		$payroll_record_id = Tbl_payroll_record::getperiod($shop_id, $payroll_period_category)->pluck('payroll_record_id');
+
 		$data['deduction'] 			= array();
 		$data['total_deduction'] 	= 0;
 		foreach($_deduction as $deduction)
@@ -3259,7 +3251,14 @@ class Payroll
 
 			$payroll_total_payment_amount = Tbl_payroll_deduction_payment_v2::gettotaldeductionpayment($employee_id, $temp['payroll_deduction_id'], $temp['deduction_name'])->first();
 			$payroll_month_payment_amount = Tbl_payroll_deduction_payment_v2::getmonthdeductionpayment($employee_id, $temp['payroll_deduction_id'], $temp['deduction_name'], $month)->first();
-			
+
+
+			if($month[0] == $payroll_month_payment_amount["payroll_payment_period"])
+			{
+				$payroll_month_payment_amount = 0;
+
+			}
+
 			if($period_count == "middle_period" && $deduction->payroll_deduction_period == "Last Period")
 			{
 				continue;
@@ -3271,12 +3270,15 @@ class Payroll
 
 				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $payroll_month_payment_amount["total_payment"];
 
+
 			}
 
 			if($temp == 'Last Period')
 			{
 				
 				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $payroll_total_payment_amount["total_payment"];
+
+		
 			}
 
 			if ($period == "Last Period") 

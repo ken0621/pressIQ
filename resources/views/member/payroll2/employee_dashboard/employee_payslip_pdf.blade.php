@@ -156,43 +156,43 @@
                 Gross Salary
             </div>
              <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
-                    {{$total_gross_pay}}
+                    {{round($total_gross_pay,2)}}
             </div>
                  <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
                 Taxable Income
             </div>
              <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
-                    {{$total_tax_pay}}
+                    {{round($total_tax_pay,2)}}
             </div>
                  <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
                 Withholding Tax
             </div>
              <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
-                    {{$total_tax_ee}}
+                    {{round($total_tax_ee,2)}}
             </div>
                  <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
                 Net Pay
             </div>
              <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
-                    {{$total_net_pay}}
+                    {{round($total_net_pay,2)}}
             </div>
             <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
                 SSS Employer
             </div>
              <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
-                    {{$total_sss_ee}}
+                    {{round($total_sss_ee,2)}}
             </div>
                  <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
                 Philhealth Employer
             </div>
              <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
-                    {{$total_philhealth_ee}}
+                    {{round($total_philhealth_ee,2)}}
             </div>
             <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
                 Pagibig Employer
             </div>
              <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
-                    {{$total_pagibig_ee}}
+                    {{round($total_pagibig_ee,2)}}
             </div>
         </div>
     </div>

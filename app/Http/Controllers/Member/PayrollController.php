@@ -2593,7 +2593,7 @@ class PayrollController extends Member
           $return['view']               = $view;
           $return['status']             = 'success';
           $return['data']               = '';
-          $return['function_name']      = 'payrollconfiguration.relaod_tbl_department';
+          $return['function_name']      = 'payrollconfiguration.reload_tbl_department';
           return json_encode($return);
      }
      public function department_reload()
@@ -2666,7 +2666,7 @@ class PayrollController extends Member
           
           $return['status']             = 'success';
           $return['data']                    = '';
-          $return['function_name']      = 'payrollconfiguration.relaod_tbl_department';
+          $return['function_name']      = 'payrollconfiguration.reload_tbl_department';
           return json_encode($return);
      }
 

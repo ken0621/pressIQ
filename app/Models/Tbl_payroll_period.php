@@ -62,7 +62,7 @@ class Tbl_payroll_period extends Model
 		
 		return $query;
 	}
-	public function scopeGetContributions_filter($query, $shop_id, $month, $year,$company_id,$branchcompany = null,$branch_id)
+	public function scopeGetContributions_filter($query, $shop_id, $month, $year,$company_id,$branch_id)
 	{
 		$query->where('month_contribution', $month);
 		$query->where('year_contribution', $year);
@@ -75,11 +75,6 @@ class Tbl_payroll_period extends Model
 		if($branch_id != 0)
 		{
 			$query->where("tbl_payroll_employee_basic.branch_location_id", $branch_id);
-		}
-
-		if($branchcompany != null)
-		{
-			$query->whereIn("tbl_payroll_employee_basic.payroll_employee_company_id", $branchcompany);
 		}
 
 		if($company_id != 0)

@@ -642,7 +642,7 @@ function limit_foreach_old($iterable, $limit)
 }
 function limit_foreach2($iterable, $limit) 
 {
-    $return = null;
+    $return = array();
     foreach ($iterable as $key => $value)
     {
         if($key <= $limit)

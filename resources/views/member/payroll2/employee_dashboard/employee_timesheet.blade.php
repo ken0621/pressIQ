@@ -18,7 +18,7 @@
                             <th>Shift</th>
                             <th>Source</th>
                             <th>Branch</th>
-                            <th>{{ $access_salary_rates == 1 ? 'Rates':'Time Spent'}}</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>

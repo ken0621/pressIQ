@@ -490,7 +490,7 @@
   </table>
 </div>
 
-<div class="div1" style="width:50px;margin-bottom: 25px;">
+<div class="div1" style="width:50px;margin-bottom: 15px;">
       <table style="width:100%;display: inline-block;">
           <tr>
             <td style="padding-bottom: 122px;"><span>Employee Sign</span></td>

@@ -250,7 +250,16 @@
         @if($breakdown["add.gross_pay"] == true && $breakdown["deduct.taxable_salary"] == true && $breakdown["add.net_pay"] == true)
         @else
      <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;">
-            {{ strtoupper($breakdown["label"]) }}
+            @if(isset($breakdown["record_type"]))
+                @if($breakdown["record_type"] == "HDMF Loan" || $breakdown["record_type"] == "SSS Loan")
+                  {{ strtoupper($breakdown["record_type"]) }}
+                @else
+                   {{ strtoupper($breakdown["label"]) }}
+                @endif
+            @else
+                {{ strtoupper($breakdown["label"]) }}
+            @endif
+
         </div>
         <div class="sa" style="width:50%;text-align: center;float:left;font-size: 12px;color:#383838;margin-bottom: 5px;font-weight: bold">
             {{ payroll_currency($breakdown["amount"]) }}

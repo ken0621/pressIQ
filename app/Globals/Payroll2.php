@@ -222,6 +222,12 @@ class Payroll2
 				$temp['payroll_company_id'] = $branch['payroll_company_id'];
 				array_push($branchcompany,$temp);
 			}
+
+			if(count($tempbranchcompany) > 1)
+			{
+				$company_id = 0;
+			}
+
 		}
 
 		$data["_employee"] = Tbl_payroll_period::getContributions_filter($shop_id, $month, $year,$company_id,$branchcompany,$branch_id)->get();
@@ -7105,11 +7111,6 @@ class Payroll2
 						{
 							$adjustment_deduction += Payroll2::payroll_number_format($breakdown["amount"], 2);
 						}
-						else
-						{
-							$adjustment_allowance += Payroll2::payroll_number_format($breakdown["amount"], 2);
-						}
-
 
 						if (isset($breakdown["category"])) 
 						{

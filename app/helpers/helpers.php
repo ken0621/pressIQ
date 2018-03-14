@@ -617,7 +617,22 @@ function address_customer_info($customer_info)
     }
     return $adderss;
 }
-function limit_foreach($iterable, $limit) 
+function limit_foreach($iterable, $limit)
+{
+    $return = array();
+    if(count($iterable) > 0)
+    {
+        foreach ($iterable as $key => $value)
+        {
+            if($key <= $limit)
+            {
+                $return[$key] = $value;
+            }
+        }
+    }
+    return $return;
+}
+function limit_foreach_old($iterable, $limit) 
 {
     foreach ($iterable as $key => $value) 
     {
@@ -627,7 +642,7 @@ function limit_foreach($iterable, $limit)
 }
 function limit_foreach2($iterable, $limit) 
 {
-    $return = null;
+    $return = array();
     foreach ($iterable as $key => $value)
     {
         if($key <= $limit)

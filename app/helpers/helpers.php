@@ -620,11 +620,14 @@ function address_customer_info($customer_info)
 function limit_foreach($iterable, $limit)
 {
     $return = null;
-    foreach ($iterable as $key => $value)
+    if(count($iterable) > 0)
     {
-        if($key <= $limit)
+        foreach ($iterable as $key => $value)
         {
-            $return[$key] = $value;
+            if($key <= $limit)
+            {
+                $return[$key] = $value;
+            }
         }
     }
     return $return;

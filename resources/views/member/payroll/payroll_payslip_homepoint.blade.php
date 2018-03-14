@@ -69,7 +69,9 @@
         </style>
     </head>
     <body>
-
+      @php
+      $count = 1;
+      @endphp
 		@foreach($_employee as $key => $employee)
           @php
           $dayswork = 1;
@@ -488,7 +490,18 @@
   </table>
 </div>
 
-<div class="div1" style="width:50px;margin-bottom: 25px;">
+<div class="div1"
+@if($count == 3)
+@php
+echo 'style="width:50px;margin-bottom: 70px;"';
+$count++;
+@endphp
+@else
+@php
+echo 'style="width:50px;margin-bottom: 25px;"';
+@endphp
+@endif
+>
       <table style="width:100%;display: inline-block;">
           <tr>
             <td style="padding-bottom: 122px;"><span>Employee Sign</span></td>
@@ -496,7 +509,9 @@
     </table>
   </div>
 
-
+@php
+$count++;
+@endphp
 
     </div>
       @endforeach

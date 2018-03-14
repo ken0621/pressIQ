@@ -103,7 +103,7 @@
       <div class="tablecontainer">
       <table>
           <tr>
-            <th width="15%" colspan="2"><br>{{ $employee->payroll_employee_number }}</th>
+            <th width="15%" colspan="2" style="text-align: right;"><br>{{ $employee->payroll_employee_number }}</th>
             <th width="48%" colspan="2" style="border-right-color: black;text-align: left;"><br>{{ $employee->payroll_employee_last_name }}, {{ $employee->payroll_employee_first_name }} {{ $employee->payroll_employee_middle_name }}</th>
             <th width="30%"><br>{{ $show_period_start }} - {{ $show_period_end }}</th>
             <th width="17%"><br>@if($show_release_date != 'not specified') {{ $show_release_date }}
@@ -490,18 +490,7 @@
   </table>
 </div>
 
-<div class="div1"
-@if($count == 3)
-@php
-echo 'style="width:50px;margin-bottom: 70px;"';
-$count++;
-@endphp
-@else
-@php
-echo 'style="width:50px;margin-bottom: 25px;"';
-@endphp
-@endif
->
+<div class="div1" style="width:50px;margin-bottom: 25px;">
       <table style="width:100%;display: inline-block;">
           <tr>
             <td style="padding-bottom: 122px;"><span>Employee Sign</span></td>
@@ -509,9 +498,6 @@ echo 'style="width:50px;margin-bottom: 25px;"';
     </table>
   </div>
 
-@php
-$count++;
-@endphp
 
     </div>
       @endforeach

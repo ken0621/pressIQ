@@ -619,12 +619,15 @@ function address_customer_info($customer_info)
 }
 function limit_foreach($iterable, $limit)
 {
-    $return = null;
-    foreach ($iterable as $key => $value)
+    $return = array();
+    if(count($iterable) > 0)
     {
-        if($key <= $limit)
+        foreach ($iterable as $key => $value)
         {
-            $return[$key] = $value;
+            if($key <= $limit)
+            {
+                $return[$key] = $value;
+            }
         }
     }
     return $return;
@@ -639,7 +642,7 @@ function limit_foreach_old($iterable, $limit)
 }
 function limit_foreach2($iterable, $limit) 
 {
-    $return = null;
+    $return = array();
     foreach ($iterable as $key => $value)
     {
         if($key <= $limit)

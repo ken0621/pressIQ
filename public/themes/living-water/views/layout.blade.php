@@ -55,11 +55,10 @@
                 <span>{!! get_content($shop_theme_info, "contact_details", "contact_company_email_address") !!}</span>
             </div>
             <div class="right-container">
-                <span>
-                    <input class="form-control" placeholder="Search">
-                </span>
-                <i class="fa fa-search" aria-hidden="true"></i>
-                
+                    <span>
+                        <input class="form-control" placeholder="Search">
+                    </span>
+                    <i class="fa fa-search" aria-hidden="true"></i>
             </div>
         </div>
     </div>
@@ -90,18 +89,21 @@
                                 <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
                                 <li><a class="smoth-scroll" href="/#process">PROCESS</a></li>
                                 <li><a class="smoth-scroll" href="/#product">PRODUCT</a></li>
+                                <li><a class="smoth-scroll" href="/#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
                             @elseif(Request::segment(1)=="product")
                                 <li><a class="smoth-scroll" href="/#home">HOME</a></li>
                                 <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
                                 <li><a class="smoth-scroll" href="/#process">PROCESS</a></li>
                                 <li><a class="smoth-scroll" href="/#product">PRODUCT</a></li>
+                                <li><a class="smoth-scroll" href="/#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
                             @else
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                 <li><a class="smoth-scroll" href="#about">ABOUT US</a></li>
                                 <li><a class="smoth-scroll" href="#process">PROCESS</a></li>
                                 <li><a class="smoth-scroll" href="#product">PRODUCT</a></li>
+                                <li><a class="smoth-scroll" href="#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="#contact">CONTACT</a></li>
                             @endif
                         </ul>

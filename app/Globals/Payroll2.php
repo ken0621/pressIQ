@@ -7613,6 +7613,156 @@ class Payroll2
 		return $_chart_of_account_insert;
 	}
 
+	public static function get_total_payroll_register_month($data)
+	{	
+		$employee_total        = null;
+		$total_basic           = 0;
+		$total_overtime  	   = 0;
+		$total_night_diff      = 0;
+		$total_reg_holiday     = 0;
+		$total_spec_holiday    = 0;
+		$total_rest_pay        = 0;
+		$total_leave_pay       = 0;
+		$total_cola            = 0;
+		$total_late            = 0;
+		$total_undertime       = 0;
+		$total_absent          = 0;
+		$total_allowance       = 0;
+		$total_adj_allowance   = 0;
+		$total_sss_loan        = 0;
+		$total_hdmf_loan       = 0;
+		$total_cash_bond       = 0;
+		$total_cash_advance    = 0;
+		$total_other_loan      = 0;
+		$total_adjustment_ded  = 0;
+		$total_sss_ee          = 0;
+		$total_sss_er          = 0;
+		$total_sss_ec          = 0;
+		$total_hdmf_ee         = 0;
+		$total_hdmf_er         = 0;
+		$total_phic_ee         = 0;
+		$total_phic_er         = 0;
+		$total_tax			   = 0;
+		$total_deduction       = 0;
+		$total_gross           = 0;
+		$total_net             = 0;
+
+
+
+		foreach($data["_employee"] as $key => $employee)
+		{	
+
+			if(!isset($employee_total[$employee->employee_id]))
+			{	
+					$total_basic           = $employee->net_basic_pay;
+					$total_overtime        = $employee->overtime;
+					$total_night_diff      = $employee->nightdiff;
+					$total_reg_holiday     = $employee->regular_holiday;
+					$total_spec_holiday    = $employee->special_holiday;
+					$total_rest_pay        = $employee->restday;
+					$total_leave_pay       = $employee->leave_pay;
+					$total_cola            = $employee->cola;
+					$total_late            = $employee->late;
+					$total_undertime       = $employee->undertime;
+					$total_absent          = $employee->absent;
+					$total_allowance       = $employee->allowance;
+					$total_adj_allowance   = $employee->adjustment_allowance;
+					$total_sss_loan        = $employee->sss_loan;
+					$total_hdmf_loan       = $employee->hdmf_loan;
+					$total_cash_bond       = $employee->cash_bond;
+					$total_cash_advance    = $employee->cash_advance;
+					$total_other_loan      = $employee->other_loans;
+					$total_adjustment_ded  = $employee->adjustment_deduction;
+					$total_sss_ee          = $employee->sss_ee;
+					$total_sss_er          = $employee->sss_er;
+					$total_sss_ec          = $employee->sss_ec;
+					$total_hdmf_ee         = $employee->pagibig_ee;
+					$total_hdmf_er         = $employee->pagibig_er;
+					$total_phic_ee         = $employee->philhealth_ee;
+					$total_phic_er         = $employee->philhealth_er;
+					$total_tax			   = $employee->tax_ee;
+					$total_deduction       = $employee->total_deduction_employee;
+					$total_gross           = $employee->gross_pay;
+					$total_net             = $employee->net_pay;
+
+
+				
+			}
+			else
+			{
+					$total_basic           += $employee->net_basic_pay;
+					$total_overtime        += $employee->overtime;
+					$total_night_diff      += $employee->nightdiff;
+					$total_reg_holiday     += $employee->regular_holiday;
+					$total_spec_holiday    += $employee->special_holiday;
+					$total_rest_pay        += $employee->restday;
+					$total_leave_pay       += $employee->leave_pay;
+					$total_cola            += $employee->cola;
+					$total_late            += $employee->late;
+					$total_undertime       += $employee->undertime;
+					$total_absent          += $employee->absent;
+					$total_allowance       += $employee->allowance;
+					$total_adj_allowance   += $employee->adjustment_allowance;
+					$total_sss_loan        += $employee->sss_loan;
+					$total_hdmf_loan       += $employee->hdmf_loan;
+					$total_cash_bond       += $employee->cash_bond;
+					$total_cash_advance    += $employee->cash_advance;
+					$total_other_loan      += $employee->other_loans;
+					$total_adjustment_ded  += $employee->adjustment_deduction;
+					$total_sss_ee          += $employee->sss_ee;
+					$total_sss_er          += $employee->sss_er;
+					$total_sss_ec          += $employee->sss_ec;
+					$total_hdmf_ee         += $employee->pagibig_ee;
+					$total_hdmf_er         += $employee->pagibig_er;
+					$total_phic_ee         += $employee->philhealth_ee;
+					$total_phic_er         += $employee->philhealth_er;
+					$total_tax			   += $employee->tax_ee;
+					$total_deduction       += $employee->total_deduction_employee;
+					$total_gross           += $employee->gross_pay;
+					$total_net             += $employee->net_pay;
+
+					
+			}
+
+			$employee_total[$employee->employee_id]                                = new stdClass();
+			$employee_total[$employee->employee_id]->employee_id 			  	   = $employee->employee_id;
+			$employee_total[$employee->employee_id]->basic_pay_total    	       = $total_basic;
+			$employee_total[$employee->employee_id]->payroll_employee_display_name = $employee->payroll_employee_display_name;
+			$employee_total[$employee->employee_id]->overtime_total				   = $total_overtime;
+			$employee_total[$employee->employee_id]->night_dif_total			   = $total_night_diff;
+			$employee_total[$employee->employee_id]->regular_total_pay			   = $total_reg_holiday;
+			$employee_total[$employee->employee_id]->special_total_pay			   = $total_spec_holiday;
+			$employee_total[$employee->employee_id]->rest_day_total				   = $total_rest_pay;
+			$employee_total[$employee->employee_id]->leave_pay_total			   = $total_leave_pay;
+			$employee_total[$employee->employee_id]->cola_total      		       = $total_cola;          
+			$employee_total[$employee->employee_id]->late_total     		       = $total_late;           
+			$employee_total[$employee->employee_id]->undertime_total 		       = $total_undertime;       
+			$employee_total[$employee->employee_id]->absent_total   		       = $total_absent;         
+			$employee_total[$employee->employee_id]->allowance_total  		       = $total_allowance;     
+			$employee_total[$employee->employee_id]->adj_allowance_total           = $total_adj_allowance;  
+			$employee_total[$employee->employee_id]->sss_loan_total  		       = $total_sss_loan;      
+			$employee_total[$employee->employee_id]->hdmf_loan_total 		       = $total_hdmf_loan;    
+			$employee_total[$employee->employee_id]->cash_bond_total		       = $total_cash_bond;      
+			$employee_total[$employee->employee_id]->cash_adv_total 		       = $total_cash_advance;    
+			$employee_total[$employee->employee_id]->other_loan_total		       = $total_other_loan;     
+			$employee_total[$employee->employee_id]->adj_deduct_total		       = $total_adjustment_ded; 
+			$employee_total[$employee->employee_id]->sss_ee_total   		       = $total_sss_ee;         
+			$employee_total[$employee->employee_id]->sss_er_total    		       = $total_sss_er;         
+			$employee_total[$employee->employee_id]->sss_ec_total   		       = $total_sss_ec;        
+			$employee_total[$employee->employee_id]->hdmf_ee_total   		       = $total_hdmf_ee;       
+			$employee_total[$employee->employee_id]->hdmf_er_total   		       = $total_hdmf_er;         
+			$employee_total[$employee->employee_id]->phic_ee_total   		       = $total_phic_ee;        
+			$employee_total[$employee->employee_id]->phic_er_total   		       = $total_phic_er;         
+			$employee_total[$employee->employee_id]->tax_total      		       = $total_tax;			  
+			$employee_total[$employee->employee_id]->total_deduction_total	       = $total_deduction;       
+			$employee_total[$employee->employee_id]->gross_total    		       = $total_gross;          
+			$employee_total[$employee->employee_id]->net_total       		       = $total_net;            
+		}
+
+
+		return $employee_total;
+	}	
+
 
 	public static function philhealth_contribution_update_2018($rate)
 	{

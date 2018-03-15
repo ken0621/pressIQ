@@ -246,6 +246,7 @@ class ShopProductController extends Shop
         {
             $perPage = 20;
         }
+
         elseif($this->shop_theme == "3xcell" || $this->shop_theme == "additions")
         {
             if ($type) 

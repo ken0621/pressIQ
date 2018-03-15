@@ -124,11 +124,12 @@ class PayrollLedger extends Member
 
 	public function export_excel_ledgerv2($company,$month,$branch)
 	{
-		$data["_employee"]  = Tbl_payroll_period::GetEmployeeAllPeriodRecords(0,$month,$branch,$company)
+		$data["_employee"]   = Tbl_payroll_period::GetEmployeeAllPeriodRecords(0,$month,$branch,$company)
 		->where("tbl_payroll_period_company.payroll_period_status","!=","pending")->where('tbl_payroll_period.shop_id',Self::shop_id())
 		->get();
-		$data = Payroll2::get_total_payroll_register($data);
-		$data["v2"] = 1;
+		$data                = Payroll2::get_total_payroll_register($data);
+		$data["month_total"] = Payroll2::get_total_payroll_register_month($data);
+		$data["v2"]          = 1;
 		Excel::create("Employee Ledger",function($excel) use ($data)
 		{
 			$excel->sheet('clients',function($sheet) use ($data)
@@ -137,5 +138,6 @@ class PayrollLedger extends Member
 			});
 		})->download('xls');
 	}
+
 
 }

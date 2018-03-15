@@ -116,7 +116,7 @@
             </div>
             <div class="row clearfix">
                 @if(count($_product) > 0)
-                    @foreach($_product as $product)
+                    @foreach(limit_foreach($_product, 8) as $product)
                     <div class="col-md-3">
                         <div class="per-album-container">
                             <div class="img-container">

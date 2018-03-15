@@ -34,7 +34,6 @@
 	<link rel="stylesheet" type="text/css" href="/themes/brown_new_dashboard/assets/mdb/css/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" href="/themes/brown_new_dashboard/assets/mdb/css/mdb.css"/>
 	<link rel="stylesheet" type="text/css" href="/themes/brown_new_dashboard/assets/mdb/css/mdb.min.css"/>
-
 </head>
 <body>
 	<header>
@@ -98,31 +97,25 @@
 
 	<div class="member">
 		<div class="members">
-			<div class="header d-flex flex-wrap">
-				<div class="left d-flex align-items-center">
-					 <div class="reminder-holder">
-					 	<div class="reminder"><span class="bold-1">A friendly Reminder: </span> You won't be receiving your payout until you setup your <span class="bold-2">payout details. <a class="bold-2" href="#"><u>Click here to set it up right away.</u></a></span>
-					 	</div>
-					 </div>
-				</div>
-				<div class="right">
-					<div class="wallet-and-balance-holder d-flex">
-						<div class="current-wallet d-flex align-items-center">
-							<div class="icon"><img src="/themes/brown_new_dashboard/assets/img/current-wallet.png" alt=""></div>
-							<div class="value-holder ml-3">
-								<div class="value">PHP 0,000,000.00</div>
-								<div class="label">Current Wallet</div>
-							</div>
-						</div>
-						<div class="ez-plan-balance d-flex align-items-center">
-							<div class="icon"><img src="/themes/brown_new_dashboard/assets/img/ez-plan-balance.png" alt=""></div>
-							<div class="value-holder ml-3">
-								<div class="value">PHP 0,000,000.00</div>
-								<div class="label">EZ Plan Balance</div>
-							</div>
-						</div>
+			<div class="header d-flex flex-wrap justify-content-between">
+				<div class="current-wallet d-flex align-items-center p-2">
+					<div class="icon"><img src="/themes/brown_new_dashboard/assets/img/current-wallet2.png" alt=""></div>
+					<div class="value-holder ml-3">
+						<div class="value">PHP 0,000,000.00</div>
+						<div class="label">Current Wallet</div>
 					</div>
 				</div>
+				<div class="ez-plan-balance d-flex align-items-center p-2">
+					<div class="icon"><img src="/themes/brown_new_dashboard/assets/img/ez-plan-balance2.png" alt=""></div>
+					<div class="value-holder ml-3">
+						<div class="value">PHP 0,000,000.00</div>
+						<div class="label">EZ Plan Balance</div>
+					</div>
+				</div>
+				<div class="reminder-holder d-flex align-items-center justify-content-center">
+				 	<div class="reminder"><span class="bold-1">A friendly Reminder: </span> You won't be receiving your payout until you setup your <span class="bold-2">payout details. <a class="bold-2" href="#"><u>Click here to set it up right away.</u></a></span>
+				 	</div>
+				 </div>
 			</div>
 			<div class="stay-aside">
 				<div class="sidebar small">

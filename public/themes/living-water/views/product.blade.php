@@ -26,7 +26,7 @@
                                         </div>
                                         @endforeach
                                     @else
-                                       <div class="col-md-3">
+                                       {{-- <div class="col-md-3">
                                             <div class="per-album-container">
                                                 <div class="img-container">
                                                     <a href="/product/view2/{{ $product['eprod_id'] }}">
@@ -97,7 +97,7 @@
                                                    </a>
                                                </div>
                                            </div>
-                                       </div>
+                                       </div> --}}
                                     @endif
                                 </div>
                             </div>

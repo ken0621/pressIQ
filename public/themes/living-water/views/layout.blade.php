@@ -55,12 +55,10 @@
                 <span>{!! get_content($shop_theme_info, "contact_details", "contact_company_email_address") !!}</span>
             </div>
             <div class="right-container">
-                <form action="/product" method="get" id="form-search">
                     <span>
-                        <input onkeydown="javascript: if(event.keyCode === 13) onSearch();" type="text" name="search" id="keyword1" class="form-control" placeholder="Search">
+                        <input class="form-control" placeholder="Search">
                     </span>
-                    <a href="" onclick="onSearch();" id="submit_link" style="color: #fff;"><i class="fa fa-search" aria-hidden="true"></i></a>
-                </form>
+                    <i class="fa fa-search" aria-hidden="true"></i>
             </div>
         </div>
     </div>

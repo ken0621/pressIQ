@@ -47,17 +47,17 @@ $content-text: 'Roboto', sans-serif;
 				height: 6px;
 			}	
 
-			.pr
-			{
-				background-color: #2bb3cd;
-			}
-
-			.deb
+			.dec
 			{
 				background-color: #2276bc;
 			}
 
-			.ez
+			.epb
+			{
+				background-color: #2bb3cd;
+			}
+
+			.mb
 			{
 				background-color: #612d82;
 			}
@@ -111,8 +111,10 @@ $content-text: 'Roboto', sans-serif;
 	}
 }
 
-.ez-plan-balance
+.earning-deducted
 {
+	min-height: 336px !important;
+
 	.balance
 	{
 		.bullet
@@ -125,20 +127,16 @@ $content-text: 'Roboto', sans-serif;
 				height: 6px;
 			}	
 
-			.ob
+			.ezebd
 			{
 				background-color: #ec4e2f;
 			}
 
-			.ed
+			.mbd
 			{
 				background-color: #ec7523;
 			}
 
-			.ezpb
-			{
-				background-color: #febe40;
-			}
 		}
 
 		.left
@@ -395,11 +393,24 @@ $content-text: 'Roboto', sans-serif;
 				}
 			}
 		}
+
+		.date-time
+		{
+			span
+			{
+				font-family: $content-text;
+				font-weight: 400;
+				font-size: 13px;
+				color: #404040;
+			}
+		}
 	}
 }
 
 .recent-rewards
 {
+	min-height: 508px !important;
+
 	.rewards-holder
 	{
 		border-bottom:  1px solid #e3e3e3;

@@ -275,18 +275,18 @@
 									<div class="bottom-section-content">
 										<div class="rewards">
 											<div class="bullet d-flex align-items-center">
-												<div class="square pr"></div>
-												<div class="left ml-3">Pairing Reward</div>
+												<div class="square dec"></div>
+												<div class="left ml-3">Direct Enrollment Commission</div>
 												<div class="right ml-auto">PHP 0.00</div>
 											</div>
 											<div class="bullet d-flex align-items-center">
-												<div class="square deb"></div>
-												<div class="left ml-3">Direct Enrollment Bonus</div>
+												<div class="square epb"></div>
+												<div class="left ml-3">EZ Plan Bonus</div>
 												<div class="right ml-auto">PHP 0.00</div>
 											</div>
 											<div class="bullet d-flex align-items-center">
-												<div class="square ez"></div>
-												<div class="left ml-3">EZ Enrollment Bonus</div>
+												<div class="square mb"></div>
+												<div class="left ml-3">Matching Bonus</div>
 												<div class="right ml-auto">PHP 0.00</div>
 											</div>
 											<div class="bullet d-flex align-items-center">
@@ -309,35 +309,30 @@
 								</div>
 							</div>
 							<div class="col">
-								<div class="section-holder ez-plan-balance">
+								<div class="section-holder earning-deducted">
 									<div class="top-section-header d-flex align-items-center">
 										<div class="icon d-flex align-items-center">
 											<img src="/themes/brown_new_dashboard/assets/img/ez-plan.png" alt="">
 										</div>
-										<div class="section-title ml-2">EZ Plan Balance</div>
+										<div class="section-title ml-2">Earnings Deducted</div>
 									</div>
 
 									<div class="bottom-section-content">
 										<div class="balance">
 											<div class="bullet d-flex align-items-center">
-												<div class="square ob"></div>
-												<div class="left ml-3">Original Balance</div>
+												<div class="square ezebd"></div>
+												<div class="left ml-3">EZ Enrollment Bonus Deducted</div>
 												<div class="right ml-auto">PHP 0.00</div>
 											</div>
 											<div class="bullet d-flex align-items-center">
-												<div class="square ed"></div>
-												<div class="left ml-3">Earnings Deducted</div>
-												<div class="right ml-auto">PHP 0.00</div>
-											</div>
-											<div class="bullet d-flex align-items-center">
-												<div class="square ezpb"></div>
-												<div class="left ml-3">EZ Plan Balance</div>
+												<div class="square mbd"></div>
+												<div class="left ml-3">Matching Bonus Deducted</div>
 												<div class="right ml-auto">PHP 0.00</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="section-holder reward-points mt-3">
+								{{-- <div class="section-holder reward-points mt-3">
 									<div class="top-section-header d-flex align-items-center">
 										<div class="icon d-flex align-items-center">
 											<img src="/themes/brown_new_dashboard/assets/img/reward-pts.png" alt="">
@@ -358,7 +353,7 @@
 											</div>
 										</div>
 									</div>
-								</div>
+								</div> --}}
 							</div>
 						</div>
 						<div class="row clearfix">
@@ -455,109 +450,134 @@
 											<div class="ticket-title ml-auto">DETAILS</div>
 										</div>
 										
-										<div class="enrollees-holder d-flex align-items-center py-3">
-											<div class="left d-flex align-items-center">
-												<div class="profile-pic d-flex align-items-start">
-													<img src="/themes/brown_new_dashboard/assets/img/c02.jpg" alt="">
+										<div class="enrollees-holder d-flex flex-column">
+											<div class="left-right-holder d-flex align-items-center justify-content-between pt-3">
+												<div class="left d-flex align-items-center">
+													<div class="profile-pic d-flex align-items-start">
+														<img src="/themes/brown_new_dashboard/assets/img/c02.jpg" alt="">
+													</div>
+													<div class="name-and-hour d-flex flex-column align-items-start ml-2">
+														<div class="name">Drew Duncan</div>
+														<div class="slot">DCB0123</div>
+													</div>
 												</div>
-												<div class="name-and-hour d-flex flex-column align-items-start ml-2">
-													<div class="name">Drew Duncan</div>
-													<div class="slot">DCB0123</div>
+												<div class="right">
+													<div class="uname-and-view d-flex align-items-center justify-content-between">
+														<div class="uname">
+															JDB0123
+														</div>
+														<div class="view">
+															<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
+														</div>
+													</div>
 												</div>
 											</div>
-											<div class="right">
-												<div class="uname-and-view d-flex align-items-center justify-content-between">
-													<div class="uname">
-														DCB0123
-													</div>
-													<div class="view">
-														<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="enrollees-holder d-flex align-items-center py-3">
-											<div class="left d-flex align-items-center">
-												<div class="profile-pic d-flex align-items-start">
-													<img src="/themes/brown_new_dashboard/assets/img/c03.jpg" alt="">
-												</div>
-												<div class="name-and-hour d-flex flex-column align-items-start ml-2">
-													<div class="name">Austin Hicks</div>
-													<div class="slot">AHB0124</div>
-												</div>
-											</div>
-											<div class="right">
-												<div class="uname-and-view d-flex align-items-center justify-content-between">
-													<div class="uname">
-														AHB124
-													</div>
-													<div class="view">
-														<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
-													</div>
-												</div>
+											<div class="date-time ml-auto">
+												<span>3-15-18 4:30PM</span>
 											</div>
 										</div>
-										<div class="enrollees-holder d-flex align-items-center py-3">
-											<div class="left d-flex align-items-center">
-												<div class="profile-pic d-flex align-items-start">
-													<img src="/themes/brown_new_dashboard/assets/img/c04.jpg" alt="">
+										<div class="enrollees-holder d-flex flex-column">
+											<div class="left-right-holder d-flex align-items-center justify-content-between pt-3">
+												<div class="left d-flex align-items-center">
+													<div class="profile-pic d-flex align-items-start">
+														<img src="/themes/brown_new_dashboard/assets/img/c03.jpg" alt="">
+													</div>
+													<div class="name-and-hour d-flex flex-column align-items-start ml-2">
+														<div class="name">Austin Hicks</div>
+														<div class="slot">AHB0124</div>
+													</div>
 												</div>
-												<div class="name-and-hour d-flex flex-column align-items-start ml-2">
-													<div class="name">Bobby Halley</div>
-													<div class="slot">BHB0125</div>
+												<div class="right">
+													<div class="uname-and-view d-flex align-items-center justify-content-between">
+														<div class="uname">
+															JDB0123
+														</div>
+														<div class="view">
+															<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
+														</div>
+													</div>
 												</div>
 											</div>
-											<div class="right">
-												<div class="uname-and-view d-flex align-items-center justify-content-between">
-													<div class="uname">
-														BHB0125
-													</div>
-													<div class="view">
-														<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="enrollees-holder d-flex align-items-center py-3">
-											<div class="left d-flex align-items-center">
-												<div class="profile-pic d-flex align-items-start">
-													<img src="/themes/brown_new_dashboard/assets/img/c05.jpg" alt="">
-												</div>
-												<div class="name-and-hour d-flex flex-column align-items-start ml-2">
-													<div class="name">Abbey Clark</div>
-													<div class="slot">ACB0126</div>
-												</div>
-											</div>
-											<div class="right">
-												<div class="uname-and-view d-flex align-items-center justify-content-between">
-													<div class="uname">
-														ACB0126
-													</div>
-													<div class="view">
-														<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
-													</div>
-												</div>
+											<div class="date-time ml-auto">
+												<span>3-14-18 5:35PM</span>
 											</div>
 										</div>
-										<div class="enrollees-holder d-flex align-items-center py-3">
-											<div class="left d-flex align-items-center">
-												<div class="profile-pic d-flex align-items-start">
-													<img src="/themes/brown_new_dashboard/assets/img/c06.jpg" alt="">
+										<div class="enrollees-holder d-flex flex-column">
+											<div class="left-right-holder d-flex align-items-center justify-content-between pt-3">
+												<div class="left d-flex align-items-center">
+													<div class="profile-pic d-flex align-items-start">
+														<img src="/themes/brown_new_dashboard/assets/img/c04.jpg" alt="">
+													</div>
+													<div class="name-and-hour d-flex flex-column align-items-start ml-2">
+														<div class="name">Bobby Halley</div>
+														<div class="slot">BHB0125</div>
+													</div>
 												</div>
-												<div class="name-and-hour d-flex flex-column align-items-start ml-2">
-													<div class="name">Cami Gosse</div>
-													<div class="slot">CGB0127</div>
+												<div class="right">
+													<div class="uname-and-view d-flex align-items-center justify-content-between">
+														<div class="uname">
+															JDB4567
+														</div>
+														<div class="view">
+															<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
+														</div>
+													</div>
 												</div>
 											</div>
-											<div class="right">
-												<div class="uname-and-view d-flex align-items-center justify-content-between">
-													<div class="uname">
-														CGB0127
+											<div class="date-time ml-auto">
+												<span>3-12-18 1:30PM</span>
+											</div>
+										</div>
+										<div class="enrollees-holder d-flex flex-column">
+											<div class="left-right-holder d-flex align-items-center justify-content-between pt-3">
+												<div class="left d-flex align-items-center">
+													<div class="profile-pic d-flex align-items-start">
+														<img src="/themes/brown_new_dashboard/assets/img/c05.jpg" alt="">
 													</div>
-													<div class="view">
-														<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
+													<div class="name-and-hour d-flex flex-column align-items-start ml-2">
+														<div class="name">Abbey Clark</div>
+														<div class="slot">ACB0126</div>
 													</div>
 												</div>
+												<div class="right">
+													<div class="uname-and-view d-flex align-items-center justify-content-between">
+														<div class="uname">
+															JDB0123
+														</div>
+														<div class="view">
+															<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="date-time ml-auto">
+												<span>3-11-18 5:23PM</span>
+											</div>
+										</div>
+										<div class="enrollees-holder d-flex flex-column">
+											<div class="left-right-holder d-flex align-items-center justify-content-between pt-3">
+												<div class="left d-flex align-items-center">
+													<div class="profile-pic d-flex align-items-start">
+														<img src="/themes/brown_new_dashboard/assets/img/c06.jpg" alt="">
+													</div>
+													<div class="name-and-hour d-flex flex-column align-items-start ml-2">
+														<div class="name">Cami Gosse</div>
+														<div class="slot">CGB0127</div>
+													</div>
+												</div>
+												<div class="right">
+													<div class="uname-and-view d-flex align-items-center justify-content-between">
+														<div class="uname">
+															JDB4567
+														</div>
+														<div class="view">
+															<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="date-time ml-auto">
+												<span>3-10-18 3:45PM</span>
 											</div>
 										</div>
 									</div>
@@ -585,7 +605,7 @@
 												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>JOC9196(Jocelyn Arcosiba)</b>.</div>
 												<div class="bottom d-flex align-items-center">
 													<div class="hours">14 hours ago</div>
-													<div class="earned-by ml-auto">EARNED BY JDE</div>
+													<div class="earned-by ml-auto">EARNED BY JDB4567</div>
 												</div>
 											</div>
 										</div>
@@ -597,7 +617,7 @@
 												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>JOC9196(Jocelyn Arcosiba)</b>.</div>
 												<div class="bottom d-flex align-items-center">
 													<div class="hours">14 hours ago</div>
-													<div class="earned-by ml-auto">EARNED BY JDE</div>
+													<div class="earned-by ml-auto">EARNED BY JDB0123</div>
 												</div>
 											</div>
 										</div>
@@ -609,7 +629,7 @@
 												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>JOC9196(Jocelyn Arcosiba)</b>.</div>
 												<div class="bottom d-flex align-items-center">
 													<div class="hours">14 hours ago</div>
-													<div class="earned-by ml-auto">EARNED BY JDE</div>
+													<div class="earned-by ml-auto">EARNED BY JDB0123</div>
 												</div>
 											</div>
 										</div>
@@ -621,7 +641,7 @@
 												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>JOC9196(Jocelyn Arcosiba)</b>.</div>
 												<div class="bottom d-flex align-items-center">
 													<div class="hours">14 hours ago</div>
-													<div class="earned-by ml-auto">EARNED BY JDE</div>
+													<div class="earned-by ml-auto">EARNED BY JDB04567</div>
 												</div>
 											</div>
 										</div>
@@ -681,14 +701,14 @@
 											        <!-- <p class="white-text">Strong overlay</p> -->
 											        <div class="date-month text-center">
 										        		<div class="date white-text">26</div>
-										        		<div class="month white-text">March</div>
+										        		<div class="month white-text">APRIL</div>
 											        </div>
 											    </div>
 											</div>
 										</div>
 										<div class="right d-flex flex-column ml-3">
 											<div class="top ml-2">
-												<div class="title">MCE MARCH</div>
+												<div class="title">MCE APRIL</div>
 												<div class="description">Masterclass in creative Entrepreneurship</div>
 											</div>
 											<div class="bottom d-flex align-items-center">
@@ -708,15 +728,15 @@
 											    <div class="mask flex-center rgba-black-strong">
 											        <!-- <p class="white-text">Strong overlay</p> -->
 											        <div class="date-month text-center">
-										        		<div class="date white-text">17</div>
-										        		<div class="month white-text">March</div>
+										        		<div class="date white-text">16</div>
+										        		<div class="month white-text">MAY</div>
 											        </div>
 											    </div>
 											</div>
 										</div>
 										<div class="right d-flex flex-column ml-3">
 											<div class="top ml-2">
-												<div class="title">MCE MARCH</div>
+												<div class="title">MCE MAY</div>
 												<div class="description">Masterclass in creative Entrepreneurship</div>
 											</div>
 											<div class="bottom d-flex align-items-center">

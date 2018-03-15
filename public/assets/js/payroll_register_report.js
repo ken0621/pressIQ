@@ -24,21 +24,24 @@ function payroll_register_report()
 
 	function event_register_report_filter()
 	{
-		$('#filter_report').on('change', function(e){
-			payroll_company_id = $(this).val();
-			payroll_department_id = $('#filter_department').val();
-			action_register_report_table(payroll_company_id,payroll_department_id);
-		});
 
-		$('#filter_department').on('change', function(e){
-			payroll_department_id = $(this).val();
-			payroll_company_id    = $('#filter_report').val();
-			action_register_report_table(payroll_company_id,payroll_department_id);
+		$('#filter_department').on('change', function(e)
+		{
+			payroll_department_id = $(this).val()
+			branch_id = $('.filter-by-branch').val();;
+			action_register_report_table(payroll_department_id,branch_id);
 
 		});
+
+	    $('.filter-by-branch').on('change', function(e)
+	    {
+	        branch_id = $(this).val();
+	    	payroll_department_id = $('#filter_department').val();
+			action_register_report_table(payroll_department_id,branch_id);
+	    });
 	}
 
-	function action_register_report_table(payroll_company_id,payroll_department_id)
+	function action_register_report_table(payroll_department_id,branch_id)
 	{
 		var period_company_id = $(".period_company_id").val();
 		$(".payroll_register_report_table").html('<div style="padding: 150px 80px; padding-bottom: 500px; text-align: center; font-size: 30px; color: #1682ba"><i class="fa fa-spinner fa-pulse fa-fw"></i></div>');
@@ -46,7 +49,7 @@ function payroll_register_report()
 			type: 'GET',
 			url: '/member/payroll/reports/payroll_register_report_table',
 			dataType: 'text',
-			data: {payroll_company_id: payroll_company_id, period_company_id : period_company_id, payroll_department_id:payroll_department_id},
+			data: {period_company_id : period_company_id, payroll_department_id:payroll_department_id, branch_id:branch_id},
 			success: function(data)
 				{
 					$(".payroll_register_report_table").html(data);

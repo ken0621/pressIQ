@@ -16,18 +16,6 @@
 </div>
 <div class=" panel panel-default panel-block panel-title-block" >
 	<div class="panel-body form-horizontal">
-		<div class="col-md-2 padding-lr-1">
-			<small>Filter by Company</small>
-			<select class="form-control filter-company" id="filter_report" data-id="{{$filtering_company}}">
-				<option value="0">All Company</option>
-				@foreach($_company as $company)
-				<option value="{{$company['company']->payroll_company_id}}">{{$company['company']->payroll_company_name}}</option> 
-				  @foreach($company['branch'] as $branch)
-				  <option value="{{$branch->payroll_company_id}}">&nbsp;&nbsp;• {{$branch->payroll_company_name}}</option>
-				  @endforeach
-				@endforeach
-			</select>
-		</div>
 		<div class="col-md-2 padding-lr-1" style="margin-left:25px;">
 			<small>Filter by Department</small>
 			<select class="form-control" id="filter_department" name="filter-department" data-id="{{$filtering_company}}">
@@ -36,6 +24,16 @@
 				<option value="{{$department->payroll_department_id}}">{{$department->payroll_department_name}}</option> 
 				@endforeach
 			</select>
+		</div>
+
+		<div class="col-md-2 padding-lr-1" style="margin-left:25px;">
+			<small>Filter by Branch</small>
+			<select class="form-control filter-by-branch" id="branch" name="branch_location_id">
+                  <option value="0">Select Branch</option>
+                  @foreach($_branch as $branch)
+                  <option value="{{$branch->branch_location_id}}">{{$branch->branch_location_name}}</option>
+                  @endforeach
+            </select>
 		</div>
 
 		<div class="form-group tab-content panel-body employee-container">
@@ -58,21 +56,21 @@
 {{-- <script type="text/javascript" src="/assets/js/ajax_offline.js"></script> --}}
 <script type="text/javascript" src="/assets/js/payroll_register_report.js"></script>
 <script>
-    $(".filter-company").unbind("change");
-    $(".filter-company").bind("change", function()
-    {
-        var link = "/member/payroll/reports/payroll_register_report_period/export_excel/"+$("#period_company_id").val()+"/"+$(this).val()+"/"+$("#filter_department").val();
-         $(".excel_tag").attr('href',link);
-    });
 
     $('select[name=filter-department]').change(function() 
     {
-        var link = "/member/payroll/reports/payroll_register_report_period/export_excel/"+$("#period_company_id").val()+"/"+$("#filter_report").val()+"/"+$(this).val();
+        var link = "/member/payroll/reports/payroll_register_report_period/export_excel/"+$("#period_company_id").val()+"/"+ $(this).val() + "/" + $('.filter-by-branch').val();
 
          $(".excel_tag").attr('href',link);
     });
 
+    $('select[name=branch_location_id]').change(function() 
+    {
+        var link = "/member/payroll/reports/payroll_register_report_period/export_excel/"+$("#period_company_id").val()+"/"+ $('#filter_department').val() + "/" + $(this).val();
 
+         $(".excel_tag").attr('href',link);
+
+    });
 
 
     </script>

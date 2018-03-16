@@ -121,6 +121,7 @@ html, body
 
                 .reminder-holder
                 {
+                    border-left: 5px solid #a87852;
                     background-color: #E7D9BC;
                     flex: 4;
                     margin: 10px;
@@ -146,7 +147,7 @@ html, body
                         font-size: 14px;
                         color: #562b15;
                         padding: 10px;
-                        border-left: 5px solid #a87852;
+                        
                     }
                 }
         }

@@ -3268,10 +3268,17 @@ class Payroll
 
 			$payroll_month_payment_amount = Tbl_payroll_deduction_payment_v2::getmonthdeductionpayment($employee_id, $temp['payroll_deduction_id'], $temp['deduction_name'], $month, $month_contrib)->first();
 
+
 			if($period_count == "middle_period" && $deduction->payroll_deduction_period == "Last Period")
 			{
 				continue;
 			}
+
+			/* if balance is less than to periodical deduction */
+			if($deduction->balance_deduction < $temp['payroll_periodal_deduction'])
+			{
+				$temp['payroll_periodal_deduction'] = $deduction->balance_deduction;
+			}	
 
 			/*Check Total payment of the month and if total payment and deduction is greater than monthly amortization*/
 			if (($payroll_month_payment_amount["total_payment"] + $deduction->payroll_periodal_deduction) > $deduction->payroll_monthly_amortization) 
@@ -3293,9 +3300,10 @@ class Payroll
 
 				}
 			}
-			
+				
 			if ($payroll_total_payment_amount["total_payment"] < $deduction->payroll_deduction_amount) 
 			{
+
 				$data['total_deduction'] += $temp['payroll_periodal_deduction'];
 
 				if ($temp['payroll_periodal_deduction'] > 0) 

@@ -246,10 +246,6 @@ class ShopProductController extends Shop
         {
             $perPage = 20;
         }
-        if($this->shop_theme == "LIVINGWATER")
-        {
-            $perPage = 25;
-        }
 
         elseif($this->shop_theme == "3xcell" || $this->shop_theme == "additions")
         {

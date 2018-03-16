@@ -4,6 +4,12 @@
 	<div class="top-1-container">
 		<div class="container">
 			<div class="prod-content-container row clearfix">
+				<div class="row">
+		        <ul id="breadcrumb">
+		          <li><a href="/product"><span class="icon icon-beaker"> </span> Gallery</a></li>
+		          <li><a href="#" class="active"><span class="icon icon-arrow-down"> </span> {{ get_product_first_name($product) }}</a></li>
+		        </ul>
+			</div>
 				<div class="col-md-6">
 					<!-- PRODUCT IMAGE -->
 					<div class="prod-image-container">
@@ -29,30 +35,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-	<div class="top-2-container">
-		<div class="container">
-			<!-- RELATED PRODUCTS -->
-			<div class="related-products-container">
-				<div class="title-container">
-					<div class="title">OTHER PRODUCTS</div>
-					<div class="line-bot"></div>
-				</div>
-				<div class="per-item-container row clearfix">
-					<!-- PER ITEM -->
-					@foreach(limit_foreach($_related, 4) as $related)
-					<div class="col-md-3">
-						<div class="per-item" style="cursor: pointer;" onClick="location.href='/product/view2/{{ $related['eprod_id'] }}'">
-							<div class="image-container">
-								<img src="{{ get_product_first_image($related) }}">
-							</div>
-						</div>
-					</div>
-					@endforeach
-				</div>
-			</div>
-			<!-- PACKAGE -->
 		</div>
 	</div>
 </div>

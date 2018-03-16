@@ -1,3 +1,10 @@
+$blue-gray 			    : #34495e;
+$blue-gray-darken 	: #2c3e50;
+$blue 				      : #3498db;
+$blue-darken 		    : #2980b9;
+$green 				      : #1abc9c;
+$green-darken 		  : #16a085;
+
 body{
 	font-family: 'Open Sans', sans-serif;
 	background-color: #f6f6f6;
@@ -7,14 +14,115 @@ body{
 .top-1-container {
 	padding: 25px 0px 40px 0px;
 
-	.prod-content-container {
-
-		.prod-image-container {
+	.prod-content-container 
+	{
+		.prod-image-container 
+		{
 			padding: 20px 0px 20px 0px;
 			overflow: hidden;
-			img {
+			img 
+			{
 				width: 100%;
 			}
+		}
+		#breadcrumb{
+		  list-style:none;
+		  display: inline-block;
+		  padding-left: 30px;
+		  li
+		  {
+		    float:left;
+		    a
+		    {
+		      color:#FFF;
+		      display:block;
+		      background: #5f5f5f;
+		      text-decoration: none;
+		      position:relative;
+		      height: 40px;
+		      line-height: 40px;
+		      padding: 0 10px 0 5px;
+		      text-align: center;
+		      margin-right: 23px;
+		    }
+		    &:first-child
+		    {
+		      a
+		      {
+		        padding-left:15px;
+		        border-radius: 4px 0 0 4px;
+		        &:before
+		        {
+		          border:none;
+		        }
+		      }
+		    }
+		    &:last-child
+		    {
+		      a
+		      {
+		        padding-right:15px;
+		        border-radius: 0 4px 4px 0;
+		        &:after
+		        {
+		          border:none;
+		        }
+		      }
+		    }
+		    
+		    a
+		    {   
+		      &:before,
+		      &:after
+		      {
+		        content: "";
+		        position:absolute;
+		        top: 0;
+		        border:0 solid #5f5f5f;
+		        border-width:20px 10px;
+		        width: 0;
+		        height: 0;
+		      }
+		      &:before
+		      {
+		        left:-20px;
+		        border-left-color:transparent;
+		      }
+		      &:after
+		      {
+		        left:100%;
+		        border-color:transparent;
+		        border-left-color: #5f5f5f;
+		      }
+		      &:hover
+		      {
+		        background-color: #1c1c1c;
+		        &:before
+		        {
+		          border-color: #1c1c1c;
+		          border-left-color:transparent;
+		         }
+		        &:after
+		        {
+		          border-left-color: #1c1c1c;
+		        }
+		      }
+		    }
+		    a.active
+		    {
+		    	background-color: #1c1c1c;
+		    	cursor: text;
+		    	&:before
+		    	{
+		    	  border-color: #1c1c1c;
+		    	  border-left-color:transparent;
+		    	 }
+		    	&:after
+		    	{
+		    	  border-left-color: #1c1c1c;
+		    	}
+		    }
+		  }
 		}
 		.prod-description-container 
 		{

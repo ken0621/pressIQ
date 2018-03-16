@@ -24,77 +24,8 @@
                                         </div>
                                         @endforeach
                                     @else
-                                       <div class="col-md-3">
-                                            <div class="per-album-container">
-                                                <div class="img-container">
-                                                    <a href="/product/view2/{{ $product['eprod_id'] }}">
-                                                        <img src="/themes/{{ $shop_theme }}/img/alkaline.jpg">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                       </div>
-                                       <div class="col-md-3">
-                                           <div class="per-album-container">
-                                               <div class="img-container">
-                                                   <a href="/product/view2/{{ $product['eprod_id'] }}">
-                                                       <img src="/themes/{{ $shop_theme }}/img/APC.jpg">
-                                                   </a>
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <div class="col-md-3">
-                                           <div class="per-album-container">
-                                               <div class="img-container">
-                                                   <a href="/product/view2/{{ $product['eprod_id'] }}">
-                                                       <img src="/themes/{{ $shop_theme }}/img/bottled-water.jpg">
-                                                   </a>
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <div class="col-md-3">
-                                           <div class="per-album-container">
-                                               <div class="img-container">
-                                                   <a href="/product/view2/{{ $product['eprod_id'] }}">
-                                                       <img src="/themes/{{ $shop_theme }}/img/CAP.jpg">
-                                                   </a>
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <div class="col-md-3">
-                                           <div class="per-album-container">
-                                               <div class="img-container">
-                                                   <a href="/product/view2/{{ $product['eprod_id'] }}">
-                                                       <img src="/themes/{{ $shop_theme }}/img/caps.jpg">
-                                                   </a>
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <div class="col-md-3">
-                                           <div class="per-album-container">
-                                               <div class="img-container">
-                                                   <a href="/product/view2/{{ $product['eprod_id'] }}">
-                                                       <img src="/themes/{{ $shop_theme }}/img/dispensers.jpg">
-                                                   </a>
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <div class="col-md-3">
-                                           <div class="per-album-container">
-                                               <div class="img-container">
-                                                   <a href="/product/view2/{{ $product['eprod_id'] }}">
-                                                       <img src="/themes/{{ $shop_theme }}/img/filter-housing.jpg">
-                                                   </a>
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <div class="col-md-3">
-                                           <div class="per-album-container">
-                                               <div class="img-container">
-                                                   <a href="/product/view2/{{ $product['eprod_id'] }}">
-                                                       <img src="/themes/{{ $shop_theme }}/img/gallons.jpg">
-                                                   </a>
-                                               </div>
-                                           </div>
+                                       <div class="col-md-3" >
+                                            <strong>"NO ITEMS FOUND"</strong>
                                        </div>
                                     @endif
                                 </div>

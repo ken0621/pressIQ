@@ -458,7 +458,7 @@
 													</div>
 													<div class="name-and-hour d-flex flex-column align-items-start ml-2">
 														<div class="name">Drew Duncan</div>
-														<div class="slot">DCB0123</div>
+														<div class="slot">DDB0123</div>
 													</div>
 												</div>
 												<div class="right">
@@ -602,9 +602,9 @@
 												<div class="square gr"></div>
 											</div>
 											<div class="earned ml-3">
-												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>JOC9196(Jocelyn Arcosiba)</b>.</div>
+												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>DDB0123(Drew Duncan)</b>.</div>
 												<div class="bottom d-flex align-items-center">
-													<div class="hours">14 hours ago</div>
+													<div class="date-hours">3-15-18 3:15PM</div>
 													<div class="earned-by ml-auto">EARNED BY JDB4567</div>
 												</div>
 											</div>
@@ -614,9 +614,9 @@
 												<div class="square gr"></div>
 											</div>
 											<div class="earned ml-3">
-												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>JOC9196(Jocelyn Arcosiba)</b>.</div>
+												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>AHB0124(Austin Hicks)</b>.</div>
 												<div class="bottom d-flex align-items-center">
-													<div class="hours">14 hours ago</div>
+													<div class="date-hours">3-14-18 4:16PM</div>
 													<div class="earned-by ml-auto">EARNED BY JDB0123</div>
 												</div>
 											</div>
@@ -626,9 +626,9 @@
 												<div class="square gr"></div>
 											</div>
 											<div class="earned ml-3">
-												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>JOC9196(Jocelyn Arcosiba)</b>.</div>
+												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>BHB0125(Bobby Halley)</b>.</div>
 												<div class="bottom d-flex align-items-center">
-													<div class="hours">14 hours ago</div>
+													<div class="date-hours">3-13-18 2:45PM</div>
 													<div class="earned-by ml-auto">EARNED BY JDB0123</div>
 												</div>
 											</div>
@@ -638,10 +638,22 @@
 												<div class="square gr"></div>
 											</div>
 											<div class="earned ml-3">
-												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>JOC9196(Jocelyn Arcosiba)</b>.</div>
+												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>ACB0126(Abbey Clark)</b>.</div>
 												<div class="bottom d-flex align-items-center">
-													<div class="hours">14 hours ago</div>
+													<div class="date-hours">3-12-18 1:54PM</div>
 													<div class="earned-by ml-auto">EARNED BY JDB04567</div>
+												</div>
+											</div>
+										</div>
+										<div class="rewards-holder d-flex py-3">
+											<div class="bullet">
+												<div class="square gr"></div>
+											</div>
+											<div class="earned ml-3">
+												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>CGB0127(Cami Gosse)</b>.</div>
+												<div class="bottom d-flex align-items-center">
+													<div class="date-hours">3-11-18 2:38PM</div>
+													<div class="earned-by ml-auto">EARNED BY JDB0123</div>
 												</div>
 											</div>
 										</div>

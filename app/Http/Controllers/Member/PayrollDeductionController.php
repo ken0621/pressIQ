@@ -562,6 +562,7 @@ class PayrollDeductionController extends Member
                     $insert['payroll_payment_amount']       = $deduction['payroll_periodal_deduction'];  
                     $insert['payroll_total_payment_amount'] = $deduction['payroll_periodal_deduction']; 
                     $insert['payroll_remaining_balance']    = $deduction_employee['payroll_deduction_amount'] - $deduction['payroll_periodal_deduction']; 
+                    $insert['payroll_month_payment']        = $period_info['month_contribution'];
                     Tbl_payroll_deduction_payment_v2::insert($insert);
                    
                }
@@ -583,6 +584,7 @@ class PayrollDeductionController extends Member
                     $insert['payroll_payment_amount']            = $deduction['payroll_periodal_deduction'];  
                     $insert['payroll_total_payment_amount']      = $payroll_total_payment_amount["total_payment"] + $deduction['payroll_periodal_deduction']; 
                     $insert['payroll_remaining_balance']         = $balance - $deduction['payroll_periodal_deduction']; 
+                    $insert['payroll_month_payment']             = $period_info['month_contribution'];
                     Tbl_payroll_deduction_payment_v2::insert($insert);
 
                }

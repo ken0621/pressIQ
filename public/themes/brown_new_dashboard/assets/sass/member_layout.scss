@@ -64,41 +64,81 @@ html, body
 
         .header
         {
-            //background-color: #e7d9bc;
             @extend .header-bg;
-            //border-bottom: 2px solid #e3e3e3;
             margin-left: 80px;
 
             @media screen and (max-width: 768px)
             {
                 margin-left: auto;
+                flex-direction: column;
             }
 
-			.left
-			{
-                border-bottom: 2px solid #e3e3e3;
-                padding: 15px;
-                flex: 3;
-
-                .bold-1
+                .current-wallet
                 {
-                    font-family: $content-text;
-                    font-weight: 700;
-                    font-size: 14px;
-                    color: #271308;
+                    background-color: #a87852;
+                    flex: 1;
+                    margin: 10px;
+
+                    .value
+                    {
+                        font-family: $content-text;
+                        font-weight: 700;
+                        color: #fff;
+                        font-size: 18px;
+                    }
+
+                    .label
+                    {
+                        @extend .value;
+                        font-weight: 400;
+                        font-size: 13px;
+                        color: #fff;
+                    }
                 }
 
-                .bold-2
+                .ez-plan-balance
                 {
-                    @extend .bold-1;
-                    color: #562b15;
+                    background-color: #a87852;
+                    flex: 1;
+                    margin: 10px;
+
+                    .value
+                    {
+                        font-family: $content-text;
+                        font-weight: 400;
+                        font-size: 14px;
+                        color: #fff;
+                    }
+
+                    .label
+                    {
+                        @extend .value;
+                        font-weight: 400;
+                        font-size: 13px;
+                        color: #fff;
+                    }
                 }
 
                 .reminder-holder
                 {
-                    background-color: #e7d9bc;
-                    border-top-right-radius: 4px;
-                    border-bottom-right-radius: 4px;
+                    border-left: 5px solid #a87852;
+                    background-color: #E7D9BC;
+                    flex: 4;
+                    margin: 10px;
+
+                    .bold-1
+                    {
+                        font-family: $content-text;
+                        font-weight: 700;
+                        font-size: 14px;
+                        color: #271308;
+                    }
+
+                    .bold-2
+                    {
+                        @extend .bold-1;
+                        color: #562b15;
+                    }
 
                     .reminder
                     {
@@ -107,63 +147,9 @@ html, body
                         font-size: 14px;
                         color: #562b15;
                         padding: 10px;
-                        border-left: 5px solid #a87852;
+                        
                     }
                 }
-			}
-
-			.right
-			{
-                flex: 2;
-
-                .wallet-and-balance-holder
-                {
-                    .current-wallet
-                    {
-                        border-bottom: 2px solid #1eb5b3;
-                        padding: 20px;
-                        flex: 3;
-
-                        .value
-                        {
-                            font-family: $content-text;
-                            font-weight: 700;
-                            color: #404040;
-                            font-size: 1.375rem;
-                        }
-
-                        .label
-                        {
-                            @extend .value;
-                            font-size: 13px;
-                            color: #1eb5b3;
-                        }
-                    }
-
-                    .ez-plan-balance
-                    {
-                        border-bottom: 2px solid #ec4e2f;
-                        padding: 20px;
-                        flex: 2;
-
-                        .value
-                        {
-                            font-family: $content-text;
-                            font-weight: 400;
-                            font-size: 14px;
-                            color: #404040;
-                        }
-
-                        .label
-                        {
-                            @extend .value;
-                            font-weight: 700;
-                            font-size: 13px;
-                            color: #ec4e2f;
-                        }
-                    }
-                }
-			}
         }
 
         .stay-aside
@@ -279,9 +265,17 @@ html, body
 
                                 .profile
                                 {
-                                    .image
+                                    .image-profile
                                     {
                                         margin-left: -10px;
+                                        width: 50px;
+
+                                        img
+                                        {
+                                            width: 100%;
+                                            border-radius: 100%;
+                                            object-fit: cover;
+                                        }
                                     }
 
                                     .label

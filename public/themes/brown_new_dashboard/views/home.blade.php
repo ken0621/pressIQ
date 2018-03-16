@@ -34,7 +34,6 @@
 	<link rel="stylesheet" type="text/css" href="/themes/brown_new_dashboard/assets/mdb/css/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" href="/themes/brown_new_dashboard/assets/mdb/css/mdb.css"/>
 	<link rel="stylesheet" type="text/css" href="/themes/brown_new_dashboard/assets/mdb/css/mdb.min.css"/>
-
 </head>
 <body>
 	<header>
@@ -46,7 +45,7 @@
 						<div class="dropdown">
 							<a class="dropbtn" href="javascript:">
 								<img src="" alt="" width="24" height="24" style="border-radius: 100%">
-								<span class="name">The Bad Puppy</span>
+								<span class="name">John Doe</span>
 								<i class=" ml-2 fas fa-angle-down"></i>
 							</a>
 							<div class="dropdown-content">
@@ -54,11 +53,11 @@
 								<a href="/logout">SIGNOUT</a> -->
 								<div class="top d-flex p-3">
 									<div class="profile-pic">
-										<img src="/themes/brown_new_dashboard/assets/img/profile.png" alt="">
+										<img src="/themes/brown_new_dashboard/assets/img/c01.jpg" alt="">
 									</div>
 									<div class="name-email ml-3">
-										<div class="uname">The Bad Puppy</div>
-										<div class="email">sample_email@gmail.com</div>
+										<div class="uname">John Doe</div>
+										<div class="email">johnd@gmail.com</div>
 									</div>
 								</div>
 								<div class="bottom p-3">
@@ -98,31 +97,25 @@
 
 	<div class="member">
 		<div class="members">
-			<div class="header d-flex flex-wrap">
-				<div class="left d-flex align-items-center">
-					 <div class="reminder-holder">
-					 	<div class="reminder"><span class="bold-1">A friendly Reminder: </span> You won't be receiving your payout until you setup your <span class="bold-2">payout details. <a class="bold-2" href="#"><u>Click here to set it up right away.</u></a></span>
-					 	</div>
-					 </div>
-				</div>
-				<div class="right">
-					<div class="wallet-and-balance-holder d-flex">
-						<div class="current-wallet d-flex align-items-center">
-							<div class="icon"><img src="/themes/brown_new_dashboard/assets/img/current-wallet.png" alt=""></div>
-							<div class="value-holder ml-3">
-								<div class="value">PHP 0,000,000.00</div>
-								<div class="label">Current Wallet</div>
-							</div>
-						</div>
-						<div class="ez-plan-balance d-flex align-items-center">
-							<div class="icon"><img src="/themes/brown_new_dashboard/assets/img/ez-plan-balance.png" alt=""></div>
-							<div class="value-holder ml-3">
-								<div class="value">PHP 0,000,000.00</div>
-								<div class="label">EZ Plan Balance</div>
-							</div>
-						</div>
+			<div class="header d-flex flex-wrap justify-content-between">
+				<div class="current-wallet d-flex align-items-start p-2">
+					<div class="icon"><img src="/themes/brown_new_dashboard/assets/img/current-wallet2.png" alt=""></div>
+					<div class="value-holder ml-3">
+						<div class="value">PHP 0.00</div>
+						<div class="label">Current Wallet</div>
 					</div>
 				</div>
+				<div class="ez-plan-balance d-flex align-items-start p-2">
+					<div class="icon"><img src="/themes/brown_new_dashboard/assets/img/ez-plan-balance2.png" alt=""></div>
+					<div class="value-holder ml-3">
+						<div class="value">PHP 0.00</div>
+						<div class="label mt-1">EZ Plan Balance</div>
+					</div>
+				</div>
+				<div class="reminder-holder d-flex align-items-center justify-content-center">
+				 	<div class="reminder"><span class="bold-1">A friendly Reminder: </span> You won't be receiving your payout until you setup your <span class="bold-2">payout details. <a class="bold-2" href="#"><u>Click here to set it up right away.</u></a></span>
+				 	</div>
+				 </div>
 			</div>
 			<div class="stay-aside">
 				<div class="sidebar small">
@@ -147,12 +140,12 @@
 								<a href="javascript:">
 									<div class="nav-holder">
 										<div class="profile d-flex align-items-center justify-content-start">
-											<div class="image">
-												<img src="/themes/brown_new_dashboard/assets/img/profile.png" alt="">
+											<div class="image-profile">
+												<img src="/themes/brown_new_dashboard/assets/img/c01.jpg" alt="">
 											</div>
 											<div class="label ml-4">
-												<div class="name">The Bad Puppy</div>
-												<div class="email">sample@email.com</div>
+												<div class="name">John Doe</div>
+												<div class="email">johnd@email.com</div>
 											</div>
 										</div>
 									</div>
@@ -282,18 +275,18 @@
 									<div class="bottom-section-content">
 										<div class="rewards">
 											<div class="bullet d-flex align-items-center">
-												<div class="square pr"></div>
-												<div class="left ml-3">Pairing Reward</div>
+												<div class="square dec"></div>
+												<div class="left ml-3">Direct Enrollment Commission</div>
 												<div class="right ml-auto">PHP 0.00</div>
 											</div>
 											<div class="bullet d-flex align-items-center">
-												<div class="square deb"></div>
-												<div class="left ml-3">Direct Enrollment Bonus</div>
+												<div class="square epb"></div>
+												<div class="left ml-3">EZ Plan Bonus</div>
 												<div class="right ml-auto">PHP 0.00</div>
 											</div>
 											<div class="bullet d-flex align-items-center">
-												<div class="square ez"></div>
-												<div class="left ml-3">EZ Enrollment Bonus</div>
+												<div class="square mb"></div>
+												<div class="left ml-3">Matching Bonus</div>
 												<div class="right ml-auto">PHP 0.00</div>
 											</div>
 											<div class="bullet d-flex align-items-center">
@@ -316,35 +309,30 @@
 								</div>
 							</div>
 							<div class="col">
-								<div class="section-holder ez-plan-balance">
+								<div class="section-holder earning-deducted">
 									<div class="top-section-header d-flex align-items-center">
 										<div class="icon d-flex align-items-center">
 											<img src="/themes/brown_new_dashboard/assets/img/ez-plan.png" alt="">
 										</div>
-										<div class="section-title ml-2">EZ Plan Balance</div>
+										<div class="section-title ml-2">Earnings Deducted</div>
 									</div>
 
 									<div class="bottom-section-content">
 										<div class="balance">
 											<div class="bullet d-flex align-items-center">
-												<div class="square ob"></div>
-												<div class="left ml-3">Original Balance</div>
+												<div class="square ezebd"></div>
+												<div class="left ml-3">EZ Enrollment Bonus Deducted</div>
 												<div class="right ml-auto">PHP 0.00</div>
 											</div>
 											<div class="bullet d-flex align-items-center">
-												<div class="square ed"></div>
-												<div class="left ml-3">Earnings Deducted</div>
-												<div class="right ml-auto">PHP 0.00</div>
-											</div>
-											<div class="bullet d-flex align-items-center">
-												<div class="square ezpb"></div>
-												<div class="left ml-3">EZ Plan Balance</div>
+												<div class="square mbd"></div>
+												<div class="left ml-3">Matching Bonus Deducted</div>
 												<div class="right ml-auto">PHP 0.00</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="section-holder reward-points mt-3">
+								{{-- <div class="section-holder reward-points mt-3">
 									<div class="top-section-header d-flex align-items-center">
 										<div class="icon d-flex align-items-center">
 											<img src="/themes/brown_new_dashboard/assets/img/reward-pts.png" alt="">
@@ -365,7 +353,7 @@
 											</div>
 										</div>
 									</div>
-								</div>
+								</div> --}}
 							</div>
 						</div>
 						<div class="row clearfix">
@@ -382,7 +370,7 @@
 											<div class="left d-flex align-items-center p-3">
 												<div class="replicated-link">
 													<div class="top">
-														<div class="label-bld">BADPUPP</div>
+														<div class="label-bld">JDB0123</div>
 														<div class="btn-holder">
 															<button class="btn-cust-brown"><img src="/themes/brown_new_dashboard/assets/img/replicated.png" alt=""> Replicated Link</button>
 														</div>
@@ -399,12 +387,12 @@
 												</div>
 												<div class="bottom d-flex align-items-center justify-content-between">
 													<div class="direct text-center m-1">
-														<span>DIRECT 1/2</span>
-														<div class="gauge-1"></div>
+														<span>DIRECT 0/2</span>
+														{{-- <div class="gauge-1"></div> --}}
 													</div>
 													<div class="group text-center m-1">
-														<div class="gauge-2"></div>
-														<span>GROUP 4/12</span>
+														{{-- <div class="gauge-2"></div> --}}
+														<span>GROUP 0/12</span>
 													</div>
 												</div>
 											</div>
@@ -413,7 +401,7 @@
 											<div class="left d-flex align-items-center p-3">
 												<div class="replicated-link">
 													<div class="top">
-														<div class="label-bld">BADPUPP</div>
+														<div class="label-bld">JDB4567</div>
 														<div class="btn-holder">
 															<button class="btn-cust-brown"><img src="/themes/brown_new_dashboard/assets/img/replicated.png" alt=""> Replicated Link</button>
 														</div>
@@ -434,70 +422,8 @@
 														<span>DIRECT 0/2</span>
 													</div>
 													<div class="group text-center m-1">
-														<div class="gauge-3"></div>
-														<span>GROUP 1/12</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="slot-holder d-flex flex-wrap align-items-center">
-											<div class="left d-flex align-items-center p-3">
-												<div class="replicated-link">
-													<div class="top">
-														<div class="label-bld">BADPUPP</div>
-														<div class="btn-holder">
-															<button class="btn-cust-brown"><img src="/themes/brown_new_dashboard/assets/img/replicated.png" alt=""> Replicated Link</button>
-														</div>
-													</div>
-												</div>
-												<div class="slot-wallet">
-													<div class="label-reg">SLOT WALLET</div>
-													<div class="value">PHP 2,500.00</div>
-												</div>
-											</div>
-											<div class="right d-flex flex-column p-3">
-												<div class="top d-flex align-items-center justify-content-center">
-													<div class="label">ROAD TO BUILDER</div>
-												</div>
-												<div class="bottom d-flex align-items-center justify-content-between">
-													<div class="direct text-center m-1">
-														<span>DIRECT 1/2</span>
-														<div class="gauge-1"></div>
-													</div>
-													<div class="group text-center m-1">
-														<div class="gauge-2"></div>
-														<span>GROUP 4/12</span>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="slot-holder d-flex flex-wrap align-items-center">
-											<div class="left d-flex align-items-center p-3">
-												<div class="replicated-link">
-													<div class="top">
-														<div class="label-bld">BADPUPP</div>
-														<div class="btn-holder">
-															<button class="btn-cust-brown"><img src="/themes/brown_new_dashboard/assets/img/replicated.png" alt=""> Replicated Link</button>
-														</div>
-													</div>
-												</div>
-												<div class="slot-wallet">
-													<div class="label-reg">SLOT WALLET</div>
-													<div class="value">PHP 2,500.00</div>
-												</div>
-											</div>
-											<div class="right d-flex flex-column p-3">
-												<div class="top d-flex align-items-center justify-content-center">
-													<div class="label">ROAD TO BUILDER</div>
-												</div>
-												<div class="bottom d-flex align-items-center justify-content-between">
-													<div class="direct text-center m-1">
-														<!-- <div class="gauge"></div> -->
-														<span>DIRECT 0/2</span>
-													</div>
-													<div class="group text-center m-1">
-														<div class="gauge-3"></div>
-														<span>GROUP 1/12</span>
+														{{-- <div class="gauge-3"></div> --}}
+														<span>GROUP 0/12</span>
 													</div>
 												</div>
 											</div>
@@ -517,109 +443,141 @@
 										<div class="section-title ml-2">Newest Enrollees</div>
 									</div>
 									<div class="bottom-section-content">
-										<div class="enrollees-holder d-flex align-items-center p-3">
-											<div class="left d-flex align-items-center">
-												<div class="profile-pic d-flex align-items-center">
-													<img src="/themes/brown_new_dashboard/assets/img/puppy-1.png" alt="">
+
+										<div class="ticket d-flex align-items-center text-center">
+											<div class="ticket-title mr-auto">NAME/SLOT</div>
+											<div class="ticket-title mx-auto pl-4">ENROLLER</div>
+											<div class="ticket-title ml-auto">DETAILS</div>
+										</div>
+										
+										<div class="enrollees-holder d-flex flex-column">
+											<div class="left-right-holder d-flex align-items-center justify-content-between pt-3">
+												<div class="left d-flex align-items-center">
+													<div class="profile-pic d-flex align-items-start">
+														<img src="/themes/brown_new_dashboard/assets/img/c02.jpg" alt="">
+													</div>
+													<div class="name-and-hour d-flex flex-column align-items-start ml-2">
+														<div class="name">Drew Duncan</div>
+														<div class="slot">DCB0123</div>
+													</div>
 												</div>
-												<div class="name-and-hour d-flex flex-column align-items-center ml-2">
-													<div class="name">Cuttie Puppy</div>
-													<div class="hour">14 hours ago</div>
+												<div class="right">
+													<div class="uname-and-view d-flex align-items-center justify-content-between">
+														<div class="uname">
+															JDB0123
+														</div>
+														<div class="view">
+															<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
+														</div>
+													</div>
 												</div>
 											</div>
-											<div class="right">
-												<div class="uname-and-view d-flex align-items-center justify-content-between">
-													<div class="uname">
-														CUTTPUP
-													</div>
-													<div class="view">
-														<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
-													</div>
-												</div>
+											<div class="date-time ml-auto">
+												<span>3-15-18 4:30PM</span>
 											</div>
 										</div>
-										<div class="enrollees-holder d-flex align-items-center p-3">
-											<div class="left d-flex align-items-center">
-												<div class="profile-pic d-flex align-items-center">
-													<img src="/themes/brown_new_dashboard/assets/img/puppy-2.png" alt="">
+										<div class="enrollees-holder d-flex flex-column">
+											<div class="left-right-holder d-flex align-items-center justify-content-between pt-3">
+												<div class="left d-flex align-items-center">
+													<div class="profile-pic d-flex align-items-start">
+														<img src="/themes/brown_new_dashboard/assets/img/c03.jpg" alt="">
+													</div>
+													<div class="name-and-hour d-flex flex-column align-items-start ml-2">
+														<div class="name">Austin Hicks</div>
+														<div class="slot">AHB0124</div>
+													</div>
 												</div>
-												<div class="name-and-hour d-flex flex-column align-items-center ml-2">
-													<div class="name">Cuttie Puppy</div>
-													<div class="hour">14 hours ago</div>
+												<div class="right">
+													<div class="uname-and-view d-flex align-items-center justify-content-between">
+														<div class="uname">
+															JDB0123
+														</div>
+														<div class="view">
+															<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
+														</div>
+													</div>
 												</div>
 											</div>
-											<div class="right">
-												<div class="uname-and-view d-flex align-items-center justify-content-between">
-													<div class="uname">
-														CUTTPUP
-													</div>
-													<div class="view">
-														<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="enrollees-holder d-flex align-items-center p-3">
-											<div class="left d-flex align-items-center">
-												<div class="profile-pic d-flex align-items-center">
-													<img src="/themes/brown_new_dashboard/assets/img/puppy-3.png" alt="">
-												</div>
-												<div class="name-and-hour d-flex flex-column align-items-center ml-2">
-													<div class="name">Cuttie Puppy</div>
-													<div class="hour">14 hours ago</div>
-												</div>
-											</div>
-											<div class="right">
-												<div class="uname-and-view d-flex align-items-center justify-content-between">
-													<div class="uname">
-														CUTTPUP
-													</div>
-													<div class="view">
-														<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
-													</div>
-												</div>
+											<div class="date-time ml-auto">
+												<span>3-14-18 5:35PM</span>
 											</div>
 										</div>
-										<div class="enrollees-holder d-flex align-items-center p-3">
-											<div class="left d-flex align-items-center">
-												<div class="profile-pic d-flex align-items-center">
-													<img src="/themes/brown_new_dashboard/assets/img/puppy-2.png" alt="">
+										<div class="enrollees-holder d-flex flex-column">
+											<div class="left-right-holder d-flex align-items-center justify-content-between pt-3">
+												<div class="left d-flex align-items-center">
+													<div class="profile-pic d-flex align-items-start">
+														<img src="/themes/brown_new_dashboard/assets/img/c04.jpg" alt="">
+													</div>
+													<div class="name-and-hour d-flex flex-column align-items-start ml-2">
+														<div class="name">Bobby Halley</div>
+														<div class="slot">BHB0125</div>
+													</div>
 												</div>
-												<div class="name-and-hour d-flex flex-column align-items-center ml-2">
-													<div class="name">Cuttie Puppy</div>
-													<div class="hour">14 hours ago</div>
+												<div class="right">
+													<div class="uname-and-view d-flex align-items-center justify-content-between">
+														<div class="uname">
+															JDB4567
+														</div>
+														<div class="view">
+															<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
+														</div>
+													</div>
 												</div>
 											</div>
-											<div class="right">
-												<div class="uname-and-view d-flex align-items-center justify-content-between">
-													<div class="uname">
-														CUTTPUP
-													</div>
-													<div class="view">
-														<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
-													</div>
-												</div>
+											<div class="date-time ml-auto">
+												<span>3-12-18 1:30PM</span>
 											</div>
 										</div>
-										<div class="enrollees-holder d-flex align-items-center p-3">
-											<div class="left d-flex align-items-center">
-												<div class="profile-pic d-flex align-items-center">
-													<img src="/themes/brown_new_dashboard/assets/img/puppy-2.png" alt="">
+										<div class="enrollees-holder d-flex flex-column">
+											<div class="left-right-holder d-flex align-items-center justify-content-between pt-3">
+												<div class="left d-flex align-items-center">
+													<div class="profile-pic d-flex align-items-start">
+														<img src="/themes/brown_new_dashboard/assets/img/c05.jpg" alt="">
+													</div>
+													<div class="name-and-hour d-flex flex-column align-items-start ml-2">
+														<div class="name">Abbey Clark</div>
+														<div class="slot">ACB0126</div>
+													</div>
 												</div>
-												<div class="name-and-hour d-flex flex-column align-items-center ml-2">
-													<div class="name">Cuttie Puppy</div>
-													<div class="hour">14 hours ago</div>
+												<div class="right">
+													<div class="uname-and-view d-flex align-items-center justify-content-between">
+														<div class="uname">
+															JDB0123
+														</div>
+														<div class="view">
+															<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
+														</div>
+													</div>
 												</div>
 											</div>
-											<div class="right">
-												<div class="uname-and-view d-flex align-items-center justify-content-between">
-													<div class="uname">
-														CUTTPUP
+											<div class="date-time ml-auto">
+												<span>3-11-18 5:23PM</span>
+											</div>
+										</div>
+										<div class="enrollees-holder d-flex flex-column">
+											<div class="left-right-holder d-flex align-items-center justify-content-between pt-3">
+												<div class="left d-flex align-items-center">
+													<div class="profile-pic d-flex align-items-start">
+														<img src="/themes/brown_new_dashboard/assets/img/c06.jpg" alt="">
 													</div>
-													<div class="view">
-														<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
+													<div class="name-and-hour d-flex flex-column align-items-start ml-2">
+														<div class="name">Cami Gosse</div>
+														<div class="slot">CGB0127</div>
 													</div>
 												</div>
+												<div class="right">
+													<div class="uname-and-view d-flex align-items-center justify-content-between">
+														<div class="uname">
+															JDB4567
+														</div>
+														<div class="view">
+															<button class="btn-cust-brown d-flex align-items-center"><img src="/themes/brown_new_dashboard/assets/img/view.png" alt=""> <span class="ml-2">View</span></button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="date-time ml-auto">
+												<span>3-10-18 3:45PM</span>
 											</div>
 										</div>
 									</div>
@@ -647,7 +605,7 @@
 												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>JOC9196(Jocelyn Arcosiba)</b>.</div>
 												<div class="bottom d-flex align-items-center">
 													<div class="hours">14 hours ago</div>
-													<div class="earned-by ml-auto">EARNED BY BADPUPP</div>
+													<div class="earned-by ml-auto">EARNED BY JDB4567</div>
 												</div>
 											</div>
 										</div>
@@ -659,7 +617,7 @@
 												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>JOC9196(Jocelyn Arcosiba)</b>.</div>
 												<div class="bottom d-flex align-items-center">
 													<div class="hours">14 hours ago</div>
-													<div class="earned-by ml-auto">EARNED BY BADPUPP</div>
+													<div class="earned-by ml-auto">EARNED BY JDB0123</div>
 												</div>
 											</div>
 										</div>
@@ -671,7 +629,7 @@
 												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>JOC9196(Jocelyn Arcosiba)</b>.</div>
 												<div class="bottom d-flex align-items-center">
 													<div class="hours">14 hours ago</div>
-													<div class="earned-by ml-auto">EARNED BY BADPUPP</div>
+													<div class="earned-by ml-auto">EARNED BY JDB0123</div>
 												</div>
 											</div>
 										</div>
@@ -683,7 +641,7 @@
 												<div class="top"><b>You earned PHP 500.00</b> from <b>direct referral bonus</b> because of <b>JOC9196(Jocelyn Arcosiba)</b>.</div>
 												<div class="bottom d-flex align-items-center">
 													<div class="hours">14 hours ago</div>
-													<div class="earned-by ml-auto">EARNED BY BADPUPP</div>
+													<div class="earned-by ml-auto">EARNED BY JDB04567</div>
 												</div>
 											</div>
 										</div>
@@ -742,15 +700,15 @@
 											    <div class="mask flex-center rgba-black-strong">
 											        <!-- <p class="white-text">Strong overlay</p> -->
 											        <div class="date-month text-center">
-										        		<div class="date white-text">17</div>
-										        		<div class="month white-text">March</div>
+										        		<div class="date white-text">26</div>
+										        		<div class="month white-text">APRIL</div>
 											        </div>
 											    </div>
 											</div>
 										</div>
 										<div class="right d-flex flex-column ml-3">
 											<div class="top ml-2">
-												<div class="title">MCE MARCH</div>
+												<div class="title">MCE APRIL</div>
 												<div class="description">Masterclass in creative Entrepreneurship</div>
 											</div>
 											<div class="bottom d-flex align-items-center">
@@ -770,15 +728,15 @@
 											    <div class="mask flex-center rgba-black-strong">
 											        <!-- <p class="white-text">Strong overlay</p> -->
 											        <div class="date-month text-center">
-										        		<div class="date white-text">17</div>
-										        		<div class="month white-text">March</div>
+										        		<div class="date white-text">16</div>
+										        		<div class="month white-text">MAY</div>
 											        </div>
 											    </div>
 											</div>
 										</div>
 										<div class="right d-flex flex-column ml-3">
 											<div class="top ml-2">
-												<div class="title">MCE MARCH</div>
+												<div class="title">MCE MAY</div>
 												<div class="description">Masterclass in creative Entrepreneurship</div>
 											</div>
 											<div class="bottom d-flex align-items-center">

@@ -796,7 +796,6 @@
 	<script type="text/javascript">
 
 	  $(document).ready(function(){
-
 	  	$('.stay-aside').scrollToFixed();
 	  	$('.adds-and-events').scrollToFixed();
 

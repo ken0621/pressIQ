@@ -14,7 +14,6 @@
                                     <!-- PER ITEM -->
                                     @if(count($_product) > 0)
                                         @foreach($_product as $product)
-
                                         <div class="col-md-3">
                                             <div class="per-album-container">
                                                 <a  href="/product/view2/{{ $product['eprod_id'] }}" style="text-decoration: none;">

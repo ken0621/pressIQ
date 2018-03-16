@@ -7,7 +7,7 @@
                 <div class="row clearfix">
                     <div class="product-list-holder col-md-12 col-sm-12 col-xs-12">
                         <div class="prod-list-container">
-                            <div class="title-container">All<div class="line-bot"></div></div>
+                            <div class="title-container">All Products<div class="line-bot"></div></div>
                             <div class="prod-list">
                                 <div class="row no-gutters clearfix gutters">
                                     <!-- PER ITEM -->

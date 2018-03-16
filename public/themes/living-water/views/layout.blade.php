@@ -46,7 +46,7 @@
     </div>
 
     <!-- HEADER -->
-    <div id="home" class="subheader-container">
+    <div id="home" class="subheader-container" style="padding-bottom: 10px;">
         <div class="container">
             <div class="left-container">
                 <span><i class="fa fa-phone" aria-hidden="true"></i></span>
@@ -55,16 +55,16 @@
                 <span>{!! get_content($shop_theme_info, "contact_details", "contact_company_email_address") !!}</span>
             </div>
             <div class="right-container">
-                <form action="/product" method="get" id="form-search" style="display: inline-block;">
+               {{--  <form action="/product" method="get" id="form-search" style="display: inline-block;">
                      <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" name="search" class="form-control" id="keyword1" placeholder="Search...">
                      <span class="search-button" id="sizing-addon1">
                         <a href="" onclick="onSearch(1);" id="submit_link" style="color: #fff;"><i class="fa fa-search" aria-hidden="true"></i></a>
                      </span>
-                </form>
-                    {{-- <span>
+                </form> --}}
+                    <span>
                         <input class="form-control" placeholder="Search">
                     </span>
-                    <i class="fa fa-search" aria-hidden="true"></i> --}}
+                    <i class="fa fa-search" aria-hidden="true"></i>
             </div>
         </div>
     </div>

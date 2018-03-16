@@ -88,12 +88,6 @@ class ShopProductContent2Controller extends Shop
             {
                 $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
             }
-
-            //display categories in product view
-            if ($this->shop_info->shop_theme == "LIVINGWATER") 
-            {
-                $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
-            }
             
             return view("product_content", $data);
         }

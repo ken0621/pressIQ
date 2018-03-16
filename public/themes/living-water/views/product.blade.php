@@ -13,7 +13,7 @@
                                 <div class="row no-gutters clearfix gutters">
                                     <!-- PER ITEM -->
                                     @if(count($_product) > 0)
-                                        @foreach($_product as $product)
+                                        @foreach(limit_foreach($_product, 25) as $product)
                                         <div class="col-md-3">
                                             <div class="per-album-container">
                                                 <a  href="/product/view2/{{ $product['eprod_id'] }}" style="text-decoration: none;">

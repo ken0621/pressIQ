@@ -76,7 +76,7 @@
         </div>
     </div>
 
-    <div id="product" class="wrapper-3">
+    <div id="service" class="wrapper-3">
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-6">

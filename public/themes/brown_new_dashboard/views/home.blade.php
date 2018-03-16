@@ -264,7 +264,7 @@
 				<div class="row clearfix">
 					<div class="col-md-8">
 						<div class="row clearfix">
-							<div class="col">
+							<div class="col-md-6">
 								<div class="section-holder reward-summary">
 									<div class="top-section-header d-flex align-items-center">
 										<div class="icon d-flex align-items-center">
@@ -308,7 +308,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="col">
+							<div class="col-md-6">
 								<div class="section-holder earning-deducted">
 									<div class="top-section-header d-flex align-items-center">
 										<div class="icon d-flex align-items-center">
@@ -434,7 +434,7 @@
 						</div>
 
 						<div class="row clearfix">
-							<div class="col-md">
+							<div class="col-md-6">
 								<div class="section-holder newest-enrollees mt-3">
 									<div class="top-section-header d-flex align-items-center">
 										<div class="icon d-flex align-items-center">
@@ -583,7 +583,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-md">
+							<div class="col-md-6">
 								<div class="section-holder recent-rewards mt-3">
 									<div class="top-section-header d-flex align-items-center">
 										<div class="left d-flex align-items-center">
@@ -683,7 +683,7 @@
 												<div class="title">MCE MARCH</div>
 												<div class="description">Masterclass in creative Entrepreneurship</div>
 											</div>
-											<div class="bottom d-flex align-items-center">
+											<div class="bottom d-flex flex-wrap align-items-center">
 												<div class="m-2">
 													<button class="btn-cust-brown w-100">Details</button>
 												</div>
@@ -711,7 +711,7 @@
 												<div class="title">MCE APRIL</div>
 												<div class="description">Masterclass in creative Entrepreneurship</div>
 											</div>
-											<div class="bottom d-flex align-items-center">
+											<div class="bottom d-flex flex-wrap align-items-center">
 												<div class="m-2">
 													<button class="btn-cust-brown w-100">Details</button>
 												</div>
@@ -739,7 +739,7 @@
 												<div class="title">MCE MAY</div>
 												<div class="description">Masterclass in creative Entrepreneurship</div>
 											</div>
-											<div class="bottom d-flex align-items-center">
+											<div class="bottom d-flex flex-wrap align-items-center">
 												<div class="m-2">
 													<button class="btn-cust-brown w-100">Details</button>
 												</div>

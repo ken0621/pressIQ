@@ -115,6 +115,11 @@ $content-text: 'Roboto', sans-serif;
 {
 	min-height: 336px !important;
 
+	@media screen and (max-width: 800px)
+	{
+		margin-top: 15px;	
+	}
+
 	.balance
 	{
 		.bullet

@@ -270,7 +270,7 @@
 										<div class="icon d-flex align-items-center">
 											<img src="/themes/brown_new_dashboard/assets/img/reward-summary.png" alt="">
 										</div>
-										<div class="section-title ml-2">Reward Sumary</div>
+										<div class="section-title ml-2">Reward Summary</div>
 									</div>
 									<div class="bottom-section-content">
 										<div class="rewards">

@@ -104,6 +104,7 @@
                     </div>
                 </div>
             </div>
+            {!! $_product->appends(Request::input())->render() !!}
         </div>
     </div>
     <!-- SCROLL TO TOP -->

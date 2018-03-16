@@ -229,7 +229,7 @@ $content-text: 'Roboto', sans-serif;
 					font-family: $content-text;
 					font-weight: 700;
 					font-size: 15px;
-					color: #404040;
+					color: #562b15;
 				}
 			}
 
@@ -241,7 +241,7 @@ $content-text: 'Roboto', sans-serif;
 				{
 					font-family: $content-text;
 					font-weight: 400;
-					font-size: 15px;
+					font-size: 13px;
 					color: #404040;
 				}
 
@@ -249,7 +249,7 @@ $content-text: 'Roboto', sans-serif;
 				{
 					font-family: $content-text;
 					font-weight: 700;
-					font-size: 18px;
+					font-size: 15px;
 					color: #768997;
 				}
 			}
@@ -265,7 +265,7 @@ $content-text: 'Roboto', sans-serif;
 				{
 					font-family: $content-text;
 					font-weight: 400;
-					font-size: 15px;
+					font-size: 13px;
 					color: #404040;
 				}
 			}
@@ -367,7 +367,7 @@ $content-text: 'Roboto', sans-serif;
 					font-family: $content-text;
 					font-weight: 400;
 					font-size: 13px;
-					color: #404040;
+					color: #562b15;
 				}
 
 				.slot
@@ -387,7 +387,7 @@ $content-text: 'Roboto', sans-serif;
 				font-family: $content-text;
 				font-weight: 700;
 				font-size: 15px;
-				color: #404040;
+				color: #562b15;
 			}
 
 			.view
@@ -406,7 +406,7 @@ $content-text: 'Roboto', sans-serif;
 				font-family: $content-text;
 				font-weight: 400;
 				font-size: 13px;
-				color: #404040;
+				color: #808080;
 			}
 		}
 	}
@@ -454,17 +454,17 @@ $content-text: 'Roboto', sans-serif;
 
 		.bottom
 		{
-			.hours
+			.date-hours
 			{
 				font-family: $content-text;
 				font-weight: 400;
 				font-size: 13px;
-				color: #404040;
+				color: #808080;
 			}
 
 			.earned-by
 			{
-				@extend .hours;
+				@extend .date-hours;
 				font-weight: 700;
 			}
 		}

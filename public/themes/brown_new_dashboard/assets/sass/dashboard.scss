@@ -211,11 +211,6 @@ $content-text: 'Roboto', sans-serif;
 	{
 		border-bottom:  1px solid #e3e3e3;
 
-		@media screen and (max-width: 500px)
-		{
-			flex-direction: column;
-		}
-
 		&:last-of-type
 		{
 			border-bottom: 0px;
@@ -224,11 +219,6 @@ $content-text: 'Roboto', sans-serif;
 		.left
 		{
 			flex: 1;
-
-			@media screen and (max-width: 500px)
-			{
-				flex-direction: column;
-			}
 
 			.replicated-link
 			{
@@ -282,12 +272,6 @@ $content-text: 'Roboto', sans-serif;
 
 			.bottom
 			{
-
-				@media screen and (max-width: 500px)
-				{
-					flex-direction: column;
-				}
-
 				.direct
 				{
 					flex: 1;

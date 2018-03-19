@@ -44,7 +44,7 @@
 					<div class="profile-dropdown">
 						<div class="dropdown">
 							<a class="dropbtn" href="javascript:">
-								<img src="" alt="" width="24" height="24" style="border-radius: 100%">
+								{{-- <img src="" alt="" width="24" height="24" style="border-radius: 100%"> --}}
 								<span class="name">John Doe</span>
 								<i class=" ml-2 fas fa-angle-down"></i>
 							</a>

@@ -665,8 +665,9 @@
 					<div class="col-md-4">
 						<section class="adds-and-events">
 							<div class="single-item">
-							  	<img src="/themes/brown_new_dashboard/assets/img/add-1.png" alt="">
-							  	<img src="/themes/brown_new_dashboard/assets/img/add-2.jpg" alt="">	
+							  	<img src="/themes/brown_new_dashboard/assets/img/ad-1.jpg" alt="">
+							  	<img src="/themes/brown_new_dashboard/assets/img/ad-2.jpg" alt="">
+							  	<img src="/themes/brown_new_dashboard/assets/img/ad-3.jpg" alt="">	
 							</div>
 							<div class="section-holder upcoming-events">
 								<div class="top-section-header d-flex align-items-center">

@@ -44,7 +44,7 @@
 					<div class="profile-dropdown">
 						<div class="dropdown">
 							<a class="dropbtn" href="javascript:">
-								<img src="" alt="" width="24" height="24" style="border-radius: 100%">
+								{{-- <img src="" alt="" width="24" height="24" style="border-radius: 100%"> --}}
 								<span class="name">John Doe</span>
 								<i class=" ml-2 fas fa-angle-down"></i>
 							</a>
@@ -75,7 +75,7 @@
 		<div class="subnav">
 			<div class="container">
 				<div class="subnav-holder d-flex flex-wrap align-items-center">
-					<div class="left d-flex align-items-center">
+					<div class="left d-flex flex-wrap align-items-center">
 						<a class="decor-none" href="#"><img src="/themes/brown_new_dashboard/assets/img/logo.svg" alt=""></a>
 						<a class="decor-none" href="#">MY ACCOUNT</a>
 						<a class="decor-none" href="#">HOME</a>
@@ -369,11 +369,9 @@
 										<div class="slot-holder d-flex flex-wrap align-items-center">
 											<div class="left d-flex align-items-center p-3">
 												<div class="replicated-link">
-													<div class="top">
-														<div class="label-bld">JDB0123</div>
-														<div class="btn-holder">
-															<button class="btn-cust-brown"><img src="/themes/brown_new_dashboard/assets/img/replicated.png" alt=""> Replicated Link</button>
-														</div>
+													<div class="label-bld">JDB0123</div>
+													<div class="btn-holder">
+														<button class="btn-cust-brown"><img src="/themes/brown_new_dashboard/assets/img/replicated.png" alt=""> Replicated Link</button>
 													</div>
 												</div>
 												<div class="slot-wallet">
@@ -400,11 +398,9 @@
 										<div class="slot-holder d-flex flex-wrap align-items-center">
 											<div class="left d-flex align-items-center p-3">
 												<div class="replicated-link">
-													<div class="top">
-														<div class="label-bld">JDB4567</div>
-														<div class="btn-holder">
-															<button class="btn-cust-brown"><img src="/themes/brown_new_dashboard/assets/img/replicated.png" alt=""> Replicated Link</button>
-														</div>
+													<div class="label-bld">JDB4567</div>
+													<div class="btn-holder">
+														<button class="btn-cust-brown"><img src="/themes/brown_new_dashboard/assets/img/replicated.png" alt=""> Replicated Link</button>
 													</div>
 												</div>
 												<div class="slot-wallet">
@@ -432,7 +428,6 @@
 								</div>
 							</div>
 						</div>
-
 						<div class="row clearfix">
 							<div class="col-md-6">
 								<div class="section-holder newest-enrollees mt-3">
@@ -663,10 +658,11 @@
 						</div>
 					</div>
 					<div class="col-md-4">
-						<section class="adds-and-events">
-							<div class="single-item">
-							  	<img src="/themes/brown_new_dashboard/assets/img/add-1.png" alt="">
-							  	<img src="/themes/brown_new_dashboard/assets/img/add-2.jpg" alt="">	
+						<section class="ads-and-events">
+							<div class="ads-carousel">
+								<img src="https://brown.com.ph/uploads/myphone-5/oS7fRo32jZTcKftkAq7i07EnoVH5IDTcKVjMXMBp.jpeg" alt="">
+						  		<img src="https://brown.com.ph/uploads/myphone-5/L7BlVBNf6NspnO6ih3wNah5FbNUrNIaIQ7CsQeRl.jpeg" alt="">
+						  		<img src="https://brown.com.ph/uploads/myphone-5/PuSMVMg8PukSD3pVrRY7LwKmGtgqvuCftsfTdHAW.jpeg" alt="">	
 							</div>
 							<div class="section-holder upcoming-events">
 								<div class="top-section-header d-flex align-items-center">
@@ -796,11 +792,10 @@
 	<script type="text/javascript">
 
 	  $(document).ready(function(){
-
 	  	$('.stay-aside').scrollToFixed();
-	  	$('.adds-and-events').scrollToFixed();
+	  	$('.ads-and-events').scrollToFixed();
 
-	    $('.single-item').slick({
+	    $('.ads-carousel').slick({
 	      dots: true,
 	      infinite: true,
 	      speed: 300,

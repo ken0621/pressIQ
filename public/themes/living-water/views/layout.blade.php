@@ -144,7 +144,7 @@
                         <div class="info-list"><a class="smoth-scroll" href="#home">HOME</a></div>
                         <div class="info-list"><a class="smoth-scroll" href="#about">ABOUT US</a></div>
                         <div class="info-list"><a class="smoth-scroll" href="#process">PROCESS</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="#product">PRODUCTS</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="#gallery">PRODUCTS</a></div>
                         <div class="info-list"><a class="smoth-scroll" href="#contact">CONTACT US</a></div>
                     </div>
                     <div class="col-md-4">

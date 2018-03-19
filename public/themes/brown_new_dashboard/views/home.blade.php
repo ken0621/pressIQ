@@ -75,7 +75,7 @@
 		<div class="subnav">
 			<div class="container">
 				<div class="subnav-holder d-flex flex-wrap align-items-center">
-					<div class="left d-flex align-items-center">
+					<div class="left d-flex flex-wrap align-items-center">
 						<a class="decor-none" href="#"><img src="/themes/brown_new_dashboard/assets/img/logo.svg" alt=""></a>
 						<a class="decor-none" href="#">MY ACCOUNT</a>
 						<a class="decor-none" href="#">HOME</a>

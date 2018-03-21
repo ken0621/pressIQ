@@ -3,6 +3,33 @@ body
 	font-family: 'Rubik', sans-serif;
 	background-color: #ededed;
 }
+
+.loader-container {
+  position: fixed;
+  background-color: #444;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  .loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 99999;
+    img {
+      // width: 200px;
+      // height: 200px;
+    }
+  }
+}
+
+
 .breadcrumbs
 {
 	margin: 12.5px 15px;

@@ -82,8 +82,6 @@
 
                     <div id="nav_list" style="display: none;"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
 
-
-
                     <div class="image-logo-holder">
                         <a class="clearfix" href="/">
                             <img src="/themes/{{ $shop_theme }}/img/header-logo.jpg">
@@ -93,6 +91,20 @@
                         <span></span>
                         <span></span>
                         <span></span>
+                    </div>
+                    <div class="menu-mobile-nav">
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#home">HOME</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#services">SERVICES</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#aboutus">ABOUT US</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#expertise">EXPERTISE</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#careers">CAREERS</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#contactus">CONTACT US</a></span>
                     </div>
                 </div>
                 <div class="col-md-10">

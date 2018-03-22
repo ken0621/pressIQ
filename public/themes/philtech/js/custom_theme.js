@@ -6,7 +6,7 @@ function custom_theme()
 	function init()
 	{
 		document_ready();
-		window_load();
+		// window_load();
 	}
 	function document_ready()
 	{
@@ -34,13 +34,13 @@ function custom_theme()
 		});
 	}
 
-	function window_load()
-	{
-	    $(window).load(function()
-	    {
-	        $('.loader-container').fadeOut();
-	    });
-	}
+	// function window_load()
+	// {
+	//     $(window).load(function()
+	//     {
+	//         $('.loader-container').fadeOut();
+	//     });
+	// }
 
 	function event_scroll_up()
 	{

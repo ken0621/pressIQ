@@ -23,7 +23,7 @@
         <!-- GLOBAL CSS -->
         @include("frontend.ghead")
 
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=9">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1.8">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
         {{-- <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css"> --}}
         
@@ -35,11 +35,11 @@
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
-        <div class="loader-container">
+        {{-- <div class="loader-container">
           <div class="loader">
-            <img src="/themes/{{ $shop_theme }}/img/loader.gif">
+            <img src="/themes/{{ $shop_theme }}/img/pageloader.gif">
           </div>
-        </div>
+        </div> --}}
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -436,7 +436,7 @@ offers New Franchise Business Model and New Rewards System using New Generation 
           </div>
         </div>
         @include("frontend.gfoot")
-        <script src="/themes/{{ $shop_theme }}/js/custom_theme.js?version=5"></script>
+        <script src="/themes/{{ $shop_theme }}/js/custom_theme.js?version=1.8"></script>
 
         @yield("js")
     </body>

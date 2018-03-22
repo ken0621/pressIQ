@@ -23,7 +23,7 @@
         <!-- GLOBAL CSS -->
         @include("frontend.ghead")
 
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=8">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=9">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
         {{-- <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css"> --}}
         
@@ -436,7 +436,7 @@ offers New Franchise Business Model and New Rewards System using New Generation 
           </div>
         </div>
         @include("frontend.gfoot")
-        <script src="/themes/{{ $shop_theme }}/js/custom_theme.js?version=4"></script>
+        <script src="/themes/{{ $shop_theme }}/js/custom_theme.js?version=5"></script>
 
         @yield("js")
     </body>

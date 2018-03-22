@@ -59,6 +59,7 @@
                 <span><i class="fa fa-facebook" aria-hidden="true"></i></span>
                 <span><i class="fa fa-twitter" aria-hidden="true"></i></span>
                 <span><i class="fa fa-instagram" aria-hidden="true"></i></span>
+                <span><a href="http://payrolldigima.com/employee_login">LOGIN</a></span>
             </div>
             @else
             <div class="left-container">
@@ -71,6 +72,7 @@
                 <span><i class="fa fa-facebook" aria-hidden="true"></i></span>
                 <span><i class="fa fa-twitter" aria-hidden="true"></i></span>
                 <span><i class="fa fa-instagram" aria-hidden="true"></i></span>
+                <span><a href="http://payrolldigima.com/employee_login">LOGIN</a></span>
             </div>
             @endif
         </div>

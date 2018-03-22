@@ -25,7 +25,7 @@
 
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=8">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
-        <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
+        {{-- <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css"> --}}
         
         <!-- OTHER CSS -->
         @yield("css")

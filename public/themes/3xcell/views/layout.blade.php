@@ -47,7 +47,7 @@
         
     </head>
 
-    <body>z
+    <body>
 
         <div id="overlay" onclick="off()"></div>
 

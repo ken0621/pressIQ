@@ -309,6 +309,7 @@
                         <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
                         <a href="/legalities"><li>LEGALITIES</li></a>
                         <a href="/contact"><li>CONTACT US</li></a>
+                        <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a>
                     </ul>
                 @endif
             </nav>

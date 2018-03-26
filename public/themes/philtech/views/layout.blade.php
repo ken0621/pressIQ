@@ -51,16 +51,16 @@
                     @if($mlm_member)
                     <div class="holder">
                         <div class="dropdown">
-                          <a class="">BUSINESS PRESENTATION</a>
+                          <a class="">BUSINESS PRESENTATION <span><i class="fa fa-angle-down"></i></span></a>
                           <div class="dropdown-content">
-                            <a href="https://drive.google.com/file/d/1Q4Tr0k5kpKalUzV-vODb6mU_tNyPMQmD">MILLIONAIRE SYSTEM</a>
-                            <a href="https://drive.google.com/open?id=0B_zVgtlTtv89ZzlKSnI3ckpxd1k">PRIVILEGE CARD PRESENTATION</a>
-                            <a href="https://drive.google.com/file/d/1gxsG3wL8emRvzxhG4Rriwz9FgnB7D84o">FRANCHISE BUSINESS PRESENTATION</a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}">MILLIONAIRE SYSTEM</a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PRIVILEGE CARD PRESENTATION</a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">FRANCHISE BUSINESS PRESENTATION</a>
                           </div>
                         </div>
                     </div>
                     @else
-                    <div class="holder"><a href="https://drive.google.com/file/d/1gxsG3wL8emRvzxhG4Rriwz9FgnB7D84o">BUSINESS PRESENTATION</a></div>
+                    <div class="holder"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
                     @endif
                     <div class="holder"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
 
@@ -247,6 +247,12 @@
                             <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
                             <a href="/legalities"><li>LEGALITIES</li></a>
                             <a href="/contact"><li>CONTACT US</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a>
+                            @if($mlm_member)
+                            <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MILLIONAIRE SYSTEM</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>FRANCHISE BUSINESS</li></a>
+                            @endif
                         </ul>
                     <div class="space2"></div>
                     <span>MEMBER'S AREA</span>

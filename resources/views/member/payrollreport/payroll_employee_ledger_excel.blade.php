@@ -16,7 +16,7 @@
 					            <td valign="center" rowspan="2" class="text-center" style="width: 120px">LATE</td>
 					            <td valign="center" rowspan="2" class="text-center" style="width: 120px">UNDERTIME</td>
 					            <td valign="center" rowspan="2" class="text-center" style="width: 120px">ABSENT</td>
-					            <td colspan="2" class="text-center" style="width: 200px">ALLOWANCES</td>
+					            <td colspan="7" class="text-center" style="width: 200px">ALLOWANCES</td>
 					            <td colspan="6" class="text-center" style="width: 600px">DEDUCTIONS</td>
 					            <td colspan="3" class="text-center" style="width: 300px">SSS Contribution</td>
 					            <td colspan="2" class="text-center" style="width: 200px">PAG-IBIG Contribution</td>
@@ -42,7 +42,12 @@
 					        	<td class="text-center" style="width: 100px"></td>
 
 	                            <td class="text-center" style="width: 100px">Allowances</td>
-	                            <td class="text-center" style="width: 100px">Adjustment Allowances</td>
+	                            <th class="text-center" style="width: 100px">Bonus</th>
+	                            <th class="text-center" style="width: 100px">Incentives</th>
+	                            <th class="text-center" style="width: 100px">Additions</th>
+	                            <th class="text-center" style="width: 100px">13 Month and Other</th>
+	                            <th class="text-center" style="width: 100px">De Minimis Benefit</th>
+	                            <th class="text-center" style="width: 100px">Others</th>
 
 	                            <td class="text-center" style="width: 100px">SSS LOAN</td>
 	                            <td class="text-center" style="width: 100px">HDMF LOAN</td>
@@ -77,7 +82,13 @@
 							    	<td class="text-center" >{{ number_format($period->undertime_total,2) }}</td>
 							    	<td class="text-center" >{{ number_format($period->absent_total,2) }}</td>
 							    	<td class="text-center" >{{ number_format($period->allowance_total,2) }}</td>
-							    	<td class="text-center" >{{ number_format($period->adj_allowance_total,2) }}</td>
+							    	<td class="text-center" >{{ number_format($period->bonus_total,2) }}</td>
+							    	<td class="text-center" >{{ number_format($period->commission_total,2) }}</td>
+							    	<td class="text-center" >{{ number_format($period->incentives_total,2) }}</td>
+							    	<td class="text-center" >{{ number_format($period->additions_total,2) }}</td>
+							    	<td class="text-center" >{{ number_format($period->deminimis_total,2) }}</td>
+							    	<td class="text-center" >{{ number_format($period->month_total_13,2) }}</td>
+
 							    	<td class="text-center" >{{ number_format($period->sss_loan_total,2) }}</td>
 							    	<td class="text-center" >{{ number_format($period->hdmf_loan_total,2) }}</td>
 							    	<td class="text-center" >{{ number_format($period->cash_bond_total,2) }}</td>
@@ -110,8 +121,14 @@
 							    	<td class="text-center" ><b>{{ number_format($late_total,2) }}</b></td>
 							    	<td class="text-center" ><b>{{ number_format($undertime_total,2) }}</b></td>
 							    	<td class="text-center" ><b>{{ number_format($absent_total,2) }}</b></td>
-							    	<td class="text-center" ><b>{{ number_format($allowance_total,2) }}</b></td>
-							    	<td class="text-center" ><b>{{ number_format($adjustment_allowance_total,2) }}</b></td>
+							    	<td class="text-center" ><b>{{ number_format($total_adjustment_allowance + $allowance_total, 2)}}</b></td>
+							    	<td class="text-center" ><b>{{ number_format($total_adjustment_bonus,2) }}</b></td>
+							    	<td class="text-center" ><b>{{ number_format($total_adjustment_commission,2) }}</b></td>
+							    	<td class="text-center" ><b>{{ number_format($total_adjustment_incentives,2) }}</b></td>
+							    	<td class="text-center" ><b>{{ number_format($total_adjustment_additions,2) }}</b></td>
+							    	<td class="text-center" ><b>{{ number_format($total_adjustment_de_minimis_benefit + $allowance_de_minimis_total, 2)}}</b></td>
+							    	<td class="text-center" ><b>{{ number_format($total_adjustment_13th_month_and_other,2) }}</b></td>
+
 							    	<td class="text-center" ><b>{{ number_format($sss_loan_total,2) }}</b></td>
 							    	<td class="text-center" ><b>{{ number_format($hdmf_loan_total,2) }}</b></td>
 							    	<td class="text-center" ><b>{{ number_format($cash_bond_total,2) }}</b></td>
@@ -142,7 +159,7 @@
 	
 					        <tr>
 					            <td valign="center" rowspan="2" class="text-center" style="width: 200px">PERIOD DATE</td>
-					            <td valign="center" rowspan="2" class="text-center" style="width: 120px">BASIC PAY</td>
+					          <td valign="center" rowspan="2" class="text-center" style="width: 120px">BASIC PAY</td>
 					            <td valign="center" rowspan="2" class="text-center" style="width: 120px">Over Time PAY</td>
 					            <td valign="center" rowspan="2" class="text-center" style="width: 120px">Night Differential Pay</td>
 					            <td valign="center" rowspan="2" class="text-center" style="width: 120px">Regular Holiday Pay</td>
@@ -153,7 +170,7 @@
 					            <td valign="center" rowspan="2" class="text-center" style="width: 120px">LATE</td>
 					            <td valign="center" rowspan="2" class="text-center" style="width: 120px">UNDERTIME</td>
 					            <td valign="center" rowspan="2" class="text-center" style="width: 120px">ABSENT</td>
-					            <td colspan="2" class="text-center" style="width: 200px">ALLOWANCES</td>
+					            <td colspan="7" class="text-center" style="width: 200px">ALLOWANCES</td>
 					            <td colspan="6" class="text-center" style="width: 600px">DEDUCTIONS</td>
 					            <td colspan="3" class="text-center" style="width: 300px">SSS Contribution</td>
 					            <td colspan="2" class="text-center" style="width: 200px">PAG-IBIG Contribution</td>
@@ -179,7 +196,12 @@
 					        	<td class="text-center" style="width: 100px"></td>
 
 	                            <td class="text-center" style="width: 100px">Allowances</td>
-	                            <td class="text-center" style="width: 100px">Adjustment Allowances</td>
+	                            <th class="text-center" style="width: 100px">Bonus</th>
+	                            <th class="text-center" style="width: 100px">Incentives</th>
+	                            <th class="text-center" style="width: 100px">Additions</th>
+	                            <th class="text-center" style="width: 100px">13 Month and Other</th>
+	                            <th class="text-center" style="width: 100px">De Minimis Benefit</th>
+	                            <th class="text-center" style="width: 100px">Others</th>
 
 	                            <td class="text-center" style="width: 100px">SSS LOAN</td>
 	                            <td class="text-center" style="width: 100px">HDMF LOAN</td>
@@ -213,8 +235,13 @@
 							    	<td class="text-center" >{{ number_format($period->late,2) }}</td>
 							    	<td class="text-center" >{{ number_format($period->undertime,2) }}</td>
 							    	<td class="text-center" >{{ number_format($period->absent,2) }}</td>
-							    	<td class="text-center" >{{ number_format($period->allowance,2) }}</td>
-							    	<td class="text-center" >{{ number_format($period->adjustment_allowance,2) }}</td>
+							    	<td class="text-center" >{{ number_format($period->allowance + $period->adjustment_allowance, 2) }}</td>
+							    	<td class="text-center" >{{ number_format($period->adjustment_bonus,2) }}</td>
+							    	<td class="text-center" >{{ number_format($period->adjustment_commission,2) }}</td>
+							    	<td class="text-center" >{{ number_format($period->adjustment_incentives,2) }}</td>
+							    	<td class="text-center" >{{ number_format($period->adjustment_additions,2) }}</td>
+							    	<td class="text-center" >{{ number_format($period->allowance_de_minimis + $period->adjustment_de_minimis_benefit, 2) }}</td>
+							    	<td class="text-center" >{{ number_format($period->adjustment_13th_month_and_other,2) }}</td>
 							    	<td class="text-center" >{{ number_format($period->sss_loan,2) }}</td>
 							    	<td class="text-center" >{{ number_format($period->hdmf_loan,2) }}</td>
 							    	<td class="text-center" >{{ number_format($period->cash_bond,2) }}</td>
@@ -247,8 +274,14 @@
 							    	<td class="text-center" ><b>{{ number_format($late_total,2) }}</b></td>
 							    	<td class="text-center" ><b>{{ number_format($undertime_total,2) }}</b></td>
 							    	<td class="text-center" ><b>{{ number_format($absent_total,2) }}</b></td>
-							    	<td class="text-center" ><b>{{ number_format($allowance_total,2) }}</b></td>
-							    	<td class="text-center" ><b>{{ number_format($adjustment_allowance_total,2) }}</b></td>
+							    	<td class="text-center" ><b>{{ number_format($total_adjustment_allowance + $allowance_total, 2)}}</b></td>
+							    	<td class="text-center" ><b>{{ number_format($total_adjustment_bonus,2) }}</b></td>
+							    	<td class="text-center" ><b>{{ number_format($total_adjustment_commission,2) }}</b></td>
+							    	<td class="text-center" ><b>{{ number_format($total_adjustment_incentives,2) }}</b></td>
+							    	<td class="text-center" ><b>{{ number_format($total_adjustment_additions,2) }}</b></td>
+							    	<td class="text-center" ><b>{{ number_format($total_adjustment_de_minimis_benefit + $allowance_de_minimis_total, 2)}}</b></td>
+							    	<td class="text-center" ><b>{{ number_format($total_adjustment_13th_month_and_other,2) }}</b></td>
+
 							    	<td class="text-center" ><b>{{ number_format($sss_loan_total,2) }}</b></td>
 							    	<td class="text-center" ><b>{{ number_format($hdmf_loan_total,2) }}</b></td>
 							    	<td class="text-center" ><b>{{ number_format($cash_bond_total,2) }}</b></td>

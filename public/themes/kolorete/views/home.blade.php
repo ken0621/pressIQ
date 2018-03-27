@@ -820,7 +820,6 @@
 			                <div class="title">FIND US ON MAP</div>
 			                <div class="map-container">
 			                    <iframe src="{{ get_content($shop_theme_info, "home", "home_google_map") }}" width="360" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
-
 			                </div>
 			            </div>
 			        </div>

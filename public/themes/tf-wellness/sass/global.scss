@@ -1,8 +1,6 @@
 body
 {
-    font-family: 'Open Sans', sans-serif;
-
-    /* font-family: Verdana,Geneva,sans-serif; */
+    font-family: 'Montserrat', sans-serif;
     background-color: #f7f7f7;
 }
 
@@ -74,7 +72,6 @@ button:hover
 .content
 {
     background-color: transparent;
-    padding-top: 5px;
 }
 
 /* HEADER */
@@ -95,6 +92,7 @@ button:hover
         {
             color: #fff;
             font-size: 20px;
+            margin-left: 5px;
         }
         span
         {
@@ -422,7 +420,26 @@ button:hover
 
 #bottom-footer
 {
-	
+    background-color: #02131c;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    color: #717679;
+    padding: 10px 0;
+    .ftr-title-2
+    {
+        float: right;
+        :nth-child(1), :nth-child(3), :nth-child(5)
+        {
+            text-decoration: none;
+            color: #fff;
+            padding: 0 5px 0 5px;
+        }
+        :nth-child(6)
+        {
+            padding-left: 10px;
+        }
+    }
+
 }
 
 /* SCROLL TO TOP */

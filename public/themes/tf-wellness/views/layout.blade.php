@@ -116,7 +116,19 @@
 
             <!-- FOOTER -->
             <footer id="bottom-footer">
-                
+                <div class="container">
+                    <span class="ftr-title-1">
+                        © 2018 TFWellness. All Rights Reserved
+                    </span>
+                    <div class="ftr-title-2">
+                      <span><a href="#">Terms and Agreement</a></span>
+                      <span>|</span>
+                      <span><a href="#">Privacy Policy</a></span>
+                      <span>|</span>
+                      <span><a href="#">Return Policy</a></span>
+                      <span>Powered By: Digima Web Solutions, Inc.</span>  
+                    </div>
+                </div>
             </footer>
 
          </div>

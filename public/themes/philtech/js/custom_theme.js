@@ -6,6 +6,7 @@ function custom_theme()
 	function init()
 	{
 		document_ready();
+		// window_load();
 	}
 	function document_ready()
 	{
@@ -22,7 +23,6 @@ function custom_theme()
 			event_mobile_sidenav();
 			event_scroll_up();
 
-
             // /*DISABLE BODY SCROLLING*/
             // var $body = $(document.body);
 
@@ -33,6 +33,14 @@ function custom_theme()
 
 		});
 	}
+
+	// function window_load()
+	// {
+	//     $(window).load(function()
+	//     {
+	//         $('.loader-container').fadeOut();
+	//     });
+	// }
 
 	function event_scroll_up()
 	{

@@ -21,6 +21,7 @@
 	<!--External css-->
 	<link rel="stylesheet" href="/themes/brown_new_dashboard/assets/css/member_layout.css">
 	<link rel="stylesheet" href="/themes/brown_new_dashboard/assets/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
 
 	<!--wow animation-->
 	<link rel="stylesheet" href="/themes/brown_new_dashboard/assets/wow/css/animate.css">

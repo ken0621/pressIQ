@@ -71,24 +71,13 @@ class ShopProductContent2Controller extends Shop
                 {
                     foreach ($data["product"]["variant"] as $key => $value) 
                     {
-                        $price_level = Tbl_mlm_slot::priceLevel($value["item_id"])->where("tbl_mlm_slot.slot_owner", Self::$customer_info->customer_id)->first();
-                        
-                        if ($price_level) 
-                        {
-                            $current_price = $price_level->custom_price;
-                        }
-                        else
-                        {
-                            $current_price = Ecom_Product::getMembershipPrice($this->shop_info->shop_id, Self::$customer_info->customer_id, $value["evariant_item_id"], $value["evariant_price"]);
-                        }
-
                         if ($value["discounted"] == "true") 
                         {
-                            $data["product"]["variant"][$key]["discounted_price"] = $current_price;
+                            $data["product"]["variant"][$key]["discounted_price"] = Ecom_Product::getMembershipPrice($this->shop_info->shop_id, Self::$customer_info->customer_id, $value["evariant_item_id"], $value["evariant_price"]);
                         }
                         else
                         {
-                            $data["product"]["variant"][$key]["evariant_price"] = $current_price;
+                            $data["product"]["variant"][$key]["evariant_price"] = Ecom_Product::getMembershipPrice($this->shop_info->shop_id, Self::$customer_info->customer_id, $value["evariant_item_id"], $value["evariant_price"]);
                         }
                     }
                 }

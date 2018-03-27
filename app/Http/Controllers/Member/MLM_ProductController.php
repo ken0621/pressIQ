@@ -146,6 +146,12 @@ class MLM_ProductController extends Member
                 $data['active'][$add_count]        = "RANK_GROUP";
                 $data['active_label'][$add_count]  = "Rank Group Bonus"; 
                 $add_count++;
+            }   
+            else if($value->marketing_plan_code == "UNILEVEL")
+            {
+                $data['active'][$add_count]        = "UNILEVEL_CASHBACK_POINTS";
+                $data['active_label'][$add_count]  = "Unilevel Cashback Points"; 
+                $add_count++;
             }            
             else if($value->marketing_plan_code == "REPURCHASE_CASHBACK")
             {
@@ -276,6 +282,10 @@ class MLM_ProductController extends Member
                     else if($value->marketing_plan_code == "RANK")
                     {
                         $update["RANK_GROUP"] = $points["RANK_GROUP"][$value2->membership_id]; 
+                    } 
+                    else if($value->marketing_plan_code == "UNILEVEL")
+                    {
+                        $update["UNILEVEL_CASHBACK_POINTS"] = $points["UNILEVEL_CASHBACK_POINTS"][$value2->membership_id]; 
                     }                    
                     else if($value->marketing_plan_code == "REPURCHASE_CASHBACK")
                     {

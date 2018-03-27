@@ -245,6 +245,9 @@ AdvancedRoute::controller("/member/mlm/gcmaintenance","Member\MLM_GCMaintenanceC
 Route::any("/member/mlm/distribute_cashback","Member\MLM_DistributeCashbackController@index");
 Route::any("/member/mlm/distribute_cashback/distribute","Member\MLM_DistributeCashbackController@distribute");
 
+Route::any("/member/mlm/distribute_unilevel_cashback","Member\MLM_DistributeCashbackController@index2");
+Route::any("/member/mlm/distribute_unilevel_cashback/distribute","Member\MLM_DistributeCashbackController@distribute2");
+
 /* start MLM Product */
 Route::any('/member/mlm/product', 'Member\MLM_ProductController@index');//luke
 Route::any('/member/mlm/product/point/add', 'Member\MLM_ProductController@add_product_points');

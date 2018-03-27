@@ -1377,6 +1377,7 @@ class MLM2
         if($item)
         {
 	        $data["UNILEVEL"]					= isset($item_points->UNILEVEL) ? $item_points->UNILEVEL : 0;
+	        $data["UNILEVEL_CASHBACK_POINTS"]	= isset($item_points->UNILEVEL_CASHBACK_POINTS) ? $item_points->UNILEVEL_CASHBACK_POINTS : 0;
 			$data["REPURCHASE_POINTS"]			= isset($item_points->REPURCHASE_POINTS) ? $item_points->REPURCHASE_POINTS : 0;
 			$data["UNILEVEL_REPURCHASE_POINTS"]	= isset($item_points->UNILEVEL_REPURCHASE_POINTS) ? $item_points->UNILEVEL_REPURCHASE_POINTS : 0;
 			$data["REPURCHASE_CASHBACK"]		= isset($item_points->REPURCHASE_CASHBACK) ? $item_points->REPURCHASE_CASHBACK : 0;

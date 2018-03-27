@@ -8,8 +8,14 @@
 			<div class="row-no-padding clearfix">
 				<div class="col-md-8">
 					<div class="slider-wrapper single-item">
+						@if(loop_content_condition($shop_theme_info, "home", "home_slider"))
+							@foreach(loop_content_get($shop_theme_info, "home", "home_slider") as $slider)
+							<img src="{{ $slider }}">
+							@endforeach
+						@else
 						<img src="/themes/{{ $shop_theme }}/img/home-slider-1.jpg">
 						<img src="/themes/{{ $shop_theme }}/img/home-slider-1.jpg">
+						@endif
 					</div>
 				</div>
 				<div class="col-md-4">
@@ -753,8 +759,8 @@
 			                        <img src="/themes/{{ $shop_theme }}/img/trusted-image.png">
 			                    </div>
 			                    <div class="col-md-8">
-			                        <div class="title">WE ARE TRUSTED</div>
-			                        <div class="description">Secured transactions, Satisfaction, Guaranteed.</div>
+			                        <div class="title">{{ get_content($shop_theme_info, "home", "home_brand1_title") }}</div>
+			                        <div class="description">{{ get_content($shop_theme_info, "home", "home_brand1_context") }}</div>
 			                    </div>
 			                </div>
 			            </div>
@@ -766,8 +772,8 @@
 			                        <img src="/themes/{{ $shop_theme }}/img/quality-image-1.png">
 			                    </div>
 			                    <div class="col-md-8">
-			                        <div class="title">QUALITY PRODUCTS</div>
-			                        <div class="description">We assure that we provide the best protection and quality at amazing prices.</div>
+			                        <div class="title">{{ get_content($shop_theme_info, "home", "home_brand2_title") }}</div>
+			                        <div class="description">{{ get_content($shop_theme_info, "home", "home_brand2_context") }}</div>
 			                    </div>
 			                </div>
 			            </div>
@@ -779,8 +785,8 @@
 			                        <img src="/themes/{{ $shop_theme }}/img/quality-image-2.png">
 			                    </div>
 			                    <div class="col-md-8">
-			                        <div class="title">QUALITY PRODUCTS</div>
-			                        <div class="description">Fast Delivery on all places locally.</div>
+			                        <div class="title">{{ get_content($shop_theme_info, "home", "home_brand3_title") }}</div>
+			                        <div class="description">{{ get_content($shop_theme_info, "home", "home_brand3_context") }}</div>
 			                    </div>
 			                </div>
 			            </div>
@@ -792,21 +798,20 @@
 			        <div class="col-md-8">
 			            <div class="left-container">
 			                <div class="title">KOLORETE MARKETING</div>
-			                <div class="information">Kolorete Marketing started on June 16, 2016 as a simple online shop with physical store at Santa Rosa Laguna. Kolorete Marketing is an online shopping center for fashion, trends, styles and other general merchandise with a marketing system that helps every individual to earn while shopping or reselling products.</div>
+			                <div class="information">{{ get_content($shop_theme_info, "home", "home_about_kolorete") }}</div>
 			                <div class="title">SHIPPING OPTIONS</div>
 			                <div class="subtitle">PICK UP</div>
-			                <div class="information">1109 Espiritu Compound, Pooc Sta. Rosa City, Laguna</div>
+			                <div class="information">{{ get_content($shop_theme_info, "home", "home_pickup_details") }}</div>
 			                <div class="subtitle">MEET UP</div>
-			                <div class="information">Within the vicinity of Binan to Cabuyao Laguna</div>
+			                <div class="information">{{ get_content($shop_theme_info, "home", "home_meetup_details") }}</div>
 			                <div class="subtitle">SHIPPING</div>
-			                <div class="information">Metro Manila starts at P90</div>
-			                <div class="information">Provincial starts at P120</div>
+			                <div class="information">{{ get_content($shop_theme_info, "home", "home_shipping_details") }}</div>
 			                <div class="title">CONTACT US</div>
 			                <div class="subtitle">Kolorete Marketing</div>
-			                <div class="information">1109 Espiritu Compound Pooc Sta. Rosa City Laguna</div>
-			                <div class="information">VIBER: 09467273576</div>
-			                <div class="information">koloretemarketing@gmail.com</div>
-			                <div class="information">facebook.com/koloretemarketing</div>
+			                <div class="information">{{ get_content($shop_theme_info, "home", "home_company_address") }}</div>
+			                <div class="information">{{ get_content($shop_theme_info, "home", "home_company_phone_number") }}</div>
+			                <div class="information">{{ get_content($shop_theme_info, "home", "home_company_email") }}</div>
+			                <div class="information">{{ get_content($shop_theme_info, "home", "home_company_socialmedia") }}</div>
 			            </div>
 			        </div>
 			        <div class="col-md-4">
@@ -814,7 +819,7 @@
 			                <img src="/themes/{{ $shop_theme }}/img/logo-footer.png">
 			                <div class="title">FIND US ON MAP</div>
 			                <div class="map-container">
-			                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15464.659178244572!2d121.1135937!3d14.3018559!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x86f66d98403088c7!2sKolorete+Marketing!5e0!3m2!1sen!2sph!4v1516420495967" width="360" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
+			                    <iframe src="{{ get_content($shop_theme_info, "home", "home_google_map") }}" width="360" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
 
 			                </div>
 			            </div>

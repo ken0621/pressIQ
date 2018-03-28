@@ -6,6 +6,169 @@
 			"label":"Slider Maintenance",
 			"type":"gallery",
 			"default":"",
+			"size":"6"
+		},
+		"home_slider_sm1" :
+		{
+			"label":"Slider 2 Maintenance",
+			"type":"gallery",
+			"default":"",
+			"size":"3"
+		},
+		"home_slider_sm2" :
+		{
+			"label":"Slider 3 Maintenance",
+			"type":"gallery",
+			"default":"",
+			"size":"3"
+		},
+		"home_icon1_title" :
+		{
+			"label":"Icon 1 Title",
+			"type":"textbox",
+			"default":"We are Trusted",
+			"size":"3"
+		},
+		"home_icon2_title" :
+		{
+			"label":"Icon 2 Title",
+			"type":"textbox",
+			"default":"Quality Products",
+			"size":"3"
+		},
+		"home_icon3_title" :
+		{
+			"label":"Icon 3 Title",
+			"type":"textbox",
+			"default":"Safe Payment",
+			"size":"3"
+		},
+		"home_icon4_title" :
+		{
+			"label":"Icon 4 Title",
+			"type":"textbox",
+			"default":"Item Delivery",
+			"size":"3"
+		},
+		"home_icon1_text" :
+		{
+			"label":"Icon 1 text",
+			"type":"textbox",
+			"default":"Secured transactions, Satisfaction, Guaranteed.",
+			"size":"3"
+		},
+		"home_icon2_text" :
+		{
+			"label":"Icon 2 text",
+			"type":"textbox",
+			"default":"We assure the best quality at amazing prices.",
+			"size":"3"
+		},
+		"home_icon3_text" :
+		{
+			"label":"Icon 3 text",
+			"type":"textbox",
+			"default":"Protected online payment",
+			"size":"3"
+		},
+		"home_icon4_text" :
+		{
+			"label":"Icon 4 text",
+			"type":"textbox",
+			"default":"We assure the fast delivery",
+			"size":"3"
+		},
+		"home_about_us" :
+		{
+			"label":"About Us Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"12"
+		},
+		"home_pick_up" :
+		{
+			"label":"Pick Up Details",
+			"type":"textarea",
+			"default":"",
+			"size":"4"
+		},
+		"home_meet_up" :
+		{
+			"label":"Meet Up Details",
+			"type":"textarea",
+			"default":"",
+			"size":"4"
+		},
+		"home_shipping" :
+		{
+			"label":"Shipping Details",
+			"type":"textarea",
+			"default":"",
+			"size":"4"
+		}
+	},
+	"contact":
+	{
+ 		"contact_company_location" :
+ 		{
+ 			"label":"Company Address",
+ 			"type":"textbox",
+ 			"default":"",
+ 			"size":"4"
+ 		},
+ 		"contact_company_phone" :
+ 		{
+ 			"label":"Company Phone Number",
+ 			"type":"textbox",
+ 			"default":"",
+ 			"size":"4"
+ 		},
+ 		"contact_company_email" :
+ 		{
+ 			"label":"Comapny Email Address",
+ 			"type":"textbox",
+ 			"default":"",
+ 			"size":"4"
+ 		},
+ 		"contact_google_map" :
+ 		{
+ 			"label":"Google Map Link",
+ 			"type":"textbox",
+ 			"default":"",
+ 			"size":"6"
+ 		}
+	},
+	"policies":
+	{
+		"policies_terms_and_agreement" :
+		{
+			"label":"Terms and Agreement",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"policies_privacy_policy" :
+		{
+			"label":"Privacy Policy",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"policies_return_policy" :
+		{
+			"label":"Return Policy",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		}
+	},
+	"gallery_maintenance":
+	{
+		"gallery_maintenance_images" :
+		{
+			"label":"Gallery Images",
+			"type":"gallery",
+			"default":"",
 			"size":"12"
 		}
 	}

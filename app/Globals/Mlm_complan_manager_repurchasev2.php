@@ -154,7 +154,7 @@ class Mlm_complan_manager_repurchasev2
         }
 
     }
-    public static function unilevel($slot_info, $points)
+    public static function unilevel($slot_info, $points,$uc_points = 0)
     {
         $unilevel_pts = $points;
 
@@ -182,17 +182,21 @@ class Mlm_complan_manager_repurchasev2
                 if($percentage === 0)
                 {
                     $unilevel_bonus = $unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level];
+                    $uc_bonus       = 0;
                 }
                 else
                 {
                     $unilevel_bonus = ($unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level]/100) * $unilevel_pts;
+                    $uc_bonus       = ($unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level]/100) * $uc_points;
                 }
             }
-
             else
             {
                 $unilevel_bonus = 0;  
+                $uc_bonus       = 0;
             }
+
+
             if($unilevel_bonus != 0)
             {
                 // 0 = points
@@ -231,6 +235,22 @@ class Mlm_complan_manager_repurchasev2
                     $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('DIRECT', $slot_info->shop_id); 
                     Mlm_slot_log::slot_array($arry_log);
                 }
+            }
+
+            if($uc_bonus != 0)
+            {
+                $array['points_log_complan'] = "UNILEVEL_CASHBACK_POINTS";
+                $array['points_log_level'] = $tree->sponsor_tree_level;
+                $array['points_log_slot'] = $slot_recipient->slot_id;
+                $array['points_log_Sponsor'] = $slot_info->slot_id;
+                $array['points_log_date_claimed'] = Carbon::now();
+                $array['points_log_converted'] = 0;
+                $array['points_log_converted_date'] = Carbon::now();
+                $array['points_log_type'] = 'UCP';
+                $array['points_log_from'] = 'Product Repurchase';
+                $array['points_log_points'] = $uc_bonus;
+
+                Mlm_slot_log::slot_log_points_array($array);
             }
         }
         Mlm_complan_manager_repurchasev2::unilevel_cutoff('UNILEVEL', $slot_info->shop_id);  

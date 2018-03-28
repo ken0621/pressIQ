@@ -514,6 +514,14 @@ function page_list($pis = 0)
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 
+        $code = "mlm-wallet-distribute-unilevel-cashback-points";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Distribute Unilevel Cashback Points";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/distribute_unilevel_cashback";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Layout (0%)";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
         $code = "mlm-wallet-gc-maintenance";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "GC Maintenance";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;

@@ -19,5 +19,11 @@ class ShopGalleryController extends Shop
         $data["page"] = "gallery_content";
         $data["id"] = $id;
         return view("gallery_content", $data);
-    }    
+    }  
+
+    public function gallery_content
+    {
+        $data["page"] = "gallery_content";
+        return view("gallery_content", $data);
+    }  
 }

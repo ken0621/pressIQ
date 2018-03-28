@@ -386,12 +386,12 @@
 		</div>
 	</div>
 </section>
-<section class="wrapper-4" id="aboutus">
+<section class="wrapper-4">
 	<div class="container">
 		<div class="row clearfix">
 			<div class="col-md-8">
 				<div class="left-container">
-					<div class="header">TF WELLNESS</div>
+					<div class="header" id="aboutus">TF WELLNESS</div>
 					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.</p>
 					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>
 					<div class="header">Shipping Options</div>
@@ -423,9 +423,9 @@
 						<span>yourcompany@email.com</span>
 					</div>
 					<form action="Post"> 
-					   @if (session('message_concern_p4ward'))
+					   @if (session('message_concern_tfwellness'))
 					       <div class="alert alert-success">
-					           {{ session('message_concern_p4ward') }}
+					           {{ session('message_concern_tfwellness') }}
 					       </div>
 					   @endif
 					   <div class="row clearfix">

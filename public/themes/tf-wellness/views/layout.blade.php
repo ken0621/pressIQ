@@ -10,7 +10,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
-        {{-- <link rel="icon" href="/themes/{{ $shop_theme }}/img/3xcell-icon.png"" type="image/png"/> --}}
+        <link rel="icon" href="/themes/{{ $shop_theme }}/img/favicon.png" type="image/jpg" />
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet">
@@ -64,13 +64,13 @@
                         <span><i class="fab fa-facebook-square"></i></span>
                     </span>
                     <span class="right-container">
-                        <span><a class="signup smoth-scroll" href="#aboutus">About Us</a></span>
+                        <span><a class="right-button smoth-scroll" href="#aboutus">About Us</a></span>
                         <span></i></span>
-                        <span><a class="signup" href="#">Gallery</a></span>
+                        <span><a class="right-button" href="#">Gallery</a></span>
                         <span></i></span>
-                        <span><a class="signup smoth-scroll" href="#contactus">Contact Us</a></span>
+                        <span><a class="right-button smoth-scroll" href="#contactus">Contact Us</a></span>
                         <span></i></span>
-                        <span><a class="signup" href="#">SIGN UP</a></span>
+                        <span><a class="right-button" href="#">SIGN UP</a></span>
                         <span>|</i></span>
                         <span><a href="/members/logout">LOGIN</a></i></span>
                     </span>
@@ -149,31 +149,38 @@
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
         <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
-        {{-- <script type="text/javascript">
-            function myFunction() {
-                var x = document.getElementById("menu");
-                if (x.style.display === "block") {
-                    x.style.display = "none";
-                } else {
-                    x.style.display = "block";
-                }
-            }
-        </script> --}}
         <script type="text/javascript">
-            $(function()
+            $window = $(window);
+            $window.scroll(function() 
             {
-                $('#close-menu').on('click',function()
-                {
-                    $(this).closest('#menu').toggle(500,function(){
-                    $('.mini-submenu').fadeIn();
-                });
+              $scroll_position = $window.scrollTop();
+                if ($scroll_position > 100) { 
+                    $('.header-container').addClass('header-fixed');
+
+                    header_height = $('.your-header').innerHeight();
+                    $('body').css('padding-top' , header_height);
+                } else {
+                    $('.header-container').removeClass('header-fixed');
+                    $('body').css('padding-top' , '0');
+                }
+             });
+        </script>
+        <script>
+            $('.smoth-scroll').on('click', function(event) {
+                var $anchor = $(this);
+                $('html, body').stop().animate({
+                    scrollTop: ($($anchor.attr('href')).offset().top -180)
+                }, 1250, 'easeInOutExpo');
+                event.preventDefault();
             });
-                $('.mini-submenu').on('click',function()
-                {
-                    $(this).next('#menu').toggle(500);
-                    $('.mini-submenu').hide();
-                })
-            })
+        </script>
+        <script type="text/javascript">
+            $.scrollUp({
+                scrollText: '<i class="fa fa-chevron-up"></i>',
+                easingType: 'linear',
+                scrollSpeed: 900,
+                animation: 'fade'
+            });
         </script>
         @yield("js")
     </body>

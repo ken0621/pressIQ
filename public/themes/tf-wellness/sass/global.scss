@@ -141,7 +141,7 @@ button:hover
             text-decoration: none;
             font-weight: 700;
         }
-        .signup
+        .right-button
         {
             color: #7c8183;
             font-weight: 300;
@@ -258,6 +258,7 @@ button:hover
             width: 100%;
             z-index: 999;
             top: 0;
+            border-bottom: 1px solid #3c525d;
         }
 
         &.subheader-container

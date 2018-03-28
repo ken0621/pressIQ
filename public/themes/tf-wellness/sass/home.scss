@@ -101,6 +101,7 @@ body
     .jumbotron
     {
         border: 1px solid #e2e2e2;
+        background-color: #fff;
         .media
         {
             h5
@@ -162,6 +163,19 @@ body
         {
             border: 1px solid #d7d7d7;
             background-color: #fff;
+            &:nth-child(1)
+            {
+                border-bottom: 0;
+            }
+            &:nth-child(2), &:nth-child(3), &:nth-child(4), &:nth-child(5), &:nth-child(6)
+            {
+                border-bottom: 0;
+                border-left: 0;
+            }
+            &:nth-child(8), &:nth-child(9), &:nth-child(10), &:nth-child(11), &:nth-child(12)
+            {
+                border-left: 0;
+            }
         }
         .prod-holder
         {
@@ -208,7 +222,7 @@ body
 {
     background-color: #f3f3f3;
     font-family: 'Montserrat', sans-serif;
-    padding: 10px 0;
+    padding: 10px 0 60px 0;
     .title
     {
         border-bottom: 1px solid #d7d7d7;
@@ -227,6 +241,116 @@ body
             font-weight: 700;
             font-size: 20px;
             color: #000;
+        }
+    }
+    .holder
+    {
+        padding: 15px 0px;
+        // margin: auto 5px;
+        .prod-holder
+        {
+            padding: 3px;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fff;
+            border: 1px solid #d7d7d7;
+            border-left: 0;
+            
+            .prod-image
+            {
+                img
+                {
+                    width: 100%;
+                }
+            }
+            .details-container
+            {
+                margin: 0 8px;
+                .prod-type
+                {
+                    color: #a7a7a7;
+                    font-size: 13px;
+                    padding: 5px 0;
+                }
+                .prod-name
+                {
+                    font-family: 'Open Sans', sans-serif;
+                    color: #1f8ddd;
+                    font-size: 15px;
+                    min-height: 44px;
+                }
+                .prod-price
+                {
+                    font-family: 'Open Sans', sans-serif;
+                    color: #000;
+                    font-size: 15px;
+                    font-weight: 700;
+                    padding: 10px 0;
+                }
+            }
+        }
+    }
+}
+
+/* Information */
+.wrapper-4
+{
+    padding-bottom: 20px;
+    background-color: #05212f;
+    font-family: 'Montserrat', sans-serif;
+    .left-container
+    {
+        .header
+        {
+            color: #fff;
+            font-size: 20px;
+            margin-bottom: 10px;
+            margin-top: 40px;
+        }
+        p
+        {
+            font-size: 13px;
+            color: #6c757b;
+        }
+        .title
+        {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 5px;
+            margin-top: 15px;
+        }
+        .contact-info
+        {
+            :nth-child(2), :nth-child(5), :nth-child(8)
+            {
+                font-size: 13px;
+                color: #6c757b;
+            }
+            :nth-child(1)
+            {
+                font-size: 15px;
+                color: #6c757b;
+                margin-right: 9px;
+            }
+            :nth-child(4), :nth-child(7)
+            {
+                font-size: 15px;
+                color: #6c757b;
+                margin-right: 5px;
+            }
+        }
+    }
+    .right-container
+    {
+        img
+        {
+            margin: 40px 0;
+        }
+        .title
+        {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 5px;
+            margin-top: 15px;
         }
     }
 }

@@ -18,14 +18,13 @@ function home()
 	function action_featured_carousel()
 	{
 		$('.product-carousel').slick({
-		  dots: true,
 		  infinite: true,
 		  speed: 300,
-		  slidesToShow: 1,
-		  slidesToScroll: 1,
+		  slidesToShow: 6,
+		  slidesToScroll: 4,
 		  arrows: true,
-		  prevArrow:"<img style='width: 10px; height: 15px;' class='a-left control-c prev slick-prev' src='/themes/kolorete/img/arrow-left.png'>",
-		  nextArrow:"<img style='width: 10px; height: 15px;' class='a-right control-c next slick-next' src='/themes/kolorete/img/arrow-right.png'>",
+		  prevArrow:"<img style='width: 10px; height: 15px;' class='a-left control-c prev slick-prev' src='/themes/tf-wellness/img/arrow-left.png'>",
+		  nextArrow:"<img style='width: 10px; height: 15px;' class='a-right control-c next slick-next' src='/themes/tf-wellness/img/arrow-right.png'>",
 		  responsive: [
 		    {
 		      breakpoint: 1024,

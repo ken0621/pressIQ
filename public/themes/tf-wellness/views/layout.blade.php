@@ -19,6 +19,7 @@
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
+        <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
 
         @include("frontend.gheadv2")
 
@@ -48,7 +49,11 @@
     </head>
 
     <body>
-
+        <div class="loader-container">
+          <div class="loader">
+            <img src="/themes/{{ $shop_theme }}/img/loader.gif">
+          </div>
+        </div>
         {{-- BLURED WHEN SIDENAV WAS CLICKED --}}
         <div class="blur-me">
             <div class="subheader-container">

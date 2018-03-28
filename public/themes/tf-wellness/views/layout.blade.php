@@ -19,7 +19,6 @@
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
-        <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
 
         @include("frontend.gheadv2")
 
@@ -49,11 +48,11 @@
     </head>
 
     <body>
-        <div class="loader-container">
+        {{-- <div class="loader-container">
           <div class="loader">
             <img src="/themes/{{ $shop_theme }}/img/loader.gif">
           </div>
-        </div>
+        </div> --}}
         {{-- BLURED WHEN SIDENAV WAS CLICKED --}}
         <div class="blur-me">
             <div class="subheader-container">
@@ -65,7 +64,13 @@
                         <span><i class="fab fa-facebook-square"></i></span>
                     </span>
                     <span class="right-container">
-                        <span><a class="signup" href="/members">SIGN UP</a></span>
+                        <span><a class="signup smoth-scroll" href="#aboutus">About Us</a></span>
+                        <span></i></span>
+                        <span><a class="signup" href="#">Gallery</a></span>
+                        <span></i></span>
+                        <span><a class="signup smoth-scroll" href="#contactus">Contact Us</a></span>
+                        <span></i></span>
+                        <span><a class="signup" href="#">SIGN UP</a></span>
                         <span>|</i></span>
                         <span><a href="/members/logout">LOGIN</a></i></span>
                     </span>
@@ -142,6 +147,7 @@
         <!-- FB WIDGET -->
         <div id="fb-root"></div>
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
+        <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
         <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
         {{-- <script type="text/javascript">
             function myFunction() {

@@ -6,11 +6,20 @@ function theme_custom()
 
 	function init()
 	{
+        window_load();
 		$(document).ready(function()
 		{
 			document_ready();
-		});
+		});   
 	}
+    
+    function window_load()
+    {
+        $(window).load(function()
+        {
+            $('.loader-container').fadeOut();
+        });
+    }
 
 	function document_ready()
 	{

@@ -386,7 +386,7 @@
 		</div>
 	</div>
 </section>
-<section class="wrapper-4">
+<section class="wrapper-4" id="aboutus">
 	<div class="container">
 		<div class="row clearfix">
 			<div class="col-md-8">
@@ -401,7 +401,16 @@
 					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
 					<div class="title">Shipping</div>
 					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-					<div class="header">Get Intouch With Us</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="right-container">
+					<img src="/themes/{{ $shop_theme }}/img/footer-logo.png">
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div class="left-container">
+					<div class="header" id="contactus">Get Intouch With Us</div>
 					<div class="title">TF Wellness</div>
 					<div class="contact-info">
 						<span><i class="fas fa-map-marker-alt"></i></span>
@@ -413,11 +422,52 @@
 						<span><i class="fa fa-envelope" aria-hidden="true"></i></span>
 						<span>yourcompany@email.com</span>
 					</div>
+					<form action="Post"> 
+					   @if (session('message_concern_p4ward'))
+					       <div class="alert alert-success">
+					           {{ session('message_concern_p4ward') }}
+					       </div>
+					   @endif
+					   <div class="row clearfix">
+					       <div class="col-md-6">
+					           <div class="form-group">
+					               <input type="text" class="form-control" id="contactus_first_name" name="contactus_first_name" placeholder="First Name*" required>
+					           </div>
+					       </div>
+					       <div class="col-md-6">
+					           <div class="form-group">
+					               <input type="text" class="form-control" id="contactus_last_name" name="contactus_last_name" placeholder="Last Name*" required>
+					           </div>
+					       </div>
+					       <div class="col-md-6">
+					           <div class="form-group">
+					                   <input type="phone" class="form-control" id="contactus_phone_number" name="contactus_phone_number" placeholder="Phone Number*" required>
+					           </div>
+					       </div>
+					       <div class="col-md-6">
+					           <div class="form-group">
+					               <input type="email" class="form-control" id="contactus_email" name="contactus_email" placeholder="Email Address*" required>
+					           </div>
+					       </div>
+					       <div class="col-md-6">
+					           <div class="form-group">
+					               <input type="text area" class="form-control" id="contactus_subject" name="contactus_subject" placeholder="Subject*" required> 
+					           </div>
+					       </div>
+					       <div class="col-md-12">
+					           <div class="form-group">
+					               <textarea type="text" class="form-control text-message" id="contactus_message" name="contactus_message" placeholder="Message*" required></textarea>
+					           </div>
+					       </div>
+					       <div class="col-md-12">
+					            <button type="submit" formaction="/contact_us/send">Send</button>
+					       </div>
+					   </div>
+					</form>
 				</div>
 			</div>
 			<div class="col-md-4">
 				<div class="right-container">
-					<img src="/themes/{{ $shop_theme }}/img/footer-logo.png">
 					<div class="title">Find Us on Google Map</div>
 					<div class="map-container">
 					    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15464.659178244572!2d121.1135937!3d14.3018559!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x86f66d98403088c7!2sKolorete+Marketing!5e0!3m2!1sen!2sph!4v1516420495967" width="360" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>

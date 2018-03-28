@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 body
 {
     background-color: transparent;
@@ -320,6 +322,7 @@ body
         }
         .contact-info
         {
+            margin-bottom: 20px;
             :nth-child(2), :nth-child(5), :nth-child(8)
             {
                 font-size: 13px;
@@ -338,6 +341,45 @@ body
                 margin-right: 5px;
             }
         }
+        input
+        {
+            padding: 0px 10px;
+            color: #545454;
+            height: 50px;
+            font-size: 18px;
+            width: 100%;
+            background-color: #f3f3f3;
+        }
+        textarea
+        {
+            padding: 10px 10px;
+            color: #545454;
+            height: 50px;
+            font-size: 18px;
+            width: 100%;
+            max-height: 150px;
+            max-width: 100%;
+            min-height: 150px;
+            min-width: 100%;
+            border: 1px solid #919191;
+            background-color: #f3f3f3;
+        }
+        button
+        {
+            @include transition(0.3s);
+            background-color: #dfd20a;
+            color: #05212f;
+            width: 160px;
+            font-size: 15px;
+            padding: 15px 0;
+            border: none;
+            cursor: pointer;
+
+            &:hover
+            {
+                opacity: 0.8;
+            }
+        }
     }
     .right-container
     {
@@ -350,7 +392,7 @@ body
             color: #fff;
             font-size: 18px;
             margin-bottom: 5px;
-            margin-top: 15px;
+            margin-top: 40px;
         }
     }
 }

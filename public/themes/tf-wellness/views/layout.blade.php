@@ -20,7 +20,7 @@
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
 
-        @include("frontend.gheadv2")
+        @include("frontend.ghead")
 
         <!-- OTHER CSS -->
         @yield("css")
@@ -62,7 +62,7 @@
                         <span>Welcome to TF Wellness</span>
                         <span>|</span>
                         <span>Follow Us On</span>
-                        <span><i class="fab fa-facebook-square"></i></span>
+                        <span><i class="fa fa-facebook-square" aria-hidden="true"></i></span>
                     </span>
                     <span class="right-container">
                         @if(Request::segment(1)=="members")
@@ -86,7 +86,7 @@
                         <span>Welcome to TF Wellness</span>
                         <span>|</span>
                         <span>Follow Us On</span>
-                        <span><i class="fab fa-facebook-square"></i></span>
+                        <span><i class="fa fa-facebook-square" aria-hidden="true"></i></span>
                     </span>
                     <span class="right-container">
                         @if(Request::segment(1)=="members")
@@ -130,7 +130,7 @@
                                 <input type="text" class="form-control" placeholder="Search items here...">
                                 <div class="btn-search">
                                     <a href="#">
-                                        <i class="fas fa-search"></i>
+                                        <i class="fa fa-search" aria-hidden="true"></i>
                                     </a>
                                 </div>
                             </div>
@@ -178,7 +178,7 @@
 
          </div>
 
-        @include("frontend.gfootv2")
+        @include("frontend.gfoot")
         <!-- FB WIDGET -->
         <div id="fb-root"></div>
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>

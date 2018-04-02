@@ -4,21 +4,19 @@
 
 <section class="home-banner">
 	<div class="container">
-		<div class="row clearfix">
-			<div class="col-md-3 p-0">
+		<div class="row-no-padding">
+			<div class="col-md-3">
 				<div class="categories-container">
 					<div class="title">
 						<img src="/themes/{{ $shop_theme }}/img/menu.png">
 						<span>Shop by Categories</span>
 					</div>
-					@if(isset($_category))
-						<ul class="categories">
+					<ul class="categories">
+						@if(isset($_category))
 							@foreach($_category as $category)
 							<li><a href="/product?type={{ $category['type_id'] }}">{{ $category['type_name'] }}</a></li>
-						</ul>
-						@endforeach
-					@else	
-					<ul class="categories">
+							@endforeach
+						@else
 						<li><a href="#">Health Supplements</a></li>
 						<li><a href="#">Beverages</a></li>
 						<li><a href="#">Beauty Products</a></li>
@@ -31,17 +29,17 @@
 						<li><a href="#">Beauty Salon</a></li>
 						<li><a href="#">Spa</a></li>
 						<li><a href="#">More</a></li>
+						@endif
 					</ul>
-					@endif
 				</div>
 			</div>
-			<div class="col-md-6 p-0">
+			<div class="col-md-6">
 				<div class="slider-wrapper single-item">
 					<img src="/themes/{{ $shop_theme }}/img/home-slider-1.jpg">
 					<img src="/themes/{{ $shop_theme }}/img/home-slider-2.jpg">
 				</div>
 			</div>
-			<div class="col-md-3 p-0">
+			<div class="col-md-3">
 				<div class="ads-carousel">
 					<div class="holder">
 						<img src="/themes/{{ $shop_theme }}/img/ads-top-1.jpg">
@@ -64,41 +62,49 @@
 </section>
 <section class="wrapper-1">
 	<div class="container pt-3 pb-4">
-		<div class="jumbotron mb-0 py-4 px-5">
+		<div class="jumbotron">
 			<div class="row clearfix">
 				<div class="col-md-3">
 					<div class="media">
-					  <img class="align-self-center mr-3" src="/themes/{{ $shop_theme }}/img/trust-icon.png" alt="Generic placeholder image">
+					  <div class="media-left media-middle media-image">
+					      <img class="media-object" src="/themes/{{ $shop_theme }}/img/trust-icon.png">
+					  </div>
 					  <div class="media-body">
-					    <h5 class="mt-0 mb-0">We are trusted</h5>
-					    <p class="mb-0">Secured transactions, Satisfaction, Guaranteed.</p>
+					    <h5 class="media-heading">We are trusted</h5>
+					    <p>Secured transactions, Satisfaction, Guaranteed.</p>
 					  </div>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<div class="media">
-					  <img class="align-self-center mr-3" src="/themes/{{ $shop_theme }}/img/quality-icon.png" alt="Generic placeholder image">
+					  <div class="media-left media-middle media-image">
+					      <img class="media-object" src="/themes/{{ $shop_theme }}/img/quality-icon.png" >
+					  </div>
 					  <div class="media-body">
-					    <h5 class="mt-0 mb-0">Quality Products</h5>
-					    <p class="mb-0">We assure the best quality at amazing prices.</p>
+					    <h5 class="media-heading">Quality Products</h5>
+					    <p>We assure the best quality at amazing prices.</p>
 					  </div>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<div class="media">
-					  <img class="align-self-center mr-3" src="/themes/{{ $shop_theme }}/img/payment-icon.png" alt="Generic placeholder image">
+					  <div class="media-left media-middle media-image">
+					      <img class="media-object" src="/themes/{{ $shop_theme }}/img/payment-icon.png">
+					  </div>
 					  <div class="media-body">
-					    <h5 class="mt-0 mb-0">Safe Payment</h5>
-					    <p class="mb-0">Protected online payment</p>
+					    <h5 class="media-heading">Safe Payment</h5>
+					    <p>Protected online payment</p>
 					  </div>
 					</div>
 				</div>
 				<div class="col-md-3">
 					<div class="media">
-					  <img class="align-self-center mr-3" src="/themes/{{ $shop_theme }}/img/delivery-icon.png" alt="Generic placeholder image">
+					  <div class="media-left media-middle media-image">
+					      <img class="media-object" src="/themes/{{ $shop_theme }}/img/delivery-icon.png">
+					  </div>
 					  <div class="media-body">
-					    <h5 class="mt-0 mb-0">Item Delivery</h5>
-					    <p class="mb-0">We assure the fast delivery</p>
+					    <h5 class="media-heading">Item Delivery</h5>
+					    <p>We assure the fast delivery</p>
 					  </div>
 					</div>
 				</div>
@@ -113,7 +119,7 @@
 			<div class="line-bot"></div>
 		</div>
 		<div class="product-container">
-			<div class="row no-gutters clearfix">
+			<div class="row-no-padding clearfix">
 				@if(count($_product) > 0)
 					@foreach($_product as $product)
 					<div class="col-md-2 prod-border">
@@ -459,7 +465,7 @@
 					<div class="header" id="contactus">Get Intouch With Us</div>
 					<div class="title">TF Wellness</div>
 					<div class="contact-info">
-						<span><i class="fas fa-map-marker-alt"></i></span>
+						<span><i class="fa fa-map-marker" aria-hidden="true"></i></span>
 						<span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</span>
 						<div></div>
 						<span><i class="fa fa-phone" aria-hidden="true"></i></span>

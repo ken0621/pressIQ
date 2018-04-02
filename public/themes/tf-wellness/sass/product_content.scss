@@ -7,6 +7,7 @@ body
 
 .main-container
 {
+	min-height: 90px;
 	.hamburger-container
 	{
 		padding: 20px 0;
@@ -29,7 +30,7 @@ body
 				margin-top: 5px;
 			}
 		}
-		.cat-title
+		#cat-title
 		{
 			font-size: 13px;
 			font-weight: 700;
@@ -43,9 +44,9 @@ body
 			display: none;
 			//top: 20px;
 			border-radius: 4px;
-			width: 80%;
+			width: 25%;
 			list-style-type: none;
-			background-color: #000;
+			background-color: #05212f;
 			position: absolute;
 			z-index: 100;
 
@@ -76,61 +77,123 @@ body
 					}
 				}
 			}
+			li
+			{
+	            padding: 10px 0;
+				position: relative;
+				z-index: 100;
+
+				@media screen and (max-width: 768px)
+				{
+					text-align: left;
+				}
+				a
+				{
+					text-decoration: none;
+					color: #fff;
+					display: block;
+					&:hover
+					{
+						color: #eded;
+					}
+				}
+			}
+			.divider
+			{
+				border-bottom: 1px solid #393938;
+				margin-right: 30px;
+			}
+		}
+	}
+	.breadcrumb
+	{
+		background-color: inherit;
+		border-bottom: 1px solid #d7d7d7;
+		padding: 8px 0px 15px 0px;
+		a
+		{
+			text-decoration: none;
+			color: #808080;
+		}
+		li+li:before
+		{
+			content: "\00bb";
+		}
+		.active
+		{
+			color: #1c1c1c;
+			font-weight: 700;
 		}
 	}
 }
 
 /* TOP 1 CONTAINER */
-.top-1-container {
-	padding: 25px 0px 40px 0px;
+.top-1-container 
+{
+	padding: 0px 0px 40px 0px;
 
-	.prod-content-container {
+	.prod-content-container 
+	{
 
-		.prod-image-container {
-			padding: 20px 0px 20px 0px;
+		.prod-image-container 
+		{
 			overflow: hidden;
-			img {
+			border: 1px solid #d7d7d7;
+			margin-top: 20px;
+			img 
+			{
 				width: 100%;
 			}
 		}
 		.prod-description-container 
 		{
-			
-			.prod-description-title-container 
+		
+			.description-title 
 			{
-				margin-top: 20px;
-				position: relative;
-				padding: 10px;
-				font-weight: 600;
-				border-bottom: 1px solid #c0c0c0;
-
-				.description-title 
-				{
-					position: absolute;
-					bottom: -1px;
-					left: 0px;
-					padding: 10px 0px 10px 0px;
-					width: 25%;
-					text-align: center;
-					border: 1px solid #c0c0c0;
-					border-radius: 10px 0px 0px 0px;
-					@media screen and (max-width: 375px) 
-					{
-					   	width: 35%;
-					}
-				}
+				font-weight: 700;
+				color: #585858;
+				font-size: 14px;
+				margin-top: 10px;
 			}
-			.prod-description {
-				padding: 10px 0px 25px 0px;
+			.prod-description 
+			{
+				padding: 10px 0px 5px 0px;
 
-				p {
-					font-size: 13px;
-					color: #1c1c1c;
+				p 
+				{
+					font-size: 14px;
+					color: #808080;
 					line-height: 25px;
 					text-align: justify;
 					text-justify: inter-word;
 				}
 			}
+			.cat-title 
+			{
+				font-weight: 700;
+				color: #585858;
+				font-size: 14px;
+				margin-top: 10px;
+			}
+			.cat-description 
+			{
+				padding: 10px 0px 5px 0px;
+				p 
+				{
+					font-size: 14px;
+					color: #808080;
+					line-height: 25px;
+					text-align: justify;
+					text-justify: inter-word;
+				}
+			}
+		}
+		.prod-price
+		{
+			font-weight: 700;
+			color: #585858;
+			font-size: 14px;
+			margin-top: 10px;
 		}
 		.purchase-details-container 
 		{
@@ -143,8 +206,8 @@ body
 			{
 				position: relative;
 				// border-bottom: 1px solid #d1d1d1;
-				color: #1c1c1c;
-				font-size: 24px;
+				color: #1f8ddd;
+				font-size: 20px;
 				padding-bottom: 10px;
 
 				.line-bot {
@@ -157,7 +220,6 @@ body
 				}
 			}
 			.product-price {
-				margin-top: 20px;
 				color: #1c1c1c;
 				font-size: 24px;
 
@@ -178,10 +240,14 @@ body
 					color: #2161c8;
 				}	
 			}
-			.product-quantity {
+			.product-quantity 
+			{
 				margin-top: 20px;
-				.info-title {
-			
+				.info-title 
+				{
+					font-weight: 700;
+					color: #585858;
+					font-size: 14px;
 				}
 				.input-quantity {
 					margin-top: 10px;
@@ -201,10 +267,10 @@ body
 				width: 30%;
 				margin-top: 20px;
 				padding: 12px 0px 12px 0px;
-				border: 2px solid #585858;
-				border-radius: 5px;
+				border: 2px solid #05212f;
+				background-color: #05212f;
 				text-align: center;
-				color: #585858;
+				color: #dfd20a;
 				font-weight: 600;
 				font-size: 15px;
 
@@ -213,13 +279,16 @@ body
 					width: 100%;
 				}
 
-				&:hover {
+				&:hover 
+				{
 					cursor: pointer;
-					background-color: #585858;
+					background-color: #fff;
+					border: 2px solid #05212f;
 					transition: 0.3s all ease;
 
-					span {
-						color: white;
+					span 
+					{
+						color: #05212f;
 						transition: 0.3s all ease;
 					}
 				}
@@ -272,15 +341,16 @@ body
 			padding: 10px 10px 10px 0px;
 			border-bottom: 1px solid #d1d1d1;
 			.title {
-				font-size: 18px;
+				font-size: 20px;
 				font-weight: 600;
 				color: #1c1c1c;
 			}
-			.line-bot {
+			.line-bot 
+			{
 				position: absolute;
-				width: 5%;
-				background-color: #585858;
-				height: 1px;
+				width: 11%;
+				background-color: #1f8ddd;
+				height: 3px;
 				bottom: -1px;
 				left: 0px;
 			}

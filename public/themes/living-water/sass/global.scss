@@ -75,6 +75,7 @@ button:hover{
 	}
 	.right-container
 	{
+		position: relative;
 		float: right;
 		display: inline-block;
 		color: #fff;
@@ -99,8 +100,8 @@ button:hover{
 		{
 			font-size: 16px;
 			position: absolute;
-			top: 18px;
-			right: 120px;
+			top: 8px;
+			right: 15px;
 			@media screen and (max-width: 768px)
 			{
 				right: 40px;

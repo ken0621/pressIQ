@@ -23,6 +23,8 @@ $text-dark: #404040;
 		{
 			background-color: #05212f;
 			border-bottom: none;
+			border-top-left-radius: 0 !important;
+			border-top-right-radius: 0 !important;
 
 			.close
 			{

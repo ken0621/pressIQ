@@ -6,7 +6,6 @@
 @if(!$mlm_member)
 	<div class="dashboard">
 	    <!-- TOP DASHBOARD-->
-
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
 	            <div class="col-md-12">

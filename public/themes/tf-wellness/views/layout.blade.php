@@ -209,14 +209,6 @@
                 event.preventDefault();
             });
         </script>
-        <script type="text/javascript">
-            $.scrollUp({
-                scrollText: '<i class="fa fa-chevron-up"></i>',
-                easingType: 'linear',
-                scrollSpeed: 900,
-                animation: 'fade'
-            });
-        </script>
         @yield("js")
     </body>
 </html>

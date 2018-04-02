@@ -11,6 +11,13 @@
 						<img src="/themes/{{ $shop_theme }}/img/menu.png">
 						<span>Shop by Categories</span>
 					</div>
+					@if(isset($_category))
+						<ul class="categories">
+							@foreach($_category as $category)
+							<li><a href="/product?type={{ $category['type_id'] }}">{{ $category['type_name'] }}</a></li>
+						</ul>
+						@endforeach
+					@else	
 					<ul class="categories">
 						<li><a href="#">Health Supplements</a></li>
 						<li><a href="#">Beverages</a></li>
@@ -25,6 +32,7 @@
 						<li><a href="#">Spa</a></li>
 						<li><a href="#">More</a></li>
 					</ul>
+					@endif
 				</div>
 			</div>
 			<div class="col-md-6 p-0">
@@ -106,6 +114,24 @@
 		</div>
 		<div class="product-container">
 			<div class="row no-gutters clearfix">
+				@if(count($_product) > 0)
+					@foreach($_product as $product)
+					<div class="col-md-2 prod-border">
+						<div class="prod-holder">
+							<a href="/product/view2/{{ $product['eprod_id'] }}" style="text-decoration: none;">
+								<div class="prod-image">
+									<img src="{{ get_product_first_image($product) }}">
+								</div>
+								<div class="details-container">
+									<div class="prod-type">Appliances</div>
+									<div class="prod-name">{{ get_product_first_name($product) }}</div>
+									<div class="prod-price">{{ get_product_first_price($product) }}</div>
+								</div>
+							</a>
+						</div>
+					</div>
+					@endforeach
+				@else
 				<div class="col-md-2 prod-border">
 					<div class="prod-holder">
 						<a href="#" style="text-decoration: none;">
@@ -274,6 +300,7 @@
 						</a>
 					</div>
 				</div>
+				@endif
 			</div>
 		</div>
 	</div>
@@ -285,6 +312,24 @@
 			<div class="line-bot"></div>
 		</div>
 		<div class="product-carousel">
+			@if(count($_product) > 0)
+			    @foreach($_product as $product)
+				<div class="holder">
+					<div class="prod-holder">
+						<a href="/product/view2/{{ $product['eprod_id'] }}" style="text-decoration: none;">
+							<div class="prod-image">
+								<img src="{{ get_product_first_image($product) }}">
+							</div>
+							<div class="details-container">
+								<div class="prod-type">Gadget</div>
+								<div class="prod-name">{{ get_product_first_name($product) }}</div>
+								<div class="prod-price">{{ get_product_first_price($product) }}</div>
+							</div>
+						</a>
+					</div>
+				</div>
+				@endforeach
+			@else	
 			<div class="holder">
 				<div class="prod-holder">
 					<a href="#" style="text-decoration: none;">
@@ -383,6 +428,7 @@
 					</a>
 				</div>
 			</div>
+			@endif
 		</div>
 	</div>
 </section>
@@ -488,7 +534,7 @@
 @endsection
 
 @section("js")
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/match-height.js"></script>
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js.js"></script>
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
 <script type="text/javascript">
 	$(document).ready(function()

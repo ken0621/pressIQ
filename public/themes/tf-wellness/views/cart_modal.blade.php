@@ -46,7 +46,7 @@
                     <button class="btn-checkout" onclick="location.href='/members/checkout'" style="cursor: pointer;">Checkout</button>
                 </div>
             </div>
-            <div class="col-md-4 total-container">
+            <div class="col-md-4">
                 @if(isset($cart) && $cart)
                 <div class="total" style="display: inline-block; vertical-align: top; margin-right: 15px;">Shipping Fee: {{ number_format($cart["info"]->shipping_fee, 2) }}</div>
                     <div class="total" style="display: inline-block; vertical-align: top;">Total: {{ $cart["_total"]->display_grand_total }}</div>

@@ -21,7 +21,7 @@ $text-dark: #404040;
 
 		.modal-header
 		{
-			background-color: #05212f ;
+			background-color: #05212f;
 			border-bottom: none;
 
 			.close
@@ -160,18 +160,14 @@ $text-dark: #404040;
 		{
 			.left-btn-container
 			{
-
 				width: 100%;
-
 				div
 				{
 					float: left;
 					padding-top: 10px;
 				}
-
 				.btn-checkout
 				{
-					@extend div;
 					margin-left: 15px;
 					padding: 12px 30px;
 					color: #fff;

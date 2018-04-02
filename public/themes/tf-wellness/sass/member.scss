@@ -54,7 +54,7 @@ $content-text: 'Open Sans', sans-serif;
 			.slotnum
 			{
 				text-align: center;
-				padding: 5px 250px;
+				padding: 5px 0;
 				font-size: 18px;
 				font-weight: 600;
 				color: #272c2f;
@@ -67,10 +67,10 @@ $content-text: 'Open Sans', sans-serif;
 .btn-primary
 {
 	@include transition(0.3s);
-	background-color: #000 !important;
+	background-color: #e1890b !important;
 	color: #fff !important;
 	background-image: none !important;
-	border-color: #000 !important;
+	border-color: #e1890b !important;
     box-shadow: none !important;
     opacity: 0.8;
 
@@ -123,7 +123,7 @@ $content-text: 'Open Sans', sans-serif;
 
 .btn-custom-primary
 {
-	background-color: #585858;
+	background-color: #0FD864;
 	color: #fff;
 
 	.fa

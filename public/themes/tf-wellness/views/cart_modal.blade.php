@@ -39,8 +39,21 @@
                 @endif
             </div>
         </div>
-        <div class="modal-footer row clearfix">
-            <div class="col-md-8">
+        <div class="modal-footer">
+            <div class="left">
+                <div class="left-btn-container">
+                    <div><a style="color: #1c1c1c; text-decoration: none; cursor: pointer;" data-dismiss="modal"><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</a></div>
+                    <button class="btn-checkout" onclick="location.href='/members/checkout'">Checkout</button>
+                </div>
+            </div>
+            <div class="right">
+                @if(isset($cart) && $cart)
+                    <div class="total">Total: {{ $cart["_total"]->display_grand_total }}</div>
+                @else
+                    <div class="total">Total: 0.00</div>
+                @endif
+            </div>
+            {{-- <div class="col-md-8">
                 <div class="left-btn-container">
                     <div data-dismiss="modal" style="color: #1c1c1c; cursor: pointer;"><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
                     <button class="btn-checkout" onclick="location.href='/members/checkout'">Checkout</button>
@@ -53,7 +66,7 @@
                 @else
                     <div class="total" style="display: inline-block; vertical-align: top;">Total: 0.00</div>
                 @endif
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>

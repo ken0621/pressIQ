@@ -299,10 +299,10 @@ $text-dark: #272c2f;
 	.input-verify-sponsor
 	{
 		padding: 5px;
-	    width: 85%;
+	    width: 100%;
 	    border: 1px solid #c9c9c9;
 	    margin-top: 20px;
-	    margin-left: 7%;
+	    // margin-left: 7%;
 	    background-color: #fff;
 	    font-size: 15px;
 	    letter-spacing: 0.5px;
@@ -344,7 +344,7 @@ $text-dark: #272c2f;
 		
 		.modal-header
 		{
-			background-color: #000;
+			background-color: #05212F;
 
 			.close
 			{

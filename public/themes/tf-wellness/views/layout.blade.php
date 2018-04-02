@@ -80,6 +80,9 @@
                         <span><a class="right-button smoth-scroll" href="#contactus">Contact Us</a></span>
                         <span></i></span>
                         @endif
+                        <span><a class="right-button" href="/members/logout">LOGOUT</a></span>
+                        <span>|</i></span>
+                        <span><a href="/members">MY ACCOUNT</a></i></span>
                     </span>
                     @else
                     <span class="left-container">

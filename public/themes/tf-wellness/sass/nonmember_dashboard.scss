@@ -30,7 +30,7 @@ $text-dark: #272c2f;
 		span
 		{
 			font-weight: 500;
-			color: #000;
+			color: #05212f;
 		}
 	}
 
@@ -114,17 +114,18 @@ $text-dark: #272c2f;
 			{
 				@include transition(0.3s);
 				font-weight: 500;
-				color: #fff;
+				color: #DFD20A;
 				font-size: 15px;
 				background-color: inherit;
 				padding: 12px 30px 12px 30px;
-				border: 2px solid #fff;
+				border: 2px solid #DFD20A;
 				border-radius: 2px;
 				font-family: $content-text;
 
 				&:hover
 				{
-					background-color: #585858;
+					border: 2px solid #05212f;
+					background-color: #05212f;
 					color: #fff;
 				}
 			}
@@ -298,10 +299,10 @@ $text-dark: #272c2f;
 	.input-verify-sponsor
 	{
 		padding: 5px;
-	    width: 85%;
+	    width: 100%;
 	    border: 1px solid #c9c9c9;
 	    margin-top: 20px;
-	    margin-left: 7%;
+	    // margin-left: 7%;
 	    background-color: #fff;
 	    font-size: 15px;
 	    letter-spacing: 0.5px;
@@ -343,7 +344,7 @@ $text-dark: #272c2f;
 		
 		.modal-header
 		{
-			background-color: #000;
+			background-color: #05212F;
 
 			.close
 			{
@@ -494,19 +495,21 @@ $text-dark: #272c2f;
 				.btn-proceed-2
 				{
 					@include transition(0.2s);
-					color: #fff;
-					background-color: #585858;
+					color: #05212f;
+					background-color: #DFD20A;
 					padding: 10px 40px;
 					border-radius: 2px;
-					border: 1px solid #585858 !important;
+					// border: 2px solid #05212f !important;
+					border: 0;
 				  	width: 100%;
 				  	margin-top: 20px;
 				  	text-transform: uppercase;
 
 				  	&:hover
 				  	{
-				  		background-color: rgba(0,0,0,0.1);
-				  		color: #585858;
+				  		// border: 2px solid #DFD20A !important;
+				  		background-color: #05212f;
+				  		color: #fff;
 				  	}
 				}
 			}

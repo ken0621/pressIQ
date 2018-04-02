@@ -54,7 +54,7 @@ $content-text: 'Open Sans', sans-serif;
 			.slotnum
 			{
 				text-align: center;
-				padding: 5px 250px;
+				padding: 5px 0;
 				font-size: 18px;
 				font-weight: 600;
 				color: #272c2f;
@@ -67,10 +67,10 @@ $content-text: 'Open Sans', sans-serif;
 .btn-primary
 {
 	@include transition(0.3s);
-	background-color: #000 !important;
+	background-color: #e1890b !important;
 	color: #fff !important;
 	background-image: none !important;
-	border-color: #000 !important;
+	border-color: #e1890b !important;
     box-shadow: none !important;
     opacity: 0.8;
 
@@ -108,22 +108,22 @@ $content-text: 'Open Sans', sans-serif;
 	}
 }
 
-.btn-kol-custom
+.btn-tf-custom
 {
 	@include transition(0.3s);
-	background-color: #585858;
-	color: #fff;
+	background-color: #DFD20A;
+	color: #05212f;
 
 	&:hover
 	{
-		opacity: 0.8;
+		background-color: #05212f;
 		color: #fff;
 	}
 }
 
 .btn-custom-primary
 {
-	background-color: #585858;
+	background-color: #0FD864;
 	color: #fff;
 
 	.fa
@@ -217,7 +217,7 @@ $content-text: 'Open Sans', sans-serif;
 
 		.sidebar
 		{
-			background-color: #000;
+			background-color: #05212f;
 			width: 300px;
 			position: absolute;
 			left: 0;
@@ -304,7 +304,7 @@ $content-text: 'Open Sans', sans-serif;
 					{
 						display: block;
 						position: relative;
-						background-color: #000;
+						background-color: #05212f;
 						a
 						{
 							display: block;
@@ -356,7 +356,7 @@ $content-text: 'Open Sans', sans-serif;
 									background-color: rgba(255,255,255,0.1);
 									color: #fff;
 									text-decoration: none;
-									border-color: #1F262C;
+									border-color: #05212f;
 
 									.icon 
 									{
@@ -387,7 +387,7 @@ $content-text: 'Open Sans', sans-serif;
 									background-color: rgba(255,255,255,0.1);
 									color: #fff;
 									text-decoration: none;
-									border-color: #1F262C;
+									border-color: #05212f;
 
 									.icon 
 									{
@@ -425,7 +425,7 @@ $content-text: 'Open Sans', sans-serif;
 								{
 									.nav-holder
 									{
-										background-color: #000;
+										background-color: #05212f;
 										span, &:before
 										{
 											opacity: 0.5;
@@ -454,7 +454,7 @@ $content-text: 'Open Sans', sans-serif;
 			&.small
 			{
 				width: 80px;
-				background-color: #000;
+				background-color: #05212f;
 				.shadow
 				{
 					display: none;
@@ -519,7 +519,7 @@ $content-text: 'Open Sans', sans-serif;
 								{
 									.nav-holder
 									{
-										background-color: rgba(255,255,255,0.1);
+										background-color: rgba(255,255,255, 0.1);
 										.icon
 										{
 											img

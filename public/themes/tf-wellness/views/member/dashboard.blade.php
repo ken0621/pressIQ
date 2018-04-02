@@ -6,7 +6,6 @@
 @if(!$mlm_member)
 	<div class="dashboard">
 	    <!-- TOP DASHBOARD-->
-
 	    <div class="dashboard-top">
 	        <div class="row clearfix">
 	            <div class="col-md-12">
@@ -169,7 +168,7 @@
 					<div class="title">Enter Product Code</div>
 					<div class="sub-container">
 						<div class="chart-legend text-center">
-							<button class="btn btn-kol-custom" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+							<button class="btn btn-tf-custom" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 						</div>
 					</div>
 				</div>
@@ -232,7 +231,7 @@
 								<div class="col-md-5">
 									<div class="action" style="text-align: center;">
 										@if($direct->distributed == 1)
-											<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-kol-custom"><i class="fa fa-star"></i> VIEW INFO</button>
+											<button onclick="action_load_link_to_modal('/members/slot-info?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-tf-custom"><i class="fa fa-star"></i> VIEW INFO</button>
 										@else
 											<button onclick="action_load_link_to_modal('/members/enter-placement?slot_no={{ Crypt::encrypt($direct->slot_id) }}&key={{ md5($direct->slot_id . $direct->slot_no) }}')" class="btn btn-danger-custom"><i class="fa fa-warning"></i> PLACE THIS SLOT</button>
 										@endif
@@ -285,7 +284,7 @@
 	                    <div class="modal-body">
 	                        <div><img src="/themes/{{ $shop_theme }}/img/done-img.png"></div>
 	                        <div class="text-header">Done!</div>
-	                        <div class="text-caption">You are now officially enrolled to<br><b>Kolorete</b>.</div>
+	                        <div class="text-caption">You are now officially enrolled to<br><b>TFWellness</b>.</div>
 	                    </div>
 	                </div>
 	            </div>

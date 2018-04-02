@@ -134,7 +134,9 @@
                             <img src="\themes\living-water\img\header-logo.png">
                         </div>
                         <div>
-                        <p>LIVINGWATER has been in the business of supplying healthy drinking water for almost three (3) years. Given its vast marketing experiences and a solid development foundation, our company has carved for itself a formidable position in the supply of healthy drinking water in the Philippines.</p>
+                        <p>
+                            {{ get_content($shop_theme_info, "footer_details", "footer_about_details") }}
+                        </p>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -152,9 +154,9 @@
                             <p class="footer-title">FOLLOW US ON</p>
                         </div>
                         <div class="social-icon-container">
-                            <a href="#"><span><i class="fa fa-facebook-square"></i></span></a>
-                            <a href="#"><span><i class="fa fa-twitter-square"></i></span></a>
-                            <a href="#"><span><i class="fa fa-instagram"></i></span></a>
+                            <a href="{{ get_content($shop_theme_info, "footer_details", "footer_social_fb") }}"><span><i class="fa fa-facebook-square"></i></span></a>
+                            <a href="{{ get_content($shop_theme_info, "footer_details", "footer_social_twitter") }}"><span><i class="fa fa-twitter-square"></i></span></a>
+                            <a href="{{ get_content($shop_theme_info, "footer_details", "footer_social_insta") }}"><span><i class="fa fa-instagram"></i></span></a>
                         </div>
                     </div>
                 </div>

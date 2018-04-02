@@ -256,7 +256,7 @@
                 <div class="col-md-6">
                     <div class="info-container">
                         <div class="map-container">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15440.112259220126!2d121.02096329822486!3d14.65434838967788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b6faf1ed4163%3A0xa543aa75a00c2da5!2sVeterans+Village%2C+Project+7%2C+Quezon+City%2C+Metro+Manila!5e0!3m2!1sen!2sph!4v1520982546353" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                            <iframe src="{{ get_content($shop_theme_info, "contact_details", "contact_google_map_link") }}" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
                         </div>
                         <div class="title">Main Office: </div>
                         <div class="details-container">

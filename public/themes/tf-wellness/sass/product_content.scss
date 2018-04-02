@@ -1,8 +1,85 @@
-body{
-	font-family: 'Open Sans', sans-serif;
-	background-color: #ededed;
+body
+{
+	font-family: 'Montserrat', sans-serif;
+	background-color: #fff;
 	color: #747474;
 }
+
+.main-container
+{
+	.hamburger-container
+	{
+		padding: 20px 0;
+		.mini-submenu
+		{
+			background-color: #05212f;
+			border: 1px solid #05212f;
+			border-radius: 4px;
+			padding: 6px 9px 11px 9px;
+			width: 42px;
+			cursor: pointer;
+			position: relative;
+			.icon-bar
+			{
+				background-color: #fff;
+				border-radius: 1px;
+				display: block;
+				height: 3px;
+				width: 22px;
+				margin-top: 5px;
+			}
+		}
+		.cat-title
+		{
+			font-size: 13px;
+			font-weight: 700;
+			color: #000;
+			position: absolute;
+			top: 142px;
+			left: 155px;
+		}
+		#menu
+		{
+			display: none;
+			//top: 20px;
+			border-radius: 4px;
+			width: 80%;
+			list-style-type: none;
+			background-color: #000;
+			position: absolute;
+			z-index: 100;
+
+			.categories-header
+			{
+				margin: 15px 0 5px 0;
+
+				@media screen and (max-width: 768px)
+				{
+					text-align: left;
+				}
+				.title
+				{
+					color: #fff;
+					font-weight: 700;
+					font-size: 18px;
+				}
+				.fa
+				{
+					color: #fff;
+					font-size: 20px;
+					float: right;
+					margin-right: 10px;
+					cursor: pointer;
+					&:hover
+					{
+						color: #eded;
+					}
+				}
+			}
+		}
+	}
+}
+
 /* TOP 1 CONTAINER */
 .top-1-container {
 	padding: 25px 0px 40px 0px;

@@ -1,6 +1,35 @@
 @extends("layout")
 @section("content")
 <div class="content">
+	<div class="main-container">
+		<div class="container">
+			<div class="hamburger-container">
+				<div class="mini-submenu">
+				    <span class="icon-bar"></span>
+				    <span class="icon-bar"></span>
+				    <span class="icon-bar"></span>
+				</div>
+				<span class="cat-title">Shop By Categories</span>
+				<ul id="menu">
+				    <div class="categories-header">
+				        <span class="title">CATEGORIES</span><i id="close-menu" class="fa fa-times" aria-hidden="true"></i>
+				    </div>
+				    <li><a href="#">Health Supplements</a></li>
+					<li><a href="#">Beverages</a></li>
+					<li><a href="#">Beauty Products</a></li>
+					<li><a href="#">Home Care Products</a></li>
+					<li><a href="#">Breakfast Foods</a></li>
+					<li><a href="#">RTWs</a></li>
+					<li><a href="#">Groceries</a></li>
+					<li><a href="#">Gadgets</a></li>
+					<li><a href="#">Home Appliances</a></li>
+					<li><a href="#">Beauty Salon</a></li>
+					<li><a href="#">Spa</a></li>
+					<li><a href="#">More</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
 	<div class="top-1-container">
 		<div class="container">
 			<div class="prod-content-container row clearfix">

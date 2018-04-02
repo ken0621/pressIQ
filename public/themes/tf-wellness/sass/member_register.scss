@@ -306,14 +306,14 @@ body
 					.btn
 					{
 						@include transition(0.2s);
-						border: 1px solid #585858;
-						background-color: #585858;
+						border: 1px solid #05212f;
+						background-color: #05212f;
 						color: #fff;
 
 						&:hover
 						{
-							background-color: rgba(0,0,0,0.1);
-							color: #585858;
+							background-color: rgba(5,33,47,0.1);
+							color: #05212f;
 						}
 					}
 				}

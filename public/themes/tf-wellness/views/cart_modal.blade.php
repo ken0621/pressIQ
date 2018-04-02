@@ -1,8 +1,8 @@
 <div class="popup-buy-a-kit">
     <div class="modal-content cart">
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title">My Shopping Cart</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
         </div>
         <div class="cart-loader-holder">
             <div style="margin: 50px auto;" class="cart-loader loader-16-gray hide"></div>
@@ -39,14 +39,14 @@
                 @endif
             </div>
         </div>
-        <div class="modal-footer row clearfix">
+        <div class="modal-footer">
             <div class="col-md-8">
                 <div class="left-btn-container">
-                    <div data-dismiss="modal" style="color: #1c1c1c; cursor: pointer;"><i class="fa fa-long-arrow-left" aria-hidden="true">&nbsp;</i>&nbsp;Continue Shopping</div>
-                    <button class="btn-checkout" onclick="location.href='/members/checkout'">Checkout</button>
+                    <div data-dismiss="modal" style="color: #1c1c1c; cursor: pointer;"><i class="fas fa-long-arrow-alt-left"></i>&nbsp;Continue Shopping</div>
+                    <button class="btn-checkout" onclick="location.href='/members/checkout'" style="cursor: pointer;">Checkout</button>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 total-container">
                 @if(isset($cart) && $cart)
                 <div class="total" style="display: inline-block; vertical-align: top; margin-right: 15px;">Shipping Fee: {{ number_format($cart["info"]->shipping_fee, 2) }}</div>
                     <div class="total" style="display: inline-block; vertical-align: top;">Total: {{ $cart["_total"]->display_grand_total }}</div>

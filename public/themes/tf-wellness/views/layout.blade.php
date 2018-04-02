@@ -57,6 +57,7 @@
         <div class="blur-me">
             <div class="subheader-container">
                 <div class="container">
+                    @if($customer)
                     <span class="left-container">
                         <span>Welcome to TF Wellness</span>
                         <span>|</span>
@@ -64,16 +65,50 @@
                         <span><i class="fab fa-facebook-square"></i></span>
                     </span>
                     <span class="right-container">
+                        @if(Request::segment(1)=="members")
+                        <span><a class="right-button smoth-scroll" href="/#aboutus">About Us</a></span>
+                        <span></i></span>
+                        <span><a class="right-button" href="/">Gallery</a></span>
+                        <span></i></span>
+                        <span><a class="right-button smoth-scroll" href="/#contactus">Contact Us</a></span>
+                        <span></i></span>
+                        @else
                         <span><a class="right-button smoth-scroll" href="#aboutus">About Us</a></span>
                         <span></i></span>
                         <span><a class="right-button" href="#">Gallery</a></span>
                         <span></i></span>
                         <span><a class="right-button smoth-scroll" href="#contactus">Contact Us</a></span>
                         <span></i></span>
-                        <span><a class="right-button" href="#">SIGN UP</a></span>
-                        <span>|</i></span>
-                        <span><a href="/members/logout">LOGIN</a></i></span>
+                        @endif
                     </span>
+                    @else
+                    <span class="left-container">
+                        <span>Welcome to TF Wellness</span>
+                        <span>|</span>
+                        <span>Follow Us On</span>
+                        <span><i class="fab fa-facebook-square"></i></span>
+                    </span>
+                    <span class="right-container">
+                        @if(Request::segment(1)=="members")
+                        <span><a class="right-button smoth-scroll" href="/#aboutus">About Us</a></span>
+                        <span></i></span>
+                        <span><a class="right-button" href="/">Gallery</a></span>
+                        <span></i></span>
+                        <span><a class="right-button smoth-scroll" href="/#contactus">Contact Us</a></span>
+                        <span></i></span>
+                        @else
+                        <span><a class="right-button smoth-scroll" href="#aboutus">About Us</a></span>
+                        <span></i></span>
+                        <span><a class="right-button" href="#">Gallery</a></span>
+                        <span></i></span>
+                        <span><a class="right-button smoth-scroll" href="#contactus">Contact Us</a></span>
+                        <span></i></span>
+                        @endif
+                        <span><a class="right-button" href="/members/register">SIGN UP</a></span>
+                        <span>|</i></span>
+                        <span><a href="/members/login">LOGIN</a></i></span>
+                    </span>
+                    @endif
                 </div>
             </div>
 
@@ -103,7 +138,7 @@
                         <div class="col-md-3">
                             <div class="cart-container">
                                 <div class="btn-cart">
-                                    <a href="#">
+                                    <a class="popup" link="/cartv2" size="lg" href="javascript:">
                                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                     </a>
                                 </div>

@@ -21,9 +21,7 @@ $text-dark: #404040;
 
 		.modal-header
 		{
-			background-color: #585858;
-			// border-top-left-radius: 3px;
-			// border-top-right-radius: 3px;
+			background-color: #05212f ;
 			border-bottom: none;
 
 			.close
@@ -160,7 +158,6 @@ $text-dark: #404040;
 
 		.modal-footer
 		{
-
 			.left-btn-container
 			{
 
@@ -176,18 +173,12 @@ $text-dark: #404040;
 				{
 					@extend div;
 					margin-left: 15px;
-
 					padding: 12px 30px;
 					color: #fff;
-					background-color: #585858;
+					background-color: #05212f;
 					border-radius: 2px;
 					border: none;
 				}
-			}
-
-			.total
-			{
-				padding-top: 10px;
 			}
 		}
 	}

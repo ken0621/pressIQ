@@ -62,7 +62,7 @@
                         <span>Welcome to TF Wellness</span>
                         <span>|</span>
                         <span>Follow Us On</span>
-                        <span><i class="fab fa-facebook-square"></i></span>
+                        <span><i class="fa fa-facebook-square" aria-hidden="true"></i></span>
                     </span>
                     <span class="right-container">
                         @if(Request::segment(1)=="members")
@@ -89,7 +89,7 @@
                         <span>Welcome to TF Wellness</span>
                         <span>|</span>
                         <span>Follow Us On</span>
-                        <span><i class="fab fa-facebook-square"></i></span>
+                        <span><i class="fa fa-facebook-square" aria-hidden="true"></i></span>
                     </span>
                     <span class="right-container">
                         @if(Request::segment(1)=="members")
@@ -133,7 +133,7 @@
                                 <input type="text" class="form-control" placeholder="Search items here...">
                                 <div class="btn-search">
                                     <a href="#">
-                                        <i class="fas fa-search"></i>
+                                        <i class="fa fa-search" aria-hidden="true"></i>
                                     </a>
                                 </div>
                             </div>

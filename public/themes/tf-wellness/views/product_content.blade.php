@@ -15,10 +15,8 @@
 						<div class="product-name-container">{{ get_product_first_name($product) }}{{-- <div class="line-bot"></div> --}}</div>
 						<!-- PRODUCT DESCRIPTION -->
 						<div class="prod-description-container">
-							<div class="prod-description-title-container">
-								<div class="description-title">
-									Description
-								</div>
+							<div class="description-title">
+								Description
 							</div>
 							<div class="prod-description">
 								<p>

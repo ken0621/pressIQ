@@ -108,15 +108,15 @@ $content-text: 'Open Sans', sans-serif;
 	}
 }
 
-.btn-kol-custom
+.btn-tf-custom
 {
 	@include transition(0.3s);
-	background-color: #585858;
-	color: #fff;
+	background-color: #DFD20A;
+	color: #05212f;
 
 	&:hover
 	{
-		opacity: 0.8;
+		background-color: #05212f;
 		color: #fff;
 	}
 }

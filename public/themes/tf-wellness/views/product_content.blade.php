@@ -9,7 +9,6 @@
 				    <span class="icon-bar"></span>
 				    <span class="icon-bar"></span>
 				</div>
-				<span class="cat-title">Shop By Categories</span>
 				<ul id="menu">
 				    <div class="categories-header">
 				        <span class="title">CATEGORIES</span><i id="close-menu" class="fa fa-times" aria-hidden="true"></i>
@@ -27,7 +26,13 @@
 					<li><a href="#">Spa</a></li>
 					<li><a href="#">More</a></li>
 				</ul>
+				<div id="cat-title">Shop By Categories</div>
 			</div>
+			<ol class="breadcrumb">
+			  <li><a href="/">Home</a></li>
+			  <li><a href="/product">Products</a></li>
+			  <li class="active">{{ get_product_first_name($product) }}</li>
+			</ol>
 		</div>
 	</div>
 	<div class="top-1-container">
@@ -49,10 +54,23 @@
 							</div>
 							<div class="prod-description">
 								<p>
-									{!! get_product_first_description($product) !!}
+									{{-- {!! get_product_first_description($product) !!} --}}
+									Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo aliquid itaque minima eveniet alias recusandae quos placeat quasi harum qui dolore pariatur ipsum excepturi ipsam inventore, soluta ab accusamus earum?
+								</p>
+							</div>
+							<div class="cat-title">
+								Category
+							</div>
+							<div class="cat-description">
+								<p>
+									{{-- {!! get_product_first_description($product) !!} --}}
+									Home Appliances
 								</p>
 							</div>
 						</div>
+						<div class="prod-price">
+								Price
+							</div>
 						<div class="product-price">
 							@if(isset($product["variant"][0]["price_level"]) && $product["variant"][0]["price_level"])
 								₱ {{ number_format($product["variant"][0]["price_level"], 2) }}
@@ -173,6 +191,24 @@
 @endsection
 
 @section("js")
+<script type="text/javascript">
+    $(function()
+    {
+        $('#close-menu').on('click',function()
+        {
+            $(this).closest('#menu').toggle(500,function(){
+            $('.mini-submenu').fadeIn();
+            $('#cat-title').fadeIn();
+        });
+    });
+        $('.mini-submenu').on('click',function()
+        {
+            $(this).next('#menu').toggle(500);
+            $('.mini-submenu').hide();
+            $('#cat-title').hide();
+        })
+    })
+</script>
 <script type="text/javascript">
 $(document).ready(function()
 {

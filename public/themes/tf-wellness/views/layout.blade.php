@@ -128,7 +128,7 @@
                         <div class="col-md-5">
                             <div class="search-container">
                                 <div class="categories-container">
-                                    <a href="#">All Categories</a>
+                                    <a href="/product">All Categories</a>
                                 </div>
                                 <input type="text" class="form-control" placeholder="Search items here...">
                                 <div class="btn-search">

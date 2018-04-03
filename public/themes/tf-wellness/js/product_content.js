@@ -121,6 +121,8 @@ function product_content()
 			
 			image_crop(".1-1-ratio", 1, 1);
     		image_crop(".4-3-ratio", 4, 3);
+
+    		action_product_zoom();
 		});
 	}
 }

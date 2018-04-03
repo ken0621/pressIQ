@@ -93,7 +93,7 @@ class Payment
 		return $return;
 	}
 
-	public static function payment_redirect($shop_id, $key, $transaction_list_id, $success, $failed, $debug = false, $method_id = null)
+	public static function payment_redirect($shop_id, $key, $transaction_list_id, $success, $failed, $debug = false, $method_id = null, $slot_id = null)
 	{
 		/* Testing Purposes */
         if ($debug) 
@@ -140,7 +140,7 @@ class Payment
 			                case 'ipay88': dd("UNDER DEVELOPMENT"); break;
 			                case 'manual1': return Self::method_other($cart, $shop_id, $api, $transaction_list_id, $success, $failed, $method_id);  break;
                             case 'manual2': return Self::method_other($cart, $shop_id, $api, $transaction_list_id, $success, $failed, $method_id);  break;
-			                case 'e_wallet': dd("UNDER DEVELOPMENT"); break;
+			                case 'e_wallet': return Self::method_ewallet($cart, $shop_id, $api, $transaction_list_id, $success, $failed, $slot_id); break;
 			                case 'cashondelivery': dd("UNDER DEVELOPMENT"); break;
 			                default: dd("UNDER DEVELOPMENT"); break;
 			            }
@@ -191,6 +191,11 @@ class Payment
     return redirect("/manual_checkout?method_id=" . $method_id . "&tid=" . Crypt::encrypt($transaction_list_id))->send();
   }
 	/** Payment Method **/
+    public static function method_ewallet($cart, $shop_id, $api, $transaction_list_id, $success, $failed, $slot_id)
+    {
+        dd($slot_id);
+    }
+
 	public static function method_dragonpay($cart, $shop_id, $api, $transaction_list_id,$success, $failed)
     {
         /* Set Summary */

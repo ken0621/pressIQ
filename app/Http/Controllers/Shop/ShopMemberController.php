@@ -3893,12 +3893,18 @@ class ShopMemberController extends Shop
     }
     public function getCheckout()
     {
-        $data["page"]       = "Checkout";
-        $shop_id            = $this->shop_info->shop_id;
-        $data["_payment"]   = $_payment = Payment::get_list($shop_id);
-        $data["_locale"]    = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
-        $data["cart"]       = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
-        
+        $data["page"]     = "Checkout";
+        $shop_id          = $this->shop_info->shop_id;
+        $data["_payment"] = $_payment = Payment::get_list($shop_id);
+        $data["_locale"]  = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
+        $data["cart"]     = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
+        $data["_slot"]    = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+
+        foreach ($data["_slot"] as $key => $value) 
+        {
+            $data["_slot"][$key]->current_wallet = MLM2::current_wallet($shop_id, $value->slot_id); 
+        }
+
         if(!Self::$customer_info)
         {
             $store["checkout_after_register"] = true;
@@ -3979,7 +3985,7 @@ class ShopMemberController extends Shop
                 $method_id  = $method_id;
                 $success    = "/members?success=1"; //redirect if payment success
                 $failed     = "/members?failed=1"; //redirect if payment failed
-                $error      = Payment::payment_redirect($shop_id, $method, $transaction_list_id, $success, $failed, false, $method_id);
+                $error      = Payment::payment_redirect($shop_id, $method, $transaction_list_id, $success, $failed, false, $method_id, request("current_slot"));
             }
             else
             {

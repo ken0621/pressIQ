@@ -12,23 +12,23 @@
 						<span>Shop by Categories</span>
 					</div>
 					<ul class="categories">
-						@if(isset($_category))
-							@foreach($_category as $category)
+						@if(isset($_categories))
+							@foreach($_categories as $category)
 							<li><a href="/product?type={{ $category['type_id'] }}">{{ $category['type_name'] }}</a></li>
 							@endforeach
 						@else
-						<li><a href="#">Health Supplements</a></li>
-						<li><a href="#">Beverages</a></li>
-						<li><a href="#">Beauty Products</a></li>
-						<li><a href="#">Home Care Products</a></li>
-						<li><a href="#">Breakfast Foods</a></li>
-						<li><a href="#">RTWs</a></li>
-						<li><a href="#">Groceries</a></li>
-						<li><a href="#">Gadgets</a></li>
-						<li><a href="#">Home Appliances</a></li>
-						<li><a href="#">Beauty Salon</a></li>
-						<li><a href="#">Spa</a></li>
-						<li><a href="#">More</a></li>
+							<li><a href="#">Health Supplements</a></li>
+							<li><a href="#">Beverages</a></li>
+							<li><a href="#">Beauty Products</a></li>
+							<li><a href="#">Home Care Products</a></li>
+							<li><a href="#">Breakfast Foods</a></li>
+							<li><a href="#">RTWs</a></li>
+							<li><a href="#">Groceries</a></li>
+							<li><a href="#">Gadgets</a></li>
+							<li><a href="#">Home Appliances</a></li>
+							<li><a href="#">Beauty Salon</a></li>
+							<li><a href="#">Spa</a></li>
+							<li><a href="#">More</a></li>
 						@endif
 					</ul>
 				</div>

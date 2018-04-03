@@ -20,7 +20,6 @@
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
 
-
         @include("frontend.ghead")
 
         <!-- OTHER CSS -->

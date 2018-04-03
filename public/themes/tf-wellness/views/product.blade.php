@@ -73,7 +73,9 @@
 										</div>
 										@endforeach
 									@else
-									   
+									   <div class="col-md-3" >
+                                            <strong>"NO ITEMS FOUND"</strong>
+                                       </div>
 									@endif
 								</div>
 							</div>

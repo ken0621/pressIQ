@@ -73,11 +73,11 @@ class ShopProductContent2Controller extends Shop
                     {
                         if ($value["discounted"] == "true") 
                         {
-                            $data["product"]["variant"][$key]["discounted_price"] = Ecom_Product::getMembershipPrice($this->shop_info->shop_id, Self::$customer_info->customer_id, $value["evariant_item_id"], $value["evariant_price"]);
+                            $data["product"]["variant"][$key]["discounted_price"] = Ecom_Product::getPriceLevel($this->shop_info->shop_id, Self::$customer_info->customer_id, $value["evariant_item_id"], $value["evariant_price"]);
                         }
                         else
                         {
-                            $data["product"]["variant"][$key]["evariant_price"] = Ecom_Product::getMembershipPrice($this->shop_info->shop_id, Self::$customer_info->customer_id, $value["evariant_item_id"], $value["evariant_price"]);
+                            $data["product"]["variant"][$key]["evariant_price"] = Ecom_Product::getPriceLevel($this->shop_info->shop_id, Self::$customer_info->customer_id, $value["evariant_item_id"], $value["evariant_price"]);
                         }
                     }
                 }

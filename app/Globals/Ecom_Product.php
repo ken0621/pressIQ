@@ -670,4 +670,24 @@ class Ecom_Product
 			return $product_price;
 		}
 	}
+
+	public static function getPriceLevel($shop_id, $customer_id, $item_id, $product_price)
+	{
+		$_slot = Tbl_mlm_slot::priceLevel($item_id)
+							 ->where("tbl_mlm_slot.slot_owner", $customer_id)
+							 ->where("tbl_mlm_slot.shop_id", $shop_id)
+							 ->get();
+		
+		$slot = $_slot->toArray();
+		$slot = array_column($slot, 'custom_price');
+		
+		if ($slot) 
+		{
+			return min($slot);
+		}
+		else
+		{
+			return $product_price;
+		}
+	}
 }

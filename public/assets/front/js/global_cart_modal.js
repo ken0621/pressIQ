@@ -70,8 +70,6 @@ function cart_modal()
 
 	function action_remove_item(self)
 	{
-		cart_loader_show();
-
 		var item_id = $(self).attr("item-id");
 
 		$.ajax({
@@ -96,6 +94,8 @@ function cart_modal()
 
 	function reload_cart(quantity = null)
 	{
+		cart_loader_show();
+		
 		$(".popup-buy-a-kit").load('/cartv2 .modal-content', function()
 		{
 			cart_loader_hide();

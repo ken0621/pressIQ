@@ -542,6 +542,7 @@
 @section("js")
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js.js"></script>
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
 <script type="text/javascript">
 	$(document).ready(function()
 	{

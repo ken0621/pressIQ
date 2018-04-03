@@ -100,9 +100,9 @@
                                 <li>Routine monitoring of installed components to minimize equipment failure and ensure timely replacement of expired filters and components.</li>
                             </ul>
                         </div>
-                        <div class="button-container">
+                        {{-- <div class="button-container">
                             <a href="/product"><button>READ MORE &raquo;</button></a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

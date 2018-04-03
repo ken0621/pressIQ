@@ -1,3 +1,5 @@
+@import "../../../assets/front/sass/mixin";
+
 body
 {
 	font-family: 'Montserrat', sans-serif;
@@ -143,6 +145,27 @@ body
 			img 
 			{
 				width: 100%;
+			}
+		}
+		.holder
+		{
+		    padding: 5px;
+			.product-holder
+			{
+				background-color: #fff;
+				img
+				{
+					width: 100%;
+				}
+				&:hover
+				{
+					img
+					{
+						@include transition(0.3s);
+						cursor: pointer;
+						opacity: 0.7;
+					}
+				}
 			}
 		}
 		.prod-description-container 

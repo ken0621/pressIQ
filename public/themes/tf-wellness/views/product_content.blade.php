@@ -43,6 +43,28 @@
 					<div class="prod-image-container">
 						<img class="single-product-img" src="{{ get_product_first_image($product) }}">
 					</div>
+					<div class="thumb-carousel">
+						<div class="holder">
+							<div class="product-holder">
+								<img onclick="view_image('{{ get_product_first_image($product) }}')" class="single-product-img" src="{{ get_product_first_image($product) }}">
+							</div>
+						</div>
+						<div class="holder">
+							<div class="product-holder">
+								<img onclick="view_image('/themes/{{ $shop_theme }}/img/product-1.jpg')" class="single-product-img" src="/themes/{{ $shop_theme }}/img/thumb-1.png">
+							</div>
+						</div>
+						<div class="holder">
+							<div class="product-holder">
+								<img onclick="view_image('/themes/{{ $shop_theme }}/img/product-1.jpg')" class="single-product-img" src="/themes/{{ $shop_theme }}/img/thumb-2.jpg">
+							</div>
+						</div>
+						<div class="holder">
+							<div class="product-holder">
+								<img onclick="view_image('/themes/{{ $shop_theme }}/img/product-1.jpg')" class="single-product-img" src="/themes/{{ $shop_theme }}/img/thumb-3.jpg">
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="purchase-details-container">
@@ -191,6 +213,7 @@
 @endsection
 
 @section("js")
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
 <script type="text/javascript">
     $(function()
     {

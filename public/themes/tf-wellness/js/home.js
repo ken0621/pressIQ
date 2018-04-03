@@ -13,6 +13,7 @@ function home()
 	{
 		action_featured_carousel();
 		ads_carousel();
+		thumb_featured_carousel();
 	}
 
 	function action_featured_carousel()
@@ -94,5 +95,47 @@ function home()
 		    // instead of a settings object
 		  ]
 		});
+	}
+	function thumb_featured_carousel()
+	{
+		$('.thumb-carousel').slick({
+		  dots: true,
+		  infinite: true,
+		  speed: 300,
+		  slidesToShow: 4,
+		  slidesToScroll: 1,
+		  arrows: true,
+		  prevArrow:"<img style='width: 40px; height: 45px; z-index: 29;' class='a-left control-c prev slick-prev' src='/themes/kolorete/img/arrow-left.png'>",
+		  nextArrow:"<img style='width: 40px; height: 45px; z-index: 29;' class='a-right control-c next slick-next' src='/themes/kolorete/img/arrow-right.png'>",
+		  responsive: [
+		    {
+		      breakpoint: 1024,
+		      settings: {
+		        slidesToShow: 3,
+		        slidesToScroll: 3,
+		        infinite: true,
+		        dots: true
+		      }
+		    },
+		    {
+		      breakpoint: 600,
+		      settings: {
+		        slidesToShow: 2,
+		        slidesToScroll: 2
+		      }
+		    },
+		    {
+		      breakpoint: 480,
+		      settings: {
+		        slidesToShow: 1,
+		        slidesToScroll: 1
+		      }
+		    }
+		    // You can unslick at a given breakpoint now by adding:
+		    // settings: "unslick"
+		    // instead of a settings object
+		  ]
+		});
+
 	}
 }

@@ -85,6 +85,20 @@
                         <span></span>
                         <span></span>
                     </div>
+                    <div class="menu-mobile-nav">
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#home">HOME</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#about">ABOUT US</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#process">PROCESS</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#service">SERVICES</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#gallery">GALLERY</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#contact">CONTACT</a></span>
+                    </div>
                 </div>
                 <div class="col-md-10">
                 <!-- NAVIGATION -->
@@ -94,7 +108,7 @@
                                 <li><a class="smoth-scroll" href="/#home">HOME</a></li>
                                 <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
                                 <li><a class="smoth-scroll" href="/#process">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="/#service">SERVICEST</a></li>
+                                <li><a class="smoth-scroll" href="/#service">SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="/#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
                             @elseif(Request::segment(1)=="product")

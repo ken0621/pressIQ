@@ -117,7 +117,7 @@
             <div class="row clearfix">
                 @if(count($_product) > 0)
                     @foreach(limit_foreach($_product, 8) as $product)
-                    <div class="col-md-3">
+                    <div class="col-md-3 col-sm-4 col-xs-4">
                         <div class="per-album-container">
                             <div class="img-container">
                                 <a href="/product/view2/{{ $product['eprod_id'] }}">

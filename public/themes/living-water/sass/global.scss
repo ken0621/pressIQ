@@ -143,6 +143,35 @@ button:hover{
 	{
 		padding-bottom: 12px;
 	}
+	.menu-mobile-nav
+	{
+		display: none;
+		padding: 10px 0px 0px 0px;
+		margin: auto;
+		text-align: center;
+		width: 100%;
+		.border-container
+		{
+			border: 0.5px solid #ededed;
+			text-align: center;
+			margin: 10px 5px;
+
+		}
+		@media screen and (max-width: 800px)
+		{
+			span
+			{
+				display: block;
+				a
+				{
+					color: #585858;
+					font-weight: 700;
+					text-decoration: none;
+					font-size: 15px;
+				}
+			}
+		}
+	}
 
 	nav
 	{
@@ -314,7 +343,7 @@ button:hover{
 		padding: 7.5px 12px 7.5px 12px;
 		margin-left: auto;
 		margin-top: 20px;
-		background-color: #02295e;
+		background-color: #1c1c1c;
 		span
 		{
 			display: block;

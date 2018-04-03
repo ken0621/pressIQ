@@ -434,8 +434,6 @@ body{
 		}
 		.img-container 
 		{
-			width: 100%;
-			height: 194px;
 			overflow: hidden;
 			text-align: center;
 			vertical-align: middle;
@@ -611,6 +609,38 @@ body{
 		    {
 		        width: 500px;
 		        height: 400px;
+		    }
+		    @media screen and (max-width: 768px)
+		    {
+		    	iframe
+		    	{
+		    	    width: 720px;
+		    	    height: 600px;
+		    	}
+		    }
+		    @media screen and (max-width: 425px)
+		    {
+		    	iframe
+		    	{
+		    	    width: 390px;
+		    	    height: 500px;
+		    	}
+		    }
+		    @media screen and (max-width: 375px)
+		    {
+		    	iframe
+		    	{
+		    	    width: 320px;
+		    	    height: 500px;
+		    	}
+		    }
+		     @media screen and (max-width: 320px)
+		    {
+		    	iframe
+		    	{
+		    	    width: 270px;
+		    	    height: 500px;
+		    	}
 		    }
 		}
 		.details-container

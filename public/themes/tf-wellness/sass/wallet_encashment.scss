@@ -150,26 +150,28 @@ $text-dark: #272c2f;
 
 .btn-cust-paysett
 {
-	background-color: rgba(0,0,0,0.1);
-	color: #585858;
-	border: 1px solid #585858;
+	background-color: #DFD20A;
+	color: #05212F;
+	border: 1px solid #DFD20A;
 
 	&:hover
 	{
-		background-color: #585858;
+		border: 1px solid #05212F;
+		background-color: #05212F;
 		color: #fff;
 	}
 }
 
 .btn-cust-reqpay
 {
-	border: 1px solid #585858;
-	background-color: #585858;
+	border: 1px solid #05212F;
+	background-color: #05212F;
 	color: #fff;
 
 	&:hover
 	{
-		background-color: rgba(0,0,0,0.1);
-		color: #585858;
+		border: 1px solid #DFD20A;
+		background-color: #DFD20A;
+		color: #05212F;
 	}
 }

@@ -20,6 +20,7 @@
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
 
+
         @include("frontend.ghead")
 
         <!-- OTHER CSS -->
@@ -187,6 +188,7 @@
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
         <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
+
         <script type="text/javascript">
             $window = $(window);
             $window.scroll(function() 

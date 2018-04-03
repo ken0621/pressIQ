@@ -123,18 +123,46 @@
 				@if(count($_product) > 0)
 					@foreach($_product as $product)
 					<div class="col-md-2 prod-border">
-						<div class="prod-holder">
-							<a href="/product/view2/{{ $product['eprod_id'] }}" style="text-decoration: none;">
-								<div class="prod-image">
-									<img src="{{ get_product_first_image($product) }}">
-								</div>
-								<div class="details-container">
-									<div class="prod-type">Appliances</div>
-									<div class="prod-name">{{ get_product_first_name($product) }}</div>
-									<div class="prod-price">{{ get_product_first_price($product) }}</div>
-								</div>
-							</a>
-						</div>
+						@if($mlm_member)
+							<div class="prod-holder prod-holder-member">
+								<a href="/product/view2/{{ $product['eprod_id'] }}" style="text-decoration: none;">
+									<div class="prod-image">
+										<div class="prod-overlay">
+											<div class="border">
+												<div class="top">
+													<div class="label"><i class="fa fa-tag"></i> Member’s Price</div>
+													<div class="price">PHP 1,800.00</div>
+												</div>
+												<div class="bottom">
+													<div class="label"><i class="fa fa-star"></i> Point Value</div>
+													<div class="point">2.0</div>
+												</div>
+											</div>
+										</div>
+										<img class="img-hover" src="{{ get_product_first_image($product) }}">
+									</div>
+									<div class="details-container">
+										<div class="prod-type">Appliances</div>
+										<div class="prod-name">{{ get_product_first_name($product) }}</div>
+										<div class="prod-price">{{ get_product_first_price($product) }}</div>
+									</div>
+								</a>
+							</div>
+						@else
+							<div class="prod-holder prod-holder-nonmember">
+								<a href="/product/view2/{{ $product['eprod_id'] }}" style="text-decoration: none;">
+									<div class="prod-image">
+										<button class="shop-now-btn">Shop Now</button>
+										<img class="img-hover" src="{{ get_product_first_image($product) }}">
+									</div>
+									<div class="details-container">
+										<div class="prod-type">Appliances</div>
+										<div class="prod-name">{{ get_product_first_name($product) }}</div>
+										<div class="prod-price">{{ get_product_first_price($product) }}</div>
+									</div>
+								</a>
+							</div>
+						@endif
 					</div>
 					@endforeach
 				@else
@@ -321,7 +349,7 @@
 			@if(count($_product) > 0)
 			    @foreach($_product as $product)
 				<div class="holder">
-					<div class="prod-holder">
+					{{-- <div class="prod-holder">
 						<a href="/product/view2/{{ $product['eprod_id'] }}" style="text-decoration: none;">
 							<div class="prod-image">
 								<img src="{{ get_product_first_image($product) }}">
@@ -332,7 +360,47 @@
 								<div class="prod-price">{{ get_product_first_price($product) }}</div>
 							</div>
 						</a>
-					</div>
+					</div> --}}
+					@if($mlm_member)
+						<div class="prod-holder prod-holder-member">
+							<a href="/product/view2/{{ $product['eprod_id'] }}" style="text-decoration: none;">
+								<div class="prod-image">
+									<div class="prod-overlay">
+										<div class="border">
+											<div class="top">
+												<div class="label"><i class="fa fa-tag"></i> Member’s Price</div>
+												<div class="price">PHP 1,800.00</div>
+											</div>
+											<div class="bottom">
+												<div class="label"><i class="fa fa-star"></i> Point Value</div>
+												<div class="point">2.0</div>
+											</div>
+										</div>
+									</div>
+									<img class="img-hover" src="{{ get_product_first_image($product) }}">
+								</div>
+								<div class="details-container">
+									<div class="prod-type">Appliances</div>
+									<div class="prod-name">{{ get_product_first_name($product) }}</div>
+									<div class="prod-price">{{ get_product_first_price($product) }}</div>
+								</div>
+							</a>
+						</div>
+					@else
+						<div class="prod-holder prod-holder-nonmember">
+							<a href="/product/view2/{{ $product['eprod_id'] }}" style="text-decoration: none;">
+								<div class="prod-image">
+									<button class="shop-now-btn">Shop Now</button>
+									<img class="img-hover" src="{{ get_product_first_image($product) }}">
+								</div>
+								<div class="details-container">
+									<div class="prod-type">Appliances</div>
+									<div class="prod-name">{{ get_product_first_name($product) }}</div>
+									<div class="prod-price">{{ get_product_first_price($product) }}</div>
+								</div>
+							</a>
+						</div>
+					@endif
 				</div>
 				@endforeach
 			@else	

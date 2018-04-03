@@ -126,17 +126,19 @@
                             </div>
                         </div>
                         <div class="col-md-5">
-                            <div class="search-container">
-                                <div class="categories-container">
-                                    <a href="/product">All Categories</a>
+                            <form action="/product" method="get" id="form-search">
+                                <div class="search-container">
+                                    <div class="categories-container">
+                                        <a href="/product">All Categories</a>
+                                    </div>
+                                    <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" name="search" id="keyword1" class="form-control" placeholder="Search items here...">
+                                    <div class="btn-search">
+                                        <a href="" onclick="onSearch(1);" id="submit_link">
+                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
                                 </div>
-                                <input type="text" class="form-control" placeholder="Search items here...">
-                                <div class="btn-search">
-                                    <a href="#">
-                                        <i class="fa fa-search" aria-hidden="true"></i>
-                                    </a>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                         <div class="col-md-3">
                             <div class="cart-container">

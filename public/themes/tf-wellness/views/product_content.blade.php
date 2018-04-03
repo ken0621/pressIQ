@@ -43,6 +43,9 @@
 					<div class="prod-image-container">
 						<img class="single-product-img" src="{{ get_product_first_image($product) }}">
 					</div>
+					<div class="prod-image-thumb-container" style="margin-left: -7.5px; margin-right: -7.5px;">
+                        
+					</div>
 				</div>
 				<div class="col-md-6">
 					<div class="purchase-details-container">

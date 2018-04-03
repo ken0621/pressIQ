@@ -53,12 +53,10 @@
                                         </thead>
                                         <tbody>
                                             @foreach($product_variant['mlm_discount'] as $key => $mlm_discount)
-                                                @if($mlm_discount['discount_name'] != "V.I.P Silver" && $mlm_discount['discount_name'] != "V.I.P Platinum (FS)")
-                                                    <tr>
-                                                        <td>{{ $mlm_discount['discount_name'] }}</td>
-                                                        <td>₱ {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
-                                                    </tr>
-                                                @endif
+                                                <tr>
+                                                    <td>{{ $mlm_discount['discount_name'] }}</td>
+                                                    <td>₱ {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+                                                </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -102,7 +100,7 @@
                                                 <div class="quantity-label">Quantity</div>
                                                 <form>
                                                     <input onChange="$(this).siblings('.product-add-cart').attr('quantity', $(this).val())" style="width: 60px;" class="variation-qty form-control input-lg" type="number" name="quantity" min="1" max="100" value="1">
-                                                    <button item-id="{{ $product_variant['evariant_item_id'] }}" quantity="1" class="product-add-cart {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }}" {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }} type="button">Add to Cart</button>
+                                                    <button item-id="{{ $product_variant['evariant_item_id'] }}" quantity="1" class="product-add-cart {{ $product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '' }}" {{ $product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '' }} type="button">Add to Cart</button>
                                                 </form>
                                             </div>
                                         </div>

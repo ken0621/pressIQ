@@ -95,6 +95,8 @@ class ShopProductContent2Controller extends Shop
                         {
                             $data["product"]["variant"][$key]["evariant_price"] = Ecom_Product::getPriceLevel($this->shop_info->shop_id, Self::$customer_info->customer_id, $value["evariant_item_id"], $value["evariant_price"]);
                         }
+                        
+                        $data["product"]["variant"][$key]["mlm_discount"] = Ecom_Product::getAllPriceLevel($this->shop_info->shop_id, $value["evariant_item_id"], $value["evariant_price"]);
                     }
                 }
             }

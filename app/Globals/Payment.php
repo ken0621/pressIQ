@@ -193,7 +193,7 @@ class Payment
 	/** Payment Method **/
     public static function method_ewallet($cart, $shop_id, $api, $transaction_list_id, $success, $failed, $slot_id)
     {
-        dd($slot_id);
+        dd("UNDER DEVELOPMENT");
     }
 
 	public static function method_dragonpay($cart, $shop_id, $api, $transaction_list_id,$success, $failed)

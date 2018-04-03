@@ -41,7 +41,7 @@
 				<div class="col-md-6">
 					<!-- PRODUCT IMAGE -->
 					<div class="prod-image-container">
-						<img class="single-product-img" src="{{ get_product_first_image($product) }}">
+						<img id="image-product"	class="single-product-img" src="{{ get_product_first_image($product) }}">
 					</div>
 					<div class="thumb-carousel">
 						<div class="holder">
@@ -51,17 +51,17 @@
 						</div>
 						<div class="holder">
 							<div class="product-holder">
-								<img onclick="view_image('/themes/{{ $shop_theme }}/img/product-1.jpg')" class="single-product-img" src="/themes/{{ $shop_theme }}/img/thumb-1.png">
+								<img onclick="view_image('/themes/{{ $shop_theme }}/img/thumb-1.png')" class="single-product-img" src="/themes/{{ $shop_theme }}/img/thumb-1.png">
 							</div>
 						</div>
 						<div class="holder">
 							<div class="product-holder">
-								<img onclick="view_image('/themes/{{ $shop_theme }}/img/product-1.jpg')" class="single-product-img" src="/themes/{{ $shop_theme }}/img/thumb-2.jpg">
+								<img onclick="view_image('/themes/{{ $shop_theme }}/img/thumb-2.jpg')" class="single-product-img" src="/themes/{{ $shop_theme }}/img/thumb-2.jpg">
 							</div>
 						</div>
 						<div class="holder">
 							<div class="product-holder">
-								<img onclick="view_image('/themes/{{ $shop_theme }}/img/product-1.jpg')" class="single-product-img" src="/themes/{{ $shop_theme }}/img/thumb-3.jpg">
+								<img onclick="view_image('/themes/{{ $shop_theme }}/img/thumb-3.jpg')" class="single-product-img" src="/themes/{{ $shop_theme }}/img/thumb-3.jpg">
 							</div>
 						</div>
 					</div>
@@ -251,6 +251,13 @@ $(document).ready(function()
         return false;
     });
 });
+</script>
+<script type="text/javascript">
+	var image_product = document.getElementById('image-product');
+	function view_image($link)
+	{
+		image_product.src = $link;
+	}
 </script>
 <script type="text/javascript" src="/assets/front/js/zoom.js"></script>
 <script type="text/javascript">

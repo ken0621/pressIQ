@@ -1,4 +1,7 @@
 @import "../../../assets/front/sass/mixin";
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700');
+
+$montserrat: 'Montserrat', sans-serif;
 
 body
 {
@@ -192,6 +195,7 @@ body
 				}
 			}
 		}
+
 		.prod-price
 		{
 			font-weight: 700;
@@ -199,6 +203,39 @@ body
 			font-size: 14px;
 			margin-top: 10px;
 		}
+
+		.product-price
+		{
+			.price
+			{
+				font-family: $montserrat;
+				font-weight: 500;
+				color: #1c1c1c;
+				font-size: 20px;
+				margin-top: 10px;
+			}
+		}
+
+		.member-only
+		{
+			margin-top: 20px;
+
+			.labels
+			{
+				@extend .prod-price;
+				color: #0168b8;
+				font-family: $montserrat;
+			}
+
+			.d-price, .p-value
+			{
+				font-weight: 500;
+				color: #0168b8;
+				font-family: $montserrat;
+				font-size: 24px;
+			}
+		}
+
 		.purchase-details-container 
 		{
 			padding: 20px 0px 0px 10px;

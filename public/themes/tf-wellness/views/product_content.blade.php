@@ -85,13 +85,13 @@
 									</p>
 								</div>
 								<div class="cat-title">
-									Category
+									{{-- Category --}}
 								</div>
 								<div class="cat-description">
 									<p>
 										{{-- {!! get_product_first_description($product) !!} --}}
 										{{-- Home Appliances --}}
-										{!! $product_variant["evariant_description"] !!}
+										{{-- {!! $product_variant["evariant_description"] !!} --}}
 									</p>
 								</div>
 							</div>
@@ -106,6 +106,15 @@
                                 	<div class="price">&#8369; {{ number_format($product_variant['evariant_price'], 2) }}</div>
                                 @endif
 							</div>
+							
+							@if($mlm_member)
+								<div class="member-only">
+									<div class="labels">Member's Discounter Price</div>
+									<div class="d-price">PHP 800.00</div>
+									<div class="labels">Point Value</div>
+									<div class="p-value">5.00</div>
+								</div>
+							@endif
 
 							@if(isset($_variant) && $_variant && count($_variant) > 0)
 								<div class="variant-holder" style="margin-top: 15px;">

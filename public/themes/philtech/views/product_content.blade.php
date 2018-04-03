@@ -53,10 +53,12 @@
                                         </thead>
                                         <tbody>
                                             @foreach($product_variant['mlm_discount'] as $key => $mlm_discount)
-                                                <tr>
-                                                    <td>{{ $mlm_discount['discount_name'] }}</td>
-                                                    <td>₱ {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
-                                                </tr>
+                                                @if($mlm_discount['discount_name'] != "V.I.P Platinum (FS)")
+                                                    <tr>
+                                                        <td>{{ $mlm_discount['discount_name'] }}</td>
+                                                        <td>₱ {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+                                                    </tr>
+                                                @endif
                                             @endforeach
                                         </tbody>
                                     </table>

@@ -158,20 +158,21 @@
 
 				.button-proceed 
 				{
-					border: 2px solid #585858;
+					border: 2px solid #DFD20A;
 					width: 100%;
 					text-align: center;
-					background-color: rgba(0,0,0,.1);
+					background-color: #DFD20A;
 					padding: 10px;
-					color: #585858;
+					color: #05212F;
 					border-radius: 4px;
 					font-size: 13px;
 					font-weight: 600;
 					
 					&:hover 
 					{
+						border: 2px solid #05212F;
 						cursor: pointer;
-						background-color: #585858;
+						background-color: #05212F;
 						color: #fff;
 					}
 				}

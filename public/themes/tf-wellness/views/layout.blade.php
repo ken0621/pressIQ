@@ -49,11 +49,11 @@
     </head>
 
     <body>
-        {{-- <div class="loader-container">
+        <div class="loader-container">
           <div class="loader">
             <img src="/themes/{{ $shop_theme }}/img/loader.gif">
           </div>
-        </div> --}}
+        </div>
         {{-- BLURED WHEN SIDENAV WAS CLICKED --}}
         <div class="blur-me">
             <div class="subheader-container">

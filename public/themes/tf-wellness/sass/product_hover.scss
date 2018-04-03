@@ -1,7 +1,8 @@
 @import "../../../assets/front/sass/mixin";
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
 
-$ff: 'Montserrat', sans-serif;
+$montserrat: 'Montserrat', sans-serif;
+$opensans: 'Open Sans', sans-serif;
 
 //NON-MLM-MEMBER
 .prod-holder-nonmember
@@ -19,7 +20,9 @@ $ff: 'Montserrat', sans-serif;
 			position: absolute;
 			z-index: 5;
 			opacity: 0;
-
+			font-family: $opensans;
+			font-weight: 600;
+			font-size: 13px;
 			background-color: #1f8ddd;
 			color: #fff;
 			border: none;
@@ -94,14 +97,14 @@ $ff: 'Montserrat', sans-serif;
 				.label
 				{
 					color: #dfd20a;
-					font-family: $ff;
+					font-family: $montserrat;
 					font-weight: 400;
 					font-size: 13px;
 				}
 
 				.price, .point
 				{
-					font-family: $ff;
+					font-family: $montserrat;
 					font-weight: 700;
 					font-size: 18px;
 					color: #fff;

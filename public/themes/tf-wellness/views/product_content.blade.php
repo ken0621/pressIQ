@@ -254,13 +254,6 @@ $(document).ready(function()
     });
 });
 </script>
-<script type="text/javascript">
-	var image_product = document.getElementById('image-product');
-	function view_image($link)
-	{
-		image_product.src = $link;
-	}
-</script>
 <script type="text/javascript" src="/assets/front/js/zoom.js"></script>
 <script type="text/javascript">
 var product_image = ".single-product-img";

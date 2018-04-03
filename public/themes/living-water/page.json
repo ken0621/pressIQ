@@ -80,6 +80,37 @@
 		}
 
 	},
+	"about":
+	{
+		"about_context" :
+		{
+			"label":"About Us Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"12"
+		},
+		"about_mission" :
+		{
+			"label":"Mission Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"about_quality_objective" :
+		{
+			"label":"Quality Objective Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"about_vision" :
+		{
+			"label":"Vision Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		}
+	},
 	"contact_details":
 	{
 		"contact_company_address" :

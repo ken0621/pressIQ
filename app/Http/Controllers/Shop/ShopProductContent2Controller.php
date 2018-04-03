@@ -68,25 +68,29 @@ class ShopProductContent2Controller extends Shop
 
             if ($this->shop_theme == "philtech") 
             {
+                $shop_id      = $this->shop_info->shop_id;
+                $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
+
+                foreach ($data["product"]["variant"] as $key => $value) 
+                {
+                    $check_stock = Warehouse2::check_stock($warehouse_id, $value["item_id"]);
+                    
+                    if ($check_stock) 
+                    {
+                        $data["product"]["variant"][$key]["inventory_status"] = "in stock";
+                    }
+                    else
+                    {
+                        $data["product"]["variant"][$key]["inventory_status"] = "out of stock";
+                    }
+                    
+                    $data["product"]["variant"][$key]["mlm_discount"] = Ecom_Product::getAllPriceLevel($this->shop_info->shop_id, $value["evariant_item_id"], $value["evariant_price"]);
+                }
+
                 if (isset($this->shop_info->shop_id) && isset(Self::$customer_info->customer_id)) 
                 {
-                    $shop_id      = $this->shop_info->shop_id;
-                    $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
-
                     foreach ($data["product"]["variant"] as $key => $value) 
                     {
-                        $check_stock = Warehouse2::check_stock($warehouse_id, $value["item_id"]);
-                        
-                        if ($check_stock) 
-                        {
-                            $data["product"]["variant"][$key]["inventory_status"] = "in stock";
-                        }
-                        else
-                        {
-                            $data["product"]["variant"][$key]["inventory_status"] = "out of stock";
-                        }
-                        
-
                         if ($value["discounted"] == "true") 
                         {
                             $data["product"]["variant"][$key]["discounted_price"] = Ecom_Product::getPriceLevel($this->shop_info->shop_id, Self::$customer_info->customer_id, $value["evariant_item_id"], $value["evariant_price"]);
@@ -95,8 +99,6 @@ class ShopProductContent2Controller extends Shop
                         {
                             $data["product"]["variant"][$key]["evariant_price"] = Ecom_Product::getPriceLevel($this->shop_info->shop_id, Self::$customer_info->customer_id, $value["evariant_item_id"], $value["evariant_price"]);
                         }
-                        
-                        $data["product"]["variant"][$key]["mlm_discount"] = Ecom_Product::getAllPriceLevel($this->shop_info->shop_id, $value["evariant_item_id"], $value["evariant_price"]);
                     }
                 }
             }

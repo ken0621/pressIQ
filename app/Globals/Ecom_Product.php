@@ -708,7 +708,7 @@ class Ecom_Product
 		{
 			$price_level_item = DB::table("tbl_price_level_item")->where("price_level_id", $value->price_level_id)->where("item_id", $item_id)->first();
 			
-			$result[$key]["discount_name"] = $value->price_level_name;
+			$result[$key]["discount_name"] = $value->membership_name;
 			$result[$key]["discount_value"] = "";
 			$result[$key]["discount_type"] = "";
 			$result[$key]["discounted_amount"] = isset($price_level_item->custom_price) ? $price_level_item->custom_price : $product_price;

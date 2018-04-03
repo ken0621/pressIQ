@@ -12,8 +12,8 @@
 						<span>Shop by Categories</span>
 					</div>
 					<ul class="categories">
-						@if(isset($_categories))
-							@foreach($_categories as $category)
+						@if(isset($_category))
+							@foreach($_category as $category)
 							<li><a href="/product?type={{ $category['type_id'] }}">{{ $category['type_name'] }}</a></li>
 							@endforeach
 						@else

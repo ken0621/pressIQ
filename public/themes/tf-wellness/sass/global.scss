@@ -92,6 +92,7 @@ button:hover
     color: #7c8183;
     font-size: 13px;
     padding: 3px;
+    z-index: 1000;
     .left-container
     {
         :nth-child(2)
@@ -141,6 +142,7 @@ button:hover
 	position: relative;
     background-color: #05212f;
     padding: 10px 0;
+    z-index: 1000;
     .search-container
     {
         .categories-container

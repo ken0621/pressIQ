@@ -18,7 +18,7 @@
         <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet">   
 
         <!-- GLOBAL CSS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1.2">
 
         @include("frontend.ghead")
 
@@ -85,6 +85,20 @@
                         <span></span>
                         <span></span>
                     </div>
+                    <div class="menu-mobile-nav">
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#home">HOME</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#about">ABOUT US</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#process">PROCESS</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#service">SERVICES</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#gallery">GALLERY</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#contact">CONTACT</a></span>
+                    </div>
                 </div>
                 <div class="col-md-10">
                 <!-- NAVIGATION -->
@@ -94,7 +108,7 @@
                                 <li><a class="smoth-scroll" href="/#home">HOME</a></li>
                                 <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
                                 <li><a class="smoth-scroll" href="/#process">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="/#service">SERVICEST</a></li>
+                                <li><a class="smoth-scroll" href="/#service">SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="/#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
                             @elseif(Request::segment(1)=="product")
@@ -134,7 +148,9 @@
                             <img src="\themes\living-water\img\header-logo.png">
                         </div>
                         <div>
-                        <p>LIVINGWATER has been in the business of supplying healthy drinking water for almost three (3) years. Given its vast marketing experiences and a solid development foundation, our company has carved for itself a formidable position in the supply of healthy drinking water in the Philippines.</p>
+                        <p>
+                            {{ get_content($shop_theme_info, "footer_details", "footer_about_details") }}
+                        </p>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -152,9 +168,9 @@
                             <p class="footer-title">FOLLOW US ON</p>
                         </div>
                         <div class="social-icon-container">
-                            <a href="#"><span><i class="fa fa-facebook-square"></i></span></a>
-                            <a href="#"><span><i class="fa fa-twitter-square"></i></span></a>
-                            <a href="#"><span><i class="fa fa-instagram"></i></span></a>
+                            <a href="{{ get_content($shop_theme_info, "footer_details", "footer_social_fb") }}"><span><i class="fa fa-facebook-square"></i></span></a>
+                            <a href="{{ get_content($shop_theme_info, "footer_details", "footer_social_twitter") }}"><span><i class="fa fa-twitter-square"></i></span></a>
+                            <a href="{{ get_content($shop_theme_info, "footer_details", "footer_social_insta") }}"><span><i class="fa fa-instagram"></i></span></a>
                         </div>
                     </div>
                 </div>

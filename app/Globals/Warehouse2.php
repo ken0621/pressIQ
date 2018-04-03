@@ -679,7 +679,19 @@ class Warehouse2
         }
         return $return;
     }
-
+    public static function check_stock($warehouse_id, $item_id)
+    {
+        $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
+        
+        if($inventory_qty > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     public static function consume_update($ref_name, $ref_id, $item_id, $quantity)
     {
         $data = Tbl_warehouse_inventory_record_log::where("record_consume_ref_name",$ref_name)->where("record_consume_ref_id",$ref_id)->get();

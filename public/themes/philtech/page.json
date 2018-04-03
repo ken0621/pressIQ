@@ -214,14 +214,28 @@
 			"label":"Legalities",
 			"type":"gallery",
 			"default":"",
-			"size":"6"
+			"size":"12"
 		},
 		"business_presentation" :
 		{
 			"label":"Business Presentation",
 			"type":"text",
 			"default":"",
-			"size":"6"
+			"size":"4"
+		},
+		"millionaire_system" :
+		{
+			"label":"The Millionaire System",
+			"type":"text",
+			"default":"",
+			"size":"4"
+		},
+		"privilege_card_presentation" :
+		{
+			"label":"Privilege Card Presentation",
+			"type":"text",
+			"default":"",
+			"size":"4"
 		}
 	},
 	"info":

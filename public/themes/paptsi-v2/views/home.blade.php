@@ -282,12 +282,12 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=1">
 @endsection
 
 @section("script")
 
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js?version=1"></script>
 
 <script type="text/javascript">
 /*$(document).ready(function($) {

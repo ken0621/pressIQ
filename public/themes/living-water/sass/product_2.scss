@@ -1,0 +1,130 @@
+.product-container
+{
+	padding: 50px 0;
+	background-color: #f6f6f6;
+	.left-container
+	{
+		text-align: center;
+		.image-holder
+		{
+			img
+			{
+				width: 70%;
+			}
+			@media screen and (max-width: 425px)
+			{
+				img
+				{
+					width: 100%;
+				}
+			}
+		}
+	}
+	.right-container
+	{
+		margin-top: 20px;
+		.title-container
+		{
+			text-align: center;
+			.icon-container
+			{
+				margin-left: 20px;
+				vertical-align: middle;
+				img
+				{
+					width: 85%;
+					@media screen and (max-width: 375px)
+					{
+						width: 60%;
+					}
+				}
+			}
+			.title
+			{
+
+				font-family: 'PT Serif', serif;
+				color: #474747;
+				font-weight: 700;
+				font-size: 25px;
+				@media screen and (max-width: 375px)
+				{
+					font-size: 20px;
+				}
+				@media screen and (max-width: 320px)
+				{
+					font-size: 17px;
+				}
+			}
+			span
+			{
+				vertical-align: middle;
+				display: inline-block;
+				margin-bottom: 20px;
+				@media screen and (max-width: 768px)
+				{
+					margin-bottom: 0px;
+				}
+			}
+		}
+		.description-container
+		{
+			font-size: 17px;
+			font-family: 'PT Sans', sans-serif;
+			color: #575757;
+			margin-top: 20px;
+			@media screen and (max-width: 320px)
+			{
+				font-size: 15px;
+			}
+			ul
+			{
+				li
+				{
+					margin-bottom: 15px;
+				}
+			}	
+		}
+	}
+	.bottom-container
+	{
+		font-family: 'PT Serif', serif;
+		.header
+		{
+			color: #474747;
+			font-weight: 700;
+			font-size: 25px;
+			padding-top: 20px;
+			text-align: center;
+		}
+		.info-container
+		{
+			.details-container
+			{
+				font-size: 17px;
+				font-family: 'PT Sans', sans-serif;
+				color: #575757;
+				margin-top: 20px;
+			}
+			.img-holder
+			{
+				padding: 5px o;
+				margin-top: 20px;
+				img
+				{
+					width: 100%;
+				}
+			}
+			.quality-container
+			{
+				font-size: 17px;
+				font-family: 'PT Sans', sans-serif;
+				color: #575757;
+				margin-top: 10px;
+				li
+				{
+					margin-top: 10px;
+				}
+			}
+		}
+	}
+}

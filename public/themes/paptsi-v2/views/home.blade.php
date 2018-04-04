@@ -21,39 +21,6 @@
         </div>
     </section>
 
-    {{-- <div id="services" class="wrapper-1">
-        <div class="row-no-padding clearfix">
-            <div class="col-md-3">
-                <div class="service-1-3-container match-height">
-                    <div class="image-holder"><img src="{{ get_content($shop_theme_info, "home", "home_services_image1") }}"></div>
-                    <div class="service-title">{!! get_content($shop_theme_info, "home", "home_services_title1") !!}</div>
-                    <div class="service-details">{!! get_content($shop_theme_info, "home", "home_services_description1") !!}</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="service-2-4-container match-height">
-                    <div class="image-holder"><img src="{{ get_content($shop_theme_info, "home", "home_services_image2") }}"></div>
-                    <div class="service-title">{!! get_content($shop_theme_info, "home", "home_services_title2") !!}</div>
-                    <div class="service-details">{!! get_content($shop_theme_info, "home", "home_services_description2") !!}</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="service-1-3-container match-height">
-                    <div class="image-holder"><img src="{{ get_content($shop_theme_info, "home", "home_services_image3") }}"></div>
-                    <div class="service-title">{!! get_content($shop_theme_info, "home", "home_services_title3") !!}</div>
-                    <div class="service-details">{!! get_content($shop_theme_info, "home", "home_services_description3") !!}</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="service-2-4-container match-height">
-                    <div class="image-holder"><img src="{{ get_content($shop_theme_info, "home", "home_services_image4") }}"></div>
-                    <div class="service-title">{!! get_content($shop_theme_info, "home", "home_services_title4") !!}</div>
-                    <div class="service-details">{!! get_content($shop_theme_info, "home", "home_services_description4") !!}</div>
-                </div>
-            </div> 
-        </div>
-    </div> --}}
-
     <section id="services" class="wrapper-1">
         <div class="container">
             <div class="service-container services-carousel">
@@ -145,66 +112,82 @@
                 <div class="row clearfix">
                     <div class="col-md-6">
                         <div class="left-container">
-                            <div class="title-container"><span class="border">|</span><span class="title"> OUR EXPERTISE</span></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="right-container">
-                            <div class="description-container">{!! get_content($shop_theme_info, "home", "home_expertise_description") !!}</div>
+                            <div class="title-container"><span class="border">|</span><span class="title"> NEWS AND ANNOUNCEMENT</span></div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="bottom-container">
-                <div class="row clearfix">
-                    <div class="col-md-3">
-                        <div class="holder-container">
-                            <div class="image-holder">
-                                <img src="{{ get_content($shop_theme_info, "home", "home_expertise_image1") }}">
+                <div class="news-carousel">
+                    @if(count(get_front_news($shop_id)) > 0)
+                        @foreach(limit_foreach(get_front_news($shop_id), 8) as $news)
+                            <div class="holder-container">
+                                <a href="/news?id={{ $news->post_id }}" style="text-decoration: none;">
+                                    <div class="image-holder">
+                                        <img src="{{ $news->post_image }}">
+                                    </div>
+                                    <div class="title-container">{{ $news->post_title }}</div>
+                                    <div class="description-container match-height">{{ $news->post_excerpt }}</div>
+                                    <div class="read-container">
+                                        <a href="/news?id={{ $news->post_id }}">Read More</a>
+                                    </div>
+                                </a>
                             </div>
-                            <div class="title-container">{!! get_content($shop_theme_info, "home", "home_expertise_title1") !!}</div>
-                            <div class="description-container match-height">{!! get_content($shop_theme_info, "home", "home_expertise_description1") !!}</div>
-                            <div class="read-container">
-                                <a href="#">Read More</a>
-                            </div>
+                        @endforeach
+                    @else
+                        <span>Coming Soon!</span>
+                    @endif   
+                </div>
+                    {{-- <div class="holder-container">
+                        <div class="image-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/wrapper3-image1.jpg">
+                        </div>
+                        <div class="title-container">LOREM IPSUM DOLOR</div>
+                        <div class="description-container match-height">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</div>
+                        <div class="read-container">
+                            <a href="#">Read More</a>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="holder-container">
-                            <div class="image-holder">
-                                <img src="{{ get_content($shop_theme_info, "home", "home_expertise_image2") }}">
-                            </div>
-                            <div class="title-container">{!! get_content($shop_theme_info, "home", "home_expertise_title2") !!}</div>
-                            <div class="description-container match-height">{!! get_content($shop_theme_info, "home", "home_expertise_description2") !!}</div>
-                            <div class="read-container">
-                                <a href="#">Read More</a>
-                            </div>
+                    <div class="holder-container">
+                        <div class="image-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/wrapper3-image2.jpg">
+                        </div>
+                        <div class="title-container">LOREM IPSUM DOLOR</div>
+                        <div class="description-container match-height">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</div>
+                        <div class="read-container">
+                            <a href="#">Read More</a>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="holder-container">
-                            <div class="image-holder">
-                                <img src="{{ get_content($shop_theme_info, "home", "home_expertise_image3") }}">
-                            </div>
-                            <div class="title-container">{!! get_content($shop_theme_info, "home", "home_expertise_title3") !!}</div>
-                            <div class="description-container match-height">{!! get_content($shop_theme_info, "home", "home_expertise_description3") !!}</div>
-                            <div class="read-container">
-                                <a href="#">Read More</a>
-                            </div>
+                    <div class="holder-container">
+                        <div class="image-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/wrapper3-image3.jpg">
+                        </div>
+                        <div class="title-container">LOREM IPSUM DOLOR</div>
+                        <div class="description-container match-height">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</div>
+                        <div class="read-container">
+                            <a href="#">Read More</a>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="holder-container">
-                            <div class="image-holder">
-                                <img src="{{ get_content($shop_theme_info, "home", "home_expertise_image4") }}">
-                            </div>
-                            <div class="title-container">{!! get_content($shop_theme_info, "home", "home_expertise_title4") !!}</div>
-                            <div class="description-container match-height">{!! get_content($shop_theme_info, "home", "home_expertise_description4") !!}</div>
-                            <div class="read-container">
-                                <a href="#">Read More</a>
-                            </div>
+                    <div class="holder-container">
+                        <div class="image-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/wrapper3-image4.jpg">
+                        </div>
+                        <div class="title-container">LOREM IPSUM DOLOR</div>
+                        <div class="description-container match-height">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</div>
+                        <div class="read-container">
+                            <a href="#">Read More</a>
                         </div>
                     </div>
+                    <div class="holder-container">
+                        <div class="image-holder">
+                            <img src="/themes/{{ $shop_theme }}/img/wrapper3-image3.jpg">
+                        </div>
+                        <div class="title-container">LOREM IPSUM DOLOR</div>
+                        <div class="description-container match-height">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</div>
+                        <div class="read-container">
+                            <a href="#">Read More</a>
+                        </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -299,12 +282,12 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=1">
 @endsection
 
 @section("script")
 
-<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js?version=1"></script>
 
 <script type="text/javascript">
 /*$(document).ready(function($) {

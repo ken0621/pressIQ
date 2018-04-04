@@ -18,7 +18,7 @@
         <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet">   
 
         <!-- GLOBAL CSS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1.2">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1.3">
 
         @include("frontend.ghead")
 
@@ -118,6 +118,13 @@
                                 <li><a class="smoth-scroll" href="/#service">SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="/#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
+                            @elseif(Request::segment(1)=="product2")
+                                <li><a class="smoth-scroll" href="/#home">HOME</a></li>
+                                <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
+                                <li><a class="smoth-scroll" href="/#process">PROCESS</a></li>
+                                <li><a class="smoth-scroll" href="/#service">SERVICES</a></li>
+                                <li><a class="smoth-scroll" href="/#gallery">GALLERY</a></li>
+                                <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
                             @else
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                 <li><a class="smoth-scroll" href="#about">ABOUT US</a></li>
@@ -157,11 +164,31 @@
                          <div class="footer-title-container">
                             <p class="footer-title">INFORMATION</p>
                         </div>
+                        @if(Request::segment(1)=="about")
+                        <div class="info-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="/#about">ABOUT US</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="/#process">PROCESS</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="/#gallery">PRODUCTS</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="/#contact">CONTACT US</a></div>
+                        @elseif(Request::segment(1)=="product")
+                        <div class="info-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="/#about">ABOUT US</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="/#process">PROCESS</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="/#gallery">PRODUCTS</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="/#contact">CONTACT US</a></div>
+                        @elseif(Request::segment(1)=="product2")
+                        <div class="info-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="/#about">ABOUT US</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="/#process">PROCESS</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="/#gallery">PRODUCTS</a></div>
+                        <div class="info-list"><a class="smoth-scroll" href="/#contact">CONTACT US</a></div>
+                        @else
                         <div class="info-list"><a class="smoth-scroll" href="#home">HOME</a></div>
                         <div class="info-list"><a class="smoth-scroll" href="#about">ABOUT US</a></div>
                         <div class="info-list"><a class="smoth-scroll" href="#process">PROCESS</a></div>
                         <div class="info-list"><a class="smoth-scroll" href="#gallery">PRODUCTS</a></div>
                         <div class="info-list"><a class="smoth-scroll" href="#contact">CONTACT US</a></div>
+                        @endif
                     </div>
                     <div class="col-md-4">
                         <div class="footer-title-container">

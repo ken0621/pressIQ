@@ -94,15 +94,11 @@
                             <span class="icon-container"><img src="/themes/living-water/img/water-drops.png"></span><span class="title">PRODUCT AND SERVICES</span>
                         </div>
                         <div class="description-container">
-                            <ul>
-                                <li>Testing and analyzing of clients in-house water supplies for the presence of bacteria, fungi, organic and inorganic compounds, taste and odor.</li>
-                                <li>Installation of the optimal water treatment and purification systems based on the client’s informed, educated and affordable choice.</li>
-                                <li>Routine monitoring of installed components to minimize equipment failure and ensure timely replacement of expired filters and components.</li>
-                            </ul>
+                            {!! get_content($shop_theme_info, "home", "home_product_description") !!}
                         </div>
-                        {{-- <div class="button-container">
-                            <a href="/product"><button>READ MORE &raquo;</button></a>
-                        </div> --}}
+                        <div class="button-container">
+                            <a href="/product2"><button>READ MORE &raquo;</button></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -215,43 +211,50 @@
                     <div class="title-container">
                         <span class="icon-container"><img src="/themes/living-water/img/water-drops.png"></span><span class="title">GET IN TOUCH WITH US</span>
                     </div>
-                     <div class="row clearfix">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="First Name*">
+                     <form action="Post"> 
+                        @if (session('message_concern_p4ward'))
+                            <div class="alert alert-success">
+                                {{ session('message_concern_p4ward') }}
+                            </div>
+                        @endif
+                         <div class="row clearfix">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="contactus_first_name" name="contactus_first_name" placeholder="First Name*" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="contactus_last_name" name="contactus_last_name" placeholder="Last Name*" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                        <input type="phone" class="form-control" id="contactus_phone_number" name="contactus_phone_number" placeholder="Phone Number*" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="email" class="form-control" id="contactus_email" name="contactus_email" placeholder="Email Address*" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text area" class="form-control" id="contactus_subject" name="contactus_subject" placeholder="Subject*" required> 
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <textarea type="text" class="form-control text-message" id="contactus_message" name="contactus_message" placeholder="Message*" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="button-container">
+                                    <button type="submit" formaction="/contact_us/send">SEND</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Last Name*">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                    <input type="phone" class="form-control" placeholder="Phone Number*">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="email" class="form-control" placeholder="Email Address*">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text area" class="form-control" placeholder="Subject*">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <textarea type="text" class="form-control text-message" placeholder="Message*"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="button-container">
-                                <button>SUBMIT</button>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
                 <div class="col-md-6">
                     <div class="info-container">
@@ -282,7 +285,7 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=1.2">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=1.3">
 @endsection
 
 @section("script")

@@ -80,6 +80,58 @@
 		}
 
 	},
+	"product_and_services":
+	{
+		"water_supplies_list" :
+		{
+			"label":"Water Treatment Parts And Supplies",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"quality_list" :
+		{
+			"label":"Quality Policy",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"water_supplies_image_1" :
+		{
+			"label":"Water Treatment Parts And Supplies Image 1 (250x118) Image Dimension",
+			"type":"image",
+			"default":"/themes/living-water/img/supplies-1.jpg",
+			"size":"3"
+		},
+		"water_supplies_image_2" :
+		{
+			"label":"Water Treatment Parts And Supplies Image 2 (250x118) Image Dimension",
+			"type":"image",
+			"default":"/themes/living-water/img/supplies-2.jpg",
+			"size":"3"
+		},
+		"water_supplies_image_3" :
+		{
+			"label":"Water Treatment Parts And Supplies Image 3 (250x118) Image Dimension",
+			"type":"image",
+			"default":"/themes/living-water/img/supplies-3.jpg",
+			"size":"3"
+		},
+		"water_supplies_image_4" :
+		{
+			"label":"Water Treatment Parts And Supplies Image 4 (250x118) Image Dimension",
+			"type":"image",
+			"default":"/themes/living-water/img/supplies-4.jpg",
+			"size":"3"
+		},
+		"water_supplies_image_5" :
+		{
+			"label":"Water Treatment Parts And Supplies Image 5 (250x118) Image Dimension",
+			"type":"image",
+			"default":"/themes/living-water/img/supplies-5.jpg",
+			"size":"6"
+		}
+	},
 	"about":
 	{
 		"about_context" :

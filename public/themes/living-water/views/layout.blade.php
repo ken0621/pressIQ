@@ -18,7 +18,7 @@
         <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet">   
 
         <!-- GLOBAL CSS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1.2">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1.3">
 
         @include("frontend.ghead")
 

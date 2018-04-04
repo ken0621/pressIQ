@@ -102,7 +102,7 @@
                         <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="#aboutus">ABOUT US</a></span>
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="#expertise">EXPERTISE</a></span>
+                        <span><a class="smoth-scroll" href="#expertise">NEWS AND ANNOUNCEMENT</a></span>
                         <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="#careers">CAREERS</a></span>
                         <div class="border-container"></div>
@@ -117,14 +117,14 @@
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                 <li><a class="smoth-scroll" href="#services">SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="#aboutus">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="#expertise">EXPERTISE</a></li>
+                                <li><a class="smoth-scroll" href="#expertise">NEWS AND ANNOUNCEMENT</a></li>
                                 <li><a class="smoth-scroll" href="#careers">CAREERS</a></li>
                                 <li><a class="smoth-scroll" href="#contactus">CONTACT US</a></li>
                             @else
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                 <li><a class="smoth-scroll" href="#services">SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="#aboutus">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="#expertise">EXPERTISE</a></li>
+                                <li><a class="smoth-scroll" href="#expertise">NEWS AND ANNOUNCEMENT</a></li>
                                 <li><a class="smoth-scroll" href="#careers">CAREERS</a></li>
                                 <li><a class="smoth-scroll" href="#contactus">CONTACT US</a></li>
                             @endif

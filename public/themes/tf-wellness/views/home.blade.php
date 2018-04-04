@@ -622,6 +622,18 @@
 	  		autoplaySpeed: 3000,
 		});
 
+		function event_slick()
+		{
+			$('.prod-image-thumb-container').slick({
+				prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/arrow-left1.png'>",
+		      	nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/arrow-right1.png'>",
+				infinite: false,
+				slidesToShow: 4,
+				slidesToScroll: 1,
+				arrows: false
+			});
+		}
+
 	    lightbox.option({
 	      'disableScrolling': true,
 	      'wrapAround': true

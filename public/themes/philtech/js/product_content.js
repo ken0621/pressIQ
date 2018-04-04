@@ -17,6 +17,7 @@ function action_text_fit()
 		minFontSize: '12px',
 	});
 }
+
 function event_change_image()
 {
 	$(".item-image-large").elevateZoom();
@@ -43,7 +44,7 @@ function event_slick()
 		infinite: true,
 		slidesToShow: 4,
 		slidesToScroll: 1,
-		arrows: false
+		arrows: true
 	});
 }
 

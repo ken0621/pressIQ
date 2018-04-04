@@ -59,10 +59,12 @@
 					<div class="col-md-6">
 						<!-- PRODUCT IMAGE -->
 						<div class="prod-image-container">
-							@foreach($product_variant['image'] as $key => $image)
-							{{-- <img class="single-product-img" src="{{ get_product_first_image($product) }}"> --}}
-							<img key="{{ $key }}" variant-id="{{ $product_variant['evariant_id'] }}" class="single-product-img 4-3-ratio {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}">
-							@endforeach
+							<div>
+								@foreach($product_variant['image'] as $key => $image)
+								{{-- <img class="single-product-img" src="{{ get_product_first_image($product) }}"> --}}
+								<img key="{{ $key }}" variant-id="{{ $product_variant['evariant_id'] }}" class="single-product-img 4-3-ratio {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}">
+								@endforeach
+							</div>
 						</div>
 						{{-- JUST NOW --}}
 						<div class="prod-image-thumb-container" style="margin-left: -7.5px; margin-right: -7.5px;">

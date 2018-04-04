@@ -31,6 +31,12 @@ class ShopHomeController extends Shop
             $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         }
 
+        //display categories in home
+        if ($this->shop_info->shop_theme == "tfwellness") 
+        {
+            $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
+        }
+
         /* Intogadgets Exclusive */
         if ($this->shop_info->shop_theme == "intogadgets") 
         {

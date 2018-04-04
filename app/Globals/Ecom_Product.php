@@ -14,6 +14,7 @@ use App\Models\Tbl_ec_variant_image;
 use App\Models\Tbl_collection_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_membership;
 
 use App\Globals\Mlm_discount;
 use App\Globals\MLM2;
@@ -669,5 +670,50 @@ class Ecom_Product
 		{
 			return $product_price;
 		}
+	}
+
+	public static function getPriceLevel($shop_id, $customer_id, $item_id, $product_price)
+	{
+		$_slot = Tbl_mlm_slot::priceLevel($item_id)
+							 ->where("tbl_mlm_slot.slot_owner", $customer_id)
+							 ->where("tbl_mlm_slot.shop_id", $shop_id)
+							 ->get();
+		
+		$slot = $_slot->toArray();
+		$slot = array_column($slot, 'custom_price');
+		
+		if ($slot) 
+		{
+			return min($slot);
+		}
+		else
+		{
+			return $product_price;
+		}
+	}
+
+	public static function getAllPriceLevel($shop_id, $item_id, $product_price)
+	{
+		$price_level = Tbl_membership::where("tbl_membership.membership_price_level", "!=", null)
+							         ->where("tbl_membership.membership_archive", 0)
+							         ->where("tbl_membership.shop_id", $shop_id)
+							         ->leftJoin('tbl_price_level', 'tbl_price_level.price_level_id', '=', 'tbl_membership.membership_price_level')
+							         // ->leftJoin('tbl_price_level_item', 'tbl_price_level_item.price_level_id', '=', 'tbl_price_level.price_level_id')
+							         // ->leftJoin('tbl_item', 'tbl_item.item_id', '=', 'tbl_price_level_item.item_id')
+							         // ->where("tbl_item.item_id", $item_id)
+									 ->get();
+        $result = [];
+
+		foreach ($price_level as $key => $value) 
+		{
+			$price_level_item = DB::table("tbl_price_level_item")->where("price_level_id", $value->price_level_id)->where("item_id", $item_id)->first();
+			
+			$result[$key]["discount_name"] = $value->membership_name;
+			$result[$key]["discount_value"] = "";
+			$result[$key]["discount_type"] = "";
+			$result[$key]["discounted_amount"] = isset($price_level_item->custom_price) ? $price_level_item->custom_price : $product_price;
+		}
+
+		return $result;
 	}
 }

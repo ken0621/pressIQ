@@ -70,8 +70,8 @@
 					      <img class="media-object" src="/themes/{{ $shop_theme }}/img/trust-icon.png">
 					  </div>
 					  <div class="media-body">
-					    <h5 class="media-heading">We are trusted</h5>
-					    <p>Secured transactions, Satisfaction, Guaranteed.</p>
+					    <h5 class="media-heading">{!! get_content($shop_theme_info, "home", "home_icon1_title") !!}</h5>
+					    <p>{!! get_content($shop_theme_info, "home", "home_icon1_text") !!}</p>
 					  </div>
 					</div>
 				</div>
@@ -81,8 +81,8 @@
 					      <img class="media-object" src="/themes/{{ $shop_theme }}/img/quality-icon.png" >
 					  </div>
 					  <div class="media-body">
-					    <h5 class="media-heading">Quality Products</h5>
-					    <p>We assure the best quality at amazing prices.</p>
+					    <h5 class="media-heading">{!! get_content($shop_theme_info, "home", "home_icon2_title") !!}</h5>
+					    <p>{!! get_content($shop_theme_info, "home", "home_icon2_text") !!}</p>
 					  </div>
 					</div>
 				</div>
@@ -92,8 +92,8 @@
 					      <img class="media-object" src="/themes/{{ $shop_theme }}/img/payment-icon.png">
 					  </div>
 					  <div class="media-body">
-					    <h5 class="media-heading">Safe Payment</h5>
-					    <p>Protected online payment</p>
+					    <h5 class="media-heading">{!! get_content($shop_theme_info, "home", "home_icon3_title") !!}</h5>
+					    <p>{!! get_content($shop_theme_info, "home", "home_icon3_text") !!}</p>
 					  </div>
 					</div>
 				</div>
@@ -103,8 +103,8 @@
 					      <img class="media-object" src="/themes/{{ $shop_theme }}/img/delivery-icon.png">
 					  </div>
 					  <div class="media-body">
-					    <h5 class="media-heading">Item Delivery</h5>
-					    <p>We assure the fast delivery</p>
+					    <h5 class="media-heading">{!! get_content($shop_theme_info, "home", "home_icon4_title") !!}</h5>
+					    <p>{!! get_content($shop_theme_info, "home", "home_icon4_text") !!}</p>
 					  </div>
 					</div>
 				</div>
@@ -512,15 +512,13 @@
 			<div class="col-md-8">
 				<div class="left-container">
 					<div class="header" id="aboutus">TF WELLNESS</div>
-					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.</p>
-					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.</p>
-					<div class="header">Shipping Options</div>
+					<p>{!! get_content($shop_theme_info, "home", "home_about_us") !!}</p>
 					<div class="title">PICK UP</div>
-					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+					<p>{!! get_content($shop_theme_info, "home", "home_pick_up") !!}</p>
 					<div class="title">Meet Up</div>
-					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+					<p>{!! get_content($shop_theme_info, "home", "home_meet_up") !!}</p>
 					<div class="title">Shipping</div>
-					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+					<p>{!! get_content($shop_theme_info, "home", "home_shipping") !!}</p>
 				</div>
 			</div>
 			<div class="col-md-4">
@@ -534,13 +532,13 @@
 					<div class="title">TF Wellness</div>
 					<div class="contact-info">
 						<span><i class="fa fa-map-marker" aria-hidden="true"></i></span>
-						<span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</span>
+						<span>{!! get_content($shop_theme_info, "contact", "contact_company_location") !!}</span>
 						<div></div>
 						<span><i class="fa fa-phone" aria-hidden="true"></i></span>
-						<span>0946 727 3576</span>
+						<span>{!! get_content($shop_theme_info, "contact", "contact_company_phone") !!}</span>
 						<div></div>
 						<span><i class="fa fa-envelope" aria-hidden="true"></i></span>
-						<span>yourcompany@email.com</span>
+						<span>{!! get_content($shop_theme_info, "contact", "contact_company_email") !!}</span>
 					</div>
 					<form action="Post"> 
 					   @if (session('message_concern_p4ward'))
@@ -590,7 +588,7 @@
 				<div class="right-container">
 					<div class="title">Find Us on Google Map</div>
 					<div class="map-container">
-					    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15464.659178244572!2d121.1135937!3d14.3018559!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x86f66d98403088c7!2sKolorete+Marketing!5e0!3m2!1sen!2sph!4v1516420495967" width="360" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
+					    <iframe src="{!! get_content($shop_theme_info, "contact", "contact_google_map") !!}" width="360" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
 					</div>
 				</div>
 			</div>

@@ -89,21 +89,21 @@
 		{
 			"label":"Pick Up Details",
 			"type":"textarea",
-			"default":"",
+			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
 			"size":"4"
 		},
 		"home_meet_up" :
 		{
 			"label":"Meet Up Details",
 			"type":"textarea",
-			"default":"",
+			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
 			"size":"4"
 		},
 		"home_shipping" :
 		{
 			"label":"Shipping Details",
 			"type":"textarea",
-			"default":"",
+			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
 			"size":"4"
 		}
 	},
@@ -113,21 +113,21 @@
  		{
  			"label":"Company Address",
  			"type":"textbox",
- 			"default":"",
+ 			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit",
  			"size":"4"
  		},
  		"contact_company_phone" :
  		{
  			"label":"Company Phone Number",
  			"type":"textbox",
- 			"default":"",
+ 			"default":"0946 727 3576",
  			"size":"4"
  		},
  		"contact_company_email" :
  		{
  			"label":"Comapny Email Address",
  			"type":"textbox",
- 			"default":"",
+ 			"default":"yourcompany@email.com",
  			"size":"4"
  		},
  		"contact_google_map" :

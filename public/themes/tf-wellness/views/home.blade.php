@@ -543,9 +543,9 @@
 						<span>yourcompany@email.com</span>
 					</div>
 					<form action="Post"> 
-					   @if (session('message_concern_tfwellness'))
+					   @if (session('message_concern_p4ward'))
 					       <div class="alert alert-success">
-					           {{ session('message_concern_tfwellness') }}
+					           {{ session('message_concern_p4ward') }}
 					       </div>
 					   @endif
 					   <div class="row clearfix">

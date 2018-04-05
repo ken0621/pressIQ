@@ -1577,7 +1577,7 @@ class ShopMemberController extends Shop
             $message->subject($p4ward_contactus['contactus_subject']);
            
         });
-        Session::flash('message_concern_tfwellness', 'Message Successfully Sent!');
+        Session::flash('message_concern_p4ward', 'Message Successfully Sent!');
         return Redirect::to('/#contactus');  
     }
 

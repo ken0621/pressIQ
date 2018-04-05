@@ -126,7 +126,7 @@
 		},
 		"water_supplies_image_5" :
 		{
-			"label":"Water Treatment Parts And Supplies Image 5 (250x118) Image Dimension",
+			"label":"Water Treatment Parts And Supplies Image 5 (530x280) Image Dimension",
 			"type":"image",
 			"default":"/themes/living-water/img/supplies-5.jpg",
 			"size":"6"

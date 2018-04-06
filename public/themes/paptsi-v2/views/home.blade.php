@@ -135,7 +135,7 @@
                             </div>
                         @endforeach
                     @else
-                        <span class="coming-soon">News and Announcements are coming Soon!</span>
+                        <span class="coming-soon">News and Announcements are coming soon!</span>
                     @endif   
                 </div>
                     {{-- <div class="holder-container">

@@ -135,7 +135,7 @@
                             </div>
                         @endforeach
                     @else
-                        <span>Coming Soon!</span>
+                        <span class="coming-soon">News and Announcements are coming Soon!</span>
                     @endif   
                 </div>
                     {{-- <div class="holder-container">
@@ -282,7 +282,7 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=1">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=1.1">
 @endsection
 
 @section("script")

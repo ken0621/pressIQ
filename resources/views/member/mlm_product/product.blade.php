@@ -17,7 +17,7 @@
         <div class="col-md-4 col-md-offset-8" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search_item_sku" placeholder="Search by item name or sku" aria-describedby="basic-addon1" onChange="search_item(this)">
+                <input type="text" class="form-control search_item_sku" placeholder="Search by item name or sku" aria-describedby="basic-addon1">
             </div>
         </div>  
     </div>

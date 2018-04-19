@@ -3938,30 +3938,35 @@ class ShopMemberController extends Shop
     }
     public function getCheckout()
     {
-        $data["page"]     = "Checkout";
-        $shop_id          = $this->shop_info->shop_id;
-        $data["_payment"] = $_payment = Payment::get_list($shop_id);
-        $data["_locale"]  = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
-        $data["cart"]     = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
-        $data["_slot"]    = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
-
-        foreach ($data["_slot"] as $key => $value) 
+        if (Self::$customer_info) 
         {
-            $data["_slot"][$key]->current_wallet = MLM2::current_wallet($shop_id, $value->slot_id); 
-        }
+            $data["page"]     = "Checkout";
+            $shop_id          = $this->shop_info->shop_id;
+            $data["_payment"] = $_payment = Payment::get_list($shop_id);
+            $data["_locale"]  = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
+            $data["cart"]     = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
+            $data["_slot"]    = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
 
-        if(!Self::$customer_info)
-        {
-            $store["checkout_after_register"] = true;
-            session($store);
-            return redirect("/members/register");
-        }
+            foreach ($data["_slot"] as $key => $value) 
+            {
+                $data["_slot"][$key]->current_wallet = MLM2::current_wallet($shop_id, $value->slot_id); 
+            }
+
+            if(!Self::$customer_info)
+            {
+                $store["checkout_after_register"] = true;
+                session($store);
+                return redirect("/members/register");
+            }
+            else
+            {
+                return (Self::load_view_for_members("member.checkout", $data)); 
+            }
+        }    
         else
         {
-            return (Self::load_view_for_members("member.checkout", $data)); 
+            return Redirect::to('/members/register');
         }
-
-        
     }
     public function postCheckout()
     {

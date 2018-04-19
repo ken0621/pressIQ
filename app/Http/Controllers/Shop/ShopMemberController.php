@@ -3965,7 +3965,7 @@ class ShopMemberController extends Shop
         }    
         else
         {
-            return Redirect::to('/members/register');
+            return Redirect::to('/members/login');
         }
     }
     public function postCheckout()

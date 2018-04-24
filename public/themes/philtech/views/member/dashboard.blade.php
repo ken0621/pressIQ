@@ -121,7 +121,7 @@
 				
 				@if(isset($points->{ "display_repurchase_cashback"}))
 				<div class="square-container">
-					<div class="title"><i class="align-icon"></i> VIP Cashback</div>
+					<div class="title"><i class="align-icon"></i> VIP Cashback Wallet</div>
 					<div class="sub-container">
 						<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 							<div class="holder">

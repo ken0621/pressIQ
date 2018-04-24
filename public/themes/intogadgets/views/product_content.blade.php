@@ -223,21 +223,23 @@
             <div class="related-content-header"><span>RELATED</span> PRODUCTS</div>
             <div class="related-content-sub">You might want to check out other products.</div>
             <div class="container">
-               @foreach(limit_foreach($_related, 4) as $related)
-               <div class="feature-holder col-md-3 col-sm-6 col-xs-12">
-                  <a href="/product/view/{{$related['eprod_id']}}">
-                     <div class="feature-img">
-                        <img class="lazy 1-1-ratio" data-original="{{ get_product_first_image($related) }}" height="222px" width="222px">
-                        <div class="feature-hover"></div>
-                        <div class="feature-hoverimg">
-                  <a href="javascript:"><i class="fa fa-link"></i></a></div>
-                  </div>
-                  </a>
-                  <a href="/product/view/{{$related['eprod_id']}}" class="feature-name">{{ get_product_first_name($related) }}</a>
-                  <div class="feature-rate"></div>
-                  <div class="feature-price">{{ get_product_first_price($related) }}</div>
-                  <a class="feature-button quick-view" style="display: none;">QUICK VIEW</a>
-               </div>
+               @foreach($_related as $related)
+                   @if($loop->iteration > 4)
+                       <div class="feature-holder col-md-3 col-sm-6 col-xs-12">
+                          <a href="/product/view/{{$related['eprod_id']}}">
+                             <div class="feature-img">
+                                <img class="lazy 1-1-ratio" data-original="{{ get_product_first_image($related) }}" height="222px" width="222px">
+                                <div class="feature-hover"></div>
+                                <div class="feature-hoverimg">
+                          <a href="javascript:"><i class="fa fa-link"></i></a></div>
+                          </div>
+                          </a>
+                          <a href="/product/view/{{$related['eprod_id']}}" class="feature-name">{{ get_product_first_name($related) }}</a>
+                          <div class="feature-rate"></div>
+                          <div class="feature-price">{{ get_product_first_price($related) }}</div>
+                          <a class="feature-button quick-view" style="display: none;">QUICK VIEW</a>
+                       </div>
+                   @endif
                @endforeach
             </div>
          </div>

@@ -256,8 +256,12 @@ class MLM_ProductController extends Member
     }   
     public function add_product_points()
     {
-        // return $_POST;
-        $old_mlm_item_points = Tbl_mlm_item_points::where('item_id', Request::input('item_id'))->first()->toArray();        
+        $old_mlm_item_points = Tbl_mlm_item_points::where('item_id', Request::input('item_id'))->first();
+        
+        if ($old_mlm_item_points) 
+        {
+            $old_mlm_item_points = $old_mlm_item_points->toArray();
+        }    
 
         $shop_id 							    = $this->checkuser('user_shop');
         $data['active_plan_product_repurchase'] = Mlm_plan::get_all_active_plan_repurchase($shop_id);
@@ -271,36 +275,46 @@ class MLM_ProductController extends Member
         {
             foreach($data['active_plan_product_repurchase'] as $key => $value)
             {
-                    $update = [];
-    	            $tablename 			 = $value->marketing_plan_code;
-                    
-                    $update[$tablename] = $points[$tablename][$value2->membership_id];
-                    if($value->marketing_plan_code == "STAIRSTEP")
+                $update = [];
+	            $tablename 			 = $value->marketing_plan_code;
+                
+                $update[$tablename] = $points[$tablename][$value2->membership_id];
+                if($value->marketing_plan_code == "STAIRSTEP")
+                {
+                    $update["STAIRSTEP_GROUP"] = $points["STAIRSTEP_GROUP"][$value2->membership_id];
+                }
+                else if($value->marketing_plan_code == "RANK")
+                {
+                    $update["RANK_GROUP"] = $points["RANK_GROUP"][$value2->membership_id]; 
+                } 
+                else if($value->marketing_plan_code == "UNILEVEL")
+                {
+                    $update["UNILEVEL_CASHBACK_POINTS"] = $points["UNILEVEL_CASHBACK_POINTS"][$value2->membership_id]; 
+                }                    
+                else if($value->marketing_plan_code == "REPURCHASE_CASHBACK")
+                {
+                    $update["REPURCHASE_CASHBACK_POINTS"] = $points["REPURCHASE_CASHBACK_POINTS"][$value2->membership_id];
+
+                    foreach($_rank as $rank)
                     {
-                        $update["STAIRSTEP_GROUP"] = $points["STAIRSTEP_GROUP"][$value2->membership_id];
-                    }
-                    else if($value->marketing_plan_code == "RANK")
-                    {
-                        $update["RANK_GROUP"] = $points["RANK_GROUP"][$value2->membership_id]; 
+                        $update_rank_cashback['amount']  = $rank_cashback_points[$rank->stairstep_id];
+                        Tbl_rank_repurchase_cashback_item::where("item_id",Request::input("item_id"))->where("rank_id",$rank->stairstep_id)->update($update_rank_cashback);
                     } 
-                    else if($value->marketing_plan_code == "UNILEVEL")
-                    {
-                        $update["UNILEVEL_CASHBACK_POINTS"] = $points["UNILEVEL_CASHBACK_POINTS"][$value2->membership_id]; 
-                    }                    
-                    else if($value->marketing_plan_code == "REPURCHASE_CASHBACK")
-                    {
-                        $update["REPURCHASE_CASHBACK_POINTS"] = $points["REPURCHASE_CASHBACK_POINTS"][$value2->membership_id];
+                }
 
-                        foreach($_rank as $rank)
-                        {
-                            $update_rank_cashback['amount']  = $rank_cashback_points[$rank->stairstep_id];
-                            Tbl_rank_repurchase_cashback_item::where("item_id",Request::input("item_id"))->where("rank_id",$rank->stairstep_id)->update($update_rank_cashback);
-                        } 
-                    }
-
-
+                if (Tbl_mlm_item_points::where('item_id', Request::input('item_id'))->where('membership_id', $value2->membership_id)->first()) 
+                {
                     Tbl_mlm_item_points::where('item_id', Request::input('item_id'))
                     ->where('membership_id', $value2->membership_id)->update($update);
+                }
+                else
+                {
+                    $insert                  = $update;
+                    $insert["item_id"]       = Request::input('item_id');
+                    $insert["membership_id"] = $value2->membership_id;
+                    
+                    Tbl_mlm_item_points::insert($insert);
+                }
             }
         }
 

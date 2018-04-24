@@ -131,12 +131,10 @@
                                                     <input type="number" class="form-control " name="{{$value}}" value="{{$variant[$value]}}" form="formvariant{{$variant['item_id']}}">
                                                 </div>    
                                                 @foreach($membership_active as $key2 => $value2)
-                                                    @if(isset($value2->membership_id) && isset($value2->membership_name) && isset($variant['points'][$value2->membership_id]->$value))
                                                     <div class="col-md-12">
                                                        <small><label>{{$value2->membership_name}}</label> </small>
-                                                       <input type="number" class="form-control input-sm" name="membership_points[{{$value}}][{{$value2->membership_id}}]" value="{{$variant['points'][$value2->membership_id]->$value}}" form="formvariant{{$variant['item_id']}}">
+                                                       <input type="number" class="form-control input-sm" name="membership_points[{{$value}}][{{$value2->membership_id}}]" value="{{ isset($variant['points'][$value2->membership_id]->$value) ? $variant['points'][$value2->membership_id]->$value : 0 }}" form="formvariant{{$variant['item_id']}}">
                                                     </div>
-                                                    @endif
                                                 @endforeach
                                             </td>
                                         @endif   

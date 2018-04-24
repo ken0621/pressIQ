@@ -344,8 +344,8 @@
                   <div class="popular-tags">
                      <div class="row clearfix">
                         @foreach($_popular_tags as $popular_tags)
-                        <div class="col-md-2 col-sm-4 col-xs-6">
-                           <a class="fit-text" href="/product?search={{ $popular_tags->keyword }}"><span>#{{ $popular_tags->keyword }}</span></a>
+                        <div class="col-md-2 col-sm-4 col-xs-6 match-height">
+                           <a style="height: auto !important;" class="fit-text" href="/product?search={{ $popular_tags->keyword }}"><span style="height: auto !important;">#{{ $popular_tags->keyword }}</span></a>
                         </div>
                         @endforeach
                      </div>

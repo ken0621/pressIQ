@@ -224,7 +224,7 @@
             <div class="related-content-sub">You might want to check out other products.</div>
             <div class="container">
                @foreach($_related as $related)
-                   @if($loop->iteration > 4)
+                   @if($loop->iteration <= 4)
                        <div class="feature-holder col-md-3 col-sm-6 col-xs-12">
                           <a href="/product/view/{{$related['eprod_id']}}">
                              <div class="feature-img">

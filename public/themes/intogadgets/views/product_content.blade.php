@@ -223,7 +223,7 @@
             <div class="related-content-header"><span>RELATED</span> PRODUCTS</div>
             <div class="related-content-sub">You might want to check out other products.</div>
             <div class="container">
-               @foreach(limit_foreach($_related, 4) as $related)
+               @foreach(limit_foreach_old($_related, 4) as $related)
                <div class="feature-holder col-md-3 col-sm-6 col-xs-12">
                   <a href="/product/view/{{$related['eprod_id']}}">
                      <div class="feature-img">

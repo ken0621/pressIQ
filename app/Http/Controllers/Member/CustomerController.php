@@ -920,7 +920,15 @@ class CustomerController extends Member
             $updateInfo['customer_balance_date'] = $date_as_of;
             $updateInfo['customer_notes'] = $notes;
             
-            Tbl_customer_other_info::where('customer_id',$client_id)->update($updateInfo);
+            if (Tbl_customer_other_info::where('customer_id',$client_id)->first()) 
+            {
+                Tbl_customer_other_info::where('customer_id',$client_id)->update($updateInfo);
+            }
+            else
+            {
+                $updateInfo['customer_id'] = $client_id;
+                Tbl_customer_other_info::insert($updateInfo);
+            }
             
             $insertAddress[0]['customer_id'] = $client_id;
             $insertAddress[0]['country_id'] = $billing_country;

@@ -152,8 +152,12 @@ class CashierController extends Member
     public function get_current_gc()
     {
         $slot_no = request('slot_no');
-        $current_slot_gc = Customer::get_current_slot_gc($slot_no);
-        return $current_slot_gc;
+        // $data['current_slot_gc'] = Customer::get_current_slot_gc($slot_no);
+        // $data['current_slot_wallet'] = Customer::get_current_slot_wallet($slot_no);
+        // $slot_id = Customer::get_slot_id($slot_no);
+        $data['current_slot_gc'] = currency("",Customer::get_points_wallet_per_slot($slot_no)['total_gc']);
+        $data['current_slot_wallet'] = currency("",Customer::get_points_wallet_per_slot($slot_no)['total_wallet']);
+        return json_encode($data);
     }
     public function pos_scan_item()
     {

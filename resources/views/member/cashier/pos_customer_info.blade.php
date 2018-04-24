@@ -58,7 +58,7 @@
         <div class="customer-name">
             <div class="row">
                 <div class="col-md-5">Current Wallet</div>
-                <div class="col-md-7 text-right">{{currency('PHP ',$customer_points['total_wallet'])}}</div>
+                <div class="col-md-7 text-right current_wallet">{{currency('PHP ',$customer_points['total_wallet'])}}</div>
             </div>
         </div>
     </div>
@@ -103,6 +103,7 @@
         function action_loader()
         {
             $(".current_gc").html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
+            $(".current_wallet").html('<i class="fa fa-spinner fa-pulse fa-fw"></i>');
         }
         function action_load_current_slot_gc()
         {
@@ -110,9 +111,11 @@
             {
                 url: "/member/cashier/pos/get_current_gc?slot_no="+$('.change-slot-id').val(),
                 type: "get",
+                dataType: 'json',
                 success: function(data)
                 {
-                    $('.current_gc').html(data+" POINT(S)");
+                    $('.current_gc').html(data.current_slot_gc+" POINT(S)");
+                    $('.current_wallet').html(data.current_slot_wallet+" POINT(S)");
                 }
             });
         }

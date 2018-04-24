@@ -164,6 +164,17 @@ class Customer
 		// dd($current_slot_gc);
 		return currency('',$current_slot_gc);
 	}
+	
+	public static function get_slot_id($slot_no)
+	{
+		return Tbl_mlm_slot::where("slot_no", $slot_no)->value("slot_id");
+	}
+	public static function get_current_slot_wallet()
+	{
+		$slot_no = request('slot_no');
+		$current_slot_wallet = Tbl_mlm_slot::currentWallet()->where("slot_no",$slot_no)->value('current_wallet');
+		return currency('',$current_slot_wallet);
+	}
 
 	public static function get_points_wallet_per_slot($slot_id = 0)
 	{

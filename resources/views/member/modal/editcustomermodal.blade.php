@@ -124,10 +124,14 @@
       </div>
       <div class="col-md-6">
         <div class="col-md-4 padding-lr-1">
+          <label for="">Contact</label>
+          <input type="text" name="contact" value="@if(isset($customer_info->contact)){{$customer_info->contact}}@endif" class="form-control"/>
+        </div>
+        <div class="col-md-4 padding-lr-1">
           <label for="">Other</label>
           <input type="text" name="other" value="@if(isset($other->customer_display_name)){{$other->customer_other_contact}}@endif" class="form-control"/>
         </div>
-        <div class="col-md-8 padding-lr-1">
+        <div class="col-md-4 padding-lr-1">
           <label for="">Website</label>
           <input type="text" name="website" value="@if(isset($other->customer_display_name)){{$other->customer_website}}@endif" class="form-control"/>
         </div>

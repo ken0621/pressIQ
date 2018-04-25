@@ -872,7 +872,7 @@ class CustomerController extends Member
             $updatecustomer['IsWalkin'] = 0;
             $updatecustomer['tin_number'] = $tin_number;
             $updatecustomer['stockist_warehouse_id'] = $stockist_warehouse_id;
-            
+            $updatecustomer['contact'] = Request::input('contact');
 
             switch ($mlm_continue) {
                 case 1:

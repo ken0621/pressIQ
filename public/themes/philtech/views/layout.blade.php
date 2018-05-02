@@ -142,6 +142,7 @@
                     <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
                     <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR MERCHANTS</a></li>
                     <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li> 
+                    <li class="nav-border"><a href="https://tacentre.com">HOTEL BOOKING</a></li>
                     <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
                     <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">CAREER</a></li>
                     <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">EVENTS</a></li>

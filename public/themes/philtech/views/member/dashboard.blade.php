@@ -115,6 +115,8 @@
 											<div class="name"><span>Direct Commission</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 										@elseif($plan->label == "Indirect")
 											<div class="name"><span>Indirect Commission</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+										@elseif($plan->label == "Unilevel")
+											<div class="name"><span>Unilevel Cashback</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 										@else
 											<div class="name"><span>{{ $plan->label }}</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 										@endif

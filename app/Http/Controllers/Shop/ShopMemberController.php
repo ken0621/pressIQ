@@ -2659,7 +2659,7 @@ class ShopMemberController extends Shop
 
         // dd($insert["birthday"]);
 
-        if(Customer::register($this->shop_info->shop_id, $insert))
+        if(Customer::register($this->shop_info->shop_id, $insert, $request->address))
         {
             Self::store_login_session($insert["email"], $raw_password);
         }

@@ -21,7 +21,7 @@ use Request;
 use Crypt;
 class Customer
 {
-	public static function register($shop_id, $info)
+	public static function register($shop_id, $info, $address = null)
 	{
 		$info["shop_id"] = $shop_id;
 		$plan_settings = Mlm_plan::get_settings($shop_id);
@@ -39,10 +39,29 @@ class Customer
 			session()->forget("lead_sponsor");
 		}
 
-		$register = Tbl_customer::insert($info);
+		$register = Tbl_customer::insertGetId($info);
 
 		if ($shop_id == 1 && $register) 
 		{
+			/* Put Address */
+			if ($address) 
+			{
+				$insert_customer_address["country_id"]       = 420;
+				$insert_customer_address["customer_state"]   = "";
+				$insert_customer_address["customer_city"]    = "";
+				$insert_customer_address["customer_zipcode"] = "";
+				$insert_customer_address["customer_street"]  = $address;
+				$insert_customer_address["state_id"]         = null;
+				$insert_customer_address["city_id"]          = null;
+				$insert_customer_address["barangay_id"]      = null;
+				$insert_customer_address["created_at"]       = Carbon::now();
+				$insert_customer_address["customer_id"]      = $register;
+				$insert_customer_address["purpose"]          = "permanent";
+
+				Tbl_customer_address::insert($insert_customer_address);
+			}
+
+			/* Send SMS */
 			$txt[0]["txt_to_be_replace"] = "[name]";
 			$txt[0]["txt_to_replace"]    = $info['first_name'];
 			$result                      = Sms::SendSms($info['contact'], "success_register", $txt, $shop_id);

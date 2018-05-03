@@ -59,6 +59,14 @@ class Customer
 				$insert_customer_address["purpose"]          = "permanent";
 
 				Tbl_customer_address::insert($insert_customer_address);
+
+				$insert_customer_address["purpose"]          = "billing";
+
+				Tbl_customer_address::insert($insert_customer_address);
+
+				$insert_customer_address["purpose"]          = "shipping";
+
+				Tbl_customer_address::insert($insert_customer_address);
 			}
 
 			/* Send SMS */

@@ -243,6 +243,7 @@
                             <a href="/"><li>HOME</li></a>
                             <a href="/partners"><li>OUR MERCHANTS</li></a>
                             <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
+                            <a href="https://tacentre.com"><li>HOTEL BOOKING</li></a>
                             <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
                             <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
                             <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
@@ -305,6 +306,7 @@
                         <a href="/"><li>HOME</li></a>
                         <a href="/partners"><li>OUR MERCHANTS</li></a>
                         <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
+                        <a href="https://tacentre.com"><li>HOTEL BOOKING</li></a>
                         <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
                         <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
                         <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
@@ -374,6 +376,7 @@ offers New Franchise Business Model and New Rewards System using New Generation 
                         <ul>
                             <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partner Merchants</a></li>
                             <li><a href="https://loadcentral.net">E-loading Business</a></li>
+                            <li><a href="https://tacentre.com">Hotel Booking</a></li>
                             {{-- <li><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></li>
                             <li><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></li> --}}
                             <li><a href="https://philtechglobalinc.vmoney.com/">E-money</a></li>

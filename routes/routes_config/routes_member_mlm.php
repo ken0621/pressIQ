@@ -340,6 +340,7 @@ Route::post('member/mlm/developer/import', 'Member\MlmDeveloperController@import
 Route::get('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase');
 Route::post('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase_submit');
 Route::get('member/mlm/developer/reset', 'Member\MlmDeveloperController@reset');
+Route::get('member/mlm/developer/reset_points', 'Member\MlmDeveloperController@reset_points');
 Route::post('member/mlm/developer/sample_upload', 'Member\MlmDeveloperController@sample_upload');
 Route::any('member/mlm/developer/myTest', 'Member\MlmDeveloperController@myTest');
 Route::any('member/mlm/developer/recompute', 'Member\MlmDeveloperController@recompute');

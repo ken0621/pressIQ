@@ -53,6 +53,22 @@ class MlmDeveloperController extends Member
         $data["_membership"] = Tbl_membership::where("shop_id", $shop_id)->active()->get();
         return view("member.mlm_developer.mlm_developer", $data);
     }
+    public function reset_points()
+    {
+        $shop_id        = $this->user_info->shop_id;
+        if($shop_id == 1)
+        {
+            Tbl_mlm_slot_points_log::slot()->where("shop_id",$shop_id)->delete();
+        }
+        else
+        {
+            dd("This function is for philtech only...");
+        }
+
+
+
+        return Redirect::to("/member/mlm/developer");
+    }
     public function index_table()
     {
         /* INITIAL DATA */
@@ -532,6 +548,7 @@ class MlmDeveloperController extends Member
     }
     public function reset()
     {
+        dd("This is disabled please ask the developer to turn it on");
         $shop_id        = $this->user_info->shop_id;
         $_slot          = Tbl_mlm_slot::where("shop_id", $shop_id)->get();
 

@@ -32,6 +32,12 @@
                             </a>
                         </li>
                         <li>
+                            <a href="/member/mlm/developer/reset_points" onclick="return (prompt('WARNING! All POINTS OF CUSTOMER will be deleted. Please write RESET_POINTS if you are sure.') == 'RESET_POINTS' ? true : false)">
+                                <div style="display: inline-block; width: 17px; text-align: center;"><i class="fa fa-warning"></i> &nbsp;</div>
+                                RESET POINTS (PHILTECH ONLY)
+                            </a>
+                        </li>
+                        <li>
                             <a href="/member/mlm/developer/reset" onclick="return (prompt('WARNING! All MLM SLOT and CUSTOMER related to MLM will be deleted. Please write RESET if you are sure.') == 'RESET' ? true : false)">
                                 <div style="display: inline-block; width: 17px; text-align: center;"><i class="fa fa-warning"></i> &nbsp;</div>
                                 RESET MLM DATA

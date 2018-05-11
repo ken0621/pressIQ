@@ -97,23 +97,53 @@
 
 			<div class="col-md-6">
 				<div class="square-container">
-					<div class="title"><i class="fa fa-table"></i> Reward Summary</div>
+					<div class="title"><i class="fa fa-table"></i> Commission Summary</div>
 					<div class="sub-container">
 						<div class="chart-legend">
 							@foreach($_wallet_plan as $plan)
-								<div class="holder">
+								@if($plan->label == "Admin Refill" || $plan->label == "Vmoney" || $plan->label == "Wallet Refill" || $plan->label == "Wallet Transfer")
+								@else
+									<div class="holder">
 
-									<div class="color"></div>
+										<div class="color"></div>
 
-									@if($plan->label == "Membership Matching")
-										<div class="name"><span>Franchise Matching</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
-									@elseif($plan->label == "Vmoney")
-										<div class="name"><span>E-Money</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
-									@else
-										<div class="name"><span>{{ $plan->label }}</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
-									@endif
+										@if($plan->label == "Membership Matching")
+											<div class="name"><span>Franchise Matching</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+										@elseif($plan->label == "Vmoney")
+											<div class="name"><span>E-Money</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+										@elseif($plan->label == "Direct")
+											<div class="name"><span>Direct Commission</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+										@elseif($plan->label == "Indirect")
+											<div class="name"><span>Indirect Commission</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+										@elseif($plan->label == "Unilevel")
+											<div class="name"><span>Unilevel Cashback</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+										@else
+											<div class="name"><span>{{ $plan->label }}</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+										@endif
 
-								</div>
+									</div>
+								@endif
+							@endforeach
+						</div>
+					</div>
+				</div>
+
+				<div class="square-container">
+					<div class="title"><i class="fa fa-table"></i> Wallet Movement</div>
+					<div class="sub-container">
+						<div class="chart-legend">
+							@foreach($_wallet_plan as $plan)
+								@if($plan->label == "Admin Refill" || $plan->label == "Vmoney" || $plan->label == "Wallet Refill" || $plan->label == "Wallet Transfer")
+									<div class="holder">
+										<div class="color"></div>
+										@if($plan->label == "Vmoney")
+											<div class="name"><span>E-Money</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+										@else
+											<div class="name"><span>{{ $plan->label }}</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+										@endif
+									</div>
+								@else		
+								@endif
 							@endforeach
 						</div>
 					</div>

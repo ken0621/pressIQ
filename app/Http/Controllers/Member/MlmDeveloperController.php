@@ -27,6 +27,7 @@ use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_brown_rank;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_leadership_advertisement_points;
+use App\Models\Tbl_item_redeemable_points;
 use DB;
 use Redirect;
 use Request;
@@ -59,6 +60,7 @@ class MlmDeveloperController extends Member
         if($shop_id == 1)
         {
             Tbl_mlm_slot_points_log::slot()->where("shop_id",$shop_id)->delete();
+            Tbl_item_redeemable_points::where("shop_id",$shop_id)->delete();
         }
         else
         {

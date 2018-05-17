@@ -673,6 +673,7 @@ class CustomerController extends Member
     	    $data['customer_info'] =  Tbl_customer::where('customer_id',$id)->first();
             $data['billing'] = Tbl_customer_address::where('customer_id',$id)->where('purpose','billing')->first();
             $data['shipping'] = Tbl_customer_address::where('customer_id',$id)->where('purpose','shipping')->first();
+            $data['permanent'] = Tbl_customer_address::where('customer_id',$id)->where('purpose','permanent')->first();
             
             $data['_attachment'] = Tbl_customer_attachment::where('customer_id',$id)->get();
             $data['other'] = Tbl_customer_other_info::where('customer_id',$id)->first();
@@ -944,6 +945,13 @@ class CustomerController extends Member
             $insertAddress[1]['customer_zipcode'] = $shipping_zipcode;
             $insertAddress[1]['customer_street'] = $shipping_street;
             $insertAddress[1]['purpose'] = 'shipping';
+            $insertAddress[2]['customer_id'] = $client_id;
+            $insertAddress[2]['country_id'] = Request::input("permanent_country");
+            $insertAddress[2]['customer_state'] = Request::input("permanent_state");
+            $insertAddress[2]['customer_city'] = Request::input("permanent_city");
+            $insertAddress[2]['customer_zipcode'] = Request::input("permanent_zipcode");
+            $insertAddress[2]['customer_street'] = Request::input("permanent_street");
+            $insertAddress[2]['purpose'] = 'permanent';
             Tbl_customer_address::where('customer_id',$client_id)->delete();
             Tbl_customer_address::insert($insertAddress);
             

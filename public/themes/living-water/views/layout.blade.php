@@ -106,32 +106,28 @@
                         <ul>
                             @if(Request::segment(1)=="about")
                                 <li><a class="smoth-scroll" href="/#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="/#process">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="/#service">SERVICES</a></li>
+                                <li><a class="smoth-scroll" href="/#service">PRODUCT & SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="/#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
+                                <li><a class="smoth-scroll" href="/about">ABOUT US</a></li>
                             @elseif(Request::segment(1)=="product")
                                 <li><a class="smoth-scroll" href="/#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="/#process">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="/#service">SERVICES</a></li>
+                                <li><a class="smoth-scroll" href="/#service">PRODUCT & SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="/#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
+                                <li><a class="smoth-scroll" href="/about">ABOUT US</a></li>
                             @elseif(Request::segment(1)=="product2")
                                 <li><a class="smoth-scroll" href="/#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="/#process">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="/#service">SERVICES</a></li>
+                                <li><a class="smoth-scroll" href="/#service">PRODUCT & SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="/#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
+                                <li><a class="smoth-scroll" href="/about">ABOUT US</a></li>
                             @else
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="#about">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="#process">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="#service">SERVICES</a></li>
+                                <li><a class="smoth-scroll" href="#service">PRODUCT & SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="#contact">CONTACT</a></li>
+                                <li><a class="smoth-scroll" href="/about">ABOUT US</a></li>
                             @endif
                         </ul>
                     </nav>
@@ -165,29 +161,29 @@
                             <p class="footer-title">INFORMATION</p>
                         </div>
                         @if(Request::segment(1)=="about")
-                        <div class="info-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="/#about">ABOUT US</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="/#process">PROCESS</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="/#gallery">PRODUCTS</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="/#contact">CONTACT US</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#service">PRODUCT & SERVICES</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#gallery">GALLERY</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#contact">CONTACT</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/about">ABOUT US</a></div>
                         @elseif(Request::segment(1)=="product")
-                        <div class="info-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="/#about">ABOUT US</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="/#process">PROCESS</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="/#gallery">PRODUCTS</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="/#contact">CONTACT US</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#service">PRODUCT & SERVICES</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#gallery">GALLERY</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#contact">CONTACT</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/about">ABOUT US</a></div>
                         @elseif(Request::segment(1)=="product2")
-                        <div class="info-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="/#about">ABOUT US</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="/#process">PROCESS</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="/#gallery">PRODUCTS</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="/#contact">CONTACT US</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#service">PRODUCT & SERVICES</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#gallery">GALLERY</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#contact">CONTACT</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/about">ABOUT US</a></div>
                         @else
-                        <div class="info-list"><a class="smoth-scroll" href="#home">HOME</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="#about">ABOUT US</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="#process">PROCESS</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="#gallery">PRODUCTS</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="#contact">CONTACT US</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="#home">HOME</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="#service">PRODUCT & SERVICES</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="#gallery">GALLERY</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="#contact">CONTACT</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/about">ABOUT US</a></div>
                         @endif
                     </div>
                     <div class="col-md-4">

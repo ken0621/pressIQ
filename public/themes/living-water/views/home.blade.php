@@ -3,11 +3,17 @@
 <div class="content">
     <!-- Media Slider -->
     <div id="home" class="slider-wrapper single-item">
+        @if(loop_content_condition($shop_theme_info, "home", "home_slider"))
+            @foreach(loop_content_get($shop_theme_info, "home", "home_slider") as $slider)
+            <img src="{{ $slider }}">
+            @endforeach
+        @else
         <img src="/themes/{{ $shop_theme }}/img/home-banner.jpg">
         <img src="/themes/{{ $shop_theme }}/img/home-banner-2.jpg">
+        @endif  
     </div>
-
-    <div id="about" class="wrapper-1">
+    
+    {{-- <div id="about" class="wrapper-1">
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-6">
@@ -30,6 +36,35 @@
                                 <img src="{{ get_content($shop_theme_info, "home", "home_about_image") }}">
                             </div>
                         </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> --}}
+
+    <div id="service" class="wrapper-3">
+        <div class="container">
+            <div class="row clearfix">
+                <div class="col-md-6">
+                    <div class="left-container">
+                        <a class="lsb-preview" href="{{ get_content($shop_theme_info, "home", "home_product_image") }}">
+                            <div class="image-holder">
+                                <img src="{{ get_content($shop_theme_info, "home", "home_product_image") }}">
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="right-container">
+                        <div class="title-container">
+                            <span class="icon-container"><img src="/themes/living-water/img/water-drops.png"></span><span class="title">PRODUCT AND SERVICES</span>
+                        </div>
+                        <div class="description-container">
+                            {!! get_content($shop_theme_info, "home", "home_product_description") !!}
+                        </div>
+                        <div class="button-container">
+                            <a href="/product2"><button>READ MORE &raquo;</button></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -69,35 +104,6 @@
                         <div class="details-container">
                             <div class="title">{!! get_content($shop_theme_info, "home", "home_process_title_2") !!}</div>
                             <div class="description">{!! get_content($shop_theme_info, "home", "home_process_description_2") !!}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="service" class="wrapper-3">
-        <div class="container">
-            <div class="row clearfix">
-                <div class="col-md-6">
-                    <div class="left-container">
-                        <a class="lsb-preview" href="{{ get_content($shop_theme_info, "home", "home_product_image") }}">
-                            <div class="image-holder">
-                                <img src="{{ get_content($shop_theme_info, "home", "home_product_image") }}">
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="right-container">
-                        <div class="title-container">
-                            <span class="icon-container"><img src="/themes/living-water/img/water-drops.png"></span><span class="title">PRODUCT AND SERVICES</span>
-                        </div>
-                        <div class="description-container">
-                            {!! get_content($shop_theme_info, "home", "home_product_description") !!}
-                        </div>
-                        <div class="button-container">
-                            <a href="/product2"><button>READ MORE &raquo;</button></a>
                         </div>
                     </div>
                 </div>

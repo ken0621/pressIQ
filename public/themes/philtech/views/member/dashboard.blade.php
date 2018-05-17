@@ -163,10 +163,10 @@
 				</div>
 				@endif
 				<div class="square-container">
-					<div class="title">Enter Product Code</div>
+					<div class="title">Enter Rewards Code</div>
 					<div class="sub-container">
 						<div class="chart-legend text-center">
-							<button class="btn btn-lblue" onclick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+							<button class="btn btn-lblue" onclick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Rewards Code</button>
 						</div>
 					</div>
 				</div>

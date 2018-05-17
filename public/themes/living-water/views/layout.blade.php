@@ -106,32 +106,28 @@
                         <ul>
                             @if(Request::segment(1)=="about")
                                 <li><a class="smoth-scroll" href="/#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="/#process">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="/#service">SERVICES</a></li>
+                                <li><a class="smoth-scroll" href="/#service">PRODUCT & SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="/#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
+                                <li><a class="smoth-scroll" href="/about">ABOUT US</a></li>
                             @elseif(Request::segment(1)=="product")
                                 <li><a class="smoth-scroll" href="/#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="/#process">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="/#service">SERVICES</a></li>
+                                <li><a class="smoth-scroll" href="/#service">PRODUCT & SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="/#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
+                                <li><a class="smoth-scroll" href="/about">ABOUT US</a></li>
                             @elseif(Request::segment(1)=="product2")
                                 <li><a class="smoth-scroll" href="/#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="/#process">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="/#service">SERVICES</a></li>
+                                <li><a class="smoth-scroll" href="/#service">PRODUCT & SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="/#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
+                                <li><a class="smoth-scroll" href="/about">ABOUT US</a></li>
                             @else
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="#about">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="#process">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="#service">SERVICES</a></li>
+                                <li><a class="smoth-scroll" href="#service">PRODUCT & SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="#contact">CONTACT</a></li>
+                                <li><a class="smoth-scroll" href="/about">ABOUT US</a></li>
                             @endif
                         </ul>
                     </nav>

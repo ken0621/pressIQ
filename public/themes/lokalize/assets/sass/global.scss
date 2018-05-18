@@ -1,0 +1,34 @@
+@import 'style';
+@import 'custom';
+
+.header-container
+{
+	// background-color: #0d0135;
+	background-color: transparent;
+    position: fixed;
+    width: 100%;
+    z-index: 99;
+
+    .navbar
+    {
+		box-shadow: none;
+		border-bottom: solid 1px #14265c;
+
+    	.nav-item
+    	{
+    		a
+    		{
+    			font-family: $ff;
+    			font-weight: $reg;
+    			font-size: 14px;
+    			color: #fff;
+    			opacity: 0.8;
+    		}
+    	}
+
+    	.align-in-mobile
+    	{
+    		margin-left: auto;
+    	}
+    }
+}

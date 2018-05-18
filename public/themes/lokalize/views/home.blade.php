@@ -43,36 +43,36 @@
 					<div class="collapse navbar-collapse" id="mainNavDropDown" >
 						<ul class="navbar-nav">
 							<li class="nav-item mx-2">
-								<a href="#" class="">ABOUT US</a>
+								<a href="#about" class="nav-link nav-link-text navigation__link">ABOUT US</a>
 							</li>
 							<li class="nav-item mx-2">
-								<a href="#" class="">HOW IT WORKS</a>
+								<a href="#how-it-works" class="nav-link nav-link-text navigation__link">HOW IT WORKS</a>
 							</li>
 							<li class="nav-item mx-2">
-								<a href="#" class="">TOKEN</a>
+								<a href="#token-allocation" class="nav-link nav-link-text navigation__link">TOKEN</a>
 							</li>
 							<li class="nav-item mx-2">
-								<a href="#" class="">BONUS</a>
+								<a href="#bonus-allocation" class="nav-link nav-link-text navigation__link">BONUS</a>
 							</li>
 							<li class="nav-item mx-2">
-								<a href="#" class="">CORE FEATURES</a>
+								<a href="#core-features" class="nav-link nav-link-text navigation__link">CORE FEATURES</a>
 							</li>
 							<li class="nav-item mx-2">
-								<a href="#" class="">ROADMAP</a>
+								<a href="#roadmap" class="nav-link nav-link-text navigation__link">ROADMAP</a>
 							</li>
 							<li class="nav-item mx-2">
-								<a href="#" class="">CONTACT US</a>
+								<a href="#contact-us" class="nav-link nav-link-text navigation__link">CONTACT US</a>
 							</li>
 							<li class="nav-item mx-2">
-								<a href="#" class="">FAQ</a>
+								<a href="#faq" class="nav-link nav-link-text navigation__link">FAQ</a>
 							</li>
 						</ul>
 						<ul class="navbar-nav align-in-mobile">
 							<li class="nav-item mx-2 ml-auto">
-								<a href="#" class="">LOGIN</a>
+								<a href="#" class="nav-link nav-link-text navigation__link login-text">LOGIN</a>
 							</li>
 							<li class="nav-item mx-2 ml-auto">
-								<a href="#" class="">REGISTER</a>
+								<a href="#" class="nav-link nav-link-text navigation__link register-text">REGISTER</a>
 							</li>
 						</ul>
 					</div>
@@ -80,7 +80,7 @@
 			</nav>
 		</header>
 		<!--BANNER SECTION-->
-		<section class="banner-section">
+		<section class="page-section banner-section">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-6">
@@ -125,7 +125,7 @@
 			</div>
 		</section>
 		<!--ABOUT US SECTION-->
-		<section class="about-us">
+		<section class="page-section about-us" id="about">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-6">
@@ -147,7 +147,7 @@
 			</div>
 		</section>
 		<!--HOW IT WORKS SECTION-->
-		<section class="how-it-works">
+		<section class="page-section how-it-works" id="how-it-works">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
@@ -163,7 +163,7 @@
 			</div>
 		</section>
 		<!--INTRODUCING SECTION-->
-		<section class="introducing">
+		<section class="page-section introducing" id="introducing">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
@@ -190,7 +190,7 @@
 			</div>
 		</section>
 		<!-- TOKEN ALLOCATION SECTION -->
-		<section class="token-allocation">
+		<section class="page-section token-allocation" id="token-allocation">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
@@ -275,7 +275,7 @@
 		</section>
 		
 		<!--BONUS ALLOCATION SECTION-->		
-		<section class="bonus-allocation">
+		<section class="page-section bonus-allocation" id="bonus-allocation">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
@@ -286,7 +286,7 @@
 				<div class="row clearfix">
 					<div class="col-md-12">
 						<div class="table-responsive py-5">
-							<table class="table table-borderless">
+							<table class="table">
 								<thead class="td-color">
 									<tr>
 										<th scope="col">Phase</th>
@@ -344,7 +344,7 @@
 											9.00<br>
 										11.00</td>
 									</tr>
-									<tr  class="td-color">
+									<tr class="td-color">
 										<td></td>
 										<td>Weeks 8-9</td>
 										<td>8,000 to 30,000	<br>
@@ -369,7 +369,7 @@
 		</section>
 
 		<!--CORE FEATURES SECTION-->
-		<section class="core-features">
+		<section class="page-section core-features" id="core-features">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
@@ -421,9 +421,97 @@
 		</section>
 
 		<!--ROADMAP SECTION-->
+		<section class="page-section roadmap" id="roadmap">
+			<div class="container">
+				<div class="text-header text-center">ROADMAP</div>
+				<section id="cd-timeline" class="cd-container">
+						<div class="cd-timeline-block">
+							<div class="cd-timeline-img cd-picture">
+							</div>
+
+							<div class="cd-timeline-content">
+								<h2>Penta Consulting</h2>
+				        <div class="timeline-content-info">
+				          <span class="timeline-content-info-title">
+				            <i class="fa fa-certificate" aria-hidden="true"></i>
+				            Front End Developer
+				          </span>
+				          <span class="timeline-content-info-date">
+				            <i class="fa fa-calendar-o" aria-hidden="true"></i>
+				            June 2016 - Present
+				          </span>
+				        </div>
+								<p>Working alongside the designer team implementing the designs, also developing custom solutions to address team necessities.</p>
+				        <ul class="content-skills">
+				        <li>HTML5</li>
+				        <li>CSS3</li>
+				        <li>JavaScript</li>
+				        <li>jQuery</li>
+				        <li>Wordpress</li>
+				        </ul>
+							</div> <!-- cd-timeline-content -->
+						</div> <!-- cd-timeline-block -->
+
+						<div class="cd-timeline-block">
+							<div class="cd-timeline-img cd-movie">
+							</div> <!-- cd-timeline-img -->
+
+							<div class="cd-timeline-content">
+								<h2>Title of section 2</h2>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde?</p>
+								<span class="cd-date">Jan 18</span>
+							</div> <!-- cd-timeline-content -->
+						</div> <!-- cd-timeline-block -->
+
+						<div class="cd-timeline-block">
+							<div class="cd-timeline-img cd-picture">
+							</div> <!-- cd-timeline-img -->
+
+							<div class="cd-timeline-content">
+								<h2>Title of section 3</h2>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, obcaecati, quisquam id molestias eaque asperiores voluptatibus cupiditate error assumenda delectus odit similique earum voluptatem doloremque dolorem ipsam quae rerum quis. Odit, itaque, deserunt corporis vero ipsum nisi eius odio natus ullam provident pariatur temporibus quia eos repellat consequuntur perferendis enim amet quae quasi repudiandae sed quod veniam dolore possimus rem voluptatum eveniet eligendi quis fugiat aliquam sunt similique aut adipisci.</p>
+								<span class="cd-date">Jan 24</span>
+							</div> <!-- cd-timeline-content -->
+						</div> <!-- cd-timeline-block -->
+
+						<div class="cd-timeline-block">
+							<div class="cd-timeline-img cd-location">
+							</div> <!-- cd-timeline-img -->
+
+							<div class="cd-timeline-content">
+								<h2>Title of section 4</h2>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis qui ut.</p>
+								<span class="cd-date">Feb 14</span>
+							</div> <!-- cd-timeline-content -->
+						</div> <!-- cd-timeline-block -->
+
+						<div class="cd-timeline-block">
+							<div class="cd-timeline-img cd-location">
+							</div> 
+
+							<div class="cd-timeline-content">
+								<h2>Title of section 5</h2>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum.</p>
+								<span class="cd-date">Feb 18</span>
+							</div> <!-- cd-timeline-content -->
+						</div> <!-- cd-timeline-block -->
+
+						<div class="cd-timeline-block">
+							<div class="cd-timeline-img cd-movie">
+							</div> <!-- cd-timeline-img -->
+
+							<div class="cd-timeline-content">
+								<h2>Final Section</h2>
+								<p>This is the content of the last section</p>
+								<span class="cd-date">Feb 26</span>
+							</div> <!-- cd-timeline-content -->
+						</div> <!-- cd-timeline-block -->
+					</section> <!-- cd-timeline -->
+			</div>
+		</section>
 
 		<!--CONTACT US SECTION-->
-		<section class="contact-us">
+		<section class="page-section contact-us" id="contact-us">
 			<div class="container">
 				<div class="text-header">CONTACT US</div>
 				<div class="row clearfix">
@@ -457,7 +545,7 @@
 							<input class="custom-textfield w-100 my-2 p-2" type="text" placeholder="Your Name">
 							<input class="custom-textfield w-100 p-2" type="text" placeholder="Email">
 							<textarea class="custom-textfield w-100 my-2 p-2" name="message" rows="10" cols="30" placeholder="Message"></textarea>
-							<button class="btn-lokal ml-auto">SEND</button>
+							<button class="btn-lokal-sm ml-auto">SEND</button>
 						</form>
 					</div>
 				</div>
@@ -465,7 +553,7 @@
 		</section>
 
 		<!--FAQ SECTION-->
-		<section class="faq">
+		<section class="page-section faq" id="faq">
 			<div class="container">
 				<div class="text-header">FAQs</div>
 				
@@ -544,17 +632,17 @@
 
 		<footer>
 			<div class="container py-4">
-				<div class="row clearfix">
-					<div class="col-md-4">
+				<div class="flex-footer d-flex align-items-center justify-content-between">
+					<div class="left ml-auto">
 						<div class="f-text">Copyright © 2018 Lokalize.io</div>
 					</div>
-					<div class="col-md-4">
-						<div class="links d-flex align-items-center justify-content-center">
+					<div class="middle px-4">
+						<div class="links d-flex align-items-center">
 							<div><a class="f-text-link" href="">Privacy</a></div>
 							<div class="ml-3"><a class="f-text-link" href="">Terms</a></div>
 						</div>
 					</div>
-					<div class="col-md-4 text-right">
+					<div class="right mr-auto">
 						<div class="social-logo">
 						    <a class="holder"><div><i class="fab fa-facebook-f"></i></div></a>
 						    <a class="holder"><div><i class="fab fa-twitter"></i></div></a>
@@ -564,8 +652,6 @@
 				</div>
 			</div>
 		</footer>
-
-
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -578,6 +664,9 @@
 		{{-- <script type="text/javascript" src="/themes/lokalize/assets/scrolltofix/jquery-scrolltofixed-min.js"></script> --}}
 		<script type="text/javascript" src="/themes/lokalize/assets/mdb/js/mdb.js"></script>
 		<script type="text/javascript" src="/themes/lokalize/assets/mdb/js/mdb.min.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/assets/js/custom.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/assets/js/smooth-scroll.js"></script>
+
 		<!-- <script type="text/javascript" src="/themes/lokalize/assets/js/globals_js.js"></script> -->
 		<!-- <script src="//themes/lokalize/assets/js/popup.js"></script> -->
 		<!--START WOW JS-->

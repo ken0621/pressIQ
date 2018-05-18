@@ -57,6 +57,12 @@
 	cursor: pointer;
 }
 
+.btn-lokal-sm
+{
+	@extend .btn-lokal;
+	padding: 7px 25px;
+}
+
 .btn-home-login
 {
 	background-color: #1344d8;
@@ -66,6 +72,28 @@
 	font-size: 14px;
 	padding: 5px 10px;
 	color: #fff;
+}
+
+.login-text
+{
+	color: #77eff8 !important;
+
+	&:hover
+	{
+		@include transition(0.2s);
+		opacity: 1 !important;
+	}
+}
+
+.register-text
+{
+	color: #775bf9 !important;
+
+	&:hover
+	{
+		@include transition(0.2s);
+		opacity: 1 !important;
+	}
 }
 
 .btn-home-reg
@@ -109,7 +137,7 @@
 .f-text-link
 {
 	@extend .f-text;
-	
+
 	&:hover
 	{
 		color: rgba(#fff, 0.8);

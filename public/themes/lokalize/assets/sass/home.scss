@@ -4,8 +4,7 @@
 $primary-c: #0a0027;
 $secondary-c: #0e0137;
 
-
-.section-style
+.page-section
 {
 	background-size: cover;
 	background-position: center center;
@@ -18,7 +17,7 @@ $secondary-c: #0e0137;
 	@include gradient($primary-c, $secondary-c);
 	background-image: url("/themes/lokalize/assets/img/banner-transparent.png");
 	background-size: cover;
-	background-position: center center;
+	background-position: center;
 	min-height: 100vh;
 	padding-top: 4rem;
 	display: flex;
@@ -121,7 +120,6 @@ $secondary-c: #0e0137;
 {
 	@include gradient($primary-c, $secondary-c);
 	background-image: url("/themes/lokalize/assets/img/about-us-bg.png");
-	@extend .section-style;
 
 	.left
 	{
@@ -140,7 +138,6 @@ $secondary-c: #0e0137;
 {
 	@include gradient($primary-c, $secondary-c);
 	background-image: url("/themes/lokalize/assets/img/how-it-works.png");
-	@extend .section-style;
 }
 
 // INTRODUCING COIN SECTION
@@ -148,7 +145,6 @@ $secondary-c: #0e0137;
 {
 	@include gradient($primary-c, $secondary-c);
 	background-image: url("/themes/lokalize/assets/img/introducing.png");
-	@extend .section-style;
 
 	.img-coin-holder
 	{
@@ -164,7 +160,6 @@ $secondary-c: #0e0137;
 {
 	@include gradient($primary-c, $secondary-c);
 	background-image: url("/themes/lokalize/assets/img/token-alloc.png");
-	@extend .section-style;
 
 	.img-holder
 	{
@@ -208,16 +203,16 @@ $secondary-c: #0e0137;
 {
 	@include gradient(#091a71, $secondary-c);
 	background-image: url("/themes/lokalize/assets/img/bonus-bg.png");
-	@extend .section-style;
 
 	table
 	{
 		font-family: $ff;
-		border: 1px solid rgba(#fff, 0.8);
+		// border: 1px solid rgba(#fff, 0.6);
 
 		thead
 		{
-			border-bottom: 1px solid #fff;
+			// border-bottom: 1px solid #fff;
+			
 			tr
 			{
 				th
@@ -231,6 +226,7 @@ $secondary-c: #0e0137;
 
 		tbody
 		{
+
 			tr
 			{
 				th, td
@@ -249,51 +245,27 @@ $secondary-c: #0e0137;
 {
 	@include gradient($primary-c, $secondary-c);
 	background-image: url("/themes/lokalize/assets/img/core-features.png");
-	@extend .section-style;
 }
 
 // ROADMAP
+.roadmap
+{
+	@include gradient-diag($secondary-c, #091a71);
+	background-image: url("/themes/lokalize/assets/img/roadmap.png");
+
+	@import 'timeline';
+}
 
 //CONTACT US
 .contact-us
 {
 	@include gradient($primary-c, $secondary-c);
 	background-image: url("/themes/lokalize/assets/img/contactus.png");
-	@extend .section-style;
 }
 
 //FAQ
 .faq
 {
-	@include gradient($primary-c, $secondary-c);
+	@include gradient-diag($secondary-c, #091a71);
 	background-image: url("/themes/lokalize/assets/img/faq.png");
-	@extend .section-style;
-}
-
-footer
-{
-	background-color: #0d0127;
-
-	.social-logo
-	{
-		.holder
-		{
-			background-color: #3d3452;
-			color: #fff;
-			width: 25px;
-			height: 25px;
-			box-sizing: content-box;
-			border-radius: 100%;
-			display: inline-block;
-			text-align: center;
-			margin: 0 2.5px;
-			cursor: pointer;
-			vertical-align: middle;
-
-			i
-			{
-				font-size: 12px;
-			}
-		}
-	}
 }

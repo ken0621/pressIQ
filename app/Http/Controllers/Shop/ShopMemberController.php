@@ -4714,6 +4714,9 @@ class ShopMemberController extends Shop
     {
         $data['action'] = '/members/slot-validate';
         $data['confirm_action'] = '/members/slot-toslot';
+
+        $data['shop_id'] = $this->shop_info->shop_id;
+
         return view('mlm.slots.use_product_code',$data);
     }
     public function postSlotValidate()

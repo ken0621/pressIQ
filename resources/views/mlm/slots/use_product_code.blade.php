@@ -2,7 +2,7 @@
     <input type="hidden" value="{{csrf_token()}}" name="_token">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title layout-modallarge-title">Use Product Code</h4>
+        <h4 class="modal-title layout-modallarge-title">Use {{ $shop_id == 1 ? 'Rewards' : 'Product' }} Code</h4>
     </div>
     <div class="modal-body modallarge-body-layout background-white">
         <div class="form-horizontal">

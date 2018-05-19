@@ -15,8 +15,7 @@
 		<script defer src="/themes/lokalize/assets/fontawesome5/svg-with-js/css/fa-svg-with-js.css"></script>
 		<script defer src="/themes/lokalize/assets/fontawesome5/svg-with-js/js/fontawesome-all.js"></script>
 		<!--External css-->
-		<link rel="stylesheet" href="/themes/lokalize/assets/css/global.css">
-		<link rel="stylesheet" href="/themes/lokalize/assets/css/home.css">
+		<link rel="stylesheet" href="/themes/lokalize/assets/css/app.css">
 		<link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
 		<!--wow animation-->
 		<link rel="stylesheet" href="/themes/lokalize/assets/wow/css/animate.css">

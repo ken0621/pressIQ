@@ -1,0 +1,283 @@
+/* HOME */
+
+.page-section
+{
+	background-size: cover;
+	background-position: center center;
+	padding: 100px 0;
+}
+
+//BANNER SECTION
+.banner-section
+{
+	@include gradient($primary-c, $secondary-c);
+	background-image: url("/themes/lokalize/assets/img/banner-transparent.png");
+	background-size: cover;
+	background-position: center;
+	min-height: 100vh;
+	padding-top: 4rem;
+	display: flex;
+	align-items: center;
+
+	.caption-holder
+	{
+		margin-top: 100px;
+
+		.caption-text
+		{
+			font-family: $ff;
+			font-size: 45px;
+			font-weight: $reg;
+			color: #fff;
+		}
+
+		.sub-caption
+		{
+			font-family: $ff;
+			font-weight: $reg;
+			font-size: 14px;
+			color: #fff;
+		}
+	}
+
+	.image-holder
+	{
+
+	}
+
+	.card-holder
+	{
+		background-color: rgba(#0d0127, 0.8);
+		max-width: 318px;
+		max-height: 416px;
+		min-width: 318px;
+		min-height: 416px;
+		margin-top: 100px;
+
+		.sale-card-header
+		{
+			font-weight: $reg;
+			font-size: 24px;
+			text-align: center;
+			color: #fff;
+			border-bottom: solid 1px #3d3453;
+		}
+
+		.sale-card-body
+		{
+			.phase-holder
+			{
+				padding: 32px;
+
+				.phase
+				{
+					font-family: $ff;
+					font-weight: $bold;
+					font-size: 20px;
+					color: #fce963;
+				}
+
+				.phase-disabled
+				{
+					font-family: $ff;
+					font-weight: $med;
+					color: #b2b2b2;
+					font-size: 14px;
+				}
+			}
+
+			.timer-holder
+			{
+				font-family: $ff;
+				text-align: center;
+				background-color: rgba(#000, 0.2);
+				padding: 10px;
+				margin: 0 32px;
+
+				.no-of-weeks
+				{
+					font-weight: $med;
+					font-size: 32px;
+					color: #fff;
+				}
+
+				.week-text-1
+				{
+					font-weight: $bold;
+					font-size: 16px;
+					color: #fff;
+				}
+
+				.week-text-2
+				{
+					font-weight: $light;
+					font-size: 13px;
+					color: #fff;
+				}
+			}
+
+			.btn-buy-coin-holder
+			{
+				margin: 15px 32px;
+			}
+		}
+	}
+}
+
+// ABOUT US SECTION
+.about-us
+{
+	@include gradient($primary-c, $secondary-c);
+	background-image: url("/themes/lokalize/assets/img/about-us-bg.png");
+
+	.left
+	{
+		
+	}
+	
+	.right
+	{
+
+	}
+
+}
+
+//HOW IT WORKS SECTION
+.how-it-works
+{
+	@include gradient($primary-c, $secondary-c);
+	background-image: url("/themes/lokalize/assets/img/how-it-works.png");
+}
+
+// INTRODUCING COIN SECTION
+.introducing
+{
+	@include gradient($primary-c, $secondary-c);
+	background-image: url("/themes/lokalize/assets/img/introducing.png");
+
+	.img-coin-holder
+	{
+		.coin
+		{
+			@include img-size(300px);
+		}
+	}
+}
+
+// TOKEN ALLOCATION SECTION
+.token-allocation
+{
+	@include gradient($primary-c, $secondary-c);
+	background-image: url("/themes/lokalize/assets/img/token-alloc.png");
+
+	.img-holder
+	{
+
+	}
+
+	table
+	{
+		font-family: $ff;
+
+		thead
+		{
+			tr
+			{
+				th
+				{
+					font-weight: $reg;
+					font-size: 16px;
+					color: #fff;
+				}
+			}
+		}
+
+		tbody
+		{
+			tr
+			{
+				th, td
+				{
+					font-weight: $reg;
+					font-size: 16px;
+					color: #fff;
+				}
+			}
+		}
+	}
+}
+
+// BONUS ALLOCATION
+.bonus-allocation
+{
+	@include gradient($secondary-c, #091a71);
+	background-image: url("/themes/lokalize/assets/img/bonus-bg.png");
+
+	table
+	{
+		font-family: $ff;
+		// border: 1px solid rgba(#fff, 0.6);
+
+		thead
+		{
+			// border-bottom: 1px solid #fff;
+			
+			tr
+			{
+				th
+				{
+					font-weight: $reg;
+					font-size: 16px;
+					color: #fff;
+				}
+			}
+		}
+
+		tbody
+		{
+
+			tr
+			{
+				th, td
+				{
+					font-weight: $light;
+					font-size: 16px;
+					color: #fff;
+				}
+			}
+		}
+	}
+}
+
+// CORE FEATURES
+.core-features
+{
+	// @include gradient($primary-c, $secondary-c);
+	background-color: #0c012f;
+	background-image: url("/themes/lokalize/assets/img/core-features.png");
+}
+
+// ROADMAP
+.roadmap
+{
+	@include gradient-diag($secondary-c, #091a71);
+	background-image: url("/themes/lokalize/assets/img/roadmap.png");
+
+	@import 'timeline';
+}
+
+//CONTACT US
+.contact-us
+{
+	@include gradient($primary-c, $secondary-c);
+	background-image: url("/themes/lokalize/assets/img/contactus.png");
+}
+
+//FAQ
+.faq
+{
+	@include gradient-diag($secondary-c, #091a71);
+	background-image: url("/themes/lokalize/assets/img/faq.png");
+}
+
+// END HOME

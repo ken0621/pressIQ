@@ -1,0 +1,19 @@
+//IMPORT ALL CORE STYLES
+
+// GLOBAL
+@import "core/animation";
+@import "core/variables";
+@import "core/mixins";
+
+// PAGE LAYOUT
+
+@import "layout/global";
+@import "layout/home";
+@import "layout/timeline";
+@import "layout/login";
+@import "layout/register";
+
+// CUSTOMS
+
+@import "core/btn-custom";
+@import "core/text-style";

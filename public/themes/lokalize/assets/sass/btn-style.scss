@@ -19,6 +19,17 @@
 	cursor: pointer;
 }
 
+.btn-glow
+{
+	box-shadow: 0px 0px 25px 5px rgba(#2fb5f8, .4);
+
+	&:hover
+	{
+		@include transition(0.2s);
+		box-shadow: 0px 0px 30px 5px rgba(#2fb5f8, .4);
+	}
+}
+
 .btn-lokal-sm
 {
 	@extend .btn-lokal;
@@ -34,6 +45,30 @@
 	font-size: 14px;
 	padding: 5px 10px;
 	color: #fff;
+}
+
+.btn-0
+{
+	font-family: $ff;
+	font-weight: $reg;
+	font-size: 16px;
+	padding: 7px 15px;
+	background-color: transparent;
+	border: 2px solid #2fb6f8;
+	color: #2fb6f8;
+	cursor: pointer;
+}
+
+.btn-0-hoverable
+{
+	@include transition(0.2s);
+	@extend .btn-0;
+	
+	&:hover
+	{
+		border: 2px solid #fff;
+		color: #fff;
+	}
 }
 
 .btn-login

@@ -25,6 +25,8 @@ $secondary-c: #0e0137;
 
 	.caption-holder
 	{
+		margin-top: 100px;
+
 		.caption-text
 		{
 			font-family: $ff;
@@ -36,8 +38,8 @@ $secondary-c: #0e0137;
 		.sub-caption
 		{
 			font-family: $ff;
-			font-weight: $thin;
-			font-size: 18px;
+			font-weight: $reg;
+			font-size: 14px;
 			color: #fff;
 		}
 	}
@@ -54,6 +56,7 @@ $secondary-c: #0e0137;
 		max-height: 416px;
 		min-width: 318px;
 		min-height: 416px;
+		margin-top: 100px;
 
 		.sale-card-header
 		{
@@ -73,14 +76,17 @@ $secondary-c: #0e0137;
 				.phase
 				{
 					font-family: $ff;
-					font-weight: $light;
-					font-size: 14px;
+					font-weight: $bold;
+					font-size: 20px;
 					color: #fce963;
 				}
 
-				.phase-opacity
+				.phase-disabled
 				{
-					opacity: 0.8;
+					font-family: $ff;
+					font-weight: $med;
+					color: #b2b2b2;
+					font-size: 14px;
 				}
 			}
 
@@ -99,10 +105,17 @@ $secondary-c: #0e0137;
 					color: #fff;
 				}
 
-				.week-text
+				.week-text-1
 				{
-					font-weight: $reg;
+					font-weight: $bold;
 					font-size: 16px;
+					color: #fff;
+				}
+
+				.week-text-2
+				{
+					font-weight: $light;
+					font-size: 13px;
 					color: #fff;
 				}
 			}
@@ -201,7 +214,7 @@ $secondary-c: #0e0137;
 // BONUS ALLOCATION
 .bonus-allocation
 {
-	@include gradient(#091a71, $secondary-c);
+	@include gradient($secondary-c, #091a71);
 	background-image: url("/themes/lokalize/assets/img/bonus-bg.png");
 
 	table
@@ -243,7 +256,8 @@ $secondary-c: #0e0137;
 // CORE FEATURES
 .core-features
 {
-	@include gradient($primary-c, $secondary-c);
+	// @include gradient($primary-c, $secondary-c);
+	background-color: #0c012f;
 	background-image: url("/themes/lokalize/assets/img/core-features.png");
 }
 

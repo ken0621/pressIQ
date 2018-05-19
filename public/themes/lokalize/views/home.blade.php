@@ -104,17 +104,18 @@
 									SALE IS LIVE
 								</div>
 								<div class="sale-card-body">
-									<div class="phase-holder">
-										<div class="phase py-1">PRE-SALE</div>
-										<div class="phase py-1 phase-opacity">MAIN-SALE</div>
-										<div class="phase py-1 phase-opacity">POST-SALE</div>
+									<div class="phase-holder text-center">
+										<div class="phase py-1"><blink><i class="far fa-clock"></i></blink> PRE-SALE</div>
+										<div class="phase-disabled py-1">MAIN-SALE</div>
+										<div class="phase-disabled py-1">POST-SALE</div>
 									</div>
 									<div class="timer-holder">
-										<div class="no-of-weeks">04</div>
-										<div class="week-text">Weeks<br>Remaining</div>
+										<div class="no-of-weeks">4</div>
+										<div class="week-text-1">Weeks Remaining</div>
+										<div class="week-text-2">Before the next Sale Phase</div>
 									</div>
 									<div class="btn-buy-coin-holder">
-										<button class="btn-lokal w-100">BUY A COIN</button>
+										<button class="btn-lokal btn-glow w-100">BUY A COIN</button>
 									</div>
 								</div>
 							</div>
@@ -128,10 +129,13 @@
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-6">
-						<div class="left">
+						<div class="left">s
 							<div class="text-header">ABOUT US</div>
 							<div class="content-text">
 								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea nostrum aut laborum ut repellendus deleniti! Reiciendis nisi magni at eligendi vero consequuntur provident, laborum, fugit corporis deleniti inventore tempora facilis. Molestias nam dolor incidunt fugiat natus animi, doloremque illo. Placeat temporibus quas molestiae veritatis eveniet aliquam, excepturi quam fuga, voluptatem.
+							</div>
+							<div class="white-paper-holder py-3">
+								<button class="btn-0 btn-0-hoverable">DOWNLOAD WHITEPAPER HERE <i class="fas fa-download"></i></button>
 							</div>
 						</div>
 					</div>
@@ -193,8 +197,8 @@
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
-						<div class="text-header text-right">TOKEN ALLOCATION</div>
-						<div class="content-text text-right">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corrupti<br>quia vel delectus ad, excepturi autem quo perferendis<br>consequuntur quas explicabo.</div>
+						<div class="text-header text-center">TOKEN ALLOCATION</div>
+						<div class="content-text text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corrupti<br>quia vel delectus ad, excepturi autem quo perferendis<br>consequuntur quas explicabo.</div>
 					</div>
 				</div>
 				<div class="row clearfix">
@@ -382,7 +386,7 @@
 					<div class="col-md-3">
 						<div class="feature-holder d-flex flex-column align-item-center justify-content-center">
 							<div class="img-holder d-flex justify-content-center">
-								<img src="/themes/lokalize/assets/img/feature-1.png" alt="">
+								<img src="/themes/lokalize/assets/img/cf-1.png" alt="">
 							</div>
 							<div class="small-header text-center">LOREM IPSUM</div>
 							<div class="small-text text-center">Lorem ipsum dolor sit amet,<br>consectetur adipisicing elit.<br>Voluptate, neque.</div>
@@ -391,7 +395,7 @@
 					<div class="col-md-3">
 						<div class="feature-holder d-flex flex-column align-item-center justify-content-center">
 							<div class="img-holder d-flex justify-content-center">
-								<img src="/themes/lokalize/assets/img/feature-2.png" alt="">
+								<img src="/themes/lokalize/assets/img/cf-2.png" alt="">
 							</div>
 							<div class="small-header text-center">LOREM IPSUM</div>
 							<div class="small-text text-center">Lorem ipsum dolor sit amet,<br>consectetur adipisicing elit.<br>Voluptate, neque.</div>
@@ -400,7 +404,7 @@
 					<div class="col-md-3">
 						<div class="feature-holder d-flex flex-column align-item-center justify-content-center">
 							<div class="img-holder d-flex justify-content-center">
-								<img src="/themes/lokalize/assets/img/feature-1.png" alt="">
+								<img src="/themes/lokalize/assets/img/cf-3.png" alt="">
 							</div>
 							<div class="small-header text-center">LOREM IPSUM</div>
 							<div class="small-text text-center">Lorem ipsum dolor sit amet,<br>consectetur adipisicing elit.<br>Voluptate, neque.</div>
@@ -409,7 +413,7 @@
 					<div class="col-md-3">
 						<div class="feature-holder d-flex flex-column align-items-center justify-content-center">
 							<div class="img-holder d-flex justify-content-center">
-								<img src="/themes/lokalize/assets/img/feature-2.png" alt="">
+								<img src="/themes/lokalize/assets/img/cf-4.png" alt="">
 							</div>
 							<div class="small-header text-center">LOREM IPSUM</div>
 							<div class="small-text text-center">Lorem ipsum dolor sit amet,<br>consectetur adipisicing elit.<br>Voluptate, neque.</div>
@@ -535,7 +539,7 @@
 								<div class="icon-holder">
 									<img src="/themes/lokalize/assets/img/phone.png" alt="">
 								</div>
-								<div class="content-text pl-3">+123-456789</div>
+								<div class="content-text pl-3"><b>+123-456789</b></div>
 							</div>
 						</div>
 					</div>
@@ -561,7 +565,7 @@
 						<div class="icon-holder">
 							<img src="/themes/lokalize/assets/img/bullet.png" alt="">
 						</div>
-						<div class="content-text ml-2">What is Bitcoin?</div>
+						<div class="content-text-bold ml-2">What is Bitcoin?</div>
 						<div class="angle-holder ml-auto">
 							<a href="" role="button" data-toggle="collapse" data-target="#answer1">
 								<img src="/themes/lokalize/assets/img/angle-down.png" alt="">
@@ -579,7 +583,7 @@
 						<div class="icon-holder">
 							<img src="/themes/lokalize/assets/img/bullet.png" alt="">
 						</div>
-						<div class="content-text ml-2">What is Lokalize?</div>
+						<div class="content-text-bold ml-2">What is Lokalize?</div>
 						<div class="angle-holder ml-auto">
 							<a href="javascript:">
 								<img src="/themes/lokalize/assets/img/angle-down.png" alt="">
@@ -592,7 +596,7 @@
 						<div class="icon-holder">
 							<img src="/themes/lokalize/assets/img/bullet.png" alt="">
 						</div>
-						<div class="content-text ml-2">Is Lokalize Anonymous?</div>
+						<div class="content-text-bold ml-2">Is Lokalize Anonymous?</div>
 						<div class="angle-holder ml-auto">
 							<a href="javascript:">
 								<img src="/themes/lokalize/assets/img/angle-down.png" alt="">
@@ -605,7 +609,7 @@
 						<div class="icon-holder">
 							<img src="/themes/lokalize/assets/img/bullet.png" alt="">
 						</div>
-						<div class="content-text ml-2">Is It Legal?</div>
+						<div class="content-text-bold ml-2">Is It Legal?</div>
 						<div class="angle-holder ml-auto">
 							<a href="javascript:">
 								<img src="/themes/lokalize/assets/img/angle-down.png" alt="">
@@ -618,7 +622,7 @@
 						<div class="icon-holder">
 							<img src="/themes/lokalize/assets/img/bullet.png" alt="">
 						</div>
-						<div class="content-text ml-2">Lorem Ipsum Dolor?</div>
+						<div class="content-text-bold ml-2">Lorem Ipsum Dolor?</div>
 						<div class="angle-holder ml-auto">
 							<a href="javascript:">
 								<img src="/themes/lokalize/assets/img/angle-down.png" alt="">
@@ -631,11 +635,11 @@
 
 		<footer>
 			<div class="container py-4">
-				<div class="flex-footer d-flex align-items-center justify-content-between">
+				<div class="flex-footer d-flex align-items-center">
 					<div class="left ml-auto">
 						<div class="f-text">Copyright © 2018 Lokalize.io</div>
 					</div>
-					<div class="middle px-4">
+					<div class="middle mx-4">
 						<div class="links d-flex align-items-center">
 							<div><a class="f-text-link" href="">Privacy</a></div>
 							<div class="ml-3"><a class="f-text-link" href="">Terms</a></div>
@@ -643,9 +647,9 @@
 					</div>
 					<div class="right mr-auto">
 						<div class="social-logo">
-						    <a class="holder"><div><i class="fab fa-facebook-f"></i></div></a>
-						    <a class="holder"><div><i class="fab fa-twitter"></i></div></a>
-						    <a class="holder"><div><i class="fab fa-instagram"></i></div></a>
+						    <a class="holder mx-3"><div><i class="fab fa-facebook-f"></i></div></a>
+						    <a class="holder mx-3"><div><i class="fab fa-twitter"></i></div></a>
+						    <a class="holder mx-3"><div><i class="fab fa-instagram"></i></div></a>
 						</div>
 					</div>
 				</div>

@@ -20,13 +20,14 @@
 
 .btn-glow
 {
-	box-shadow: 0px 0px 25px 5px rgba(#2fb5f8, .4);
+	// box-shadow: 0px 0px 25px 5px rgba(#2fb5f8, .4);
+	animation: glowing 1s infinite;
 
-	&:hover
-	{
-		@include transition(0.2s);
-		box-shadow: 0px 0px 30px 5px rgba(#2fb5f8, .4);
-	}
+	// &:hover
+	// {
+	// 	@include transition(0.2s);
+	// 	box-shadow: 0px 0px 30px 5px rgba(#2fb5f8, .4);
+	// }
 }
 
 .btn-lokal-sm

@@ -80,7 +80,7 @@
 		</header>
 
 		<!--BANNER SECTION-->
-		<section class="page-section banner-section" id="particles-js">
+		<section class="banner-section" id="particles-js">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-6">
@@ -99,7 +99,7 @@
 						</div>
 					</div>
 					<div class="col-md-6">
-						<div class="d-flex align-items-center justify-content-center">
+						<div class="d-flex align-items-center justify-content-end">
 							<div class="card-holder">
 								<div class="sale-card-header py-2">
 									SALE IS LIVE
@@ -130,7 +130,7 @@
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-6">
-						<div class="left">s
+						<div class="left">
 							<div class="text-header">ABOUT US</div>
 							<div class="content-text">
 								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea nostrum aut laborum ut repellendus deleniti! Reiciendis nisi magni at eligendi vero consequuntur provident, laborum, fugit corporis deleniti inventore tempora facilis. Molestias nam dolor incidunt fugiat natus animi, doloremque illo. Placeat temporibus quas molestiae veritatis eveniet aliquam, excepturi quam fuga, voluptatem.
@@ -656,7 +656,6 @@
 		<script type="text/javascript" src="/themes/lokalize/assets/slick-1.8.0/slick/slick.min.js"></script>
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script type="text/javascript" src="/themes/lokalize/assets/js/match-height.js"></script>
-		<script type="text/javascript" src="/themes/lokalize/assets/js/member_layout.js"></script>
 		{{-- <script type="text/javascript" src="/themes/lokalize/assets/scrolltofix/jquery-scrolltofixed.js"></script> --}}
 		{{-- <script type="text/javascript" src="/themes/lokalize/assets/scrolltofix/jquery-scrolltofixed-min.js"></script> --}}
 		<script type="text/javascript" src="/themes/lokalize/assets/mdb/js/mdb.js"></script>
@@ -668,7 +667,6 @@
 
 		<!-- <script type="text/javascript" src="/themes/lokalize/assets/js/globals_js.js"></script> -->
 		<!-- <script src="//themes/lokalize/assets/js/popup.js"></script> -->
-					
 
 		<!--START WOW JS-->
 		<script src="/themes/lokalize/assets/wow/js/wow.min.js"></script>
@@ -676,29 +674,6 @@
 		new WOW().init();
 		</script>
 		<!--END WOW JS-->
-
-		<!--PARTICLES-->
-		<!-- stats.js -->
-		<script src="js/lib/stats.js"></script>
-		{{-- <script>
-		  var count_particles, stats, update;
-		  stats = new Stats;
-		  stats.setMode(0);
-		  stats.domElement.style.position = 'absolute';
-		  stats.domElement.style.left = '0px';
-		  stats.domElement.style.top = '0px';
-		  document.body.appendChild(stats.domElement);
-		  count_particles = document.querySelector('.js-count-particles');
-		  update = function() {
-		    stats.begin();
-		    stats.end();
-		    if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) {
-		      count_particles.innerText = window.pJSDom[0].pJS.particles.array.length;
-		    }
-		    requestAnimationFrame(update);
-		  };
-		  requestAnimationFrame(update);
-		</script> --}}
 					
 	</body>
 </html>

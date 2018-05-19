@@ -2,15 +2,41 @@
 @keyframes blink {
   0% {
     opacity: 0; }
-  25% {
+  5% {
+    opacity: 0.5; }
+  10% {
     opacity: 0.6; }
-  50% {
+  15% {
+    opacity: 0.7; }
+  20% {
     opacity: 0.8; }
-  75% {
+  25% {
+    opacity: 0.9; }
+  30% {
     opacity: 1; } }
-blink {
-  animation: blink 1s infinite; }
-
+@keyframes glowing {
+  0% {
+    box-shadow: 0px 0px 25px 5px rgba(47, 181, 248, 0.4); }
+  10% {
+    box-shadow: 0px 0px 24px 5px rgba(47, 181, 248, 0.4); }
+  20% {
+    box-shadow: 0px 0px 23px 5px rgba(47, 181, 248, 0.4); }
+  30% {
+    box-shadow: 0px 0px 22px 5px rgba(47, 181, 248, 0.4); }
+  40% {
+    box-shadow: 0px 0px 21px 5px rgba(47, 181, 248, 0.4); }
+  50% {
+    box-shadow: 0px 0px 20px 5px rgba(47, 181, 248, 0.4); }
+  60% {
+    box-shadow: 0px 0px 21px 5px rgba(47, 181, 248, 0.4); }
+  70% {
+    box-shadow: 0px 0px 22px 5px rgba(47, 181, 248, 0.4); }
+  80% {
+    box-shadow: 0px 0px 23px 5px rgba(47, 181, 248, 0.4); }
+  90% {
+    box-shadow: 0px 0px 24px 5px rgba(47, 181, 248, 0.4); }
+  100% {
+    box-shadow: 0px 0px 25px 5px rgba(47, 181, 248, 0.4); } }
 /* VARIABLES */
 /* MIXINS */
 /* GLOBALS */
@@ -110,15 +136,13 @@ footer {
       right: 0;
       bottom: 58px; } }
 
-/* ---- stats.js ---- */
-/* ---- particles.js container ---- */
 /* HOME */
 .page-section {
   background-size: cover;
   background-position: center center;
   padding: 100px 0; }
 
-.banner-section {
+.banner-section, #particles-js {
   min-height: 100vh;
   background-color: #0a0027;
   background-color: -moz-linear-gradient(top, #0a0027 0%, #0e0137 100%);
@@ -130,72 +154,74 @@ footer {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$primary, endColorstr=$secondary, GradientType=0 );
   background-image: url("");
   background-size: cover;
-  background-position: center center;
+  background-position: 50% 50%;
   background-repeat: no-repeat;
   padding-top: 4rem;
   position: relative;
   z-index: 20; }
-  .banner-section canvas {
+  .banner-section canvas, #particles-js canvas {
     position: absolute;
     top: 0;
     display: block;
     vertical-align: bottom; }
-  .banner-section .caption-holder {
+  .banner-section .caption-holder, #particles-js .caption-holder {
     margin-top: 100px; }
-    .banner-section .caption-holder .caption-text {
+    .banner-section .caption-holder .caption-text, #particles-js .caption-holder .caption-text {
       font-family: "Montserrat", sans-serif;
       font-size: 45px;
       font-weight: 400;
       color: #fff; }
-    .banner-section .caption-holder .sub-caption {
+    .banner-section .caption-holder .sub-caption, #particles-js .caption-holder .sub-caption {
       font-family: "Montserrat", sans-serif;
       font-weight: 400;
       font-size: 14px;
       color: #fff; }
-  .banner-section .card-holder {
+  .banner-section .card-holder, #particles-js .card-holder {
     background-color: rgba(13, 1, 39, 0.8);
     max-width: 318px;
     max-height: 416px;
     min-width: 318px;
     min-height: 416px;
     margin-top: 100px; }
-    .banner-section .card-holder .sale-card-header {
+    .banner-section .card-holder .sale-card-header, #particles-js .card-holder .sale-card-header {
       font-weight: 400;
       font-size: 24px;
       text-align: center;
       color: #fff;
       border-bottom: solid 1px #3d3453; }
-    .banner-section .card-holder .sale-card-body .phase-holder {
+    .banner-section .card-holder .sale-card-body .phase-holder, #particles-js .card-holder .sale-card-body .phase-holder {
       padding: 32px; }
-      .banner-section .card-holder .sale-card-body .phase-holder .phase {
+      .banner-section .card-holder .sale-card-body .phase-holder blink, #particles-js .card-holder .sale-card-body .phase-holder blink {
+        animation: blink 1s infinite; }
+      .banner-section .card-holder .sale-card-body .phase-holder .phase, #particles-js .card-holder .sale-card-body .phase-holder .phase {
         font-family: "Montserrat", sans-serif;
         font-weight: 700;
         font-size: 20px;
         color: #fce963; }
-      .banner-section .card-holder .sale-card-body .phase-holder .phase-disabled {
+      .banner-section .card-holder .sale-card-body .phase-holder .phase-disabled, #particles-js .card-holder .sale-card-body .phase-holder .phase-disabled {
         font-family: "Montserrat", sans-serif;
         font-weight: 500;
         color: #b2b2b2;
         font-size: 14px; }
-    .banner-section .card-holder .sale-card-body .timer-holder {
+    .banner-section .card-holder .sale-card-body .timer-holder, #particles-js .card-holder .sale-card-body .timer-holder {
       font-family: "Montserrat", sans-serif;
       text-align: center;
       background-color: rgba(0, 0, 0, 0.2);
       padding: 10px;
       margin: 0 32px; }
-      .banner-section .card-holder .sale-card-body .timer-holder .no-of-weeks {
+      .banner-section .card-holder .sale-card-body .timer-holder .no-of-weeks, #particles-js .card-holder .sale-card-body .timer-holder .no-of-weeks {
         font-weight: 500;
         font-size: 32px;
         color: #fff; }
-      .banner-section .card-holder .sale-card-body .timer-holder .week-text-1 {
+      .banner-section .card-holder .sale-card-body .timer-holder .week-text-1, #particles-js .card-holder .sale-card-body .timer-holder .week-text-1 {
         font-weight: 700;
         font-size: 16px;
         color: #fff; }
-      .banner-section .card-holder .sale-card-body .timer-holder .week-text-2 {
+      .banner-section .card-holder .sale-card-body .timer-holder .week-text-2, #particles-js .card-holder .sale-card-body .timer-holder .week-text-2 {
         font-weight: 300;
         font-size: 13px;
         color: #fff; }
-    .banner-section .card-holder .sale-card-body .btn-buy-coin-holder {
+    .banner-section .card-holder .sale-card-body .btn-buy-coin-holder, #particles-js .card-holder .sale-card-body .btn-buy-coin-holder {
       margin: 15px 32px; }
 
 .about-us {
@@ -771,13 +797,7 @@ Main components
   cursor: pointer; }
 
 .btn-glow {
-  box-shadow: 0px 0px 25px 5px rgba(47, 181, 248, 0.4); }
-  .btn-glow:hover {
-    -webkit-transition: all 0.2s ease-in-out;
-    -moz-transition: all 0.2s ease-in-out;
-    -o-transition: all 0.2s ease-in-out;
-    transition: all 0.2s ease-in-out;
-    box-shadow: 0px 0px 30px 5px rgba(47, 181, 248, 0.4); }
+  animation: glowing 1s infinite; }
 
 .btn-lokal-sm {
   padding: 7px 25px; }

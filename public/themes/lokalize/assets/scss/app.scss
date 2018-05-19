@@ -1,4 +1,4 @@
-//IMPORT ALL CORE STYLES
+//IMPORT ALL STYLES
 
 // GLOBAL
 @import "core/animation";
@@ -8,6 +8,7 @@
 // PAGE LAYOUT
 
 @import "layout/global";
+@import "layout/particles";
 @import "layout/home";
 @import "layout/timeline";
 @import "layout/login";

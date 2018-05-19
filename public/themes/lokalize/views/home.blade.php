@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		{{-- <link rel="icon" href="/themes/lokalize/assets/img/brown-ico.png" type="image/png"/> --}}
+		<link rel="icon" href="/themes/lokalize/assets/img/favicon.png" type="image/png"/>
 		<title>Lokalize</title>
 		<!-- Google Fonts -->
 		<link href="https://fonts.googleapis.com/css?family=Montserrat:100,300,400,500,600,700" rel="stylesheet">
@@ -27,6 +27,7 @@
 		<link rel="stylesheet" type="text/css" href="/themes/lokalize/assets/mdb/css/bootstrap.min.css"/>
 		<link rel="stylesheet" type="text/css" href="/themes/lokalize/assets/mdb/css/mdb.css"/>
 		<link rel="stylesheet" type="text/css" href="/themes/lokalize/assets/mdb/css/mdb.min.css"/>
+
 	</head>
 	<body>
 		<header class="header-container">
@@ -77,8 +78,9 @@
 				</div>
 			</nav>
 		</header>
+
 		<!--BANNER SECTION-->
-		<section class="page-section banner-section">
+		<section class="page-section banner-section" id="particles-js">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-6">
@@ -91,7 +93,7 @@
 									Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam, quia.
 								</div>
 							</div>
-							<div class="image-holder mt-2 py-2">
+							<div class="image-holder mt-3 py-2 wow fadeIn">
 								<img src="/themes/lokalize/assets/img/Isom.png" alt="">
 							</div>
 						</div>
@@ -275,7 +277,6 @@
 				</div>
 			</div>
 		</section>
-		
 		<!--BONUS ALLOCATION SECTION-->		
 		<section class="page-section bonus-allocation" id="bonus-allocation">
 			<div class="container">
@@ -369,7 +370,6 @@
 				</div>
 			</div>
 		</section>
-
 		<!--CORE FEATURES SECTION-->
 		<section class="page-section core-features" id="core-features">
 			<div class="container">
@@ -421,7 +421,6 @@
 				</div>
 			</div>
 		</section>
-
 		<!--ROADMAP SECTION-->
 		<section class="page-section roadmap" id="roadmap">
 			<div class="container">
@@ -511,7 +510,6 @@
 					</section> <!-- cd-timeline -->
 			</div>
 		</section>
-
 		<!--CONTACT US SECTION-->
 		<section class="page-section contact-us" id="contact-us">
 			<div class="container">
@@ -553,7 +551,6 @@
 				</div>
 			</div>
 		</section>
-
 		<!--FAQ SECTION-->
 		<section class="page-section faq" id="faq">
 			<div class="container">
@@ -631,7 +628,6 @@
 				</div>
 			</div>
 		</section>
-
 		<footer>
 			<div class="container py-4">
 				<div class="flex-footer d-flex align-items-center">
@@ -654,7 +650,6 @@
 				</div>
 			</div>
 		</footer>
-
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		<script src="/themes/lokalize/assets/bootstrap4/dist/js/bootstrap.min.js"></script>
@@ -668,14 +663,42 @@
 		<script type="text/javascript" src="/themes/lokalize/assets/mdb/js/mdb.min.js"></script>
 		<script type="text/javascript" src="/themes/lokalize/assets/js/custom.js"></script>
 		<script type="text/javascript" src="/themes/lokalize/assets/js/smooth-scroll.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/assets/particlesjs/particles.js"></script>	
+		<script type="text/javascript" src="/themes/lokalize/assets/particlesjs/demo/js/app.js"></script>
 
 		<!-- <script type="text/javascript" src="/themes/lokalize/assets/js/globals_js.js"></script> -->
 		<!-- <script src="//themes/lokalize/assets/js/popup.js"></script> -->
+					
+
 		<!--START WOW JS-->
 		<script src="/themes/lokalize/assets/wow/js/wow.min.js"></script>
 		<script>
 		new WOW().init();
 		</script>
 		<!--END WOW JS-->
+
+		<!--PARTICLES-->
+		<!-- stats.js -->
+		<script src="js/lib/stats.js"></script>
+		{{-- <script>
+		  var count_particles, stats, update;
+		  stats = new Stats;
+		  stats.setMode(0);
+		  stats.domElement.style.position = 'absolute';
+		  stats.domElement.style.left = '0px';
+		  stats.domElement.style.top = '0px';
+		  document.body.appendChild(stats.domElement);
+		  count_particles = document.querySelector('.js-count-particles');
+		  update = function() {
+		    stats.begin();
+		    stats.end();
+		    if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) {
+		      count_particles.innerText = window.pJSDom[0].pJS.particles.array.length;
+		    }
+		    requestAnimationFrame(update);
+		  };
+		  requestAnimationFrame(update);
+		</script> --}}
+					
 	</body>
 </html>

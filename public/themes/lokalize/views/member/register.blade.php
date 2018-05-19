@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" href="/themes/lokalize/assets/img/favicon.png" type="image/png"/>
 		<title>Lokalize</title>
 		<!-- Google Fonts -->
 		<link href="https://fonts.googleapis.com/css?family=Montserrat:100,300,400,500,600,700" rel="stylesheet">
@@ -14,7 +15,7 @@
 		<script defer src="/themes/lokalize/assets/fontawesome5/svg-with-js/css/fa-svg-with-js.css"></script>
 		<script defer src="/themes/lokalize/assets/fontawesome5/svg-with-js/js/fontawesome-all.js"></script>
 		<!--External css-->
-		<link rel="stylesheet" href="/themes/lokalize/assets/css/register.css">
+		<link rel="stylesheet" href="/themes/lokalize/assets/css/app.css">
 		<link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
 		<!--wow animation-->
 		<link rel="stylesheet" href="/themes/lokalize/assets/wow/css/animate.css">

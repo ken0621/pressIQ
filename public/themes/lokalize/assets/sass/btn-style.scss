@@ -1,0 +1,59 @@
+@import 'style';
+@import 'mixins';
+
+.btn-home-reg
+{
+	color: #1344d8 !important;
+}
+
+.btn-lokal
+{
+	@include grad-btn(#2fb5f8, #785bfa);
+	font-family: $ff;
+	font-weight: $reg;
+	font-size: 18px;
+	padding: 15px 25px;
+	border: 0;
+	border-radius: 4px;
+	color: #fff;
+	cursor: pointer;
+}
+
+.btn-lokal-sm
+{
+	@extend .btn-lokal;
+	padding: 7px 25px;
+}
+
+.btn-home-login
+{
+	background-color: #1344d8;
+	border-radius: 6px;
+	font-family: $ff;
+	font-weight: $reg;
+	font-size: 14px;
+	padding: 5px 10px;
+	color: #fff;
+}
+
+.btn-login
+{
+	color: #77eff8 !important;
+
+	&:hover
+	{
+		@include transition(0.2s);
+		opacity: 1 !important;
+	}
+}
+
+.btn-reg
+{
+	color: #775bf9 !important;
+
+	&:hover
+	{
+		@include transition(0.2s);
+		opacity: 1 !important;
+	}
+}

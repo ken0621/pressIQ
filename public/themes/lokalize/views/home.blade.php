@@ -16,7 +16,6 @@
 		<script defer src="/themes/lokalize/assets/fontawesome5/svg-with-js/js/fontawesome-all.js"></script>
 		<!--External css-->
 		<link rel="stylesheet" href="/themes/lokalize/assets/css/global.css">
-		<link rel="stylesheet" href="/themes/lokalize/assets/css/style.css">
 		<link rel="stylesheet" href="/themes/lokalize/assets/css/home.css">
 		<link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
 		<!--wow animation-->
@@ -69,10 +68,10 @@
 						</ul>
 						<ul class="navbar-nav align-in-mobile">
 							<li class="nav-item mx-2 ml-auto">
-								<a href="#" class="nav-link nav-link-text navigation__link login-text">LOGIN</a>
+								<a href="/member/login" class="nav-link nav-link-text navigation__link btn-login">LOGIN</a>
 							</li>
 							<li class="nav-item mx-2 ml-auto">
-								<a href="#" class="nav-link nav-link-text navigation__link register-text">REGISTER</a>
+								<a href="/member/register" class="nav-link nav-link-text navigation__link btn-reg">REGISTER</a>
 							</li>
 						</ul>
 					</div>

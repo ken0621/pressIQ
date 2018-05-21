@@ -94,7 +94,7 @@
 								</div>
 							</div>
 							<div class="image-holder mt-3 py-2 wow fadeIn">
-								<img src="/themes/lokalize/assets/img/Isom.png" alt="">
+								<img src="/themes/lokalize/assets/img/Isom.png" class="img-fluid" alt="">
 							</div>
 						</div>
 					</div>
@@ -143,7 +143,7 @@
 					<div class="col-md-6">
 						<div class="right d-flex align-items-center justify-content-center">
 							<div class="isom-image-holder py-2">
-								<img src="/themes/lokalize/assets/img/isom-people.png" alt="">
+								<img src="/themes/lokalize/assets/img/isom-people.png" class="img-fluid" alt="">
 							</div>
 						</div>
 					</div>
@@ -159,7 +159,7 @@
 							<div class="text-header text-center">HOW IT WORKS</div>
 							<div class="content-text text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo dicta veritatis<br>qui nesciunt voluptas explicabo praesentium atque, aspernatur voluptatibus. Cum!</div>
 							<div class="image-holder py-4 d-flex justify-content-center">
-								<img class="pt-3" src="/themes/lokalize/assets/img/how-it-works-circle.png" alt="">
+								<img class="pt-3" src="/themes/lokalize/assets/img/how-it-works-circle.png" class="img-fluid" alt="">
 							</div>
 						</div>
 					</div>
@@ -177,16 +177,16 @@
 				<div class="row clearfix">
 					<div class="col-md-12">
 						<div class="img-coin-holder d-flex align-items-center justify-content-center">
-							<img class="coin" src="/themes/lokalize/assets/img/coin.png" alt="">
+							<img class="coin" src="/themes/lokalize/assets/img/coin.png" class="img-fluid" alt="">
 						</div>
 						<div class="lokal-img-text pt-3 d-flex flex-column align-items-center justify-content-center">
 							<div class="img-holder d-flex justify-content-center">
-								<img src="/themes/lokalize/assets/img/lokal-coin-text.png" alt="">
+								<img src="/themes/lokalize/assets/img/lokal-coin-text.png" class="img-fluid" alt="">
 							</div>
 							<div class="content-text text-center pt-3">In total there will be no more than 592,592,587<br>
 							tokens created, never to be increased. LOKAL will run natively on the Ethereum Blockchain with ERC20.</div>
 							<div class="img-holder pt-3 d-flex justify-content-center">
-								<img src="/themes/lokalize/assets/img/lokal-variant.png" alt="">
+								<img src="/themes/lokalize/assets/img/lokal-variant.png" class="img-fluid" alt="">
 							</div>
 						</div>
 					</div>
@@ -205,7 +205,7 @@
 				<div class="row clearfix">
 					<div class="col-md-6">
 						<div class="img-holder py-5">
-							<img src="/themes/lokalize/assets/img/chart.png" alt="">
+							<img src="/themes/lokalize/assets/img/chart.png" class="img-fluid" alt="">
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -385,7 +385,7 @@
 					<div class="col-md-3">
 						<div class="feature-holder d-flex flex-column align-item-center justify-content-center">
 							<div class="img-holder d-flex justify-content-center">
-								<img src="/themes/lokalize/assets/img/cf-1.png" alt="">
+								<img src="/themes/lokalize/assets/img/cf-1.png" class="img-fluid" alt="">
 							</div>
 							<div class="small-header text-center">LOREM IPSUM</div>
 							<div class="small-text text-center">Lorem ipsum dolor sit amet,<br>consectetur adipisicing elit.<br>Voluptate, neque.</div>
@@ -394,7 +394,7 @@
 					<div class="col-md-3">
 						<div class="feature-holder d-flex flex-column align-item-center justify-content-center">
 							<div class="img-holder d-flex justify-content-center">
-								<img src="/themes/lokalize/assets/img/cf-2.png" alt="">
+								<img src="/themes/lokalize/assets/img/cf-2.png" class="img-fluid" alt="">
 							</div>
 							<div class="small-header text-center">LOREM IPSUM</div>
 							<div class="small-text text-center">Lorem ipsum dolor sit amet,<br>consectetur adipisicing elit.<br>Voluptate, neque.</div>
@@ -403,7 +403,7 @@
 					<div class="col-md-3">
 						<div class="feature-holder d-flex flex-column align-item-center justify-content-center">
 							<div class="img-holder d-flex justify-content-center">
-								<img src="/themes/lokalize/assets/img/cf-3.png" alt="">
+								<img src="/themes/lokalize/assets/img/cf-3.png" class="img-fluid" alt="">
 							</div>
 							<div class="small-header text-center">LOREM IPSUM</div>
 							<div class="small-text text-center">Lorem ipsum dolor sit amet,<br>consectetur adipisicing elit.<br>Voluptate, neque.</div>
@@ -412,7 +412,7 @@
 					<div class="col-md-3">
 						<div class="feature-holder d-flex flex-column align-items-center justify-content-center">
 							<div class="img-holder d-flex justify-content-center">
-								<img src="/themes/lokalize/assets/img/cf-4.png" alt="">
+								<img src="/themes/lokalize/assets/img/cf-4.png" class="img-fluid" alt="">
 							</div>
 							<div class="small-header text-center">LOREM IPSUM</div>
 							<div class="small-text text-center">Lorem ipsum dolor sit amet,<br>consectetur adipisicing elit.<br>Voluptate, neque.</div>

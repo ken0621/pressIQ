@@ -77,7 +77,7 @@
   box-shadow: 0 2px 5px -2px rgba(0, 0, 0, 0.75); }
   @media screen and (min-width: 991px) {
     .header-fixed.header-container {
-      background-color: rgba(10, 0, 39, 0.75);
+      background-color: #0a0027;
       padding: 0;
       position: fixed;
       width: 100%;
@@ -91,9 +91,6 @@
         -o-transition: all 0.2s ease-in-out;
         transition: all 0.2s ease-in-out;
         opacity: 1; } }
-  @media screen and (max-width: 991px) {
-    .header-fixed {
-      display: none; } }
 
 footer {
   background-color: #0d0127; }
@@ -157,15 +154,17 @@ footer {
   background-position: 50% 50%;
   background-repeat: no-repeat;
   padding-top: 4rem;
-  position: relative;
-  z-index: 20; }
+  position: relative; }
   .banner-section canvas, #particles-js canvas {
     position: absolute;
     top: 0;
     display: block;
     vertical-align: bottom; }
   .banner-section .caption-holder, #particles-js .caption-holder {
-    margin-top: 100px; }
+    margin-top: 50px;
+    position: absolute;
+    z-index: 80;
+    left: 0; }
     .banner-section .caption-holder .caption-text, #particles-js .caption-holder .caption-text {
       font-family: "Montserrat", sans-serif;
       font-size: 45px;
@@ -176,13 +175,22 @@ footer {
       font-weight: 400;
       font-size: 14px;
       color: #fff; }
+  .banner-section .image-holder, #particles-js .image-holder {
+    position: absolute;
+    z-index: 80;
+    top: 150px;
+    left: 0; }
   .banner-section .card-holder, #particles-js .card-holder {
-    background-color: rgba(13, 1, 39, 0.8);
+    background-color: rgba(0, 0, 0, 0.2);
     max-width: 318px;
     max-height: 416px;
     min-width: 318px;
     min-height: 416px;
-    margin-top: 100px; }
+    margin-top: 80px;
+    position: absolute;
+    z-index: 80;
+    top: 0;
+    right: 0; }
     .banner-section .card-holder .sale-card-header, #particles-js .card-holder .sale-card-header {
       font-weight: 400;
       font-size: 24px;
@@ -206,7 +214,7 @@ footer {
     .banner-section .card-holder .sale-card-body .timer-holder, #particles-js .card-holder .sale-card-body .timer-holder {
       font-family: "Montserrat", sans-serif;
       text-align: center;
-      background-color: rgba(0, 0, 0, 0.2);
+      background-color: rgba(13, 1, 39, 0.8);
       padding: 10px;
       margin: 0 32px; }
       .banner-section .card-holder .sale-card-body .timer-holder .no-of-weeks, #particles-js .card-holder .sale-card-body .timer-holder .no-of-weeks {
@@ -934,5 +942,14 @@ Main components
     transition: all 0.2s ease-in-out;
     color: #775bfa;
     opacity: 1; }
+
+@media screen and (max-width: 991px) {
+  .banner-section .caption-holder {
+    position: static; }
+  .banner-section .image-holder {
+    position: static;
+    top: 10; }
+  .banner-section .card-holder {
+    position: static; } }
 
 /*# sourceMappingURL=app.css.map */

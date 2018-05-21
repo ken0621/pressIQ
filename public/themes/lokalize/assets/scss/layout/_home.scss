@@ -21,7 +21,6 @@
 	background-repeat: no-repeat;
 	padding-top: 4rem;
 	position: relative;
-	z-index: 20;
 	// display: flex;
 	// align-items: center;
 
@@ -35,7 +34,10 @@
 
 	.caption-holder
 	{
-		margin-top: 100px;
+		margin-top: 50px;
+		position: absolute;
+		z-index: 80;
+		left: 0;
 
 		.caption-text
 		{
@@ -56,17 +58,25 @@
 
 	.image-holder
 	{
-
+		position: absolute;
+		z-index: 80;
+		top: 150px;
+		left: 0;
 	}
 
 	.card-holder
 	{
-		background-color: rgba(#0d0127, 0.8);
+		// background-color: rgba(#0d0127, 0.8);
+		background-color: rgba(#000, 0.2);
 		max-width: 318px;
 		max-height: 416px;
 		min-width: 318px;
 		min-height: 416px;
-		margin-top: 100px;
+		margin-top: 80px;
+		position: absolute;
+		z-index: 80;
+		top: 0;
+		right: 0;
 
 		.sale-card-header
 		{
@@ -106,7 +116,8 @@
 			{
 				font-family: $ff;
 				text-align: center;
-				background-color: rgba(#000, 0.2);
+				background-color: rgba(#0d0127, 0.8);
+				// background-color: rgba(#000, 0.2);
 				padding: 10px;
 				margin: 0 32px;
 

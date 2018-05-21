@@ -84,7 +84,7 @@
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-6">
-						<div class="left d-flex flex-column">
+						<div class="d-flex flex-column">
 							<div class="caption-holder">
 								<div class="caption-text">
 									LOREM IPSUM
@@ -93,8 +93,18 @@
 									Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam, quia.
 								</div>
 							</div>
-							<div class="image-holder mt-3 py-2 wow fadeIn">
-								<img src="/themes/lokalize/assets/img/Isom.png" class="img-fluid" alt="">
+							<div class="image-holder mt-3 py-2">
+								{{-- <img src="/themes/lokalize/assets/img/Isom.png" class="img-fluid" alt=""> --}}
+								<div class="vector-img">
+									<img class="base wow fadeIn" data-wow-delay="0.2s" src="/themes/lokalize/assets/img/banner-isom-img/base.png" alt="">
+									<img class="line wow fadeIn" data-wow-delay="0.4s" src="/themes/lokalize/assets/img/banner-isom-img/line.png" alt="">
+									<img class="main-s wow zoomIn" data-wow-delay="0.6s" src="/themes/lokalize/assets/img/banner-isom-img/main-server.png" alt="">
+									<img class="server-1 wow zoomIn" data-wow-delay="0.8s" src="/themes/lokalize/assets/img/banner-isom-img/server.png" alt="">
+									<img class="server-2 wow zoomIn" data-wow-delay="1s" src="/themes/lokalize/assets/img/banner-isom-img/server.png" alt="">
+									<img class="location-1 wow zoomIn" data-wow-delay="1.2s" src="/themes/lokalize/assets/img/banner-isom-img/location.png" alt="">
+									<img class="location-2 wow zoomIn" data-wow-delay="1.4s" src="/themes/lokalize/assets/img/banner-isom-img/location.png" alt="">
+									<img class="location-3 wow zoomIn" data-wow-delay="1.6s" src="/themes/lokalize/assets/img/banner-isom-img/location.png" alt="">
+								</div>
 							</div>
 						</div>
 					</div>
@@ -185,9 +195,9 @@
 							</div>
 							<div class="content-text text-center pt-3">In total there will be no more than 592,592,587<br>
 							tokens created, never to be increased. LOKAL will run natively on the Ethereum Blockchain with ERC20.</div>
-							<div class="img-holder pt-3 d-flex justify-content-center">
+							{{-- <div class="img-holder pt-3 d-flex justify-content-center">
 								<img src="/themes/lokalize/assets/img/lokal-variant.png" class="img-fluid" alt="">
-							</div>
+							</div> --}}
 						</div>
 					</div>
 				</div>

@@ -178,8 +178,40 @@ footer {
   .banner-section .image-holder, #particles-js .image-holder {
     position: absolute;
     z-index: 80;
-    top: 150px;
+    top: 180px;
     left: 0; }
+    .banner-section .image-holder .vector-img, #particles-js .image-holder .vector-img {
+      position: relative; }
+      .banner-section .image-holder .vector-img .base, #particles-js .image-holder .vector-img .base {
+        position: absolute; }
+      .banner-section .image-holder .vector-img .line, #particles-js .image-holder .vector-img .line {
+        position: absolute;
+        top: -17px;
+        left: 22px; }
+      .banner-section .image-holder .vector-img .main-s, #particles-js .image-holder .vector-img .main-s {
+        position: absolute;
+        top: 50px;
+        left: 133px; }
+      .banner-section .image-holder .vector-img .server-1, #particles-js .image-holder .vector-img .server-1 {
+        position: absolute;
+        top: 165px;
+        left: 15px; }
+      .banner-section .image-holder .vector-img .server-2, #particles-js .image-holder .vector-img .server-2 {
+        position: absolute;
+        left: 310px;
+        top: -23px; }
+      .banner-section .image-holder .vector-img .location-1, #particles-js .image-holder .vector-img .location-1 {
+        position: absolute;
+        top: -18px;
+        left: 120px; }
+      .banner-section .image-holder .vector-img .location-2, #particles-js .image-holder .vector-img .location-2 {
+        position: absolute;
+        top: 220px;
+        left: 228px; }
+      .banner-section .image-holder .vector-img .location-3, #particles-js .image-holder .vector-img .location-3 {
+        position: absolute;
+        top: 130px;
+        left: 382px; }
   .banner-section .card-holder, #particles-js .card-holder {
     background-color: rgba(0, 0, 0, 0.2);
     max-width: 318px;

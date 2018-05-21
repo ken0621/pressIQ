@@ -96,7 +96,7 @@
 							<div class="image-holder mt-3 py-2">
 								{{-- <img src="/themes/lokalize/assets/img/Isom.png" class="img-fluid" alt=""> --}}
 								<div class="vector-img">
-									<img class="base wow fadeIn" data-wow-delay="0.2s" src="/themes/lokalize/assets/img/banner-isom-img/base.png" alt="">
+									<img class="base wow fadeIn" data-wow-delay="0.2s" width="451" height="314" src="/themes/lokalize/assets/img/banner-isom-img/base.png" alt="">
 									<img class="line wow fadeIn" data-wow-delay="0.4s" src="/themes/lokalize/assets/img/banner-isom-img/line.png" alt="">
 									<img class="main-s wow zoomIn" data-wow-delay="0.6s" src="/themes/lokalize/assets/img/banner-isom-img/main-server.png" alt="">
 									<img class="server-1 wow zoomIn" data-wow-delay="0.8s" src="/themes/lokalize/assets/img/banner-isom-img/server.png" alt="">

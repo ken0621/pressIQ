@@ -7,6 +7,7 @@
                 <th class="text-center" width="250px">Item Name</th>
                 <th class="text-center"></th>
                 <th class="text-center"></th>
+                <th class="text-center"></th>
                 <!-- <th class="text-center"></th> -->
             </tr>
         </thead>
@@ -37,6 +38,13 @@
                 @else
                 <td class="text-center" colspan="3"><a href="javascript:">{{$item->used_by}}</a></td>
                 @endif
+                <td class="text-center">
+                    @if($item->released)
+                        Released
+                    @else
+                        <a href="javascript:" class="popup" size="md" link="/member/mlm/product_code2/release?id={{ $item->record_log_id }}">Release</a>
+                    @endif
+                </td>
             </tr>
             @endforeach
             <!--  <tr>

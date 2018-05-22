@@ -6,12 +6,18 @@ use App\Globals\Warehouse2;
 use App\Globals\Pdf_global;
 use App\Globals\Customer;
 use App\Globals\Report;
+use App\Globals\Sms;
+use App\Globals\Mail_global;
 
 use App\Globals\BarcodeGenerator;
 use App\Globals\Transaction;
 use Redirect;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+
+use App\Models\Tbl_release_product_code;
+
+use DB;
 
 class MLM_CodeControllerV2 extends Member
 {
@@ -222,6 +228,9 @@ class MLM_CodeControllerV2 extends Member
                 $data['_item_product_code'][$key]->used_by = Transaction::get_customer_name_transaction($value->record_consume_ref_id, $this->user_info->shop_id);
                 // }
             }
+
+            $released = DB::table("tbl_release_product_code")->where("record_log_id", $value->record_log_id)->count();
+            $data['_item_product_code'][$key]->released = $released;
         }
 
         return view("member.mlm_code_v2.product_code_table",$data);
@@ -345,5 +354,60 @@ class MLM_CodeControllerV2 extends Member
         {
             return view('member.mlm_code_v2.report_code',$data);
         }
+    }
+
+    public function release()
+    {
+        $data["_customer"] = Customer::getAllCustomer(false, true);
+
+        return view('member.mlm_code_v2.release', $data);
+    }
+
+    public function release_submit(Request $request)
+    {
+        $id    = $request->id;
+        $exist = Tbl_release_product_code::where("record_log_id", $id)->first();
+
+        if (!$exist) 
+        {
+            $customer_id      = $request->customer_id;
+            $receipt_number   = $request->receipt_number;
+            $amount           = $request->amount;
+            $cellphone_number = $request->cellphone_number;
+            $email            = $request->email;
+
+            $insert["customer_id"]               = $customer_id;
+            $insert["record_log_id"]             = $id;
+            $insert["receipt_number"]            = $receipt_number;
+            $insert["amount"]                    = $amount;
+            $insert["cellphone_number"]          = $cellphone_number;
+            $insert["email"]                     = $email;
+            $insert["release_product_code_date"] = Carbon::now();
+
+            Tbl_release_product_code::insert($insert);
+
+            /* Send SMS and E-mail */
+            $code = DB::table("tbl_warehouse_inventory_record_log")->where("record_log_id", $id)->first();
+
+            if ($code) 
+            {
+                $text_message = "PIN: " . $code->mlm_pin . " ACTIVATION: " . $code->mlm_activation;
+                $result = Sms::SendSingleText($cellphone_number, $text_message, "", null);
+
+                $email_content["subject"] = "Product Release Code";
+                $email_content["content"] = "PIN: " . $code->mlm_pin . "</br> ACTIVATION: " . $code->mlm_activation;
+
+                $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $email);
+
+                $response["response_status"] = "success";
+            }
+        }
+        else
+        {
+            $response["response_status"] = "error";
+            $response["message"]         = "This product code is already released.";
+        }
+
+        return json_encode($response);
     }
 }

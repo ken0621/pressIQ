@@ -97,15 +97,17 @@ class MLM2
 					$q->orWhere("record_consume_ref_id", $list->transaction_list_id);
 				}
 			});
-			
-			$_codes = $query->get();
+
+			$query2 = Tbl_warehouse_inventory_record_log::where("tbl_warehouse_inventory_record_log.record_shop_id", $shop_id)->where("tbl_release_product_code.customer_id", $customer_id)->join("tbl_release_product_code", "tbl_release_product_code.record_log_id", "=", "tbl_warehouse_inventory_record_log.record_log_id")->get();
+			$merged = $query->get()->merge($query2);
+			$_codes = $merged->all();
 			
 			foreach($_codes as $key => $code)
 			{
 				$slot = Tbl_mlm_slot::where("slot_id", $code->mlm_slot_id_created)->customer()->first();
 				$transaction_list = Tbl_transaction_list::where("transaction_list_id", $code->record_consume_ref_id)->first();
 				
-				$_codes[$key]->transaction_number = $transaction_list->transaction_number;
+				$_codes[$key]->transaction_number = $transaction_list ? $transaction_list->transaction_number : '';
 				
 				if($slot)
 				{
@@ -121,11 +123,7 @@ class MLM2
 		{
 			$_codes = array();	
 		}
-			
 
-		
-
-		
 		return $_codes;
 	}
 	public static function get_code($record_log_id)

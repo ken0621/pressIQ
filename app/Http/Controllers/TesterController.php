@@ -265,9 +265,25 @@ class TesterController extends Controller
     
     function get_assets($project, $image)
     {
-        $imagepath   = '/uploads/'.$project.'/'.$image;
-        $imageget    = Storage::disk('ftp')->get($imagepath);
+        $imagepath    = 'uploads/'.$project.'/'.$image;
+        $exist        = Storage::disk('spaces')->exists($imagepath);
 
-        echo $imageget;
+        if ($exist) 
+        {
+            $url = Storage::disk('spaces')->url($imagepath);
+        }
+        else
+        {
+            $imageget = Storage::disk('ftp')->get($imagepath);
+
+            if ($imageget) 
+            {
+                Storage::disk('spaces')->put($imagepath, $imageget, 'public');
+            }
+
+            $url = Storage::disk('spaces')->url($imagepath);
+        }
+
+        return Redirect::to($url);
     }
 }

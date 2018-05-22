@@ -41,6 +41,7 @@ use Validator;
 use Redirect;
 use Crypt;
 use DB;
+use Storage;
 
 class TesterController extends Controller
 {

@@ -15,8 +15,7 @@
 		<script defer src="/themes/lokalize/assets/fontawesome5/svg-with-js/css/fa-svg-with-js.css"></script>
 		<script defer src="/themes/lokalize/assets/fontawesome5/svg-with-js/js/fontawesome-all.js"></script>
 		<!--External css-->
-		<link rel="stylesheet" href="/themes/lokalize/assets/css/app.css">
-		<link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
+		<link rel="stylesheet" href="/themes/lokalize/css/app.css?v=0.3">
 		<!--wow animation-->
 		<link rel="stylesheet" href="/themes/lokalize/assets/wow/css/animate.css">
 		<!-- Slick -->
@@ -27,6 +26,7 @@
 		<link rel="stylesheet" type="text/css" href="/themes/lokalize/assets/mdb/css/bootstrap.min.css"/>
 		<link rel="stylesheet" type="text/css" href="/themes/lokalize/assets/mdb/css/mdb.css"/>
 		<link rel="stylesheet" type="text/css" href="/themes/lokalize/assets/mdb/css/mdb.min.css"/>
+
 	</head>
 	<body>
 
@@ -56,17 +56,20 @@
 		<script src="/themes/lokalize/assets/bootstrap4/dist/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/themes/lokalize/assets/slick-1.8.0/slick/slick.min.js"></script>
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
-		<script type="text/javascript" src="/themes/lokalize/assets/js/match-height.js"></script>
-		<script type="text/javascript" src="/themes/lokalize/assets/js/member_layout.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/js/match-height.js"></script>
 		{{-- <script type="text/javascript" src="/themes/lokalize/assets/scrolltofix/jquery-scrolltofixed.js"></script> --}}
 		{{-- <script type="text/javascript" src="/themes/lokalize/assets/scrolltofix/jquery-scrolltofixed-min.js"></script> --}}
 		<script type="text/javascript" src="/themes/lokalize/assets/mdb/js/mdb.js"></script>
 		<script type="text/javascript" src="/themes/lokalize/assets/mdb/js/mdb.min.js"></script>
-		<script type="text/javascript" src="/themes/lokalize/assets/js/custom.js"></script>
-		<script type="text/javascript" src="/themes/lokalize/assets/js/smooth-scroll.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/js/custom.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/js/parallax.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/js/smooth-scroll.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/assets/particlesjs/particles.js"></script>	
+		<script type="text/javascript" src="/themes/lokalize/assets/particlesjs/demo/js/app.js"></script>
 
 		<!-- <script type="text/javascript" src="/themes/lokalize/assets/js/globals_js.js"></script> -->
-		<!-- <script src="//themes/lokalize/assets/js/popup.js"></script> -->
+		<!-- <script src="//themes/lokalize/js/popup.js"></script> -->
+
 		<!--START WOW JS-->
 		<script src="/themes/lokalize/assets/wow/js/wow.min.js"></script>
 		<script>

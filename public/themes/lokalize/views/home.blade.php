@@ -47,7 +47,7 @@
 								<a href="#how-it-works" class="nav-link nav-link-text navigation__link">HOW IT WORKS</a>
 							</li>
 							<li class="nav-item mx-2">
-								<a href="#token-allocation" class="nav-link nav-link-text navigation__link">TOKEN</a>
+								<a href="#introducing" class="nav-link nav-link-text navigation__link">TOKEN</a>
 							</li>
 							<li class="nav-item mx-2">
 								<a href="#bonus-allocation" class="nav-link nav-link-text navigation__link">BONUS</a>
@@ -198,6 +198,11 @@
 								<img src="/themes/lokalize/assets/img/lokal-variant.png" class="img-fluid" alt="">
 							</div> --}}
 						</div>
+					</div>
+				</div>
+				<div class="scroll-down d-flex justify-content-center py-3">
+					<div class="scroll-holder">
+						<a href="#token-allocation" class="nav-link nav-link-text navigation__link wow fadeInDown" data-wow-delay="1s" data-wow-iteration="infinite"><img src="/themes/lokalize/assets/img/scroll-down.svg" class="img-fluid" alt=""></a>
 					</div>
 				</div>
 			</div>
@@ -637,6 +642,10 @@
 				</div>
 			</div>
 		</section>
+
+		<!-- SCROLL TO TOP -->
+		<div class="scroll-up"><img src="/themes/lokalize/assets/img/scroll-up.svg"></div>
+
 		<footer>
 			<div class="container py-4">
 				<div class="flex-footer d-flex align-items-center">
@@ -664,19 +673,19 @@
 		<script src="/themes/lokalize/assets/bootstrap4/dist/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/themes/lokalize/assets/slick-1.8.0/slick/slick.min.js"></script>
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
-		<script type="text/javascript" src="/themes/lokalize/assets/js/match-height.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/js/match-height.js"></script>
 		{{-- <script type="text/javascript" src="/themes/lokalize/assets/scrolltofix/jquery-scrolltofixed.js"></script> --}}
 		{{-- <script type="text/javascript" src="/themes/lokalize/assets/scrolltofix/jquery-scrolltofixed-min.js"></script> --}}
 		<script type="text/javascript" src="/themes/lokalize/assets/mdb/js/mdb.js"></script>
 		<script type="text/javascript" src="/themes/lokalize/assets/mdb/js/mdb.min.js"></script>
-		<script type="text/javascript" src="/themes/lokalize/assets/js/custom.js"></script>
-		<script type="text/javascript" src="/themes/lokalize/assets/js/parallax.js"></script>
-		<script type="text/javascript" src="/themes/lokalize/assets/js/smooth-scroll.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/js/custom.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/js/parallax.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/js/smooth-scroll.js"></script>
 		<script type="text/javascript" src="/themes/lokalize/assets/particlesjs/particles.js"></script>	
 		<script type="text/javascript" src="/themes/lokalize/assets/particlesjs/demo/js/app.js"></script>
 
 		<!-- <script type="text/javascript" src="/themes/lokalize/assets/js/globals_js.js"></script> -->
-		<!-- <script src="//themes/lokalize/assets/js/popup.js"></script> -->
+		<!-- <script src="//themes/lokalize/js/popup.js"></script> -->
 
 		<!--START WOW JS-->
 		<script src="/themes/lokalize/assets/wow/js/wow.min.js"></script>
@@ -684,6 +693,15 @@
 		new WOW().init();
 		</script>
 		<!--END WOW JS-->
+
+		<script type="text/javascript">
+		$(document).ready(function($) {
+	        /*TEXT FADEOUT*/
+	        $(window).scroll(function(){
+	                $(".caption-holder, .image-holder, .card-holder").css("opacity", 1 - $(window).scrollTop() / 250);
+	        });
+		});
+		</script>
 					
 	</body>
 </html>

@@ -261,4 +261,12 @@ class TesterController extends Controller
         }
         
     }
+    
+    function get_assets($project, $image)
+    {
+        $imagepath   = '/uploads/'.$project.'/'.$image;
+        $imageget    = Storage::disk('ftp')->get($imagepath);
+
+        echo $imageget;
+    }
 }

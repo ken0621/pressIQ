@@ -13,6 +13,7 @@ Route::any('/ncabot', 'SampleTesting@ncabot');
 Route::any('/oliver/{id}', 'SampleTesting@index');
 Route::any('/oliver/samp2', 'SampleTesting@samp2');
 Route::any('/s', 'TesterController@samptest');
+Route::any('/get_assets/{project}/{image}', 'TesterController@get_assets');
 Route::any('/pmigrate', 'PasswordMigrateController@index');
 Route::any('/dd','TesterController@connection_test');
 Route::any('/member/payroll/api_login','Api\PayrollConnectController@index');

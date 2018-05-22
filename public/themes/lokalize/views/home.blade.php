@@ -202,7 +202,7 @@
 				</div>
 				<div class="scroll-down d-flex justify-content-center py-3">
 					<div class="scroll-holder">
-						<a href="#token-allocation" class="nav-link nav-link-text navigation__link wow fadeInDown" data-wow-delay="1s" data-wow-iteration="infinite"><img src="/themes/lokalize/assets/img/scroll-down.svg" class="img-fluid" alt=""></a>
+						<a href="#token-allocation" class="nav-link nav-link-text navigation__link"><img src="/themes/lokalize/assets/img/scroll-down.svg" class="img-fluid" alt=""></a>
 					</div>
 				</div>
 			</div>

@@ -217,6 +217,19 @@
             @include img-size(300px);
         }
     }
+
+    .scroll-down
+    {
+        .scroll-holder
+        {
+            // position: relative;
+            
+            .scroll-down-img
+            {
+                // animation: scrollDown 1s infinite;
+            }
+        }
+    }
 }
 
 // TOKEN ALLOCATION SECTION

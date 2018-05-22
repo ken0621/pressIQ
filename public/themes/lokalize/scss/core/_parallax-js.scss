@@ -4,11 +4,16 @@
     background-position: 50% 50% \9  !important;
 }
 
-html, body {
-    height: 100%;
-}
+// html, body {
+//     height: 100%;
+// }
 
-.fullscreen.overflow, .fullscreen.overflow .container {
+// .fullscreen.overflow, .fullscreen.overflow .container {
+//     height: auto;
+//     min-height: 100%;
+// }
+
+.fullscreen .container {
     height: auto;
     min-height: 100%;
 }
@@ -16,5 +21,3 @@ html, body {
 .not-fullscreen {
     height: 50%;
 }
-
-/*# sourceMappingURL=parallax.css.map */

@@ -15,8 +15,7 @@
 		<script defer src="/themes/lokalize/assets/fontawesome5/svg-with-js/css/fa-svg-with-js.css"></script>
 		<script defer src="/themes/lokalize/assets/fontawesome5/svg-with-js/js/fontawesome-all.js"></script>
 		<!--External css-->
-		<link rel="stylesheet" href="/themes/lokalize/assets/css/app.css?v=0.2">
-		<link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
+		<link rel="stylesheet" href="/themes/lokalize/css/app.css?v=0.3">
 		<!--wow animation-->
 		<link rel="stylesheet" href="/themes/lokalize/assets/wow/css/animate.css">
 		<!-- Slick -->
@@ -48,7 +47,7 @@
 								<a href="#how-it-works" class="nav-link nav-link-text navigation__link">HOW IT WORKS</a>
 							</li>
 							<li class="nav-item mx-2">
-								<a href="#token-allocation" class="nav-link nav-link-text navigation__link">TOKEN</a>
+								<a href="#introducing" class="nav-link nav-link-text navigation__link">TOKEN</a>
 							</li>
 							<li class="nav-item mx-2">
 								<a href="#bonus-allocation" class="nav-link nav-link-text navigation__link">BONUS</a>
@@ -84,7 +83,7 @@
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-6">
-						<div class="left d-flex flex-column">
+						<div class="d-flex flex-column">
 							<div class="caption-holder">
 								<div class="caption-text">
 									LOREM IPSUM
@@ -93,8 +92,18 @@
 									Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam, quia.
 								</div>
 							</div>
-							<div class="image-holder mt-3 py-2 wow fadeIn">
-								<img src="/themes/lokalize/assets/img/Isom.png" class="img-fluid" alt="">
+							<div class="image-holder mt-3 py-2">
+								{{-- <img src="/themes/lokalize/assets/img/Isom.png" class="img-fluid" alt=""> --}}
+								<div class="vector-img">
+									<img class="base wow fadeIn" data-wow-delay="0.2s" width="451" height="314" src="/themes/lokalize/assets/img/banner-isom-img/base.png" alt="">
+									<img class="line wow fadeIn" data-wow-delay="0.4s" src="/themes/lokalize/assets/img/banner-isom-img/line.png" alt="">
+									<img class="main-s wow zoomIn" data-wow-delay="0.6s" src="/themes/lokalize/assets/img/banner-isom-img/main-server.png" alt="">
+									<img class="server-1 wow zoomIn" data-wow-delay="0.8s" src="/themes/lokalize/assets/img/banner-isom-img/server.png" alt="">
+									<img class="server-2 wow zoomIn" data-wow-delay="1s" src="/themes/lokalize/assets/img/banner-isom-img/server.png" alt="">
+									<img class="location-1 wow zoomIn" data-wow-delay="1.2s" src="/themes/lokalize/assets/img/banner-isom-img/location.png" alt="">
+									<img class="location-2 wow zoomIn" data-wow-delay="1.4s" src="/themes/lokalize/assets/img/banner-isom-img/location.png" alt="">
+									<img class="location-3 wow zoomIn" data-wow-delay="1.6s" src="/themes/lokalize/assets/img/banner-isom-img/location.png" alt="">
+								</div>
 							</div>
 						</div>
 					</div>
@@ -126,7 +135,7 @@
 			</div>
 		</section>
 		<!--ABOUT US SECTION-->
-		<section class="page-section about-us" id="about">
+		<section class="page-section about-us not-fullscreen background parallax" id="about" data-img-width="1366" data-img-height="673" data-diff="100">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-6">
@@ -151,7 +160,7 @@
 			</div>
 		</section>
 		<!--HOW IT WORKS SECTION-->
-		<section class="page-section how-it-works" id="how-it-works">
+		<section class="page-section how-it-works not-fullscreen background parallax" id="how-it-works" data-img-width="1366" data-img-height="735" data-diff="100">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
@@ -167,7 +176,7 @@
 			</div>
 		</section>
 		<!--INTRODUCING SECTION-->
-		<section class="page-section introducing" id="introducing">
+		<section class="page-section introducing not-fullscreen background parallax" id="introducing" data-img-width="1366" data-img-height="641" data-diff="100">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
@@ -185,16 +194,21 @@
 							</div>
 							<div class="content-text text-center pt-3">In total there will be no more than 592,592,587<br>
 							tokens created, never to be increased. LOKAL will run natively on the Ethereum Blockchain with ERC20.</div>
-							<div class="img-holder pt-3 d-flex justify-content-center">
+							{{-- <div class="img-holder pt-3 d-flex justify-content-center">
 								<img src="/themes/lokalize/assets/img/lokal-variant.png" class="img-fluid" alt="">
-							</div>
+							</div> --}}
 						</div>
+					</div>
+				</div>
+				<div class="scroll-down d-flex justify-content-center py-3">
+					<div class="scroll-holder">
+						<a href="#token-allocation" class="nav-link nav-link-text navigation__link"><img src="/themes/lokalize/assets/img/scroll-down.svg" class="img-fluid" alt=""></a>
 					</div>
 				</div>
 			</div>
 		</section>
 		<!-- TOKEN ALLOCATION SECTION -->
-		<section class="page-section token-allocation" id="token-allocation">
+		<section class="page-section token-allocation not-fullscreen background parallax" id="token-allocation" data-img-width="1366" data-img-height="836" data-diff="100">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
@@ -278,7 +292,7 @@
 			</div>
 		</section>
 		<!--BONUS ALLOCATION SECTION-->		
-		<section class="page-section bonus-allocation" id="bonus-allocation">
+		<section class="page-section bonus-allocation not-fullscreen background parallax" id="bonus-allocation" data-img-width="1366" data-img-height="1490" data-diff="100">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
@@ -371,7 +385,7 @@
 			</div>
 		</section>
 		<!--CORE FEATURES SECTION-->
-		<section class="page-section core-features" id="core-features">
+		<section class="page-section core-features not-fullscreen background parallax" id="core-features" data-img-width="1366" data-img-height="701" data-diff="100">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
@@ -422,96 +436,96 @@
 			</div>
 		</section>
 		<!--ROADMAP SECTION-->
-		<section class="page-section roadmap" id="roadmap">
+		<section class="page-section roadmap not-fullscreen background parallax" id="roadmap" data-img-width="1366" data-img-height="1470" data-diff="100">
 			<div class="container">
 				<div class="text-header text-center">ROADMAP</div>
 				<section id="cd-timeline" class="cd-container">
-						<div class="cd-timeline-block">
-							<div class="cd-timeline-img cd-picture">
+					<div class="cd-timeline-block">
+						<div class="cd-timeline-img cd-picture">
+						</div>
+
+						<div class="cd-timeline-content">
+							<h2>Penta Consulting</h2>
+							<div class="timeline-content-info">
+								<span class="timeline-content-info-title">
+									<i class="fa fa-certificate" aria-hidden="true"></i>
+									Front End Developer
+								</span>
+								<span class="timeline-content-info-date">
+									<i class="fa fa-calendar-o" aria-hidden="true"></i>
+									May 2018 - Present
+								</span>
 							</div>
+							<p>Working alongside the designer team implementing the designs, also developing custom solutions to address team necessities.</p>
+							<ul class="content-skills">
+								<li>HTML5</li>
+								<li>CSS3</li>
+								<li>JavaScript</li>
+								<li>jQuery</li>
+							</ul>
+						</div> <!-- cd-timeline-content -->
+					</div> <!-- cd-timeline-block -->
 
-							<div class="cd-timeline-content">
-								<h2>Penta Consulting</h2>
-				        <div class="timeline-content-info">
-				          <span class="timeline-content-info-title">
-				            <i class="fa fa-certificate" aria-hidden="true"></i>
-				            Front End Developer
-				          </span>
-				          <span class="timeline-content-info-date">
-				            <i class="fa fa-calendar-o" aria-hidden="true"></i>
-				            June 2016 - Present
-				          </span>
-				        </div>
-								<p>Working alongside the designer team implementing the designs, also developing custom solutions to address team necessities.</p>
-				        <ul class="content-skills">
-				        <li>HTML5</li>
-				        <li>CSS3</li>
-				        <li>JavaScript</li>
-				        <li>jQuery</li>
-				        <li>Wordpress</li>
-				        </ul>
-							</div> <!-- cd-timeline-content -->
-						</div> <!-- cd-timeline-block -->
+					<div class="cd-timeline-block">
+						<div class="cd-timeline-img cd-movie">
+						</div> <!-- cd-timeline-img -->
 
-						<div class="cd-timeline-block">
-							<div class="cd-timeline-img cd-movie">
-							</div> <!-- cd-timeline-img -->
+						<div class="cd-timeline-content">
+							<h2>Title of section 2</h2>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde?</p>
+							<span class="cd-date">Jan 18</span>
+						</div> <!-- cd-timeline-content -->
+					</div> <!-- cd-timeline-block -->
 
-							<div class="cd-timeline-content">
-								<h2>Title of section 2</h2>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde?</p>
-								<span class="cd-date">Jan 18</span>
-							</div> <!-- cd-timeline-content -->
-						</div> <!-- cd-timeline-block -->
+					<div class="cd-timeline-block">
+						<div class="cd-timeline-img cd-picture">
+						</div> <!-- cd-timeline-img -->
 
-						<div class="cd-timeline-block">
-							<div class="cd-timeline-img cd-picture">
-							</div> <!-- cd-timeline-img -->
+						<div class="cd-timeline-content">
+							<h2>Title of section 3</h2>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, obcaecati, quisquam id molestias eaque asperiores voluptatibus cupiditate error assumenda delectus odit similique earum voluptatem doloremque dolorem ipsam quae rerum quis. Odit, itaque, deserunt corporis vero ipsum nisi eius odio natus ullam provident pariatur temporibus quia eos repellat consequuntur perferendis enim amet quae quasi repudiandae sed quod veniam dolore possimus rem voluptatum eveniet eligendi quis fugiat aliquam sunt similique aut adipisci.</p>
+							<span class="cd-date">Jan 24</span>
+						</div> <!-- cd-timeline-content -->
+					</div> <!-- cd-timeline-block -->
 
-							<div class="cd-timeline-content">
-								<h2>Title of section 3</h2>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, obcaecati, quisquam id molestias eaque asperiores voluptatibus cupiditate error assumenda delectus odit similique earum voluptatem doloremque dolorem ipsam quae rerum quis. Odit, itaque, deserunt corporis vero ipsum nisi eius odio natus ullam provident pariatur temporibus quia eos repellat consequuntur perferendis enim amet quae quasi repudiandae sed quod veniam dolore possimus rem voluptatum eveniet eligendi quis fugiat aliquam sunt similique aut adipisci.</p>
-								<span class="cd-date">Jan 24</span>
-							</div> <!-- cd-timeline-content -->
-						</div> <!-- cd-timeline-block -->
+					<div class="cd-timeline-block">
+						<div class="cd-timeline-img cd-location">
+						</div> <!-- cd-timeline-img -->
 
-						<div class="cd-timeline-block">
-							<div class="cd-timeline-img cd-location">
-							</div> <!-- cd-timeline-img -->
+						<div class="cd-timeline-content">
+							<h2>Title of section 4</h2>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis qui ut.</p>
+							<span class="cd-date">Feb 14</span>
+						</div> <!-- cd-timeline-content -->
+					</div> <!-- cd-timeline-block -->
 
-							<div class="cd-timeline-content">
-								<h2>Title of section 4</h2>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis qui ut.</p>
-								<span class="cd-date">Feb 14</span>
-							</div> <!-- cd-timeline-content -->
-						</div> <!-- cd-timeline-block -->
+					<div class="cd-timeline-block">
+						<div class="cd-timeline-img cd-location">
+						</div> 
 
-						<div class="cd-timeline-block">
-							<div class="cd-timeline-img cd-location">
-							</div> 
+						<div class="cd-timeline-content">
+							<h2>Title of section 5</h2>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum.</p>
+							<span class="cd-date">Feb 18</span>
+						</div> <!-- cd-timeline-content -->
+					</div> <!-- cd-timeline-block -->
 
-							<div class="cd-timeline-content">
-								<h2>Title of section 5</h2>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum.</p>
-								<span class="cd-date">Feb 18</span>
-							</div> <!-- cd-timeline-content -->
-						</div> <!-- cd-timeline-block -->
+					<div class="cd-timeline-block">
+						<div class="cd-timeline-img cd-movie">
+						</div> <!-- cd-timeline-img -->
 
-						<div class="cd-timeline-block">
-							<div class="cd-timeline-img cd-movie">
-							</div> <!-- cd-timeline-img -->
-
-							<div class="cd-timeline-content">
-								<h2>Final Section</h2>
-								<p>This is the content of the last section</p>
-								<span class="cd-date">Feb 26</span>
-							</div> <!-- cd-timeline-content -->
-						</div> <!-- cd-timeline-block -->
-					</section> <!-- cd-timeline -->
+						<div class="cd-timeline-content">
+							<h2>Final Section</h2>
+							<p>This is the content of the last section</p>
+							<span class="cd-date">Feb 26</span>
+						</div> <!-- cd-timeline-content -->
+					</div> <!-- cd-timeline-block -->
+				</section> <!-- cd-timeline -->
 			</div>
 		</section>
+
 		<!--CONTACT US SECTION-->
-		<section class="page-section contact-us" id="contact-us">
+		<section class="page-section contact-us not-fullscreen background parallax" id="contact-us" data-img-width="1366" data-img-height="616" data-diff="100">
 			<div class="container">
 				<div class="text-header">CONTACT US</div>
 				<div class="row clearfix">
@@ -552,7 +566,7 @@
 			</div>
 		</section>
 		<!--FAQ SECTION-->
-		<section class="page-section faq" id="faq">
+		<section class="page-section faq not-fullscreen background parallax" id="faq" data-img-width="1364" data-img-height="777" data-diff="100">
 			<div class="container">
 				<div class="text-header">FAQs</div>
 				
@@ -628,6 +642,10 @@
 				</div>
 			</div>
 		</section>
+
+		<!-- SCROLL TO TOP -->
+		<div class="scroll-up"><img src="/themes/lokalize/assets/img/scroll-up.svg"></div>
+
 		<footer>
 			<div class="container py-4">
 				<div class="flex-footer d-flex align-items-center">
@@ -655,18 +673,19 @@
 		<script src="/themes/lokalize/assets/bootstrap4/dist/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="/themes/lokalize/assets/slick-1.8.0/slick/slick.min.js"></script>
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
-		<script type="text/javascript" src="/themes/lokalize/assets/js/match-height.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/js/match-height.js"></script>
 		{{-- <script type="text/javascript" src="/themes/lokalize/assets/scrolltofix/jquery-scrolltofixed.js"></script> --}}
 		{{-- <script type="text/javascript" src="/themes/lokalize/assets/scrolltofix/jquery-scrolltofixed-min.js"></script> --}}
 		<script type="text/javascript" src="/themes/lokalize/assets/mdb/js/mdb.js"></script>
 		<script type="text/javascript" src="/themes/lokalize/assets/mdb/js/mdb.min.js"></script>
-		<script type="text/javascript" src="/themes/lokalize/assets/js/custom.js"></script>
-		<script type="text/javascript" src="/themes/lokalize/assets/js/smooth-scroll.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/js/custom.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/js/parallax.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/js/smooth-scroll.js"></script>
 		<script type="text/javascript" src="/themes/lokalize/assets/particlesjs/particles.js"></script>	
 		<script type="text/javascript" src="/themes/lokalize/assets/particlesjs/demo/js/app.js"></script>
 
 		<!-- <script type="text/javascript" src="/themes/lokalize/assets/js/globals_js.js"></script> -->
-		<!-- <script src="//themes/lokalize/assets/js/popup.js"></script> -->
+		<!-- <script src="//themes/lokalize/js/popup.js"></script> -->
 
 		<!--START WOW JS-->
 		<script src="/themes/lokalize/assets/wow/js/wow.min.js"></script>
@@ -674,6 +693,15 @@
 		new WOW().init();
 		</script>
 		<!--END WOW JS-->
+
+		<script type="text/javascript">
+		$(document).ready(function($) {
+	        /*TEXT FADEOUT*/
+	        $(window).scroll(function(){
+	                $(".caption-holder, .image-holder, .card-holder").css("opacity", 1 - $(window).scrollTop() / 250);
+	        });
+		});
+		</script>
 					
 	</body>
 </html>

@@ -16,7 +16,7 @@ particlesJS('particles-js',
   {
     "particles": {
       "number": {
-        "value": 50,
+        "value": 30,
         "density": {
           "enable": true,
           "value_area": 800
@@ -99,7 +99,7 @@ particlesJS('particles-js',
         "grab": {
           "distance": 400,
           "line_linked": {
-            "opacity": 0.04734885849793636
+            "opacity": 0.5
           }
         },
         "bubble": {

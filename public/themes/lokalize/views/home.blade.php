@@ -135,7 +135,7 @@
 			</div>
 		</section>
 		<!--ABOUT US SECTION-->
-		<section class="page-section about-us" id="about">
+		<section class="page-section about-us not-fullscreen background parallax" id="about" data-img-width="1366" data-img-height="673" data-diff="100">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-6">
@@ -160,7 +160,7 @@
 			</div>
 		</section>
 		<!--HOW IT WORKS SECTION-->
-		<section class="page-section how-it-works" id="how-it-works">
+		<section class="page-section how-it-works not-fullscreen background parallax" id="how-it-works" data-img-width="1366" data-img-height="735" data-diff="100">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
@@ -176,7 +176,7 @@
 			</div>
 		</section>
 		<!--INTRODUCING SECTION-->
-		<section class="page-section introducing" id="introducing">
+		<section class="page-section introducing not-fullscreen background parallax" id="introducing" data-img-width="1366" data-img-height="641" data-diff="100">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
@@ -203,7 +203,7 @@
 			</div>
 		</section>
 		<!-- TOKEN ALLOCATION SECTION -->
-		<section class="page-section token-allocation" id="token-allocation">
+		<section class="page-section token-allocation not-fullscreen background parallax" id="token-allocation" data-img-width="1366" data-img-height="836" data-diff="100">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
@@ -287,7 +287,7 @@
 			</div>
 		</section>
 		<!--BONUS ALLOCATION SECTION-->		
-		<section class="page-section bonus-allocation" id="bonus-allocation">
+		<section class="page-section bonus-allocation not-fullscreen background parallax" id="bonus-allocation" data-img-width="1366" data-img-height="1490" data-diff="100">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
@@ -380,7 +380,7 @@
 			</div>
 		</section>
 		<!--CORE FEATURES SECTION-->
-		<section class="page-section core-features" id="core-features">
+		<section class="page-section core-features not-fullscreen background parallax" id="core-features" data-img-width="1366" data-img-height="701" data-diff="100">
 			<div class="container">
 				<div class="row clearfix">
 					<div class="col-md-12">
@@ -435,92 +435,92 @@
 			<div class="container">
 				<div class="text-header text-center">ROADMAP</div>
 				<section id="cd-timeline" class="cd-container">
-						<div class="cd-timeline-block">
-							<div class="cd-timeline-img cd-picture">
+					<div class="cd-timeline-block">
+						<div class="cd-timeline-img cd-picture">
+						</div>
+
+						<div class="cd-timeline-content">
+							<h2>Penta Consulting</h2>
+							<div class="timeline-content-info">
+								<span class="timeline-content-info-title">
+									<i class="fa fa-certificate" aria-hidden="true"></i>
+									Front End Developer
+								</span>
+								<span class="timeline-content-info-date">
+									<i class="fa fa-calendar-o" aria-hidden="true"></i>
+									May 2018 - Present
+								</span>
 							</div>
+							<p>Working alongside the designer team implementing the designs, also developing custom solutions to address team necessities.</p>
+							<ul class="content-skills">
+								<li>HTML5</li>
+								<li>CSS3</li>
+								<li>JavaScript</li>
+								<li>jQuery</li>
+							</ul>
+						</div> <!-- cd-timeline-content -->
+					</div> <!-- cd-timeline-block -->
 
-							<div class="cd-timeline-content">
-								<h2>Penta Consulting</h2>
-				        <div class="timeline-content-info">
-				          <span class="timeline-content-info-title">
-				            <i class="fa fa-certificate" aria-hidden="true"></i>
-				            Front End Developer
-				          </span>
-				          <span class="timeline-content-info-date">
-				            <i class="fa fa-calendar-o" aria-hidden="true"></i>
-				            May 2018 - Present
-				          </span>
-				        </div>
-								<p>Working alongside the designer team implementing the designs, also developing custom solutions to address team necessities.</p>
-				        <ul class="content-skills">
-				        <li>HTML5</li>
-				        <li>CSS3</li>
-				        <li>JavaScript</li>
-				        <li>jQuery</li>
-				        </ul>
-							</div> <!-- cd-timeline-content -->
-						</div> <!-- cd-timeline-block -->
+					<div class="cd-timeline-block">
+						<div class="cd-timeline-img cd-movie">
+						</div> <!-- cd-timeline-img -->
 
-						<div class="cd-timeline-block">
-							<div class="cd-timeline-img cd-movie">
-							</div> <!-- cd-timeline-img -->
+						<div class="cd-timeline-content">
+							<h2>Title of section 2</h2>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde?</p>
+							<span class="cd-date">Jan 18</span>
+						</div> <!-- cd-timeline-content -->
+					</div> <!-- cd-timeline-block -->
 
-							<div class="cd-timeline-content">
-								<h2>Title of section 2</h2>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde?</p>
-								<span class="cd-date">Jan 18</span>
-							</div> <!-- cd-timeline-content -->
-						</div> <!-- cd-timeline-block -->
+					<div class="cd-timeline-block">
+						<div class="cd-timeline-img cd-picture">
+						</div> <!-- cd-timeline-img -->
 
-						<div class="cd-timeline-block">
-							<div class="cd-timeline-img cd-picture">
-							</div> <!-- cd-timeline-img -->
+						<div class="cd-timeline-content">
+							<h2>Title of section 3</h2>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, obcaecati, quisquam id molestias eaque asperiores voluptatibus cupiditate error assumenda delectus odit similique earum voluptatem doloremque dolorem ipsam quae rerum quis. Odit, itaque, deserunt corporis vero ipsum nisi eius odio natus ullam provident pariatur temporibus quia eos repellat consequuntur perferendis enim amet quae quasi repudiandae sed quod veniam dolore possimus rem voluptatum eveniet eligendi quis fugiat aliquam sunt similique aut adipisci.</p>
+							<span class="cd-date">Jan 24</span>
+						</div> <!-- cd-timeline-content -->
+					</div> <!-- cd-timeline-block -->
 
-							<div class="cd-timeline-content">
-								<h2>Title of section 3</h2>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, obcaecati, quisquam id molestias eaque asperiores voluptatibus cupiditate error assumenda delectus odit similique earum voluptatem doloremque dolorem ipsam quae rerum quis. Odit, itaque, deserunt corporis vero ipsum nisi eius odio natus ullam provident pariatur temporibus quia eos repellat consequuntur perferendis enim amet quae quasi repudiandae sed quod veniam dolore possimus rem voluptatum eveniet eligendi quis fugiat aliquam sunt similique aut adipisci.</p>
-								<span class="cd-date">Jan 24</span>
-							</div> <!-- cd-timeline-content -->
-						</div> <!-- cd-timeline-block -->
+					<div class="cd-timeline-block">
+						<div class="cd-timeline-img cd-location">
+						</div> <!-- cd-timeline-img -->
 
-						<div class="cd-timeline-block">
-							<div class="cd-timeline-img cd-location">
-							</div> <!-- cd-timeline-img -->
+						<div class="cd-timeline-content">
+							<h2>Title of section 4</h2>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis qui ut.</p>
+							<span class="cd-date">Feb 14</span>
+						</div> <!-- cd-timeline-content -->
+					</div> <!-- cd-timeline-block -->
 
-							<div class="cd-timeline-content">
-								<h2>Title of section 4</h2>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis qui ut.</p>
-								<span class="cd-date">Feb 14</span>
-							</div> <!-- cd-timeline-content -->
-						</div> <!-- cd-timeline-block -->
+					<div class="cd-timeline-block">
+						<div class="cd-timeline-img cd-location">
+						</div> 
 
-						<div class="cd-timeline-block">
-							<div class="cd-timeline-img cd-location">
-							</div> 
+						<div class="cd-timeline-content">
+							<h2>Title of section 5</h2>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum.</p>
+							<span class="cd-date">Feb 18</span>
+						</div> <!-- cd-timeline-content -->
+					</div> <!-- cd-timeline-block -->
 
-							<div class="cd-timeline-content">
-								<h2>Title of section 5</h2>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum.</p>
-								<span class="cd-date">Feb 18</span>
-							</div> <!-- cd-timeline-content -->
-						</div> <!-- cd-timeline-block -->
+					<div class="cd-timeline-block">
+						<div class="cd-timeline-img cd-movie">
+						</div> <!-- cd-timeline-img -->
 
-						<div class="cd-timeline-block">
-							<div class="cd-timeline-img cd-movie">
-							</div> <!-- cd-timeline-img -->
-
-							<div class="cd-timeline-content">
-								<h2>Final Section</h2>
-								<p>This is the content of the last section</p>
-								<span class="cd-date">Feb 26</span>
-							</div> <!-- cd-timeline-content -->
-						</div> <!-- cd-timeline-block -->
-					</section> <!-- cd-timeline -->
+						<div class="cd-timeline-content">
+							<h2>Final Section</h2>
+							<p>This is the content of the last section</p>
+							<span class="cd-date">Feb 26</span>
+						</div> <!-- cd-timeline-content -->
+					</div> <!-- cd-timeline-block -->
+				</section> <!-- cd-timeline -->
 			</div>
 		</section>
 
 		<!--CONTACT US SECTION-->
-		<section class="page-section contact-us" id="contact-us">
+		<section class="page-section contact-us not-fullscreen background parallax" id="contact-us" data-img-width="1366" data-img-height="616" data-diff="100">
 			<div class="container">
 				<div class="text-header">CONTACT US</div>
 				<div class="row clearfix">
@@ -561,7 +561,7 @@
 			</div>
 		</section>
 		<!--FAQ SECTION-->
-		<section class="page-section faq" id="faq">
+		<section class="page-section faq not-fullscreen background parallax" id="faq" data-img-width="1364" data-img-height="777" data-diff="100">
 			<div class="container">
 				<div class="text-header">FAQs</div>
 				

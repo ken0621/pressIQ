@@ -15,8 +15,7 @@
 		<script defer src="/themes/lokalize/assets/fontawesome5/svg-with-js/css/fa-svg-with-js.css"></script>
 		<script defer src="/themes/lokalize/assets/fontawesome5/svg-with-js/js/fontawesome-all.js"></script>
 		<!--External css-->
-		<link rel="stylesheet" href="/themes/lokalize/assets/css/app.css?v=0.2">
-		<link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
+		<link rel="stylesheet" href="/themes/lokalize/css/app.css?v=0.3">
 		<!--wow animation-->
 		<link rel="stylesheet" href="/themes/lokalize/assets/wow/css/animate.css">
 		<!-- Slick -->
@@ -432,7 +431,7 @@
 			</div>
 		</section>
 		<!--ROADMAP SECTION-->
-		<section class="page-section roadmap" id="roadmap">
+		<section class="page-section roadmap not-fullscreen background parallax" id="roadmap" data-img-width="1366" data-img-height="1470" data-diff="100">
 			<div class="container">
 				<div class="text-header text-center">ROADMAP</div>
 				<section id="cd-timeline" class="cd-container">
@@ -449,7 +448,7 @@
 				          </span>
 				          <span class="timeline-content-info-date">
 				            <i class="fa fa-calendar-o" aria-hidden="true"></i>
-				            June 2016 - Present
+				            May 2018 - Present
 				          </span>
 				        </div>
 								<p>Working alongside the designer team implementing the designs, also developing custom solutions to address team necessities.</p>
@@ -458,7 +457,6 @@
 				        <li>CSS3</li>
 				        <li>JavaScript</li>
 				        <li>jQuery</li>
-				        <li>Wordpress</li>
 				        </ul>
 							</div> <!-- cd-timeline-content -->
 						</div> <!-- cd-timeline-block -->
@@ -520,6 +518,7 @@
 					</section> <!-- cd-timeline -->
 			</div>
 		</section>
+
 		<!--CONTACT US SECTION-->
 		<section class="page-section contact-us" id="contact-us">
 			<div class="container">
@@ -671,6 +670,7 @@
 		<script type="text/javascript" src="/themes/lokalize/assets/mdb/js/mdb.js"></script>
 		<script type="text/javascript" src="/themes/lokalize/assets/mdb/js/mdb.min.js"></script>
 		<script type="text/javascript" src="/themes/lokalize/assets/js/custom.js"></script>
+		<script type="text/javascript" src="/themes/lokalize/assets/js/parallax.js"></script>
 		<script type="text/javascript" src="/themes/lokalize/assets/js/smooth-scroll.js"></script>
 		<script type="text/javascript" src="/themes/lokalize/assets/particlesjs/particles.js"></script>	
 		<script type="text/javascript" src="/themes/lokalize/assets/particlesjs/demo/js/app.js"></script>

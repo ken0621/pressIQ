@@ -1,0 +1,320 @@
+/* HOME */
+
+.page-section {
+    background-size: cover;
+    background-position: center center;
+    padding: 100px 0;
+}
+
+//BANNER SECTION
+.banner-section, #particles-js {
+    min-height: 100vh;
+
+    @include gradient($primary-c, $secondary-c);
+
+    // background-image: url("/themes/lokalize/assets/img/banner-transparent.png");
+    background-image: url("");
+    background-size: cover;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    padding-top: 4rem;
+    position: relative;
+
+    // display: flex;
+    // align-items: center;
+
+    canvas {
+        position: absolute;
+        top: 0;
+        display: block;
+        vertical-align: bottom;
+    }
+
+    .caption-holder {
+        margin-top: 50px;
+        position: absolute;
+        z-index: 80;
+        left: 0;
+
+        .caption-text {
+            font-family: $ff;
+            font-size: 45px;
+            font-weight: $reg;
+            color: #fff;
+        }
+
+        .sub-caption {
+            font-family: $ff;
+            font-weight: $reg;
+            font-size: 14px;
+            color: #fff;
+        }
+    }
+
+    .image-holder {
+        position: absolute;
+        z-index: 80;
+        top: 180px;
+        left: 0;
+
+        .vector-img {
+            position: relative;
+
+            .base {
+                position: absolute;
+                height: auto;
+            }
+
+            .line {
+                position: absolute;
+                top: -17px;
+                left: 22px;
+            }
+
+            .main-s {
+                position: absolute;
+                top: 50px;
+                left: 133px;
+            }
+
+            .server-1 {
+                position: absolute;
+                top: 165px;
+                left: 15px;
+            }
+
+            .server-2 {
+                position: absolute;
+                left: 310px;
+                top: -23px;
+            }
+
+            .location-1 {
+                position: absolute;
+                top: -18px;
+                left: 120px;
+            }
+
+            .location-2 {
+                position: absolute;
+                top: 220px;
+                left: 228px;
+            }
+
+            .location-3 {
+                position: absolute;
+                top: 130px;
+                left: 382px;
+            }
+        }
+    }
+
+    .card-holder {
+        // background-color: rgba(#0d0127, 0.8);
+        background-color: rgba(#000, 0.2);
+        max-width: 318px;
+        max-height: 416px;
+        min-width: 318px;
+        min-height: 416px;
+        margin-top: 80px;
+        position: absolute;
+        z-index: 80;
+        top: 0;
+        right: 0;
+
+        .sale-card-header {
+            font-weight: $reg;
+            font-size: 24px;
+            text-align: center;
+            color: #fff;
+            border-bottom: solid 1px #3d3453;
+        }
+
+        .sale-card-body {
+            .phase-holder {
+                padding: 32px;
+
+                blink {
+                    animation: blink 1s infinite;
+                }
+
+                .phase {
+                    font-family: $ff;
+                    font-weight: $bold;
+                    font-size: 20px;
+                    color: #fce963;
+                }
+
+                .phase-disabled {
+                    font-family: $ff;
+                    font-weight: $med;
+                    color: #b2b2b2;
+                    font-size: 14px;
+                }
+            }
+
+            .timer-holder {
+                font-family: $ff;
+                text-align: center;
+                background-color: rgba(#0d0127, 0.8);
+
+                // background-color: rgba(#000, 0.2);
+                padding: 10px;
+                margin: 0 32px;
+
+                .no-of-weeks {
+                    font-weight: $med;
+                    font-size: 32px;
+                    color: #fff;
+                }
+
+                .week-text-1 {
+                    font-weight: $bold;
+                    font-size: 16px;
+                    color: #fff;
+                }
+
+                .week-text-2 {
+                    font-weight: $light;
+                    font-size: 13px;
+                    color: #fff;
+                }
+            }
+
+            .btn-buy-coin-holder {
+                margin: 15px 32px;
+            }
+        }
+    }
+}
+
+// ABOUT US SECTION
+.about-us {
+    @include gradient($primary-c, $secondary-c);
+
+    background-image: url("/themes/lokalize/assets/img/about-us-bg.png");
+
+    .left {}
+
+    .right {}
+}
+
+//HOW IT WORKS SECTION
+.how-it-works {
+    @include gradient($primary-c, $secondary-c);
+
+    background-image: url("/themes/lokalize/assets/img/how-it-works.png");
+}
+
+// INTRODUCING COIN SECTION
+.introducing {
+    @include gradient($primary-c, $secondary-c);
+
+    background-image: url("/themes/lokalize/assets/img/introducing.png");
+
+    .img-coin-holder {
+        .coin {
+            @include img-size(300px);
+        }
+    }
+}
+
+// TOKEN ALLOCATION SECTION
+.token-allocation {
+    @include gradient($primary-c, $secondary-c);
+
+    background-image: url("/themes/lokalize/assets/img/token-alloc.png");
+
+    .img-holder {}
+
+    table {
+        font-family: $ff;
+
+        thead {
+            tr {
+                th {
+                    font-weight: $reg;
+                    font-size: 16px;
+                    color: #fff;
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                th, td {
+                    font-weight: $reg;
+                    font-size: 16px;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
+
+// BONUS ALLOCATION
+.bonus-allocation {
+    @include gradient($secondary-c, #091a71);
+
+    background-image: url("/themes/lokalize/assets/img/bonus-bg.png");
+
+    table {
+        font-family: $ff;
+
+        // border: 1px solid rgba(#fff, 0.6);
+
+        thead {
+            // border-bottom: 1px solid #fff;
+
+            tr {
+                th {
+                    font-weight: $reg;
+                    font-size: 16px;
+                    color: #fff;
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                th, td {
+                    font-weight: $light;
+                    font-size: 16px;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
+
+// CORE FEATURES
+.core-features {
+    // @include gradient($primary-c, $secondary-c);
+    background-color: #0c012f;
+    background-image: url("/themes/lokalize/assets/img/core-features.png");
+}
+
+// ROADMAP
+.roadmap {
+    @include gradient-diag($secondary-c, #091a71);
+
+    background-image: url("/themes/lokalize/assets/img/roadmap.png");
+
+    @import "timeline";
+}
+
+//CONTACT US
+.contact-us {
+    @include gradient($primary-c, $secondary-c);
+
+    background-image: url("/themes/lokalize/assets/img/contactus.png");
+}
+
+//FAQ
+.faq {
+    @include gradient-diag($secondary-c, #091a71);
+
+    background-image: url("/themes/lokalize/assets/img/faq.png");
+}
+
+// END HOME

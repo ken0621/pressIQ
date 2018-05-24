@@ -76,10 +76,11 @@
 						<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 							@foreach($_point_plan as $plan)
 								@if($plan->label == "Repurchase Cashback")
-									<!-- <div class="holder">
+									<div class="holder">
 										<div class="color"></div>
 										<div class="name"><span>VIP Cashback</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
-									</div> -->
+									</div>
+								@elseif(count($plan->label == "Repurchase Cashback")
 								@else
 									<div class="holder">
 										<div class="color"></div>
@@ -114,7 +115,7 @@
 										@elseif($plan->label == "Direct")
 											<div class="name"><span>Direct Commission</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 										@elseif($plan->label == "Indirect")
-											<div class="name"><span>Indirect Commission</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+											<div class="name"><span>Override Commission</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 										@elseif($plan->label == "Unilevel")
 											<div class="name"><span>Unilevel Cashback</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 										@else
@@ -163,10 +164,10 @@
 				</div>
 				@endif
 				<div class="square-container">
-					<div class="title">Enter Rewards Code</div>
+					<div class="title">Enter Product Code</div>
 					<div class="sub-container">
 						<div class="chart-legend text-center">
-							<button class="btn btn-lblue" onclick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Rewards Code</button>
+							<button class="btn btn-lblue" onclick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
 						</div>
 					</div>
 				</div>

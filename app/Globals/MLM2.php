@@ -285,6 +285,8 @@ class MLM2
 
 
 		$_plan = Tbl_mlm_slot_wallet_log::groupBy("wallet_log_plan")->where("shop_id", $shop_id)->get();
+		
+
 		$_plan_ignore = array("E Money", "Repurchase", "Tours Wallet Points", "Tours Wallet", "Encashment", "Cheque", "Undefined");
 
 		foreach($_plan as $key => $plan)
@@ -301,6 +303,7 @@ class MLM2
 				$_plan[$key]->string_plan			= $string_plan;
 				$_plan[$key]->label 				= $label;
 				$return["_wallet"]->$string_plan 	= 0;
+
 			}
 		}
 
@@ -313,7 +316,6 @@ class MLM2
 		$return["_wallet"]->complan_stairstep 					= 0;
 
 		$return["_wallet_plan"] = $_plan;
-		
 		$return["_points"] = new stdClass();
 
 
@@ -328,7 +330,7 @@ class MLM2
 			$_plan_points[$key]->label 			= Self::complan_to_label($shop_id, $string_plan);
 			$return["_points"]->$string_plan 	= 0;
 		}
-
+		
 		$return["_points"]->brown_builder_points 	= 0;
 		$return["_points"]->brown_leader_points 	= 0;
 		$return["_points"]->rank_pv 				= 0;

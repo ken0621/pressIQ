@@ -230,7 +230,7 @@ class ShopMemberController extends Shop
             }
             $data['token_titles']   = $token_titles;
             $data['token_amounts']  = $token_amounts;
-            
+           
             return Self::load_view_for_members("member.dashboard", $data);
         }
 

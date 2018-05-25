@@ -72,15 +72,29 @@
 				<div class="square-container">
 					<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 					<div class="sub-container">
+
 						@if(count($_point_plan) > 0)
 						<div class="chart-legend" style="min-height: 117px; max-height: auto;">
+							<?php $cb = 1; ?>
 							@foreach($_point_plan as $plan)
 								@if($plan->label == "Repurchase Cashback")
+								<?php $cb = 2; ?>
 									<div class="holder">
 										<div class="color"></div>
 										<div class="name"><span>VIP Cashback</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
 									</div>
-								@elseif(count($plan->label == "Repurchase Cashback")
+								@elseif($plan->label == "Executive Points")
+								<?php $cb = 2; ?>
+									<div class="holder">
+										<div class="color"></div>
+										<div class="name"><span>Executive Points</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+									</div>
+								@elseif($plan->label == "Leadership Bonus")
+									<div class="holder">
+										<div class="color"></div>
+										<div class="name"><span>Leadership Points</span> <div class="name w2hpx">{{ $points->{ "display_" . $plan->string_plan } }}</div></div>
+									</div>
+
 								@else
 									<div class="holder">
 										<div class="color"></div>
@@ -88,6 +102,20 @@
 									</div>
 								@endif
 							@endforeach
+							@if($cb == 1)
+
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>VIP Cashback</span> 0.00 POINT(S)</div>
+								</div>
+							@endif
+							@if($cb == 1)
+
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>Executive Points</span> 0.00 POINT(S)</div>
+								</div>
+							@endif		
 						</div>
 						@else
 							<div class="text-center" style="padding: 20px">You don't have any points yet.</div>

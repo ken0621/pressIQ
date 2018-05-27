@@ -124,12 +124,12 @@ class Transaction
         $store['create_set_method_id'] = $method;
         session($store);
     }
-    public static function create($shop_id, $transaction_id, $transaction_type, $transaction_date, $posted = false, $source = null, $transaction_number = null)
+    public static function create($shop_id, $transaction_id, $transaction_type, $transaction_date, $posted = false, $source = null, $transaction_number = null, $customer_id = null)
     {
         $transaction_sales_person = isset($transaction_id["transaction_sales_person"]) ? $transaction_id["transaction_sales_person"] : null;
         if($source == null)
         {
-            $cart = Cart2::get_cart_info();
+            $cart = Cart2::get_cart_info($customer_id);
         }
         else
         {

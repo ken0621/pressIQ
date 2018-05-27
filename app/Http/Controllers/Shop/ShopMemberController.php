@@ -3973,6 +3973,7 @@ class ShopMemberController extends Shop
         $shop_id  = $this->shop_info->shop_id;
         $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
         $cart = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
+        $customer_id = isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null;
         $validate = null;
         if($cart)
         {   
@@ -4028,8 +4029,19 @@ class ShopMemberController extends Shop
             
             Transaction::create_set_method($method);
             Transaction::create_set_method_id($method_id);
-            $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
+            
+            if($shop_id == 1)
+            {
+                $source = null;
+                $transact_number = null;
+                $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-", $source, $transact_number, $customer_id);
 
+            }
+            else
+            {
+                $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
+            }
+            
             if(is_numeric($transaction_list_id))
             {
                 $method_id  = $method_id;

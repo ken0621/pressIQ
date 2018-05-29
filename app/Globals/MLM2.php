@@ -80,7 +80,7 @@ class MLM2
 	{
 		$return = null;
 		
-		$query = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','transaction_list');
+		$query = Tbl_warehouse_inventory_record_log::item()->where('record_consume_ref_name','transaction_list');
 		
 		$_list = Tbl_transaction_list::
 										join("tbl_transaction", "tbl_transaction.transaction_id", "=", "tbl_transaction_list.transaction_id")
@@ -98,7 +98,7 @@ class MLM2
 				}
 			});
 
-			$query2 = Tbl_warehouse_inventory_record_log::where("tbl_warehouse_inventory_record_log.record_shop_id", $shop_id)->where("tbl_release_product_code.customer_id", $customer_id)->join("tbl_release_product_code", "tbl_release_product_code.record_log_id", "=", "tbl_warehouse_inventory_record_log.record_log_id")->get();
+			$query2 = Tbl_warehouse_inventory_record_log::item()->where("tbl_warehouse_inventory_record_log.record_shop_id", $shop_id)->where("tbl_release_product_code.customer_id", $customer_id)->join("tbl_release_product_code", "tbl_release_product_code.record_log_id", "=", "tbl_warehouse_inventory_record_log.record_log_id")->get();
 			$merged = $query->get()->merge($query2);
 			$_codes = $merged->all();
 			
@@ -123,7 +123,7 @@ class MLM2
 		{
 			$_codes = array();	
 		}
-
+		
 		return $_codes;
 	}
 	public static function get_code($record_log_id)

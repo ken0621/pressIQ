@@ -16,6 +16,11 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 use App\Models\Tbl_release_product_code;
+use App\Models\Tbl_distribute_product_code;
+use App\Models\Tbl_warehouse_inventory_record_log;
+use App\Models\Tbl_item_token_log;
+use App\Models\Tbl_item_token;
+use App\Models\Tbl_mlm_slot;
 
 use DB;
 
@@ -229,8 +234,10 @@ class MLM_CodeControllerV2 extends Member
                 // }
             }
 
-            $released = DB::table("tbl_release_product_code")->where("record_log_id", $value->record_log_id)->count();
-            $data['_item_product_code'][$key]->released = $released;
+            $released                                      = DB::table("tbl_release_product_code")->where("record_log_id", $value->record_log_id)->count();
+            $distributed                                   = DB::table("tbl_distribute_product_code")->where("record_log_id", $value->record_log_id)->count();
+            $data['_item_product_code'][$key]->released    = $released;
+            $data['_item_product_code'][$key]->distributed = $distributed;
         }
 
         return view("member.mlm_code_v2.product_code_table",$data);
@@ -356,6 +363,119 @@ class MLM_CodeControllerV2 extends Member
         }
     }
 
+    public function get_slot(Request $request)
+    {
+        return json_encode(DB::table("tbl_mlm_slot")->where("tbl_mlm_slot.slot_owner", $request->customer_id)->get());
+    }
+
+    public function distribute()
+    {
+        $data["_customer"] = Customer::getAllCustomer(false, true);
+
+        return view('member.mlm_code_v2.distribute', $data);
+    }
+
+    public function distribute_submit(Request $request)
+    {
+        $id               = $request->id;
+        $exist            = Tbl_distribute_product_code::where("record_log_id", $id)->first();
+        $customer_id      = $request->customer_id;
+        $receipt_number   = $request->receipt_number;
+        $amount           = $request->amount;
+        $cellphone_number = $request->cellphone_number;
+        $email            = $request->email;
+        $slot_no          = $request->slot_no;
+
+        if (!$exist) 
+        {
+            $record_log = Tbl_warehouse_inventory_record_log::where("record_log_id", $id)->first();
+
+            if ($record_log) 
+            {
+                /* Use Product Code */
+                $mlm_pin         = $record_log->mlm_pin;
+                $mlm_activation  = $record_log->mlm_activation;
+                $slot_id         = Tbl_mlm_slot::where('slot_no', $slot_no)->where('slot_owner', $customer_id)->value('slot_id');
+                $shop_id         = $this->user_info->shop_id;
+                $consume['name'] = 'customer_product_code';
+                $consume['id']   = $customer_id;
+                $val             = Warehouse2::consume_product_codes($shop_id, $mlm_pin, $mlm_activation, $consume);
+                
+                if(is_numeric($val))
+                {
+                    MLM2::purchase($shop_id, $slot_id, $val);
+                    $return['status']        = 'success';
+                    $return['call_function'] = 'success_used';
+
+
+                    $item = Tbl_warehouse_inventory_record_log::where('mlm_activation',$mlm_activation)
+                                                         ->where('mlm_pin',$mlm_pin)
+                                                         ->first();
+                    
+                    $item_token = Tbl_item_token::where('item_id',$item->record_item_id)->first();
+
+                    if($item_token)
+                    {            
+                        $token_log['shop_id']                = $shop_id;
+                        $token_log['token_log_slot_owner']   = $customer_id;
+                        $token_log['token_log_date_created'] = Carbon::now();
+                        $token_log['token_id']               = $item_token->token_id;
+                        $token_log['amount']                 = $item_token->amount;
+
+                        Tbl_item_token_log::insert($token_log);
+                    }
+
+                    /* Insert Product Log */
+                    $insert["customer_id"]                  = $customer_id;
+                    $insert["record_log_id"]                = $id;
+                    $insert["receipt_number"]               = $receipt_number;
+                    $insert["amount"]                       = $amount;
+                    $insert["cellphone_number"]             = $cellphone_number;
+                    $insert["email"]                        = $email;
+                    $insert["distribute_product_code_date"] = Carbon::now();
+                    $insert["user_id"]                      = $this->user_info->user_id;
+
+                    Tbl_distribute_product_code::insert($insert);
+
+                    /* Send SMS and E-mail */
+                    $code = DB::table("tbl_warehouse_inventory_record_log")->where("record_log_id", $id)->first();
+
+                    if ($code) 
+                    {
+                        $repurchase_cashback = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'REPURCHASE_CASHBACK')->where('points_log_slot', $slot_id)->sum('points_log_points');
+                        $item_points         = MLM2::item_points($shop_id, $code->record_item_id, $code->mlm_slot_id_created)["REPURCHASE_CASHBACK"];
+                        $text_message        = "You received ". $item_points ." cashback points. Your total cashback point is " . $repurchase_cashback;
+                        $result              = Sms::SendSingleText($cellphone_number, $text_message, "", null);
+
+                        $email_content["subject"] = "Reward Code Distribute";
+                        $email_content["content"] = "You received ". $item_points ." cashback points.</br> Your total cashback point is " . $repurchase_cashback;
+
+                        $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $email);
+                    }
+
+                    $response["response_status"] = "success";
+                }
+                else
+                {
+                    $response['response_status'] = 'error';
+                    $response['message']         = $val;
+                }
+            }
+            else
+            {
+                $response["response_status"] = "error";
+                $response["message"]         = "This product code doesn't exist.";
+            }
+        }
+        else
+        {
+            $response["response_status"] = "error";
+            $response["message"]         = "This product code is already distributed.";
+        }
+
+        return json_encode($response);
+    }
+
     public function release()
     {
         $data["_customer"] = Customer::getAllCustomer(false, true);
@@ -383,6 +503,7 @@ class MLM_CodeControllerV2 extends Member
             $insert["cellphone_number"]          = $cellphone_number;
             $insert["email"]                     = $email;
             $insert["release_product_code_date"] = Carbon::now();
+            $insert["user_id"]                   = $this->user_info->user_id;
 
             Tbl_release_product_code::insert($insert);
 
@@ -394,13 +515,13 @@ class MLM_CodeControllerV2 extends Member
                 $text_message = "PIN: " . $code->mlm_pin . " ACTIVATION: " . $code->mlm_activation;
                 $result = Sms::SendSingleText($cellphone_number, $text_message, "", null);
 
-                $email_content["subject"] = "Product Release Code";
+                $email_content["subject"] = "Reward Code Release";
                 $email_content["content"] = "PIN: " . $code->mlm_pin . "</br> ACTIVATION: " . $code->mlm_activation;
 
                 $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $email);
-
-                $response["response_status"] = "success";
             }
+
+            $response["response_status"] = "success";
         }
         else
         {

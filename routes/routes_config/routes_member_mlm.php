@@ -42,6 +42,11 @@ Route::any('/member/mlm/code2/assemble/table', 'Member\MLM_CodeControllerV2@memb
 Route::any('/member/mlm/code2/change_status','Member\MLM_CodeControllerV2@change_status');
 Route::any('/member/mlm/code2/disassemble', 'Member\MLM_CodeControllerV2@membership_code_disassemble'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/product_code2', 'Member\MLM_CodeControllerV2@index'); //GUILLERMO TABLIGAN
+Route::get('/member/mlm/product_code2/distribute', 'Member\MLM_CodeControllerV2@distribute'); //GUILLERMO TABLIGAN
+Route::get('/member/mlm/product_code2/distribute/get_slot', 'Member\MLM_CodeControllerV2@get_slot'); //GUILLERMO TABLIGAN
+Route::post('/member/mlm/product_code2/distribute', 'Member\MLM_CodeControllerV2@distribute_submit'); //GUILLERMO TABLIGAN
+Route::get('/member/mlm/product_code2/release', 'Member\MLM_CodeControllerV2@release'); //GUILLERMO TABLIGAN
+Route::post('/member/mlm/product_code2/release', 'Member\MLM_CodeControllerV2@release_submit'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/product_code2/table', 'Member\MLM_CodeControllerV2@product_code_table'); //GUILLERMO TABLIGAN
 
 Route::any('/member/mlm/report_codes', 'Member\MLM_CodeControllerV2@report_code'); //ARCY

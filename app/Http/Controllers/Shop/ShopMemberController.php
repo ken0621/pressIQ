@@ -30,6 +30,7 @@ use App\Globals\Mail_global;
 use App\Globals\Transaction;
 use App\Globals\Warehouse2;
 use App\Globals\Ecom_Product;
+use App\Globals\Sms;
 use App\Globals\abs\AbsMain;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
@@ -4800,7 +4801,7 @@ class ShopMemberController extends Shop
 
         $shop_id = $this->shop_info->shop_id;
         $consume['name'] = 'customer_product_code';
-        $consume['id'] =Self::$customer_info->customer_id;
+        $consume['id'] = Self::$customer_info->customer_id;
         $val = Warehouse2::consume_product_codes($shop_id, $mlm_pin, $mlm_activation, $consume);
         
         if(is_numeric($val))
@@ -4825,6 +4826,26 @@ class ShopMemberController extends Shop
                 Tbl_item_token_log::insert($token_log);
             }
 
+            /* Send SMS and E-mail */
+            $distribute = DB::table("tbl_distribute_product_code")->where("customer_id", Self::$customer_info->customer_id)->where("record_log_id", $item->record_log_id)->first();
+
+            if ($distribute) 
+            {
+                $code = DB::table("tbl_warehouse_inventory_record_log")->where("record_log_id", $item->record_log_id)->first();
+
+                if ($code) 
+                {
+                    $repurchase_cashback = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'REPURCHASE_CASHBACK')->where('points_log_slot', $slot_id)->sum('points_log_points');
+                    $item_points         = MLM2::item_points($shop_id, $code->record_item_id, $code->mlm_slot_id_created)["REPURCHASE_CASHBACK"];
+                    $text_message        = "You received ". $item_points ." cashback points. Your total cashback point is " . $repurchase_cashback;
+                    $result              = Sms::SendSingleText($distribute->cellphone_number, $text_message, "", null);
+
+                    $email_content["subject"] = "Reward Code Distribute";
+                    $email_content["content"] = "You received ". $item_points ." cashback points.</br> Your total cashback point is " . $repurchase_cashback;
+
+                    $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $distribute->email);
+                }
+            }
         }
         else
         {

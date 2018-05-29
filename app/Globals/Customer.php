@@ -265,7 +265,7 @@ class Customer
 
 		return $return;
 	}
-	public static function getAllCustomer($for_tablet = false)
+	public static function getAllCustomer($for_tablet = false, $with_slot = false)
 	{
 		$shop_id = Customer::getShopId();
 		if($for_tablet == true)
@@ -277,6 +277,12 @@ class Customer
 		// {
 		// 	$customer = $customer->selectRaw('*, tbl_employee.first_name as salesrep_fname, tbl_employee.middle_name as salesrep_mname,tbl_employee.last_name as salesrep_lname')->commission()->salesrep();
 		// }
+		
+		if ($with_slot) 
+		{
+			$customer = $customer->join("tbl_mlm_slot", "tbl_mlm_slot.slot_owner", "=", "tbl_customer.customer_id");
+		}
+
 		return $customer->get();
 	}
 	public static function countAllCustomer($for_tablet = false)

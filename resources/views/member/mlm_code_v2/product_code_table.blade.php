@@ -7,7 +7,8 @@
                 <th class="text-center" width="250px">Item Name</th>
                 <th class="text-center"></th>
                 <th class="text-center"></th>
-                <!-- <th class="text-center"></th> -->
+                <th class="text-center"></th>
+                <th class="text-center"></th>
             </tr>
         </thead>
         <tbody>
@@ -35,7 +36,24 @@
                     <td class="text-center"><a size="md" class="popup" link="/member/mlm/code2/change_status?action=block&item_id={{$item->item_id}}&record_id={{$item->record_log_id}}">Block Code</a></td>
                     @endif
                 @else
-                <td class="text-center" colspan="3"><a href="javascript:">{{$item->used_by}}</a></td>
+                <td class="text-center" colspan="5"><a href="javascript:">{{$item->used_by}}</a></td>
+                @endif
+                {{-- @if(Request::input('status') == "unused" || Request::input('status') == '') --}}
+                @if($item->item_in_use == 'unused')
+                <td class="text-center">
+                    @if($item->released)
+                        Released
+                    @else
+                        <a href="javascript:" class="popup" size="md" link="/member/mlm/product_code2/release?id={{ $item->record_log_id }}">Release</a>
+                    @endif
+                </td>
+                <td class="text-center">
+                    @if($item->distributed)
+                        Distributed
+                    @else                        
+                        <a href="javascript:" class="popup" size="md" link="/member/mlm/product_code2/distribute?id={{ $item->record_log_id }}">Distribute</a>
+                    @endif
+                </td>
                 @endif
             </tr>
             @endforeach

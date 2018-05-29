@@ -1703,7 +1703,6 @@ class Item
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 
         $query = Tbl_warehouse_inventory_record_log::slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('item_type_id','!=',5)->groupBy('record_log_id')->orderBy('record_log_id');
-        
         if($search_keyword)
         {
             // $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
@@ -1717,6 +1716,7 @@ class Item
         if($status == 'reserved')
         {
             $query->where('record_consume_ref_name',$status)->reserved_customer();
+
         }
         else if($status == 'block')
         {
@@ -1730,9 +1730,17 @@ class Item
         {
             $query->where('record_consume_ref_id','!=', 0)->where('item_in_use','unused');
         }
+        else if($status == 'printed')
+        {
+            $query->where('printed', '=', 1);
+        }
         else
         {
             $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->where('item_in_use','unused');
+            if($shop_id == 1)
+            {
+                $query->where('printed', 0);
+            }
         }
         if($item_id != 0)
         {
@@ -2046,5 +2054,15 @@ class Item
             $return[$key]->qty_on_hand = Self::get_item_inventory($shop_id, $item_id, $value->warehouse_id, $date_from, $date_to);
         }
         return $return;
+    }
+    public static function set_as_printed($list)
+    {
+        
+        foreach($list as $key => $value)
+        {
+            $list[$key] = $value; 
+            Tbl_warehouse_inventory_record_log::where("record_log_id", $value)->update(["printed" => 1]);
+        }
+        return false;
     }
 }

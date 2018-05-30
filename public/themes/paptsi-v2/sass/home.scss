@@ -151,6 +151,7 @@ body{
 
 		.holder
 		{
+
 			&:nth-child(odd)
 			{
 				background-color: #00497e;
@@ -173,7 +174,7 @@ body{
 			.details
 			{
 				font-size: 18px;
-				margin-top: 5px;
+				margin-top: 15px;
 			}
 		}
 	}
@@ -259,6 +260,7 @@ body{
 
 .wrapper-2
 {
+	padding-bottom: 30px;
 	.left-container
 	{
 		.title-container
@@ -291,7 +293,7 @@ body{
 		.description-container
 		{
 			color: #585858;
-			padding-top: 30px;
+			padding-top: 20px;
 			font-size: 18px;
 			font-weight: 400;
 
@@ -307,7 +309,8 @@ body{
 			width: 180px;
 			text-align: center;
 			padding: 10px 0px;
-			margin-top: 50px;
+			margin-top: 20px;
+			margin-bottom: 30px;
 
 			@media screen and (max-width: 425px)
 			{

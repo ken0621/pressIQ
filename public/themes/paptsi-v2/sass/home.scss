@@ -69,7 +69,7 @@ body{
 			{
 				text-align: center;
 			}
-			:nth-child(1)
+			.top-info
 			{
 				font-size: 45px;
 				font-weight: 700;
@@ -98,7 +98,7 @@ body{
 					}
 				}
 			}
-			:nth-child(2)
+			.mid-info
 			{
 				border-bottom: 1px solid #fff;
 				font-size: 23px;
@@ -115,7 +115,7 @@ body{
 					padding-top: 10px;
 				}
 			}
-			:nth-child(3)
+			.bottom-info
 			{
 				color: #fff;
 				padding-top: 10px;

@@ -6,13 +6,13 @@
         <div class="top-banner" style="background-image: url('/themes/paptsi-v2/img/home-banner.jpg');">
             <div class="container">
                 <div class="c-container">
-                    <div>
+                    <div class="top-info">
                         <span>We Aim For The Best</span><span> Services</span>
                     </div>
-                    <div>
+                    <div class="mid-info">
                         In the Industry of Ports and Terminal Services
                     </div>
-                    <div>
+                    <div class="bottom-info">
                         {!! get_content($shop_theme_info, "home", "home_banner_description") !!}
                     </div>
                     <button class="t-button">Read More</button>
@@ -282,7 +282,7 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=1.2">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=1.3">
 @endsection
 
 @section("script")

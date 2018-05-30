@@ -48,6 +48,9 @@ Route::post('/member/mlm/product_code2/distribute', 'Member\MLM_CodeControllerV2
 Route::get('/member/mlm/product_code2/release', 'Member\MLM_CodeControllerV2@release'); //GUILLERMO TABLIGAN
 Route::post('/member/mlm/product_code2/release', 'Member\MLM_CodeControllerV2@release_submit'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/product_code2/table', 'Member\MLM_CodeControllerV2@product_code_table'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/product_code2/table/set', 'Member\MLM_CodeControllerV2@set_as_printed');
+Route::any('/member/mlm/print_codes_report', 'Member\MLM_CodeControllerV2@print_codes_report');
+
 
 Route::any('/member/mlm/report_codes', 'Member\MLM_CodeControllerV2@report_code'); //ARCY
 Route::any('/member/mlm/report_codes/data','Member\MLM_CodeControllerV2@report_code_table');

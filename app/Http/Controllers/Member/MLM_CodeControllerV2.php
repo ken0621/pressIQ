@@ -8,7 +8,7 @@ use App\Globals\Customer;
 use App\Globals\Report;
 use App\Globals\Sms;
 use App\Globals\Mail_global;
-
+use Excel;
 use App\Globals\BarcodeGenerator;
 use App\Globals\Transaction;
 use Redirect;
@@ -238,8 +238,8 @@ class MLM_CodeControllerV2 extends Member
             $distributed                                   = DB::table("tbl_distribute_product_code")->where("record_log_id", $value->record_log_id)->count();
             $data['_item_product_code'][$key]->released    = $released;
             $data['_item_product_code'][$key]->distributed = $distributed;
+            
         }
-
         return view("member.mlm_code_v2.product_code_table",$data);
     }
     public function print_codes(Request $request)
@@ -506,6 +506,7 @@ class MLM_CodeControllerV2 extends Member
             $insert["user_id"]                   = $this->user_info->user_id;
 
             Tbl_release_product_code::insert($insert);
+            Tbl_warehouse_inventory_record_log::where('record_log_id', $id)->update('released', 1);
 
             /* Send SMS and E-mail */
             $code = DB::table("tbl_warehouse_inventory_record_log")->where("record_log_id", $id)->first();
@@ -530,5 +531,41 @@ class MLM_CodeControllerV2 extends Member
         }
 
         return json_encode($response);
+    }
+    public function set_as_printed(Request $request)
+    {
+        
+        Item::set_as_printed($request->printed);
+
+        return  redirect('/member/mlm/product_code2');
+    }
+
+    public function print_codes_report()
+    {
+        $data['_released'] = Item::get_all_item_record_log('', "released");
+        $data['_reserved'] = Item::get_all_item_record_log('', "reserved");
+        $data['_blocked'] = Item::get_all_item_record_log('', "block");
+        $data['_used'] = Item::get_all_item_record_log('', "used");
+        $data['_sold'] = Item::get_all_item_record_log('', "sold");
+        $data['_printed'] = Item::get_all_item_record_log('', "printed");
+        
+        $data['_distributed'] = Item::get_all_item_record_log('', "distributed");
+        $data['_unused'] = Item::get_all_item_record_log('','');
+
+        Excel::create('Codes Report', function($excel) use ($data)
+        {
+            foreach($data as $key => $value)
+            {
+                $data_container["data"] = $value;
+                $excel->sheet( str_replace('_', " ", $key) .' codes', function($sheet) use ($data_container)
+                {
+                    $sheet->setOrientation('landscape');
+                    $sheet->loadView('member.mlm_code_v2.product_code_excel_table', $data_container);
+                   
+                });
+            }
+        })->download('xlsx');
+
+        return view('member.mlm_code_v2.product_code');
     }
 }

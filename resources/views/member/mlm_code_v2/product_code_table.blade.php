@@ -2,6 +2,13 @@
     <table class="table table-bordered table-striped table-condensed">
         <thead style="text-transform: uppercase">
             <tr>
+               
+                    <th class="text-center">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="select-all">
+                        </div>
+                    </th>
+               
                 <th class="text-center" width="200px">Pin No.</th>
                 <th class="text-center" width="250px">Activation</th>
                 <th class="text-center" width="250px">Item Name</th>
@@ -13,7 +20,16 @@
         </thead>
         <tbody>
             @foreach($_item_product_code as $item)
+
+
             <tr>
+                
+                    <td class="text-center">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input select-id" id="select-id" name="selected[]" value="{{ $item->record_log_id }}">
+                        </div>
+                    </td>
+                
                 <td class="text-center">{{$item->mlm_pin}}</td>
                 <td class="text-center">{{$item->mlm_activation}}</td>
                 <td class="text-center">{{$item->item_name}}</td>
@@ -69,3 +85,7 @@
     </table>
 </div>
 <div class="pull-right">{!! $_item_product_code->render() !!}</div>
+
+
+
+

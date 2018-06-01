@@ -6,13 +6,13 @@
         <div class="top-banner" style="background-image: url('/themes/paptsi-v2/img/home-banner.jpg');">
             <div class="container">
                 <div class="c-container">
-                    <div>
+                    <div class="top-info">
                         <span>We Aim For The Best</span><span> Services</span>
                     </div>
-                    <div>
+                    <div class="mid-info">
                         In the Industry of Ports and Terminal Services
                     </div>
-                    <div>
+                    <div class="bottom-info">
                         {!! get_content($shop_theme_info, "home", "home_banner_description") !!}
                     </div>
                     <button class="t-button">Read More</button>
@@ -24,59 +24,59 @@
     <section id="services" class="wrapper-1">
         <div class="container">
             <div class="service-container services-carousel">
-                <div class="holder">
+                <div class="holder match-height">
                     <div image-holder>
                         <img src="/themes/paptsi-v2/img/wrapper-image-1.png">
                     </div>
-                    <div class="title">
+                    {{-- <div class="title">
                         Services 1
-                    </div>
+                    </div> --}}
                     <div class="details">
-                        Lorem, ipsum, dolor, sit amet
+                        Operation and management of passenger terminal building
                     </div>
                 </div>
-                <div class="holder">
+                <div class="holder match-height">
                     <div image-holder>
                         <img src="/themes/paptsi-v2/img/wrapper-image-2.png">
                     </div>
-                    <div class="title">
+                    {{-- <div class="title">
                         Services 1
-                    </div>
+                    </div> --}}
                     <div class="details">
-                        Lorem, ipsum, dolor, sit amet
+                        Cargo Handling operation
                     </div>
                 </div>
-                <div class="holder">
+                <div class="holder match-height">
                     <div image-holder>
                         <img src="/themes/paptsi-v2/img/wrapper-image-3.png">
                     </div>
-                    <div class="title">
+                    {{-- <div class="title">
                         Services 1
-                    </div>
+                    </div> --}}
                     <div class="details">
-                        Lorem, ipsum, dolor, sit amet
+                        Management and operation of other port facilities such as but not limited to arrastre, stevedoring and weighbridge
                     </div>
                 </div>
-                <div class="holder">
+                <div class="holder match-height">
                     <div image-holder>
                         <img src="/themes/paptsi-v2/img/wrapper-image-4.png">
                     </div>
-                    <div class="title">
+                    {{-- <div class="title">
                         Services 1
-                    </div>
+                    </div> --}}
                     <div class="details">
-                        Lorem, ipsum, dolor, sit amet
+                        Rentals of concessionaires
                     </div>
                 </div>
-                <div class="holder">
+                <div class="holder match-height">
                     <div image-holder>
-                        <img src="/themes/paptsi-v2/img/wrapper-image-1.png">
+                        <img src="/themes/paptsi-v2/img/wrapper-image-5.png">
                     </div>
-                    <div class="title">
+                    {{-- <div class="title">
                         Services 1
-                    </div>
+                    </div> --}}
                     <div class="details">
-                        Lorem, ipsum, dolor, sit amet
+                        Leasing out of office spaces
                     </div>
                 </div>
             </div>
@@ -90,9 +90,9 @@
                     <div class="left-container">
                         <div class="title-container"><span class="border">|</span><span class="title"> OUR COMPANY</span></div>
                         <div class="description-container">{!! get_content($shop_theme_info, "home", "home_company_description") !!}</div>
-                         <div class="button-container">
+                         {{-- <div class="button-container">
                             <a href="#Read More">READ MORE</a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -282,7 +282,7 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=1.2">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=1.3">
 @endsection
 
 @section("script")

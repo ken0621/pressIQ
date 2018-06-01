@@ -1014,6 +1014,7 @@ Route::get('/testing','Member\MLM_CodeController@tester');
 /* ImageController */
 Route::post('image/image_upload','Member\ImageController@upload_image');
 Route::get('image/load_media_library', 'Member\ImageController@load_media_library');
+Route::get('image/delete_image', 'Member\ImageController@delete_image');
 
 /* Load Ajax Data */
 Route::get('/member/accounting/load_coa','Member\ChartOfAccountController@load_coa');

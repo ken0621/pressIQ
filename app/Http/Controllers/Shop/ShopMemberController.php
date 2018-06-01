@@ -129,6 +129,15 @@ class ShopMemberController extends Shop
             $data["wallet"]             = $data["customer_summary"]["_wallet"];
             $data["points"]             = $data["customer_summary"]["_points"];
             $data["_wallet_plan"]       = $data["customer_summary"]["_wallet_plan"];
+            if($data['shop_id'] == 1)
+            {
+                $sort = $data["_wallet_plan"];
+                $temp = $sort[4];
+                $sort[4] = $sort[5];
+                $sort[5] = $temp;
+
+                $data["_wallet_plan"] = $sort;
+            }
             $data["_point_plan"]        = $data["customer_summary"]["_point_plan"];
             $data["_slot"]              = $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);

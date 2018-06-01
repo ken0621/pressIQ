@@ -285,6 +285,7 @@ class MLM2
 
 
 		$_plan = Tbl_mlm_slot_wallet_log::groupBy("wallet_log_plan")->where("shop_id", $shop_id)->get();
+		
 		$_plan_ignore = array("E Money", "Repurchase", "Tours Wallet Points", "Tours Wallet", "Encashment", "Cheque", "Undefined");
 
 		foreach($_plan as $key => $plan)
@@ -301,9 +302,9 @@ class MLM2
 				$_plan[$key]->string_plan			= $string_plan;
 				$_plan[$key]->label 				= $label;
 				$return["_wallet"]->$string_plan 	= 0;
+
 			}
 		}
-
 		$return["_wallet"]->complan_triangle 					= 0;
 		$return["_wallet"]->complan_direct 						= 0;
 		$return["_wallet"]->complan_builder 					= 0;
@@ -313,13 +314,12 @@ class MLM2
 		$return["_wallet"]->complan_stairstep 					= 0;
 
 		$return["_wallet_plan"] = $_plan;
-		
 		$return["_points"] = new stdClass();
 
 
 
 
-		$_plan_points = Tbl_mlm_slot_points_log::where("shop_id", $shop_id)->slot()->groupBy("points_log_complan")->get();
+		$_plan_points = Tbl_mlm_slot_points_log::slot()->where("shop_id", $shop_id)->groupBy("points_log_complan")->get();
 
 		foreach($_plan_points as $key=> $plan)
 		{
@@ -457,7 +457,21 @@ class MLM2
 		$return["_slot"] = $_slot;
 		$return["display_slot_count"] = number_format($return["slot_count"], 0) . " SLOT(S)";
 		$return["_wallet"]->display_total_points = number_format($return["_wallet"]->total_points, 2) . " POINT(S)";;
-		
+		// if($shop_id = 1)
+		// {
+		// 	foreach($return["_point_plan"] as $key => $return)
+		// 	{
+		// 		if($return->label != "Repurchase Cashback")
+		// 		{
+		// 			$return["cashback"] = null;
+		// 			return $return;
+		// 		}
+		// 		else
+		// 		{
+		// 			return $return;
+		// 		}
+		// 	}
+		// }
 		return $return;
 	}
 	public static function complan_to_label($shop_id, $string)

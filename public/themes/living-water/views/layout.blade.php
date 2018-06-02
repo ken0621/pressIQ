@@ -18,7 +18,7 @@
         <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet">   
 
         <!-- GLOBAL CSS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1.3">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1.4">
 
         @include("frontend.ghead")
 
@@ -55,9 +55,9 @@
                 <span>{!! get_content($shop_theme_info, "contact_details", "contact_company_email_address") !!}</span>
             </div>
             <div class="right-container">
-                <form action="/product" method="get" id="form-search" style="display: inline-block;">
+                <form action="/product" method="get" id="form-search">
                      <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" name="search" class="form-control" id="keyword1" placeholder="Search...">
-                     <span class="search-button" id="sizing-addon1">
+                     <span class="search-button">
                         <a href="" onclick="onSearch(1);" id="submit_link" style="color: #fff;"><i class="fa fa-search" aria-hidden="true"></i></a>
                      </span>
                 </form>

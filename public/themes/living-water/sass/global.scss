@@ -96,12 +96,11 @@ button:hover{
 		{
 		  color: #fff;
 		}
-		.fa
+		.search-button
 		{
-			font-size: 16px;
 			position: absolute;
-			top: 8px;
 			right: 15px;
+			top: 8px;
 			@media screen and (max-width: 768px)
 			{
 				right: 40px;
@@ -109,6 +108,10 @@ button:hover{
 			@media screen and (max-width: 425px)
 			{
 				right: 30px;
+			}
+			.fa
+			{
+				font-size: 16px;
 			}
 		}
 	}

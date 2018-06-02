@@ -81,13 +81,25 @@ class ImageController extends Member
 		{
 			$imagepath = $value->image_path;
 
-			if(Storage::disk('spaces')->exists($imagepath))
+			while(true)
 			{
-				$get_only_exist[$key] = $value;
-			}
-			elseif(Storage::disk('ftp')->exists($imagepath))
-			{
-				$get_only_exist[$key] = $value;
+				try 
+				{
+					if(Storage::disk('spaces')->exists($imagepath))
+					{
+						$get_only_exist[$key] = $value;
+					}
+					elseif(Storage::disk('ftp')->exists($imagepath))
+					{
+						$get_only_exist[$key] = $value;
+					}
+
+					break; // exit the loop
+				} 
+				catch (\Exception $e) 
+				{
+					continue;
+				}
 			}
 		}
 		// foreach ($remote_server as $key => $value) 

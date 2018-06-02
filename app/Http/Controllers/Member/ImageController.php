@@ -74,7 +74,7 @@ class ImageController extends Member
 
 	public function load_media_library()
 	{
-		$data['_image'] = Tbl_image::where("image_shop", $this->user_info->shop_id)->where("deleted", 0)->orderBy('image_date_created', 'DESC')->get();
+		$data['_image'] = Tbl_image::where("image_shop", $this->user_info->shop_id)->where("deleted", 0)->get();
 		// $get_only_exist = [];
 		// $remote_server = Storage::disk('ftp')->files('/uploads/' . $this->user_info->shop_key . '-' . $this->user_info->shop_id);
 		// foreach ($data['_image'] as $key => $value) 
@@ -113,7 +113,7 @@ class ImageController extends Member
 		// {
 		//     return $b['image_date_created'] <=> $a['image_date_created'];
 		// });
-
+		
 		return view('member.modal.load_media_library', $data);
 	}
 
@@ -128,7 +128,7 @@ class ImageController extends Member
 				Storage::disk('spaces')->delete($img->image_path);
 				Storage::disk('ftp')->delete($img->image_path);
 
-				DB::table("tbl_image")->update(["deleted" => 1]);
+				DB::table("tbl_image")->where("image_id", $img->image_id)->update(["deleted" => 1]);
 			}
 		}
 

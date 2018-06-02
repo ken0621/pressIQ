@@ -294,9 +294,12 @@ body{
 		{
 			color: #585858;
 			padding-top: 20px;
-			font-size: 18px;
-			font-weight: 400;
-
+			p
+			{
+				font-size: 18px !important;
+				font-weight: 400 !important;
+				font-family: $display-text !important;
+			}
 			@media screen and (max-width: 425px)
 			{
 				text-align: center;
@@ -332,7 +335,7 @@ body{
 		.image-holder
 		{
 			text-align: center;
-			padding: 50px 0px 50px 0px;
+			padding: 50px 0px 25px 0px;
 			width: 100%;
 			img
 			{
@@ -352,6 +355,30 @@ body{
 			@media screen and (max-width: 320px)
 			{
 				padding: 30px 0px 10px 0px;
+			}
+		}
+		.description-container
+		{
+			color: #585858;
+			p
+			{
+				font-size: 18px !important;
+				font-weight: 400 !important;
+				font-family: $display-text !important;
+			}
+			ul
+			{
+				li
+				{
+					font-size: 18px !important;
+					font-weight: 400 !important;
+					font-family: $display-text !important;
+				}
+			}
+			@media screen and (max-width: 425px)
+			{
+				text-align: center;
+				padding-bottom: 20px
 			}
 		}
 	}

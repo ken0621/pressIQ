@@ -89,7 +89,9 @@
                 <div class="col-md-6">
                     <div class="left-container">
                         <div class="title-container"><span class="border">|</span><span class="title"> OUR COMPANY</span></div>
-                        <div class="description-container">{!! get_content($shop_theme_info, "home", "home_company_description") !!}</div>
+                        <div class="description-container">
+                            {!! get_content($shop_theme_info, "home", "home_company_description") !!}
+                        </div>
                          {{-- <div class="button-container">
                             <a href="#Read More">READ MORE</a>
                         </div> --}}
@@ -99,6 +101,9 @@
                     <div class="right-container">
                         <div class="image-holder">
                             <img src="{{ get_content($shop_theme_info, "home", "home_company_image") }}">
+                        </div>
+                        <div class="description-container">
+                            {!! get_content($shop_theme_info, "home", "home_company_description_2") !!}
                         </div>
                     </div>
                 </div>

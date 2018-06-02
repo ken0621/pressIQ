@@ -15,7 +15,7 @@ class UpdateTblImageDeleted extends Migration
     {
         Schema::table('tbl_image', function (Blueprint $table) 
         {
-            $table->dropColumn('deleted');
+            $table->dropColumn('archived');
             $table->tinyInteger('deleted')->default(0);
         });
     }

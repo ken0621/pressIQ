@@ -74,45 +74,45 @@ class ImageController extends Member
 
 	public function load_media_library()
 	{
-		$data['_image'] = Tbl_image::where("image_shop", $this->user_info->shop_id)->where("deleted", 0)->get();
-		$get_only_exist = [];
+		$data['_image'] = Tbl_image::where("image_shop", $this->user_info->shop_id)->where("deleted", 0)->orderBy('image_date_created', 'DESC')->get();
+		// $get_only_exist = [];
 		// $remote_server = Storage::disk('ftp')->files('/uploads/' . $this->user_info->shop_key . '-' . $this->user_info->shop_id);
-		foreach ($data['_image'] as $key => $value) 
-		{
-			$imagepath = $value->image_path;
+		// foreach ($data['_image'] as $key => $value) 
+		// {
+		// 	$imagepath = $value->image_path;
 
-			while(true)
-			{
-				try 
-				{
-					if(Storage::disk('spaces')->exists($imagepath))
-					{
-						$get_only_exist[$key] = $value;
-					}
-					elseif(Storage::disk('ftp')->exists($imagepath))
-					{
-						$get_only_exist[$key] = $value;
-					}
+		// 	while(true)
+		// 	{
+		// 		try 
+		// 		{
+		// 			if(Storage::disk('spaces')->exists($imagepath))
+		// 			{
+		// 				$get_only_exist[$key] = $value;
+		// 			}
+		// 			elseif(Storage::disk('ftp')->exists($imagepath))
+		// 			{
+		// 				$get_only_exist[$key] = $value;
+		// 			}
 
-					break; // exit the loop
-				} 
-				catch (\Exception $e) 
-				{
-					continue;
-				}
-			}
-		}
+		// 			break; // exit the loop
+		// 		} 
+		// 		catch (\Exception $e) 
+		// 		{
+		// 			continue;
+		// 		}
+		// 	}
+		// }
 		// foreach ($remote_server as $key => $value) 
 		// {
 		// 	$image = Tbl_image::where("image_path", '/' . $value)->first();
 		// 	$get_only_exist[$key] = $image;
 		// }
-		$data['_image'] = $get_only_exist;
+		// $data['_image'] = $get_only_exist;
 
-		usort($data['_image'], function($a, $b) 
-		{
-		    return $b['image_date_created'] <=> $a['image_date_created'];
-		});
+		// usort($data['_image'], function($a, $b) 
+		// {
+		//     return $b['image_date_created'] <=> $a['image_date_created'];
+		// });
 
 		return view('member.modal.load_media_library', $data);
 	}

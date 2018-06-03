@@ -15,7 +15,6 @@
                     <div class="bottom-info">
                         {!! get_content($shop_theme_info, "home", "home_banner_description") !!}
                     </div>
-                    <button class="t-button">Read More</button>
                 </div>
             </div>
         </div>

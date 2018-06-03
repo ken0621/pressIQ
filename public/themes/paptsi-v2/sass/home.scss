@@ -64,7 +64,7 @@ body{
 		.c-container
 		{
 			color: #fff;
-			max-width: 750px;
+			max-width: 620px;
 			@media screen and (max-width: 425px)
 			{
 				text-align: center;
@@ -100,8 +100,7 @@ body{
 			}
 			.mid-info
 			{
-				border-bottom: 1px solid #fff;
-				font-size: 23px;
+				font-size: 30px;
 				padding-bottom: 10px;
 
 				@media screen and (max-width: 425px)
@@ -117,14 +116,16 @@ body{
 			}
 			.bottom-info
 			{
-				color: #fff;
 				padding-top: 10px;
 				padding-bottom: 20px;
-				font-size: 18px;
-
-				@media screen and (max-width: 425px)
+				p
 				{
-					font-size: 13px;
+					color: #fff;
+					font-size: 18px;
+					@media screen and (max-width: 425px)
+					{
+						font-size: 13px;
+					}
 				}
 			}
 			.t-button

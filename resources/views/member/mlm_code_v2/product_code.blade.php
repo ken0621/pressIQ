@@ -24,6 +24,7 @@
         <li class="cursor-pointer change-tab sold-tab" onClick="click_status('sold');" mode="approved"><a class="cursor-pointer"><i class="fa fa-money"></i> Sold</a></li>
         <li class="cursor-pointer change-tab used-tab" onClick="click_status('used');" mode="approved"><a class="cursor-pointer"><i class="fa fa-star"></i> Used</a></li>
         <li class="cursor-pointer change-tab block-tab" onClick="click_status('block');" mode="approved"><a class="cursor-pointer"><i class="fa fa-warning"></i> Blocked</a></li>
+        <li class="cursor-pointer change-tab printed-tab" onClick="click_status('printed');" mode="approved"><a class="cursor-pointer"><i class="fa fa-print"></i> Printed</a></li>
     </ul>
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">
@@ -33,12 +34,20 @@
        
         </div>
         <div class="col-md-2" style="padding: 10px">
+            <div class>
+                <button class="btn" style="color:#1d5f95; background-color: white; border-color: #1f89e0" onClick="tag_as_printed()"> Tag as Printed </button>
+            </div>
         </div>
         <div class="col-md-4" style="padding: 10px">
+            
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
                 <input type="text" class="form-control search-keyword" placeholder="Search..." aria-describedby="basic-addon1">
+
             </div>
+            
+                
+            
         </div>
     </div>
     <div class="tab-content codes_container" style="min-height: 300px;">
@@ -55,4 +64,5 @@
 @endsection
 @section('script')
 <script type="text/javascript" src="/assets/member/js/membership_code/product_code.js"></script>
+
 @endsection

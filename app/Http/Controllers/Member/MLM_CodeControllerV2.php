@@ -223,7 +223,7 @@ class MLM_CodeControllerV2 extends Member
                 // }
             }
         }
-
+        
         return view("member.mlm_code_v2.product_code_table",$data);
     }
     public function print_codes(Request $request)
@@ -345,5 +345,12 @@ class MLM_CodeControllerV2 extends Member
         {
             return view('member.mlm_code_v2.report_code',$data);
         }
+    }
+    public function set_as_printed(Request $request)
+    {
+        
+        Item::set_as_printed($request->printed);
+
+        return  redirect('/member/mlm/product_code2');
     }
 }

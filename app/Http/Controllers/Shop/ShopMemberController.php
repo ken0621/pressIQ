@@ -3154,6 +3154,10 @@ class ShopMemberController extends Shop
             Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
 
             MLM2::entry($shop_id,$slot_id);
+            /** ARCY CONSUME PRODUCT CODES
+            $consume['name'] = '';
+            $consume['id'] = '';
+            Warehouse2::consume_product_codes($shop_id, $codes->mlm_pin, $codes->mlm_activation, $consume ,"","used"); **/
             $used['item_in_use'] = 'used';
             Tbl_warehouse_inventory_record_log::where('record_log_id',$codes->record_log_id)->update($used);
             $response = 'success';

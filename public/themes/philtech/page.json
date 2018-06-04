@@ -236,6 +236,13 @@
 			"type":"text",
 			"default":"",
 			"size":"4"
+		},
+		"merchant_presentation" :
+		{
+			"label":"Merchant Presentation",
+			"type":"text",
+			"default":"",
+			"size":"4"
 		}
 	},
 	"info":

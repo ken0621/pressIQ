@@ -65,6 +65,7 @@
                         <th class="text-left">Contact Person</th>
                         <th class="text-left">Contact Details</th>
                         <th class="text-center">Balance Total</th>
+                        <th class="text-center">Date/Time Created</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -85,6 +86,7 @@
                                 Email Address : <a target="_blank" {{$customer->email != "" ? 'href=https://mail.google.com/mail/?view=cm&fs=1&to='.$customer->email : '' }}>{{$customer->email != "" ? $customer->email : "---" }}
                             </td>
                             <td class="text-right  {{$customer->customer_opening_balance > 0? 'color-red': ''}}"><span class="pull-left"></span>{{currency('PHP',$customer->balance)}}</td>
+                            <td class="text-right"><span class="pull-left"></span>{{date_format($customer->created_at, 'M-d-Y / h:i:s A')}}</td>
                             <td class="text-center">
                                 <!-- ACTION BUTTON -->
                                 <!-- <div class="dropdown">

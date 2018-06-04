@@ -235,7 +235,7 @@
           </div>
           <div id="preview_boiler_content"></div>
             <div>
-              &nbsp; <a href="https://twitter.com/Press_IQ?lang=en" class="twitter-share-button" data-url="" data-size="small">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+              &nbsp;<span> <a href="https://twitter.com/Press_IQ?lang=en" class="twitter-share-button" data-url="" data-size="small">Tweet</a></span> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
               <iframe src="https://www.facebook.com/plugins/like.php?href=https://www.facebook.com/Press-IQ-153736705433100&width=74&layout=button_count&action=like&size=small&show_faces=false&share=false&height=21&appId" width="61" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
               <script src="//platform.linkedin.com/in.js" type="text/javascript" >lang: en_US</script>
               <script type="IN/Share" data-url="https://www.linkedin.com/company/press-iq"></script>

@@ -113,7 +113,7 @@
                       <input type="text"  id="last_name" name="last_name" class="form-control" value="{{$_user_edits->user_last_name}}">
 
                       <div class="title">Email:</div>
-                      <input type="text" id="email" name="email" class="form-control" value="{{$_user_edits->user_email}}">
+                      <input type="text" id="email" name="email" class="form-control" value="{{$_user_edits->user_email}}" readonly>
 
                       <div class="title">Company Name:</div>
                       <input type="text" id="company_name" name="company_name" class="form-control" value="{{$_user_edits->user_company_name}}">
@@ -127,11 +127,11 @@
               </div>
 
               <div class="user-container">
-                 <div class="title">User Account
-                        <div class="search-container pull-right">
-                         <input placeholder="Search" type="text"  name="search_user" id="search_user">
-                         <button  type="button" name="search_button_user" id="search_button_user" class="btn btn-success">Search</button>
-                        </div>
+                  <div class="title">User Account
+                      <div class="search-container pull-right">
+                       <input placeholder="Search" type="text"  name="search_user" id="search_user">
+                       <button  type="button" name="search_button_user" id="search_button_user" class="btn btn-success">Search</button>
+                      </div>
                   </div>
                   <table  class="table table-bordered" id="showHere_table_search">
                      <tr>
@@ -142,7 +142,7 @@
                          <th style="width: 15%;">Date Started</th>
                          <th style="width: 20%;">Action</th>
                      </tr>
-                      @foreach($_user as $_user_account)
+                        @foreach($_user as $_user_account)
                         <tr>
                            <td> <a href="">{{$_user_account->user_first_name}}</td>
                            <td>{{$_user_account->user_last_name}}</td>
@@ -161,7 +161,7 @@
                         </tr>
                         @endforeach
                   </table>
-              </div>    
+                </div>    
             </div>
 
             <div id="admin_account" class="tabcontent add-media-container">
@@ -189,30 +189,26 @@
                         </tr>
                         @endforeach
                   </table>
-                @if(session::has('edit_admin'))
-                 @foreach($_admin_edit as $_admin_edits)
-                     <div class="title-container">Add Admin Account</div>
-                       <form method="post" action="">
-                         {{csrf_field()}}
-                         <div class="title">First Name:</div>
-                       <input type="text" id="first_name" name="first_name" class="form-control" value="{{$_admin_edits->user_first_name}}" autofocus>
+                   @if(session::has('edit_admin'))
+                      @foreach($_admin_edit as $_admin_edits)
+                       <div class="title-container">Add Admin Account</div>
+                         <form method="post" action="">
+                           {{csrf_field()}}
+                           <div class="title">First Name:</div>
+                         <input type="text" id="first_name" name="first_name" class="form-control" value="{{$_admin_edits->user_first_name}}" autofocus>
 
-                         <div class="title">Last Name:</div>
-                         <input type="text"  id="last_name" name="last_name" class="form-control" value="{{$_admin_edits->user_last_name}}">
+                           <div class="title">Last Name:</div>
+                           <input type="text"  id="last_name" name="last_name" class="form-control" value="{{$_admin_edits->user_last_name}}">
 
-                         <div class="title">Email:</div>
-                         <input type="text" id="email" name="email" class="form-control" value="{{$_admin_edits->user_email}}">
+                           <div class="title">Email:</div>
+                           <input type="text" id="email" name="email" class="form-control" value="{{$_admin_edits->user_email}}">
 
-
-                         <div class="title">Company:</div>
-                         <input type="text" id="company_name" name="company_name" class="form-control" value="{{$_admin_edits->user_company_name}}">
-
-                         <div class="button-container">
-                             <button type="submit" id="submit_button" name="submit_button" formaction="/pressadmin/manage_admin_edit">Submit</button>
-                         </div>
-                     </form>
-                    @endforeach
-                   @else
+                           <div class="button-container">
+                               <button type="submit" id="submit_button" name="submit_button" formaction="/pressadmin/manage_admin_edit">Submit</button>
+                           </div>
+                       </form>
+                      @endforeach
+                  @else
                    <div class="title-container">Add Admin Account</div>
                      <form method="post" action="">
                        {{csrf_field()}}
@@ -232,7 +228,7 @@
                            <button type="submit" id="admin_submit_button" name="admin_submit_button" formaction="/pressadmin/manage_user/add_admin">Submit</button>
                        </div>
                    </form>
-                   @endif
+                  @endif
             </div>
         </div>
     </div>

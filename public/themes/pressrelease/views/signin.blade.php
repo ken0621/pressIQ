@@ -23,9 +23,11 @@
 				    				<input type="password" name="user_password" id="user_password" placeholder="Password">
 				    			</div>
 				    			@if(session()->has('message'))
-								<span class="register-form" style="color: red;">
-									 <strong>Error!</strong> {{ session('message') }}<br>
-								</span>
+				    			<div class="register-form">
+									<span class="register-form" style="color: red;">
+										<strong>Error!</strong>{{ session('message') }}<br>
+									</span>
+								</div>
 								<div class="forgot-password"><a href="">Forgot Password?</a></div> 
 				    			<div class="button-container">
 				    			<button type="submit" href="">Login</button>

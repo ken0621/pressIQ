@@ -163,12 +163,12 @@
                             <div class="footer-title-container">
                                 <p class="footer-title">NEWS LETTER</p>
                             </div>
-                            <input type="email" style="background-color:#FDFDFD;" placeholder="Enter Your Email" id="newsletter" name="newsletter" required>
+                            <input type="email" style="background-color:#FDFDFD;color:black;" placeholder="Enter Your Email" id="newsletter" name="newsletter" required>
                             <span>
                             <button type="submit" formaction="/newsletter/send"><i class="fa fa-paper-plane" aria-hidden="true"></i>
                             </span>
                         </div>
-                        </form>
+                        </form> 
                     <div class="col-md-3">
                         <div class="footer-follow-container">
                             <p class="footer-follow-title">FOLLOW US ON</p>

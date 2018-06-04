@@ -1702,7 +1702,7 @@ class Item
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 
-        $query = Tbl_warehouse_inventory_record_log::slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('item_type_id','!=',5)->groupBy('record_log_id')->orderBy('record_log_id');
+        $query = Tbl_warehouse_inventory_record_log::slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('item_type_id','!=',5)->groupBy('tbl_warehouse_inventory_record_log.record_log_id')->orderBy('tbl_warehouse_inventory_record_log.record_log_id');
         if($search_keyword)
         {
             // $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
@@ -1713,6 +1713,7 @@ class Item
                 $q->orWhere("item_name", "LIKE", "%$search_keyword%");
             });
         }
+
         if($status == 'reserved')
         {
             $query->where('record_consume_ref_name',$status)->reserved_customer();
@@ -1734,12 +1735,23 @@ class Item
         {
             $query->where('printed', '=', 1);
         }
+        else if($status == 'released')
+        {
+            $query->released();
+            $query->where('release_product_id', '!=', null);
+        }
+        else if($status == 'distributed')
+        {
+            $query->distributed();
+            $query->where('distribute_product_id', '!=', null);
+        }
         else
         {
             $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->where('item_in_use','unused');
             if($shop_id == 1)
             {
-                $query->where('printed', 0);
+                $query = $query->where('printed', 0);
+                $query = $query->where('released', 0);
             }
         }
         if($item_id != 0)

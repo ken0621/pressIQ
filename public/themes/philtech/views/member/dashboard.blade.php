@@ -130,7 +130,7 @@
 					<div class="sub-container">
 						<div class="chart-legend">
 							@foreach($_wallet_plan as $plan)
-								@if($plan->label == "Admin Refill" || $plan->label == "Vmoney" || $plan->label == "Wallet Refill" || $plan->label == "Wallet Transfer")
+								@if($plan->label == "Admin Refill" || $plan->label == "Vmoney" || $plan->label == "Wallet Refill" || $plan->label == "Wallet Transfer" || $plan->label == "Repurchase")
 								@else
 									<div class="holder">
 
@@ -162,7 +162,7 @@
 					<div class="sub-container">
 						<div class="chart-legend">
 							@foreach($_wallet_plan as $plan)
-								@if($plan->label == "Admin Refill" || $plan->label == "Vmoney" || $plan->label == "Wallet Refill" || $plan->label == "Wallet Transfer")
+								@if($plan->label == "Admin Refill" || $plan->label == "Vmoney" || $plan->label == "Wallet Refill" || $plan->label == "Wallet Transfer" || $plan->label == "Repurchase")
 									<div class="holder">
 										<div class="color"></div>
 										@if($plan->label == "Vmoney")

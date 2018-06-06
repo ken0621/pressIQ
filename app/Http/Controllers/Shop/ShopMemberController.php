@@ -1994,76 +1994,78 @@ class ShopMemberController extends Shop
                         /* V-MONEY */
                         if ($method == "vmoney") 
                         {
-                            /* API */
-                            $post = 'mxtransfer.svc';
+                            return 'disable_emoney';
+
+                            // /* API */
+                            // $post = 'mxtransfer.svc';
                             
-                            if (get_domain() == "philtechglobalinc.com") 
-                            {
-                                $environment = 1;
-                            }
-                            else
-                            {
-                                $environment = 0;
-                            }
+                            // if (get_domain() == "philtechglobalinc.com") 
+                            // {
+                            //     $environment = 1;
+                            // }
+                            // else
+                            // {
+                            //     $environment = 0;
+                            // }
 
-                            /* Sandbox */
-                            if ($environment == 0) 
-                            {
-                                $pass["apiKey"] = 'Vqzs90pKLb6iwsGQhnRS'; // Vendor API Key issued by VMoney
-                                $pass["merchantId"] = 'M239658948226'; // Merchant ID registered within VMoney
-                                /* Set URL Sandbox or Live */
-                                $url = "http://test.vmoney.com/gtcvbankmerchant/";
-                            }
-                            /* Production */
-                            else
-                            {
-                                $pass["apiKey"] = 'z9Gy1dBbnyj9cxMqXSKF'; // Vendor API Key issued by VMoney
-                                $pass["merchantId"] = 'M132582139240'; // Merchant ID registered within VMoney
-                                /* Set URL Sandbox or Live */
-                                $url = "https://philtechglobalinc.vmoney.com/gtcvbankmerchant/";
-                            }
+                            // /* Sandbox */
+                            // if ($environment == 0) 
+                            // {
+                            //     $pass["apiKey"] = 'Vqzs90pKLb6iwsGQhnRS'; // Vendor API Key issued by VMoney
+                            //     $pass["merchantId"] = 'M239658948226'; // Merchant ID registered within VMoney
+                            //     /* Set URL Sandbox or Live */
+                            //     $url = "http://test.vmoney.com/gtcvbankmerchant/";
+                            // }
+                            // /* Production */
+                            // else
+                            // {
+                            //     $pass["apiKey"] = 'z9Gy1dBbnyj9cxMqXSKF'; // Vendor API Key issued by VMoney
+                            //     $pass["merchantId"] = 'M132582139240'; // Merchant ID registered within VMoney
+                            //     /* Set URL Sandbox or Live */
+                            //     $url = "https://philtechglobalinc.vmoney.com/gtcvbankmerchant/";
+                            // }
 
-                            $get_email = Tbl_vmoney_settings::where("slot_id", $slot_id)->first();
+                            // $get_email = Tbl_vmoney_settings::where("slot_id", $slot_id)->first();
 
-                            if ($get_email) 
-                            {
-                                $pass["recipient"] = $get_email->vmoney_email; // Recipient's email address
-                                $pass["merchantRef"] = Self::$customer_info->customer_id . time(); // Merchant reference number
-                                $pass["amount"] = $take_home; // Amount of the transaction
-                                $pass["currency"] = 'PHP'; // Currency being transferred (ie PHP)
-                                $pass["message"] = 'Philtech VMoney Wallet Transfer'; // Memo or notes for transaction
+                            // if ($get_email) 
+                            // {
+                            //     $pass["recipient"] = $get_email->vmoney_email; // Recipient's email address
+                            //     $pass["merchantRef"] = Self::$customer_info->customer_id . time(); // Merchant reference number
+                            //     $pass["amount"] = $take_home; // Amount of the transaction
+                            //     $pass["currency"] = 'PHP'; // Currency being transferred (ie PHP)
+                            //     $pass["message"] = 'Philtech VMoney Wallet Transfer'; // Memo or notes for transaction
 
-                                $post_params = $url . $post . "?" . http_build_query($pass);
+                            //     $post_params = $url . $post . "?" . http_build_query($pass);
 
-                                try 
-                                {
-                                    $client = new Client();
-                                    $response = $client->post($post_params, $pass);
-                                    $stream = $response->getBody();
-                                    $contents = $stream->getContents(); // returns all the contents
-                                    $contents = $stream->getContents(); // empty string
-                                    $stream->rewind(); // Seek to the beginning
-                                    $contents = $stream->getContents(); // returns all the contents
-                                    $data_decoded = json_decode($contents);
+                            //     try 
+                            //     {
+                            //         $client = new Client();
+                            //         $response = $client->post($post_params, $pass);
+                            //         $stream = $response->getBody();
+                            //         $contents = $stream->getContents(); // returns all the contents
+                            //         $contents = $stream->getContents(); // empty string
+                            //         $stream->rewind(); // Seek to the beginning
+                            //         $contents = $stream->getContents(); // returns all the contents
+                            //         $data_decoded = json_decode($contents);
 
-                                    /* Result */
-                                    if ($data_decoded->resultCode == "000") 
-                                    {   
-                                        $status = "DONE"; // ASK IF RELEASED OR DONE
-                                        $remarks = "Request Payout via V-Money";
+                            //         /* Result */
+                            //         if ($data_decoded->resultCode == "000") 
+                            //         {   
+                            //             $status = "DONE"; // ASK IF RELEASED OR DONE
+                            //             $remarks = "Request Payout via V-Money";
 
-                                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
-                                    }
-                                    else
-                                    {
-                                        // TBD
-                                    }
-                                } 
-                                catch (\Exception $e) 
-                                {
-                                    dd($e->getMessage());
-                                }
-                            }
+                            //             $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
+                            //         }
+                            //         else
+                            //         {
+                            //             // TBD
+                            //         }
+                            //     } 
+                            //     catch (\Exception $e) 
+                            //     {
+                            //         dd($e->getMessage());
+                            //     }
+                            // }
                         }
                         elseif($method == "airline")
                         {

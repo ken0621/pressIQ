@@ -1448,9 +1448,21 @@ class ShopMemberController extends Shop
             return redirect::back();
         }    
 
-        Session::put('success', 'Your file successfully import in database!!!');
+        Session::put('Success', 'Your file successfully import in database!!!');
         return back();
     }
+
+    public function downloadExcel($type)
+    {
+        $data = Tbl_press_release_recipient::get()->toArray();
+        return Excel::create('Sample Excel File', function($excel) use ($data) {
+            $excel->sheet('Sample Data Sheet', function($sheet) use ($data)
+            {
+                $sheet->fromArray($data);
+            });
+        })->download($type);
+    }
+
 
     public function pressadmin_email_edit($id)
     {   

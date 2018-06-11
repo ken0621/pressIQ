@@ -39,7 +39,7 @@ use App\Models\Tbl_recaptcha_pool_amount;
 use App\Models\Tbl_item_token;
 use App\Models\Tbl_item_token_log;
 use App\Models\Tbl_token_list;
-
+use App\Models\Tbl_vmoney_logs;
 use App\Models\Tbl_image;
 // use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_item_redeemable_report;
@@ -2037,6 +2037,11 @@ class ShopMemberController extends Shop
 
                                 $post_params = $url . $post . "?" . http_build_query($pass);
 
+                                $status = "DONE"; // ASK IF RELEASED OR DONE
+                                $remarks = "Request Payout via V-Money";
+
+                                $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
+
                                 try 
                                 {
                                     $client = new Client();
@@ -2047,23 +2052,28 @@ class ShopMemberController extends Shop
                                     $stream->rewind(); // Seek to the beginning
                                     $contents = $stream->getContents(); // returns all the contents
                                     $data_decoded = json_decode($contents);
-
+                                    $insert['vmoney_logs'] = serialize($data_decoded);
+                                    $insert['created_at'] = Carbon::now();
+                                    
+                                   
                                     /* Result */
                                     if ($data_decoded->resultCode == "000") 
                                     {   
-                                        $status = "DONE"; // ASK IF RELEASED OR DONE
-                                        $remarks = "Request Payout via V-Money";
 
-                                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
+                                       Tbl_vmoney_logs::insert($insert);
                                     }
                                     else
-                                    {
-                                        // TBD
+                                    {   
+                                        MLM2::delete_wallet_log($shop_id, $slot_id, $slot_payout_return);
+                                        Tbl_vmoney_logs::insert($insert);
+                                        //delete wallet logs
                                     }
                                 } 
                                 catch (\Exception $e) 
                                 {
-                                    dd($e->getMessage());
+                                    MLM2::delete_wallet_log($shop_id, $slot_id, $slot_payout_return);
+                                    Tbl_vmoney_logs::insert($insert);
+                                    // delete wallet logs
                                 }
                             }
                         }

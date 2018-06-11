@@ -1392,7 +1392,7 @@ class ShopMemberController extends Shop
     }
 
 
-     public function press_admin_import_email()    
+    public function press_admin_import_email()    
     {
       
         if(Session::exists('user_email'))
@@ -1412,57 +1412,66 @@ class ShopMemberController extends Shop
         {
             return Redirect::to("/"); 
         }
-
     }      
-
-     public function importExcel(Request $request)     
-    {  
-
-        if($request->hasFile('import_file'))          
+  
+    public static function nullables($name)
+    {
+        if($name==null)
         {
-            Excel::load($request->file('import_file')->getRealPath(), function ($reader) 
-            {
-                foreach ($reader->toArray() as $key => $row) 
-                {
-
-                    $data['research_email_address']  = $row['research_email_address'] != null ? $row['research_email_address']:'';
-                    $data['company_name']            = $row['company_name'] != null ? $row['company_name']:'';
-                    $data['name']                    = $row['name'] != null ? $row['name']:'';
-                    $data['position']                = $row['position'] != null ? $row['position']:'';
-                    $data['title_of_journalist']     = $row['title_of_journalist'] != null ? $row['title_of_journalist']:'';
-                    $data['country']                 = $row['country'] != null ? $row['country']:'';
-                    $data['industry_type']           = $row['industry_type'] != null ? $row['industry_type']:'';
-                    $data['website']                 = $row['website'] != null ? $row['website']:'';
-                    $data['description']             = $row['description'] != null ? $row['description']:'';
-                    $data['media_type']              = $row['media_type'] != null ? $row['media_type']:'';
-
-                    if(!empty($data)) 
-                    {
-                        DB::table('tbl_press_release_recipients')->insert($data);
-                    }
-                }
-            });     
-        } 
+            return "";
+        }
         else
         {
-            return redirect::back();
-        }    
+            return $name;
+        }
+    }
 
+    public function importExcel(Request $request)     
+    {  
+        if($request->hasFile('import_file'))          
+        {
+
+            $file   = $request->file('import_file')->getRealPath();
+            $_data  = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
+            $first  = $_data[0]; 
+            $count          = 0;
+            $countPayee     = 0;
+            foreach($_data as $row)
+            {
+                $data['research_email_address']  = Self::nullables($row->research_email_address);
+                $data['company_name']            = Self::nullables($row->company_name);
+                $data['name']                    = Self::nullables($row->name);
+                $data['position']                = Self::nullables($row->position);
+                $data['title_of_journalist']     = Self::nullables($row->title_of_journalist);
+                $data['country']                 = Self::nullables($row->country);
+                $data['industry_type']           = Self::nullables($row->industry_type);
+                $data['website']                 = Self::nullables($row->website);
+                $data['description']             = Self::nullables($row->description);
+                $data['media_type']              = Self::nullables($row->media_type);
+                
+                if(!empty($data)) 
+                {
+                    DB::table('tbl_press_release_recipients')->insert($data);
+                }
+            } 
+        }
         Session::put('Success', 'Your file successfully import in database!!!');
         return back();
     }
 
     public function downloadExcel($type)
     {
-        $data = Tbl_press_release_recipient::get()->toArray();
-        return Excel::create('Sample Excel File', function($excel) use ($data) {
-            $excel->sheet('Sample Data Sheet', function($sheet) use ($data)
+        $excels['data'] =   ['RESEARCH EMAIL ADDRESS','COMPANY NAME','NAME','POSITION','TITLE OF JOURNALIST','COUNTRY','INDUSTRY TYPE','WEBSITE','DESCRIPTION','MEDIA TYPE'];
+        Excel::create('PRESS IQ SAMPLE SHEET', function($excel) use ($excels) 
+        {
+            $excel->sheet('template', function($sheet) use ($excels) 
             {
-                $sheet->fromArray($data);
+                $data   = $excels['data'];
+                $sheet->fromArray($data, null, 'A1', false, false);
+                $sheet->freezeFirstRow();
             });
         })->download($type);
     }
-
 
     public function pressadmin_email_edit($id)
     {   

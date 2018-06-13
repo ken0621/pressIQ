@@ -699,7 +699,7 @@ class ShopMemberController extends Shop
         }
     }
 
-     public function press_user_manage_user_update(Request $request)
+    public function press_user_manage_user_update(Request $request)
     {
         if(request()->isMethod("post"))
         {       

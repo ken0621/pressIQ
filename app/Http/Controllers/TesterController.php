@@ -289,7 +289,7 @@ class TesterController extends Controller
             }
             else
             {
-                $url = 'https://mll.sfsu.edu/sites/default/files/people/images/placeholder-person-300x300_9.jpg';
+                $url = 'http://www.allwhitebackground.com/images/2/2278-190x190.jpg';
             }
         }
 

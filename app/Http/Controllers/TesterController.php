@@ -274,9 +274,8 @@ class TesterController extends Controller
         }
         else
         {
-            $exist_ftp = Storage::disk('ftp')->exists($imagepath);
-
-            if ($exist_ftp) 
+            // $exist_ftp = Storage::disk('ftp')->exists($imagepath);
+            if ($this->remoteFileExists('http://digimaweb.solutions/uploadthirdparty/uploads/' . $imagepath))
             {
                 $imageget = Storage::disk('ftp')->get($imagepath);
 
@@ -287,12 +286,23 @@ class TesterController extends Controller
 
                 $url = Storage::disk('spaces')->url($imagepath);
             }
-            else
+            else 
             {
                 $url = 'http://www.allwhitebackground.com/images/2/2278-190x190.jpg';
             }
         }
 
         return Redirect::to($url);
+    }
+
+    function remoteFileExists($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_NOBODY, 1);
+        curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        if (curl_exec($ch)) return true;
+        else return false;
     }
 }

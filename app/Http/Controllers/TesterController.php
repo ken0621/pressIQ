@@ -274,14 +274,23 @@ class TesterController extends Controller
         }
         else
         {
-            $imageget = Storage::disk('ftp')->get($imagepath);
+            $exist_ftp = Storage::disk('ftp')->exists($imagepath);
 
-            if ($imageget) 
+            if ($exist_ftp) 
             {
-                Storage::disk('spaces')->put($imagepath, $imageget, 'public');
-            }
+                $imageget = Storage::disk('ftp')->get($imagepath);
 
-            $url = Storage::disk('spaces')->url($imagepath);
+                if ($imageget) 
+                {
+                    Storage::disk('spaces')->put($imagepath, $imageget, 'public');
+                }
+
+                $url = Storage::disk('spaces')->url($imagepath);
+            }
+            else
+            {
+                $url = 'http://via.placeholder.com/500x500';
+            }
         }
 
         return Redirect::to($url);

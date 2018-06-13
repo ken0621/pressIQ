@@ -303,7 +303,7 @@ class ShopMemberController extends Shop
         }   
     }
 
-     public function pressuser_dashboard()
+    public function pressuser_dashboard()
     {
         if(Session::exists('user_email'))
         {
@@ -1011,7 +1011,7 @@ class ShopMemberController extends Shop
       return  redirect::back();
     }
 
-     public function pressadmin()
+    public function pressadmin()
     {
         if(Session::exists('user_email'))
         {
@@ -1031,7 +1031,7 @@ class ShopMemberController extends Shop
             return Redirect::to("/"); 
         }
     }
-     public function pressadmin_dashboard()
+    public function pressadmin_dashboard()
     {
         if (Session::exists('user_email')) 
         {
@@ -1462,9 +1462,9 @@ class ShopMemberController extends Shop
     public function downloadExcel($type)
     {
         $excels['data'] =   ['RESEARCH EMAIL ADDRESS','COMPANY NAME','NAME','POSITION','TITLE OF JOURNALIST','COUNTRY','INDUSTRY TYPE','WEBSITE','DESCRIPTION','MEDIA TYPE'];
-        Excel::create('PRESS IQ SAMPLE SHEET', function($excel) use ($excels) 
+        Excel::create('PRESS IQ SAMPLE', function($excel) use ($excels) 
         {
-            $excel->sheet('template', function($sheet) use ($excels) 
+            $excel->sheet('PRESS IQ SAMPLE SHEET', function($sheet) use ($excels) 
             {
                 $data   = $excels['data'];
                 $sheet->fromArray($data, null, 'A1', false, false);

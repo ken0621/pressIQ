@@ -79,7 +79,7 @@
 	/*box-shadow: 0px 12px 25px -15px rgba(0,0,0,0.2);*/
 	padding: 15px 20px;
 	/*border: 1px solid #ededed;*/
-	width: 75%;
+	width: 100%;
 	/*background-color: #fff;*/
 }
 </style>
@@ -120,8 +120,10 @@
 					<td width="75%">
 						<div class="heading-container">{{$pr_headline}}</div>
 					</td>
-					<td width="25%">
-						<div class="logo-holder"><img src="{!!$pr_co_img!!}" style="width: 100%;"></div>
+					<td width="40%">
+						<div class="logo-holder">
+							<img src="{!!$pr_co_img!!}" style="width: 100%;">
+						</div>
 					</td>
 				</tr>
 			</table>

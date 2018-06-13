@@ -289,7 +289,7 @@ class TesterController extends Controller
             }
             else
             {
-                $url = 'http://via.placeholder.com/500x500';
+                $url = '';
             }
         }
 

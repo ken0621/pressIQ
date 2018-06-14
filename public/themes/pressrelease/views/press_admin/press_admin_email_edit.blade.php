@@ -9,11 +9,11 @@
             <form method="post">
               {{csrf_field()}}
             <div class="title">Title:</div>
-            <input type="text" name="pr_headline" value="{{$edits->pr_headline}}"><br>
+              <input type="text" name="pr_headline" value="{{$edits->pr_headline}}"><br>
             <div class="title">Release Text Body:</div>
-            <textarea name="pr_content">{!!$edits->pr_content!!}</textarea><br>
+              <textarea name="pr_content">{!!$edits->pr_content!!}</textarea><br>
             <div class="title">Boilerplate:</div>
-            <textarea name="pr_boiler_content">{!!$edits->pr_boiler_content!!}</textarea>
+              <textarea name="pr_boiler_content">{!!$edits->pr_boiler_content!!}</textarea>
             <div class="button-container">
                 <button type="submit" name="save" value="save" formaction="/pressadmin/email_save">Save as draft</button>
             </div>

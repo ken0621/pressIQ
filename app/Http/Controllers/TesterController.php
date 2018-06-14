@@ -275,7 +275,7 @@ class TesterController extends Controller
         else
         {
             // $exist_ftp = Storage::disk('ftp')->exists($imagepath);
-            if ($this->remoteFileExists('http://digimaweb.solutions/uploadthirdparty/uploads/' . $imagepath))
+            if ($this->remoteFileExists('http://digimaweb.solutions/uploadthirdparty/' . $imagepath))
             {
                 $imageget = Storage::disk('ftp')->get($imagepath);
 

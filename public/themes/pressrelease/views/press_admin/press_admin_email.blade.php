@@ -25,7 +25,6 @@
                             <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/email_delete/{{$email->pr_id}}"><button type="button"  class="btn btn-danger center">
                             <i class="fa fa-trash" name="" aria-hidden="true"></i>Delete</button>
                         </td>
-
                     </tr>
                     @endforeach
 

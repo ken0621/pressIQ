@@ -2042,6 +2042,12 @@ class ShopMemberController extends Shop
 
                                 $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
 
+                                if($_slot[$key]->current_wallet - $amount < 0)
+                                {
+                                    break;
+                                    return Redirect::back();
+                                }
+                                
                                 try 
                                 {
                                     $client = new Client();

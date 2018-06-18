@@ -59,7 +59,8 @@
 					data: $(e.currentTarget).serialize(),
 					type:"post",
 					success: function(data)
-					{
+					{	
+						$(".dis-button-tho").removeAttr('disabled').removeProp('disabled');
 						if(data == "")
 						{
 							$("#global_modal").modal("hide");

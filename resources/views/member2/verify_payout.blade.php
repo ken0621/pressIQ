@@ -73,10 +73,9 @@
 					type:"post",
 					success: function(data)
 					{
-						$(".dis-button-tho").removeAttr('disabled').removeProp('disabled');
-
 						if(data == "")
 						{
+							$(".dis-button-tho").removeAttr('disabled').removeProp('disabled');
 							window.location.reload();
 						}
 						else if(data == "disable_emoney")

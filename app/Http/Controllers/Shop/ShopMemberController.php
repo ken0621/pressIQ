@@ -2055,7 +2055,7 @@ class ShopMemberController extends Shop
                                     $insert['vmoney_logs'] = serialize($data_decoded);
                                     $insert['created_at'] = Carbon::now();
                                     $insert['customer_id'] = Self::$customer_info->customer_id;
-                                   
+                                    $insert['slot_id'] = $slot_id;
                                     /* Result */
                                     if ($data_decoded->resultCode == "000") 
                                     {   

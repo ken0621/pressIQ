@@ -1913,7 +1913,7 @@ class ShopMemberController extends Shop
         $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
         
         $payout_setting = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
-
+        
         $tax = $payout_setting->enchasment_settings_tax;
         $service_charge = $payout_setting->enchasment_settings_p_fee;
         $service_charge_type = $payout_setting->enchasment_settings_p_fee_type;
@@ -2054,7 +2054,7 @@ class ShopMemberController extends Shop
                                     $data_decoded = json_decode($contents);
                                     $insert['vmoney_logs'] = serialize($data_decoded);
                                     $insert['created_at'] = Carbon::now();
-                                    
+                                    $insert['customer_id'] = Self::$customer_info->customer_id;
                                    
                                     /* Result */
                                     if ($data_decoded->resultCode == "000") 

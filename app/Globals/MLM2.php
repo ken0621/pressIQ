@@ -165,6 +165,11 @@ class MLM2
 			return Tbl_mlm_slot_wallet_log::insertGetId($insert);
 		}
 	}
+	public static function delete_wallet_log($shop_id, $slot_id, $wallet_log_id)
+	{
+		Tbl_mlm_slot_wallet_log::where('wallet_log_id', $wallet_log_id)->where('wallet_log_slot', $slot_id)->where('shop_id',$shop_id)->delete();
+
+	}
 	public static function get_sponsor_network($shop_id, $slot_no, $level = null)
 	{
 		$slot_id = Tbl_mlm_slot::where("shop_id", $shop_id)->where("slot_no", $slot_no)->value("slot_id");

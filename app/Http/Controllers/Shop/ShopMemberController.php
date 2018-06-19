@@ -39,7 +39,7 @@ use App\Models\Tbl_recaptcha_pool_amount;
 use App\Models\Tbl_item_token;
 use App\Models\Tbl_item_token_log;
 use App\Models\Tbl_token_list;
-
+use App\Models\Tbl_vmoney_logs;
 use App\Models\Tbl_image;
 // use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_item_redeemable_report;
@@ -1913,7 +1913,7 @@ class ShopMemberController extends Shop
         $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
         
         $payout_setting = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
-
+        
         $tax = $payout_setting->enchasment_settings_tax;
         $service_charge = $payout_setting->enchasment_settings_p_fee;
         $service_charge_type = $payout_setting->enchasment_settings_p_fee_type;
@@ -1994,78 +1994,94 @@ class ShopMemberController extends Shop
                         /* V-MONEY */
                         if ($method == "vmoney") 
                         {
-                            return 'disable_emoney';
+                            // return 'disable_emoney';
 
-                            // /* API */
-                            // $post = 'mxtransfer.svc';
+                            /* API */
+                            $post = 'mxtransfer.svc';
                             
-                            // if (get_domain() == "philtechglobalinc.com") 
-                            // {
-                            //     $environment = 1;
-                            // }
-                            // else
-                            // {
-                            //     $environment = 0;
-                            // }
+                            if (get_domain() == "philtechglobalinc.com") 
+                            {
+                                $environment = 1;
+                            }
+                            else
+                            {
+                                $environment = 0;
+                            }
 
-                            // /* Sandbox */
-                            // if ($environment == 0) 
-                            // {
-                            //     $pass["apiKey"] = 'Vqzs90pKLb6iwsGQhnRS'; // Vendor API Key issued by VMoney
-                            //     $pass["merchantId"] = 'M239658948226'; // Merchant ID registered within VMoney
-                            //     /* Set URL Sandbox or Live */
-                            //     $url = "http://test.vmoney.com/gtcvbankmerchant/";
-                            // }
-                            // /* Production */
-                            // else
-                            // {
-                            //     $pass["apiKey"] = 'z9Gy1dBbnyj9cxMqXSKF'; // Vendor API Key issued by VMoney
-                            //     $pass["merchantId"] = 'M132582139240'; // Merchant ID registered within VMoney
-                            //     /* Set URL Sandbox or Live */
-                            //     $url = "https://philtechglobalinc.vmoney.com/gtcvbankmerchant/";
-                            // }
+                            /* Sandbox */
+                            if ($environment == 0) 
+                            {
+                                $pass["apiKey"] = 'Vqzs90pKLb6iwsGQhnRS'; // Vendor API Key issued by VMoney
+                                $pass["merchantId"] = 'M239658948226'; // Merchant ID registered within VMoney
+                                /* Set URL Sandbox or Live */
+                                $url = "http://test.vmoney.com/gtcvbankmerchant/";
+                            }
+                            /* Production */
+                            else
+                            {
+                                $pass["apiKey"] = 'z9Gy1dBbnyj9cxMqXSKF'; // Vendor API Key issued by VMoney
+                                $pass["merchantId"] = 'M132582139240'; // Merchant ID registered within VMoney
+                                /* Set URL Sandbox or Live */
+                                $url = "https://philtechglobalinc.vmoney.com/gtcvbankmerchant/";
+                            }
 
-                            // $get_email = Tbl_vmoney_settings::where("slot_id", $slot_id)->first();
+                            $get_email = Tbl_vmoney_settings::where("slot_id", $slot_id)->first();
 
-                            // if ($get_email) 
-                            // {
-                            //     $pass["recipient"] = $get_email->vmoney_email; // Recipient's email address
-                            //     $pass["merchantRef"] = Self::$customer_info->customer_id . time(); // Merchant reference number
-                            //     $pass["amount"] = $take_home; // Amount of the transaction
-                            //     $pass["currency"] = 'PHP'; // Currency being transferred (ie PHP)
-                            //     $pass["message"] = 'Philtech VMoney Wallet Transfer'; // Memo or notes for transaction
+                            if ($get_email) 
+                            {
+                                $pass["recipient"] = $get_email->vmoney_email; // Recipient's email address
+                                $pass["merchantRef"] = Self::$customer_info->customer_id . time(); // Merchant reference number
+                                $pass["amount"] = $take_home; // Amount of the transaction
+                                $pass["currency"] = 'PHP'; // Currency being transferred (ie PHP)
+                                $pass["message"] = 'Philtech VMoney Wallet Transfer'; // Memo or notes for transaction
 
-                            //     $post_params = $url . $post . "?" . http_build_query($pass);
+                                $post_params = $url . $post . "?" . http_build_query($pass);
 
-                            //     try 
-                            //     {
-                            //         $client = new Client();
-                            //         $response = $client->post($post_params, $pass);
-                            //         $stream = $response->getBody();
-                            //         $contents = $stream->getContents(); // returns all the contents
-                            //         $contents = $stream->getContents(); // empty string
-                            //         $stream->rewind(); // Seek to the beginning
-                            //         $contents = $stream->getContents(); // returns all the contents
-                            //         $data_decoded = json_decode($contents);
+                                $status = "DONE"; // ASK IF RELEASED OR DONE
+                                $remarks = "Request Payout via V-Money";
 
-                            //         /* Result */
-                            //         if ($data_decoded->resultCode == "000") 
-                            //         {   
-                            //             $status = "DONE"; // ASK IF RELEASED OR DONE
-                            //             $remarks = "Request Payout via V-Money";
+                                $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
 
-                            //             $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
-                            //         }
-                            //         else
-                            //         {
-                            //             // TBD
-                            //         }
-                            //     } 
-                            //     catch (\Exception $e) 
-                            //     {
-                            //         dd($e->getMessage());
-                            //     }
-                            // }
+                                if($_slot[$key]->current_wallet - $amount < 0)
+                                {
+                                    break;
+                                    return Redirect::back();
+                                }
+                                
+                                try 
+                                {
+                                    $client = new Client();
+                                    $response = $client->post($post_params, $pass);
+                                    $stream = $response->getBody();
+                                    $contents = $stream->getContents(); // returns all the contents
+                                    $contents = $stream->getContents(); // empty string
+                                    $stream->rewind(); // Seek to the beginning
+                                    $contents = $stream->getContents(); // returns all the contents
+                                    $data_decoded = json_decode($contents);
+                                    $insert['vmoney_logs'] = serialize($data_decoded);
+                                    $insert['created_at'] = Carbon::now();
+                                    $insert['customer_id'] = Self::$customer_info->customer_id;
+                                    $insert['slot_id'] = $slot_id;
+                                    /* Result */
+                                    if ($data_decoded->resultCode == "000") 
+                                    {   
+
+                                       Tbl_vmoney_logs::insert($insert);
+                                    }
+                                    else
+                                    {   
+                                        MLM2::delete_wallet_log($shop_id, $slot_id, $slot_payout_return);
+                                        Tbl_vmoney_logs::insert($insert);
+                                        //delete wallet logs
+                                    }
+                                } 
+                                catch (\Exception $e) 
+                                {
+                                    MLM2::delete_wallet_log($shop_id, $slot_id, $slot_payout_return);
+                                    Tbl_vmoney_logs::insert($insert);
+                                    // delete wallet logs
+                                }
+                            }
                         }
                         elseif($method == "airline")
                         {

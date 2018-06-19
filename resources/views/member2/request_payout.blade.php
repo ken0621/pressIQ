@@ -5,7 +5,7 @@
 
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
-		<h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
+		<h4 class="modal-title"><i class="fa fa-money"></i> Request Payout</h4>
 	</div>
 	<div class="modal-body clearfix">
 		<div class="error-message-here text-center" style="color: red; padding: 5px;"></div>

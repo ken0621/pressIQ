@@ -77,9 +77,10 @@
 {
 	margin: auto;
 	/*box-shadow: 0px 12px 25px -15px rgba(0,0,0,0.2);*/
-	padding: 15px 20px;
+	padding: 0px 5px;
+	/*padding: 15px 20px;*/
 	/*border: 1px solid #ededed;*/
-	width: 100%;
+	/*width: 100%;*/
 	/*background-color: #fff;*/
 }
 </style>
@@ -112,7 +113,6 @@
 			<div class="content-container">{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_boiler_content); !!}</div>
 		</div>
 	</div> --}}
-
 	<div class="background-container">
 		<div class="container">
 			<table width="100%">
@@ -134,9 +134,11 @@
 			<div class="border"></div>
 			<div class="title-about-container">About {{$pr_co_name}}</div>
 			<div class="title-about-container">{{$pr_type}}</div>
-			<div class="content-container">{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_boiler_content); !!}</div>
+			<div class="content-container">{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_boiler_content); !!}</div>			
 		</div>
 	</div>
-
+	<div style="text-align: center;padding: 0px 20px 0px 20px">                                         
+		Don't want to recieve amazing emails from us? <a href="*|UNSUB:http://press-iq.com/unsub|*">Unsubscribe.</a>
+	</div>
 </body>
 </html>

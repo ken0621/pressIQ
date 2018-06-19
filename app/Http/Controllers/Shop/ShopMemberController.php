@@ -668,11 +668,20 @@ class ShopMemberController extends Shop
     public function pressuser_pressrelease_recipient_search(Request $request)
     {  
         $search_key         = $request->search_key;
-        $data['_recipient'] = Tbl_press_release_recipient::where('name','like','%'.$search_key.'%')
-                            ->Orwhere('company_name','like','%'.$search_key.'%')
-                            ->Orwhere('position','like','%'.$search_key.'   %')
-                            ->get();
-        return view("press_user.search_recipient", $data);
+
+        if($search_key == null)
+        {
+           return "No data Found.";
+        }
+        else
+        {
+            $data['_recipient'] = Tbl_press_release_recipient::where('name','like','%'.$search_key.'%')
+                                ->Orwhere('company_name','like','%'.$search_key.'%')
+                                ->Orwhere('position','like','%'.$search_key.'%')
+                                ->get();
+
+            return view("press_user.search_recipient", $data);
+        }
     }
   
     public function press_user_manage_user()
@@ -936,7 +945,7 @@ class ShopMemberController extends Shop
                 }
 
                 $data["analytics_view"] = $analytics_view;
-                $data["page"]           = "Analytics Details";
+                $data["page"]           = "Analytics Detail";
                 return view("press_user.press_user_analytics_view_all",$data); 
             }
         }
@@ -1164,12 +1173,21 @@ class ShopMemberController extends Shop
     public function mediacontacts_search(Request $request)
     {  
         $search_media = $request->search_media;
-        $data["_media_contacts"] = Tbl_press_release_recipient::where('name','like','%'.$search_media.'%')
-                                 ->Orwhere('company_name','like','%'.$search_media.'%')
-                                 ->Orwhere('country','like','%'.$search_media.'%')
-                                 ->Orwhere('research_email_address','like','%'.$search_media.'%')
-                                 ->get();
-        return view("press_admin.search_press_admin_media_contacts", $data);
+
+        if($search_media == null)
+        {
+            return "No Data Found.";
+        }
+        else
+        {
+            $data["_media_contacts"] = Tbl_press_release_recipient::where('name','like','%'.$search_media.'%')
+                                     ->Orwhere('company_name','like','%'.$search_media.'%')
+                                     ->Orwhere('country','like','%'.$search_media.'%')
+                                     ->Orwhere('research_email_address','like','%'.$search_media.'%')
+                                     ->get();
+
+            return view("press_admin.search_press_admin_media_contacts", $data);
+        }
     }
 
     public function add_user(Request $request)  
@@ -1269,18 +1287,26 @@ class ShopMemberController extends Shop
     public function manage_user_search(Request $request)
     {   
         $search_user = $request->search_user;
-        $data["_user"] = Tbl_pressiq_user::where('user_level',2)
-                        ->where('user_first_name','like','%'.$search_user.'%')
-                        ->Orwhere('user_last_name','like','%'.$search_user.'%')
-                        ->Orwhere('user_email','like','%'.$search_user.'%')
-                        ->Orwhere('user_company_name','like','%'.$search_user.'%')
-                        ->get();
-        return view("press_admin.search_press_admin_manage_user", $data);
-    }
 
-    public function manage_user_add_admin(Request $request)
+        if($search_user == null)
+        {
+            return "No Data Found.";
+        }
+        else
+        {
+            $data["_user"] = Tbl_pressiq_user::where('user_level',2)
+                            ->where('user_first_name','like','%'.$search_user.'%')
+                            ->Orwhere('user_last_name','like','%'.$search_user.'%')
+                            ->Orwhere('user_email','like','%'.$search_user.'%')
+                            ->Orwhere('user_company_name','like','%'.$search_user.'%')
+                            ->get();
+            return view("press_admin.search_press_admin_manage_user", $data);
+        }        
+    }       
+ 
+    public function manage_user_add_admin(Request $request)   
     {
-      $data["user_first_name"]                 = $request->user_first_name;
+      $data["user_first_name"]                 = $request->user_first_name . " (Admin)";
       $data["user_last_name"]                  = $request->user_last_name;
       $data["user_email"]                      = $request->user_email;
       $data["user_password"]                   = Crypt::encrypt(request('user_password'));

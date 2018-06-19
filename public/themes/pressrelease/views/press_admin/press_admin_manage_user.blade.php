@@ -126,13 +126,12 @@
                 @endif
               </div>
 
-              <div class="user-container">
-                  <div class="title">User Account
-                      <div class="search-container pull-right">
-                       <input placeholder="Search" type="text"  name="search_user" id="search_user">
-                       <button  type="button" name="search_button_user" id="search_button_user" class="btn btn-success">Search</button>
-                      </div>
+              <div class="user-container"><br>
+                  <div class="search-container pull-right">
+                      <input placeholder="Search" type="text"  name="search_user" id="search_user">
+                      <button  type="button" name="search_button_user" id="search_button_user" class="btn btn-success">Search</button>
                   </div>
+                  <div class="title">User Account</div>
                   <table  class="table table-bordered" id="showHere_table_search">
                      <tr>
                          <th style="width: 15%;">First Name</th>
@@ -144,7 +143,7 @@
                      </tr>
                         @foreach($_user as $_user_account)
                         <tr>
-                           <td> <a href="">{{$_user_account->user_first_name}}</td>
+                           <td>{{$_user_account->user_first_name}}</td>
                            <td>{{$_user_account->user_last_name}}</td>
                            <td>{{$_user_account->user_email}}</td>
                            <td>{{$_user_account->user_company_name}}</td>
@@ -164,8 +163,7 @@
                 </div>    
             </div>
 
-            <div id="admin_account" class="tabcontent add-media-container">
-                <div class="title-container">Update Admin Account</div><br>
+            <div id="admin_account" class="tabcontent add-media-container"><br>
                   <table  class="table table-bordered" id="showHere_table">
                      <tr>
                          <th style="width: 20%;">First Name</th>

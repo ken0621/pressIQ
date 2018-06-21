@@ -72,12 +72,14 @@
                     <div class="title">Company Name: *</div>
                     <input type="text" id="company_name" name="company_name" class="form-control" value="{{$edits->company_name}}" required>
 
+                    <div class="title">Email: *</div>
+                    <input type="email" id="contact_email" name="contact_email" class="form-control" value="{{$edits->research_email_address}}" required>
 
                     <div class="title">Country: *</div>
                     <input type="text" id="country" name="country" class="form-control" value="{{$edits->country}}" required>
 
-                    <div class="title">Email: *</div>
-                    <input type="email" id="contact_email" name="contact_email" class="form-control" value="{{$edits->research_email_address}}" required>
+                    <div class="title">Language: *</div>
+                    <input type="text" id="language" name="language" class="form-control" value="{{$edits->language}}" required>
 
                     <div class="title">Website: *</div>
                     <input type="text"  id="contact_website" name="contact_website" class="form-control" value="{{$edits->website}}">
@@ -110,8 +112,11 @@
                     <div class="title">Company Name: *</div>
                     <input type="text" id="company_name" name="company_name" class="form-control" placeholder="Enter the company name of the media contact" style="background-color: #f1f1f1;" required>
 
+                     <div class="title">Email: *</div>
+                    <input type="email" id="contact_email" name="contact_email" class="form-control" style="background-color: #f1f1f1;" placeholder="Enter one email address only" required>
+
                     <div class="title">Country: *</div>
-                       <select class="form-control" id="country" name="country" data-placeholder="Select Country for User" style="width: 700px;background-color: #f1f1f1;"> 
+                        <select class="form-control" id="country" name="country" data-placeholder="Select Country for User" style="width: 700px;background-color: #f1f1f1;"> 
                             <option value="Hong Kong">Hong Kong</option>
                             <option value="Philippines">Philippines</option>
                             <option value="Singapore">Singapore</option> 
@@ -119,10 +124,13 @@
                             <option value="Indonesia">Indonesia</option>
                             <option value="Malaysia">Malaysia</option>
                             <option value="India">India</option>
-                       </select> 
+                        </select> 
 
-                    <div class="title">Email: *</div>
-                    <input type="email" id="contact_email" name="contact_email" class="form-control" style="background-color: #f1f1f1;" placeholder="Enter one email address only" required>
+                    <div class="title">Language: *</div>
+                      <select class="form-control" id="language" name="language" style="width: 700px;background-color: #f1f1f1;"> 
+                          <option value="English">English</option>
+                          <option value="Chinese">Chinese</option>
+                      </select> 
 
                     <div class="title">Website: *</div>
                     <input type="text"  id="contact_website" name="contact_website" class="form-control">

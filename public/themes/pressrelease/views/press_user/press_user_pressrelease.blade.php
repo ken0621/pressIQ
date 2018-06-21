@@ -69,7 +69,14 @@
                          <option value="{{$value}}">{{ $value }}</option>
                          @endforeach
                     </select>
-
+                    
+                    <div class="title">Language:</div>
+                    <select data-placeholder="--Choose a Language--" multiple class="chosen-select" id="language" name="language[]">
+                        @foreach($_language as $language)
+                        <option value="{{$language->language}}">{{$language->language}}</option>
+                        @endforeach
+                    </select>
+                    
                     <div class="title">Industry Type:</div>
                     <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select" id="industry_type" name="industry_type[]">
                           @foreach($_industry_type as $industry)
@@ -139,6 +146,13 @@
                          @foreach($country as $key => $value)
                          <option value="{{$value}}">{{ $value }}</option>
                          @endforeach
+                    </select>
+
+                    <div class="title">Language:</div>
+                    <select data-placeholder="--Choose a Language--" multiple class="chosen-select" id="language" name="language[]">
+                        @foreach($_language as $language)
+                        <option value="{{$language->language}}">{{$language->language}}</option>
+                        @endforeach
                     </select>
 
                     <div class="title">Industry Type:</div>
@@ -316,7 +330,20 @@
   });
 </script>
 
-<script>  
+<script> 
+   $('#language').change(function() 
+   {
+     if(choose_country.value =="")
+        {
+          alert('Please Choose Country First!');
+          $('#language').attr('disabled', 'disabled');
+        }
+    else
+        {
+          $('#language').attr('disabled', false)
+        }
+   });
+
    $('#industry_type').change(function() 
    {
      if(choose_country.value =="")

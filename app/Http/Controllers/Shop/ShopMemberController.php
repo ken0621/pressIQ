@@ -476,7 +476,6 @@ class ShopMemberController extends Shop
                     Session::forget('pr_edit');
                     Session::flash('email_sent', 'Email Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
-
                 }
                 else
                 {
@@ -492,11 +491,12 @@ class ShopMemberController extends Shop
 
     public function send($pr_info)        
     {
-        // dd('Sorry Website Under Construction!');
-        $to  = explode(",", $pr_info['pr_to']);
+        $to                       = explode(",", $pr_info['pr_to']);
         $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
+ 
+        $result = array_unique($to);
 
-        foreach ($to as $pr_info['pr_to']) 
+        foreach ($result as $pr_info['pr_to']) 
         {
             Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
             {
@@ -506,7 +506,7 @@ class ShopMemberController extends Shop
             });
         }
     }  
-   
+
     public function send_contact_us()
     {
         $contactus_info["contactus_first_name"]         =request('first_name');

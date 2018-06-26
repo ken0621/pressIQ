@@ -418,13 +418,35 @@ class ShopMemberController extends Shop
         }
         else
         {    
-            $user_membership = tbl_pressiq_user::where('user_email',session('user_email'))->first()->user_membership;
-            $user_limit      = count(tbl_pressiq_press_releases::where('pr_from',session('user_email'))->get());
+            $user_membership   = tbl_pressiq_user::where('user_email',session('user_email'))->first()->user_membership;
+            $user_limit        = count(tbl_pressiq_press_releases::where('pr_from',session('user_email'))->get());
             
-            if($user_membership>$user_limit )
+            $user_date_created = tbl_pressiq_user::where('user_email',session('user_email'))->first()->user_date_created;
+            $user_date_limit   = date("Y-m-d", strtotime('6 months', strtotime($user_date_created)));
+            $user_date_now     = date("Y-m-d", strtotime('now'));
+
+
+            if($user_membership>$user_limit)
             {
-                $this->send($pr_info);
-            }
+                if($user_date_limit <= $user_date_now)
+                {
+                    echo "<script>alert('Sorry, Your Account Has Expired.')</script>";
+                    $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
+
+                    Mail::send('emails.admin_alert',$pr_info, function($message) use ($pr_info)
+                    {
+                        $message->from($pr_info["explode_email"][0] . '@press-iq.com');
+                        $message->to('marketing@press-iq.com');
+                        $message->subject('PressIQ');
+                    });
+                    $data["page"] = "Home";
+                    return view("home", $data);
+                }
+                else
+                {
+                    $this->send($pr_info);   
+                }
+            }    
             else
             {   
                 echo "<script>alert('Sorry! You have reached the Maximum Sending Limit.')</script>";
@@ -476,7 +498,6 @@ class ShopMemberController extends Shop
                     Session::forget('pr_edit');
                     Session::flash('email_sent', 'Email Successfully Sent!');
                     return Redirect::to("/pressuser/mypressrelease");
-
                 }
                 else
                 {
@@ -485,6 +506,7 @@ class ShopMemberController extends Shop
                     return Redirect::to("/pressuser/mypressrelease");
                 }
             }
+
             $data["page"] = "Press Release - Press Release";
             return view("press_user.press_user_pressrelease", $data);
         } 
@@ -492,11 +514,12 @@ class ShopMemberController extends Shop
 
     public function send($pr_info)        
     {
-        // dd('Sorry Website Under Construction!');
-        $to  = explode(",", $pr_info['pr_to']);
+        $to = explode(",", $pr_info['pr_to']);
         $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
+ 
+        $result = array_unique($to);
 
-        foreach ($to as $pr_info['pr_to']) 
+        foreach ($result as $pr_info['pr_to']) 
         {
             Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
             {
@@ -506,7 +529,7 @@ class ShopMemberController extends Shop
             });
         }
     }  
-   
+
     public function send_contact_us()
     {
         $contactus_info["contactus_first_name"]         =request('first_name');

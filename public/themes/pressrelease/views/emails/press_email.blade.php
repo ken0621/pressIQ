@@ -17,7 +17,7 @@
 .container
 {
 	/*background-color: #f5f5f5;*/
-	margin: 0px 130px;
+	margin: 0px 50px;
 	padding: 40px 40px;
 	border-radius: 10px;
 	min-height: 640px;
@@ -30,7 +30,7 @@
 	text-align: center;
 	font-weight: 700;
 	font-family: 'PT Serif';
-	padding: 0px 20px 0px 20px;
+	padding: 30px 20px 30px 20px;
 }
 .sender-container
 {
@@ -67,7 +67,7 @@
 }
 .title-about-container
 {
-	padding: 20px 0px 15px 0px;
+	padding: 10px 0px 5px 0px;
 	font-size: 20px;
 	color: #404040;
 	font-family: 'PT Sans';
@@ -77,7 +77,7 @@
 {
 	margin: auto;
 	/*box-shadow: 0px 12px 25px -15px rgba(0,0,0,0.2);*/
-	padding: 0px 5px;
+	padding: 0px 0px;
 	/*padding: 15px 20px;*/
 	/*border: 1px solid #ededed;*/
 	/*width: 100%;*/
@@ -117,10 +117,10 @@
 		<div class="container">
 			<table width="100%">
 				<tr>
-					<td width="75%">
+					<td width="70%">
 						<div class="heading-container">{{$pr_headline}}</div>
 					</td>
-					<td width="40%">
+					<td width="50%">
 						<div class="logo-holder">
 							<img src="{!!$pr_co_img!!}" style="width: 100%;">
 						</div>

@@ -523,7 +523,7 @@ class ShopMemberController extends Shop
         {
             Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
             {
-                $message->from('no-reply' . '@press-iq.com', $pr_info['pr_sender_name']);
+                $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
                 $message->to($pr_info['pr_to']);
                 $message->subject($pr_info["pr_headline"]);
             });

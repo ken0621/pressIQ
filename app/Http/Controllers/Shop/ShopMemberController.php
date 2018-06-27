@@ -387,7 +387,7 @@ class ShopMemberController extends Shop
         {
             return Redirect::to("/"); 
         }
-    }
+    }   
         
     public function send_pr()
     {
@@ -510,8 +510,8 @@ class ShopMemberController extends Shop
             $data["page"] = "Press Release - Press Release";
             return view("press_user.press_user_pressrelease", $data);
         } 
-    }    
-
+    }     
+ 
     public function send($pr_info)        
     {
         $to = explode(",", $pr_info['pr_to']);

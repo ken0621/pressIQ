@@ -3,6 +3,30 @@
 <head>
 
 <style>
+@media screen and (max-width: 1366px)
+{
+	
+}
+@media screen and (max-width: 768px)
+{
+	.container
+	{
+		margin: 0px 0px !important;
+		padding: 0px 0px !important;
+	}
+	.heading-container
+	{
+		font-size: 20px !important;
+	}
+	.title-about-container
+	{
+		font-size: 16px !important;
+	}
+	.content-container
+	{
+		font-size: 13px !important;
+	}
+}
 .background-container
 {
 	position: relative;
@@ -31,6 +55,7 @@
 	font-weight: 700;
 	font-family: 'PT Serif';
 	padding: 30px 20px 30px 20px;
+
 }
 .sender-container
 {
@@ -92,27 +117,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-	{{-- <div class="background-container">
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-9" style="padding-left: 0px; padding-right: 0px;">
-					<div class="heading-container">{{$pr_headline}}</div>
-				</div>
-				<div class="col-xs-3" style="padding-left: 0px; padding-right: 20px;">
-					<div class="logo-holder">
-					  <img src="{!!$pr_co_img!!}" style="width: 100%;">
-					</div>
-				</div>
-			</div>
-			<div class="sender-container"><span class="title-sender">Published by </span><span class="sender-name">{{$pr_sender_name}}</span></div>
-			<div class="date-container">{{$pr_date_sent}}</div>
-			<div class="content-container"><p>{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_content); !!}</p></div>
-			<div class="border"></div>
-			<div class="title-about-container">About {{$pr_co_name}}</div>
-			<div class="title-about-container">{{$pr_type}}</div>
-			<div class="content-container">{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_boiler_content); !!}</div>
-		</div>
-	</div> --}}
 	<div class="background-container">
 		<div class="container">
 			<table width="100%">

@@ -250,15 +250,16 @@
                             <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
                             <a href="/legalities"><li>LEGALITIES</li></a>
                             <a href="/contact"><li>CONTACT US</li></a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a>
+                            {{-- <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a> --}}
+                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>FRANCHISE BUSINESS PRESENTATION</li></a>
+                            {{-- <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MARKETING PLAN PRESENTATION</li></a> --}}
+                            @if($mlm_member)
                             <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>FRANCHISE BUSINESS PRESENTATION</li></a>
                             <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
                             <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
                             <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MARKETING PLAN PRESENTATION</li></a>
-                            @if($mlm_member)
-                            <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MILLIONAIRE SYSTEM</li></a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>FRANCHISE BUSINESS</li></a>
                             @endif
                         </ul>
                     <div class="space2"></div>

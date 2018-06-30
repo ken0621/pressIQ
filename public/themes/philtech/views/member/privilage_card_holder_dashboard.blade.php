@@ -44,10 +44,13 @@
 					@if(count($_point_plan) > 0)
 					<div class="chart-legend" style="min-height: 117px; max-height: auto;">
 						@foreach($_point_plan as $plan)
-						<div class="holder">
-							
-							<div class="name" style="width: 100%;"><div class="color pull-left middle-pos"></div><span>{{ $plan->label }}</span> <span class="p-text">{{ $points->{ "display_" . $plan->string_plan } }}</span></div>
-						</div>
+						@if($plan->label == "Repurchase Cashback")
+							<div class="holder">
+								
+								<div class="name" style="width: 100%;"><div class="color pull-left middle-pos"></div><span>{{ $plan->label }}</span> <span class="p-text">{{ $points->{ "display_" . $plan->string_plan } }}</span></div>
+							</div>
+						@endif
+
 						@endforeach
 					</div>
 					@else

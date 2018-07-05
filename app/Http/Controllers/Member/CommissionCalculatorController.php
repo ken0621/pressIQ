@@ -50,6 +50,9 @@ class CommissionCalculatorController extends Member
         $comm['total_selling_price'] = str_replace(',', '', $request->total_selling_price);
         $comm['total_contract_price'] = $request->total_contract_price;
         $comm['total_commission'] = $request->total_commission;
+        $comm['total_net_commission'] = $request->total_net_commission;
+        $comm['ewt'] = $request->ewt;
+        $comm['ewt_amount'] = $request->ewt_amount;        
         $comm['loanable_amount'] = $request->loanable_amount;
         $comm['date_created'] = Carbon::now();
 
@@ -64,12 +67,17 @@ class CommissionCalculatorController extends Member
         $return = CommissionCalculator::create($shop_id, $comm, $comm_item);
 
         // die(var_dump('success'));
-        if($return == 'success')
+        if($return)
         {
-            $data['status'] = $return;
+            $data['status'] = "success";
             $data['call_function'] = 'success_commission';
-            return json_encode($data);
         }
+        else
+        {
+            $data['status'] = "error";
+            $data['status_message'] = "Unsuccessful Transaction";
+        }
+        return json_encode($data);
     }
     public function getLoadItem(Request $request)
     {

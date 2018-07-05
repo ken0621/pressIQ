@@ -25,9 +25,10 @@ class CommissionCalculator
 {
 	public static function create($shop_id, $comm, $comm_item)
 	{
-		$refnum = $comm['refnum'];
+		$refnum = isset($comm['refnum']) ? $comm['refnum'] : '';
 
-		unset($comm['refnum']);
+		// unset($comm['refnum']);
+
 		$comm['shop_id'] = $shop_id;
 		$commission_id = Tbl_commission::insertGetId($comm);
 
@@ -125,7 +126,7 @@ class CommissionCalculator
 			Tbl_commission_invoice::insert($ins);
 		}
 
-		// die(var_dump($comm_item_id));
+		// die(var_dump($invoice_id));
 		return $invoice_id;
 		
 	}

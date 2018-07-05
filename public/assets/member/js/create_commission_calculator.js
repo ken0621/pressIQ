@@ -19,6 +19,9 @@ var ndp = 0;
 var tcp_string = '';
 var tcp = 0;
 
+var ewt_string = '';
+var ewt = 0.05;
+
 var selected_customer='';
 
 function create_commission_calculator()
@@ -129,6 +132,11 @@ function create_commission_calculator()
 			width : '100%',
 			onChangeValue : function()
 			{
+				if($(this).val())
+				{
+					ewt = parseFloat($(this).val()) / 100;
+					event_compute_commission();
+				}
 			}
 		});
 	}
@@ -249,6 +257,12 @@ function create_commission_calculator()
 		var amount_tc = ((tsp - discount) / tax) * agent_commission_percent;
 		$('.amount-tc').html('P '+ number_format(amount_tc));
 		
+		var amount_ewt = amount_tc * ewt;
+		$(".amount-ewt").html('P ' + number_format(amount_ewt));
+
+		var amount_net_comm = amount_tc - amount_ewt;
+		$(".amount-net-comm").html('P ' + number_format(amount_net_comm));
+
 		tcp_string = $('.tcp-commission').val();
 		ndp_string = $('.ndp-commission').val();
 		if(ndp_string.indexOf('%') > 0)
@@ -276,7 +290,7 @@ function create_commission_calculator()
 		{
 			tcp = parseFloat(tcp_string/100);
 		}
-		var amount_tcp1 = amount_tc * tcp;
+		var amount_tcp1 = amount_net_comm * tcp;
 		$('.amount-tcp1').html('P '+number_format(amount_tcp1));
 
 		ndp = 0;
@@ -288,17 +302,21 @@ function create_commission_calculator()
 		{
 			ndp = parseFloat(ndp_string/100);
 		}
-		var amount_ndp = amount_tc * ndp;
+		var amount_ndp = amount_net_comm * ndp;
 		$('.amount-ndp').html('P '+number_format(amount_ndp));
 
 		$('.input-tcp').val(amount_tcp);
 		$('.input-tc').val(amount_tc);
+		$('.input-net-comm').val(amount_net_comm);
 		$('.input-loanable-amount').val(amount_loanable);
+		$('.input-ewt').val(amount_ewt);
 		$('.c-amount-tsp').html(number_format(tsp, false));
 		$('.c-amount-disc').html(number_format(discount, false));
 		$('.c-amount-tax').html(number_format(tax));
 		$('.c-amount-commission').html((agent_commission_percent * 100) + '%');
 		$('.c-amount-dp').html((downpayment * 100) + '%');
+		$('.c-amount-tc').html(number_format(amount_tc, false));
+		$('.c-ewt').html((ewt * 100) + '%');
 	}
 	function event_accept_number_only()
 	{

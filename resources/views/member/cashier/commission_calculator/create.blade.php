@@ -152,6 +152,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
+                            <input type="hidden" name="ewt_amount" class="input-ewt">
                             <h4><div class="amount-ewt">EWT</div></h4>
                         </div
                         >
@@ -235,6 +236,19 @@
         </div>
     </div>
 </div>
+<div class="hidden row clearfix" id="ewt-content">
+    <div class="text-center">
+
+        <div class="col-md-12">
+            <div>TC * EWT</div>
+        </div>
+        <br>
+        <br>
+        <div class="col-md-12">
+            <div><label class="c-amount-tc">30,000.00</label> * <label class="c-ewt">5%</label></div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
 
   function setTwoNumberDecimal(x) 
@@ -255,6 +269,13 @@
         title: '<h4 style="padding:0px">Commission Computation</h4>',
         content: function() {
           return $("#computation-content").html();
+        }
+    });
+    $('#popover_ewt').popover({ 
+        html : true,
+        title: '<h4 style="padding:0px">NET Commission</h4>',
+        content: function() {
+          return $("#ewt-content").html();
         }
     });
     $('#popover_downpayment').popover({ 

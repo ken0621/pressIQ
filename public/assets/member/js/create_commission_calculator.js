@@ -124,6 +124,13 @@ function create_commission_calculator()
 				}
 			}
 		});
+		$('.select-ewt').globalDropList({
+			hasPopup : 'false',
+			width : '100%',
+			onChangeValue : function()
+			{
+			}
+		});
 	}
 
 	/* AFTER ADDING AN  ITEM */

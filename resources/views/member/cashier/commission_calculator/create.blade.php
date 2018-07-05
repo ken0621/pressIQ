@@ -139,6 +139,33 @@
                             <a id="popover_tc" data-trigger="hover" data-placement="top" href="javascript:"><h4><div class="amount-tc">TC Amount</div></h4></a>
                         </div>
                     </div>
+                    <div class="form-group"> 
+                        <div class="col-md-6 padding-top-here">
+                            <div class="col-md-6">
+                                <strong>EWT</strong>
+                            </div>
+                            <div class="col-md-6">
+                                <select name="ewt"  class="form-control input-sm select-ewt">
+                                    <option value="5" selected>5%</option>
+                                    <option value="10">10%</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <h4><div class="amount-ewt">EWT</div></h4>
+                        </div
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-6 text-right">
+                            <h4><b>NET Commission :</b></h4>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <input type="hidden" name="total_net_commission" class="input-net-comm">
+                            <a id="popover_ewt" data-trigger="hover" data-placement="top" href="javascript:"><h4><div class="amount-net-comm">NET Commission Amount</div></h4></a>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <div class="col-md-6 padding-top-here">
                             <div class="col-md-6">

@@ -121,9 +121,8 @@ function create_commission_calculator()
 			{
 				if($(this).val())
 				{
-					agent_commission_percent = parseFloat($(this).find("option:selected").attr('commission-percent')) / 100;
-					event_compute_commission();
 					$(".agent-comm-rate").val($(this).find("option:selected").attr('commission-percent')+"%");
+					event_compute_commission();
 				}
 			}
 		});
@@ -209,6 +208,7 @@ function create_commission_calculator()
 	function event_compute_commission()
 	{
 		dp_string = $('.downpayment').val();		
+		agent_commission_string = $(".agent-comm-rate").val();
 
 		downpayment = 0;
 		discount = parseFloat(($('.discount').val()).replace(',',''));
@@ -224,7 +224,13 @@ function create_commission_calculator()
 		{
 			downpayment = (parseFloat(dp_string.substring(0, dp_string)) / 100);
 		}
-
+		agent_commission_percent = parseFloat(agent_commission_string);
+		if(agent_commission_string.indexOf('%') > 0)
+		{
+			agent_commission_percent = (parseFloat(agent_commission_string.substring(0, agent_commission_string.indexOf('%'))));
+		}
+		agent_commission_percent = agent_commission_percent / 100;
+		
 		tsp_string = $('.sales-price').val();	
 		/*tsp = parseFloat(($('.sales-price').val()).replace(',',''));*/
 		if(tsp_string > 0)

@@ -30,7 +30,7 @@
                         </div>
                         <div class="col-md-2">
                             <strong>Agent Rate</strong>
-                            <input type="text" class="text-right agent-comm-rate input-sm form-control" name="" placeholder="">
+                            <input type="text" class="text-right agent-comm-rate compute-all input-sm form-control" name="" placeholder="">
                         </div>
                         <div class="col-md-6">
                             <div class="col-md-6">

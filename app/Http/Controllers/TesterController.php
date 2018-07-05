@@ -274,16 +274,35 @@ class TesterController extends Controller
         }
         else
         {
-            $imageget = Storage::disk('ftp')->get($imagepath);
-
-            if ($imageget) 
+            // $exist_ftp = Storage::disk('ftp')->exists($imagepath);
+            if ($this->remoteFileExists('http://digimaweb.solutions/uploadthirdparty/' . $imagepath))
             {
-                Storage::disk('spaces')->put($imagepath, $imageget, 'public');
-            }
+                $imageget = Storage::disk('ftp')->get($imagepath);
 
-            $url = Storage::disk('spaces')->url($imagepath);
+                if ($imageget) 
+                {
+                    Storage::disk('spaces')->put($imagepath, $imageget, 'public');
+                }
+
+                $url = Storage::disk('spaces')->url($imagepath);
+            }
+            else 
+            {
+                $url = 'http://www.allwhitebackground.com/images/2/2278-190x190.jpg';
+            }
         }
 
         return Redirect::to($url);
+    }
+
+    function remoteFileExists($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_NOBODY, 1);
+        curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        if (curl_exec($ch)) return true;
+        else return false;
     }
 }

@@ -53,9 +53,10 @@
                         <div class="dropdown">
                           <a class="">BUSINESS PRESENTATION <span><i class="fa fa-angle-down"></i></span></a>
                           <div class="dropdown-content">
-                            <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}">MILLIONAIRE SYSTEM</a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PRIVILEGE CARD PRESENTATION</a>
                             <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">FRANCHISE BUSINESS PRESENTATION</a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}">MERCHANT PRESENTATION</a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PRIVILEGE CARD PRESENTATION</a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}">MARKETING PLAN PRESENTATION</a>
                           </div>
                         </div>
                     </div>
@@ -249,11 +250,16 @@
                             <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
                             <a href="/legalities"><li>LEGALITIES</li></a>
                             <a href="/contact"><li>CONTACT US</li></a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a>
-                            @if($mlm_member)
-                            <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MILLIONAIRE SYSTEM</li></a>
+                            {{-- <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a> --}}
+                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>FRANCHISE BUSINESS PRESENTATION</li></a>
+                            {{-- <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
                             <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>FRANCHISE BUSINESS</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MARKETING PLAN PRESENTATION</li></a> --}}
+                            @if($mlm_member)
+                            {{-- <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>FRANCHISE BUSINESS PRESENTATION</li></a> --}}
+                            <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MARKETING PLAN PRESENTATION</li></a>
                             @endif
                         </ul>
                     <div class="space2"></div>
@@ -264,10 +270,12 @@
                         @if($mlm_member)
                         <a href="/members/genealogy?mode=binary"><li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">GENEALOGY</li></a>
                         <a href="/members/report"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">REPORTS</li></a>
-                        <a href="/members/network"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">NETWORK LIST</li></a>
-                        <a href="/members/lead-list"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">LEAD LIST</li></a>
-                        <a href="/members/redeemable"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">REDEEMABLE</li></a> 
-                        <a href="/members/wallet-encashment"><li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}">WALLET</li></a> 
+                        <a href="/members/network"><li class="{{ Request::segment(2) == "network" ? "active" : "" }}">NETWORK LIST</li></a>
+                        <a href="/members/lead-list"><li class="{{ Request::segment(2) == "leads" ? "active" : "" }}">LEAD LIST</li></a>
+                        <a href="/members/redeemable"><li class="{{ Request::segment(2) == "redeemable" ? "active" : "" }}">REDEEMABLE</li></a> 
+                        <a href="/members/wallet-encashment"><li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}">WALLET</li></a>
+                        <a href="/members/wallet-transfer"><li class="{{ Request::segment(2) == "wallet-transfer" ? "active" : "" }}">WALLET TRANSFER</li></a>
+                        <a href="/members/wallet-refill"><li class="{{ Request::segment(2) == "wallet-refill" ? "active" : "" }}">WALLET REFILL</li></a> 
                             @if($customer)
                                 <a href="/members/logout"><li class="user-logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></li>
                                 </a>

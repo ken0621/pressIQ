@@ -1,5 +1,6 @@
 var product_code = new product_code();
 var load_table_data = {};
+var idList = [];
 
 function product_code()
 {
@@ -18,6 +19,8 @@ function product_code()
 		action_load_table();
 		event_load_search();
 		add_event_pagination();
+		select_all();
+		select();
 	}
 	function add_event_pagination()
 	{
@@ -79,6 +82,7 @@ function product_code()
 	    load_table_data.page = 1;
 	    action_load_table();
 	}
+	
 }
 function click_status(status)
 {
@@ -97,3 +101,84 @@ function success_change_status(data)
         product_code.action_load_table();		
 	}	
 }
+
+function select_all()
+{
+    $(".codes_container").on("click", "#select-all", function(e)
+    {   
+        $('.select-id').each(function(index, el) 
+        {
+        	if($(e.currentTarget).is(':checked'))
+        	{
+        		if (!$(el).is(':checked')) 
+        		{
+        			$(el).trigger('click');
+        		}
+        	}
+        	else
+        	{
+        		if ($(el).is(':checked')) 
+        		{
+        			$(el).trigger('click');
+        		}
+        	}
+        });
+        
+    }); 
+}
+
+function select()
+{
+	$(".codes_container").on("click", "#select-id", function(e)
+    {
+    	if(this.checked)
+    	{
+    		idList.push($(this).val());
+    	}
+    	else
+    	{
+
+    		var index = idList.indexOf($(this).val());
+
+			if (index !== -1) 
+			{
+				idList.splice(index, 1);
+			}
+    	}
+    });
+    
+}
+
+function tag_as_printed()
+{
+	console.log(idList);
+	
+		$.ajax({
+			url: '/member/mlm/product_code2/table/set',
+			type: 'get',
+			data: {printed: idList},
+			success:function(data)
+			{
+
+			}
+		})
+		// $.ajax({
+		// 	url: '/path/to/file',
+		// 	type: 'default GET (Other values: POST)',
+		// 	dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
+		// 	data: {param1: 'value1'},
+		// })
+		// .done(function() {
+		// 	console.log("success");
+		// })
+		// .fail(function() {
+		// 	console.log("error");
+		// })
+		// .always(function() {
+		// 	console.log("complete");
+		// });
+		
+	
+}
+
+

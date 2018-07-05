@@ -310,12 +310,12 @@ function create_commission_calculator()
 		$('.input-net-comm').val(amount_net_comm);
 		$('.input-loanable-amount').val(amount_loanable);
 		$('.input-ewt').val(amount_ewt);
-		$('.c-amount-tsp').html(number_format(tsp, false));
-		$('.c-amount-disc').html(number_format(discount, false));
+		$('.c-amount-tsp').html(number_format(tsp));
+		$('.c-amount-disc').html(number_format(discount));
 		$('.c-amount-tax').html(number_format(tax));
 		$('.c-amount-commission').html((agent_commission_percent * 100) + '%');
 		$('.c-amount-dp').html((downpayment * 100) + '%');
-		$('.c-amount-tc').html(number_format(amount_tc, false));
+		$('.c-amount-tc').html(number_format(amount_tc));
 		$('.c-ewt').html((ewt * 100) + '%');
 	}
 	function event_accept_number_only()

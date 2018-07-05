@@ -230,7 +230,7 @@ function create_commission_calculator()
 			agent_commission_percent = (parseFloat(agent_commission_string.substring(0, agent_commission_string.indexOf('%'))));
 		}
 		agent_commission_percent = agent_commission_percent / 100;
-		
+
 		tsp_string = $('.sales-price').val();	
 		/*tsp = parseFloat(($('.sales-price').val()).replace(',',''));*/
 		if(tsp_string > 0)
@@ -323,6 +323,8 @@ function create_commission_calculator()
 		$('.c-amount-dp').html((downpayment * 100) + '%');
 		$('.c-amount-tc').html(number_format(amount_tc));
 		$('.c-ewt').html((ewt * 100) + '%');
+		$('.input-ndp-comm').val(amount_ndp);
+		$('.input-tcp-comm').val(amount_tcp);
 	}
 	function event_accept_number_only()
 	{

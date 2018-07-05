@@ -55,6 +55,8 @@ class CommissionCalculatorController extends Member
         $comm['ewt_amount'] = $request->ewt_amount;        
         $comm['loanable_amount'] = $request->loanable_amount;
         $comm['date_created'] = Carbon::now();
+        $comm['ndp_commission'] = $request->ndp_commission_amount;
+        $comm['tcp_commission'] = $request->tcp_commission_amount;
 
         $comm_item['item_id'] = $request->item_id;
         $comm_item['downpayment_percent'] = str_replace('%', '', $request->downpayment_percent);

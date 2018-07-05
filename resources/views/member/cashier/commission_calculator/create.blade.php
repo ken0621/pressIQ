@@ -177,6 +177,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
+                            <input type="hidden" class="input-ndp-comm" name="ndp_commission_amount">
                             <h4><div class="amount-ndp">NDP Commission Amount</div></h4>
                         </div>
                     </div>
@@ -190,6 +191,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
+                            <input type="hidden" class="input-tcp-comm" name="tcp_commission_amount">
                             <h4><div class="amount-tcp1">TCP Commission Amount</div></h4>
                         </div>
                     </div>

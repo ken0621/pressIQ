@@ -120,6 +120,7 @@ function create_commission_calculator()
 				{
 					agent_commission_percent = parseFloat($(this).find("option:selected").attr('commission-percent')) / 100;
 					event_compute_commission();
+					$(".agent-comm-rate").val($(this).find("option:selected").attr('commission-percent')+"%");
 				}
 			}
 		});

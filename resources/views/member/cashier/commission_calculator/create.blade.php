@@ -22,11 +22,15 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <strong>Select Agent</strong>
                             <select class="select-agent form-control input-sm" name="agent_id">
                                 @include('member.cashier.sales_agent.load_sales_agent')
                             </select>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Agent Rate</strong>
+                            <input type="text" class="text-right agent-comm-rate input-sm form-control" name="" placeholder="">
                         </div>
                         <div class="col-md-6">
                             <div class="col-md-6">

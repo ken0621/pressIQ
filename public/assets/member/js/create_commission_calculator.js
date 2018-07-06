@@ -24,6 +24,8 @@ var ewt = 0.05;
 
 var selected_customer='';
 
+var global_tr_html = $(".div-script tbody").html();
+
 function create_commission_calculator()
 {
 	init();
@@ -44,6 +46,34 @@ function create_commission_calculator()
 		event_change_tcp();
 		action_load_date();
 
+		event_click_last_row();
+		event_remove_tr();
+
+	}
+
+	function event_remove_tr()
+	{
+		$(document).on("click", ".remove-tr", function(e){
+			var len = $(".agent-list .remove-tr").length;
+			if($(".agent-list .remove-tr").length > 1)
+			{
+				$(this).parent().remove();
+			}
+			else
+			{
+				console.log("success");
+			}
+		});
+	}
+	function event_click_last_row()
+	{
+		$(document).on("click", "tbody.draggable tr:last td:not(.remove-tr)", function(){
+			event_click_last_row_op();
+		});
+	}
+	function event_click_last_row_op()
+	{
+		$("tbody.agent-list").append(global_tr_html);
 	}
 	function action_load_datepicker()
 	{

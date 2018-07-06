@@ -74,7 +74,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="border: 1px solid #000;margin: 10px;"></div>
+                <div style="border: 0.5px solid #000;margin: 10px;"></div>
                 <div class="form-horizontal">
                     <div class="form-group text-center">
                         <div class="col-md-6 text-right">
@@ -128,7 +128,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="border: 1px solid #000;margin: 10px;"></div>
+                <div style="border: 0.5px solid #000;margin: 10px;"></div>
                 <div class="form-horizontal">
                     <div class="form-group">
                         <div class="col-md-6 text-right">
@@ -196,7 +196,30 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="">
+                        <div class="col-md-6">
+                            <strong>Agent</strong>
+                        </div>
+                    </div>
+                    <div class="form-group agent-li">
+                        <div class="col-md-12">
+                            <table class="table table-condensed tbl-agent-li">
+                                <tbody class="agent-list draggable">
+                                    <tr class="tr-agent-li">
+                                        <td class="remove-tr"><i style="color: #fc4949" class="fa fa-trash fa-2x"></i></td>
+                                        <td width="300">
+                                            <select class="form-control input-sm select-agent-li">
+                                                <option></option>
+                                            </select>
+                                        </td>
+                                        <td width="300">
+                                            <input type="text" class="form-control input-sm text-right" name="">
+                                        </td>
+                                        <td class="text-center">
+                                            <h4><label>Agent Commission</label></h4>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -208,6 +231,25 @@
     	<button class="btn btn-primary btn-custom-primary" type="submit">Save</button>
     </div>
 </form>
+
+<div class="div-script">
+    <table class="div-item-row-script hide">
+         <tr class="tr-agent-li">
+            <td class="remove-tr"><i style="color: #fc4949" class="fa fa-trash fa-2x"></i></td>
+            <td width="300">
+                <select class="form-control input-sm select-agent-li">
+                    <option></option>
+                </select>
+            </td>
+            <td width="300">
+                <input type="text" class="form-control input-sm text-right" name="">
+            </td>
+            <td class="text-center">
+                <h4><label>Agent Commission</label></h4>
+            </td>
+        </tr>
+    </table>
+</div>
 <div class="hidden row clearfix" id="computation-content">
     <div style="width: 300px">
         <div class="col-md-7 text-center">

@@ -8,6 +8,7 @@ use App\Models\Tbl_commission_invoice;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_user;
+use App\Models\Tbl_commission_invoice_agent;
 
 use App\Globals\Invoice;
 use App\Globals\Item;
@@ -23,7 +24,7 @@ use DB;
 
 class CommissionCalculator
 {
-	public static function create($shop_id, $comm, $comm_item)
+	public static function create($shop_id, $comm, $comm_item, $comm_agent)
 	{
 		$refnum = isset($comm['refnum']) ? $comm['refnum'] : '';
 
@@ -114,7 +115,21 @@ class CommissionCalculator
 		$ins['commission_amount'] = round(Self::get_computation($shop_id, $commission_id)['amount_tcp_comm'],5);
 		$ins['payment_amount'] = round(Self::get_computation($shop_id, $commission_id)['amount_loanable'],5);
 		$ins['commission_type'] = 'TCPC';
-		Tbl_commission_invoice::insert($ins);
+		$tcp_id = Tbl_commission_invoice::insertGetId($ins);
+
+		if(count($comm_agent) > 0)
+		{
+			foreach ($comm_agent as $key => $value) 
+			{
+				$ins_comm_agent['agent_comm_inv_id'] = $tcp_id;
+				$ins_comm_agent['agent_id'] = $value['agent_id'];
+				$ins_comm_agent['agent_percent'] = $value['agent_rate_percent'];
+				$ins_comm_agent['agent_amount'] = $value['agent_net_comm'];
+				$ins_comm_agent['commission_amount'] = $value['agent_tcp_comm'];
+
+				Tbl_commission_invoice_agent::insert($ins_comm_agent);
+			}
+		}
 
 		for($i = 0; $i < $loop_for; $i++) 
 		{ 
@@ -123,7 +138,22 @@ class CommissionCalculator
 			$ins['commission_amount'] = round(Self::get_computation($shop_id, $commission_id)['amount_monthly_commission'],5);
 			$ins['payment_amount'] = round(Self::get_computation($shop_id, $commission_id)['amount_monthly_amort'],5);
 			$ins['commission_type'] = 'NDPC';
-			Tbl_commission_invoice::insert($ins);
+			$ndp_id = Tbl_commission_invoice::insertGetId($ins);
+
+			if(count($comm_agent) > 0)
+			{
+				foreach ($comm_agent as $keyndp => $valuendp) 
+				{
+					$ins_comm_ndp['agent_comm_inv_id'] = $ndp_id;
+					$ins_comm_ndp['agent_id'] = $valuendp['agent_id'];
+					$ins_comm_ndp['agent_percent'] = $valuendp['agent_rate_percent'];
+					$ins_comm_ndp['agent_amount'] = $valuendp['agent_net_comm'];
+					$ins_comm_ndp['commission_amount'] = $valuendp['agent_ndp_comm'] / Self::get_computation($shop_id, $commission_id)['month_amort'];
+
+					Tbl_commission_invoice_agent::insert($ins_comm_ndp);
+				}
+			}
+
 		}
 
 		return $invoice_id;
@@ -237,6 +267,7 @@ class CommissionCalculator
 	public static function per_agent($agent_id)
 	{
 		$get_all = Tbl_commission::invoice()->where('agent_id',$agent_id)->groupBy('comm_inv_id')->get();
+		$get_all = Tbl_commission_invoice_agent::comm_invoice()->where('agent_id',$agent_id)->groupBy('comm_inv_id')->get();
 		$return['orverall_comm'] = 0;
 		$return['released_comm'] = 0;
 		$return['for_releasing_comm'] = 0;
@@ -245,23 +276,25 @@ class CommissionCalculator
 		{
 			if($value->is_released == 1 && $value->invoice_is_paid == 1)
 			{
-				$return['released_comm'] += $value->commission_amount;
+				$return['released_comm'] += $value->agent_commission_amount;
 			}
 			if($value->invoice_is_paid == 1 && $value->is_released == 0)
 			{
-				$return['for_releasing_comm'] += $value->commission_amount;
+				$return['for_releasing_comm'] += $value->agent_commission_amount;
 			}
 			if($value->is_released == 0 && $value->invoice_is_paid == 0)
 			{
-				$return['pending_comm'] += $value->commission_amount;
+				$return['pending_comm'] += $value->agent_commission_amount;
 			}
-			$return['orverall_comm'] += $value->commission_amount;
+			$return['orverall_comm'] += $value->agent_commission_amount;
 		}
 		return $return;
 	}
 	public static function per_agent_commission($agent_id)
 	{
-		$get_all = Tbl_commission::customer()->item()->where('tbl_commission.shop_id',Self::getShopId())->where('agent_id',$agent_id)->groupBy('tbl_commission.commission_id')->get();
+		$get_all = Tbl_commission::customer()->item()->where('tbl_commission.shop_id', Self::getShopId())->where('agent_id',$agent_id)->groupBy('tbl_commission.commission_id')->get();
+		$get_all = Tbl_commission::customer()->item()->invoice()->agent()->where('tbl_commission.shop_id', Self::getShopId())->where("comm_agent_id", $agent_id)->groupBy('tbl_commission.commission_id')->get();
+		
 		foreach ($get_all as $key => $value) 
 		{
 			$get_all[$key]['orverall_comm'] = 0;
@@ -269,31 +302,35 @@ class CommissionCalculator
 			$get_all[$key]['for_releasing_comm'] = 0;
 			$get_all[$key]['pending_comm'] = 0;
 
-			$data = Tbl_commission_invoice::where('commission_id',$value->commission_id)->get();
+			$data = Tbl_commission_invoice_agent::comm_invoice()->where("comm_agent_id", $agent_id)->where('commission_id',$value->commission_id)->get();
 			foreach ($data as $key2 => $value2) 
 			{
 				if($value2->is_released == 1 && $value2->invoice_is_paid == 1)
 				{
-					$get_all[$key]['released_comm'] += $value2->commission_amount;
+					$get_all[$key]['released_comm'] += $value2->agent_commission_amount;
 				}
 				if($value2->invoice_is_paid == 1 && $value2->is_released == 0)
 				{
-					$get_all[$key]['for_releasing_comm'] += $value2->commission_amount;
+					$get_all[$key]['for_releasing_comm'] += $value2->agent_commission_amount;
 				}
 				if($value2->is_released == 0 && $value2->invoice_is_paid == 0)
 				{
-					$get_all[$key]['pending_comm'] += $value2->commission_amount;
+					$get_all[$key]['pending_comm'] += $value2->agent_commission_amount;
 				}
-				$get_all[$key]['orverall_comm'] += $value2->commission_amount;
+				$get_all[$key]['orverall_comm'] += $value2->agent_commission_amount;
 			}
 		}
 		
 		return $get_all;
 	}
 
-	public static function per_commission_invoices($commission_id)
+	public static function per_commission_invoices_backup($commission_id)
 	{
 		return Tbl_commission::invoice()->where('tbl_commission.commission_id',$commission_id)->groupBy('comm_inv_id')->orderBy('comm_inv_id', 'DESC')->get();
+	}
+	public static function per_commission_invoices($commission_id, $agent_id)
+	{
+		return Tbl_commission::invoice()->agent()->where('tbl_commission.commission_id',$commission_id)->where("comm_agent_id", $agent_id)->groupBy('comm_inv_id')->orderBy('comm_inv_id', 'DESC')->get();
 	}
 	public static function get_actual_computation($tsp, $downpayment, $disc, $monthly_amort, $misc, $ndp_comm, $tcp_comm, $comm_percent)
 	{

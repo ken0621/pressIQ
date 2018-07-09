@@ -66,17 +66,46 @@ class CommissionCalculatorController extends Member
         $comm_item['ndp_commission'] = str_replace('%', '', $request->ndp_commission);
         $comm_item['tcp_commission'] = str_replace('%', '', $request->tcp_commission);
 
-        $return = CommissionCalculator::create($shop_id, $comm, $comm_item);
-
-        if($return)
+        $return = null;
+        $total_rate_comm = 0; 
+        $comm_agent = null;
+        foreach ($request->agent_li as $key => $value) 
         {
-            $data['status'] = "success";
-            $data['call_function'] = 'success_commission';
+            if($value)
+            {
+                $comm_agent[$key]['agent_id'] = $value;
+                $comm_agent[$key]['agent_rate_percent'] = isset($request->agent_rate_percent[$key]) ? str_replace('%', '', $request->agent_rate_percent[$key]) : 0;
+                $comm_agent[$key]['agent_net_comm'] = isset($request->agent_net_comm[$key]) ? $request->agent_net_comm[$key] : 0;
+                $comm_agent[$key]['agent_ndp_comm'] = isset($request->agent_ndp_comm[$key]) ? $request->agent_ndp_comm[$key] : 0;
+                $comm_agent[$key]['agent_tcp_comm'] = isset($request->agent_tcp_comm[$key]) ? $request->agent_tcp_comm[$key] : 0;
+
+                $total_rate_comm += $comm_agent[$key]['agent_rate_percent'];
+            }
+        }
+
+        if($total_rate_comm != 100)
+        {
+            $return = "Agents rate commission must equal to 100%";
+        }
+        if(!$return)
+        {
+            $return = CommissionCalculator::create($shop_id, $comm, $comm_item, $comm_agent);
+
+            if($return)
+            {
+                $data['status'] = "success";
+                $data['call_function'] = 'success_commission';
+            }
+            else
+            {
+                $data['status'] = "error";
+                $data['status_message'] = "Unsuccessful Transaction";
+            }
         }
         else
         {
             $data['status'] = "error";
-            $data['status_message'] = "Unsuccessful Transaction";
+            $data['status_message'] = $return;
         }
         return json_encode($data);
     }

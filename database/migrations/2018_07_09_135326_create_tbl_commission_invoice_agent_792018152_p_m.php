@@ -13,13 +13,9 @@ class CreateTblCommissionInvoiceAgent792018152PM extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_commission', function (Blueprint $table) {
-            $table->dropForeign("tbl_commision_agent_id_foreign");
-            $table->integer("agent_id")->nullable()->default(0);
-        });
         Schema::create('tbl_commission_invoice_agent', function (Blueprint $table) {
             $table->increments("invoice_agent_id");
-            $table->integer("comm_inv_id")->unsigned();
+            $table->integer("agent_comm_inv_id")->unsigned();
             $table->integer("agent_id")->unsigned();
             $table->double("agent_percent")->default(0)->nullable();
             $table->double("agent_amount")->default(0)->nullable();

@@ -10,7 +10,8 @@
             <label>Philtech VIP Name</label>
             <select name="customer_id" class="vip-name-distribute form-control">
                 @foreach($_customer as $customer)
-                    <option value="{{ $customer->customer_id }}">{{ ucwords(strtolower($customer->first_name)) }} {{ ucwords(strtolower($customer->middle_name)) }} {{ ucwords(strtolower($customer->last_name)) }}</option>
+                    <option selected></option>
+                    <option value="{{ $customer->customer_id }}">{{ ucwords(strtolower($customer->first_name)) }} {{ ucwords(strtolower($customer->middle_name)) }} {{ ucwords(strtolower($customer->last_name)) }}({{$customer->membership_name}})</option>
                 @endforeach
             </select>
         </div>
@@ -20,6 +21,7 @@
                 <option value="1">Select VIP First</option>
             </select>
         </div>
+
         <div class="form-group">
             <label>Receipt No.</label>
             <input class="form-control" type="text" name="receipt_number">
@@ -62,6 +64,7 @@ $('.vip-name-distribute').on('change', function(e)
     })
     .done(function(result) 
     {
+        console.log(result);
         var slot_no = '';
 
         $.each(result, function(index, val) 
@@ -96,4 +99,6 @@ function submit_done(data)
         toastr.error('This product code is already distributed.', 'Error');
     }
 }
+
+
 </script>

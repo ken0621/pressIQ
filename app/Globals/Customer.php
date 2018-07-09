@@ -280,7 +280,7 @@ class Customer
 		
 		if ($with_slot) 
 		{
-			$customer = $customer->join("tbl_mlm_slot", "tbl_mlm_slot.slot_owner", "=", "tbl_customer.customer_id");
+			$customer = $customer->join("tbl_mlm_slot", "tbl_mlm_slot.slot_owner", "=", "tbl_customer.customer_id")->join('tbl_membership', 'tbl_mlm_slot.slot_membership', '=', 'tbl_membership.membership_id');
 		}
 
 		return $customer->get();

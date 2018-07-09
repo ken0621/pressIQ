@@ -225,13 +225,15 @@
                                         </td>
                                         <td class="text-center">
                                             <h5><label class="lbl-agent-li-rate-comm">0.00</label></h5>
-                                            <input type="hidden" name="agent_rate_amount[]" class="input-agent-li-rate-comm">
+                                            <input type="hidden" class="input-agent-li-rate-comm" name="agent_net_comm[]">
                                         </td>
                                         <td class="text-center">
                                             <h5><label class="lbl-agent-li-ndp-comm">0.00</label></h5>
+                                            <input type="hidden" class="input-agent-li-ndp-comm" name="agent_ndp_comm[]">
                                         </td>
                                         <td class="text-center">
                                             <h5><label class="lbl-agent-li-tcp-comm">0.00</label></h5>
+                                            <input type="hidden" class="input-agent-li-tcp-comm" name="agent_tcp_comm[]">
                                         </td>
                                         <td class="remove-tr"><i style="color: #fc4949" class="fa fa-trash fa-2x"></i></td>
                                     </tr>
@@ -262,13 +264,15 @@
             </td>
             <td class="text-center">
                 <h5><label  class="lbl-agent-li-rate-comm">0.00</label></h5>
-                <input type="hidden" name="" class="input-agent-li-rate-comm" name="agent_rate_amount[]">
+                <input type="hidden" class="input-agent-li-rate-comm" name="agent_net_comm[]">
             </td>
             <td class="text-center">
                 <h5><label class="lbl-agent-li-ndp-comm">0.00</label></h5>
+                <input type="hidden" class="input-agent-li-ndp-comm" name="agent_ndp_comm[]">
             </td>
             <td class="text-center">
                 <h5><label class="lbl-agent-li-tcp-comm">0.00</label></h5>
+                <input type="hidden" class="input-agent-li-tcp-comm" name="agent_tcp_comm[]">
             </td>
             <td class="remove-tr"><i style="color: #fc4949" class="fa fa-trash fa-2x"></i></td>
         </tr>

@@ -402,6 +402,10 @@ function create_commission_calculator()
 			$tr_row.find(".lbl-agent-li-rate-comm").html(number_format($per_agent_comm)).change();
 			$tr_row.find(".lbl-agent-li-ndp-comm").html(number_format($per_agent_comm * ndp)).change();
 			$tr_row.find(".lbl-agent-li-tcp-comm").html(number_format($per_agent_comm * tcp)).change();
+
+			$tr_row.find(".input-agent-li-rate-comm").val($per_agent_comm).change();
+			$tr_row.find(".input-agent-li-ndp-comm").val($per_agent_comm).change();
+			$tr_row.find(".input-agent-li-tcp-comm").val($per_agent_comm).change();
 		});
 
 		$('.input-tcp').val(amount_tcp);

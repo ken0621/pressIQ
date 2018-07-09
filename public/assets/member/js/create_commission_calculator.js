@@ -400,6 +400,8 @@ function create_commission_calculator()
 				$per_agent_comm = 0;
 			}
 			$tr_row.find(".lbl-agent-li-rate-comm").html(number_format($per_agent_comm)).change();
+			$tr_row.find(".lbl-agent-li-ndp-comm").html(number_format($per_agent_comm * ndp)).change();
+			$tr_row.find(".lbl-agent-li-tcp-comm").html(number_format($per_agent_comm * tcp)).change();
 		});
 
 		$('.input-tcp').val(amount_tcp);

@@ -116,7 +116,7 @@ class CommissionCalculator
 		$ins['commission_type'] = 'TCPC';
 		Tbl_commission_invoice::insert($ins);
 
-		for($i = 0; $i < $loop_for ; $i++) 
+		for($i = 0; $i < $loop_for; $i++) 
 		{ 
 			$ins['invoice_id'] = $invoice_id;
 			$ins['commission_id'] = $commission_id;
@@ -126,7 +126,6 @@ class CommissionCalculator
 			Tbl_commission_invoice::insert($ins);
 		}
 
-		// die(var_dump($invoice_id));
 		return $invoice_id;
 		
 	}

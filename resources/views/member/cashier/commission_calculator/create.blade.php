@@ -203,21 +203,37 @@
                     <div class="form-group agent-li">
                         <div class="col-md-12">
                             <table class="table table-condensed tbl-agent-li">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Rate</th>
+                                        <th class="text-center">Agent NET Commission</th>
+                                        <th class="text-center">NDP Commission</th>
+                                        <th class="text-center">TCP Commission</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
                                 <tbody class="agent-list draggable">
                                     <tr class="tr-agent-li">
-                                        <td class="remove-tr"><i style="color: #fc4949" class="fa fa-trash fa-2x"></i></td>
                                         <td width="300">
                                             <select class="form-control input-sm select-agent-li dropdown-agent-li" name="agent_li[]">
                                                 @include('member.cashier.sales_agent.load_sales_agent')
                                             </select>
                                         </td>
-                                        <td width="300">
+                                        <td width="200">
                                             <input type="text" class="form-control compute-all input-sm text-right txt-agent-li-rate" name="agent_rate_percent[]">
                                         </td>
                                         <td class="text-center">
-                                            <h4><label class="lbl-agent-li-rate-comm">Agent Commission</label></h4>
+                                            <h5><label class="lbl-agent-li-rate-comm">0.00</label></h5>
                                             <input type="hidden" name="agent_rate_amount[]" class="input-agent-li-rate-comm">
                                         </td>
+                                        <td class="text-center">
+                                            <h5><label class="lbl-agent-li-ndp-comm">0.00</label></h5>
+                                        </td>
+                                        <td class="text-center">
+                                            <h5><label class="lbl-agent-li-tcp-comm">0.00</label></h5>
+                                        </td>
+                                        <td class="remove-tr"><i style="color: #fc4949" class="fa fa-trash fa-2x"></i></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -236,7 +252,6 @@
 <div class="div-script">
     <table class="div-item-row-script hide">
          <tr class="tr-agent-li">
-            <td class="remove-tr"><i style="color: #fc4949" class="fa fa-trash fa-2x"></i></td>
             <td width="300">
                 <select class="form-control input-sm select-agent-li" name="agent_li[]">
                     @include('member.cashier.sales_agent.load_sales_agent')
@@ -246,9 +261,16 @@
                 <input type="text" class="form-control compute-all input-sm text-right txt-agent-li-rate" name="agent_rate_percent[]">
             </td>
             <td class="text-center">
-                <h4><label  class="lbl-agent-li-rate-comm">Agent Commission</label></h4>
+                <h5><label  class="lbl-agent-li-rate-comm">0.00</label></h5>
                 <input type="hidden" name="" class="input-agent-li-rate-comm" name="agent_rate_amount[]">
             </td>
+            <td class="text-center">
+                <h5><label class="lbl-agent-li-ndp-comm">0.00</label></h5>
+            </td>
+            <td class="text-center">
+                <h5><label class="lbl-agent-li-tcp-comm">0.00</label></h5>
+            </td>
+            <td class="remove-tr"><i style="color: #fc4949" class="fa fa-trash fa-2x"></i></td>
         </tr>
     </table>
 </div>
@@ -290,12 +312,12 @@
     <div class="text-center">
 
         <div class="col-md-12">
-            <div>TC * EWT</div>
+            <div>TC - (TC * EWT)</div>
         </div>
         <br>
         <br>
         <div class="col-md-12">
-            <div><label class="c-amount-tc">30,000.00</label> * <label class="c-ewt">5%</label></div>
+            <div><label class="c-amount-tc">30,000.00</label> - (<label class="c-amount-tc">30,000.00</label> * <label class="c-ewt">5%</label>)</div>
         </div>
     </div>
 </div>

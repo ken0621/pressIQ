@@ -68,7 +68,6 @@ class CommissionCalculatorController extends Member
 
         $return = CommissionCalculator::create($shop_id, $comm, $comm_item);
 
-        // die(var_dump('success'));
         if($return)
         {
             $data['status'] = "success";

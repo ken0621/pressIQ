@@ -442,16 +442,45 @@ class MLM_CodeControllerV2 extends Member
 
                     if ($code) 
                     {
-                        $customer            = DB::table("tbl_customer")->where("customer_id", $customer_id)->first();
+                        $customer            = DB::table("tbl_customer")->where("customer_id", $customer_id)->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')->join('tbl_membership', 'tbl_mlm_slot.slot_membership', '=', 'tbl_membership.membership_id');
                         $repurchase_cashback = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'REPURCHASE_CASHBACK')->where('points_log_slot', $slot_id)->sum('points_log_points');
                         $item_points         = MLM2::item_points($shop_id, $code->record_item_id, $code->mlm_slot_id_created)["REPURCHASE_CASHBACK"];
-                        $text_message        = "Hi " . ($customer ? ucwords(strtolower($customer->first_name)) : '') . "! You earned P". number_format($item_points, 2) ." Cash-Back from your purchase at ZENAR TELECOMS MERCHANT. Your total CASH-BACK now is P" . number_format($repurchase_cashback, 2) . ". Congratulations!";
-                        $result              = Sms::SendSingleText($cellphone_number, $text_message, "", null);
 
-                        $email_content["subject"] = "Reward Code Distribute";
-                        $email_content["content"] = $text_message;
+                        $privilegecard = $customer->where('tbl_membership.membership_id', 1)->first();
+                        $vip =  $customer->where('tbl_membership.membership_id', '!=', 1)->first();
+                        //privilegecardholder
+                        if($privilegecard)
+                        {
+                            $text_message        = "Hi " . ($customer ? ucwords(strtolower($privilegecard->first_name)) : '') . "! You earned P". number_format($item_points, 2) ." Cash-Back from your purchase at ZENAR TELECOMS MERCHANT. Your total points now is P" . number_format($repurchase_cashback, 2) . ". Congratulations!";
 
-                        $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $email);
+                            if($privilegecard->contact)
+                            {
+                                $result              = Sms::SendSingleText($privilegecard->contact, $text_message, "", null);
+                            }
+                            else
+                            {
+                                $result              = Sms::SendSingleText($cellphone_number, $text_message, "", null);
+                            }
+                            
+                            $sponsor = $privilegecard->slot_sponsor;
+
+                            $mail_recipient = DB::table('tbl_mlm_slot')->join('tbl_customer', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')->where('tbl_mlm_slot.slot_id', $sponsor)->first();
+
+                            $email_content["subject"] = "Reward Code Distribute";
+
+                            $email_content["content"] = "Hi " . ($mail_recipient ? ucwords(strtolower($mail_recipient->first_name)) : '') . "! You earned P". number_format($item_points, 2) ." Cash-Back from ." ucwords(strtolower($privilegecard->first_name)). "Your total points now is P" . number_format($repurchase_cashback, 2) . ". Congratulations!";
+
+
+                            $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $mail_recipient->email);
+
+                        }
+                        //vip
+                        else
+                        {
+                            $text_message        = "Hi " . ($customer ? ucwords(strtolower($customer->first_name)) : '') . "! You earned P". number_format($item_points, 2) ." Cash-Back from your purchase at ZENAR TELECOMS MERCHANT. Your total CASH-BACK now is P" . number_format($repurchase_cashback, 2) . ". Congratulations!";
+                            $result              = Sms::SendSingleText($cellphone_number, $text_message, "", null);
+                        }
+                        
                     }
 
                     $response["response_status"] = "success";

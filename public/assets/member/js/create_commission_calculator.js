@@ -74,6 +74,7 @@ function create_commission_calculator()
 	function event_click_last_row_op()
 	{
 		$("tbody.agent-list").append(global_tr_html);
+		action_initialize_select();
 	}
 	function action_load_datepicker()
 	{
@@ -156,6 +157,34 @@ function create_commission_calculator()
 				}
 			}
 		});
+		$('.dropdown-agent-li').globalDropList({
+			hasPopup : 'true',
+			link : '/member/cashier/sales_agent/add',
+			width : '100%',
+			link_size : 'md',
+			onChangeValue : function()
+			{
+				if($(this).val())
+				{
+					event_select_agent($(this));
+				}
+			}
+		});
+
+	    $(".draggable .tr-agent-li:last td select.select-agent-li").globalDropList(
+        {
+            hasPopup : 'true',
+			link : '/member/cashier/sales_agent/add',
+			width : '100%',
+			link_size : 'md',
+			onChangeValue : function()
+			{
+				if($(this).val())
+				{
+					event_select_agent($(this));
+				}
+			}
+        });
 		$('.select-ewt').globalDropList({
 			hasPopup : 'false',
 			width : '100%',
@@ -168,6 +197,12 @@ function create_commission_calculator()
 				}
 			}
 		});
+	}
+	function event_select_agent($this)
+	{
+		$parent = $this.closest(".tr-agent-li");
+		$parent.find(".txt-agent-li-rate").val($this.find("option:selected").attr("commission-percent")+"%").change();
+		event_compute_commission();
 	}
 
 	/* AFTER ADDING AN  ITEM */
@@ -326,6 +361,10 @@ function create_commission_calculator()
 		{
 			tcp = parseFloat(tcp_string/100);
 		}
+		if(!tcp)
+		{
+			tcp = 0;
+		}
 		var amount_tcp1 = amount_net_comm * tcp;
 		$('.amount-tcp1').html('P '+number_format(amount_tcp1));
 
@@ -338,8 +377,32 @@ function create_commission_calculator()
 		{
 			ndp = parseFloat(ndp_string/100);
 		}
+		if(!ndp)
+		{
+			ndp = 0;
+		}
 		var amount_ndp = amount_net_comm * ndp;
 		$('.amount-ndp').html('P '+number_format(amount_ndp));
+
+		$(".draggable .tr-agent-li").each(function()
+		{
+			$tr_row = $(this);
+
+			$tr_percent = $tr_row.find(".txt-agent-li-rate").val();
+
+			agent_li_comm_rate = parseFloat($tr_percent);
+			if($tr_percent.indexOf('%') > 0)
+			{
+				agent_li_comm_rate = (parseFloat($tr_percent.substring(0, $tr_percent.indexOf('%'))));
+			}
+			$per_agent_comm = amount_net_comm * (agent_li_comm_rate / 100);
+			if(!$per_agent_comm)
+			{
+				$per_agent_comm = 0;
+			}
+			$tr_row.find(".lbl-agent-li-rate-comm").html(number_format($per_agent_comm)).change();
+		});
+
 
 		$('.input-tcp').val(amount_tcp);
 		$('.input-tc').val(amount_tc);

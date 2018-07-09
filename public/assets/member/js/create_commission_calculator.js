@@ -232,13 +232,11 @@ function create_commission_calculator()
 	}
 	function event_compute_all()
 	{
-		$('.compute-all').unbind('keyup');
-		$('.compute-all').bind('keyup', function()
+		$("body").on("change",'.compute-all', function()
 		{
 			event_compute_commission();
 		});
-		$('.discount-auto-add-comma').unbind('keyup');
-		$('.discount-auto-add-comma').bind('keyup', function()
+		$("body").on("keyup",'.discount-auto-add-comma', function()
 		{
 			$(this).val(auto_comma($(this).val()));	
 			event_compute_commission();		
@@ -384,6 +382,7 @@ function create_commission_calculator()
 		var amount_ndp = amount_net_comm * ndp;
 		$('.amount-ndp').html('P '+number_format(amount_ndp));
 
+		var $total_agent_percent = 0;
 		$(".draggable .tr-agent-li").each(function()
 		{
 			$tr_row = $(this);
@@ -402,7 +401,6 @@ function create_commission_calculator()
 			}
 			$tr_row.find(".lbl-agent-li-rate-comm").html(number_format($per_agent_comm)).change();
 		});
-
 
 		$('.input-tcp').val(amount_tcp);
 		$('.input-tc').val(amount_tc);

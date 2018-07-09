@@ -212,7 +212,7 @@
                                             </select>
                                         </td>
                                         <td width="300">
-                                            <input type="text" class="form-control input-sm text-right txt-agent-li-rate" name="agent_rate_percent[]">
+                                            <input type="text" class="form-control compute-all input-sm text-right txt-agent-li-rate" name="agent_rate_percent[]">
                                         </td>
                                         <td class="text-center">
                                             <h4><label class="lbl-agent-li-rate-comm">Agent Commission</label></h4>
@@ -238,16 +238,16 @@
          <tr class="tr-agent-li">
             <td class="remove-tr"><i style="color: #fc4949" class="fa fa-trash fa-2x"></i></td>
             <td width="300">
-                <select class="form-control input-sm select-agent-li">
+                <select class="form-control input-sm select-agent-li" name="agent_li[]">
                     @include('member.cashier.sales_agent.load_sales_agent')
                 </select>
             </td>
             <td width="300">
-                <input type="text" class="form-control input-sm text-right txt-agent-li-rate" name="">
+                <input type="text" class="form-control compute-all input-sm text-right txt-agent-li-rate" name="agent_rate_percent[]">
             </td>
             <td class="text-center">
                 <h4><label  class="lbl-agent-li-rate-comm">Agent Commission</label></h4>
-                <input type="hidden" name="" class="input-agent-li-rate-comm">
+                <input type="hidden" name="" class="input-agent-li-rate-comm" name="agent_rate_amount[]">
             </td>
         </tr>
     </table>

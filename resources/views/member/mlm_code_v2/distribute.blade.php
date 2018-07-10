@@ -34,10 +34,10 @@
             <label>Cellphone No.</label>
             <input class="form-control" id="contact" type="text"  name="cellphone_number" required>
         </div>
-        <div class="form-group">
+        {{-- <div class="form-group">
             <label>Email</label>
             <input class="form-control" id="contact_email" type="email" name="email">
-        </div>
+        </div> --}}
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
@@ -71,7 +71,6 @@ $('.vip-name-distribute').on('change', function(e)
         {
             slot_no += '<option value="'+val.slot_no+'">'+val.slot_no+'</option>';
             number = val.contact;
-            email = val.email;
         });
 
         $('.slot-no').empty();
@@ -79,7 +78,6 @@ $('.vip-name-distribute').on('change', function(e)
         $('.slot-no').removeClass('disabled').removeProp('disabled').removeAttr('disabled');
         $('.slot-no').chosen();
         $('#contact').val(number);
-        $('#contact_email').val(email);
     })
     .fail(function() 
     {

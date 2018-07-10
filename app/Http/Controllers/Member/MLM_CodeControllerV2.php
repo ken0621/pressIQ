@@ -21,6 +21,7 @@ use App\Models\Tbl_warehouse_inventory_record_log;
 use App\Models\Tbl_item_token_log;
 use App\Models\Tbl_item_token;
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_mlm_item_points;
 
 use DB;
 
@@ -439,45 +440,51 @@ class MLM_CodeControllerV2 extends Member
 
                     /* Send SMS and E-mail */
                     $code = DB::table("tbl_warehouse_inventory_record_log")->where("record_log_id", $id)->first();
-
+                    
                     if ($code) 
                     {
                         $customer            = DB::table("tbl_customer")->where("customer_id", $customer_id)->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')->join('tbl_membership', 'tbl_mlm_slot.slot_membership', '=', 'tbl_membership.membership_id');
                         $repurchase_cashback = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'REPURCHASE_CASHBACK')->where('points_log_slot', $slot_id)->sum('points_log_points');
                         $item_points         = MLM2::item_points($shop_id, $code->record_item_id, $code->mlm_slot_id_created)["REPURCHASE_CASHBACK"];
 
+                        $repurchase_points = Tbl_mlm_item_points::where('item_id', $code->record_item_id)->where('membership_id', 1)->first();
+                        $repurchase_points_total = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'REPURCHASE_POINTS')->where('points_log_slot', $slot_id)->sum('points_log_points');
+
                         $privilegecard = $customer->where('tbl_membership.membership_id', 1)->first();
-                        $vip =  $customer->where('tbl_membership.membership_id', '!=', 1)->first();
                         //privilegecardholder
                         if($privilegecard)
                         {
-                            $text_message        = "Hi " . ($customer ? ucwords(strtolower($privilegecard->first_name)) : '') . "! You earned P". number_format($item_points, 2) ." Cash-Back from your purchase at ZENAR TELECOMS MERCHANT. Your total points now is P" . number_format($repurchase_cashback, 2) . ". Congratulations!";
+                            $text_message        = "Hi " . ($customer ? ucwords(strtolower($privilegecard->first_name)) : '') . "! You earned P". number_format($repurchase_points->REPURCHASE_POINTS, 2) ." Cash-Back from your purchase at ZENAR TELECOMS MERCHANT. Your total points now is P" . number_format($repurchase_points_total, 2) . ". Congratulations!";
 
-                            if($privilegecard->contact)
-                            {
-                                $result              = Sms::SendSingleText($privilegecard->contact, $text_message, "", null);
-                            }
-                            else
-                            {
-                                $result              = Sms::SendSingleText($cellphone_number, $text_message, "", null);
-                            }
+                            $result              = Sms::SendSingleText($cellphone_number, $text_message, "", null);
+                            
                             
                             $sponsor = $privilegecard->slot_sponsor;
 
                             $mail_recipient = DB::table('tbl_mlm_slot')->join('tbl_customer', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')->where('tbl_mlm_slot.slot_id', $sponsor)->first();
 
+                            $sponsor_cashback = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'UNILEVEL_CASHBACK_POINTS')->where('points_log_Sponsor', $slot_id)->first();
+
+                            $sponsor_cashback_total = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'REPURCHASE_CASHBACK')->where('points_log_slot', $sponsor)->sum('points_log_points');
+
+
                             $email_content["subject"] = "Reward Code Distribute";
 
-                            $email_content["content"] = "Hi " . ($mail_recipient ? ucwords(strtolower($mail_recipient->first_name)) : '') . "! You earned P". number_format($item_points, 2) ." Cash-Back from ". ucwords(strtolower($privilegecard->first_name)). "Your total points now is P" . number_format($repurchase_cashback, 2) . ". Congratulations!";
+                            $email_content["content"] = "Hi " . ($mail_recipient ? ucwords(strtolower($mail_recipient->first_name)) : '') . "! You earned P". number_format($sponsor_cashback->points_log_points, 2) ." Cash-Back from ". ucwords(strtolower($privilegecard->first_name)). ". Your total points now is P" . number_format($sponsor_cashback_total, 2) . ". Congratulations!";
 
 
-                            $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $mail_recipient->email);
+                            $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $email);
 
                         }
                         //vip
                         else
                         {
-                            $text_message        = "Hi " . ($vip ? ucwords(strtolower($vip->first_name)) : '') . "! You earned P". number_format($item_points, 2) ." Cash-Back from your purchase at ZENAR TELECOMS MERCHANT. Your total CASH-BACK now is P" . number_format($repurchase_cashback, 2) . ". Congratulations!";
+                            $vip = DB::table("tbl_customer")->where("customer_id", $customer_id)->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')->join('tbl_membership', 'tbl_mlm_slot.slot_membership', '=', 'tbl_membership.membership_id')->first();
+                            
+                            $repurchase_cashback_points = DB::table('tbl_mlm_slot_points_log')->where([['points_log_slot', $vip->slot_id],['points_log_Sponsor', $vip->slot_id],['points_log_complan', 'REPURCHASE_CASHBACK']])->orderBy('points_log_id', 'DESC')->first();
+                            $repurchase_cashback_total = DB::table('tbl_mlm_slot_points_log')->where([['points_log_slot', $vip->slot_id],['points_log_Sponsor', $vip->slot_id],['points_log_complan', 'REPURCHASE_CASHBACK']])->sum('points_log_points');
+
+                            $text_message        = "Hi " . ($vip ? ucwords(strtolower($vip->first_name)) : '') . "! You earned P". number_format($repurchase_cashback_points->points_log_points, 2) ." Cash-Back from your purchase at ZENAR TELECOMS MERCHANT. Your total CASH-BACK now is P" . number_format($repurchase_cashback_total, 2) . ". Congratulations!";
                             $result              = Sms::SendSingleText($cellphone_number, $text_message, "", null);
                         }
                         

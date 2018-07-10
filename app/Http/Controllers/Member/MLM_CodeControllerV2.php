@@ -468,7 +468,7 @@ class MLM_CodeControllerV2 extends Member
 
                             $email_content["subject"] = "Reward Code Distribute";
 
-                            $email_content["content"] = "Hi " . ($mail_recipient ? ucwords(strtolower($mail_recipient->first_name)) : '') . "! You earned P". number_format($item_points, 2) ." Cash-Back from ." ucwords(strtolower($privilegecard->first_name)). "Your total points now is P" . number_format($repurchase_cashback, 2) . ". Congratulations!";
+                            $email_content["content"] = "Hi " . ($mail_recipient ? ucwords(strtolower($mail_recipient->first_name)) : '') . "! You earned P". number_format($item_points, 2) ." Cash-Back from ". ucwords(strtolower($privilegecard->first_name)). "Your total points now is P" . number_format($repurchase_cashback, 2) . ". Congratulations!";
 
 
                             $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $mail_recipient->email);

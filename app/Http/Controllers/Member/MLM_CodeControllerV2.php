@@ -477,7 +477,7 @@ class MLM_CodeControllerV2 extends Member
                         //vip
                         else
                         {
-                            $text_message        = "Hi " . ($customer ? ucwords(strtolower($customer->first_name)) : '') . "! You earned P". number_format($item_points, 2) ." Cash-Back from your purchase at ZENAR TELECOMS MERCHANT. Your total CASH-BACK now is P" . number_format($repurchase_cashback, 2) . ". Congratulations!";
+                            $text_message        = "Hi " . ($vip ? ucwords(strtolower($vip->first_name)) : '') . "! You earned P". number_format($item_points, 2) ." Cash-Back from your purchase at ZENAR TELECOMS MERCHANT. Your total CASH-BACK now is P" . number_format($repurchase_cashback, 2) . ". Congratulations!";
                             $result              = Sms::SendSingleText($cellphone_number, $text_message, "", null);
                         }
                         

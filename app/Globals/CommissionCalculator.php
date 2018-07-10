@@ -2,6 +2,7 @@
 namespace App\Globals;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_receive_payment;
+use App\Models\Tbl_receive_payment_line;
 use App\Models\Tbl_commission;
 use App\Models\Tbl_commission_item;
 use App\Models\Tbl_commission_invoice;
@@ -452,55 +453,125 @@ class CommissionCalculator
 			$rp_amount = 0;
 			$total_paid = 0;
 			$payment_applied = 0;
-			foreach ($all as $key => $value) 
-			{
-				if($value->invoice_is_paid != 0)
-				{
-					$total_paid += $value->payment_amount;
-				}
-				if($value->payment_ref_id != 0)
-				{
-					$rp[$value->payment_ref_id] = Tbl_receive_payment::where("rp_id", $value->payment_ref_id)->value("rp_total_amount");
-				}
-			}
-			if(count($rp) > 0)
-			{
-				foreach ($rp as $key1 => $value1) 
-				{
-					$rp_amount += $value1;
-				}
-			}
-			
-			$additional = 0;
-			// if($rp_amount > $total_paid)
+			// foreach ($all as $key => $value) 
 			// {
-				$additional = abs($rp_amount - $total_paid);
+			// 	if($value->invoice_is_paid != 0)
+			// 	{
+			// 		$total_paid += $value->payment_amount;
+			// 	}
+			// 	if($value->payment_ref_id != 0)
+			// 	{
+			// 		$rp[$value->payment_ref_id] = Tbl_receive_payment::where("rp_id", $value->payment_ref_id)->value("rp_total_amount");
+			// 	}
 			// }
-			$ctr = floor(($get_payment_data->rp_total_amount + $additional) / $check->payment_amount);
+			// if(count($rp) > 0)
+			// {
+			// 	foreach ($rp as $key1 => $value1) 
+			// 	{
+			// 		$rp_amount += $value1;
+			// 	}
+			// }
+			
+			// $additional = 0;
+			// // if($rp_amount > $total_paid)
+			// // {
+			// 	$additional = abs($rp_amount - $total_paid);
+			// // }
+			// $ctr = floor(($get_payment_data->rp_total_amount + $additional) / $check->payment_amount);
 
-			// $ctr = floor(($rp_amount+ $get_payment_data->rp_total_amount) / $check->payment_amount);
+			// // $ctr = floor(($rp_amount+ $get_payment_data->rp_total_amount) / $check->payment_amount);
 
-			for ($i = 0; $i < $ctr; $i++) 
-			{ 
-				$check2 = Tbl_commission_invoice::where('invoice_id',$invoice_id)->where("invoice_is_paid",0)->where("is_released",0)->orderBy("comm_inv_id",'DESC')->first();
-				/*UPDATE COMMISSION HERE*/
-				$update['payment_ref_name'] = 'receive_payment';
-				$update['payment_ref_id'] = $rcvpyment_id;
-				$update['invoice_is_paid'] = 1;
-				$update['is_released'] = 1;	
-				if($check2)
+			// for ($i = 0; $i < $ctr; $i++) 
+			// { 
+			// 	$check2 = Tbl_commission_invoice::where('invoice_id',$invoice_id)->where("invoice_is_paid",0)->where("is_released",0)->orderBy("comm_inv_id",'DESC')->first();
+			// 	/*UPDATE COMMISSION HERE*/
+			// 	$update['payment_ref_name'] = 'receive_payment';
+			// 	$update['payment_ref_id'] = $rcvpyment_id;
+			// 	$update['invoice_is_paid'] = 1;
+			// 	$update['is_released'] = 1;	
+			// 	if($check2)
+			// 	{
+			// 		if(strtolower($check2->commission_type) == 'tcpc')
+			// 		{
+			// 			$update['is_released'] = Self::check_ndp_paid_all($check2->commission_id);			
+			// 		}
+			// 		Tbl_commission_invoice::where('comm_inv_id',$check2->comm_inv_id)->update($update);
+			// 		// Self::update_tcp($check->commission_id);
+			// 	}
+			// }
+
+			/* NEW */
+
+			$_unpaid = Tbl_commission_invoice::where('invoice_id',$invoice_id)->where("invoice_is_paid",0)->where("is_released",0)->orderBy("comm_inv_id",'DESC')->get();
+
+			$_paid = Tbl_commission_invoice::payment()->where('invoice_id',$invoice_id)->where("invoice_is_paid",1)->where("is_released",1)->orderBy("comm_inv_id",'DESC')->groupBy("rp_id")->get();
+			$paid_amount = 0;
+			foreach ($_paid as $keypaid => $valuepaid)
+			{
+				$paid_amount += $valuepaid->rp_total_amount;
+			}
+			$rp_amount = Tbl_receive_payment_line::where("rpline_reference_id", $invoice_id)->sum("rpline_amount");
+			$payment_applied = $rp_amount;
+
+			$amount_paid = 0;
+			$amount_unpaid = 0;
+			$_get = Tbl_commission_invoice::where('invoice_id',$invoice_id)->orderBy("comm_inv_id",'DESC')->get();
+			foreach ($_get as $keyget => $valueget)
+			{
+				if($valueget->invoice_is_paid == 1 && $valueget->is_released == 1)
 				{
-					if(strtolower($check2->commission_type) == 'tcpc')
-					{
-						$update['is_released'] = Self::check_ndp_paid_all($check2->commission_id);			
-					}
-					Tbl_commission_invoice::where('comm_inv_id',$check2->comm_inv_id)->update($update);
-					// Self::update_tcp($check->commission_id);
+					$amount_paid += $valueget->payment_amount;
 				}
 			}
-			$payment_applied = $rp_amount + $get_payment_data->rp_total_amount;
-			Tbl_commission::where("commission_id", $check->commission_id)->udpate(["payment_applied" => $payment_applied]);
+			$next_unpaid = Self::check_next_unpaid($invoice_id, $rcvpyment_id, $amount_paid, $get_payment_data->rp_total_amount);
+			Tbl_commission::where("commission_id", $check->commission_id)->update(["payment_applied" => $payment_applied]);
+
+			/* END NEW */
+
 		}
+	}
+	public static function check_next_unpaid($invoice_id, $rp_id ,$amount_paid_amount = 0, $payment_applied = 0)
+	{		
+		$unpaid = Tbl_commission_invoice::where('invoice_id',$invoice_id)->where("invoice_is_paid",0)->where("is_released",0)->orderBy("comm_inv_id",'DESC')->first();
+		if($unpaid)
+		{
+			$fortcp_applied_payment = Tbl_commission::where("commission_id", $unpaid->commission_id)->value("payment_applied");
+			$inv_overall_price = Tbl_customer_invoice::where("inv_id", $invoice_id)->value("inv_overall_price");
+			if($payment_applied >= ($amount_paid_amount + $unpaid->payment_amount) || $fortcp_applied_payment >= $inv_overall_price)
+			{
+				Self::update_commission_invoice($invoice_id, $rp_id, $amount_paid_amount, $payment_applied);
+			}
+		}
+	}
+	public static function update_commission_invoice($invoice_id, $rp_id, $amount_paid_amount, $payment_applied)
+	{
+		$check2 = Tbl_commission_invoice::where('invoice_id',$invoice_id)->where("invoice_is_paid",0)->where("is_released",0)->orderBy("comm_inv_id",'DESC')->first();
+		$update['payment_ref_id'] = $rp_id;
+		$update['invoice_is_paid'] = 1;
+		$update['is_released'] = 1;	
+		if($check2)
+		{
+			if(strtolower($check2->commission_type) == 'tcpc')
+			{
+				$update['is_released'] = Self::check_ndp_paid_all($check2->commission_id);			
+			}
+			Tbl_commission_invoice::where('comm_inv_id',$check2->comm_inv_id)->update($update);
+		}
+		$get_new_amount_paid = Self::get_new_amount_paid($invoice_id);
+		Self::check_next_unpaid($invoice_id, $rp_id, $get_new_amount_paid, $payment_applied);
+	}
+	public static function get_new_amount_paid($invoice_id)
+	{
+		$_get = Tbl_commission_invoice::where('invoice_id',$invoice_id)->orderBy("comm_inv_id",'DESC')->get();
+		$amount_paid = 0;
+		foreach ($_get as $keyget => $valueget)
+		{
+			if($valueget->invoice_is_paid == 1 && $valueget->is_released == 1)
+			{
+				$amount_paid += $valueget->payment_amount;
+			}
+		}
+		return $amount_paid;
 	}
 	public static function check_ndp_paid_all($commission_id)
 	{

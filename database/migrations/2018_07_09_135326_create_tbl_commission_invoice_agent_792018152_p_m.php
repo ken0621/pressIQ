@@ -13,6 +13,16 @@ class CreateTblCommissionInvoiceAgent792018152PM extends Migration
      */
     public function up()
     {
+        Schema::create('tbl_commission', function (Blueprint $table) {
+            $table->dropForeign("tbl_commission_agent_id_foreign");
+        });
+        Schema::create('tbl_commission', function (Blueprint $table) {
+            $table->dropColumn("agent_id");
+        });
+        Schema::create('tbl_commission', function (Blueprint $table) {
+            $table->integer("agent_id")->nullable()->unsigned();
+            $table->foreign("agent_id")->references("employee_id")->on("tbl_employee")->onDelete("cascade");
+        });
         Schema::create('tbl_commission_invoice_agent', function (Blueprint $table) {
             $table->increments("invoice_agent_id");
             $table->integer("agent_comm_inv_id")->unsigned();

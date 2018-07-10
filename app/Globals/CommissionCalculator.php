@@ -122,10 +122,10 @@ class CommissionCalculator
 			foreach ($comm_agent as $key => $value) 
 			{
 				$ins_comm_agent['agent_comm_inv_id'] = $tcp_id;
-				$ins_comm_agent['agent_id'] = $value['agent_id'];
+				$ins_comm_agent['comm_agent_id'] = $value['agent_id'];
 				$ins_comm_agent['agent_percent'] = $value['agent_rate_percent'];
 				$ins_comm_agent['agent_amount'] = $value['agent_net_comm'];
-				$ins_comm_agent['commission_amount'] = $value['agent_tcp_comm'];
+				$ins_comm_agent['agent_commission_amount'] = $value['agent_tcp_comm'];
 
 				Tbl_commission_invoice_agent::insert($ins_comm_agent);
 			}
@@ -145,10 +145,10 @@ class CommissionCalculator
 				foreach ($comm_agent as $keyndp => $valuendp) 
 				{
 					$ins_comm_ndp['agent_comm_inv_id'] = $ndp_id;
-					$ins_comm_ndp['agent_id'] = $valuendp['agent_id'];
+					$ins_comm_ndp['comm_agent_id'] = $valuendp['agent_id'];
 					$ins_comm_ndp['agent_percent'] = $valuendp['agent_rate_percent'];
 					$ins_comm_ndp['agent_amount'] = $valuendp['agent_net_comm'];
-					$ins_comm_ndp['commission_amount'] = $valuendp['agent_ndp_comm'] / Self::get_computation($shop_id, $commission_id)['month_amort'];
+					$ins_comm_ndp['agent_commission_amount'] = $valuendp['agent_ndp_comm'] / Self::get_computation($shop_id, $commission_id)['month_amort'];
 
 					Tbl_commission_invoice_agent::insert($ins_comm_ndp);
 				}
@@ -282,7 +282,7 @@ class CommissionCalculator
 			{
 				$return['for_releasing_comm'] += $value->agent_commission_amount;
 			}
-			if($value->is_released == 0 && $value->invoice_is_paid == 0)
+			if($value->is_released == 0 && $value->invoice_is_paid == 0 || $value->is_released == 1 && $value->invoice_is_paid == 0)
 			{
 				$return['pending_comm'] += $value->agent_commission_amount;
 			}
@@ -313,7 +313,7 @@ class CommissionCalculator
 				{
 					$get_all[$key]['for_releasing_comm'] += $value2->agent_commission_amount;
 				}
-				if($value2->is_released == 0 && $value2->invoice_is_paid == 0)
+				if($value2->is_released == 0 && $value2->invoice_is_paid == 0 || $value2->is_released == 1 && $value->invoice_is_paid == 0)
 				{
 					$get_all[$key]['pending_comm'] += $value2->agent_commission_amount;
 				}
@@ -451,6 +451,7 @@ class CommissionCalculator
 			$rp = null;
 			$rp_amount = 0;
 			$total_paid = 0;
+			$payment_applied = 0;
 			foreach ($all as $key => $value) 
 			{
 				if($value->invoice_is_paid != 0)
@@ -475,27 +476,30 @@ class CommissionCalculator
 			// {
 				$additional = abs($rp_amount - $total_paid);
 			// }
-
 			$ctr = floor(($get_payment_data->rp_total_amount + $additional) / $check->payment_amount);
+
+			// $ctr = floor(($rp_amount+ $get_payment_data->rp_total_amount) / $check->payment_amount);
 
 			for ($i = 0; $i < $ctr; $i++) 
 			{ 
-				$check = Tbl_commission_invoice::where('invoice_id',$invoice_id)->where("invoice_is_paid",0)->where("is_released",0)->orderBy("comm_inv_id",'DESC')->first();
+				$check2 = Tbl_commission_invoice::where('invoice_id',$invoice_id)->where("invoice_is_paid",0)->where("is_released",0)->orderBy("comm_inv_id",'DESC')->first();
 				/*UPDATE COMMISSION HERE*/
 				$update['payment_ref_name'] = 'receive_payment';
 				$update['payment_ref_id'] = $rcvpyment_id;
 				$update['invoice_is_paid'] = 1;
 				$update['is_released'] = 1;	
-				if($check)
+				if($check2)
 				{
-					if(strtolower($check->commission_type) == 'tcpc')
+					if(strtolower($check2->commission_type) == 'tcpc')
 					{
-						$update['is_released'] = Self::check_ndp_paid_all($check->commission_id);			
+						$update['is_released'] = Self::check_ndp_paid_all($check2->commission_id);			
 					}
-					Tbl_commission_invoice::where('comm_inv_id',$check->comm_inv_id)->update($update);
-					Self::update_tcp($check->commission_id);
+					Tbl_commission_invoice::where('comm_inv_id',$check2->comm_inv_id)->update($update);
+					// Self::update_tcp($check->commission_id);
 				}
 			}
+			$payment_applied = $rp_amount + $get_payment_data->rp_total_amount;
+			Tbl_commission::where("commission_id", $check->commission_id)->udpate(["payment_applied" => $payment_applied]);
 		}
 	}
 	public static function check_ndp_paid_all($commission_id)

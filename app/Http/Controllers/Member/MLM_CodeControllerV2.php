@@ -457,7 +457,7 @@ class MLM_CodeControllerV2 extends Member
                         //privilegecardholder
                         if($privilegecard)
                         {
-                            $text_message        = "Hi " . ($customer ? ucwords(strtolower($privilegecard->first_name)) : '') . "! You earned P". number_format($repurchase_points->REPURCHASE_POINTS, 2) ." Cash-Back from your purchase at".$warehouse->warehouse_name. "Your total points now is P" . number_format($repurchase_points_total, 2) . ". Congratulations!";
+                            $text_message        = "Hi " . ($customer ? ucwords(strtolower($privilegecard->first_name)) : '') . "! You earned P". number_format($repurchase_points->REPURCHASE_POINTS, 2) ." Cash-Back from your purchase at ".$warehouse->warehouse_name. ". Your total points now is P" . number_format($repurchase_points_total, 2) . ". Congratulations!";
 
                             $result              = Sms::SendSingleText($cellphone_number, $text_message, "", null);
                             
@@ -473,7 +473,7 @@ class MLM_CodeControllerV2 extends Member
 
                             $email_content["subject"] = "Reward Code Distribute";
 
-                            $email_content["content"] = "Hi " . ($mail_recipient ? ucwords(strtolower($mail_recipient->first_name)) : '') . "! You earned P". number_format($sponsor_cashback->points_log_points, 2) ." Cash-Back from ". ucwords(strtolower($privilegecard->first_name)). ". Your total points now is P" . number_format($sponsor_cashback_total, 2) . ". Congratulations!";
+                            $email_content["content"] = "Hi " . ($mail_recipient ? ucwords(strtolower($mail_recipient->first_name)) : '') . "! You earned P". number_format($sponsor_cashback->points_log_points, 2) ." Cash-Back from ". ucwords(strtolower($privilegecard->first_name))." ".ucwords(strtolower($privilegecard->last_name)). " who purchased at ". $warehouse->warehouse_name." Your total points now is P" . number_format($sponsor_cashback_total, 2) . ". Congratulations!";
 
 
                             $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $email);

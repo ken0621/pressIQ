@@ -32,11 +32,11 @@
         </div>
         <div class="form-group">
             <label>Cellphone No.</label>
-            <input class="form-control" type="text" value="+63" name="cellphone_number" required>
+            <input class="form-control" id="contact" type="text"  name="cellphone_number" required>
         </div>
         <div class="form-group">
             <label>Email</label>
-            <input class="form-control" type="email" name="email">
+            <input class="form-control" id="contact_email" type="email" name="email">
         </div>
     </div>
     <div class="modal-footer">
@@ -47,7 +47,6 @@
 
 <script type="text/javascript">
 $('.vip-name-distribute').chosen();
-
 $('.vip-name-distribute').on('change', function(e) 
 {
     $('.slot-no').addClass('disabled').prop('disabled', true).attr('disabled', true);
@@ -66,16 +65,21 @@ $('.vip-name-distribute').on('change', function(e)
     {
         console.log(result);
         var slot_no = '';
-
+        var number = 0;
+        var email ='';
         $.each(result, function(index, val) 
         {
             slot_no += '<option value="'+val.slot_no+'">'+val.slot_no+'</option>';
+            number = val.contact;
+            email = val.email;
         });
 
         $('.slot-no').empty();
         $('.slot-no').append(slot_no);
         $('.slot-no').removeClass('disabled').removeProp('disabled').removeAttr('disabled');
         $('.slot-no').chosen();
+        $('#contact').val(number);
+        $('#contact_email').val(email);
     })
     .fail(function() 
     {

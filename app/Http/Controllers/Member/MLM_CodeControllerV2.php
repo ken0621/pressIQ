@@ -365,7 +365,7 @@ class MLM_CodeControllerV2 extends Member
 
     public function get_slot(Request $request)
     {
-        return json_encode(DB::table("tbl_mlm_slot")->where("tbl_mlm_slot.slot_owner", $request->customer_id)->get());
+        return json_encode(DB::table("tbl_mlm_slot")->join('tbl_customer', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')->where("tbl_mlm_slot.slot_owner", $request->customer_id)->get());
     }
 
     public function distribute()

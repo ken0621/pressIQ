@@ -25,13 +25,13 @@
                                     <td class="text-center">Invoice # {{$invoices->new_inv_id}} ({{$invoices->commission_type}})</td>
                                     <td class="text-center">{{date('m/d/Y',strtotime($invoices->inv_date))}}</td>
                                     <td class="text-center {{$total_inv_amount += $invoices->payment_amount }}">{{currency('P ',$invoices->payment_amount,2)}}</td>
-                                    <td class="text-center {{$total_comm_amount += $invoices->commission_amount}}">{{currency('P ',$invoices->commission_amount,2)}}</td>
+                                    <td class="text-center {{$total_comm_amount += $invoices->agent_commission_amount}}">{{currency('P ',$invoices->agent_commission_amount,2)}}</td>
                                     <td class="text-center">
                                         <a href="javascript:">
                                             @if($invoices->invoice_is_paid == 1)
                                             PAID
                                             @else
-                                            <label class="{{$total_pending_comm+= $invoices->commission_amount}}">PENDING</label>
+                                            <label class="{{$total_pending_comm+= $invoices->agent_commission_amount}}">PENDING</label>
                                             @endif
                                         </a>
                                     </td>

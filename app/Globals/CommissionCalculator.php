@@ -266,8 +266,8 @@ class CommissionCalculator
 	}
 	public static function per_agent($agent_id)
 	{
-		$get_all = Tbl_commission::invoice()->where('agent_id',$agent_id)->groupBy('comm_inv_id')->get();
-		$get_all = Tbl_commission_invoice_agent::comm_invoice()->where('agent_id',$agent_id)->groupBy('comm_inv_id')->get();
+		$get_all = Tbl_commission::invoice()->agent()->where('comm_agent_id',$agent_id)->groupBy('comm_inv_id')->get();
+		$get_all = Tbl_commission_invoice_agent::comm_invoice()->where('comm_agent_id',$agent_id)->groupBy('comm_inv_id')->get();
 		$return['orverall_comm'] = 0;
 		$return['released_comm'] = 0;
 		$return['for_releasing_comm'] = 0;
@@ -486,12 +486,15 @@ class CommissionCalculator
 				$update['payment_ref_id'] = $rcvpyment_id;
 				$update['invoice_is_paid'] = 1;
 				$update['is_released'] = 1;	
-				if(strtolower($check->commission_type) == 'tcpc')
+				if($check)
 				{
-					$update['is_released'] = Self::check_ndp_paid_all($check->commission_id);			
+					if(strtolower($check->commission_type) == 'tcpc')
+					{
+						$update['is_released'] = Self::check_ndp_paid_all($check->commission_id);			
+					}
+					Tbl_commission_invoice::where('comm_inv_id',$check->comm_inv_id)->update($update);
+					Self::update_tcp($check->commission_id);
 				}
-				Tbl_commission_invoice::where('comm_inv_id',$check->comm_inv_id)->update($update);
-				Self::update_tcp($check->commission_id);
 			}
 		}
 	}

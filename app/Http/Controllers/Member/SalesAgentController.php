@@ -79,7 +79,7 @@ class SalesAgentController extends Member
 	public function getInvoices(Request $request, $commission_id)
 	{
 		$agent_id = $request->agent_id;
-		$data['_invoices'] = CommissionCalculator::per_commission_invoices($commission_id);
+		$data['_invoices'] = CommissionCalculator::per_commission_invoices($commission_id, $agent_id);
 		$data['commission'] = CommissionCalculator::info($this->user_info->shop_id,$commission_id);
 		
 		return view('member.cashier.sales_agent.sales_agent_invoices',$data);

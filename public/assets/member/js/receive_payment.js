@@ -114,18 +114,19 @@ function receive_payment()
 	/* CHECK BOX FOR LINE ITEM */
 	function event_line_check_change()
 	{
-		$(document).on("change", ".line-checked", function()
+		$("body").on("change", ".line-checked", function()
 		{
 			action_change_input_value($(this));
 		});
 	}
 	function action_change_input_value($this)
 	{
-		if($this.is(":checked"))
+		if($this.prop("checked"))
 		{
 			$this.prev().val(1);
 			var balance = $this.parents("tr").find(".balance-due").val();
-			if(!formatFloat($this.parents("tr").find(".amount-payment").val()) > 0)
+			var amount_payment = formatFloat($this.parents("tr").find(".amount-payment").val());
+			if(!amount_payment > 0)
 			{
 				$this.parents("tr").find(".amount-payment").val(balance).change();
 			}
@@ -137,6 +138,29 @@ function receive_payment()
 			$this.parents("tr").find(".amount-payment").val('').change();
 		}
 	}
+
+	function action_add_comma(number)
+	{
+		number += '';
+		if(number == ''){
+			return '';
+		}
+
+		else{
+			return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+	}
+	function action_return_to_number(number = '')
+	{
+		number += '';
+		number = number.replace(/,/g, "");
+		if(number == "" || number == null || isNaN(number)){
+			number = 0;
+		}
+		
+		return parseFloat(number);
+	}
+
 
 	function action_compute_maximum_amount()
 	{
@@ -189,15 +213,15 @@ function receive_payment()
 
 	function event_payment_amount_change()
 	{
-		$(document).on("change",".amount-payment", function(e)
+		$("body").on("change",".amount-payment", function(e)
 		{
-			$(this).val(formatFloat($(this).val()) == 0 ? '' : formatMoney($(this).val()));
-
-			!is_amount_receive_modified ? $(".amount-received").val(action_total_amount_apply()).change() : $(".amount-received").change();
-			action_update_apply_amount(action_total_amount_apply());
+			var amount_payment = action_return_to_number($(this).val());
+			// $(this).val(action_return_to_number($(this).val()) == 0 ? '' : formatMoney($(this).val()));
+			!is_amount_receive_modified ? $(".amount-received").val(action_total_amount_apply()).change() : 0;
+			// action_update_apply_amount(action_total_amount_apply());
 
 			// check - uncheck checkbox
-			if(formatFloat($(this).val()) > 0)
+			if(amount_payment > 0)
 			{
 				$(this).parents("tr").find(".line-checked").prop("checked", true).change();
 			}
@@ -207,7 +231,7 @@ function receive_payment()
 			}
 
 			// validation for exceeding balace
-			if(formatFloat($(this).val()) > formatFloat($(this).parents("tr").find(".balance-due").val()) )
+			if(amount_payment > action_return_to_number($(this).parents("tr").find(".balance-due").val()) )
 			{
 				this.setCustomValidity("You may not pay more than the balance due");
     			return false;
@@ -225,7 +249,7 @@ function receive_payment()
 		var line_payment_amount = 0;
 		$(".amount-payment").each(function()
 		{
-			line_payment_amount += formatFloat($(this).val());
+			line_payment_amount += action_return_to_number($(this).val());
 		})
 		return formatMoney(line_payment_amount);
 	}
@@ -285,9 +309,8 @@ function receive_payment()
 	}
 	function compute_total()
 	{		
-		$(".applied-total-amount").val(parseFloat(amount_due) - parseFloat(amount_credit));
-		$('.applied-amount').html('PHP ' + formatMoney_2(parseFloat(amount_due) - parseFloat(amount_credit)));
-		console.log(parseFloat(amount_due) - parseFloat(amount_credit));
+		$(".applied-total-amount").val(action_return_to_number(amount_due) - action_return_to_number(amount_credit));
+		$('.applied-amount').html('PHP ' + action_add_comma(action_return_to_number(amount_due) - action_return_to_number(amount_credit)));
 	}
 	this.event_compute_apply_credit = function()
 	{

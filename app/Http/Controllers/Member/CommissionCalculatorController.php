@@ -256,7 +256,7 @@ class CommissionCalculatorController extends Member
                                     $return = CommissionCalculator::create($this->user_info->shop_id, $comm, $comm_item);
                                     Session::put('invoice_id', $return);
                                     Session::put('customer_id', $customer_id);
-
+ 
                                     $json["status"]     = "success";
                                     $json["message"]    = "Success";
                                 }

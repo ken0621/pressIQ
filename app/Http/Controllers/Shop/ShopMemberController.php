@@ -1805,14 +1805,6 @@ class ShopMemberController extends Shop
                                     ->get();
         }
 
-
-
-
-   
-
-
-    
-
         else    
         {
             $data['_recipient']   = Tbl_press_release_recipient::whereIn('country', $filter["country"])

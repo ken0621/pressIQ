@@ -124,6 +124,7 @@
                             <option value="Indonesia">Indonesia</option>
                             <option value="Malaysia">Malaysia</option>
                             <option value="India">India</option>
+                            <option value="Canada">Canada</option>
                         </select> 
 
                     <div class="title">Language: *</div>

@@ -526,6 +526,13 @@ class CommissionCalculator
 			$next_unpaid = Self::check_next_unpaid($invoice_id, $rcvpyment_id, $amount_paid, $get_payment_data->rp_total_amount);
 			Tbl_commission::where("commission_id", $check->commission_id)->update(["payment_applied" => $payment_applied]);
 
+			$fortcp_applied_payment = Tbl_commission::where("commission_id", $check->commission_id)->value("payment_applied");
+			$inv_overall_price = Tbl_customer_invoice::where("inv_id", $invoice_id)->value("inv_overall_price");
+			if($fortcp_applied_payment >= $inv_overall_price)
+			{
+				Self::update_commission_invoice($invoice_id, $rcvpyment_id);
+			}
+
 			/* END NEW */
 
 		}
@@ -535,15 +542,13 @@ class CommissionCalculator
 		$unpaid = Tbl_commission_invoice::where('invoice_id',$invoice_id)->where("invoice_is_paid",0)->where("is_released",0)->orderBy("comm_inv_id",'DESC')->first();
 		if($unpaid)
 		{
-			$fortcp_applied_payment = Tbl_commission::where("commission_id", $unpaid->commission_id)->value("payment_applied");
-			$inv_overall_price = Tbl_customer_invoice::where("inv_id", $invoice_id)->value("inv_overall_price");
-			if($payment_applied >= ($amount_paid_amount + $unpaid->payment_amount) || $fortcp_applied_payment >= $inv_overall_price)
+			if($payment_applied >= ($amount_paid_amount + $unpaid->payment_amount))
 			{
 				Self::update_commission_invoice($invoice_id, $rp_id, $amount_paid_amount, $payment_applied);
 			}
 		}
 	}
-	public static function update_commission_invoice($invoice_id, $rp_id, $amount_paid_amount, $payment_applied)
+	public static function update_commission_invoice($invoice_id, $rp_id, $amount_paid_amount = 0, $payment_applied = 0)
 	{
 		$check2 = Tbl_commission_invoice::where('invoice_id',$invoice_id)->where("invoice_is_paid",0)->where("is_released",0)->orderBy("comm_inv_id",'DESC')->first();
 		$update['payment_ref_id'] = $rp_id;

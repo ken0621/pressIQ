@@ -3173,8 +3173,12 @@ class ShopMemberController extends Shop
             Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
 
             MLM2::entry($shop_id,$slot_id);
-            $used['item_in_use'] = 'used';
-            Tbl_warehouse_inventory_record_log::where('record_log_id',$codes->record_log_id)->update($used);
+         
+            $consume['name'] = 'created_slot';
+            $consume['id'] = $slot_id;
+            Warehouse2::consume_product_codes($shop_id, $codes->mlm_pin, $codes->mlm_activation, $consume ,"Created Slot #".$slot_id,"used");
+            // $used['item_in_use'] = 'used';
+            // Tbl_warehouse_inventory_record_log::where('record_log_id',$codes->record_log_id)->update($used);
             $response = 'success';
         }
 

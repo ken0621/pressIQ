@@ -19,7 +19,12 @@ var ndp = 0;
 var tcp_string = '';
 var tcp = 0;
 
+var ewt_string = '';
+var ewt = 0.05;
+
 var selected_customer='';
+
+var global_tr_html = $(".div-script tbody").html();
 
 function create_commission_calculator()
 {
@@ -41,6 +46,35 @@ function create_commission_calculator()
 		event_change_tcp();
 		action_load_date();
 
+		event_click_last_row();
+		event_remove_tr();
+
+	}
+
+	function event_remove_tr()
+	{
+		$(document).on("click", ".remove-tr", function(e){
+			var len = $(".agent-list .remove-tr").length;
+			if($(".agent-list .remove-tr").length > 1)
+			{
+				$(this).parent().remove();
+			}
+			else
+			{
+				console.log("success");
+			}
+		});
+	}
+	function event_click_last_row()
+	{
+		$(document).on("click", "tbody.draggable tr:last td:not(.remove-tr)", function(){
+			event_click_last_row_op();
+		});
+	}
+	function event_click_last_row_op()
+	{
+		$("tbody.agent-list").append(global_tr_html);
+		action_initialize_select();
 	}
 	function action_load_datepicker()
 	{
@@ -118,11 +152,57 @@ function create_commission_calculator()
 			{
 				if($(this).val())
 				{
-					agent_commission_percent = parseFloat($(this).find("option:selected").attr('commission-percent')) / 100;
+					$(".agent-comm-rate").val($(this).find("option:selected").attr('commission-percent')+"%");
 					event_compute_commission();
 				}
 			}
 		});
+		$('.dropdown-agent-li').globalDropList({
+			hasPopup : 'true',
+			link : '/member/cashier/sales_agent/add',
+			width : '100%',
+			link_size : 'md',
+			onChangeValue : function()
+			{
+				if($(this).val())
+				{
+					event_select_agent($(this));
+				}
+			}
+		});
+
+	    $(".draggable .tr-agent-li:last td select.select-agent-li").globalDropList(
+        {
+            hasPopup : 'true',
+			link : '/member/cashier/sales_agent/add',
+			width : '100%',
+			link_size : 'md',
+			onChangeValue : function()
+			{
+				if($(this).val())
+				{
+					event_select_agent($(this));
+				}
+			}
+        });
+		$('.select-ewt').globalDropList({
+			hasPopup : 'false',
+			width : '100%',
+			onChangeValue : function()
+			{
+				if($(this).val())
+				{
+					ewt = parseFloat($(this).val()) / 100;
+					event_compute_commission();
+				}
+			}
+		});
+	}
+	function event_select_agent($this)
+	{
+		$parent = $this.closest(".tr-agent-li");
+		$parent.find(".txt-agent-li-rate").val($this.find("option:selected").attr("commission-percent")+"%").change();
+		event_compute_commission();
 	}
 
 	/* AFTER ADDING AN  ITEM */
@@ -152,13 +232,11 @@ function create_commission_calculator()
 	}
 	function event_compute_all()
 	{
-		$('.compute-all').unbind('keyup');
-		$('.compute-all').bind('keyup', function()
+		$("body").on("change",'.compute-all', function()
 		{
 			event_compute_commission();
 		});
-		$('.discount-auto-add-comma').unbind('keyup');
-		$('.discount-auto-add-comma').bind('keyup', function()
+		$("body").on("keyup",'.discount-auto-add-comma', function()
 		{
 			$(this).val(auto_comma($(this).val()));	
 			event_compute_commission();		
@@ -193,6 +271,7 @@ function create_commission_calculator()
 	function event_compute_commission()
 	{
 		dp_string = $('.downpayment').val();		
+		agent_commission_string = $(".agent-comm-rate").val();
 
 		downpayment = 0;
 		discount = parseFloat(($('.discount').val()).replace(',',''));
@@ -208,6 +287,12 @@ function create_commission_calculator()
 		{
 			downpayment = (parseFloat(dp_string.substring(0, dp_string)) / 100);
 		}
+		agent_commission_percent = parseFloat(agent_commission_string);
+		if(agent_commission_string.indexOf('%') > 0)
+		{
+			agent_commission_percent = (parseFloat(agent_commission_string.substring(0, agent_commission_string.indexOf('%'))));
+		}
+		agent_commission_percent = agent_commission_percent / 100;
 
 		tsp_string = $('.sales-price').val();	
 		/*tsp = parseFloat(($('.sales-price').val()).replace(',',''));*/
@@ -241,6 +326,12 @@ function create_commission_calculator()
 		var amount_tc = ((tsp - discount) / tax) * agent_commission_percent;
 		$('.amount-tc').html('P '+ number_format(amount_tc));
 		
+		var amount_ewt = amount_tc * ewt;
+		$(".amount-ewt").html('P ' + number_format(amount_ewt));
+
+		var amount_net_comm = amount_tc - amount_ewt;
+		$(".amount-net-comm").html('P ' + number_format(amount_net_comm));
+
 		tcp_string = $('.tcp-commission').val();
 		ndp_string = $('.ndp-commission').val();
 		if(ndp_string.indexOf('%') > 0)
@@ -268,7 +359,11 @@ function create_commission_calculator()
 		{
 			tcp = parseFloat(tcp_string/100);
 		}
-		var amount_tcp1 = amount_tc * tcp;
+		if(!tcp)
+		{
+			tcp = 0;
+		}
+		var amount_tcp1 = amount_net_comm * tcp;
 		$('.amount-tcp1').html('P '+number_format(amount_tcp1));
 
 		ndp = 0;
@@ -280,17 +375,53 @@ function create_commission_calculator()
 		{
 			ndp = parseFloat(ndp_string/100);
 		}
-		var amount_ndp = amount_tc * ndp;
+		if(!ndp)
+		{
+			ndp = 0;
+		}
+		var amount_ndp = amount_net_comm * ndp;
 		$('.amount-ndp').html('P '+number_format(amount_ndp));
+
+		var $total_agent_percent = 0;
+		$(".draggable .tr-agent-li").each(function()
+		{
+			$tr_row = $(this);
+
+			$tr_percent = $tr_row.find(".txt-agent-li-rate").val();
+
+			agent_li_comm_rate = parseFloat($tr_percent);
+			if($tr_percent.indexOf('%') > 0)
+			{
+				agent_li_comm_rate = (parseFloat($tr_percent.substring(0, $tr_percent.indexOf('%'))));
+			}
+			$per_agent_comm = amount_net_comm * (agent_li_comm_rate / 100);
+			if(!$per_agent_comm)
+			{
+				$per_agent_comm = 0;
+			}
+			$tr_row.find(".lbl-agent-li-rate-comm").html(number_format($per_agent_comm)).change();
+			$tr_row.find(".lbl-agent-li-ndp-comm").html(number_format($per_agent_comm * ndp)).change();
+			$tr_row.find(".lbl-agent-li-tcp-comm").html(number_format($per_agent_comm * tcp)).change();
+
+			$tr_row.find(".input-agent-li-rate-comm").val($per_agent_comm).change();
+			$tr_row.find(".input-agent-li-ndp-comm").val($per_agent_comm * ndp).change();
+			$tr_row.find(".input-agent-li-tcp-comm").val($per_agent_comm * tcp).change();
+		});
 
 		$('.input-tcp').val(amount_tcp);
 		$('.input-tc').val(amount_tc);
+		$('.input-net-comm').val(amount_net_comm);
 		$('.input-loanable-amount').val(amount_loanable);
-		$('.c-amount-tsp').html(number_format(tsp, false));
-		$('.c-amount-disc').html(number_format(discount, false));
+		$('.input-ewt').val(amount_ewt);
+		$('.c-amount-tsp').html(number_format(tsp));
+		$('.c-amount-disc').html(number_format(discount));
 		$('.c-amount-tax').html(number_format(tax));
 		$('.c-amount-commission').html((agent_commission_percent * 100) + '%');
 		$('.c-amount-dp').html((downpayment * 100) + '%');
+		$('.c-amount-tc').html(number_format(amount_tc));
+		$('.c-ewt').html((ewt * 100) + '%');
+		$('.input-ndp-comm').val(amount_ndp);
+		$('.input-tcp-comm').val(amount_tcp);
 	}
 	function event_accept_number_only()
 	{

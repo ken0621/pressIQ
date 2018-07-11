@@ -157,6 +157,20 @@ class Mlm_complan_manager_repurchasev2
     public static function unilevel($slot_info, $points,$uc_points = 0)
     {
         $unilevel_pts = $points;
+        $proceed_to_privilege = 0;
+
+        if($slot_info)
+        {
+            $is_privilege = Tbl_membership::where("membership_id",$slot_info->slot_membership)->first();
+            if($is_privilege)
+            {
+                if($is_privilege->membership_privilege == 1)
+                {
+                    $proceed_to_privilege = 1;
+                }
+            }
+        }
+
 
         $_unilevel_setting = Tbl_mlm_unilevel_settings::get();
         $_tree             = Tbl_tree_sponsor::child($slot_info->slot_id)->level()->distinct_level()->get();
@@ -172,28 +186,57 @@ class Mlm_complan_manager_repurchasev2
         foreach($_tree as $key => $tree)
         {
             $slot_recipient = Mlm_compute::get_slot_info($tree->sponsor_tree_parent_id);
-            if(isset($unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level]))
+            /* PROCEED TO PRIVILEGE COMPUTATION IF THE ONE WHO PURCHASE IS PRIVILEGE MEMBERSHIP TYPE */
+            if($proceed_to_privilege == 1)
             {
-                      
-                $settings = $unilevel_level_settings[$slot_recipient->membership_id][$tree->sponsor_tree_level];
-                $percentage = $unilevel_level_settings_percentage[$slot_recipient->membership_id][$tree->sponsor_tree_level];
-                // 0 = fixed
-                // 1 = percentage
-                if($percentage === 0)
+                if(isset($unilevel_level[$slot_info->slot_membership][$tree->sponsor_tree_level]))
                 {
-                    $unilevel_bonus = $unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level];
-                    $uc_bonus       = 0;
+                    $settings = $unilevel_level_settings[$slot_info->slot_membership][$tree->sponsor_tree_level];
+                    $percentage = $unilevel_level_settings_percentage[$slot_info->slot_membership][$tree->sponsor_tree_level];
+                    // 0 = fixed
+                    // 1 = percentage
+                    if($percentage === 0)
+                    {
+                        $unilevel_bonus = $unilevel_level[$slot_info->slot_membership][$tree->sponsor_tree_level];
+                        $uc_bonus       = 0;
+                    }
+                    else
+                    {
+                        $unilevel_bonus = ($unilevel_level[$slot_info->slot_membership][$tree->sponsor_tree_level]/100) * $unilevel_pts;
+                        $uc_bonus       = ($unilevel_level[$slot_info->slot_membership][$tree->sponsor_tree_level]/100) * $uc_points;
+                    }
                 }
                 else
                 {
-                    $unilevel_bonus = ($unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level]/100) * $unilevel_pts;
-                    $uc_bonus       = ($unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level]/100) * $uc_points;
-                }
+                    $unilevel_bonus = 0;  
+                    $uc_bonus       = 0;
+                }  
             }
             else
             {
-                $unilevel_bonus = 0;  
-                $uc_bonus       = 0;
+                if(isset($unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level]))
+                {
+                          
+                    $settings = $unilevel_level_settings[$slot_recipient->membership_id][$tree->sponsor_tree_level];
+                    $percentage = $unilevel_level_settings_percentage[$slot_recipient->membership_id][$tree->sponsor_tree_level];
+                    // 0 = fixed
+                    // 1 = percentage
+                    if($percentage === 0)
+                    {
+                        $unilevel_bonus = $unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level];
+                        $uc_bonus       = 0;
+                    }
+                    else
+                    {
+                        $unilevel_bonus = ($unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level]/100) * $unilevel_pts;
+                        $uc_bonus       = ($unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level]/100) * $uc_points;
+                    }
+                }
+                else
+                {
+                    $unilevel_bonus = 0;  
+                    $uc_bonus       = 0;
+                }            
             }
 
 

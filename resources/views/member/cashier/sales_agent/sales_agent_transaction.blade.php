@@ -10,7 +10,8 @@
                     <thead style="text-transform: uppercase">
                         <tr>
                             <th class="text-center" width="10px">#</th>
-                            <th class="text-center" width="250px">CUSTOMER NAME</th>
+                            <th class="text-center" width="200px">CUSTOMER NAME</th>
+                            <th class="text-center" >INV#</th>
                             <th class="text-center" >TOTAL COMMISSION</th>
                             <th class="text-center" >RELEASED</th>
                             <th class="text-center" >PENDING</th>
@@ -23,6 +24,7 @@
                                 <tr>
                                     <td class="text-center">{{$key+1}}</td>
                                     <td class="text-center">{{ucwords($transaction->first_name.' '.$transaction->middle_name.' '.$transaction->last_name)}}</td>
+                                    <td class="text-center">{{$transaction->new_inv_id}}</td>
                                     <td class="text-center {{$total_overall+= $transaction->orverall_comm}}">{{currency('P ',$transaction->orverall_comm,2)}}</td>
                                     <td class="text-center {{$total_released+= $transaction->released_comm}}">{{currency('P ',$transaction->released_comm,2)}}</td>
                                     <td class="text-center {{$total_pending+= $transaction->pending_comm}}">{{currency('P ',$transaction->pending_comm,2)}}</td>
@@ -32,12 +34,12 @@
                                 </tr>
                             @endforeach
                         @else
-                        <tr><td colspan="7" class="text-center">NO TRANSACTION YET</td></tr>
+                        <tr><td colspan="8" class="text-center">NO TRANSACTION YET</td></tr>
                         @endif
                     </tbody>
                     <tfoot>
                     	<tr>
-                    		<td colspan="2" class="text-right"><b>TOTAL</b></td>
+                    		<td colspan="3" class="text-right"><b>TOTAL</b></td>
                     		<td class="text-center"><strong>{{currency('P ',$total_overall)}}</strong></td>
                     		<td class="text-center"><strong>{{currency('P ',$total_released)}}</strong></td>
                     		<td class="text-center"><strong>{{currency('P ',$total_pending)}}</strong></td>

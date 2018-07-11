@@ -320,8 +320,7 @@ class CommissionCalculator
 				}
 				$get_all[$key]['orverall_comm'] += $value2->agent_commission_amount;
 			}
-		}
-		
+		}		
 		return $get_all;
 	}
 

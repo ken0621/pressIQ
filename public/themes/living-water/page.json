@@ -1,6 +1,13 @@
 {
 	"home":
 	{
+		"home_slider" :
+		{
+			"label":"Slider Maintenance",
+			"type":"gallery",
+			"default":"",
+			"size":"12"
+		},
 		"home_banner" :
 		{
 			"label":"Home Banner Image (1600x700) Image Dimensions",

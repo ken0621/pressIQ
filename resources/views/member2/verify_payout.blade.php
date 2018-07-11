@@ -42,7 +42,7 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white btn-custom-cancel" data-dismiss="modal"><i class="fa fa-close"></i> Cancel</button>
-		<button type="submit" class="btn btn-primary btn-custom-primary" type="button"><i class="fa fa-check"></i> Confirm Request Payout</button>
+		<button type="submit" class="btn btn-primary btn-custom-primary dis-button-tho" type="button"><i class="fa fa-check"></i> Confirm Request Payout</button>
 	</div>
 </form>
 
@@ -64,6 +64,8 @@
 		{
 			$(".request-payout-form").submit(function(e)
 			{
+				$(".dis-button-tho").attr('disabled', true).prop('disabled', true);
+
 				$.ajax(
 				{
 					url:"/members/verify-payout",
@@ -73,7 +75,12 @@
 					{
 						if(data == "")
 						{
+							$(".dis-button-tho").removeAttr('disabled').removeProp('disabled');
 							window.location.reload();
+						}
+						else if(data == "disable_emoney")
+						{
+							alert("E-Money is temporarily disabled.");
 						}
 						else
 						{

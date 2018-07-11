@@ -1,0 +1,28 @@
+//HEADER
+@media screen and (max-width: 768px)
+{
+	// background-color: #0a0027 !important;
+}
+
+//BANNER SECTION
+@media screen and (max-width: 991px)
+{
+	.banner-section
+	{
+		.caption-holder
+		{
+			position: static;
+		}
+
+		.image-holder
+		{
+			position: static;
+			top: 10;
+		}
+
+		.card-holder
+		{
+			position: static;
+		}
+	}
+}

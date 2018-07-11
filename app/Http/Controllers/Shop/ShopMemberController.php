@@ -30,6 +30,7 @@ use App\Globals\Mail_global;
 use App\Globals\Transaction;
 use App\Globals\Warehouse2;
 use App\Globals\Ecom_Product;
+use App\Globals\Sms;
 use App\Globals\abs\AbsMain;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
@@ -38,7 +39,7 @@ use App\Models\Tbl_recaptcha_pool_amount;
 use App\Models\Tbl_item_token;
 use App\Models\Tbl_item_token_log;
 use App\Models\Tbl_token_list;
-
+use App\Models\Tbl_vmoney_logs;
 use App\Models\Tbl_image;
 // use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_item_redeemable_report;
@@ -129,6 +130,15 @@ class ShopMemberController extends Shop
             $data["wallet"]             = $data["customer_summary"]["_wallet"];
             $data["points"]             = $data["customer_summary"]["_points"];
             $data["_wallet_plan"]       = $data["customer_summary"]["_wallet_plan"];
+            if($data['shop_id'] == 1)
+            {
+                $sort = $data["_wallet_plan"];
+                $temp = $sort[4];
+                $sort[4] = $sort[5];
+                $sort[5] = $temp;
+
+                $data["_wallet_plan"] = $sort;
+            }
             $data["_point_plan"]        = $data["customer_summary"]["_point_plan"];
             $data["_slot"]              = $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
@@ -1903,7 +1913,7 @@ class ShopMemberController extends Shop
         $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
         
         $payout_setting = Tbl_mlm_encashment_settings::where("shop_id", $this->shop_info->shop_id)->first();
-
+        
         $tax = $payout_setting->enchasment_settings_tax;
         $service_charge = $payout_setting->enchasment_settings_p_fee;
         $service_charge_type = $payout_setting->enchasment_settings_p_fee_type;
@@ -1984,6 +1994,8 @@ class ShopMemberController extends Shop
                         /* V-MONEY */
                         if ($method == "vmoney") 
                         {
+                            // return 'disable_emoney';
+
                             /* API */
                             $post = 'mxtransfer.svc';
                             
@@ -2025,6 +2037,17 @@ class ShopMemberController extends Shop
 
                                 $post_params = $url . $post . "?" . http_build_query($pass);
 
+                                $status = "DONE"; // ASK IF RELEASED OR DONE
+                                $remarks = "Request Payout via V-Money";
+
+                                $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
+
+                                if($_slot[$key]->current_wallet - $amount < 0)
+                                {
+                                    break;
+                                    return Redirect::back();
+                                }
+                                
                                 try 
                                 {
                                     $client = new Client();
@@ -2035,23 +2058,28 @@ class ShopMemberController extends Shop
                                     $stream->rewind(); // Seek to the beginning
                                     $contents = $stream->getContents(); // returns all the contents
                                     $data_decoded = json_decode($contents);
-
+                                    $insert['vmoney_logs'] = serialize($data_decoded);
+                                    $insert['created_at'] = Carbon::now();
+                                    $insert['customer_id'] = Self::$customer_info->customer_id;
+                                    $insert['slot_id'] = $slot_id;
                                     /* Result */
                                     if ($data_decoded->resultCode == "000") 
                                     {   
-                                        $status = "DONE"; // ASK IF RELEASED OR DONE
-                                        $remarks = "Request Payout via V-Money";
 
-                                        $slot_payout_return = MLM2::slot_payout($shop_id, $slot_id, $method, $remarks, $take_home, $tax_amount, $service_charge, $other_charge, $date, $status);
+                                       Tbl_vmoney_logs::insert($insert);
                                     }
                                     else
-                                    {
-                                        // TBD
+                                    {   
+                                        MLM2::delete_wallet_log($shop_id, $slot_id, $slot_payout_return);
+                                        Tbl_vmoney_logs::insert($insert);
+                                        //delete wallet logs
                                     }
                                 } 
                                 catch (\Exception $e) 
                                 {
-                                    dd($e->getMessage());
+                                    MLM2::delete_wallet_log($shop_id, $slot_id, $slot_payout_return);
+                                    Tbl_vmoney_logs::insert($insert);
+                                    // delete wallet logs
                                 }
                             }
                         }
@@ -3973,6 +4001,7 @@ class ShopMemberController extends Shop
         $shop_id  = $this->shop_info->shop_id;
         $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
         $cart = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
+        $customer_id = isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null;
         $validate = null;
         if($cart)
         {   
@@ -4028,8 +4057,19 @@ class ShopMemberController extends Shop
             
             Transaction::create_set_method($method);
             Transaction::create_set_method_id($method_id);
-            $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
+            
+            if($shop_id == 1)
+            {
+                $source = null;
+                $transact_number = null;
+                $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-", $source, $transact_number, $customer_id);
 
+            }
+            else
+            {
+                $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
+            }
+            
             if(is_numeric($transaction_list_id))
             {
                 $method_id  = $method_id;
@@ -4714,6 +4754,9 @@ class ShopMemberController extends Shop
     {
         $data['action'] = '/members/slot-validate';
         $data['confirm_action'] = '/members/slot-toslot';
+
+        $data['shop_id'] = $this->shop_info->shop_id;
+
         return view('mlm.slots.use_product_code',$data);
     }
     public function postSlotValidate()
@@ -4797,7 +4840,7 @@ class ShopMemberController extends Shop
 
         $shop_id = $this->shop_info->shop_id;
         $consume['name'] = 'customer_product_code';
-        $consume['id'] =Self::$customer_info->customer_id;
+        $consume['id'] = Self::$customer_info->customer_id;
         $val = Warehouse2::consume_product_codes($shop_id, $mlm_pin, $mlm_activation, $consume);
         
         if(is_numeric($val))
@@ -4822,6 +4865,26 @@ class ShopMemberController extends Shop
                 Tbl_item_token_log::insert($token_log);
             }
 
+            /* Send SMS and E-mail */
+            $distribute = DB::table("tbl_distribute_product_code")->where("customer_id", Self::$customer_info->customer_id)->where("record_log_id", $item->record_log_id)->first();
+
+            if ($distribute) 
+            {
+                $code = DB::table("tbl_warehouse_inventory_record_log")->where("record_log_id", $item->record_log_id)->first();
+
+                if ($code) 
+                {
+                    $repurchase_cashback = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'REPURCHASE_CASHBACK')->where('points_log_slot', $slot_id)->sum('points_log_points');
+                    $item_points         = MLM2::item_points($shop_id, $code->record_item_id, $code->mlm_slot_id_created)["REPURCHASE_CASHBACK"];
+                    $text_message        = "You received ". $item_points ." cashback points. Your total cashback point is " . $repurchase_cashback;
+                    $result              = Sms::SendSingleText($distribute->cellphone_number, $text_message, "", null);
+
+                    $email_content["subject"] = "Reward Code Distribute";
+                    $email_content["content"] = "You received ". $item_points ." cashback points.</br> Your total cashback point is " . $repurchase_cashback;
+
+                    $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $distribute->email);
+                }
+            }
         }
         else
         {

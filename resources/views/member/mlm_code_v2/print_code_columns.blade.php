@@ -107,7 +107,9 @@
                                 <option value="">Unused</option>
                                 <option value="reserved">Reserved</option>
                                 <option value="block">Block</option>
-                                <option value="used">Used</option>
+                                <option value="used">Activated</option>
+                                <option value="printed">Printed</option>
+
                             </select>
                         </div>
                     </div>

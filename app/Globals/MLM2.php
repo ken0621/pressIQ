@@ -80,7 +80,7 @@ class MLM2
 	{
 		$return = null;
 		
-		$query = Tbl_warehouse_inventory_record_log::where('record_consume_ref_name','transaction_list');
+		$query = Tbl_warehouse_inventory_record_log::item()->where('record_consume_ref_name','transaction_list');
 		
 		$_list = Tbl_transaction_list::
 										join("tbl_transaction", "tbl_transaction.transaction_id", "=", "tbl_transaction_list.transaction_id")
@@ -97,15 +97,17 @@ class MLM2
 					$q->orWhere("record_consume_ref_id", $list->transaction_list_id);
 				}
 			});
-			
-			$_codes = $query->get();
+
+			$query2 = Tbl_warehouse_inventory_record_log::item()->where("tbl_warehouse_inventory_record_log.record_shop_id", $shop_id)->where("tbl_release_product_code.customer_id", $customer_id)->join("tbl_release_product_code", "tbl_release_product_code.record_log_id", "=", "tbl_warehouse_inventory_record_log.record_log_id")->get();
+			$merged = $query->get()->merge($query2);
+			$_codes = $merged->all();
 			
 			foreach($_codes as $key => $code)
 			{
 				$slot = Tbl_mlm_slot::where("slot_id", $code->mlm_slot_id_created)->customer()->first();
 				$transaction_list = Tbl_transaction_list::where("transaction_list_id", $code->record_consume_ref_id)->first();
 				
-				$_codes[$key]->transaction_number = $transaction_list->transaction_number;
+				$_codes[$key]->transaction_number = $transaction_list ? $transaction_list->transaction_number : '';
 				
 				if($slot)
 				{
@@ -121,10 +123,6 @@ class MLM2
 		{
 			$_codes = array();	
 		}
-			
-
-		
-
 		
 		return $_codes;
 	}
@@ -166,6 +164,11 @@ class MLM2
 			}
 			return Tbl_mlm_slot_wallet_log::insertGetId($insert);
 		}
+	}
+	public static function delete_wallet_log($shop_id, $slot_id, $wallet_log_id)
+	{
+		Tbl_mlm_slot_wallet_log::where('wallet_log_id', $wallet_log_id)->where('wallet_log_slot', $slot_id)->where('shop_id',$shop_id)->delete();
+
 	}
 	public static function get_sponsor_network($shop_id, $slot_no, $level = null)
 	{
@@ -285,7 +288,15 @@ class MLM2
 
 
 		$_plan = Tbl_mlm_slot_wallet_log::groupBy("wallet_log_plan")->where("shop_id", $shop_id)->get();
-		$_plan_ignore = array("E Money", "Repurchase", "Tours Wallet Points", "Tours Wallet", "Encashment", "Cheque", "Undefined");
+		
+		if ($shop_id == 1) 
+		{
+			$_plan_ignore = array("E Money", "Tours Wallet Points", "Tours Wallet", "Encashment", "Cheque", "Undefined");
+		}
+		else
+		{
+			$_plan_ignore = array("E Money", "Repurchase", "Tours Wallet Points", "Tours Wallet", "Encashment", "Cheque", "Undefined");
+		}
 
 		foreach($_plan as $key => $plan)
 		{
@@ -301,9 +312,9 @@ class MLM2
 				$_plan[$key]->string_plan			= $string_plan;
 				$_plan[$key]->label 				= $label;
 				$return["_wallet"]->$string_plan 	= 0;
+
 			}
 		}
-
 		$return["_wallet"]->complan_triangle 					= 0;
 		$return["_wallet"]->complan_direct 						= 0;
 		$return["_wallet"]->complan_builder 					= 0;
@@ -313,13 +324,12 @@ class MLM2
 		$return["_wallet"]->complan_stairstep 					= 0;
 
 		$return["_wallet_plan"] = $_plan;
-		
 		$return["_points"] = new stdClass();
 
 
 
 
-		$_plan_points = Tbl_mlm_slot_points_log::where("shop_id", $shop_id)->slot()->groupBy("points_log_complan")->get();
+		$_plan_points = Tbl_mlm_slot_points_log::slot()->where("shop_id", $shop_id)->groupBy("points_log_complan")->get();
 
 		foreach($_plan_points as $key=> $plan)
 		{
@@ -457,7 +467,21 @@ class MLM2
 		$return["_slot"] = $_slot;
 		$return["display_slot_count"] = number_format($return["slot_count"], 0) . " SLOT(S)";
 		$return["_wallet"]->display_total_points = number_format($return["_wallet"]->total_points, 2) . " POINT(S)";;
-		
+		// if($shop_id = 1)
+		// {
+		// 	foreach($return["_point_plan"] as $key => $return)
+		// 	{
+		// 		if($return->label != "Repurchase Cashback")
+		// 		{
+		// 			$return["cashback"] = null;
+		// 			return $return;
+		// 		}
+		// 		else
+		// 		{
+		// 			return $return;
+		// 		}
+		// 	}
+		// }
 		return $return;
 	}
 	public static function complan_to_label($shop_id, $string)

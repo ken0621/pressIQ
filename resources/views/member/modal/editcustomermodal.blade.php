@@ -488,7 +488,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label>Password</label>
-                                            <input type="password" class="form-control mlm_password" value="@if($customer_info->password != null){{ Crypt::decrypt($customer_info->password)}}@endif" name="mlm_password" @if($customer_info->ismlm == 0) readonly @endif>
+                                            <input type="password" class="form-control mlm_password" value="@if($customer_info->password != null){{ Crypt::decrypt($customer_info->password)}}@endif" name="mlm_password">
                                             <div>
                                                 <input type="checkbox" class="show_password"> Show Password
                                             </div>

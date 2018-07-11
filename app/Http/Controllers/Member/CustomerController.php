@@ -886,6 +886,7 @@ class CustomerController extends Member
                     break;
                 default:
                         $updatecustomer['ismlm'] = 0;
+                        $updatecustomer['password'] = Crypt::encrypt(Request::input('mlm_password'));
                     break;
             }
 

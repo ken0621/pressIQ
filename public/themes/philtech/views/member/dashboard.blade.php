@@ -72,14 +72,29 @@
 				<div class="square-container">
 					<div class="title"><i class="align-icon brown-icon-gift"></i> Reward Points</div>
 					<div class="sub-container">
+
 						@if(count($_point_plan) > 0)
 						<div class="chart-legend" style="min-height: 117px; max-height: auto;">
+							<?php $cb = 1; ?>
 							@foreach($_point_plan as $plan)
 								@if($plan->label == "Repurchase Cashback")
-									<!-- <div class="holder">
+								<?php $cb = 2; ?>
+									<div class="holder">
 										<div class="color"></div>
 										<div class="name"><span>VIP Cashback</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
-									</div> -->
+									</div>
+								@elseif($plan->label == "Executive Points")
+								<?php $cb = 2; ?>
+									<div class="holder">
+										<div class="color"></div>
+										<div class="name"><span>Executive Points</span> {{ $points->{ "display_" . $plan->string_plan } }}</div>
+									</div>
+								@elseif($plan->label == "Leadership Bonus")
+									<div class="holder">
+										<div class="color"></div>
+										<div class="name"><span>Leadership Points</span> <div class="name w2hpx">{{ $points->{ "display_" . $plan->string_plan } }}</div></div>
+									</div>
+
 								@else
 									<div class="holder">
 										<div class="color"></div>
@@ -87,6 +102,20 @@
 									</div>
 								@endif
 							@endforeach
+							@if($cb == 1)
+
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>VIP Cashback</span> 0.00 POINT(S)</div>
+								</div>
+							@endif
+							@if($cb == 1)
+
+								<div class="holder">
+									<div class="color"></div>
+									<div class="name"><span>Executive Points</span> 0.00 POINT(S)</div>
+								</div>
+							@endif		
 						</div>
 						@else
 							<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
@@ -101,7 +130,7 @@
 					<div class="sub-container">
 						<div class="chart-legend">
 							@foreach($_wallet_plan as $plan)
-								@if($plan->label == "Admin Refill" || $plan->label == "Vmoney" || $plan->label == "Wallet Refill" || $plan->label == "Wallet Transfer")
+								@if($plan->label == "Admin Refill" || $plan->label == "Vmoney" || $plan->label == "Wallet Refill" || $plan->label == "Wallet Transfer" || $plan->label == "Repurchase")
 								@else
 									<div class="holder">
 
@@ -114,7 +143,7 @@
 										@elseif($plan->label == "Direct")
 											<div class="name"><span>Direct Commission</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 										@elseif($plan->label == "Indirect")
-											<div class="name"><span>Indirect Commission</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+											<div class="name"><span>Override Commission</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 										@elseif($plan->label == "Unilevel")
 											<div class="name"><span>Unilevel Cashback</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 										@else
@@ -133,7 +162,7 @@
 					<div class="sub-container">
 						<div class="chart-legend">
 							@foreach($_wallet_plan as $plan)
-								@if($plan->label == "Admin Refill" || $plan->label == "Vmoney" || $plan->label == "Wallet Refill" || $plan->label == "Wallet Transfer")
+								@if($plan->label == "Admin Refill" || $plan->label == "Vmoney" || $plan->label == "Wallet Refill" || $plan->label == "Wallet Transfer" || $plan->label == "Repurchase")
 									<div class="holder">
 										<div class="color"></div>
 										@if($plan->label == "Vmoney")

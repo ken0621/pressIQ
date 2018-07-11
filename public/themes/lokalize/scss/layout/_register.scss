@@ -1,0 +1,28 @@
+/* REGISTER */
+
+.page-section
+{
+	background-size: cover;
+	background-position: center center;
+	padding: 100px 0;
+}
+
+.w-35
+{
+	max-width: 35% !important;
+	min-width: 35% !important;
+}
+
+.register-page
+{
+	@include gradient($primary-c, $secondary-c);
+	background-image: url("/themes/lokalize/assets/img/loginregister-bg.png");
+	background-size: cover;
+	background-position: center;
+	min-height: 100vh;
+	padding-top: 4rem;
+	display: flex;
+	align-items: center;
+}
+
+//END REGISTER

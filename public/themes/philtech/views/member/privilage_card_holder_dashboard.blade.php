@@ -54,10 +54,10 @@
 						<div class="text-center" style="padding: 20px">You don't have any points yet.</div>
 					@endif
 				</div>
-				<div class="title left-side">Enter Product Code</div>
+				<div class="title left-side">Enter Rewards Code</div>
 				<div class="sub-container">
 					<div class="chart-legend text-center">
-						<button class="btn btn-lblue" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Product Code</button>
+						<button class="btn btn-lblue" onClick="action_load_link_to_modal('/members/slot-useproductcode', 'md')">Use Rewards Code</button>
 					</div>
 				</div>
 			</div>

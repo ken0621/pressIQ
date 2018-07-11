@@ -29,6 +29,12 @@
                     <input name="UNILEVEL" type="text" class="form-control" placeholder="100 (IF EMPTY)">
                 </div>
             </div>
+            <div class="form-group">
+                <div class="col-md-12">            
+                    <label>UNILEVEL CASHBACK POINTS</label>
+                    <input name="UNILEVEL_CASHBACK_POINTS" type="text" class="form-control" placeholder="100 (IF EMPTY)">
+                </div>
+            </div>
             @endif
         @endif
         

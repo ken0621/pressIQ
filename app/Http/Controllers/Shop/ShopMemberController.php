@@ -1805,6 +1805,14 @@ class ShopMemberController extends Shop
                                     ->get();
         }
 
+        elseif ($filter["country"]!="" && $filter["industry_type"]=="" && $filter["media_type"]!="" && $filter["title_of_journalist"]=="" && $filter["language"]!="")
+        {
+            $data['_recipient']   = Tbl_press_release_recipient::whereIn('country', $filter["country"])
+                                    ->whereIn('language', $filter["language"])
+                                    ->whereIn('media_type', $filter["media_type"])
+                                    ->get();
+        }
+
         else    
         {
             $data['_recipient']   = Tbl_press_release_recipient::whereIn('country', $filter["country"])

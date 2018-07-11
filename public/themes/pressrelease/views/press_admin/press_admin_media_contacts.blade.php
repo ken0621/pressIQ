@@ -11,7 +11,7 @@
                                     
             <div class="press-release-content">
             <div id="press_media" class="tabcontent press-media-container">
-                 @if (Session::has('success_merchant'))
+                  @if (Session::has('success_merchant'))
                   <div class="alert alert-success">
                      <center>{{ Session::get('success_merchant') }}</center>
                   </div>
@@ -81,17 +81,17 @@
                     <div class="title">Language: *</div>
                     <input type="text" id="language" name="language" class="form-control" value="{{$edits->language}}" required>
 
-                    <div class="title">Website: *</div>
-                    <input type="text"  id="contact_website" name="contact_website" class="form-control" value="{{$edits->website}}">
-
                     <div class="title">Media Type: *</div>
                     <input type="text" id="media_type" name="media_type" class="form-control" value="{{$edits->media_type}}">
 
-                    <div class="title">Industry Type: *</div>
+                    <div class="title">Industry: *</div>
                     <input type="text" id="industry_type" name="industry_type" class="form-control" value="{{$edits->industry_type}}">
 
                     <div class="title">Title Journalist: *</div>
                     <input type="text" id="title_journalist" name="title_journalist" class="form-control" value="{{$edits->title_of_journalist}}">
+
+                    <div class="title">Website: *</div>
+                    <input type="text"  id="contact_website" name="contact_website" class="form-control" value="{{$edits->website}}">
 
                     <div class="title">Description: *</div>
                     <textarea id="description" name="description">{{$edits->description}}</textarea>
@@ -128,22 +128,50 @@
                         </select> 
 
                     <div class="title">Language: *</div>
-                      <select class="form-control" id="language" name="language" style="width: 700px;background-color: #f1f1f1;"> 
-                          <option value="English">English</option>
-                          <option value="Chinese">Chinese</option>
-                      </select> 
-
-                    <div class="title">Website: *</div>
-                    <input type="text"  id="contact_website" name="contact_website" class="form-control">
+                        <select class="form-control" id="language" name="language" style="width: 700px;background-color: #f1f1f1;"> 
+                            <option value="English">English</option>
+                            <option value="Chinese">Chinese</option>
+                        </select> 
 
                     <div class="title">Media Type: *</div>
-                    <input type="text" id="media_type" name="media_type" class="form-control">
+                        <select class="form-control" id="media_type" name="media_type" style="width: 700px;background-color: #f1f1f1;"> 
+                            <option value="Newspaper">Newspaper</option>
+                            <option value="Online Newspaper">Online Newspaper</option>
+                            <option value="Magazine">Magazine</option>
+                            <option value="Online Magazine">Online Magazine</option>
+                            <option value="Blog">Blog</option>
+                            <option value="Trade Publication">Trade Publication</option>
+                        </select> 
 
-                    <div class="title">Industry Type: *</div>
-                    <input type="text" id="industry_type" name="industry_type" class="form-control" >
+                    <div class="title">Industry: *</div>
+                        <select class="form-control" id="industry_type" name="industry_type" style="width: 700px;background-color: #f1f1f1;"> 
+                            <option value="Beauty">Beauty</option>
+                            <option value="Business">Business</option>
+                            <option value="Computers">Computers</option>
+                            <option value="Culture and Art">Culture and Art</option>
+                            <option value="Education">Education</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Enviroment">Enviroment</option>
+                            <option value="Family">Family</option>
+                            <option value="Fashion">Fashion</option>
+                            <option value="Financial Services">Financial Services</option>
+                            <option value="Food and Beverage">Food and Beverage</option>
+                            <option value="Health">Health</option>
+                            <option value="Hospitality">Hospitality</option>
+                            <option value="Luxury">Luxury</option>
+                            <option value="Music and Entertainment">Music and Entertainment</option>
+                            <option value="Real Estate">Real Estate</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Watches and Jewellery">Watches and Jewellery</option>
+                            <option value="Wine and Beer">Wine and Beer</option>
+                        </select> 
 
                     <div class="title">Title Journalist: *</div>
                     <input type="text" id="title_journalist" name="title_journalist" class="form-control">
+
+                    <div class="title">Website: *</div>
+                    <input type="text"  id="contact_website" name="contact_website" class="form-control">
 
                     <div class="title">Description: *</div>
                     <textarea id="description" name="description"></textarea>

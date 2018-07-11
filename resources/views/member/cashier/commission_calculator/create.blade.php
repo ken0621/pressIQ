@@ -22,11 +22,15 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-6">
+                        <div class="col-md-4 hidden">
                             <strong>Select Agent</strong>
                             <select class="select-agent form-control input-sm" name="agent_id">
                                 @include('member.cashier.sales_agent.load_sales_agent')
                             </select>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Agents Rate</strong>
+                            <input type="text" class="text-right agent-comm-rate compute-all input-sm form-control" name="" placeholder="">
                         </div>
                         <div class="col-md-6">
                             <div class="col-md-6">
@@ -70,7 +74,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="border: 1px solid #000;margin: 10px;"></div>
+                <div style="border: 0.5px solid #000;margin: 10px;"></div>
                 <div class="form-horizontal">
                     <div class="form-group text-center">
                         <div class="col-md-6 text-right">
@@ -124,7 +128,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="border: 1px solid #000;margin: 10px;"></div>
+                <div style="border: 0.5px solid #000;margin: 10px;"></div>
                 <div class="form-horizontal">
                     <div class="form-group">
                         <div class="col-md-6 text-right">
@@ -133,6 +137,34 @@
                         <div class="col-md-6 text-center">
                             <input type="hidden" name="total_commission" class="input-tc">
                             <a id="popover_tc" data-trigger="hover" data-placement="top" href="javascript:"><h4><div class="amount-tc">TC Amount</div></h4></a>
+                        </div>
+                    </div>
+                    <div class="form-group"> 
+                        <div class="col-md-6 padding-top-here">
+                            <div class="col-md-6">
+                                <strong>EWT</strong>
+                            </div>
+                            <div class="col-md-6">
+                                <select name="ewt"  class="form-control input-sm select-ewt">
+                                    <option value="5" selected>5%</option>
+                                    <option value="10">10%</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <input type="hidden" name="ewt_amount" class="input-ewt">
+                            <h4><div class="amount-ewt">EWT</div></h4>
+                        </div
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-6 text-right">
+                            <h4><b>NET Commission :</b></h4>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <input type="hidden" name="total_net_commission" class="input-net-comm">
+                            <a id="popover_ewt" data-trigger="hover" data-placement="top" href="javascript:"><h4><div class="amount-net-comm">NET Commission Amount</div></h4></a>
                         </div>
                     </div>
                     <div class="form-group">
@@ -145,6 +177,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
+                            <input type="hidden" class="input-ndp-comm" name="ndp_commission_amount">
                             <h4><div class="amount-ndp">NDP Commission Amount</div></h4>
                         </div>
                     </div>
@@ -158,7 +191,54 @@
                             </div>
                         </div>
                         <div class="col-md-6 text-center">
+                            <input type="hidden" class="input-tcp-comm" name="tcp_commission_amount">
                             <h4><div class="amount-tcp1">TCP Commission Amount</div></h4>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <strong>Agent</strong>
+                        </div>
+                    </div>
+                    <div class="form-group agent-li">
+                        <div class="col-md-12">
+                            <table class="table table-condensed tbl-agent-li">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Rate</th>
+                                        <th class="text-center">Agent NET Commission</th>
+                                        <th class="text-center">NDP Commission</th>
+                                        <th class="text-center">TCP Commission</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="agent-list draggable">
+                                    <tr class="tr-agent-li">
+                                        <td width="300">
+                                            <select class="form-control input-sm select-agent-li dropdown-agent-li" name="agent_li[]">
+                                                @include('member.cashier.sales_agent.load_sales_agent')
+                                            </select>
+                                        </td>
+                                        <td width="200">
+                                            <input type="text" class="form-control compute-all input-sm text-right txt-agent-li-rate" name="agent_rate_percent[]">
+                                        </td>
+                                        <td class="text-center">
+                                            <h5><label class="lbl-agent-li-rate-comm">0.00</label></h5>
+                                            <input type="hidden" class="input-agent-li-rate-comm" name="agent_net_comm[]">
+                                        </td>
+                                        <td class="text-center">
+                                            <h5><label class="lbl-agent-li-ndp-comm">0.00</label></h5>
+                                            <input type="hidden" class="input-agent-li-ndp-comm" name="agent_ndp_comm[]">
+                                        </td>
+                                        <td class="text-center">
+                                            <h5><label class="lbl-agent-li-tcp-comm">0.00</label></h5>
+                                            <input type="hidden" class="input-agent-li-tcp-comm" name="agent_tcp_comm[]">
+                                        </td>
+                                        <td class="remove-tr"><i style="color: #fc4949" class="fa fa-trash fa-2x"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -170,6 +250,34 @@
     	<button class="btn btn-primary btn-custom-primary" type="submit">Save</button>
     </div>
 </form>
+
+<div class="div-script">
+    <table class="div-item-row-script hide">
+         <tr class="tr-agent-li">
+            <td width="300">
+                <select class="form-control input-sm select-agent-li" name="agent_li[]">
+                    @include('member.cashier.sales_agent.load_sales_agent')
+                </select>
+            </td>
+            <td width="300">
+                <input type="text" class="form-control compute-all input-sm text-right txt-agent-li-rate" name="agent_rate_percent[]">
+            </td>
+            <td class="text-center">
+                <h5><label  class="lbl-agent-li-rate-comm">0.00</label></h5>
+                <input type="hidden" class="input-agent-li-rate-comm" name="agent_net_comm[]">
+            </td>
+            <td class="text-center">
+                <h5><label class="lbl-agent-li-ndp-comm">0.00</label></h5>
+                <input type="hidden" class="input-agent-li-ndp-comm" name="agent_ndp_comm[]">
+            </td>
+            <td class="text-center">
+                <h5><label class="lbl-agent-li-tcp-comm">0.00</label></h5>
+                <input type="hidden" class="input-agent-li-tcp-comm" name="agent_tcp_comm[]">
+            </td>
+            <td class="remove-tr"><i style="color: #fc4949" class="fa fa-trash fa-2x"></i></td>
+        </tr>
+    </table>
+</div>
 <div class="hidden row clearfix" id="computation-content">
     <div style="width: 300px">
         <div class="col-md-7 text-center">
@@ -204,6 +312,19 @@
         </div>
     </div>
 </div>
+<div class="hidden row clearfix" id="ewt-content">
+    <div class="text-center">
+
+        <div class="col-md-12">
+            <div>TC - (TC * EWT)</div>
+        </div>
+        <br>
+        <br>
+        <div class="col-md-12">
+            <div><label class="c-amount-tc">30,000.00</label> - (<label class="c-amount-tc">30,000.00</label> * <label class="c-ewt">5%</label>)</div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
 
   function setTwoNumberDecimal(x) 
@@ -224,6 +345,13 @@
         title: '<h4 style="padding:0px">Commission Computation</h4>',
         content: function() {
           return $("#computation-content").html();
+        }
+    });
+    $('#popover_ewt').popover({ 
+        html : true,
+        title: '<h4 style="padding:0px">NET Commission</h4>',
+        content: function() {
+          return $("#ewt-content").html();
         }
     });
     $('#popover_downpayment').popover({ 

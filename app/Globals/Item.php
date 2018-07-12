@@ -1692,17 +1692,37 @@ class Item
 
         return $data;
     }
+    public static function print_codes_report($from, $to, $warehouse_id)
+    {
+        $data['_released'] = Self::get_all_item_record_log('', "released", null, null, null, null, $from, $to, $warehouse_id);
+        $data['_reserved'] = Self::get_all_item_record_log('', "reserved", null, null, null, null, $from, $to, $warehouse_id);
+        $data['_blocked'] = Self::get_all_item_record_log('', "block", null, null, null, null, $from, $to, $warehouse_id);
+        $data['_used'] = Self::get_all_item_record_log('', "used", null, null, null, null, $from, $to, $warehouse_id);
+        $data['_sold'] = Self::get_all_item_record_log('', "sold", null, null, null, null, $from, $to, $warehouse_id);
+        $data['_printed'] = Self::get_all_item_record_log('', "printed", null, null, null, null, $from, $to, $warehouse_id);        
+        $data['_distributed'] = Self::get_all_item_record_log('', "distributed", null, null, null, null, $from, $to, $warehouse_id);
+        $data['_unused'] = Self::get_all_item_record_log('','',null, null, null, null, $from, $to, $warehouse_id);
+        return $data;
+    }
     public static function get_membership()
     {
         $shop_id = Item::getShopId();
         return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
-    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0, $item_id = 0, $get_to = 0, $take = 0, $from = "", $to = "")
+    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0, $item_id = 0, $get_to = 0, $take = 0, $from = "", $to = "", $selected_warehouse = null)
     {
-        $shop_id = Item::getShopId();
-        $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
 
-        $query = Tbl_warehouse_inventory_record_log::slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('item_type_id','!=',5)->groupBy('tbl_warehouse_inventory_record_log.record_log_id')->orderBy('tbl_warehouse_inventory_record_log.record_log_id');
+        $shop_id = Item::getShopId();
+        $query = Tbl_warehouse_inventory_record_log::slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('item_type_id','!=',5)->groupBy('tbl_warehouse_inventory_record_log.record_log_id')->orderBy('tbl_warehouse_inventory_record_log.record_log_id');
+        if($selected_warehouse != null)
+        {
+            $query->where('record_warehouse_id',$selected_warehouse);
+        }
+        else
+        {
+            $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+            $query->where('record_warehouse_id',$warehouse_id);
+        }
         if($search_keyword)
         {
             // $query->where('mlm_pin', "LIKE", "%" . $search_keyword . "%");
@@ -1745,6 +1765,10 @@ class Item
             $query->distributed();
             $query->where('distribute_product_id', '!=', null);
         }
+        else if($status == 'all')
+        {
+            $query->whereBetween('record_log_date_updated', [$from, $to])->limit(100);
+        }
         else
         {
             $query->where('record_inventory_status',0)->where('record_consume_ref_name',null)->where('item_in_use','unused');
@@ -1761,7 +1785,7 @@ class Item
 
         if($from && $to)
         {
-            $query->whereBetween('record_log_date_updated', [$from, $to]);
+            $query->whereBetween('record_log_date_updated', [$from, $to])->limit(100);
         }
         if($paginate != 0)
         {
@@ -1771,8 +1795,6 @@ class Item
         {
             $data = $query->get();            
         }
-
-
         if($take != 0)
         {
             if($get_to > 1)

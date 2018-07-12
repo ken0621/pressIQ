@@ -1,10 +1,9 @@
 <div class="panel panel-default panel-block panel-title-block">
-    <div class="panel-heading row clearfix">
-    	<form class="global-submit filter" method="post" action="{{$action}}" >
-    	{!! csrf_field() !!}
-    	<input type="hidden" name="report_type" value="plain" class="report_type_i">
-    	<input type="hidden" name="report_field_type" class="report_field_type" value="{{$report_code or ''}}">
-        <div class="form-group">
+    <div class="panel-heading">
+        <form class="global-submit filter" method="post" action="{{$action}}" >
+        {!! csrf_field() !!}
+        <input type="hidden" name="report_type" value="plain" class="report_type_i">
+        <div class="row clearfix">
             <div class="col-md-2">
                 <select class="form-control input-sm report_period" name="report_period">
                     <option value="all">All Dates</option>
@@ -21,29 +20,22 @@
             </div>
             <div class="col-md-2"><input type="text" class="form-control from_report_a datepicker" name="from" placeholder="Start Date"></div>
             <div class="col-md-2"><input type="text" class="form-control form_report_b datepicker" name="to" placeholder="End Date"></div>
-            <div class="col-md-3"><button class="btn btn-primary run-report" onclick="$('.report_type_i').val('plain')" >Run Report</button></div>
-            <button class="btn btn-custom-red-white margin-right-10 btn-pdf pull-right" onclick="report_file('pdf')"><i class="fa fa-file-pdf-o"></i>&nbsp;Export to PDF</button>
-            <button class="btn btn-custom-green-white margin-right-10 btn-pdf pull-right" onclick="report_file('excel')"><i class="fa fa-file-excel-o"></i>&nbsp;Export to Excel</button>
-
+            <div class="col-md-3"><button class="btn btn-primary run-report" type="button" onclick="$('.report_type_i').val('plain')" >Run Report</button></div>
             
+            <button class="btn btn-custom-green-white margin-right-10 btn-pdf pull-right" onclick="report_file('per_sheet_in_excel')"><i class="fa fa-file-excel-o"></i>&nbsp;Export to Excel</button>
         </div>
-        <div style="margin-top: 15px" class="form-group">
-            <div class="col-md-5 " style="padding: 5px">
-                <select class="form-control input-sm droplist-warehouse" name="warehouse_id">
-                @foreach($_warehouse as $warehouse)
+        <div  style="margin-top: 15px" class=" row clearfix form-group">
+            <div class="col-md-5 " style="padding: 5px"> 
+                <select class="form-control input-sm warehouse_id" name="warehouse_id" required="true">
+                    @foreach($_warehouse as $warehouse)
                     <option value="{{$warehouse->warehouse_id}}">{{$warehouse->warehouse_name}}</option>
-                @endforeach
+                    @endforeach
                 </select>
             </div>
         </div>
         </form>
-        <a href ="/member/report/merchants/code/print_codes_report/{{$_from}}/{{$_to}}"><button class="btn"  style="color:#1d5f95; background-color: white; border-color: #1f89e0; margin-right: 10px" size='md' ><i class="fa fa-print"></i> Print Codes Report</button></a>
     </div>
 </div>
-@section('script')
-<script type="text/javascript" src="/assets/member/js/membership_code/product_code.js"></script>
-
-@endsection
 <script type="text/javascript">
 
     var new_report = new new_report();
@@ -54,22 +46,6 @@
         function init()
         {
             event_run_report_click();
-            action_load_initialize_select();
-        }
-        function action_load_initialize_select()
-        {
-            $(".droplist-warehouse").globalDropList(
-            {
-
-                hasPopup: "false",
-                width : "100%",
-                placeholder : "Select Warehouse..",
-                onChangeValue: function()
-                {  
-                    
-                }
-
-            });
         }
         function event_run_report_click()
         {
@@ -85,11 +61,17 @@
                     {
                         $(".from_report_a").val(data.start_date);
                         $(".form_report_b").val(data.end_date);
+                        
                     }
                     else
                     {
                         $(".from_report_a").val("");
                         $(".form_report_b").val("");
+                        
+                    }
+                    if(data.warehouse_id != null)
+                    {
+                        $(".warehouse_id").val(data.warehouse_id);
                     }
                 })
                 .fail(function() {
@@ -106,17 +88,5 @@
         var link        = link + '?' + serialize + '&report_type=' + type;
         console.log(link);
         window.open(link);
-
-        // var date_from  = $('.from_report_a').val();
-        // var date_to    = $('.form_report_b').val();
-        // var period     = $('.report_period').val();
-        // var link       = $("form.filter").attr("action");
-        // var report_field_type = $('.report_field_type').val();
-        // var token      = $("input[name='_token']").val();
-        // var link       = link + '?_token='+token+'&report_type=' + type + '&report_field_type=' + report_field_type + '&report_period=' + period + '&from=' + date_from + '&to=' + date_to
-
-        // console.log(link);
-        // // window.open( link + '?report_type=' + type + '&from=' + date_from + '&to=' + date_to + '&report_field_type=' + report_field_type + '&report_period=' + period);
-        // window.open(link);
     }
 </script>

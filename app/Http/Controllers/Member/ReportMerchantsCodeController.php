@@ -65,18 +65,24 @@ class ReportMerchantsCodeController extends Member
 
         $shop_id = $this->user_info->shop_id;
         $data['_warehouse'] = Warehouse2::get_all_warehouse($shop_id);
-        //$warehouse_id = Request::input('warehouse_id');
-        $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
+        
 
+        $data['warehouse_id'] = Warehouse2::get_current_warehouse($shop_id);
+        if(Request::input('warehouse_id') != null)
+        {
+            $data['warehouse_id'] = Request::input('warehouse_id');
+        }
+        $data['warehouse_name']= Warehouse2::get_warehouse_name($shop_id, $data['warehouse_id']);
         $data['_from'] = $data['from']." "."00:00:00";
         $data['_to'] = $data['to']." "."11:59:59";
-        $data['_item_product_code'] = Tbl_warehouse_inventory_record_log::slotinfo()->item()->membership()->where('record_shop_id',$shop_id)->where('record_warehouse_id',$warehouse_id)->where('item_type_id','!=',5)->groupBy('tbl_warehouse_inventory_record_log.record_log_id')->orderBy('tbl_warehouse_inventory_record_log.record_log_id')->where('record_inventory_status',0)->where('record_consume_ref_name',null)->where('item_in_use','unused')->whereBetween('record_log_date_updated', [$data['_from'], $data['_to']])->get();
-        //dd(count($data['_item_product_code']));
+        $data['_item_product_code'] = Item::get_all_item_record_log('', "all", null, null, null, null, $data['from'], $data['to'], $data['warehouse_id']);
+        $return = Item::print_codes_report($data['_from'], $data['_to'], $data['warehouse_id']);
+
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
         if($report_type && !$load_view)
         {
             $view =  'member.reports.output.merchants_code'; 
-            return Report::check_report_type($report_type, $view, $data, 'Merchants Code-'.Carbon::now());
+            return Report::check_report_type($report_type, $view, $data, 'Merchants Code-'.Carbon::now(), null, null, $return);
         }
         else
         {
@@ -86,34 +92,5 @@ class ReportMerchantsCodeController extends Member
     public function report_header($data)
     {
         return view('member.reports.head', $data);
-    }
-    public function print_codes_report($from, $to)
-    {
-        //$search_keyword = '', $status = '', $paginate = 0, $item_id = 0, $get_to = 0, $take = 0, $from = "", $to = ""
-        $data['_released'] = Item::get_all_item_record_log('', "released", null, null, null, null, $from, $to);
-        $data['_reserved'] = Item::get_all_item_record_log('', "reserved", null, null, null, null, $from, $to);
-        $data['_blocked'] = Item::get_all_item_record_log('', "block", null, null, null, null, $from, $to);
-        $data['_used'] = Item::get_all_item_record_log('', "used", null, null, null, null, $from, $to);
-        $data['_sold'] = Item::get_all_item_record_log('', "sold", null, null, null, null, $from, $to);
-        $data['_printed'] = Item::get_all_item_record_log('', "printed", null, null, null, null, $from, $to);
-        
-        $data['_distributed'] = Item::get_all_item_record_log('', "distributed", null, null, null, null, $from, $to);
-        $data['_unused'] = Item::get_all_item_record_log('','',null, null, null, null, $from, $to);
-
-        Excel::create('Codes Report', function($excel) use ($data)
-        {
-            foreach($data as $key => $value)
-            {
-                $data_container["data"] = $value;
-                $excel->sheet( str_replace('_', " ", $key) .' codes', function($sheet) use ($data_container)
-                {
-                    $sheet->setOrientation('landscape');
-                    $sheet->loadView('member.mlm_code_v2.product_code_excel_table', $data_container);
-                   
-                });
-            }
-        })->download('xlsx');
-
-        return view('member.reports.output.merchants_code');
     }
 }

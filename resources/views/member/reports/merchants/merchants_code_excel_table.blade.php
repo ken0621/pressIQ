@@ -1,6 +1,10 @@
-
 <html>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <h2 class="text-center">{{$shop_name}}</h2>
+    <h4 class="text-center"><b>{{$head_title." - ".$sheet_name}}</b></h4>
+    <h4 class="text-center"><b>{{$warehouse_name}}</b></h4>
+    <h4 class="text-center">{{isset($from) && $from != '1000-01-01' ? dateFormat($from)." - ".dateFormat($to) : 'All Dates'}}</h4>
+
     <table class="table">
       <thead class="thead-light">
         <tr>
@@ -16,7 +20,6 @@
         @if(isset($return))
           @foreach($return as $value)
           <tr>
-
               <td class="text-center">{{$value->mlm_pin}}</td>
               <td class="text-center">{{$value->mlm_activation}}</td>
               <td class="text-center">{{$value->item_name}}</td>
@@ -24,7 +27,7 @@
           </tr>
           @endforeach
         @else
-        ----------------------NO TRANSACTION--------------------
+          <tr> ===== NO DATA FOUND =====</tr>
         @endif
       </tbody>
     </table>

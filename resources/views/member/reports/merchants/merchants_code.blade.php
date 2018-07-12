@@ -27,7 +27,6 @@
 		$(document).on("click", ".run-report", function()
 		{
 			var serialize_data = $("form.filter").serialize()
-			
 			$(".load-data").load("/member/report/merchants/code?"+serialize_data+"&load_view=true .load-content", function()
 				{
 					action_collaptible(true);

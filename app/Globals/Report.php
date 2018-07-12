@@ -176,10 +176,9 @@ class Report
 	 * @param  string   $pdf_format		landscape or portrait : default is landscape	
 	 * @author BKA	
 	 */
-	public static function check_report_type($report_type, $view, $data, $name="File", $pdf_format = "landscape", $paper_size = null)
-    {   
+	public static function check_report_type($report_type, $view, $data, $name="File", $pdf_format = "landscape", $paper_size = null, $return = null)
+    { 
         $_view = view($view, $data); 
-
          switch ($report_type) 
          {
          	case 'return_view':
@@ -197,6 +196,25 @@ class Report
                             $sheet->loadView($view, $data);
                         });
                     })->export('xls');	
+            case 'per_sheet_in_excel':
+            		Excel::create($name, function($excel) use($data, $view, $return) 
+                    {
+                    	foreach ($return as $key => $value)
+                    	{
+                    		$data_container["shop_name"] = $data['shop_name'];
+                    		$data_container["head_title"] = $data['head_title'];
+                    		$data_container["warehouse_name"] = $data['warehouse_name'];
+                    		$data_container["from"] = $data['from'];
+                    		$data_container["to"] = $data['to'];
+                    		$data_container["sheet_name"] = str_replace('_', " ", strtoupper($key));
+                    		$data_container["return"] = $value;
+		                    $excel->sheet( str_replace('_', " ", $key) .' codes', function($sheet) use($data_container) 
+		                    {	
+		                        $sheet->loadView('member.reports.merchants.merchants_code_excel_table', $data_container);
+		                    });
+                    	}
+                    })->download('xls');
+
             default:
                     $return['status'] = 'success_plain';
                     $return['view'] = $_view->render();

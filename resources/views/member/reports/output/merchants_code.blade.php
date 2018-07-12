@@ -13,6 +13,7 @@
                  		</tr>
                     </thead >
          		    <tbody>
+                        @if(count($_item_product_code) > 0)
          				@foreach($_item_product_code as $key => $item)
                         <tr>
              				<td class="text-center">{{$item->mlm_pin}}</td>
@@ -20,8 +21,11 @@
                             <td class="text-center">{{$item->item_name}}</td>
                             <td class="text-center">{{date('m/d/Y', strtotime($item->record_log_date_updated))}}</td>
                  		</tr>
-     				   @endforeach
-         		 </tbody>
+     				    @endforeach
+                        @else
+                        <tr>NO DATA FOUND</tr>
+                        @endif
+         		     </tbody>
          		</table>
          	</div>
           <h5 class="text-center">---- {{$now or ''}} ----</h5>

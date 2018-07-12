@@ -507,7 +507,9 @@ class MLM_CodeControllerV2 extends Member
             $insert["user_id"]                   = $this->user_info->user_id;
 
             Tbl_release_product_code::insert($insert);
-            Tbl_warehouse_inventory_record_log::where('record_log_id', $id)->update('released', 1);
+            $update['released'] = 1;
+            $update['record_log_date_updated'] = Carbon::now();
+            Tbl_warehouse_inventory_record_log::where('record_log_id', $id)->update($update);
 
             /* Send SMS and E-mail */
             $code = DB::table("tbl_warehouse_inventory_record_log")->where("record_log_id", $id)->first();

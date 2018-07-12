@@ -398,6 +398,10 @@ Route::any('/member/report/agent/profit_loss','Member\ReportAgentProfitLossContr
 /*LOGISTIC REPORT*/
 Route::any('/member/report/logistic','Member\ReportLogisticController@index');
 
+/*MERCHANTS CODE REPORT*/
+Route::any('/member/report/merchants/code','Member\ReportMerchantsCodeController@index');
+Route::any('/member/report/merchants/code/print_codes_report/{$from}/{$to}','Member\ReportMerchantsCodeController@print_codes_report');
+
 /*SALES LIQUIDATION*/
 Route::any('member/cashier/sales_liquidation','Member\PisSalesLiquidationController@index');
 Route::any('/member/cashier/report/{id}','Member\PisSalesLiquidationController@report');

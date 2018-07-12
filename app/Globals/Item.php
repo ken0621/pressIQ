@@ -1697,7 +1697,7 @@ class Item
         $shop_id = Item::getShopId();
         return Tbl_membership::where('shop_id',$shop_id)->where('membership_archive',0)->get();
     }
-    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0, $item_id = 0, $get_to = 0, $take = 0)
+    public static function get_all_item_record_log($search_keyword = '', $status = '', $paginate = 0, $item_id = 0, $get_to = 0, $take = 0, $from = "", $to = "")
     {
         $shop_id = Item::getShopId();
         $warehouse_id = Warehouse2::get_current_warehouse($shop_id);
@@ -1759,6 +1759,10 @@ class Item
             $query->where('tbl_item.item_id',$item_id);
         }
 
+        if($from && $to)
+        {
+            $query->whereBetween('record_log_date_updated', [$from, $to]);
+        }
         if($paginate != 0)
         {
             $data = $query->paginate($paginate);
@@ -1767,6 +1771,7 @@ class Item
         {
             $data = $query->get();            
         }
+
 
         if($take != 0)
         {

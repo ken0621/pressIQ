@@ -114,6 +114,6 @@ class ReportMerchantsCodeController extends Member
             }
         })->download('xlsx');
 
-        return view('member.mlm_code_v2.product_code');
+        return view('member.reports.output.merchants_code');
     }
 }

@@ -40,7 +40,10 @@
         <a href ="/member/report/merchants/code/print_codes_report/{{$_from}}/{{$_to}}"><button class="btn"  style="color:#1d5f95; background-color: white; border-color: #1f89e0; margin-right: 10px" size='md' ><i class="fa fa-print"></i> Print Codes Report</button></a>
     </div>
 </div>
+@section('script')
+<script type="text/javascript" src="/assets/member/js/membership_code/product_code.js"></script>
 
+@endsection
 <script type="text/javascript">
 
     var new_report = new new_report();

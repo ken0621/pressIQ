@@ -190,6 +190,8 @@ class MLM_CodeControllerV2 extends Member
             }
             $update['record_log_date_updated'] = Carbon::now();
             $update['record_item_remarks'] = $request->remarks;
+            //dd($update);
+            //dd($update);
             Warehouse2::update_warehouse_item($record_log_id, $update);
 
             $return['status'] = 'success';

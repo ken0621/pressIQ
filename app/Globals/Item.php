@@ -1737,7 +1737,6 @@ class Item
         if($status == 'reserved')
         {
             $query->where('record_consume_ref_name',$status)->reserved_customer();
-
         }
         else if($status == 'block')
         {
@@ -1757,12 +1756,12 @@ class Item
         }
         else if($status == 'released')
         {
-            $query->released();
+            $query->released()->releasedCustomer();
             $query->where('release_product_id', '!=', null);
         }
         else if($status == 'distributed')
         {
-            $query->distributed();
+            $query->distributed()->customer();
             $query->where('distribute_product_id', '!=', null);
         }
         else if($status == 'all')
@@ -1782,7 +1781,7 @@ class Item
         {
             $query->where('tbl_item.item_id',$item_id);
         }
-
+ 
         if($from && $to)
         {
             $query->whereBetween('record_log_date_updated', [$from, $to])->limit(100);
@@ -2096,7 +2095,7 @@ class Item
     }
     public static function set_as_printed($list)
     {
-        
+        dd($list);
         foreach($list as $key => $value)
         {
             $list[$key] = $value; 

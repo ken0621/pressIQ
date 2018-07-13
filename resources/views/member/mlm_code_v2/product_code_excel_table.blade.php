@@ -13,18 +13,15 @@
         </tr>
       </thead>
       <tbody>
-        @if(isset($return))
-          @foreach($return as $value)
+        @if(isset($data))
+          @foreach($data as $value)
           <tr>
-
               <td class="text-center">{{$value->mlm_pin}}</td>
               <td class="text-center">{{$value->mlm_activation}}</td>
               <td class="text-center">{{$value->item_name}}</td>
               <td class="text-center">{{date('m/d/Y', strtotime($value->record_log_date_updated))}}</td>
           </tr>
           @endforeach
-        @else
-        ----------------------NO TRANSACTION--------------------
         @endif
       </tbody>
     </table>

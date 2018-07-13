@@ -43,11 +43,11 @@
                                    <td>{{$_media->company_name}}</td>
                                    <td>{{$_media->country}}</td>
                                    <td>
-                                     <a href="/pressadmin/pressreleases_edit_recipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-warning center">
+                                     <button type="button"  class="btn btn-warning center pop_chosen_recipient_btn" data-id="{{$_media->recipient_id}}">
                                      <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button>
                                      
                                      <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/pressreleases_deleterecipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-danger center">
-                                     <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button>
+                                     <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button></a>
                                    </td>
                                 </tr>
                             @endforeach
@@ -58,56 +58,13 @@
             </div>
 
             <div id="add_media" class="tabcontent add-media-container">
-                 <div class="title-container">Add Media Contacts</div> 
-              @if(session()->has("r_edit"))
-                @foreach($edit as $edits)
-                <form method="post" action="/pressadmin/pressreleases_addrecipient">
-                    {{csrf_field()}}
-                    <div class="title">Contact Name: *</div>
-                    <input type="text" id="name" name="name" class="form-control" value="{{$edits->name}}" required>
-
-                    <div class="title">Position: *</div>
-                    <input type="text"  id="position" name="position" class="form-control" value="{{$edits->position}}" required>
-
-                    <div class="title">Company Name: *</div>
-                    <input type="text" id="company_name" name="company_name" class="form-control" value="{{$edits->company_name}}" required>
-
-                    <div class="title">Email: *</div>
-                    <input type="email" id="contact_email" name="contact_email" class="form-control" value="{{$edits->research_email_address}}" required>
-
-                    <div class="title">Country: *</div>
-                    <input type="text" id="country" name="country" class="form-control" value="{{$edits->country}}" required>
-
-                    <div class="title">Language: *</div>
-                    <input type="text" id="language" name="language" class="form-control" value="{{$edits->language}}" required>
-
-                    <div class="title">Media Type: *</div>
-                    <input type="text" id="media_type" name="media_type" class="form-control" value="{{$edits->media_type}}">
-
-                    <div class="title">Industry: *</div>
-                    <input type="text" id="industry_type" name="industry_type" class="form-control" value="{{$edits->industry_type}}">
-
-                    <div class="title">Title Journalist: *</div>
-                    <input type="text" id="title_journalist" name="title_journalist" class="form-control" value="{{$edits->title_of_journalist}}">
-
-                    <div class="title">Website: *</div>
-                    <input type="text"  id="contact_website" name="contact_website" class="form-control" value="{{$edits->website}}">
-
-                    <div class="title">Description: *</div>
-                    <textarea id="description" name="description">{{$edits->description}}</textarea>
-                    <div class="button-container">
-                        <button type="submit" id="submit_button" name="submit_button">Add Contacts</button>
-                    </div>
-                </form>
-                @endforeach
-              @else
                 <form method="post" action="/pressadmin/pressreleases_addrecipient" enctype="multipart/form-data">
                     {{csrf_field()}}
+                   
+                    <input type="hidden" id="name" name="action" class="form-control" value="add">
+
                     <div class="title">Contact Name: *</div>
                     <input type="text" id="name" name="name" class="form-control" style="background-color: #f1f1f1;" placeholder="Enter the name of the media contact" required>
-
-                    <div class="title">Position: *</div>
-                    <input type="text"  id="position" name="position" class="form-control" style="background-color: #f1f1f1;"  placeholder="Enter the position of the media contact" required>
 
                     <div class="title">Company Name: *</div>
                     <input type="text" id="company_name" name="company_name" class="form-control" placeholder="Enter the company name of the media contact" style="background-color: #f1f1f1;" required>
@@ -173,17 +130,42 @@
                     <div class="title">Website: *</div>
                     <input type="text"  id="contact_website" name="contact_website" class="form-control">
 
+                    <div class="title">Position: *</div>
+                    <input type="text"  id="position" name="position" class="form-control" style="background-color: #f1f1f1;"  placeholder="Enter the position of the media contact" required>
+
                     <div class="title">Description: *</div>
                     <textarea id="description" name="description"></textarea>
                     <div class="button-container">
                         <button type="submit" id="submit_button" name="submit_button">Submit</button>
                     </div>
                 </form>
-              @endif
+       
             </div>
             </div>
         </div>
     </div>
+</div>
+
+<div class="popup-view">
+  <div class="modal" id="viewPopup" name="viewPopup" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <form method="post" action="/pressadmin/pressreleases_addrecipient" enctype="multipart/form-data">
+        {{csrf_field()}}
+      <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Edit Media Contacts</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <button type="submit" id="submit_button" class="btn btn-primary pull-right" name="submit_button">Update Contacts</button>
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+       </form>
+    </div>
+  </div>
 </div>
 
 @endsection
@@ -213,6 +195,27 @@ function openCity(evt, cityName)
 // Get the element with id="defaultOpen" and click on it
 document.getElementById("defaultOpen").click();
 </script>
+
+<script>
+  $('.pop_chosen_recipient_btn').click(function()
+  {
+      var recipient_id = $(this).data('id');
+
+      $.ajax({
+        url: '/pressadmin/pressreleases_edit_recipient/'+recipient_id,
+        type: 'GET',
+        success: function (data)
+        {
+            setTimeout(function()
+            {  
+                $('#viewPopup').modal('show');
+                $('div.modal-body').html(data); 
+            }, 100);
+        }
+      });
+  });
+</script>
+
 
 @endsection
 

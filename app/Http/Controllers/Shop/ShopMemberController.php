@@ -1488,13 +1488,13 @@ class ShopMemberController extends Shop
             $countPayee     = 0;
             foreach($_data as $row)
             {
-                $data['research_email_address']  = Self::nullables($row->research_email_address);
-                $data['company_name']            = Self::nullables($row->company_name);
-                $data['name']                    = Self::nullables($row->name);
+                $data['research_email_address']  = Self::nullables($row->email_address);
+                $data['company_name']            = Self::nullables($row->publication);
+                $data['name']                    = Self::nullables($row->first_name.' '.$row->last_name);
                 $data['position']                = Self::nullables($row->position);
-                $data['title_of_journalist']     = Self::nullables($row->title_of_journalist);
+                $data['title_of_journalist']     = Self::nullables($row->job_title);
                 $data['country']                 = Self::nullables($row->country);
-                $data['industry_type']           = Self::nullables($row->industry_type);
+                $data['industry_type']           = Self::nullables($row->category);
                 $data['website']                 = Self::nullables($row->website);
                 $data['description']             = Self::nullables($row->description);
                 $data['media_type']              = Self::nullables($row->media_type);
@@ -1511,8 +1511,9 @@ class ShopMemberController extends Shop
     }
 
     public function downloadExcel($type)
-    {
-        $excels['data'] =   ['RESEARCH EMAIL ADDRESS','COMPANY NAME','NAME','POSITION','TITLE OF JOURNALIST','COUNTRY','INDUSTRY TYPE','WEBSITE','DESCRIPTION','MEDIA TYPE','LANGUAGE'];
+    { 
+        $excels['data'] =   ['COUNTRY','CATEGORY','PUBLICATION','MEDIA TYPE','FIRST NAME','LAST NAME','JOB TITLE','EMAIL ADDRESS','LANGUAGE'];
+        
         Excel::create('PRESS IQ SAMPLE', function($excel) use ($excels) 
         {
             $excel->sheet('PRESS IQ SAMPLE SHEET', function($sheet) use ($excels) 
@@ -1583,10 +1584,10 @@ class ShopMemberController extends Shop
         $data["industry_type"]             = $request->industry_type;
         $data["title_of_journalist"]       = $request->title_journalist;
         $data["description"]               = $request->description;
-        if(session::has('r_edit'))
+        if($request->action =='edit')
         {
             DB::table('tbl_press_release_recipients')
-            ->where('recipient_id', session('r_edit'))
+            ->where('recipient_id', $request->recipient_id)
             ->update([
                     'name'                  =>$data["name"],
                     'position'              =>$data["position"],
@@ -1619,8 +1620,8 @@ class ShopMemberController extends Shop
     }
     public function pressreleases_edit_recipient($id)
     {
-        Session::put('r_edit',$id);  
-        return Redirect::back();
+        $data['recipient_details']  =  Tbl_press_release_recipient::where('recipient_id',$id)->first();
+       return view('press_admin.press_admin_media_contacts_update',$data);
     }
   
     public function pressuser_choose_recipient(Request $request)  

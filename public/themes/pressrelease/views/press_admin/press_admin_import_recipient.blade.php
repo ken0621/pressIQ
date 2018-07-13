@@ -17,7 +17,6 @@
             <div class="container">
                 <h1 style="font-size: 20px">Download Media Database Template</h1>
                 <a href="{{ URL::to('downloadExcel/xls') }}"><button class="btn btn-success">Download Excel xls</button></a>
-                {{-- <a href="{{ URL::to('downloadExcel/xlsx') }}"><button class="btn btn-success">Download Excel xlsx</button></a> --}}
             </div><br><br>
 
             <div class="container">

@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAEC,oCACA,CAHD,QACA,CAGE,UAAU,CAAE,KAAK,EAElB,uBACA,CACC,UAAU,CAAE,MAAM,CAClB,MAAM,CAAE,IAAI,CACZ,KAAK,CAAE,GAAG,CAEV,oCACA,CAPD,uBACA,CAOE,KAAK,CAAE,IAAI,CACX,0BACA,CACC,SAAS,CAAE,IAAI",
+"sources": ["../sass/replicated.scss"],
+"names": [],
+"file": "replicated.css"
+}

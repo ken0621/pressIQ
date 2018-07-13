@@ -1,0 +1,22 @@
+.content 
+{
+	@media screen and (max-width: 768px)
+	{
+		margin-top: 123px;
+	}
+	.media-wrapper	 
+	{
+		text-align: center;
+		margin: auto;
+		width: 75%;
+
+		@media screen and (max-width: 425px)
+		{
+			width: 100%;
+			h1 
+			{
+				font-size: 24px;
+			}
+		}
+	}	
+}

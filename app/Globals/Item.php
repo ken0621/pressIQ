@@ -2095,11 +2095,11 @@ class Item
     }
     public static function set_as_printed($list)
     {
-        dd($list);
         foreach($list as $key => $value)
         {
-            $list[$key] = $value; 
-            Tbl_warehouse_inventory_record_log::where("record_log_id", $value)->update(["printed" => 1]);
+            $update['printed'] = 1
+            $update['record_log_date_updated'] = Carbon::now();
+            Tbl_warehouse_inventory_record_log::where("record_log_id", $value)->update($update);
         }
         return false;
     }

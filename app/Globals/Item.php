@@ -1766,7 +1766,7 @@ class Item
         }
         else if($status == 'all')
         {
-            $query->whereBetween('record_log_date_updated', [$from, $to])->limit(100);
+            $query->whereBetween('record_log_date_updated', [$from, $to]);
         }
         else
         {
@@ -1802,6 +1802,7 @@ class Item
             }
             $data = $query->take($take + 1)->get();
         }
+
         return $data;
     }
     public static function get_first_assembled_kit($shop_id)
@@ -2097,7 +2098,7 @@ class Item
     {
         foreach($list as $key => $value)
         {
-            $update['printed'] = 1
+            $update['printed'] = 1;
             $update['record_log_date_updated'] = Carbon::now();
             Tbl_warehouse_inventory_record_log::where("record_log_id", $value)->update($update);
         }

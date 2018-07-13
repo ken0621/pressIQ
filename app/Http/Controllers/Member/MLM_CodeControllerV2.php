@@ -541,7 +541,6 @@ class MLM_CodeControllerV2 extends Member
     {
         
         Item::set_as_printed($request->printed);
-
         return  redirect('/member/mlm/product_code2');
     }
 

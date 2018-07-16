@@ -8,7 +8,7 @@
                  <center>{{ Session::get('delete_email') }}</center>
               </div>
               @endif 
-            <div class="title-container">Email's Press Release</div>
+            <div class="title-container">Emails Press Release</div>
             <table>
                 <tr>
                     <th style="width: 30%;">Email From</th>

@@ -1330,8 +1330,8 @@ class ShopMemberController extends Shop
  
     public function manage_user_add_admin(Request $request)   
     {
-      $data["user_first_name"]                 = $request->user_first_name . " (Admin)";
-      $data["user_last_name"]                  = $request->user_last_name;
+      $data["user_first_name"]                 = $request->user_first_name ;
+      $data["user_last_name"]                  = $request->user_last_name . " (Admin)";
       $data["user_email"]                      = $request->user_email;
       $data["user_password"]                   = Crypt::encrypt(request('user_password'));
       $data["user_level"]                      = "1";
@@ -1340,18 +1340,21 @@ class ShopMemberController extends Shop
       return  redirect::back();
     }
 
-    public function pressadmin_manage_user_edit()
+    public function pressadmin_manage_user_edit(Request $request)
     {
-        DB::table('tbl_pressiq_user')
-                        ->where('user_id', session('edit_user'))
-                        ->update([
-                            'user_first_name'     =>request('first_name'),
-                            'user_last_name'      =>request('last_name'),
-                            'user_email'          =>request('email'),
-                            'user_company_name'   =>request('company_name'),
-                            ]);
-        Session::forget('edit_user');
-        Session::flash('success_user', 'User Successfully Updated!');
+        if($request->action =='edit')
+        {
+            DB::table('tbl_pressiq_user')
+                            ->where('user_id',  $request->user_id)
+                            ->update([
+                                'user_first_name'     =>request('first_name'),
+                                'user_last_name'      =>request('last_name'),
+                                'user_email'          =>request('email'),
+                                'user_company_name'   =>request('company_name'),
+                                ]);
+            Session::forget('edit_user');
+            Session::flash('success_user', 'User Successfully Updated!');
+        }
         return redirect()->back();
     }
 
@@ -1376,31 +1379,37 @@ class ShopMemberController extends Shop
         return Redirect::to("/signin"); 
     }
 
-    public function pressadmin_manage_admin_edit()
+    public function pressadmin_manage_admin_edit(Request $request)
     {
-        DB::table('tbl_pressiq_user')
-                        ->where('user_id', session('edit_admin'))
-                        ->update([
-                            'user_first_name'     =>request('first_name'),
-                            'user_last_name'      =>request('last_name'),
-                            'user_email'          =>request('email'),
-                            'user_company_name'   =>request('company_name')
-                            ]);
-        Session::forget('edit_admin');
-        Session::flash('success_admin', 'Admin Successfully Updated!');
+        if($request->action =='edited_admin')
+        {
+            DB::table('tbl_pressiq_user')
+                            ->where('user_id', $request->admin_id)
+                            ->update([
+                                'user_first_name'     =>request('first_name'),
+                                'user_last_name'      =>request('last_name'),
+                                'user_email'          =>request('email'),
+                                ]);
+            Session::forget('edit_admin');
+            Session::flash('success_admin', 'Admin Successfully Updated!');
+        }
         return redirect()->back();
     }
     public function edit_user($id)
     {
-        Session::put('edit_user',$id);
-        
-        return redirect()->back();
+       $data['_user_edits']  =   Tbl_pressiq_user::where('user_id',$id)->first();
+       return view('press_admin.press_admin_edit_user',$data);
+       
+        // Session::put('edit_user',$id);
+        // return redirect()->back();
     }
     public function edit_admin($id)
     {
-        Session::put('edit_admin',$id);
-        
-        return redirect()->back();
+        $data['_admin_edits']  =  Tbl_pressiq_user::where('user_id',$id)->first();
+        return view('press_admin.press_admin_edit_admin',$data);
+
+        // Session::put('edit_admin',$id);
+        // return redirect()->back();
     }
 
     public function manage_user_delete_admin($id)
@@ -1491,8 +1500,8 @@ class ShopMemberController extends Shop
                 $data['research_email_address']  = Self::nullables($row->email_address);
                 $data['company_name']            = Self::nullables($row->publication);
                 $data['name']                    = Self::nullables($row->first_name.' '.$row->last_name);
-                $data['position']                = Self::nullables($row->position);
-                $data['title_of_journalist']     = Self::nullables($row->job_title);
+                $data['position']                = Self::nullables($row->job_title);
+                $data['title_of_journalist']     = Self::nullables($row->position);
                 $data['country']                 = Self::nullables($row->country);
                 $data['industry_type']           = Self::nullables($row->category);
                 $data['website']                 = Self::nullables($row->website);
@@ -1582,7 +1591,7 @@ class ShopMemberController extends Shop
         $data["website"]                   = $request->contact_website;
         $data["media_type"]                = $request->media_type;
         $data["industry_type"]             = $request->industry_type;
-        $data["title_of_journalist"]       = $request->title_journalist;
+        // $data["title_of_journalist"]       = $request->title_journalist;
         $data["description"]               = $request->description;
         if($request->action =='edit')
         {
@@ -1598,7 +1607,7 @@ class ShopMemberController extends Shop
                     'website'               =>$data["website"],
                     'media_type'            =>$data["media_type"],
                     'industry_type'         =>$data["industry_type"],
-                    'title_of_journalist'   =>$data["title_of_journalist"],
+                    // 'title_of_journalist'   =>$data["title_of_journalist"],
                     'description'           =>$data["description"]
                     ]);
             Session::forget('r_edit');

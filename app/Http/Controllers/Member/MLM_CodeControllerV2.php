@@ -388,7 +388,6 @@ class MLM_CodeControllerV2 extends Member
         $receipt_number   = $request->receipt_number;
         $amount           = $request->amount;
         $cellphone_number = $request->cellphone_number;
-        $email            = $request->email;
         $slot_no          = $request->slot_no;
         $warehouse_id     = session('warehouse_id_1');
         $warehouse        = DB::table('tbl_warehouse')->where('warehouse_id', $warehouse_id)->first();
@@ -437,7 +436,7 @@ class MLM_CodeControllerV2 extends Member
                     $insert["receipt_number"]               = $receipt_number;
                     $insert["amount"]                       = $amount;
                     $insert["cellphone_number"]             = $cellphone_number;
-                    $insert["email"]                        = $email;
+                    // $insert["email"]                        = $email;
                     $insert["distribute_product_code_date"] = Carbon::now();
                     $insert["user_id"]                      = $this->user_info->user_id;
 
@@ -467,6 +466,7 @@ class MLM_CodeControllerV2 extends Member
                             $sponsor = $privilegecard->slot_sponsor;
 
                             $mail_recipient = DB::table('tbl_mlm_slot')->join('tbl_customer', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')->where('tbl_mlm_slot.slot_id', $sponsor)->first();
+                            
 
                             $sponsor_cashback = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'UNILEVEL_CASHBACK_POINTS')->where('points_log_Sponsor', $slot_id)->first();
 
@@ -478,7 +478,7 @@ class MLM_CodeControllerV2 extends Member
                             $email_content["content"] = "Hi " . ($mail_recipient ? ucwords(strtolower($mail_recipient->first_name)) : '') . "! You earned P". number_format($sponsor_cashback->points_log_points, 2) ." Cashback from ". ucwords(strtolower($privilegecard->first_name))." ".ucwords(strtolower($privilegecard->last_name)). " who purchased at ". $warehouse->warehouse_name." Your total Cashback is P" . number_format($sponsor_cashback_total, 2) . ". Congratulations!";
 
 
-                            $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $mail_recipient);
+                            $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $mail_recipient->email);
 
                         }
                         //vip

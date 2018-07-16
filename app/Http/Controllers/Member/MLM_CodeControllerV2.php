@@ -387,7 +387,11 @@ class MLM_CodeControllerV2 extends Member
         $customer_id      = $request->customer_id;
         $receipt_number   = $request->receipt_number;
         $amount           = $request->amount;
-        $cellphone_number = $request->cellphone_number;
+        $phone = $request->cellphone_number;
+        if(strlen($phone) == 11)
+        {
+            $cellphone_number = "+63".substr($phone,1);
+        }
         $slot_no          = $request->slot_no;
         $warehouse_id     = session('warehouse_id_1');
         $warehouse        = DB::table('tbl_warehouse')->where('warehouse_id', $warehouse_id)->first();

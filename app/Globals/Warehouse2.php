@@ -50,6 +50,11 @@ class Warehouse2
         }
         return $data->get();
     }
+    public static function get_warehouse_name($shop_id, $warehouse_id)
+    {
+        $data = Tbl_warehouse::where('warehouse_shop_id',$shop_id)->where('archived',0)->where('warehouse_id',$warehouse_id)->first();
+        return $data->warehouse_name;
+    }
 	public static function get_current_warehouse($shop_id)
 	{
 		return session('warehouse_id_'.$shop_id);

@@ -18,9 +18,17 @@ class Tbl_warehouse_inventory_record_log extends Model
     {
         return $query->join('tbl_distribute_product_code', 'tbl_warehouse_inventory_record_log.record_log_id', '=', 'tbl_distribute_product_code.record_log_id');
     }
+    public function scopeCustomer($query)
+    {
+        return $query->leftjoin('tbl_customer','tbl_distribute_product_code.customer_id','=','tbl_customer.customer_id');
+    }
     public function scopeReleased($query)
     {
         return $query->leftjoin('tbl_release_product_code', 'tbl_warehouse_inventory_record_log.record_log_id', '=', 'tbl_release_product_code.record_log_id');
+    }
+    public function scopeReleasedCustomer($query)
+    {
+        return $query->leftjoin('tbl_customer', 'tbl_release_product_code.customer_id', '=', 'tbl_customer.customer_id');
     }
     public function scopeMembership($query)
     {

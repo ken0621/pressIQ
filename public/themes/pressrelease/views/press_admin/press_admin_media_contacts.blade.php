@@ -124,14 +124,14 @@
                             <option value="Wine and Beer">Wine and Beer</option>
                         </select> 
 
-                    <div class="title">Title Journalist: *</div>
-                    <input type="text" id="title_journalist" name="title_journalist" class="form-control">
+                    <div class="title">Title: *</div>
+                    <input type="text" id="position" name="position" class="form-control" style="background-color: #f1f1f1;"  placeholder="Enter the position of the media contact" required>
 
                     <div class="title">Website: *</div>
                     <input type="text"  id="contact_website" name="contact_website" class="form-control">
 
-                    <div class="title">Position: *</div>
-                    <input type="text"  id="position" name="position" class="form-control" style="background-color: #f1f1f1;"  placeholder="Enter the position of the media contact" required>
+                    {{-- <div class="title">Position: *</div> --}}
+                    {{-- <input type="text"  id="position" name="position" class="form-control" style="background-color: #f1f1f1;"  placeholder="Enter the position of the media contact" required> --}}
 
                     <div class="title">Description: *</div>
                     <textarea id="description" name="description"></textarea>

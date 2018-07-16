@@ -12,7 +12,7 @@
       <tr>
           <td style="width: 15%;text-align: center;">{{$recipients->name}}</td>
           <td style="width: 15%;text-align: center;">{{$recipients->company_name}}</td>
-          <td style="width: 15%;text-align: center;">{{$recipients->title_of_journalist}}</td>
+          <td style="width: 15%;text-align: center;">{{$recipients->position}}</td>
           <td style="width: 15%;text-align: center;">{{$recipients->industry_type}}</td>
           <td style="width: 15%;text-align: center;">{{$recipients->media_type}}</td>
       </tr>

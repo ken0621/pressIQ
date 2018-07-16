@@ -101,8 +101,7 @@
             </div>
 
             <div id="user_account" class="tabcontent press-media-container">
-              <div class="user-update-container">
-
+             {{--  <div class="user-update-container">
                 @if(session::has('edit_user'))
                  @foreach($_user_edit as $_user_edits)
                   <div class="title-container">UPDATE USER ACCOUNT</div>
@@ -126,7 +125,7 @@
                   </form>
                  @endforeach
                 @endif
-              </div>
+              </div> --}}
 
               <div class="user-container"><br>
                   <div class="search-container pull-right">
@@ -149,10 +148,13 @@
                            <td>{{$_user_account->user_last_name}}</td>
                            <td>{{$_user_account->user_email}}</td>
                            <td>{{$_user_account->user_company_name}}</td>
-                           <td>{{$_user_account->user_date_created}}</td>
+                           <td>{{date("F d, Y - H:i:s", strtotime($_user_account->user_date_created))}}</td>
                            <td>
-                            <a id="edit" href="/pressadmin/edit_user/{{$_user_account->user_id}}">
-                              <button type="button"  class="btn btn-warning center "><i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>  Edit</button></a>
+                            <button type="button"  class="btn btn-warning center pop_user_btn" data-id="{{$_user_account->user_id}}">
+                            <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button>
+
+                            {{-- <a id="edit" href="/pressadmin/edit_user/{{$_user_account->user_id}}"> --}}
+                            {{-- <button type="button"  class="btn btn-warning center "><i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>  Edit</button></a> --}}
 
                             <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/delete_user/{{$_user_account->user_id}}"><button type="button" class="btn btn-danger center">
                             <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>  Delete</button></a>
@@ -181,8 +183,12 @@
                            <td>{{$_admin_account->user_last_name}}</td>
                            <td>{{$_admin_account->user_email}}</td>
                            <td>
-                            <a href="/pressadmin/edit_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-warning center">
-                            <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>  Edit</button>
+
+                            <button type="button"  class="btn btn-warning center pop_admin_btn" data-id="{{$_admin_account->user_id}}">
+                            <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button>
+
+                           {{--  <a href="/pressadmin/edit_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-warning center">
+                            <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>  Edit</button> --}}
 
                             <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/manage_user/delete_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-danger center">
                             <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>  Delete</button>
@@ -190,70 +196,76 @@
                         </tr>
                         @endforeach
                   </table>
-                   @if(session::has('edit_admin'))
-                      @foreach($_admin_edit as $_admin_edits)
-                       <div class="title-container">Add Admin Account</div>
-                         <form method="post" action="">
-                           {{csrf_field()}}
-                           <div class="title">First Name:</div>
-                         <input type="text" id="first_name" name="first_name" class="form-control" value="{{$_admin_edits->user_first_name}}" autofocus>
+                  
+                  <div class="title-container">Add Admin Account</div>
+                  <form method="post" action="">
+                   {{csrf_field()}}
+                  <div class="title"></div>
+                   <input type="text" id="user_first_name" name="user_first_name" class="form-control" placeholder="First Name" required>
 
-                           <div class="title">Last Name:</div>
-                           <input type="text"  id="last_name" name="last_name" class="form-control" value="{{$_admin_edits->user_last_name}}">
+                   <div class="title"></div>
+                   <input type="text"  id="user_last_name" name="user_last_name" class="form-control" placeholder="Last Name" required>
 
-                           <div class="title">Email:</div>
-                           <input type="text" id="email" name="email" class="form-control" value="{{$_admin_edits->user_email}}">
+                   <div class="title"> </div>
+                   <input type="email" id="user_email" name="user_email" class="form-control" placeholder="Email" required>
 
-                           <div class="button-container">
-                               <button type="submit" id="submit_button" name="submit_button" formaction="/pressadmin/manage_admin_edit">Submit</button>
-                           </div>
-                       </form>
-                      @endforeach
-                  @else
-                   <div class="title-container">Add Admin Account</div>
-                     <form method="post" action="">
-                       {{csrf_field()}}
-                      <div class="title"></div>
-                       <input type="text" id="user_first_name" name="user_first_name" class="form-control" placeholder="First Name" required>
+                   <div class="title"></div>
+                   <input type="Password" id="user_password" name="user_password" class="form-control" placeholder="Password" required>
 
-                       <div class="title"></div>
-                       <input type="text"  id="user_last_name" name="user_last_name" class="form-control" placeholder="Last Name" required>
-
-                       <div class="title"> </div>
-                       <input type="email" id="user_email" name="user_email" class="form-control" placeholder="Email" required>
-
-                       <div class="title"></div>
-                       <input type="Password" id="user_password" name="user_password" class="form-control" placeholder="Password" required>
-
-                       <div class="button-container">
-                           <button type="submit" id="admin_submit_button" name="admin_submit_button" formaction="/pressadmin/manage_user/add_admin">Submit</button>
-                       </div>
-                   </form>
-                  @endif
+                   <div class="button-container">
+                       <button type="submit" id="admin_submit_button" name="admin_submit_button" formaction="/pressadmin/manage_user/add_admin">Submit</button>
+                   </div>
+                  </form>
             </div>
         </div>
     </div>
 </div>  
 
-
 <div class="popup-view">
   <div class="modal" id="viewPopup" name="viewPopup" role="dialog">
     <div class="modal-dialog modal-lg">
-        {{-- <form method="post" action="/pressadmin/pressreleases_addrecipient" enctype="multipart/form-data"> --}}
+        <form method="post" action="/pressadmin/manage_user_edit" enctype="multipart/form-data">
         {{csrf_field()}}
-      <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Edit Media Contacts</h4>
+        <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Update User</h4>
+          </div>
+
+          <div class="modal-body">
+          </div>
+
+          <div class="modal-footer">
+              <button type="submit" id="submit_button" class="btn btn-primary pull-right" name="submit_button">Update User</button>
+              <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+          </div>
         </div>
-       {{--  <div class="modal-body">
-        </div> --}}
-        <div class="modal-footer">
-            <button type="submit" id="submit_button" class="btn btn-primary pull-right" name="submit_button">Update Contacts</button>
-            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="popup-view">
+  <div class="modal" id="viewAdminPopup" name="viewAdminPopup" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <form method="post" action="/pressadmin/manage_admin_edit" enctype="multipart/form-data">
+        {{csrf_field()}}
+        <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Update Admin</h4>
+          </div>
+
+          <div class="modal-body">
+          </div>
+
+          <div class="modal-footer">
+              <button type="submit" id="submit_button" class="btn btn-primary pull-right" name="submit_button">Update Admin</button>
+              <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+          </div>
         </div>
-      </div>
-       {{-- </form> --}}
+      </form> 
     </div>
   </div>
 </div>
@@ -266,13 +278,6 @@
 
 @section("script")
 <script  src="/assets/js/manage_user.js"></script>
-
-<script>
-  $('#edit').click(function()
-  {
-    //alert("123");
-    $('#previewPopup').modal('show');
-</script>
 
 <script>
 function openCity(evt, cityName) 
@@ -298,22 +303,42 @@ document.getElementById("defaultOpen").click();
 </script>
 
 <script>
-  $('.pop_chosen_recipient_btn').click(function()
+  $('.pop_user_btn').click(function()
   {
-      // var recipient_id = $(this).data('id');
+      var user_id = $(this).data('id');
 
-      // $.ajax({
-      //   url: '/pressadmin/pressreleases_edit_recipient/'+recipient_id,
-      //   type: 'GET',
-      //   success: function (data)
-      //   {
-      //       setTimeout(function()
-      //       {  
+      $.ajax({
+        url: '/pressadmin/edit_user/'+user_id,
+        type: 'GET',
+        success: function (data)
+        {
+            setTimeout(function()
+            {  
                 $('#viewPopup').modal('show');
-      //           $('div.modal-body').html(data); 
-      //       }, 100);
-      //   }
-      // });
+                $('div.modal-body').html(data); 
+            }, 100);
+        }
+      });
+  });
+</script>
+
+<script>
+  $('.pop_admin_btn').click(function()
+  {
+      var admin_id = $(this).data('id');
+
+      $.ajax({
+        url: '/pressadmin/edit_admin/'+admin_id,
+        type: 'GET',
+        success: function (data)
+        {
+            setTimeout(function()
+            {  
+                $('#viewAdminPopup').modal('show');
+                $('div.modal-body').html(data); 
+            }, 100);
+        }
+      });
   });
 </script>
 

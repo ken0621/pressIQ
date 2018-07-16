@@ -26,14 +26,14 @@
         <div class="title">Industry: *</div>
         <input type="text" id="industry_type" name="industry_type" class="form-control" value="{{$recipient_details->industry_type}}"><br>
 
-        <div class="title">Title Journalist: *</div>
-        <input type="text" id="title_journalist" name="title_journalist" class="form-control" value="{{$recipient_details->title_of_journalist}}"><br>
+        <div class="title">Title: *</div>
+        <input type="text" id="position" name="position" class="form-control" value="{{$recipient_details->position}}"><br>
 
         <div class="title">Website: *</div>
         <input type="text"  id="contact_website" name="contact_website" class="form-control" value="{{$recipient_details->website}}"><br>
 
-        <div class="title">Position: *</div>
-        <input type="text"  id="position" name="position" class="form-control" value="{{$recipient_details->position}}" ><br>
+        {{-- <div class="title">Position: *</div> --}}
+        {{-- <input type="text"  id="position" name="position" class="form-control" value="{{$recipient_details->position}}" ><br> --}}
 
         <div class="title">Description: *</div>
         <textarea id="description" class="form-control" name="description">{{$recipient_details->description}}</textarea><br>

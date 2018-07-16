@@ -189,8 +189,10 @@ class MLM_CodeControllerV2 extends Member
             {
                 $update['record_consume_ref_name'] = $status;                
             }
+            $update['record_log_date_updated'] = Carbon::now();
             $update['record_item_remarks'] = $request->remarks;
-
+            //dd($update);
+            //dd($update);
             Warehouse2::update_warehouse_item($record_log_id, $update);
 
             $return['status'] = 'success';
@@ -440,7 +442,7 @@ class MLM_CodeControllerV2 extends Member
                     $insert["user_id"]                      = $this->user_info->user_id;
 
                     Tbl_distribute_product_code::insert($insert);
-
+                    
                     /* Send SMS and E-mail */
                     $code = DB::table("tbl_warehouse_inventory_record_log")->where("record_log_id", $id)->first();
                     
@@ -546,8 +548,8 @@ class MLM_CodeControllerV2 extends Member
             $insert["user_id"]                   = $this->user_info->user_id;
 
             Tbl_release_product_code::insert($insert);
-
             $update['released'] = 1;
+            $update['record_log_date_updated'] = Carbon::now();
             Tbl_warehouse_inventory_record_log::where('record_log_id', $id)->update($update);
 
             /* Send SMS and E-mail */
@@ -578,7 +580,6 @@ class MLM_CodeControllerV2 extends Member
     {
         
         Item::set_as_printed($request->printed);
-
         return  redirect('/member/mlm/product_code2');
     }
 

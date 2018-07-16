@@ -313,5 +313,15 @@
 			"default":"",
 			"size":"6"
 		}
+	},
+	"video":
+	{
+		"video_link":
+		{
+			"label":"Replicated Page Video Link",
+			"type":"textbox",
+			"default":"https://www.youtube.com/embed/2ZyTldtOG4Y",
+			"size":"6"
+		}
 	}
 }

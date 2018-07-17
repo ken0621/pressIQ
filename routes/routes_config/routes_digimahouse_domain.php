@@ -128,6 +128,12 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('importExport', 										'Shop\ShopMemberController@importExport');
 	Route::get('downloadExcel/{type}',  							'Shop\ShopMemberController@downloadExcel');
 	Route::post('importExcel', 										'Shop\ShopMemberController@importExcel');
+	Route::any('/pressadmin/add_industry', 							'Shop\ShopMemberController@add_industry'); //PRESS RELEASE
+	Route::any('/pressadmin/edit_industry/{id}',					'Shop\ShopMemberController@edit_industry'); //PRESS RELEASE
+	Route::any('/pressadmin/delete_industry/{id}',					'Shop\ShopMemberController@delete_industry'); //PRESS RELEASE
+	Route::any('/pressadmin/add_media_type', 						'Shop\ShopMemberController@add_media_type'); //PRESS RELEASE
+	Route::any('/pressadmin/edit_media_type/{id}',					'Shop\ShopMemberController@edit_media_type'); //PRESS RELEASE
+	Route::any('/pressadmin/delete_media_type/{id}',				'Shop\ShopMemberController@delete_media_type'); //PRESS RELEASE
 	
 
 	Route::get('/announcement', 'Shop\ShopAboutController@announcement'); //Alternative

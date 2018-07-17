@@ -73,6 +73,8 @@ use App\Models\Tbl_press_release_recipient;
 use App\Models\Tbl_pressiq_press_releases;
 use App\Models\Tbl_pressiq_user;
 use App\Models\Tbl_pressiq_demo;
+use App\Models\Tbl_pressiq_industry;
+use App\Models\Tbl_pressiq_media_type;
 
 use App\Models\Tbl_item_redeemable_points;
 use App\Models\Tbl_item_redeemable_request;
@@ -1040,7 +1042,7 @@ class ShopMemberController extends Shop
     public function pressuser_media_contacts_delete($id)
     {
       Tbl_press_release_recipient::where('recipient_id',$id)->delete();
-       Session::flash('delete_user', 'Recipient Successfully Deleted!');
+      Session::flash('delete_user', 'Recipient Successfully Deleted!');
       return  redirect::back();
     }
 
@@ -1169,8 +1171,10 @@ class ShopMemberController extends Shop
     public function pressadmin_media_contacts()  
     {
 
-        $data['_media_contacts'] = Tbl_press_release_recipient::orderByRaw('created_at DESC')
-                                    ->get();
+        $data['_media_contacts'] = Tbl_press_release_recipient::orderByRaw('created_at DESC')->get();
+        $data['_industry']       = Tbl_pressiq_industry::orderByRaw('date_created DESC')->get();
+        $data['_media_name']     = Tbl_pressiq_media_type::orderByRaw('date_created DESC')->get();
+                                                      
         $data['edit']            = DB::table('tbl_press_release_recipients')
                                     ->where('recipient_id',session('r_edit'))
                                     ->get();
@@ -1895,6 +1899,75 @@ class ShopMemberController extends Shop
         $data["page"] = "Thank You";
         return view("press_user.thank_you", $data);
     }
+
+    public function add_industry(Request $request)
+    {
+        $data["industry_name"]                      = $request->industry_name;
+        $data["date_created"]                       = now();
+        if($request->action =='edit')
+        {
+            DB::table('tbl_pressiq_industry')
+            ->where('industry_id', $request->industry_id)
+            ->update([
+                    'industry_name'           =>$data["industry_name"]
+                    ]);
+            Session::flash('success_industry_edit', 'Industry Successfully Updated!');
+        }
+        else
+        {
+            Tbl_pressiq_industry::insert($data);
+            Session::flash('success_industry', 'New Industry Successfully Added!');
+        }
+        return  redirect::back();
+    }
+
+    public function edit_industry($id)
+    {
+       $data['_industry_edits']  =   Tbl_pressiq_industry::where('industry_id',$id)->first();
+       return view('press_admin.press_admin_industry_update',$data);
+    }
+
+    public function delete_industry($id)
+    {
+      Tbl_pressiq_industry::where('industry_id',$id)->delete();
+      Session::flash('delete_industry', 'Industry Successfully Deleted!');
+      return  redirect::back();
+    }
+
+    public function add_media_type(Request $request)
+    {
+        $data["media_name"]                      = $request->media_name;
+        $data["date_created"]                    = now();
+        if($request->action =='edit')
+        {
+            DB::table('tbl_pressiq_media')
+            ->where('media_id', $request->media_id)
+            ->update([
+                    'media_name'           =>$data["media_name"]
+                    ]);
+            Session::flash('success_media_edit', 'Media Type Successfully Updated!');
+        }
+        else
+        {
+            Tbl_pressiq_media_type::insert($data);
+            Session::flash('success_media_add', 'New Media Successfully Added!');
+        }
+        return  redirect::back();
+    }
+
+    public function edit_media_type($id)
+    {
+       $data['_media_edits']  =   Tbl_pressiq_media_type::where('media_id',$id)->first();
+       return view('press_admin.press_admin_media_update',$data);
+    }
+
+    public function delete_media_type($id)
+    {
+      Tbl_pressiq_media_type::where('media_id',$id)->delete();
+      Session::flash('delete_media_name', 'Media Successfully Deleted!');
+      return  redirect::back();
+    }
+  
 
     //*Press Release*//
 

@@ -30,7 +30,7 @@
               </div>
             @endif   
           <div class="tab">
-             <button class="tablinks" onclick="openCity(event, 'new_user_account')" id="defaultOpen">Add User Account</button>
+            <button class="tablinks" onclick="openCity(event, 'new_user_account')" id="defaultOpen">Add User Account</button>
             <button class="tablinks"  onclick="openCity(event, 'user_account')" >Users Account</button>
             <button class="tablinks"  onclick="openCity(event, 'admin_account')" >Admin Account</button>
           </div>    

@@ -1170,14 +1170,16 @@ class ShopMemberController extends Shop
 
     public function pressadmin_media_contacts()  
     {
+        $data['_media_contacts'] 	= Tbl_press_release_recipient::orderByRaw('created_at DESC')->get();
+        $data['_industry']       	= Tbl_pressiq_industry::orderByRaw('date_created DESC')->get();
+        $data['_media_name']     	= Tbl_pressiq_media_type::orderByRaw('date_created DESC')->get();
 
-        $data['_media_contacts'] = Tbl_press_release_recipient::orderByRaw('created_at DESC')->get();
-        $data['_industry']       = Tbl_pressiq_industry::orderByRaw('date_created DESC')->get();
-        $data['_media_name']     = Tbl_pressiq_media_type::orderByRaw('date_created DESC')->get();
-                                                      
-        $data['edit']            = DB::table('tbl_press_release_recipients')
-                                    ->where('recipient_id',session('r_edit'))
-                                    ->get();
+        $data['_industry_name_add'] = Tbl_pressiq_industry::distinct()->get(['industry_name']);
+        $data['_media_name_add']	= Tbl_pressiq_media_type::distinct()->get(['media_name']);
+                                  
+        $data['edit']           	= DB::table('tbl_press_release_recipients')
+                                    	->where('recipient_id',session('r_edit'))
+                                    	->get();
         if(Session::exists('user_email'))
         {
            $level=session('pr_user_level');

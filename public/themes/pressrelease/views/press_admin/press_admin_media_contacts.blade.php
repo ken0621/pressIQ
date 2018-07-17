@@ -43,8 +43,8 @@
           <div class="tab">
             <button class="tablinks" onclick="openCity(event, 'press_media')" id="defaultOpen">Press IQ Media Contacts</button>
             <button class="tablinks" onclick="openCity(event, 'add_media')" >Add Media Contacts</button>
+            <button class="tablinks" onclick="openCity(event, 'add_media_type')" >Add Media Type</button>
             <button class="tablinks" onclick="openCity(event, 'add_industry')" >Add Industries</button>
-            <button class="tablinks" onclick="openCity(event, 'add_media_type')" >Add Media</button>
           </div>                        
             <div class="press-release-content">
               <div id="press_media" class="tabcontent press-media-container">
@@ -69,25 +69,25 @@
                       <div class="title-container">Media Contacts</div> 
                       <div class="left-container" name="press_table" id="press_table1">
                           <table  class="table table-bordered" id="showHere_table1">
-                                  <tr>
-                                      <th style="width: 25%;">Contact Name</th>
-                                      <th style="width: 25%;">Company</th>
-                                      <th style="width: 25%;">Country</th>
-                                      <th style="width: 25%;">Action</th>
-                                  </tr>
+                              <tr>
+                                  <th style="width: 25%;">Contact Name</th>
+                                  <th style="width: 25%;">Company</th>
+                                  <th style="width: 25%;">Country</th>
+                                  <th style="width: 25%;">Action</th>
+                              </tr>
                               @foreach($_media_contacts as $_media)
-                                  <tr>
-                                     <td>{{$_media->name}}</td>
-                                     <td>{{$_media->company_name}}</td>
-                                     <td>{{$_media->country}}</td>
-                                     <td>
-                                       <button type="button"  class="btn btn-warning center pop_chosen_recipient_btn" data-id="{{$_media->recipient_id}}">
-                                       <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button>
-                                       
-                                       <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/pressreleases_deleterecipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-danger center">
-                                       <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button></a>
-                                     </td>
-                                  </tr>
+                              <tr>
+                                 <td>{{$_media->name}}</td>
+                                 <td>{{$_media->company_name}}</td>
+                                 <td>{{$_media->country}}</td>
+                                 <td>
+                                   <button type="button"  class="btn btn-warning center pop_chosen_recipient_btn" data-id="{{$_media->recipient_id}}">
+                                   <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button>
+                                   
+                                   <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/pressreleases_deleterecipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-danger center">
+                                   <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button></a>
+                                 </td>
+                              </tr>
                               @endforeach
                           </table>
                      </div>
@@ -130,41 +130,21 @@
                           </select> 
 
                       <div class="title">Media Type: *</div>
-                          <select class="form-control" id="media_type" name="media_type" style="width: 700px;background-color: #f1f1f1;"> 
-                              <option value="Newspaper">Newspaper</option>
-                              <option value="Online Newspaper">Online Newspaper</option>
-                              <option value="Magazine">Magazine</option>
-                              <option value="Online Magazine">Online Magazine</option>
-                              <option value="Blog">Blog</option>
-                              <option value="Trade Publication">Trade Publication</option>
+                          <select class="form-control" id="media_type" name="media_type" style="width: 700px;background-color: #f1f1f1;" required> 
+                            @foreach($_media_name_add as $_media_filter)
+                              <option value="{{$_media_filter->media_name}}">{{$_media_filter->media_name}}</option>
+                            @endforeach
                           </select> 
 
                       <div class="title">Industry: *</div>
-                          <select class="form-control" id="industry_type" name="industry_type" style="width: 700px;background-color: #f1f1f1;"> 
-                              <option value="Beauty">Beauty</option>
-                              <option value="Business">Business</option>
-                              <option value="Computers">Computers</option>
-                              <option value="Culture and Art">Culture and Art</option>
-                              <option value="Education">Education</option>
-                              <option value="Electronics">Electronics</option>
-                              <option value="Enviroment">Enviroment</option>
-                              <option value="Family">Family</option>
-                              <option value="Fashion">Fashion</option>
-                              <option value="Financial Services">Financial Services</option>
-                              <option value="Food and Beverage">Food and Beverage</option>
-                              <option value="Health">Health</option>
-                              <option value="Hospitality">Hospitality</option>
-                              <option value="Luxury">Luxury</option>
-                              <option value="Music and Entertainment">Music and Entertainment</option>
-                              <option value="Real Estate">Real Estate</option>
-                              <option value="Sports">Sports</option>
-                              <option value="Technology">Technology</option>
-                              <option value="Watches and Jewellery">Watches and Jewellery</option>
-                              <option value="Wine and Beer">Wine and Beer</option>
+                          <select class="form-control" id="industry_type" name="industry_type" style="width: 700px;background-color: #f1f1f1;" required> 
+                            @foreach($_industry_name_add as $_industry_name)
+                              <option value="{{$_industry_name->industry_name}}">{{$_industry_name->industry_name}}</option>
+                            @endforeach
                           </select> 
 
                       <div class="title">Title: *</div>
-                      <input type="text" id="position" name="position" class="form-control" style="background-color: #f1f1f1;"  placeholder="Enter the position of the media contact" required>
+                      <input type="text" id="position" name="position" class="form-control" style="background-color: #f1f1f1;"  placeholder="Enter the title of the media contact" required>
 
                       <div class="title">Website: *</div>
                       <input type="text"  id="contact_website" name="contact_website" class="form-control">
@@ -178,41 +158,6 @@
                           <button type="submit" id="submit_button" name="submit_button">Submit</button>
                       </div>
                   </form>
-              </div>
-
-              <div id="add_industry" class="tabcontent add-media-container">
-                <div class="col-md-12">
-                  <div class="press-holder-container"> 
-                    <div class="title-container">Insert Industry</div><br>
-                      <form method="post" action="/pressadmin/add_industry">
-                        {{csrf_field()}}
-                          <input type="text" id="industry_name" name="industry_name" class="form-control" style="background-color: #f1f1f1;" placeholder="Enter the name of the industry" required><br>
-                          <div class="button-container">
-                              <button type="submit" id="submit_button" name="submit_button">Submit</button>
-                          </div><br>
-                      </form> 
-                       <div class="left-container" name="press_table" id="press_table1" style="overflow-y: scroll;display: block;height: 300px;">
-                        <table  class="table table-bordered" id="showHere_table1">
-                          <tr>
-                            <th style="width: 25%;">Industry Name</th>
-                            <th style="width: 25%;">Action</th>
-                          </tr>
-                        @foreach($_industry as $industry_name)
-                          <tr>
-                            <td>{{$industry_name->industry_name}}</td>
-                              <td>
-                              <button type="button"  class="btn btn-warning center pop_industry_btn" data-id="{{$industry_name->industry_id}}">
-                              <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button> 
-
-                              <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/delete_industry/{{$industry_name->industry_id}}"><button type="button"  class="btn btn-danger center">
-                              <i class="fa fa-trash" name="industry_id" aria-hidden="true"></i>Delete</button></a>
-                            </td>
-                          </tr>
-                        @endforeach
-                        </table>
-                      </div>
-                  </div>
-                </div>
               </div>
 
               <div id="add_media_type" class="tabcontent add-media-container">
@@ -249,6 +194,41 @@
                   </div>
                 </div>
               </div>
+
+              <div id="add_industry" class="tabcontent add-media-container">
+                <div class="col-md-12">
+                  <div class="press-holder-container"> 
+                    <div class="title-container">Insert Industry</div><br>
+                      <form method="post" action="/pressadmin/add_industry">
+                        {{csrf_field()}}
+                          <input type="text" id="industry_name" name="industry_name" class="form-control" style="background-color: #f1f1f1;" placeholder="Enter the name of the industry" required><br>
+                          <div class="button-container">
+                              <button type="submit" id="submit_button" name="submit_button">Submit</button>
+                          </div><br>
+                      </form> 
+                       <div class="left-container" name="press_table" id="press_table1" style="overflow-y: scroll;display: block;height: 300px;">
+                        <table  class="table table-bordered" id="showHere_table1">
+                          <tr>
+                            <th style="width: 25%;">Industry Name</th>
+                            <th style="width: 25%;">Action</th>
+                          </tr>
+                        @foreach($_industry as $industry_name)
+                          <tr>
+                            <td>{{$industry_name->industry_name}}</td>
+                              <td>
+                              <button type="button"  class="btn btn-warning center pop_industry_btn" data-id="{{$industry_name->industry_id}}">
+                              <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button> 
+
+                              <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/delete_industry/{{$industry_name->industry_id}}"><button type="button"  class="btn btn-danger center">
+                              <i class="fa fa-trash" name="industry_id" aria-hidden="true"></i>Delete</button></a>
+                            </td>
+                          </tr>
+                        @endforeach
+                        </table>
+                      </div>
+                  </div>
+                </div>
+              </div>  
         </div>
     </div>
 </div>

@@ -82,10 +82,10 @@
                                  <td>{{$_media->country}}</td>
                                  <td>
                                    <button type="button"  class="btn btn-warning center pop_chosen_recipient_btn" data-id="{{$_media->recipient_id}}">
-                                   <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button>
+                                   <i class="fa fa-wrench" name="" aria-hidden="true"></i> Edit</button>
                                    
                                    <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/pressreleases_deleterecipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-danger center">
-                                   <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button></a>
+                                   <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i> Delete</button></a>
                                  </td>
                               </tr>
                               @endforeach
@@ -182,10 +182,10 @@
                                 <td>{{$media->media_name}}</td>
                                   <td>
                                     <button type="button"  class="btn btn-warning center pop_media_type_btn" data-id="{{$media->media_id}}">
-                                    <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button> 
+                                    <i class="fa fa-wrench" name="" aria-hidden="true"></i> Edit</button> 
 
                                     <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/delete_media_type/{{$media->media_id}}"><button type="button"  class="btn btn-danger center">
-                                    <i class="fa fa-trash" name="industry_id" aria-hidden="true"></i>Delete</button></a>
+                                    <i class="fa fa-trash" name="industry_id" aria-hidden="true"></i> Delete</button></a>
                                   </td>
                               </tr>
                               @endforeach
@@ -217,10 +217,10 @@
                             <td>{{$industry_name->industry_name}}</td>
                               <td>
                               <button type="button"  class="btn btn-warning center pop_industry_btn" data-id="{{$industry_name->industry_id}}">
-                              <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button> 
+                              <i class="fa fa-wrench" name="" aria-hidden="true"></i> Edit</button> 
 
                               <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/delete_industry/{{$industry_name->industry_id}}"><button type="button"  class="btn btn-danger center">
-                              <i class="fa fa-trash" name="industry_id" aria-hidden="true"></i>Delete</button></a>
+                              <i class="fa fa-trash" name="industry_id" aria-hidden="true"></i> Delete</button></a>
                             </td>
                           </tr>
                         @endforeach

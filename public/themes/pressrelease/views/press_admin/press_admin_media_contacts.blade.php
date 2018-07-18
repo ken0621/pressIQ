@@ -160,7 +160,7 @@
                   </form>
               </div>
 
-              <div id="add_media_type" class="tabcontent add-media-container">
+              <div id="add_media_type" class="tabcontent insert-media-container">
                 <div class="col-md-12">
                   <div class="press-holder-container"> 
                     <div class="title-container">Insert Media Type</div><br>
@@ -171,31 +171,31 @@
                               <button type="submit" id="submit_button" name="submit_button">Submit</button>
                           </div><br>
                       </form> 
-                       <div class="left-container" name="press_table" id="press_table1" style="overflow-y: scroll;display: block;height: 300px;">
-                        <table  class="table table-bordered" id="showHere_table1">
-                          <tr>
-                            <th style="width: 25%;">Media Name</th>
-                            <th style="width: 25%;">Action</th>
-                          </tr>
-                          @foreach($_media_name as $media)
-                          <tr>
-                            <td>{{$media->media_name}}</td>
-                              <td>
-                                <button type="button"  class="btn btn-warning center pop_media_type_btn" data-id="{{$media->media_id}}">
-                                <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button> 
+                       <div class="left-container" name="press_table" id="press_table1">
+                          <table  class="table table-bordered" id="showHere_table1">
+                              <tr>
+                                <th style="width: 25%;">Media Name</th>
+                                <th style="width: 25%;">Action</th>
+                              </tr>
+                              @foreach($_media_name as $media)
+                              <tr>
+                                <td>{{$media->media_name}}</td>
+                                  <td>
+                                    <button type="button"  class="btn btn-warning center pop_media_type_btn" data-id="{{$media->media_id}}">
+                                    <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button> 
 
-                                <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/delete_media_type/{{$media->media_id}}"><button type="button"  class="btn btn-danger center">
-                                <i class="fa fa-trash" name="industry_id" aria-hidden="true"></i>Delete</button></a>
-                              </td>
-                          </tr>
-                          @endforeach
-                        </table>
+                                    <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/delete_media_type/{{$media->media_id}}"><button type="button"  class="btn btn-danger center">
+                                    <i class="fa fa-trash" name="industry_id" aria-hidden="true"></i>Delete</button></a>
+                                  </td>
+                              </tr>
+                              @endforeach
+                          </table>
                       </div>
                   </div>
                 </div>
               </div>
 
-              <div id="add_industry" class="tabcontent add-media-container">
+              <div id="add_industry" class="tabcontent insert-media-container">
                 <div class="col-md-12">
                   <div class="press-holder-container"> 
                     <div class="title-container">Insert Industry</div><br>
@@ -206,7 +206,7 @@
                               <button type="submit" id="submit_button" name="submit_button">Submit</button>
                           </div><br>
                       </form> 
-                       <div class="left-container" name="press_table" id="press_table1" style="overflow-y: scroll;display: block;height: 300px;">
+                       <div class="left-container" name="press_table" id="press_table1">
                         <table  class="table table-bordered" id="showHere_table1">
                           <tr>
                             <th style="width: 25%;">Industry Name</th>

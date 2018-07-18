@@ -142,7 +142,7 @@
 		</div>
 	</div>
 	<div style="text-align: center;padding: 0px 20px 0px 20px">                                         
-		You can reply to me.<a href="{{$pr_from}}" >{{$pr_from}}</a>
+		You can reply to me. <a href="{{$pr_from}}" >{{$pr_from}}</a>
 	</div><br>
 	<div style="text-align: center;padding: 0px 20px 0px 20px">                                         
 		Don't want to recieve amazing emails from us? <a href="*|UNSUB:http://mywebsite.com/unsub|*">Unsubscribe.</a>

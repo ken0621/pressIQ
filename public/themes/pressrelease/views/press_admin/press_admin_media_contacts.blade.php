@@ -44,7 +44,7 @@
             <button class="tablinks" onclick="openCity(event, 'press_media')" id="defaultOpen">Press IQ Media Contacts</button>
             <button class="tablinks" onclick="openCity(event, 'add_media')" >Add Media Contacts</button>
             <button class="tablinks" onclick="openCity(event, 'add_media_type')" >Add Media Type</button>
-            <button class="tablinks" onclick="openCity(event, 'add_industry')" >Add Industries</button>
+            <button class="tablinks" onclick="openCity(event, 'add_industry')" >Add Industry</button>
           </div>                        
             <div class="press-release-content">
               <div id="press_media" class="tabcontent press-media-container">
@@ -166,7 +166,7 @@
                     <div class="title-container">Insert Media Type</div><br>
                       <form method="post" action="/pressadmin/add_media_type">
                         {{csrf_field()}}
-                          <input type="text" id="media_name" name="media_name" class="form-control" style="background-color: #f1f1f1;" placeholder="Enter the name of the media" required><br>
+                          <input type="text" id="media_name" name="media_name" class="form-control" style="background-color: #f1f1f1;width: 450px" placeholder="Enter the name of the media" required><br>
                           <div class="button-container">
                               <button type="submit" id="submit_button" name="submit_button">Submit</button>
                           </div><br>
@@ -174,8 +174,8 @@
                        <div class="left-container" name="press_table" id="press_table1">
                           <table  class="table table-bordered" id="showHere_table1">
                               <tr>
-                                <th style="width: 25%;">Media Name</th>
-                                <th style="width: 25%;">Action</th>
+                                <th style="width: 30%;">Media Name</th>
+                                <th style="width: 30%;">Action</th>
                               </tr>
                               @foreach($_media_name as $media)
                               <tr>
@@ -201,7 +201,7 @@
                     <div class="title-container">Insert Industry</div><br>
                       <form method="post" action="/pressadmin/add_industry">
                         {{csrf_field()}}
-                          <input type="text" id="industry_name" name="industry_name" class="form-control" style="background-color: #f1f1f1;" placeholder="Enter the name of the industry" required><br>
+                          <input type="text" id="industry_name" name="industry_name" class="form-control" style="background-color: #f1f1f1;width: 450px" placeholder="Enter the name of the industry" required><br>
                           <div class="button-container">
                               <button type="submit" id="submit_button" name="submit_button">Submit</button>
                           </div><br>
@@ -209,8 +209,8 @@
                        <div class="left-container" name="press_table" id="press_table1">
                         <table  class="table table-bordered" id="showHere_table1">
                           <tr>
-                            <th style="width: 25%;">Industry Name</th>
-                            <th style="width: 25%;">Action</th>
+                            <th style="width: 30%;">Industry Name</th>
+                            <th style="width: 30%;">Action</th>
                           </tr>
                         @foreach($_industry as $industry_name)
                           <tr>

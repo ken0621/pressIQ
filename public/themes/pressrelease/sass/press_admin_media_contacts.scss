@@ -15,7 +15,7 @@
                 background-color: #f1f1f1;
                 width: 17%;
                 border-right: none;
-                height: 98px;
+                height: 194px;
             }
 
             .tabcontent 
@@ -27,7 +27,7 @@
                 width: 83%;
             }
 
-            button
+            .tablinks
             {
                 display: block;
                 background-color: inherit;
@@ -42,12 +42,12 @@
                 font-size: 13px;
             }
 
-            button:hover
+            .tablinks:hover
             {
                 background-color: #ddd;
             }
 
-            button.active
+            .tablinks.active
             {
                 background-color: #ccc;
             }
@@ -113,6 +113,7 @@
                         display: inline-block;
                         vertical-align: middle;
                         width: 90px;
+                        height: 50px;
                     }
                 }
             }
@@ -172,6 +173,72 @@
                         padding: 10px 20px;
                         width: 16%;
                     }                    
+                }
+            }
+
+            .insert-media-container
+            {
+                min-height: 700px;
+                .title-container
+                {
+                    font-size: 25px;
+                    color: #316df9; 
+                    font-weight: 700;
+                    padding-top: 20px;
+                }
+                .button-container
+                {
+                    button
+                    {
+                        background-color: #316df9;
+                        color: #fff;
+                        font-size: 15px;
+                        text-decoration: none;
+                        padding: 10px 20px;
+                        width: 16%;
+                    }                    
+                }
+                .left-container
+                {
+                    table
+                    {
+                        font-family: arial, sans-serif;
+                        border-collapse: collapse;
+                        width: 100%;
+                        display:block;
+                        height: 600px;
+                        overflow-y: scroll;
+                        text-align: center;
+                        background-color: #FFFFFF;
+                        margin-top: 15px;
+                    }
+
+                    th
+                    {
+                        border: 1px solid #dddddd;
+                        text-align: center;
+                        padding-top: 12px;
+                        padding-bottom: 12px;
+                        background-color: #4CAF50;
+                        color: white;
+                    }
+                    td
+                    {
+                        border: 1px solid #dddddd;
+                        text-align: center;
+                        padding: 10px;
+                        vertical-align: middle;
+                    }
+                    tr:nth-child(odd)
+                    {
+                        background-color: #f2f2f2;
+                    }
+                    button
+                    {
+                        display: inline-block;
+                        vertical-align: middle;
+                        width: 190px;
+                    }
                 }
             }
         }

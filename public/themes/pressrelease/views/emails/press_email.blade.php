@@ -142,7 +142,7 @@
 		</div>
 	</div>
 	<div style="text-align: center;padding: 0px 20px 0px 20px">                                         
-		Don't want to recieve amazing emails from us? <a href="*|UNSUB:http://press-iq.com/unsub|*">Unsubscribe.</a>
+		Don't want to recieve amazing emails from us? <a href="*|UNSUB:http://mywebsite.com/unsub|*">Unsubscribe.</a>
 	</div>
 </body>
 </html>

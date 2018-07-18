@@ -1,10 +1,10 @@
 @extends("press_user.member")
 @section("pressview")
-<div class="background-container">
-    <div class="pressview">
-       <div class="manage-user-container">
+<div class="background-container" style="height: 1200px;">
+    <div class="pressview" style="height: 1200px;">
+       <div class="manage-user-container" style="height: 1100px;">
          <div class="title-container">Profile Account</div>
-         @if(session()->has('message'))
+              @if(session()->has('message'))
               <div class="details">
               <span style="color: red;">
                 <strong>Error!</strong> {{ session('message') }}<br>
@@ -49,7 +49,7 @@
 .Title {
  
   color: white;
-  padding: 10px;
+  padding: 100px;
 } 
 </style>
 @endsection

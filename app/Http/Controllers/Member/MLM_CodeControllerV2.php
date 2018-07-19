@@ -392,6 +392,10 @@ class MLM_CodeControllerV2 extends Member
         {
             $cellphone_number = "+63".substr($phone,1);
         }
+        else
+        {
+            $cellphone_number = $request->cellphone_number;
+        }
         $slot_no          = $request->slot_no;
         $warehouse_id     = session('warehouse_id_1');
         $warehouse        = DB::table('tbl_warehouse')->where('warehouse_id', $warehouse_id)->first();
@@ -491,7 +495,7 @@ class MLM_CodeControllerV2 extends Member
                             $vip = DB::table("tbl_customer")->where("customer_id", $customer_id)->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')->join('tbl_membership', 'tbl_mlm_slot.slot_membership', '=', 'tbl_membership.membership_id')->first();
                             
                             $repurchase_cashback_points = DB::table('tbl_mlm_slot_points_log')->where([['points_log_slot', $vip->slot_id],['points_log_Sponsor', $vip->slot_id],['points_log_complan', 'REPURCHASE_CASHBACK']])->orderBy('points_log_id', 'DESC')->first();
-                            $repurchase_cashback_total = DB::table('tbl_mlm_slot_points_log')->where([['points_log_slot', $vip->slot_id],['points_log_Sponsor', $vip->slot_id],['points_log_complan', 'REPURCHASE_CASHBACK']])->sum('points_log_points');
+                            $repurchase_cashback_total = DB::table('tbl_mlm_slot_points_log')->where([['points_log_slot', $vip->slot_id],['points_log_from', 'Repurchase Cashback Points']])->sum('points_log_points');
 
                             $text_message        = "Hi " . ($vip ? ucwords(strtolower($vip->first_name)) : '') . "! You earned P". number_format($repurchase_cashback_points->points_log_points, 2) ." Cashback from your purchase at ". $warehouse->warehouse_name." Your total Cashback is P" . number_format($repurchase_cashback_total, 2) . ". Congratulations!";
                             $result              = Sms::SendSingleText($cellphone_number, $text_message, "", null);

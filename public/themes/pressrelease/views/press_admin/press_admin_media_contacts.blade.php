@@ -84,7 +84,7 @@
                                    <button type="button"  class="btn btn-warning center pop_chosen_recipient_btn" data-id="{{$_media->recipient_id}}">
                                    <i class="fa fa-wrench" name="" aria-hidden="true"></i> Edit</button>
                                    
-                                   <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/pressreleases_deleterecipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-danger center">
+                                   <button type="button"  class="btn btn-danger center pop_delete_media_btn" data-id="{{$_media->recipient_id}}">
                                    <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i> Delete</button></a>
                                  </td>
                               </tr>
@@ -184,7 +184,7 @@
                                     <button type="button"  class="btn btn-warning center pop_media_type_btn" data-id="{{$media->media_id}}">
                                     <i class="fa fa-wrench" name="" aria-hidden="true"></i> Edit</button> 
 
-                                    <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/delete_media_type/{{$media->media_id}}"><button type="button"  class="btn btn-danger center">
+                                    <button type="button"  class="btn btn-danger center pop_btn_delete_media_type" data-id="{{$media->media_id}}">
                                     <i class="fa fa-trash" name="industry_id" aria-hidden="true"></i> Delete</button></a>
                                   </td>
                               </tr>
@@ -219,7 +219,7 @@
                               <button type="button"  class="btn btn-warning center pop_industry_btn" data-id="{{$industry_name->industry_id}}">
                               <i class="fa fa-wrench" name="" aria-hidden="true"></i> Edit</button> 
 
-                              <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/delete_industry/{{$industry_name->industry_id}}"><button type="button"  class="btn btn-danger center">
+                              <button type="button"  class="btn btn-danger center pop_btn_delete_industry" data-id="{{$industry_name->industry_id}}">
                               <i class="fa fa-trash" name="industry_id" aria-hidden="true"></i> Delete</button></a>
                             </td>
                           </tr>
@@ -256,6 +256,62 @@
 </div>
 
 <div class="popup-view">
+  <div class="modal" id="viewPopupMediaDelete" name="viewPopupMediaDelete" role="dialog">
+    <div class="modal-dialog modal-sm" >
+      <form method="post" action="/pressadmin/pressreleases_deleterecipient/media" enctype="multipart/form-data">
+        {{csrf_field()}}
+        <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title">Are you sure you want to Delete?</h4>
+          </div>
+          <div class="modal-body">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="popup-view">
+  <div class="modal" id="viewPopupMedia" name="viewPopupMedia" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <form method="post" action="/pressadmin/add_media_type" enctype="multipart/form-data">
+        {{csrf_field()}}
+        <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Edit Media Type</h4>
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+              <button type="submit" id="submit_media" class="btn btn-primary pull-right" name="submit_media">Update Media Type</button>
+              <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+       </form>
+    </div>
+  </div>
+</div>
+
+<div class="popup-view">
+  <div class="modal" id="viewPopupMediaTypeDelete" name="viewPopupMediaTypeDelete" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <form method="post" action="/pressadmin/delete_media_type_contact" enctype="multipart/form-data">
+        {{csrf_field()}}
+        <div class="modal-content">
+          <div class="modal-header">
+               <h4 class="modal-title">Are you sure you want to Delete?</h4>
+          </div>
+          <div class="modal-body">
+          </div>
+        </div>
+       </form>
+    </div>
+  </div>
+</div>
+
+<div class="popup-view">
   <div class="modal" id="viewPopupIndustry" name="viewPopupIndustry" role="dialog">
     <div class="modal-dialog modal-lg">
         <form method="post" action="/pressadmin/add_industry" enctype="multipart/form-data">
@@ -278,20 +334,15 @@
 </div>
 
 <div class="popup-view">
-  <div class="modal" id="viewPopupMedia" name="viewPopupMedia" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <form method="post" action="/pressadmin/add_media_type" enctype="multipart/form-data">
+  <div class="modal" id="viewPopupIndustryDelete" name="viewPopupIndustryDelete" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <form method="post" action="/pressadmin/delete_industry_contact" enctype="multipart/form-data">
         {{csrf_field()}}
         <div class="modal-content">
           <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">Edit Media Type</h4>
+               <h4 class="modal-title">Are you sure you want to Delete?</h4>
           </div>
           <div class="modal-body">
-          </div>
-          <div class="modal-footer">
-              <button type="submit" id="submit_media" class="btn btn-primary pull-right" name="submit_media">Update Media Type</button>
-              <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
           </div>
         </div>
        </form>
@@ -348,18 +399,18 @@ document.getElementById("defaultOpen").click();
 </script>
 
 <script>
-  $('.pop_industry_btn').click(function()
+  $('.pop_delete_media_btn').click(function()
   {
-      var industry_id = $(this).data('id');
+      var recipient_id = $(this).data('id');
 
       $.ajax({
-        url: '/pressadmin/edit_industry/'+industry_id,
+        url: '/pressadmin/pressreleases_deleterecipient/'+recipient_id,
         type: 'GET',
         success: function (data)
         {
             setTimeout(function()
             {  
-                $('#viewPopupIndustry').modal('show');
+                $('#viewPopupMediaDelete').modal('show');
                 $('div.modal-body').html(data); 
             }, 100);
         }
@@ -387,6 +438,65 @@ document.getElementById("defaultOpen").click();
   });
 </script>
 
+<script>
+  $('.pop_btn_delete_media_type').click(function()
+  {
+      var media_id = $(this).data('id');
+
+      $.ajax({
+        url: '/pressadmin/delete_media_type/'+media_id,
+        type: 'GET',
+        success: function (data)
+        {
+            setTimeout(function()
+            {  
+                $('#viewPopupMediaTypeDelete').modal('show');
+                $('div.modal-body').html(data); 
+            }, 100);
+        }
+      });
+  });
+</script>
+
+<script>
+  $('.pop_industry_btn').click(function()
+  {
+      var industry_id = $(this).data('id');
+
+      $.ajax({
+        url: '/pressadmin/edit_industry/'+industry_id,
+        type: 'GET',
+        success: function (data)
+        {
+            setTimeout(function()
+            {  
+                $('#viewPopupIndustry').modal('show');
+                $('div.modal-body').html(data); 
+            }, 100);
+        }
+      });
+  });
+</script>
+
+<script>
+  $('.pop_btn_delete_industry').click(function()
+  {
+      var industry_id = $(this).data('id');
+
+      $.ajax({
+        url: '/pressadmin/delete_industry/'+industry_id,
+        type: 'GET',
+        success: function (data)
+        {
+            setTimeout(function()
+            {  
+                $('#viewPopupIndustryDelete').modal('show');
+                $('div.modal-body').html(data); 
+            }, 100);
+        }
+      });
+  });
+</script>
 
 @endsection
 

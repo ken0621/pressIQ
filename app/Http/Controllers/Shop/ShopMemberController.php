@@ -1405,31 +1405,44 @@ class ShopMemberController extends Shop
     {
        $data['_user_edits']  =   Tbl_pressiq_user::where('user_id',$id)->first();
        return view('press_admin.press_admin_edit_user',$data);
-       
-        // Session::put('edit_user',$id);
-        // return redirect()->back();
     }
+
     public function edit_admin($id)
     {
         $data['_admin_edits']  =  Tbl_pressiq_user::where('user_id',$id)->first();
         return view('press_admin.press_admin_edit_admin',$data);
-
-        // Session::put('edit_admin',$id);
-        // return redirect()->back();
     }
 
     public function manage_user_delete_admin($id)
     {
-      Tbl_pressiq_user::where('user_id',$id)->delete();
-      Session::flash('delete_admin', "Admin Already Deleted!");
-      return  redirect::back();
+        $data['_admin_deletes']  =  Tbl_pressiq_user::where('user_id',$id)->first();
+        return view('press_admin.press_admin_delete_admin',$data);
+    }
+
+    public function manage_user_delete_admin_user(Request $request)
+    {
+        if ($request->action == 'delete') 
+        {
+            Tbl_pressiq_user::where('user_id',$request->admin_id)->delete();
+            Session::flash('delete_admin', "Admin Already Deleted!");
+        }
+        return  redirect::back();
     }
 
     public function manage_user_delete_user($id)
     {
-      Tbl_pressiq_user::where('user_id',$id)->delete();
-      Session::flash('delete_user', "User Already Deleted!");
-      return  redirect::back();
+        $data['_user_deletes']  =   Tbl_pressiq_user::where('user_id',$id)->first();
+        return view('press_admin.press_admin_delete_user',$data);
+    }
+
+    public function delete_user_account(Request $request)
+    {
+        if($request->action == 'delete')
+        {
+            Tbl_pressiq_user::where('user_id',$request->user_id)->delete();
+            Session::flash('delete_user', "User Already Deleted!");
+        }
+        return redirect::back();
     }
    
     public function pressadmin_email()
@@ -1629,14 +1642,24 @@ class ShopMemberController extends Shop
 
     public function pressreleases_deleterecipient($id)
     {
-        Tbl_press_release_recipient::where('recipient_id',$id)->delete();
-        Session::flash('delete', "Recipient Already Deleted!");
+        $data['recipient_details_delete']  =  Tbl_press_release_recipient::where('recipient_id',$id)->first();
+        return view('press_admin.press_admin_media_contacts_delete',$data);
+    }
+
+    public function pressreleases_deleterecipient_media(Request $request)
+    {
+        if($request->action =='delete')
+        {
+            Tbl_press_release_recipient::where('recipient_id',$request->recipient_id)->delete();
+            Session::flash('delete', "Recipient Already Deleted!");
+        }
         return  redirect::back();
     }
+
     public function pressreleases_edit_recipient($id)
     {
         $data['recipient_details']  =  Tbl_press_release_recipient::where('recipient_id',$id)->first();
-       return view('press_admin.press_admin_media_contacts_update',$data);
+        return view('press_admin.press_admin_media_contacts_update',$data);
     }
   
     public function pressuser_choose_recipient(Request $request)  
@@ -1931,9 +1954,18 @@ class ShopMemberController extends Shop
 
     public function delete_industry($id)
     {
-      Tbl_pressiq_industry::where('industry_id',$id)->delete();
-      Session::flash('delete_industry', 'Industry Successfully Deleted!');
-      return  redirect::back();
+        $data['_industry_deletes']  =   Tbl_pressiq_industry::where('industry_id',$id)->first();
+        return view('press_admin.press_admin_industry_delete',$data);
+    }
+
+    public function delete_industry_contact(Request $request)
+    {
+        if($request->action =='delete')
+        {
+            Tbl_pressiq_industry::where('industry_id',$request->industry_id)->delete();
+            Session::flash('delete_industry', 'Industry Successfully Deleted!');
+        }
+        return redirect::back();
     }
 
     public function add_media_type(Request $request)
@@ -1965,10 +1997,20 @@ class ShopMemberController extends Shop
 
     public function delete_media_type($id)
     {
-      Tbl_pressiq_media_type::where('media_id',$id)->delete();
-      Session::flash('delete_media_name', 'Media Successfully Deleted!');
-      return  redirect::back();
+        $data['_media_delete']  =   Tbl_pressiq_media_type::where('media_id',$id)->first();
+        return view('press_admin.press_admin_media_delete',$data);
     }
+
+    public function delete_media_type_contact(Request $request)
+    {
+        if($request->action == 'delete')
+        {
+            Tbl_pressiq_media_type::where('media_id',$request->media_id)->delete();
+            Session::flash('delete_media_name', 'Media Successfully Deleted!');
+        }
+        return redirect::back();
+    }
+  
   
 
     //*Press Release*//

@@ -156,7 +156,7 @@
                             {{-- <a id="edit" href="/pressadmin/edit_user/{{$_user_account->user_id}}"> --}}
                             {{-- <button type="button"  class="btn btn-warning center "><i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>  Edit</button></a> --}}
 
-                            <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/delete_user/{{$_user_account->user_id}}"><button type="button" class="btn btn-danger center">
+                            <button type="button" class="btn btn-danger center pop_user_delete" data-id="{{$_user_account->user_id}}">
                             <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>  Delete</button></a>
 
                             <a onclick="return confirm('Force to Login?');" href="/pressadmin/manage_force_login/{{$_user_account->user_id}}"><button type="button" class="btn btn-success center">
@@ -190,7 +190,8 @@
                            {{--  <a href="/pressadmin/edit_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-warning center">
                             <i class="fa fa-wrench" name="recipient_id" aria-hidden="true"></i>  Edit</button> --}}
 
-                            <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/manage_user/delete_admin/{{$_admin_account->user_id}}"><button type="button"  class="btn btn-danger center">
+                            {{-- <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/manage_user/delete_admin/{{$_admin_account->user_id}}"> --}}
+                            <button type="button"  class="btn btn-danger center pop_admin_delete" data-id="{{$_admin_account->user_id}}">
                             <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>  Delete</button>
                            </td>
                         </tr>
@@ -231,10 +232,8 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
               <h4 class="modal-title">Update User</h4>
           </div>
-
           <div class="modal-body">
           </div>
-
           <div class="modal-footer">
               <button type="submit" id="submit_button" class="btn btn-primary pull-right" name="submit_button">Update User</button>
               <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
@@ -245,6 +244,22 @@
   </div>
 </div>
 
+<div class="popup-view">
+  <div class="modal" id="viewPopupDeleteUser" name="viewPopupDeleteUser" role="dialog">
+    <div class="modal-dialog modal-sm" >
+      <form method="post" action="/pressadmin/delete_user_account" enctype="multipart/form-data">
+        {{csrf_field()}}
+        <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title">Are you sure you want to Delete?</h4>
+          </div>
+          <div class="modal-body">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <div class="popup-view">
   <div class="modal" id="viewAdminPopup" name="viewAdminPopup" role="dialog">
@@ -256,16 +271,31 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
               <h4 class="modal-title">Update Admin</h4>
           </div>
-
           <div class="modal-body">
           </div>
-
           <div class="modal-footer">
               <button type="submit" id="submit_button" class="btn btn-primary pull-right" name="submit_button">Update Admin</button>
               <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
           </div>
         </div>
       </form> 
+    </div>
+  </div>
+</div>
+
+<div class="popup-view">
+  <div class="modal" id="viewPopupDeleteAdmin" name="viewPopupDeleteAdmin" role="dialog">
+    <div class="modal-dialog modal-sm" >
+      <form method="post" action="/pressadmin/manage_user/delete_admin_user" enctype="multipart/form-data">
+        {{csrf_field()}}
+        <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title">Are you sure you want to Delete?</h4>
+          </div>
+          <div class="modal-body">
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -323,6 +353,26 @@ document.getElementById("defaultOpen").click();
 </script>
 
 <script>
+  $('.pop_user_delete').click(function()
+  {
+      var user_id = $(this).data('id');
+
+      $.ajax({
+        url: '/pressadmin/delete_user/'+user_id,
+        type: 'GET',
+        success: function (data)
+        {
+            setTimeout(function()
+            {  
+                $('#viewPopupDeleteUser').modal('show');
+                $('div.modal-body').html(data); 
+            }, 100);
+        }
+      });
+  });
+</script>
+
+<script>
   $('.pop_admin_btn').click(function()
   {
       var admin_id = $(this).data('id');
@@ -335,6 +385,26 @@ document.getElementById("defaultOpen").click();
             setTimeout(function()
             {  
                 $('#viewAdminPopup').modal('show');
+                $('div.modal-body').html(data); 
+            }, 100);
+        }
+      });
+  });
+</script>
+
+<script>
+  $('.pop_admin_delete').click(function()
+  {
+      var admin_id = $(this).data('id');
+
+      $.ajax({
+        url: '/pressadmin/manage_user/delete_admin/'+admin_id,
+        type: 'GET',
+        success: function (data)
+        {
+            setTimeout(function()
+            {  
+                $('#viewPopupDeleteAdmin').modal('show');
                 $('div.modal-body').html(data); 
             }, 100);
         }

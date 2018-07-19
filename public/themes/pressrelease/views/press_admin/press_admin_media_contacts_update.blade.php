@@ -1,7 +1,4 @@
 
-    <form method="post" action="/pressadmin/pressreleases_addrecipient" enctype="multipart/form-data">
-        {{csrf_field()}}
-
         <input type="hidden" id="name" name="action" class="form-control" value="edit">
         <input type="hidden" id="name" name="recipient_id" class="form-control" value="{{$recipient_details->recipient_id}}">
 

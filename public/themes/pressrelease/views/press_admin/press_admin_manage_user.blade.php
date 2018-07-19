@@ -159,7 +159,8 @@
                             <button type="button" class="btn btn-danger center pop_user_delete" data-id="{{$_user_account->user_id}}">
                             <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>  Delete</button></a>
 
-                            <a onclick="return confirm('Force to Login?');" href="/pressadmin/manage_force_login/{{$_user_account->user_id}}"><button type="button" class="btn btn-success center">
+                            {{-- <a onclick="return confirm('Force to Login?');" href="/pressadmin/manage_force_login/{{$_user_account->user_id}}"> --}}
+                            <button type="button" class="btn btn-success center pop_force_login" data-id="{{$_user_account->user_id}}">
                             <i class="fa fa-vcard-o" name="recipient_id" aria-hidden="true"></i>  Force Login</button></a>
                            </td>
                         </tr>
@@ -300,6 +301,24 @@
   </div>
 </div>
 
+<div class="popup-view">
+  <div class="modal" id="viewPopupForceLogin" name="viewPopupForceLogin" role="dialog">
+    <div class="modal-dialog modal-sm" >
+      <form method="post" action="/pressadmin/force_login" >
+        {{csrf_field()}}
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Force to Login?</h4>
+          </div>
+          <div class="modal-body">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 @endsection
 
 @section("css") 
@@ -405,6 +424,26 @@ document.getElementById("defaultOpen").click();
             setTimeout(function()
             {  
                 $('#viewPopupDeleteAdmin').modal('show');
+                $('div.modal-body').html(data); 
+            }, 100);
+        }
+      });
+  });
+</script>
+
+<script>
+  $('.pop_force_login').click(function()
+  {
+      var user_id_force = $(this).data('id');
+
+      $.ajax({
+        url: '/pressadmin/manage_force_login/'+user_id_force,
+        type: 'GET',
+        success: function (data)
+        {
+            setTimeout(function()
+            {  
+                $('#viewPopupForceLogin').modal('show');
                 $('div.modal-body').html(data); 
             }, 100);
         }

@@ -122,6 +122,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/pressuser/media_contacts/delete/{id}', 			'Shop\ShopMemberController@pressuser_media_contacts_delete');
 	Route::post('/pressadmin/pressreleases/recipient',				'Shop\ShopMemberController@pressadmin_pressreleases_recipient'); //PRESS RELEASE
 	Route::any('/pressadmin/pressreleases_addrecipient',		    'Shop\ShopMemberController@pressadmin_pressrelease_addrecipient');//PRESS RELEASE
+	Route::any('/pressadmin/pressreleases_deleterecipient/media', 	'Shop\ShopMemberController@pressreleases_deleterecipient_media');//PRESS RELEASE
 	Route::any('/pressadmin/pressreleases_deleterecipient/{id}', 	'Shop\ShopMemberController@pressreleases_deleterecipient');//PRESS RELEASE
 	Route::any('/pressadmin/pressreleases_edit_recipient/{id}', 	'Shop\ShopMemberController@pressreleases_edit_recipient');//PRESS RELEASE
 	Route::get('/pressadmin/import_recipient', 						'Shop\ShopMemberController@press_admin_import_email');//PRESS RELEASE
@@ -129,12 +130,15 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('downloadExcel/{type}',  							'Shop\ShopMemberController@downloadExcel');
 	Route::post('importExcel', 										'Shop\ShopMemberController@importExcel');
 	Route::any('/pressadmin/add_industry', 							'Shop\ShopMemberController@add_industry'); //PRESS RELEASE
+	Route::any('/pressadmin/delete_industry_contact', 				'Shop\ShopMemberController@delete_industry_contact'); //PRESS RELEASE
 	Route::any('/pressadmin/edit_industry/{id}',					'Shop\ShopMemberController@edit_industry'); //PRESS RELEASE
 	Route::any('/pressadmin/delete_industry/{id}',					'Shop\ShopMemberController@delete_industry'); //PRESS RELEASE
 	Route::any('/pressadmin/add_media_type', 						'Shop\ShopMemberController@add_media_type'); //PRESS RELEASE
+	Route::any('/pressadmin/delete_media_type_contact',				'Shop\ShopMemberController@delete_media_type_contact'); //PRESS RELEASE
 	Route::any('/pressadmin/edit_media_type/{id}',					'Shop\ShopMemberController@edit_media_type'); //PRESS RELEASE
 	Route::any('/pressadmin/delete_media_type/{id}',				'Shop\ShopMemberController@delete_media_type'); //PRESS RELEASE
 	
+
 
 	Route::get('/announcement', 'Shop\ShopAboutController@announcement'); //Alternative
 	Route::get('/blog', 'Shop\ShopBlogController@index');

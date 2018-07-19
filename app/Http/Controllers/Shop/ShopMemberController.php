@@ -1366,23 +1366,31 @@ class ShopMemberController extends Shop
 
     public function pressadmin_manage_force_login($id)
     {
+        $data['_force_login_id']  =  Tbl_pressiq_user::where('user_id',$id)->first();
+        return view('press_admin.press_admin_force_login',$data);
+    }
 
-        session::flush();
-        $_user_data = DB::table('tbl_pressiq_user')->where('user_id',$id)->get();
-        
-        foreach ($_user_data as $user_data) 
+    public function force_login(Request $request)
+    {
+        if($request->action == 'force')
         {
-            # code...
-        }
-        Session::put('user_email', $user_data->user_email);
-        Session::put('user_first_name',$user_data->user_first_name);
-        Session::put('user_last_name',$user_data->user_last_name);
-        Session::put('user_company_name',$user_data->user_company_name);
-        Session::put('user_company_image',$user_data->user_company_image);
-        Session::put('pr_user_level',$user_data->user_level);
-        Session::put('pr_user_id',$user_data->user_id);
+            session::flush();
+            $_user_data = DB::table('tbl_pressiq_user')->where('user_id',$request->user_id)->get();
+            
+            foreach ($_user_data as $user_data) 
+            {
+               
+            }
+            Session::put('user_email', $user_data->user_email);
+            Session::put('user_first_name',$user_data->user_first_name);
+            Session::put('user_last_name',$user_data->user_last_name);
+            Session::put('user_company_name',$user_data->user_company_name);
+            Session::put('user_company_image',$user_data->user_company_image);
+            Session::put('pr_user_level',$user_data->user_level);
+            Session::put('pr_user_id',$user_data->user_id);
 
-        return Redirect::to("/signin"); 
+            return Redirect::to("/signin"); 
+        }
     }
 
     public function pressadmin_manage_admin_edit(Request $request)
@@ -1594,9 +1602,18 @@ class ShopMemberController extends Shop
 
     public function email_delete($id)
     {
-      Tbl_pressiq_press_releases::where('pr_id',$id)->delete();
-      Session::flash('delete_email', "Email Already Deleted!");
-      return  redirect::back();
+        $data['_email_admin_delete']  =  Tbl_pressiq_press_releases::where('pr_id',$id)->first();
+        return view('press_admin.press_admin_email_delete',$data);
+    }
+
+    public function email_delete_admin(Request $request)
+    {
+        if($request->action == 'delete')
+        {
+            Tbl_pressiq_press_releases::where('pr_id',$request->pr_id)->delete();
+            Session::flash('delete_email', "Email Already Deleted!");
+        }
+        return redirect::back();
     }
 
     public function pressadmin_pressrelease_addrecipient(Request $request)

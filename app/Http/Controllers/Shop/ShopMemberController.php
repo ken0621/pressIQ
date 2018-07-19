@@ -1405,31 +1405,44 @@ class ShopMemberController extends Shop
     {
        $data['_user_edits']  =   Tbl_pressiq_user::where('user_id',$id)->first();
        return view('press_admin.press_admin_edit_user',$data);
-       
-        // Session::put('edit_user',$id);
-        // return redirect()->back();
     }
+
     public function edit_admin($id)
     {
         $data['_admin_edits']  =  Tbl_pressiq_user::where('user_id',$id)->first();
         return view('press_admin.press_admin_edit_admin',$data);
-
-        // Session::put('edit_admin',$id);
-        // return redirect()->back();
     }
 
     public function manage_user_delete_admin($id)
     {
-      Tbl_pressiq_user::where('user_id',$id)->delete();
-      Session::flash('delete_admin', "Admin Already Deleted!");
-      return  redirect::back();
+        $data['_admin_deletes']  =  Tbl_pressiq_user::where('user_id',$id)->first();
+        return view('press_admin.press_admin_delete_admin',$data);
+    }
+
+    public function manage_user_delete_admin_user(Request $request)
+    {
+        if ($request->action == 'delete') 
+        {
+            Tbl_pressiq_user::where('user_id',$request->admin_id)->delete();
+            Session::flash('delete_admin', "Admin Already Deleted!");
+        }
+        return  redirect::back();
     }
 
     public function manage_user_delete_user($id)
     {
-      Tbl_pressiq_user::where('user_id',$id)->delete();
-      Session::flash('delete_user', "User Already Deleted!");
-      return  redirect::back();
+        $data['_user_deletes']  =   Tbl_pressiq_user::where('user_id',$id)->first();
+        return view('press_admin.press_admin_delete_user',$data);
+    }
+
+    public function delete_user_account(Request $request)
+    {
+        if($request->action == 'delete')
+        {
+            Tbl_pressiq_user::where('user_id',$request->user_id)->delete();
+            Session::flash('delete_user', "User Already Deleted!");
+        }
+        return redirect::back();
     }
    
     public function pressadmin_email()

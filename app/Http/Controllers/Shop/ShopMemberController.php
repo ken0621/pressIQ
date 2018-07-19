@@ -331,11 +331,20 @@ class ShopMemberController extends Shop
     }
     public function pressuser_delete_draft($pid)
     {
-        Tbl_pressiq_press_releases::where('pr_id',$pid)->delete();
-        Session::forget('pr_edit');
-        Session::flash('delete', "Draft Already Deleted!");
-        return  redirect::back();
+        $data['_draft_release']  =  Tbl_pressiq_press_releases::where('pr_id',$pid)->first();
+        return view('press_user.press_user_draft_delete',$data);
     } 
+
+    public function delete_draft_release(Request $request)
+    {
+        if($request->action == 'delete')
+        {
+            Tbl_pressiq_press_releases::where('pr_id',$request->pr_id)->delete();
+            Session::forget('pr_edit');
+            Session::flash('delete', "Draft Already Deleted!");
+            return  redirect::back();
+        }
+    }
 
     public function pressuser_edit_draft($pid)
     {

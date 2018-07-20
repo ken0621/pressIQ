@@ -13,8 +13,7 @@
                 <tr>    
                     <th>Press Release Title</th>
                     <th>Status</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
+                    <th colspan="2">Action</th>
                 </tr>
                 @foreach($drafts as $draft)
                 <tr>

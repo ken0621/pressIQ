@@ -743,65 +743,74 @@ class ShopMemberController extends Shop
         }
     }
 
-    public function press_user_manage_user_update(Request $request)
+    public function press_user_manage_user_update($id)
     {
-        if(request()->isMethod("post"))
-        {       
-            $value["user_first_name"]       = request('user_first_name');
-            $rules["user_first_name"]       = ['required'];
-            $value["user_last_name"]        = request('user_last_name'); 
-            $rules["user_last_name"]        = ['required'];  
-            $value["password"]              = request('user_password');
-            $value["password_confirmation"] = request("user_password_confirmation");
-            $rules["password"]              = ['required','min:5','confirmed'];
-            $value["user_company_name"]     = request("user_company_name");
-            $rules["user_company_name"]     = ['required'];
-            $value["user_company_image"]    = request("user_company_image");
-            $rules["user_company_image"]    = ['required'];
-            $validator = Validator::make($value, $rules);
+        $data['_profile']  =    DB::table('tbl_pressiq_user')->where('user_id',$id)->first();
+        return view('press_user.press_user_profile_update',$data);
+    }
 
-            if ($validator->fails()) 
-            {
-                return Redirect::back()->with('message', $validator->errors()->first())->withInput();
-            }
-            else
-            {
-               
+    public function press_user_profile_update(Request $request)
+    {
+        if($request->action == 'edit')
+        {
+            if(request()->isMethod("post"))
+            {       
+                $value["user_first_name"]       = request('user_first_name');
+                $rules["user_first_name"]       = ['required'];
+                $value["user_last_name"]        = request('user_last_name'); 
+                $rules["user_last_name"]        = ['required'];  
+                $value["password"]              = request('user_password');
+                $value["password_confirmation"] = request("user_password_confirmation");
+                $rules["password"]              = ['required','min:5','confirmed'];
+                $value["user_company_name"]     = request("user_company_name");
+                $rules["user_company_name"]     = ['required'];
+                $value["user_company_image"]    = request("user_company_image");
+                $rules["user_company_image"]    = ['required'];
+                $validator = Validator::make($value, $rules);
+
+                if ($validator->fails()) 
+                {
+                    return Redirect::back()->with('message', $validator->errors()->first())->withInput();
+                }
+                else
+                {
+
                 $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
                 $path ="";
+
                 if($request->hasFile('user_company_image'))
                 {
                     $path = Storage::putFile('user_company_image', $request->file('user_company_image'));
-                }               
-                $data["user_first_name"]                 = $request->user_first_name;
-                $data["user_last_name"]                  = $request->user_last_name;
-                $data["user_email"]                      = $request->user_email;
-                $data["user_password"]                   = Crypt::encrypt(request('user_password'));
-                $data["user_date_created"]               = Carbon::now();
-                $data["user_company_name"]               = $request->user_company_name;
-                $data["user_level"]                      = "2";
-                if($path!="")
-                {
-                    $data["user_company_image"]          = $path_prefix.$path;
-                }        
+                    }               
+                    $data["user_first_name"]                 = $request->user_first_name;
+                    $data["user_last_name"]                  = $request->user_last_name;
+                    $data["user_email"]                      = $request->user_email;
+                    $data["user_password"]                   = Crypt::encrypt(request('user_password'));
+                    $data["user_date_created"]               = Carbon::now();
+                    $data["user_company_name"]               = $request->user_company_name;
+                    $data["user_level"]                      = "2";
+                    if($path!="")
+                    {
+                        $data["user_company_image"]          = $path_prefix.$path;
+                    }        
 
-                Tbl_pressiq_user::where('user_id', session('pr_user_id'))
-                                    ->update([
-                                        'user_first_name'     =>request('user_first_name'),
-                                        'user_last_name'      =>request('user_last_name'),
-                                        'user_company_name'   =>request('user_company_name'),
-                                        'user_password'       =>Crypt::encrypt(request('user_password')),
-                                        'user_company_image'  =>$path_prefix.$path,
-                                        ]);
-                Session::flush('');
-                Session::flash('update_user_profile');
-                return Redirect::to("/signin");           
-               
-            }       
-        }
-        else
-        {
-            return redirect::back();
+                    Tbl_pressiq_user::where('user_id', session('pr_user_id'))
+                    ->update([
+                    'user_first_name'     =>request('user_first_name'),
+                    'user_last_name'      =>request('user_last_name'),
+                    'user_company_name'   =>request('user_company_name'),
+                    'user_password'       =>Crypt::encrypt(request('user_password')),
+                    'user_company_image'  =>$path_prefix.$path,
+                    ]);
+                    Session::flush('');
+                    Session::flash('update_user_profile');
+                    return Redirect::to("/signin");           
+                }       
+            }
+            else
+            {
+                return redirect::back();
+            }
         }
     }
 

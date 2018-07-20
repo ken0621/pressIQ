@@ -71,30 +71,30 @@
                     </select>
                     
                     <div class="title">Language:</div>
-                    <select data-placeholder="--Choose a Language--" multiple class="chosen-select" id="language" name="language[]">
+                    <select data-placeholder="--Choose a Language--" multiple class="chosen-select pop_language" id="language" name="language[]">
                         @foreach($_language as $language)
                         <option value="{{$language->language}}">{{$language->language}}</option>
                         @endforeach
                     </select>
                     
                     <div class="title">Industry Type:</div>
-                    <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select" id="industry_type" name="industry_type[]">
+                    <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select pop_industry" id="industry_type" name="industry_type[]">
                           @foreach($_industry_type as $industry)
                         <option value="{{$industry->industry_type}}">{{$industry->industry_type}}</option>
                           @endforeach
                     </select>
 
                     <div class="title">Media Type:</div>
-                    <select data-placeholder="--Choose a media type--" multiple class="chosen-select" id="media_type" name="media_type[]">
+                    <select data-placeholder="--Choose a media type--" multiple class="chosen-select pop_media" id="media_type" name="media_type[]">
                           @foreach($_media_type as $media)
                         <option value="{{$media->media_type}}">{{$media->media_type}}</option>
                           @endforeach
                     </select>
 
                     <div class="title">Title of Journalist:</div>
-                    <select data-placeholder="--Choose a title of journalist--" multiple class="chosen-select" id="title_of_journalist" name="title_of_journalist[]">
-                          @foreach($_title_of_journalist as $title)
-                        <option value="{{$title->title_of_journalist}}">{{$title->title_of_journalist}}</option>
+                    <select data-placeholder="--Choose a title of journalist--" multiple class="chosen-select pop_title" id="position" name="position[]">
+                          @foreach($_position as $position)
+                        <option value="{{$position->position}}">{{$position->position}}</option>
                           @endforeach
                     </select>
 
@@ -134,7 +134,7 @@
                     <span class="button"><button type="submit" name="draft" value="draft" formaction="/pressuser/pressrelease/draft"><a>Save as draft</a></button></span>
                     <span class="preview-button"><a href="#" id="prev_btn">Preview</a></span>
 
-                    <span class="button"><button type="button" id="btnnextCreate" class="tablinks"><a>Continue &raquo;</a></button></span>
+                    <span class="button"><button type="button" id="btnnextCreate" class="tablinks pop_please_fill"><a>Continue &raquo;</a></button></span>
                   </div>
                 </div>
 
@@ -149,30 +149,30 @@
                     </select>
 
                     <div class="title">Language:</div>
-                    <select data-placeholder="--Choose a Language--" multiple class="chosen-select" id="language" name="language[]">
+                    <select data-placeholder="--Choose a Language--" multiple class="chosen-select pop_language" id="language" name="language[]">
                         @foreach($_language as $language)
                         <option value="{{$language->language}}">{{$language->language}}</option>
                         @endforeach
                     </select>
 
                     <div class="title">Industry Type:</div>
-                    <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select" id="industry_type" name="industry_type[]" >
+                    <select data-placeholder="--Choose a industry type--" multiple  class="chosen-select pop_industry" id="industry_type" name="industry_type[]" >
                           @foreach($_industry_type as $industry)
                         <option value="{{$industry->industry_type}}">{{$industry->industry_type}}</option>
                           @endforeach
                     </select>
 
                     <div class="title">Media Type:</div>
-                    <select data-placeholder="--Choose a media type--" multiple class="chosen-select" id="media_type" name="media_type[]">
+                    <select data-placeholder="--Choose a media type--" multiple class="chosen-select pop_media" id="media_type" name="media_type[]">
                           @foreach($_media_type as $media)
                         <option value="{{$media->media_type}}">{{$media->media_type}}</option>
                           @endforeach
                     </select>
 
                     <div class="title">Title:</div>
-                    <select data-placeholder="--Choose a title of journalist--" multiple class="chosen-select" id="title_of_journalist" name="title_of_journalist[]">
-                          @foreach($_title_of_journalist as $title)
-                        <option value="{{$title->title_of_journalist}}">{{$title->title_of_journalist}}</option>
+                    <select data-placeholder="--Choose a title of journalist--" multiple class="chosen-select pop_title" id="position" name="position[]">
+                          @foreach($_position as $position)
+                        <option value="{{$position->position}}">{{$position->position}}</option>
                           @endforeach
                     </select>
 
@@ -190,7 +190,7 @@
                     {{-- POPUP CHOOSE RECIPIENT --}}
                     <span class="choose-button" readon><a href="javascript:" id="pop_recipient_btn">Choose Recipient</a></span>
                     {{-- POPUP CHOOSE RECIPIENT --}}
-                    <span class="button"><button type="button" id="btnnextSend" class="tablinks"><a>Continue &raquo;</a></button></span>
+                    <span class="button"><button type="button" id="btnnextSend" class="tablinks pop_up_next"><a>Continue &raquo;</a></button></span>
                       @endif
                     <div class="button-container"></div>
                 </div>
@@ -277,11 +277,60 @@
   </div>
 </div>
 
+
+<div class="popup-view">
+  <div class="modal fade" id="viewPopupPleaseFill" name="viewPopupPleaseFill" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content" style="height: 150px">
+          <div class="modal-header" style="background-color:#C91F37;">
+            <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
+            <h4 class="modal-title" style="color:white;">Warning!</h4>
+          </div>
+          <div class="modal-body" style="overflow-y: auto;">
+            <label style="color:red;font-size: 20px;text-align: center;">Please fill the required fields!</label>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="popup-view">
+  <div class="modal fade" id="viewPopupNext" name="viewPopupNext" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content" style="height: 150px">
+          <div class="modal-header" style="background-color:#C91F37;">
+            <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
+            <h4 class="modal-title" style="color:white;">Warning!</h4>
+          </div>
+          <div class="modal-body" style="overflow-y: auto; text-align: center;">
+            <label style="color:red;font-size: 20px;">Choose Recipient First!</label>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="popup-view">
+  <div class="modal fade" id="viewPopupCountryFirst" name="viewPopupCountryFirst" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content" style="height: 150px">
+          <div class="modal-header" style="background-color:#C91F37;">
+            <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
+            <h4 class="modal-title" style="color:white;">Warning!</h4>
+          </div>
+          <div class="modal-body" style="overflow-y: auto; text-align: center;">
+            <label style="color:red;font-size: 20px;">Please Choose Country First!</label>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/press_user_pressrelease.css">
 @endsection 
-@section("script")
+@section("script")  
 <script>
    function openCity(evt, cityName) 
    {
@@ -331,11 +380,11 @@
 </script>
 
 <script> 
-   $('#language').change(function() 
+   $('.pop_language').change(function() 
    {
      if(choose_country.value =="")
         {
-          alert('Please Choose Country First!');
+          $('#viewPopupCountryFirst').modal('show');
           $('#language').attr('disabled', 'disabled');
         }
     else
@@ -344,11 +393,11 @@
         }
    });
 
-   $('#industry_type').change(function() 
+   $('.pop_industry').change(function() 
    {
      if(choose_country.value =="")
         {
-          alert('Please Choose Country First!');
+          $('#viewPopupCountryFirst').modal('show');
           $('#industry_type').attr('disabled', 'disabled');
         }
     else
@@ -357,11 +406,11 @@
         }
    });
 
-   $('#media_type').change(function() 
+   $('.pop_media').change(function() 
    {
      if(choose_country.value =="")
         {
-          alert('Please Choose Country First!');
+          $('#viewPopupCountryFirst').modal('show');
           $('#media_type').attr('disabled', 'disabled');
         }
     else
@@ -370,16 +419,16 @@
         }
    });
 
-   $('#title_of_journalist').change(function() 
+   $('.pop_title').change(function() 
    {
      if(choose_country.value =="")
         {
-          alert('Please Choose Country First!');
-          $('#title_of_journalist').attr('disabled', 'disabled');
+          $('#viewPopupCountryFirst').modal('show');
+          $('#position').attr('disabled', 'disabled');
         }
     else
         {
-           $('#title_of_journalist').attr('disabled', false);
+           $('#position').attr('disabled', false);
         }
    });
 
@@ -402,7 +451,33 @@
     $('#previewPopup').modal('show'); 
   });
 
-  $('#btnnextCreate').click(function()
+  // $('#btnnextCreate').click(function()
+  // {
+  //  if(pr_type.value !="" && pr_headline.value !="" && tinymce.get('pr_content').getContent() != "" && tinymce.get('pr_boiler_content').getContent() != "")
+  //       {
+  //         openCity(event, 'choose_recipient');     
+  //       }
+
+  //   else
+  //       {
+  //         alert('Please fill the required fields!'); 
+  //       }
+  // });
+
+  // $('#btnnextSend').click(function()
+  // {
+  //   if(recipient_email.value!="")
+  //       {
+  //         openCity(event, 'send_release');    
+  //       }
+
+  //   else
+  //       {
+  //         alert('Choose Recipient First!'); 
+  //       }
+  // });
+
+  $('.pop_please_fill').click(function()
   {
    if(pr_type.value !="" && pr_headline.value !="" && tinymce.get('pr_content').getContent() != "" && tinymce.get('pr_boiler_content').getContent() != "")
         {
@@ -411,11 +486,11 @@
 
     else
         {
-          alert('Please fill the required fields!'); 
+          $('#viewPopupPleaseFill').modal('show');
         }
   });
 
-  $('#btnnextSend').click(function()
+  $('.pop_up_next').click(function()
   {
     if(recipient_email.value!="")
         {
@@ -424,7 +499,7 @@
 
     else
         {
-          alert('Choose Recipient First!'); 
+           $('#viewPopupNext').modal('show');
         }
   });
 

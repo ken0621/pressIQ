@@ -13,8 +13,7 @@
                 <tr>
                     <th style="width: 30%;">Email From</th>
                     <th style="width: 60%;">Header</th>
-                    <th style="width: 60%;">Edit</th>
-                    <th style="width: 60%;">Delete</th>
+                    <th style="width: 60%;" colspan="2">Action</th>
                     @foreach($_email as $email)
                     <tr>
                         <td style="width: 30%;">{{$email->pr_from}}</td>

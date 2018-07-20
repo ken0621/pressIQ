@@ -23,7 +23,7 @@
                   @foreach($pr as $prs)
                   <tr>
                       <td>{{$prs->pr_headline}}</td>
-                      <td>{{$prs->pr_date_sent}}</td>
+                      <td>{{date("F d, Y - H:i:s", strtotime($prs->pr_date_sent))}}</td>
                       <td>{{$prs->pr_status}}</td>
                   </tr>
                   @endforeach

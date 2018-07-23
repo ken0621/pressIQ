@@ -420,7 +420,6 @@ class MLM2
 
 			$_slot_points = Tbl_mlm_slot_points_log::where("points_log_slot", $slot->slot_id)->get();
 
-
 			foreach($_slot_points as $slot_points)
 			{
 				$wallet_plan = strtolower($slot_points->points_log_complan);
@@ -440,16 +439,16 @@ class MLM2
 					if($slot_points->points_log_converted == 1)
 					{
 						$return["_points"]->$wallet_plan -= $slot_points->points_log_points;
+
 					}
 					
 					$return["_wallet"]->total_points -= $slot_points->points_log_points;
+
 				}
 			}
 		}
-
 		$_wallet = json_encode($return["_wallet"]);
 		$_points = json_encode($return["_points"]);
-
 		/* DISPLAY FORMAT */
 		foreach(json_decode($_wallet) as $key => $wallet)
 		{

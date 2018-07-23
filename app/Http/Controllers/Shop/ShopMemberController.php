@@ -127,6 +127,8 @@ class ShopMemberController extends Shop
         if(Self::$customer_info)
         {
             $data["customer_summary"]   = MLM2::customer_income_summary($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            // $s = DB::table('tbl_mlm_slot_points_log')->where('points_log_slot', 2)->where('points_log_complan', 'UNILEVEL_CASHBACK_POINTS')->sum('points_log_points');
+            // dd($s);
             $data["wallet"]             = $data["customer_summary"]["_wallet"];
             $data["points"]             = $data["customer_summary"]["_points"];
             $data["_wallet_plan"]       = $data["customer_summary"]["_wallet_plan"];
@@ -240,7 +242,6 @@ class ShopMemberController extends Shop
             }
             $data['token_titles']   = $token_titles;
             $data['token_amounts']  = $token_amounts;
-            
             return Self::load_view_for_members("member.dashboard", $data);
         }
 

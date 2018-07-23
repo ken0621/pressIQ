@@ -34,10 +34,10 @@
             <label>Cellphone No.</label>
             <input value="+63" class="form-control" id="contact" type="text"  name="cellphone_number" required>
         </div>
-        {{-- <div class="form-group">
+        <div class="form-group">
             <label>Email</label>
             <input class="form-control" id="contact_email" type="email" name="email">
-        </div> --}}
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>

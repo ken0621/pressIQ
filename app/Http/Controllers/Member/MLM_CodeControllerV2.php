@@ -475,13 +475,14 @@ class MLM_CodeControllerV2 extends Member
 
                             $mail_recipient = DB::table('tbl_mlm_slot')->join('tbl_customer', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')->where('tbl_mlm_slot.slot_id', $sponsor)->first();
                             
+                            // $mail_recipient = $request->email;
 
-                            $sponsor_cashback = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'UNILEVEL_CASHBACK_POINTS')->where('points_log_Sponsor', $slot_id)->first();
+                            $sponsor_cashback = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'UNILEVEL_CASHBACK_POINTS')->where('points_log_Sponsor', $slot_id)->where('points_log_slot',$sponsor)->orderBy('points_log_date_claimed', 'desc')->first();
 
-                            $sponsor_cashback_total = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'REPURCHASE_CASHBACK')->where('points_log_slot', $sponsor)->sum('points_log_points');
+                            $sponsor_cashback_total = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'UNILEVEL_CASHBACK_POINTS')->where('points_log_slot', $sponsor)->sum('points_log_points');
 
 
-                            $email_content["subject"] = "Reward Code Distribute";
+                            $email_content["subject"] = "Loyalty and Rewards System";
 
                             $email_content["content"] = "Hi " . ($mail_recipient ? ucwords(strtolower($mail_recipient->first_name)) : '') . "! You earned P". number_format($sponsor_cashback->points_log_points, 2) ." Cashback from ". ucwords(strtolower($privilegecard->first_name))." ".ucwords(strtolower($privilegecard->last_name)). " who purchased at ". $warehouse->warehouse_name." Your total Cashback is P" . number_format($sponsor_cashback_total, 2) . ". Congratulations!";
 

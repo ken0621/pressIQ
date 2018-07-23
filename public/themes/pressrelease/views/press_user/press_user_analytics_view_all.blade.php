@@ -27,7 +27,6 @@
                       <th style="text-align: center;width: 20%">Date / Time </th>
                       <th style="text-align: center;width: 20%">Title / Subject</th>
                       <th style="text-align: center;width: 10%">Status </th>
-                      <th style="text-align: center;width: 25%">Recipients</th>
                       <th style="text-align: center;width: 15%">No. Email Open</th>
                       <th style="text-align: center;width: 15%">Clicks</th>
                     </tr>
@@ -36,7 +35,6 @@
                       <td>{{date("m-d-Y\ / h:i:s a",($view->ts))}} </td>
                       <td>{{$view-> subject}}</td>
                       <td>{{$view-> state}}</td>
-                      <td>{{$view-> email}}</td>
                       <td>{{$view-> opens}}</td>
                       <td>{{$view-> clicks}}</td>
                     </tr>

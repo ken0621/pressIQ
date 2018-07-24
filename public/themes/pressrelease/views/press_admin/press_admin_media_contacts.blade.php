@@ -59,14 +59,54 @@
                        <center>{{ Session::get('delete') }}</center>
                     </div>
                     @endif
-
                   <div class="col-md-12">
-                   <div class="press-holder-container">
+                  <div class="press-holder-container">     
+
                       <div class="search-container pull-right">
-                          <input placeholder="Search" type="text"  name="search_media" id="search_media">
-                          <button  type="button" name="search_button" id="search_button" class="btn btn-success">Search</button>
-                      </div>  
-                      <div class="title-container">Media Contacts</div> 
+                          <button type="button" name="search_button" id="search_button" class="btn btn-success" style="height: 40px;">Search</button>
+                          <input type="text" class="form-control" placeholder="Search"   name="search_media" id="search_media">
+                      </div><br><br><br>
+
+                      <div class="row clearfix">
+                          <div class="col-md-3">
+                                <select class="form-control " id="country_filter" name="country_filter" style="width: 230px;background-color: #f1f1f1;" required> 
+                                  <option>-- All Industry Country --</option>
+                                  <option value="Hong Kong">Hong Kong</option>
+                                  <option value="Philippines">Philippines</option>
+                                  <option value="Singapore">Singapore</option> 
+                                  <option value="China">China</option>
+                                  <option value="Indonesia">Indonesia</option>
+                                  <option value="Malaysia">Malaysia</option>
+                                  <option value="India">India</option>
+                                  <option value="Canada">Canada</option>
+                                </select>
+                          </div>
+
+                          <div class="col-md-3">
+                                <select class="form-control " id="industry_type_filter" name="industry_type_filter" style="width: 230px;background-color: #f1f1f1;" required> 
+                                  <option>-- All Industry Category --</option>
+                                  @foreach($_industry_name_add as $_industry_name)
+                                    <option value="{{$_industry_name->industry_name}}">{{$_industry_name->industry_name}}</option>
+                                  @endforeach
+                                </select>
+                          </div>
+
+                          <div class="col-md-3">
+                                <select class="form-control" id="media_type_filter" name="media_type_filter" style="width: 230px;background-color: #f1f1f1;" required> 
+                                  <option>-- All Media Type --</option>
+                                  @foreach($_media_name_add as $_media_filter)
+                                    <option value="{{$_media_filter->media_name}}">{{$_media_filter->media_name}}</option>
+                                  @endforeach
+                                </select>
+                          </div>
+
+                          <div class="col-md-3">
+                              <div class="button-container">
+                                <button type="button" name="" id="" class="btn btn-success" style="height: 35px; width: 100%">Filter Data</button><br>
+                              </div>
+                          </div>
+                      </div>
+
                       <div class="left-container" name="press_table" id="press_table1">
                           <table  class="table table-bordered" id="showHere_table1">
                               <tr>

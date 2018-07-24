@@ -76,6 +76,8 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/newsroom',											'Shop\ShopNewsRoomController@index');//PRESS RELEASE
 	Route::any('/newsroom/search',									'Shop\ShopNewsRoomController@newsroom_search');//PRESS RELEASE
 	Route::any('/mediacontacts/search',								'Shop\ShopMemberController@mediacontacts_search');//PRESS RELEASE
+	Route::any('/mediacontacts/filter',								'Shop\ShopMemberController@mediacontacts_filter');//PRESS RELEASE
+	Route::post('/mediacontacts/delete_all',						'Shop\ShopMemberController@mediacontacts_delete_all');//PRESS RELEASE
 	Route::get('/newsroom/view/{pid}',								'Shop\ShopNewsRoomController@news_room_view');//PRESS RELEASE
 	Route::get('/pressuser/choose_recipient', 						'Shop\ShopMemberController@pressuser_choose_recipient');
 	Route::get('/pressuser/choose_recipient_view',  				'Shop\ShopMemberController@choose_recipient_view');

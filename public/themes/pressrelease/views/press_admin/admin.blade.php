@@ -1,5 +1,6 @@
 @extends("layout")
 @section("content")
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="content">
 <div class="background-container" style="background-image: url('/themes/{{ $shop_theme }}/img/home-banner.jpg')">
 	<div class="container">

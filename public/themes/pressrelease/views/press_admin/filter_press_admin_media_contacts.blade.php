@@ -1,12 +1,12 @@
 
 <tr>
-  <th style="width: 7px;">Select</th>
-  <th style="width: 7%;">Contact Name</th>
-  <th style="width: 7%;">Company</th>
-  <th style="width: 7%;">Country</th>
-  <th style="width: 7%;">Industry Type</th>
-  <th style="width: 7%;">Media Type</th>
-  <th style="width: 30%;">Action</th>
+  <th style="width: 10%;">Select</th>
+  <th style="width: 10%;">Contact Name</th>
+  <th style="width: 5%;">Company</th>
+  <th style="width: 5%;">Country</th>
+  <th style="width: 5%;">Industry Type</th>
+  <th style="width: 5%;">Media Type</th>
+  <th style="width: 20%;">Action</th>
 </tr>
 @foreach($_media_contacts_filter as $_media)
   <tr>

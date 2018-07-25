@@ -70,7 +70,7 @@
                       <div class="row clearfix">
                           <div class="col-md-3">
                                 <select class="form-control " id="country_filter" name="country_filter" style="width: 230px;background-color: #f1f1f1;" required> 
-                                  <option>-- All Country --</option>
+                                  <option value="">-- All Country --</option>
                                   <option value="Hong Kong">Hong Kong</option>
                                   <option value="Philippines">Philippines</option>
                                   <option value="Singapore">Singapore</option> 
@@ -84,7 +84,7 @@
 
                           <div class="col-md-3">
                                 <select class="form-control " id="industry_type_filter" name="industry_type_filter" style="width: 230px;background-color: #f1f1f1;" required> 
-                                  <option>-- All Industry Category --</option>
+                                  <option value="">-- All Industry Category --</option>
                                   @foreach($_industry_name_add as $_industry_name)
                                     <option value="{{$_industry_name->industry_name}}">{{$_industry_name->industry_name}}</option>
                                   @endforeach
@@ -93,7 +93,7 @@
 
                           <div class="col-md-3">
                                 <select class="form-control" id="media_type_filter" name="media_type_filter" style="width: 230px;background-color: #f1f1f1;" required> 
-                                  <option>-- All Media Type --</option>
+                                  <option value="">-- All Media Type --</option>
                                   @foreach($_media_name_add as $_media_filter)
                                     <option value="{{$_media_filter->media_name}}">{{$_media_filter->media_name}}</option>
                                   @endforeach
@@ -110,13 +110,13 @@
                       <div class="left-container" name="press_table" id="press_table1">
                           <table  class="table table-bordered" id="showHere_table1">
                               <tr>
-                                  <th style="width: 7px;">Select</th>
-                                  <th style="width: 7%;">Contact Name</th>
-                                  <th style="width: 7%;">Company</th>
-                                  <th style="width: 7%;">Country</th>
-                                  <th style="width: 7%;">Industry Type</th>
-                                  <th style="width: 7%;">Media Type</th>
-                                  <th style="width: 30%;">Action</th>
+                                  <th style="width: 10%;">Select</th>
+                                  <th style="width: 10%;">Contact Name</th>
+                                  <th style="width: 5%;">Company</th>
+                                  <th style="width: 5%;">Country</th>
+                                  <th style="width: 5%;">Industry Type</th>
+                                  <th style="width: 5%;">Media Type</th>
+                                  <th style="width: 20%;">Action</th>
                               </tr> 
                               @foreach($_media_contacts as $_media)
                               <tr>
@@ -347,8 +347,8 @@
           <div class="modal-header">
               <h4 class="modal-title"></h4>
           </div>
-          <div class="modal-body">
-          </div>
+          {{-- <div class="modal-body" >
+          </div> --}}
           <div class="modal-footer">
               <button class="btn btn-danger pop_delete_all">YES</button>
               <button type="button" class="btn btn-default pull-right" data-dismiss="modal">NO</button>

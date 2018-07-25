@@ -1244,11 +1244,61 @@ class ShopMemberController extends Shop
         $filter_industry            =   $request->filter_industry;
         $filter_media               =   $request->filter_media;
 
-        $data["_media_contacts_filter"] = Tbl_press_release_recipient::where('country','like','%'.$filter_country.'%')
-                                             ->Orwhere('industry_type','like','%'.$filter_country.'%')
-                                             ->Orwhere('media_type','like','%'.$filter_country.'%')
-                                             ->get();
+        if($filter_country=="" && $filter_industry=="" && $filter_media =="")
+        {
+            $data["_media_contacts_filter"] = Tbl_press_release_recipient::get();  
+        }
+        elseif ($filter_country!="" && $filter_industry=="" && $filter_media =="")
+        {
+             $data["_media_contacts_filter"] = Tbl_press_release_recipient::where('country',$filter_country)
+                                                ->get();
+        }
+        elseif ($filter_country=="" && $filter_industry!="" && $filter_media =="")
+        {
+            $data["_media_contacts_filter"] = Tbl_press_release_recipient::where('industry_type',$filter_industry)
+                                                ->get();
+        }
+        elseif ($filter_country=="" && $filter_industry=="" && $filter_media !="") 
+        {
+            $data["_media_contacts_filter"] = Tbl_press_release_recipient::where('media_type',$filter_media)
+                                              ->get();
+        }
+        elseif ($filter_country!="" && $filter_industry!="" && $filter_media =="")
+        {
+            $data["_media_contacts_filter"] = Tbl_press_release_recipient::where('country',$filter_country)
+                                                ->where('industry_type',$filter_industry)
+                                                ->get();
+        }
 
+        elseif ($filter_country=="" && $filter_industry!="" && $filter_media !="")
+        {
+            $data["_media_contacts_filter"] = Tbl_press_release_recipient::where('industry_type',$filter_industry)
+                                                ->where('media_type',$filter_media)
+                                                ->get();
+        }
+
+        elseif ($filter_country!="" && $filter_industry=="" && $filter_media !="")
+        {
+            $data["_media_contacts_filter"] = Tbl_press_release_recipient::where('country',$filter_country)
+                                                ->where('media_type',$filter_media)
+                                                ->get();
+        }
+
+        elseif ($filter_country!="" && $filter_industry!="" && $filter_media !="") 
+        {
+           $data["_media_contacts_filter"] = Tbl_press_release_recipient::where('country',$filter_country)
+                                                ->where('industry_type',$filter_industry)
+                                                ->where('media_type',$filter_media)
+                                                ->get();
+        }
+
+        else    
+        {
+            $data["_media_contacts_filter"] = Tbl_press_release_recipient::get();  
+          
+        }
+
+        
         return view("press_admin.filter_press_admin_media_contacts", $data);
     }
 

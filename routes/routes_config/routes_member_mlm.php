@@ -42,7 +42,15 @@ Route::any('/member/mlm/code2/assemble/table', 'Member\MLM_CodeControllerV2@memb
 Route::any('/member/mlm/code2/change_status','Member\MLM_CodeControllerV2@change_status');
 Route::any('/member/mlm/code2/disassemble', 'Member\MLM_CodeControllerV2@membership_code_disassemble'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/product_code2', 'Member\MLM_CodeControllerV2@index'); //GUILLERMO TABLIGAN
+Route::get('/member/mlm/product_code2/distribute', 'Member\MLM_CodeControllerV2@distribute'); //GUILLERMO TABLIGAN
+Route::get('/member/mlm/product_code2/distribute/get_slot', 'Member\MLM_CodeControllerV2@get_slot'); //GUILLERMO TABLIGAN
+Route::post('/member/mlm/product_code2/distribute', 'Member\MLM_CodeControllerV2@distribute_submit'); //GUILLERMO TABLIGAN
+Route::get('/member/mlm/product_code2/release', 'Member\MLM_CodeControllerV2@release'); //GUILLERMO TABLIGAN
+Route::post('/member/mlm/product_code2/release', 'Member\MLM_CodeControllerV2@release_submit'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/product_code2/table', 'Member\MLM_CodeControllerV2@product_code_table'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/product_code2/table/set', 'Member\MLM_CodeControllerV2@set_as_printed');
+Route::any('/member/mlm/print_codes_report', 'Member\MLM_CodeControllerV2@print_codes_report');
+
 
 Route::any('/member/mlm/report_codes', 'Member\MLM_CodeControllerV2@report_code'); //ARCY
 Route::any('/member/mlm/report_codes/data','Member\MLM_CodeControllerV2@report_code_table');
@@ -245,6 +253,9 @@ AdvancedRoute::controller("/member/mlm/gcmaintenance","Member\MLM_GCMaintenanceC
 Route::any("/member/mlm/distribute_cashback","Member\MLM_DistributeCashbackController@index");
 Route::any("/member/mlm/distribute_cashback/distribute","Member\MLM_DistributeCashbackController@distribute");
 
+Route::any("/member/mlm/distribute_unilevel_cashback","Member\MLM_DistributeCashbackController@index2");
+Route::any("/member/mlm/distribute_unilevel_cashback/distribute","Member\MLM_DistributeCashbackController@distribute2");
+
 /* start MLM Product */
 Route::any('/member/mlm/product', 'Member\MLM_ProductController@index');//luke
 Route::any('/member/mlm/product/point/add', 'Member\MLM_ProductController@add_product_points');
@@ -337,6 +348,7 @@ Route::post('member/mlm/developer/import', 'Member\MlmDeveloperController@import
 Route::get('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase');
 Route::post('member/mlm/developer/repurchase', 'Member\MlmDeveloperController@repurchase_submit');
 Route::get('member/mlm/developer/reset', 'Member\MlmDeveloperController@reset');
+Route::get('member/mlm/developer/reset_points', 'Member\MlmDeveloperController@reset_points');
 Route::post('member/mlm/developer/sample_upload', 'Member\MlmDeveloperController@sample_upload');
 Route::any('member/mlm/developer/myTest', 'Member\MlmDeveloperController@myTest');
 Route::any('member/mlm/developer/recompute', 'Member\MlmDeveloperController@recompute');

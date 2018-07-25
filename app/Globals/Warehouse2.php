@@ -50,6 +50,11 @@ class Warehouse2
         }
         return $data->get();
     }
+    public static function get_warehouse_name($shop_id, $warehouse_id)
+    {
+        $data = Tbl_warehouse::where('warehouse_shop_id',$shop_id)->where('archived',0)->where('warehouse_id',$warehouse_id)->first();
+        return $data->warehouse_name;
+    }
 	public static function get_current_warehouse($shop_id)
 	{
 		return session('warehouse_id_'.$shop_id);
@@ -679,7 +684,19 @@ class Warehouse2
         }
         return $return;
     }
-
+    public static function check_stock($warehouse_id, $item_id)
+    {
+        $inventory_qty = Warehouse2::get_item_qty($warehouse_id, $item_id);
+        
+        if($inventory_qty > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
     public static function consume_update($ref_name, $ref_id, $item_id, $quantity)
     {
         $data = Tbl_warehouse_inventory_record_log::where("record_consume_ref_name",$ref_name)->where("record_consume_ref_id",$ref_id)->get();

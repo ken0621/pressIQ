@@ -184,6 +184,13 @@ class Mlm_compute
                 $rank_group_points = $data["RANK_GROUP"];
                 $plan              = strtolower($points_title);
                 Mlm_complan_manager_repurchasev2::$plan($slot_info,$rank_points,$rank_group_points);
+            }           
+            else if($points_title == "UNILEVEL")
+            {
+                $points            = $data["UNILEVEL"];
+                $uc_points         = $data["UNILEVEL_CASHBACK_POINTS"];
+                $plan              = strtolower($points_title);
+                Mlm_complan_manager_repurchasev2::$plan($slot_info,$points,$uc_points);
             }
             else if($points_title == "BROWN_REPURCHASE")
             {      

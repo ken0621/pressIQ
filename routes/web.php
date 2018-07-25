@@ -13,6 +13,7 @@ Route::any('/ncabot', 'SampleTesting@ncabot');
 Route::any('/oliver/{id}', 'SampleTesting@index');
 Route::any('/oliver/samp2', 'SampleTesting@samp2');
 Route::any('/s', 'TesterController@samptest');
+Route::any('/get_assets/{project}/{image}', 'TesterController@get_assets');
 Route::any('/pmigrate', 'PasswordMigrateController@index');
 Route::any('/dd','TesterController@connection_test');
 Route::any('/member/payroll/api_login','Api\PayrollConnectController@index');
@@ -396,6 +397,10 @@ Route::any('/member/report/agent/profit_loss','Member\ReportAgentProfitLossContr
 
 /*LOGISTIC REPORT*/
 Route::any('/member/report/logistic','Member\ReportLogisticController@index');
+
+/*MERCHANTS CODE REPORT*/
+Route::any('/member/report/merchants/code','Member\ReportMerchantsCodeController@index');
+Route::any('/member/report/merchants/code/print_codes_report/{$from}/{$to}','Member\ReportMerchantsCodeController@print_codes_report');
 
 /*SALES LIQUIDATION*/
 Route::any('member/cashier/sales_liquidation','Member\PisSalesLiquidationController@index');
@@ -1013,6 +1018,7 @@ Route::get('/testing','Member\MLM_CodeController@tester');
 /* ImageController */
 Route::post('image/image_upload','Member\ImageController@upload_image');
 Route::get('image/load_media_library', 'Member\ImageController@load_media_library');
+Route::get('image/delete_image', 'Member\ImageController@delete_image');
 
 /* Load Ajax Data */
 Route::get('/member/accounting/load_coa','Member\ChartOfAccountController@load_coa');

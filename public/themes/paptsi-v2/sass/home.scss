@@ -44,6 +44,7 @@ body{
 	overflow-y: hidden;
 	.top-banner
 	{
+		padding-top: 100px;
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
@@ -57,17 +58,18 @@ body{
 		@media screen and (max-width: 768px)
 		{
 			margin-top: 0px;
+			padding-top: 0px;
 		}
 
 		.c-container
 		{
 			color: #fff;
-			max-width: 750px;
+			max-width: 620px;
 			@media screen and (max-width: 425px)
 			{
 				text-align: center;
 			}
-			:nth-child(1)
+			.top-info
 			{
 				font-size: 45px;
 				font-weight: 700;
@@ -96,10 +98,9 @@ body{
 					}
 				}
 			}
-			:nth-child(2)
+			.mid-info
 			{
-				border-bottom: 1px solid #fff;
-				font-size: 23px;
+				font-size: 30px;
 				padding-bottom: 10px;
 
 				@media screen and (max-width: 425px)
@@ -113,16 +114,18 @@ body{
 					padding-top: 10px;
 				}
 			}
-			:nth-child(3)
+			.bottom-info
 			{
-				color: #fff;
 				padding-top: 10px;
 				padding-bottom: 20px;
-				font-size: 18px;
-
-				@media screen and (max-width: 425px)
+				p
 				{
-					font-size: 13px;
+					color: #fff;
+					font-size: 18px;
+					@media screen and (max-width: 425px)
+					{
+						font-size: 13px;
+					}
 				}
 			}
 			.t-button
@@ -149,6 +152,7 @@ body{
 
 		.holder
 		{
+
 			&:nth-child(odd)
 			{
 				background-color: #00497e;
@@ -171,7 +175,7 @@ body{
 			.details
 			{
 				font-size: 18px;
-				margin-top: 5px;
+				margin-top: 15px;
 			}
 		}
 	}
@@ -257,6 +261,7 @@ body{
 
 .wrapper-2
 {
+	padding-bottom: 30px;
 	.left-container
 	{
 		.title-container
@@ -289,10 +294,13 @@ body{
 		.description-container
 		{
 			color: #585858;
-			padding-top: 30px;
-			font-size: 18px;
-			font-weight: 400;
-
+			padding-top: 20px;
+			p
+			{
+				font-size: 18px !important;
+				font-weight: 400 !important;
+				font-family: $display-text !important;
+			}
 			@media screen and (max-width: 425px)
 			{
 				text-align: center;
@@ -305,7 +313,8 @@ body{
 			width: 180px;
 			text-align: center;
 			padding: 10px 0px;
-			margin-top: 50px;
+			margin-top: 20px;
+			margin-bottom: 30px;
 
 			@media screen and (max-width: 425px)
 			{
@@ -327,7 +336,7 @@ body{
 		.image-holder
 		{
 			text-align: center;
-			padding: 50px 0px 50px 0px;
+			padding: 50px 0px 25px 0px;
 			width: 100%;
 			img
 			{
@@ -347,6 +356,30 @@ body{
 			@media screen and (max-width: 320px)
 			{
 				padding: 30px 0px 10px 0px;
+			}
+		}
+		.description-container
+		{
+			color: #585858;
+			p
+			{
+				font-size: 18px !important;
+				font-weight: 400 !important;
+				font-family: $display-text !important;
+			}
+			ul
+			{
+				li
+				{
+					font-size: 18px !important;
+					font-weight: 400 !important;
+					font-family: $display-text !important;
+				}
+			}
+			@media screen and (max-width: 425px)
+			{
+				text-align: center;
+				padding-bottom: 20px
 			}
 		}
 	}
@@ -392,22 +425,6 @@ body{
 				}
 			}
 		}
-		.right-container
-		{
-			.description-container
-			{
-				padding-top: 50px;
-				color: #fff;
-				font-size: 18px;
-				font-weight: 400;
-				text-align: right;
-
-				@media screen and (max-width: 425px)
-				{
-					text-align: center;
-				}
-			}
-		}
 	}
 	.bottom-container
 	{
@@ -415,42 +432,64 @@ body{
 		.holder-container
 		{
 			background-color: #fff;
-			margin-top: 30px;
+			padding: 5px 5px;
+        	margin: 40px 5px;
 			.image-holder
 			{
 				img
 				{
 					width: 100%;
+					object-fit: cover;
+					height: 250px;
+					object-position: center center;
 				}
 			}
 			.title-container
 			{
-				padding-top: 10px;
-				font-size: 20px;
+				font-size: 18px;
 				color: #003b66;
 				font-weight: 700;
-				padding-left: 20px;
+				padding: 10px 5px 0px 5px
 			}
 			.description-container
 			{
 				color: #585858;
-				padding-top: 20px;
-				padding-left: 20px;
-				font-size: 18px;
-				padding-right: 20px;
+				font-size: 16px;
+				padding: 10px 5px 0px 5px;
 			}
 			.read-container
 			{
-				color: #0e70b7;
 				font-size: 15px;
 				font-weight: 700;
-				padding: 25px 0 20px 20px;
+				padding: 5px 0px 10px 5px;
 				a
 				{
 					text-decoration: none;
+					color: #0e70b7;
 				}
 			}
+			&:hover
+			{
+				cursor: pointer;
+				img 
+				{
+				    opacity: 0.7;
+				    transition: 0.3s all ease;
+				}
 
+				a
+				{
+					text-decoration: underline;
+					color: #003b66;
+				}
+			}
+		}
+		.coming-soon
+		{
+			font-size: 20px;
+			color: #fff;
+			margin: 30px 0 0 30px;
+			width: 400px;
 		}
 	}
 }

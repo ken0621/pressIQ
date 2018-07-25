@@ -480,7 +480,7 @@ class ShopCheckoutController extends Shop
             $data["page"]            = "Checkout Payment";
             $data["_payment_method"] = $this->get_payment_method();
             $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
-            if($data["get_cart"]['cart'])
+            if(isset($data["get_cart"]['cart']))
             {
                 return view("checkout_payment", $data);
             }

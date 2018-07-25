@@ -144,6 +144,11 @@ header
 	.subnav
 	{
 		background-color: #271308;
+		
+		.logo-holder
+		{
+			padding: 20px;
+		}
 
 		.left
 		{
@@ -164,7 +169,7 @@ header
 				a
 				{
 					padding: 20px;
-					
+
 					img
 					{
 

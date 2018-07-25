@@ -113,6 +113,13 @@
 			"default":"/themes/paptsi-v2/img/wrapper2-image.jpg",
 			"size":"6"
 		},
+		"home_company_description_2" :
+		{
+			"label":"Paptsi commit itself description",
+			"type":"tinymce",
+			"default":"Philippine Archipelago Ports and Terminal Services Inc. aims to be a key player in the industry of port operation and management. We provide safe, clean and convenient port facilities and passenger terminal buildings.",
+			"size":"6"
+		},
 		"home_expertise_description" :
 		{
 			"label":"Expertise Description",

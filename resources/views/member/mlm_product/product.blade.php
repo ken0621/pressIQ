@@ -15,10 +15,13 @@
 </div>
 <div class="search-filter-box">
         <div class="col-md-4 col-md-offset-8" style="padding: 10px">
-            <div class="input-group">
-                <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search_item_sku" placeholder="Search by item name or sku" aria-describedby="basic-addon1" onChange="search_item(this)">
-            </div>
+            <form method="get">
+                <div class="input-group">
+                    <span onclick="$('.kliku-here').trigger('click')" style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                    <button type="submit" class="kliku-here hide"></button>
+                    <input value="{{ Request::input('item') }}" name="item" type="text" class="form-control search_item_sku" placeholder="Search by item name or sku" aria-describedby="basic-addon1">
+                </div>
+            </form>
         </div>  
     </div>
 <div class="panel panel-default panel-block panel-title-block">
@@ -128,12 +131,10 @@
                                                     <input type="number" class="form-control " name="{{$value}}" value="{{$variant[$value]}}" form="formvariant{{$variant['item_id']}}">
                                                 </div>    
                                                 @foreach($membership_active as $key2 => $value2)
-                                                    @if(isset($value2->membership_id))
                                                     <div class="col-md-12">
                                                        <small><label>{{$value2->membership_name}}</label> </small>
-                                                       <input type="number" class="form-control input-sm" name="membership_points[{{$value}}][{{$value2->membership_id}}]" value="{{$variant['points'][$value2->membership_id]->$value}}" form="formvariant{{$variant['item_id']}}">
+                                                       <input type="number" class="form-control input-sm" name="membership_points[{{$value}}][{{$value2->membership_id}}]" value="{{ isset($variant['points'][$value2->membership_id]->$value) ? $variant['points'][$value2->membership_id]->$value : 0 }}" form="formvariant{{$variant['item_id']}}">
                                                     </div>
-                                                    @endif
                                                 @endforeach
                                             </td>
                                         @endif   

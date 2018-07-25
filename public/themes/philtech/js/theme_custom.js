@@ -6,6 +6,7 @@ function theme_custom()
     function init()
     {
         document_ready();
+       
     }
     function document_ready()
     {

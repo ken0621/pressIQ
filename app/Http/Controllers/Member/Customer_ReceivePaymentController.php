@@ -228,7 +228,6 @@ class Customer_ReceivePaymentController extends Member
             {
                 $json["redirect"]    = "/member/customer/receive_payment/list";
             }
-            
             if($cm_id == "")
             {
                 if($button_action == "save-and-edit")
@@ -240,7 +239,6 @@ class Customer_ReceivePaymentController extends Member
             {
                 $json["redirect"]    = "/member/customer/credit_memo/list";
             }
-            
         }
         else
         {

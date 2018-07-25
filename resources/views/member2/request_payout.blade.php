@@ -5,7 +5,7 @@
 
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
-		<h4 class="modal-title"><i class="fa fa-money"></i> REQUEST PAYOUT</h4>
+		<h4 class="modal-title"><i class="fa fa-money"></i> Request Payout</h4>
 	</div>
 	<div class="modal-body clearfix">
 		<div class="error-message-here text-center" style="color: red; padding: 5px;"></div>
@@ -31,7 +31,7 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white btn-custom-close" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-		<button type="submit" class="btn btn-primary btn-custom-primary" type="button"><i class="fa fa-angle-double-right"></i> Request Payout</button>
+<button type="submit" class="btn btn-primary btn-custom-primary " type="button"><i class="fa fa-angle-double-right"></i> Request Payout</button>
 	</div>
 </form>
 
@@ -51,13 +51,16 @@
 		{
 			$(".request-payout-form").submit(function(e)
 			{
+				$(".dis-button-tho").attr('disabled', true).prop('disabled', true);
+
 				$.ajax(
 				{
 					url:"/members/request-payout",
 					data: $(e.currentTarget).serialize(),
 					type:"post",
 					success: function(data)
-					{
+					{	
+						$(".dis-button-tho").removeAttr('disabled').removeProp('disabled');
 						if(data == "")
 						{
 							$("#global_modal").modal("hide");

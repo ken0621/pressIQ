@@ -55,14 +55,17 @@ button:hover{
 }
 
 /* HEADER */
-.subheader-container{
+.subheader-container
+{
 	background-color: #003b66;
-	padding: 10px 0px 5px 0px;
+	padding: 10px 0px 10px 0px;
 	font-size: 12px;
 	
-	.left-container {
+	.left-container 
+	{
 		float: left;
-		span {
+		span 
+		{
 			padding: 0px 5px;
 			color: #fff;
 		}
@@ -71,12 +74,23 @@ button:hover{
 			display: none;
 		}
 	}
-	.right-container {
+	.right-container 
+	{
 		float: right;
-		span {
+		span 
+		{
 			padding: 0px 15px;
 			color: #fff;
 			font-size: 15px;
+			a
+			{
+				background-color: #fcc205;
+				text-decoration: none;
+				color: #003b66;
+				padding: 5px 15px;
+				font-size: 12px;
+				font-weight: 700;
+			}
 		}
 	}
 }
@@ -109,9 +123,33 @@ button:hover{
 		padding-bottom: 12px;
 	}
 
-	nav{
-		a.active{
-			color: #76b83f;
+	.menu-mobile-nav
+	{
+		display: none;
+		padding: 10px 0px 0px 0px;
+		margin: auto;
+		text-align: center;
+		width: 100%;
+		.border-container
+		{
+			border: 0.5px solid #ededed;
+			text-align: center;
+			margin: 10px 5px;
+
+		}
+		@media screen and (max-width: 800px)
+		{
+			span
+			{
+				display: block;
+				a
+				{
+					color: #585858;
+					font-weight: 700;
+					text-decoration: none;
+					font-size: 15px;
+				}
+			}
 		}
 	}
 }
@@ -263,12 +301,12 @@ button:hover{
 		padding: 7.5px 12px 7.5px 12px;
 		margin-left: auto;
 		margin-top: 20px;
-		background-color: #02295e;
+		background-color: #003b66;
 		span
 		{
 			display: block;
 			height: 3px;
-			background-color: #fff;
+			background-color: #fcc205;
 			margin: 5px 0;
 		}
 	}

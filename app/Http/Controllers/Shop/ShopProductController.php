@@ -304,7 +304,7 @@ class ShopProductController extends Shop
         return new LengthAwarePaginator($itemsForCurrentPage, count($items), $perPage,Paginator::resolveCurrentPage(), array('path' => Paginator::resolveCurrentPath()));
     }
 
-    // P4ward Product Red Rice Scrub -> Carlo
+    // Alternative Living Water -> Carlo
     public function product2()
     {
         $data["page"] = "Product 2";

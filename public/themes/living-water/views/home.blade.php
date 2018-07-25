@@ -3,11 +3,17 @@
 <div class="content">
     <!-- Media Slider -->
     <div id="home" class="slider-wrapper single-item">
+        @if(loop_content_condition($shop_theme_info, "home", "home_slider"))
+            @foreach(loop_content_get($shop_theme_info, "home", "home_slider") as $slider)
+            <img src="{{ $slider }}">
+            @endforeach
+        @else
         <img src="/themes/{{ $shop_theme }}/img/home-banner.jpg">
         <img src="/themes/{{ $shop_theme }}/img/home-banner-2.jpg">
+        @endif  
     </div>
-
-    <div id="about" class="wrapper-1">
+    
+    {{-- <div id="about" class="wrapper-1">
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-6">
@@ -30,6 +36,35 @@
                                 <img src="{{ get_content($shop_theme_info, "home", "home_about_image") }}">
                             </div>
                         </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> --}}
+
+    <div id="service" class="wrapper-3">
+        <div class="container">
+            <div class="row clearfix">
+                <div class="col-md-6">
+                    <div class="left-container">
+                        <a class="lsb-preview" href="{{ get_content($shop_theme_info, "home", "home_product_image") }}">
+                            <div class="image-holder">
+                                <img src="{{ get_content($shop_theme_info, "home", "home_product_image") }}">
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="right-container">
+                        <div class="title-container">
+                            <span class="icon-container"><img src="/themes/living-water/img/water-drops.png"></span><span class="title">PRODUCT AND SERVICES</span>
+                        </div>
+                        <div class="description-container">
+                            {!! get_content($shop_theme_info, "home", "home_product_description") !!}
+                        </div>
+                        <div class="button-container">
+                            <a href="/product2"><button>READ MORE &raquo;</button></a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -76,39 +111,6 @@
         </div>
     </div>
 
-    <div id="service" class="wrapper-3">
-        <div class="container">
-            <div class="row clearfix">
-                <div class="col-md-6">
-                    <div class="left-container">
-                        <a class="lsb-preview" href="{{ get_content($shop_theme_info, "home", "home_product_image") }}">
-                            <div class="image-holder">
-                                <img src="{{ get_content($shop_theme_info, "home", "home_product_image") }}">
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="right-container">
-                        <div class="title-container">
-                            <span class="icon-container"><img src="/themes/living-water/img/water-drops.png"></span><span class="title">PRODUCT AND SERVICES</span>
-                        </div>
-                        <div class="description-container">
-                            <ul>
-                                <li>Testing and analyzing of clients in-house water supplies for the presence of bacteria, fungi, organic and inorganic compounds, taste and odor.</li>
-                                <li>Installation of the optimal water treatment and purification systems based on the client’s informed, educated and affordable choice.</li>
-                                <li>Routine monitoring of installed components to minimize equipment failure and ensure timely replacement of expired filters and components.</li>
-                            </ul>
-                        </div>
-                        <div class="button-container">
-                            <a href="/product"><button>READ MORE &raquo;</button></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="gallery" class="wrapper-4">
         <div class="container">
             <div class="title-container">
@@ -117,7 +119,7 @@
             <div class="row clearfix">
                 @if(count($_product) > 0)
                     @foreach(limit_foreach($_product, 8) as $product)
-                    <div class="col-md-3">
+                    <div class="col-md-3 col-sm-4 col-xs-4">
                         <div class="per-album-container">
                             <div class="img-container">
                                 <a href="/product/view2/{{ $product['eprod_id'] }}">
@@ -215,48 +217,55 @@
                     <div class="title-container">
                         <span class="icon-container"><img src="/themes/living-water/img/water-drops.png"></span><span class="title">GET IN TOUCH WITH US</span>
                     </div>
-                     <div class="row clearfix">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="First Name*">
+                     <form action="Post"> 
+                        @if (session('message_concern_p4ward'))
+                            <div class="alert alert-success">
+                                {{ session('message_concern_p4ward') }}
+                            </div>
+                        @endif
+                         <div class="row clearfix">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="contactus_first_name" name="contactus_first_name" placeholder="First Name*" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="contactus_last_name" name="contactus_last_name" placeholder="Last Name*" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                        <input type="phone" class="form-control" id="contactus_phone_number" name="contactus_phone_number" placeholder="Phone Number*" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="email" class="form-control" id="contactus_email" name="contactus_email" placeholder="Email Address*" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text area" class="form-control" id="contactus_subject" name="contactus_subject" placeholder="Subject*" required> 
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <textarea type="text" class="form-control text-message" id="contactus_message" name="contactus_message" placeholder="Message*" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="button-container">
+                                    <button type="submit" formaction="/contact_us/send">SEND</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Last Name*">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                    <input type="phone" class="form-control" placeholder="Phone Number*">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="email" class="form-control" placeholder="Email Address*">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text area" class="form-control" placeholder="Subject*">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <textarea type="text" class="form-control text-message" placeholder="Message*"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="button-container">
-                                <button>SUBMIT</button>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
                 <div class="col-md-6">
                     <div class="info-container">
                         <div class="map-container">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15440.112259220126!2d121.02096329822486!3d14.65434838967788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b6faf1ed4163%3A0xa543aa75a00c2da5!2sVeterans+Village%2C+Project+7%2C+Quezon+City%2C+Metro+Manila!5e0!3m2!1sen!2sph!4v1520982546353" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                            <iframe src="{{ get_content($shop_theme_info, "contact_details", "contact_google_map_link") }}" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
                         </div>
                         <div class="title">Main Office: </div>
                         <div class="details-container">
@@ -282,7 +291,7 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=1.2">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=1.3">
 @endsection
 
 @section("script")

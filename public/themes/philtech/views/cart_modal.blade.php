@@ -5,7 +5,9 @@
             <h4 class="modal-title">My Shopping Cart</h4>
         </div>
         <div class="cart-loader-holder">
-            <div style="margin: 50px auto;" class="cart-loader loader-16-gray hide"></div>
+            <div style="margin: 50px auto;" class="cart-loader loader-16-gray hide">
+                <img style="max-width: 100%; margin: auto; display: block;" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif">
+            </div>
             <div class="not-loader">
                 @if(isset($cart) && $cart)
                 {{-- <div class="table-responsive"> --}}
@@ -25,9 +27,9 @@
                             <tr>
                                 <td><img src=""></td>
                                 <td>{{ $item->item_name }}</td>
-                                <td>P {{ number_format($item->item_price) }}</td>
+                                <td>&#8369; {{ number_format($item->item_price, 2) }}</td>
                                 <td><input class="item-qty form-control text-center" style="width: 75px; margin: auto;" type="number" name="quantity" min="1" step="1" value="{{ $item->quantity }}" item-id="{{ $item->item_id }}"></td>
-                                <td>P {{ number_format($item->subtotal, 2) }}</td>
+                                <td>&#8369; {{ number_format($item->subtotal, 2) }}</td>
                                 <td><div class="remove-container remove-item-cart" item-id="{{ $item->item_id }}" style="cursor: pointer;"><i class="fa fa-times" aria-hidden="true"></i></div></td>
                             </tr>
                             @endforeach

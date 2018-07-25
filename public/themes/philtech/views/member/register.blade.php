@@ -117,6 +117,13 @@
                                             <input required class="form-control input-sm" type="text" name="contact" value="{{ old('contact') ? old('contact') : '+63' }}">
                                         </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <div class="register-label">ADDRESS</div>
+                                        <div class="form-input">
+                                            <textarea class="form-control" required name="address">{{ $dummy['password'] or '' }}</textarea>
+                                        </div>
+                                    </div>
                                     
                                     <div class="form-group">
                                         <div class="register-label">PASSWORD</div>

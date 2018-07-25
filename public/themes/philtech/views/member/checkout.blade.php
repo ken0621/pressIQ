@@ -137,6 +137,12 @@
 												<option value="{{ $payment->link_reference_name }}">{{ $payment->method_name }}</option>
 											@endforeach
 										</select>	
+										<select class="show-select-slot hide" name="current_slot" style="margin-top: 15px;">
+											<option selected disabled hidden>SELECT SLOT</option>
+											@foreach($_slot as $slot)
+												<option value="{{ $slot->slot_id }}">{{ $slot->slot_no }} (&#8369; {{ number_format($slot->current_wallet, 2) }})</option>
+											@endforeach
+										</select>
 									</div>
 								</div>
 								<div class="button-container">
@@ -175,14 +181,31 @@
   </div>
 </div>
 @endsection
-@section("script")
+@section("js")
 
 <script type="text/javascript">
-	// $(document).ready(function(){
- //    $("#proceed").click(function(){
- //      $("#myModal2").modal('show');
- //    });
- //  });
+$(document).ready(function() 
+{
+	action_method_change($('.payment-method-is-empty').val());
+
+	$('.payment-method-is-empty').change(function(event) 
+	{
+		var method = $(event.currentTarget).val();
+		action_method_change(method);
+	});
+
+	function action_method_change(method)
+	{
+		if (method == "e_wallet") 
+		{
+			$(".show-select-slot").removeClass('hide');
+		}
+		else
+		{
+			$(".show-select-slot").addClass('hide');
+		}
+	}
+});
 </script>
 
 @endsection

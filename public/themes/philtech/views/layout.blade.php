@@ -23,9 +23,9 @@
         <!-- GLOBAL CSS -->
         @include("frontend.ghead")
 
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=7">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1.8">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
-        <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
+        {{-- <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css"> --}}
         
         <!-- OTHER CSS -->
         @yield("css")
@@ -35,9 +35,11 @@
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
-        <div class="loader" style="display: none;">
-          <span><img src="/resources/assets/frontend/img/loader.gif"></span>
-        </div>
+        {{-- <div class="loader-container">
+          <div class="loader">
+            <img src="/themes/{{ $shop_theme }}/img/pageloader.gif">
+          </div>
+        </div> --}}
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -49,16 +51,17 @@
                     @if($mlm_member)
                     <div class="holder">
                         <div class="dropdown">
-                          <a class="">BUSINESS PRESENTATION</a>
+                          <a class="">BUSINESS PRESENTATION <span><i class="fa fa-angle-down"></i></span></a>
                           <div class="dropdown-content">
-                            <a href="https://drive.google.com/file/d/1Q4Tr0k5kpKalUzV-vODb6mU_tNyPMQmD">MILLIONAIRE SYSTEM</a>
-                            <a href="https://drive.google.com/open?id=0B_zVgtlTtv89ZzlKSnI3ckpxd1k">PRIVILEGE CARD PRESENTATION</a>
-                            <a href="https://drive.google.com/file/d/1gxsG3wL8emRvzxhG4Rriwz9FgnB7D84o">FRANCHISE BUSINESS PRESENTATION</a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">FRANCHISE BUSINESS PRESENTATION</a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}">MERCHANT PRESENTATION</a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PRIVILEGE CARD PRESENTATION</a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}">MARKETING PLAN PRESENTATION</a>
                           </div>
                         </div>
                     </div>
                     @else
-                    <div class="holder"><a href="https://drive.google.com/file/d/1gxsG3wL8emRvzxhG4Rriwz9FgnB7D84o">BUSINESS PRESENTATION</a></div>
+                    <div class="holder"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
                     @endif
                     <div class="holder"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
 
@@ -140,6 +143,7 @@
                     <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
                     <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR MERCHANTS</a></li>
                     <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li> 
+                    <li class="nav-border"><a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb">HOTEL BOOKING</a></li>
                     <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
                     <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">CAREER</a></li>
                     <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">EVENTS</a></li>
@@ -240,11 +244,23 @@
                             <a href="/"><li>HOME</li></a>
                             <a href="/partners"><li>OUR MERCHANTS</li></a>
                             <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
+                            <a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb"><li>HOTEL BOOKING</li></a>
                             <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
                             <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
                             <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
                             <a href="/legalities"><li>LEGALITIES</li></a>
                             <a href="/contact"><li>CONTACT US</li></a>
+                            {{-- <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a> --}}
+                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>FRANCHISE BUSINESS PRESENTATION</li></a>
+                            {{-- <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MARKETING PLAN PRESENTATION</li></a> --}}
+                            @if($mlm_member)
+                            {{-- <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>FRANCHISE BUSINESS PRESENTATION</li></a> --}}
+                            <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MARKETING PLAN PRESENTATION</li></a>
+                            @endif
                         </ul>
                     <div class="space2"></div>
                     <span>MEMBER'S AREA</span>
@@ -254,10 +270,12 @@
                         @if($mlm_member)
                         <a href="/members/genealogy?mode=binary"><li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">GENEALOGY</li></a>
                         <a href="/members/report"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">REPORTS</li></a>
-                        <a href="/members/network"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">NETWORK LIST</li></a>
-                        <a href="/members/lead-list"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">LEAD LIST</li></a>
-                        <a href="/members/redeemable"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">REDEEMABLE</li></a> 
-                        <a href="/members/wallet-encashment"><li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}">WALLET</li></a> 
+                        <a href="/members/network"><li class="{{ Request::segment(2) == "network" ? "active" : "" }}">NETWORK LIST</li></a>
+                        <a href="/members/lead-list"><li class="{{ Request::segment(2) == "leads" ? "active" : "" }}">LEAD LIST</li></a>
+                        <a href="/members/redeemable"><li class="{{ Request::segment(2) == "redeemable" ? "active" : "" }}">REDEEMABLE</li></a> 
+                        <a href="/members/wallet-encashment"><li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}">WALLET</li></a>
+                        <a href="/members/wallet-transfer"><li class="{{ Request::segment(2) == "wallet-transfer" ? "active" : "" }}">WALLET TRANSFER</li></a>
+                        <a href="/members/wallet-refill"><li class="{{ Request::segment(2) == "wallet-refill" ? "active" : "" }}">WALLET REFILL</li></a> 
                             @if($customer)
                                 <a href="/members/logout"><li class="user-logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></li>
                                 </a>
@@ -296,11 +314,13 @@
                         <a href="/"><li>HOME</li></a>
                         <a href="/partners"><li>OUR MERCHANTS</li></a>
                         <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
+                        <a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb"><li>HOTEL BOOKING</li></a>
                         <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
                         <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
                         <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
                         <a href="/legalities"><li>LEGALITIES</li></a>
                         <a href="/contact"><li>CONTACT US</li></a>
+                        <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a>
                     </ul>
                 @endif
             </nav>
@@ -364,6 +384,7 @@ offers New Franchise Business Model and New Rewards System using New Generation 
                         <ul>
                             <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partner Merchants</a></li>
                             <li><a href="https://loadcentral.net">E-loading Business</a></li>
+                            <li><a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb">Hotel Booking</a></li>
                             {{-- <li><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></li>
                             <li><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></li> --}}
                             <li><a href="https://philtechglobalinc.vmoney.com/">E-money</a></li>
@@ -434,7 +455,7 @@ offers New Franchise Business Model and New Rewards System using New Generation 
           </div>
         </div>
         @include("frontend.gfoot")
-        <script src="/themes/{{ $shop_theme }}/js/custom_theme.js?version=4"></script>
+        <script src="/themes/{{ $shop_theme }}/js/custom_theme.js?version=1.8"></script>
 
         @yield("js")
     </body>

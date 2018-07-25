@@ -59,6 +59,7 @@
                 <span><i class="fa fa-facebook" aria-hidden="true"></i></span>
                 <span><i class="fa fa-twitter" aria-hidden="true"></i></span>
                 <span><i class="fa fa-instagram" aria-hidden="true"></i></span>
+                <span><a href="http://payrolldigima.com/employee_login">LOGIN</a></span>
             </div>
             @else
             <div class="left-container">
@@ -71,6 +72,7 @@
                 <span><i class="fa fa-facebook" aria-hidden="true"></i></span>
                 <span><i class="fa fa-twitter" aria-hidden="true"></i></span>
                 <span><i class="fa fa-instagram" aria-hidden="true"></i></span>
+                <span><a href="http://payrolldigima.com/employee_login">LOGIN</a></span>
             </div>
             @endif
         </div>
@@ -82,8 +84,6 @@
 
                     <div id="nav_list" style="display: none;"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
 
-
-
                     <div class="image-logo-holder">
                         <a class="clearfix" href="/">
                             <img src="/themes/{{ $shop_theme }}/img/header-logo.jpg">
@@ -94,6 +94,20 @@
                         <span></span>
                         <span></span>
                     </div>
+                    <div class="menu-mobile-nav">
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#home">HOME</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#services">SERVICES</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#aboutus">ABOUT US</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#expertise">NEWS AND ANNOUNCEMENT</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#careers">CAREERS</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#contactus">CONTACT US</a></span>
+                    </div>
                 </div>
                 <div class="col-md-10">
                 <!-- NAVIGATION -->
@@ -103,14 +117,14 @@
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                 <li><a class="smoth-scroll" href="#services">SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="#aboutus">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="#expertise">EXPERTISE</a></li>
+                                <li><a class="smoth-scroll" href="#expertise">NEWS AND ANNOUNCEMENT</a></li>
                                 <li><a class="smoth-scroll" href="#careers">CAREERS</a></li>
                                 <li><a class="smoth-scroll" href="#contactus">CONTACT US</a></li>
                             @else
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                 <li><a class="smoth-scroll" href="#services">SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="#aboutus">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="#expertise">EXPERTISE</a></li>
+                                <li><a class="smoth-scroll" href="#expertise">NEWS AND ANNOUNCEMENT</a></li>
                                 <li><a class="smoth-scroll" href="#careers">CAREERS</a></li>
                                 <li><a class="smoth-scroll" href="#contactus">CONTACT US</a></li>
                             @endif
@@ -135,7 +149,9 @@
                         <div class="footer-icon-container">
                             <img src="\themes\paptsi-v2\img\paptsi-icon-footer.png">
                         </div>
-                        <div><p>{!! get_content($shop_theme_info, "home", "home_company_description") !!}</div>
+                        <div>
+                            <p>Philippine Archipelago Ports and Terminal Services Inc. aims to be a key player in the industry of port operation and management. We provide safe, clean and convenient port facilities and passenger terminal buildings.</p>
+                        </div>
                         <div class="footer-image">
                             <img src="\themes\paptsi-v2\img\footer-image.jpg">
                         </div>

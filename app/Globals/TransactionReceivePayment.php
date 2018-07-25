@@ -8,6 +8,7 @@ use App\Models\Tbl_receive_payment_line;
 use Carbon\Carbon;
 use DB;
 use App\Globals\AccountingTransaction;
+use App\Globals\CommissionCalculator;
 use App\Globals\Invoice;
 use App\Globals\Accounting;
 
@@ -81,7 +82,7 @@ class TransactionReceivePayment
 
         	$rcvpayment_id  = Tbl_receive_payment::insertGetId($ins);
 
-        	$val = Self::insertline($rcvpayment_id, $insert_item);
+        	$val = Self::insertline($rcvpayment_id, $insert_item, $shop_id);
 
         	/* Transaction Journal */
 	        $entry["reference_module"]      = "receive-payment";
@@ -163,7 +164,7 @@ class TransactionReceivePayment
       		}
       	}
 	}
-	public static function insertline($rcvpayment_id, $insert_item)
+	public static function insertline($rcvpayment_id, $insert_item, $shop_id = '')
 	{
 		foreach ($insert_item as $key => $value) 
 		{
@@ -184,6 +185,11 @@ class TransactionReceivePayment
 	            if($value["rpline_reference_name"] == 'invoice')
 	            {
 	                $ret = Invoice::updateAmountApplied($value["rpline_reference_id"]);
+                    $check = CommissionCalculator::check_settings($shop_id);
+                    if($check == 1)
+                    {
+                        CommissionCalculator::update_commission($value["rpline_reference_id"], $rcvpayment_id);
+                    }
 	            }
 	        }
 		}

@@ -1,5 +1,5 @@
 <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
-<div class="popup-buy-a-kit">
+<div class="popup-buy-a-kit kart">
     <div class="modal-content cart">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

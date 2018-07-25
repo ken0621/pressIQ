@@ -21,7 +21,7 @@ use Request;
 use Crypt;
 class Customer
 {
-	public static function register($shop_id, $info)
+	public static function register($shop_id, $info, $address = null)
 	{
 		$info["shop_id"] = $shop_id;
 		$plan_settings = Mlm_plan::get_settings($shop_id);
@@ -39,10 +39,37 @@ class Customer
 			session()->forget("lead_sponsor");
 		}
 
-		$register = Tbl_customer::insert($info);
+		$register = Tbl_customer::insertGetId($info);
 
 		if ($shop_id == 1 && $register) 
 		{
+			/* Put Address */
+			if ($address) 
+			{
+				$insert_customer_address["country_id"]       = 420;
+				$insert_customer_address["customer_state"]   = "";
+				$insert_customer_address["customer_city"]    = "";
+				$insert_customer_address["customer_zipcode"] = "";
+				$insert_customer_address["customer_street"]  = $address;
+				$insert_customer_address["state_id"]         = null;
+				$insert_customer_address["city_id"]          = null;
+				$insert_customer_address["barangay_id"]      = null;
+				$insert_customer_address["created_at"]       = Carbon::now();
+				$insert_customer_address["customer_id"]      = $register;
+				$insert_customer_address["purpose"]          = "permanent";
+
+				Tbl_customer_address::insert($insert_customer_address);
+
+				$insert_customer_address["purpose"]          = "billing";
+
+				Tbl_customer_address::insert($insert_customer_address);
+
+				$insert_customer_address["purpose"]          = "shipping";
+
+				Tbl_customer_address::insert($insert_customer_address);
+			}
+
+			/* Send SMS */
 			$txt[0]["txt_to_be_replace"] = "[name]";
 			$txt[0]["txt_to_replace"]    = $info['first_name'];
 			$result                      = Sms::SendSms($info['contact'], "success_register", $txt, $shop_id);
@@ -164,6 +191,17 @@ class Customer
 		// dd($current_slot_gc);
 		return currency('',$current_slot_gc);
 	}
+	
+	public static function get_slot_id($slot_no)
+	{
+		return Tbl_mlm_slot::where("slot_no", $slot_no)->value("slot_id");
+	}
+	public static function get_current_slot_wallet()
+	{
+		$slot_no = request('slot_no');
+		$current_slot_wallet = Tbl_mlm_slot::currentWallet()->where("slot_no",$slot_no)->value('current_wallet');
+		return currency('',$current_slot_wallet);
+	}
 
 	public static function get_points_wallet_per_slot($slot_id = 0)
 	{
@@ -227,7 +265,7 @@ class Customer
 
 		return $return;
 	}
-	public static function getAllCustomer($for_tablet = false)
+	public static function getAllCustomer($for_tablet = false, $with_slot = false)
 	{
 		$shop_id = Customer::getShopId();
 		if($for_tablet == true)
@@ -239,6 +277,12 @@ class Customer
 		// {
 		// 	$customer = $customer->selectRaw('*, tbl_employee.first_name as salesrep_fname, tbl_employee.middle_name as salesrep_mname,tbl_employee.last_name as salesrep_lname')->commission()->salesrep();
 		// }
+		
+		if ($with_slot) 
+		{
+			$customer = $customer->join("tbl_mlm_slot", "tbl_mlm_slot.slot_owner", "=", "tbl_customer.customer_id")->join('tbl_membership', 'tbl_mlm_slot.slot_membership', '=', 'tbl_membership.membership_id');
+		}
+
 		return $customer->get();
 	}
 	public static function countAllCustomer($for_tablet = false)

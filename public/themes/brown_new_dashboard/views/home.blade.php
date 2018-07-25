@@ -21,6 +21,7 @@
 	<!--External css-->
 	<link rel="stylesheet" href="/themes/brown_new_dashboard/assets/css/member_layout.css">
 	<link rel="stylesheet" href="/themes/brown_new_dashboard/assets/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
 
 	<!--wow animation-->
 	<link rel="stylesheet" href="/themes/brown_new_dashboard/assets/wow/css/animate.css">
@@ -75,8 +76,10 @@
 		<div class="subnav">
 			<div class="container">
 				<div class="subnav-holder d-flex flex-wrap align-items-center">
-					<div class="left d-flex flex-wrap align-items-center">
+					<div class="logo-holder d-flex align-items-center justify-content-center">
 						<a class="decor-none" href="#"><img src="/themes/brown_new_dashboard/assets/img/logo.svg" alt=""></a>
+					</div>
+					<div class="left d-flex flex-wrap align-items-center">
 						<a class="decor-none" href="#">MY ACCOUNT</a>
 						<a class="decor-none" href="#">HOME</a>
 						<a class="decor-none" href="#">ABOUT</a>
@@ -374,7 +377,7 @@
 														<button class="btn-cust-brown"><img src="/themes/brown_new_dashboard/assets/img/replicated.png" alt=""> Replicated Link</button>
 													</div>
 												</div>
-												<div class="slot-wallet">
+												<div class="slot-wallet ml-2">
 													<div class="label-reg">SLOT WALLET</div>
 													<div class="value">PHP 2,500.00</div>
 												</div>
@@ -403,7 +406,7 @@
 														<button class="btn-cust-brown"><img src="/themes/brown_new_dashboard/assets/img/replicated.png" alt=""> Replicated Link</button>
 													</div>
 												</div>
-												<div class="slot-wallet">
+												<div class="slot-wallet ml-2">
 													<div class="label-reg">SLOT WALLET</div>
 													<div class="value">PHP 2,500.00</div>
 												</div>

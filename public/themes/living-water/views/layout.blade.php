@@ -18,7 +18,7 @@
         <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet">   
 
         <!-- GLOBAL CSS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1.4">
 
         @include("frontend.ghead")
 
@@ -55,16 +55,16 @@
                 <span>{!! get_content($shop_theme_info, "contact_details", "contact_company_email_address") !!}</span>
             </div>
             <div class="right-container">
-               {{--  <form action="/product" method="get" id="form-search" style="display: inline-block;">
+                <form action="/product" method="get" id="form-search">
                      <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" name="search" class="form-control" id="keyword1" placeholder="Search...">
-                     <span class="search-button" id="sizing-addon1">
+                     <span class="search-button">
                         <a href="" onclick="onSearch(1);" id="submit_link" style="color: #fff;"><i class="fa fa-search" aria-hidden="true"></i></a>
                      </span>
-                </form> --}}
-                    <span>
+                </form>
+                    {{-- <span>
                         <input class="form-control" placeholder="Search">
                     </span>
-                    <i class="fa fa-search" aria-hidden="true"></i>
+                    <i class="fa fa-search" aria-hidden="true"></i> --}}
             </div>
         </div>
     </div>
@@ -85,6 +85,20 @@
                         <span></span>
                         <span></span>
                     </div>
+                    <div class="menu-mobile-nav">
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#home">HOME</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#about">ABOUT US</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#process">PROCESS</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#service">SERVICES</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#gallery">GALLERY</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#contact">CONTACT</a></span>
+                    </div>
                 </div>
                 <div class="col-md-10">
                 <!-- NAVIGATION -->
@@ -92,25 +106,28 @@
                         <ul>
                             @if(Request::segment(1)=="about")
                                 <li><a class="smoth-scroll" href="/#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="/#process">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="/#service">SERVICEST</a></li>
+                                <li><a class="smoth-scroll" href="/#service">PRODUCT & SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="/#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
+                                <li><a class="smoth-scroll" href="/about">ABOUT US</a></li>
                             @elseif(Request::segment(1)=="product")
                                 <li><a class="smoth-scroll" href="/#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="/#process">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="/#service">SERVICES</a></li>
+                                <li><a class="smoth-scroll" href="/#service">PRODUCT & SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="/#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
+                                <li><a class="smoth-scroll" href="/about">ABOUT US</a></li>
+                            @elseif(Request::segment(1)=="product2")
+                                <li><a class="smoth-scroll" href="/#home">HOME</a></li>
+                                <li><a class="smoth-scroll" href="/#service">PRODUCT & SERVICES</a></li>
+                                <li><a class="smoth-scroll" href="/#gallery">GALLERY</a></li>
+                                <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
+                                <li><a class="smoth-scroll" href="/about">ABOUT US</a></li>
                             @else
                                 <li><a class="smoth-scroll" href="#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="#about">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="#process">PROCESS</a></li>
-                                <li><a class="smoth-scroll" href="#service">SERVICES</a></li>
+                                <li><a class="smoth-scroll" href="#service">PRODUCT & SERVICES</a></li>
                                 <li><a class="smoth-scroll" href="#gallery">GALLERY</a></li>
                                 <li><a class="smoth-scroll" href="#contact">CONTACT</a></li>
+                                <li><a class="smoth-scroll" href="/about">ABOUT US</a></li>
                             @endif
                         </ul>
                     </nav>
@@ -134,27 +151,49 @@
                             <img src="\themes\living-water\img\header-logo.png">
                         </div>
                         <div>
-                        <p>LIVINGWATER has been in the business of supplying healthy drinking water for almost three (3) years. Given its vast marketing experiences and a solid development foundation, our company has carved for itself a formidable position in the supply of healthy drinking water in the Philippines.</p>
+                        <p>
+                            {{ get_content($shop_theme_info, "footer_details", "footer_about_details") }}
+                        </p>
                         </div>
                     </div>
                     <div class="col-md-4">
                          <div class="footer-title-container">
                             <p class="footer-title">INFORMATION</p>
                         </div>
-                        <div class="info-list"><a class="smoth-scroll" href="#home">HOME</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="#about">ABOUT US</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="#process">PROCESS</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="#gallery">PRODUCTS</a></div>
-                        <div class="info-list"><a class="smoth-scroll" href="#contact">CONTACT US</a></div>
+                        @if(Request::segment(1)=="about")
+                            <div class="info-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#service">PRODUCT & SERVICES</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#gallery">GALLERY</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#contact">CONTACT</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/about">ABOUT US</a></div>
+                        @elseif(Request::segment(1)=="product")
+                            <div class="info-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#service">PRODUCT & SERVICES</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#gallery">GALLERY</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#contact">CONTACT</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/about">ABOUT US</a></div>
+                        @elseif(Request::segment(1)=="product2")
+                            <div class="info-list"><a class="smoth-scroll" href="/#home">HOME</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#service">PRODUCT & SERVICES</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#gallery">GALLERY</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/#contact">CONTACT</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/about">ABOUT US</a></div>
+                        @else
+                            <div class="info-list"><a class="smoth-scroll" href="#home">HOME</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="#service">PRODUCT & SERVICES</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="#gallery">GALLERY</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="#contact">CONTACT</a></div>
+                            <div class="info-list"><a class="smoth-scroll" href="/about">ABOUT US</a></div>
+                        @endif
                     </div>
                     <div class="col-md-4">
                         <div class="footer-title-container">
                             <p class="footer-title">FOLLOW US ON</p>
                         </div>
                         <div class="social-icon-container">
-                            <a href="#"><span><i class="fa fa-facebook-square"></i></span></a>
-                            <a href="#"><span><i class="fa fa-twitter-square"></i></span></a>
-                            <a href="#"><span><i class="fa fa-instagram"></i></span></a>
+                            <a href="{{ get_content($shop_theme_info, "footer_details", "footer_social_fb") }}"><span><i class="fa fa-facebook-square"></i></span></a>
+                            <a href="{{ get_content($shop_theme_info, "footer_details", "footer_social_twitter") }}"><span><i class="fa fa-twitter-square"></i></span></a>
+                            <a href="{{ get_content($shop_theme_info, "footer_details", "footer_social_insta") }}"><span><i class="fa fa-instagram"></i></span></a>
                         </div>
                     </div>
                 </div>

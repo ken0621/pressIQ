@@ -69,6 +69,15 @@ return [
             'username' => 'uploadthirdparty@digimaweb.solutions',
             'password' => '8ert8Tw_hD}0',
         ],
+
+        'spaces' => [
+            'driver' => 's3',
+            'key' => 'YVNVSGBHPSCEFZDF6CM4',
+            'secret' => 'Vpuw1GyN3+vxQRP8NZyzxujkIUFuTqzSfrr6pWolW+4',
+            'endpoint' => 'https://sgp1.digitaloceanspaces.com',
+            'region' => 'sgp1',
+            'bucket' => 'digima',
+        ],
     ],
 
 ];

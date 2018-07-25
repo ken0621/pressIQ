@@ -80,6 +80,7 @@
 				  			<tr>
 				  				<th class="text-left" width="200px">PIN</th>
 				  				<th class="text-left" width="200px">ACTIVATION</th>
+				  				<th class="text-left">TYPE</th>
 				  				<th class="text-center">STATUS</th>
 				  				<th class="text-center">USED BY</th>
 				  				<th></th>
@@ -90,6 +91,7 @@
 				  			<tr>
 				  				<td class="text-left">{{ $code->mlm_pin }}</td>
 				  				<td class="text-left">{{ $code->mlm_activation }}</td>
+				  				<td class="text-left">{{ $code->item_type_id == 5 ? "Reward Code" : "Membership Code" }}</td>
 				  				<td class="text-center">{{ $code->item_in_use }}</td>
 				  				<td class="text-center">{{ $code->used_by }}</td>
 				  			</tr>

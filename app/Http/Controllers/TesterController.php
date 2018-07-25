@@ -41,6 +41,7 @@ use Validator;
 use Redirect;
 use Crypt;
 use DB;
+use Storage;
 
 class TesterController extends Controller
 {
@@ -260,5 +261,48 @@ class TesterController extends Controller
             return view("errors.test", $data);
         }
         
+    }
+    
+    function get_assets($project, $image)
+    {
+        $imagepath    = 'uploads/'.$project.'/'.$image;
+        $exist        = Storage::disk('spaces')->exists($imagepath);
+
+        if ($exist) 
+        {
+            $url = Storage::disk('spaces')->url($imagepath);
+        }
+        else
+        {
+            // $exist_ftp = Storage::disk('ftp')->exists($imagepath);
+            if ($this->remoteFileExists('http://digimaweb.solutions/uploadthirdparty/' . $imagepath))
+            {
+                $imageget = Storage::disk('ftp')->get($imagepath);
+
+                if ($imageget) 
+                {
+                    Storage::disk('spaces')->put($imagepath, $imageget, 'public');
+                }
+
+                $url = Storage::disk('spaces')->url($imagepath);
+            }
+            else 
+            {
+                $url = 'http://www.allwhitebackground.com/images/2/2278-190x190.jpg';
+            }
+        }
+
+        return Redirect::to($url);
+    }
+
+    function remoteFileExists($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_NOBODY, 1);
+        curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        if (curl_exec($ch)) return true;
+        else return false;
     }
 }

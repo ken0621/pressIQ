@@ -1,6 +1,13 @@
 {
 	"home":
 	{
+		"home_slider" :
+		{
+			"label":"Slider Maintenance",
+			"type":"gallery",
+			"default":"",
+			"size":"12"
+		},
 		"home_banner" :
 		{
 			"label":"Home Banner Image (1600x700) Image Dimensions",
@@ -80,6 +87,89 @@
 		}
 
 	},
+	"product_and_services":
+	{
+		"water_supplies_list" :
+		{
+			"label":"Water Treatment Parts And Supplies",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"quality_list" :
+		{
+			"label":"Quality Policy",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"water_supplies_image_1" :
+		{
+			"label":"Water Treatment Parts And Supplies Image 1 (250x118) Image Dimension",
+			"type":"image",
+			"default":"/themes/living-water/img/supplies-1.jpg",
+			"size":"3"
+		},
+		"water_supplies_image_2" :
+		{
+			"label":"Water Treatment Parts And Supplies Image 2 (250x118) Image Dimension",
+			"type":"image",
+			"default":"/themes/living-water/img/supplies-2.jpg",
+			"size":"3"
+		},
+		"water_supplies_image_3" :
+		{
+			"label":"Water Treatment Parts And Supplies Image 3 (250x118) Image Dimension",
+			"type":"image",
+			"default":"/themes/living-water/img/supplies-3.jpg",
+			"size":"3"
+		},
+		"water_supplies_image_4" :
+		{
+			"label":"Water Treatment Parts And Supplies Image 4 (250x118) Image Dimension",
+			"type":"image",
+			"default":"/themes/living-water/img/supplies-4.jpg",
+			"size":"3"
+		},
+		"water_supplies_image_5" :
+		{
+			"label":"Water Treatment Parts And Supplies Image 5 (530x280) Image Dimension",
+			"type":"image",
+			"default":"/themes/living-water/img/supplies-5.jpg",
+			"size":"6"
+		}
+	},
+	"about":
+	{
+		"about_context" :
+		{
+			"label":"About Us Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"12"
+		},
+		"about_mission" :
+		{
+			"label":"Mission Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"about_quality_objective" :
+		{
+			"label":"Quality Objective Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"about_vision" :
+		{
+			"label":"Vision Context",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		}
+	},
 	"contact_details":
 	{
 		"contact_company_address" :
@@ -101,6 +191,44 @@
 			"label":"Contact Number of Company",
 			"type":"textbox",
 			"default":"09479855602 / 09988627466",
+			"size":"4"
+		},
+		"contact_google_map_link" :
+		{
+			"label":"Google Map Link",
+			"type":"textbox",
+			"default":"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15440.112259220126!2d121.02096329822486!3d14.65434838967788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b6faf1ed4163%3A0xa543aa75a00c2da5!2sVeterans+Village%2C+Project+7%2C+Quezon+City%2C+Metro+Manila!5e0!3m2!1sen!2sph!4v1520982546353",
+			"size":"6"
+		}
+	},
+	"footer_details":
+	{
+		"footer_about_details":
+		{
+			"label":"Footer About Caption",
+			"type":"textarea",
+			"default":"LIVINGWATER has been in the business of supplying healthy drinking water for almost three (3) years. Given its vast marketing experiences and a solid development foundation, our company has carved for itself a formidable position in the supply of healthy drinking water in the Philippines.",
+			"size":"12"
+		},
+		"footer_social_fb":
+		{
+			"label":"Fb Page Link",
+			"type":"textbox",
+			"default":"#",
+			"size":"4"
+		},
+		"footer_social_twitter":
+		{
+			"label":"Twitter Page Link",
+			"type":"textbox",
+			"default":"#",
+			"size":"4"
+		},
+		"footer_social_insta":
+		{
+			"label":"Instagram Page Link",
+			"type":"textbox",
+			"default":"#",
 			"size":"4"
 		}
 	}

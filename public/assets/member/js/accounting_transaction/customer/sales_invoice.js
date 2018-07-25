@@ -234,7 +234,6 @@ function sales_invoice()
     		{  
     			action_load_unit_measurement($(this));
     		}
-
         });
 	}
 	function action_load_open_transaction($customer_id)

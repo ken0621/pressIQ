@@ -214,14 +214,35 @@
 			"label":"Legalities",
 			"type":"gallery",
 			"default":"",
-			"size":"6"
+			"size":"12"
 		},
 		"business_presentation" :
 		{
 			"label":"Business Presentation",
 			"type":"text",
 			"default":"",
-			"size":"6"
+			"size":"4"
+		},
+		"millionaire_system" :
+		{
+			"label":"The Millionaire System",
+			"type":"text",
+			"default":"",
+			"size":"4"
+		},
+		"privilege_card_presentation" :
+		{
+			"label":"Privilege Card Presentation",
+			"type":"text",
+			"default":"",
+			"size":"4"
+		},
+		"merchant_presentation" :
+		{
+			"label":"Merchant Presentation",
+			"type":"text",
+			"default":"",
+			"size":"4"
 		}
 	},
 	"info":
@@ -290,6 +311,16 @@
 			"label":"General Terms and Condition",
 			"type":"tinymce",
 			"default":"",
+			"size":"6"
+		}
+	},
+	"video":
+	{
+		"video_link":
+		{
+			"label":"Replicated Page Video Link",
+			"type":"textbox",
+			"default":"https://www.youtube.com/embed/2ZyTldtOG4Y",
 			"size":"6"
 		}
 	}

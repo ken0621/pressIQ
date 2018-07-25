@@ -972,7 +972,7 @@ class Cart
         $subtotal = 0;
         $shipping_fee = 0;
 
-        $_cart = Self::get_cart($shop_id)["cart"];
+        $_cart = isset(Self::get_cart($shop_id)["cart"]) ? Self::get_cart($shop_id)["cart"] : null; 
         unset($data["tbl_ec_order_item"]);
         /* ITEM ON CART */
         foreach($_cart as $key => $cart)

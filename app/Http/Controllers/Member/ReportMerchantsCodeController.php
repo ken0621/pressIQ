@@ -64,8 +64,7 @@ class ReportMerchantsCodeController extends Member
         $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 
         $shop_id = $this->user_info->shop_id;
-        $data['_warehouse'] = Warehouse2::get_all_warehouse($shop_id);
-        
+        $data['_warehouse'] = Warehouse2::get_all_warehouse_user_id($shop_id, $this->user_info->user_id);
 
         $data['warehouse_id'] = Warehouse2::get_current_warehouse($shop_id);
         if(Request::input('warehouse_id') != null)

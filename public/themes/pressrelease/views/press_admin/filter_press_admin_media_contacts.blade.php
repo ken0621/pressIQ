@@ -1,14 +1,17 @@
 
 <tr>
-  <th style="width: 15%;">Contact Name</th>
-  <th style="width: 15%;">Company</th>
-  <th style="width: 15%;">Country</th>
-  <th style="width: 15%;">Industry Type</th>
-  <th style="width: 15%;">Media Type</th>
-  <th style="width: 30%;">Action</th>
+  <th style="width: 10%;">Select</th>
+  <th style="width: 10%;">Contact Name</th>
+  <th style="width: 5%;">Company</th>
+  <th style="width: 5%;">Country</th>
+  <th style="width: 5%;">Industry Type</th>
+  <th style="width: 5%;">Media Type</th>
+  <th style="width: 20%;">Action</th>
 </tr>
-@foreach($_media_contacts as $_media)
+@foreach($_media_contacts_filter as $_media)
   <tr>
+    <input type="hidden" id="recipient_id" name="recipient_id[]" value="{{$_media->recipient_id}}">
+    <td style="text-align: center;"><input type="checkbox" class="checkbox"  name="checkboxs[]" value="{{$_media->recipient_id}}" style="width: 100%"></td>
     <td>{{$_media->name}}</td>
     <td>{{$_media->company_name}}</td>
     <td>{{$_media->country}}</td>
@@ -20,12 +23,6 @@
 
       <button type="button"  class="btn btn-danger center pop_delete_media_btn" data-id="{{$_media->recipient_id}}">
       <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i> Delete</button></a>
-
-      {{-- <a href="/pressadmin/pressreleases_edit_recipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-warning center">
-      <i class="fa fa-wrench" name="" aria-hidden="true"></i>Edit</button> --}}
-
-      {{-- <a onclick="return confirm('Are you sure you want to Delete?');" href="/pressadmin/pressreleases_deleterecipient/{{$_media->recipient_id}}"><button type="button"  class="btn btn-danger center"> --}}
-      {{-- <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i>Delete</button> --}}
     </td>
   </tr>
 @endforeach

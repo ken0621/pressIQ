@@ -59,27 +59,74 @@
                        <center>{{ Session::get('delete') }}</center>
                     </div>
                     @endif
-
                   <div class="col-md-12">
-                   <div class="press-holder-container">
+                  <div class="press-holder-container">     
+
                       <div class="search-container pull-right">
-                          <input placeholder="Search" type="text"  name="search_media" id="search_media">
-                          <button  type="button" name="search_button" id="search_button" class="btn btn-success">Search</button>
-                      </div>  
-                      <div class="title-container">Media Contacts</div> 
+                          <button type="button" name="search_button" id="search_button" class="btn btn-success" style="height: 40px;">Search</button>
+                          <input type="text" class="form-control" placeholder="Search"   name="search_media" id="search_media">
+                      </div><br><br><br>
+
+                      <div class="row clearfix">
+                          <div class="col-md-3">
+                                <select class="form-control " id="country_filter" name="country_filter" style="width: 230px;background-color: #f1f1f1;" required> 
+                                  <option value="">-- All Country --</option>
+                                  <option value="Hong Kong">Hong Kong</option>
+                                  <option value="Philippines">Philippines</option>
+                                  <option value="Singapore">Singapore</option> 
+                                  <option value="China">China</option>
+                                  <option value="Indonesia">Indonesia</option>
+                                  <option value="Malaysia">Malaysia</option>
+                                  <option value="India">India</option>
+                                  <option value="Canada">Canada</option>
+                                </select>
+                          </div>
+
+                          <div class="col-md-3">
+                                <select class="form-control " id="industry_type_filter" name="industry_type_filter" style="width: 230px;background-color: #f1f1f1;" required> 
+                                  <option value="">-- All Industry Category --</option>
+                                  @foreach($_industry_name_add as $_industry_name)
+                                    <option value="{{$_industry_name->industry_name}}">{{$_industry_name->industry_name}}</option>
+                                  @endforeach
+                                </select>
+                          </div>
+
+                          <div class="col-md-3">
+                                <select class="form-control" id="media_type_filter" name="media_type_filter" style="width: 230px;background-color: #f1f1f1;" required> 
+                                  <option value="">-- All Media Type --</option>
+                                  @foreach($_media_name_add as $_media_filter)
+                                    <option value="{{$_media_filter->media_name}}">{{$_media_filter->media_name}}</option>
+                                  @endforeach
+                                </select>
+                          </div>
+
+                          <div class="col-md-3">
+                              <div class="button-container">
+                                <button type="button" name="filter_data" id="filter_data" class="btn btn-success" style="height: 35px; width: 100%">Filter Data</button><br>
+                              </div>
+                          </div>
+                      </div>
+                    <form action="" class="choose_recipient_form" method="POST" id="choose_recipient_form">
                       <div class="left-container" name="press_table" id="press_table1">
                           <table  class="table table-bordered" id="showHere_table1">
                               <tr>
-                                  <th style="width: 25%;">Contact Name</th>
-                                  <th style="width: 25%;">Company</th>
-                                  <th style="width: 25%;">Country</th>
-                                  <th style="width: 25%;">Action</th>
-                              </tr>
+                                  <th style="width: 10%;">Select</th>
+                                  <th style="width: 10%;">Contact Name</th>
+                                  <th style="width: 5%;">Company</th>
+                                  <th style="width: 5%;">Country</th>
+                                  <th style="width: 5%;">Industry Type</th>
+                                  <th style="width: 5%;">Media Type</th>
+                                  <th style="width: 20%;">Action</th>
+                              </tr> 
                               @foreach($_media_contacts as $_media)
                               <tr>
+                                 <input type="hidden" id="recipient_id" name="recipient_id[]" value="{{$_media->recipient_id}}">
+                                 <td style="text-align: center;"><input type="checkbox" class="checkbox"  name="checkboxs[]" value="{{$_media->recipient_id}}" style="width: 100%"></td>
                                  <td>{{$_media->name}}</td>
                                  <td>{{$_media->company_name}}</td>
                                  <td>{{$_media->country}}</td>
+                                 <td>{{$_media->industry_type}}</td>
+                                 <td>{{$_media->media_type}}</td>
                                  <td>
                                    <button type="button"  class="btn btn-warning center pop_chosen_recipient_btn" data-id="{{$_media->recipient_id}}">
                                    <i class="fa fa-wrench" name="" aria-hidden="true"></i> Edit</button>
@@ -91,10 +138,30 @@
                               @endforeach
                           </table>
                      </div>
-                   </div>    
+                    </form> 
+                   </div> 
+                   <div class="right-container">
+                        <div class="col-md-4">
+                              <div class="button-container">
+                                <button type="button" class="btn btn-success center" id="select_all" name="select_all" style="width: 150px;">
+                                <i class="" name="recipient_id" aria-hidden="true"></i> Select All</button></a>  
+                              </div>
+                          </div>
+                          <div class="col-md-4">
+                              <div class="button-container">
+                                <button type="button" class="btn btn-success center" id="unselect_all" name="unselect_all" style="width: 150px;">
+                                <i class="" name="recipient_id" aria-hidden="true"></i> Unselect All</button></a>
+                              </div>
+                          </div>
+                          <div class="col-md-1">
+                              <div class="button-container">
+                                <button type="button" class="btn btn-danger center pop_delete_all_confirm" style="width: 150px;">
+                                <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i> Delete All</button></a>
+                              </div>
+                          </div> 
+                      </div><br><br><br>  
                   </div>
               </div>
-
               <div id="add_media" class="tabcontent add-media-container">
                 <div class="title-container">Insert Media Contacts</div> 
                   <form method="post" action="/pressadmin/pressreleases_addrecipient" enctype="multipart/form-data">
@@ -265,9 +332,28 @@
               <h4 class="modal-title">Are you sure you want to Delete?</h4>
           </div>
           <div class="modal-body">
+
+          </div>
+         </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="popup-view">
+  <div class="modal" id="viewPopupMediaDeleteAll" name="viewPopupMediaDeleteAll" role="dialog">
+    <div class="modal-dialog modal-sm" >
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title"></h4>
+          </div>
+          {{-- <div class="modal-body" >
+          </div> --}}
+          <div class="modal-footer">
+              <button class="btn btn-danger pop_delete_all">YES</button>
+              <button type="button" class="btn btn-default pull-right" data-dismiss="modal">NO</button>
           </div>
         </div>
-      </form>
     </div>
   </div>
 </div>
@@ -391,7 +477,8 @@ document.getElementById("defaultOpen").click();
             setTimeout(function()
             {  
                 $('#viewPopup').modal('show');
-                $('div.modal-body').html(data); 
+                $('#viewPopup').find('div.modal-body').html(data); 
+                // $('div.modal-body').html(data); 
             }, 100);
         }
       });
@@ -411,7 +498,7 @@ document.getElementById("defaultOpen").click();
             setTimeout(function()
             {  
                 $('#viewPopupMediaDelete').modal('show');
-                $('div.modal-body').html(data); 
+                $('#viewPopupMediaDelete').find('div.modal-body').html(data); 
             }, 100);
         }
       });

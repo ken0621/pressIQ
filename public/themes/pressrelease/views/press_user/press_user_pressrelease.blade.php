@@ -286,7 +286,7 @@
             <button type="button" class="close" data-dismiss="modal" style="color: white;">&times;</button>
             <h4 class="modal-title" style="color:white;">Warning!</h4>
           </div>
-          <div class="modal-body" style="overflow-y: auto;">
+          <div class="modal-body" style="overflow-y: auto; text-align: center;">
             <label style="color:red;font-size: 20px;text-align: center;">Please fill the required fields!</label>
           </div>
       </div>

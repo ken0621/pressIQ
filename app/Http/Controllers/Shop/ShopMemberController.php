@@ -1238,6 +1238,69 @@ class ShopMemberController extends Shop
             return view("press_admin.search_press_admin_media_contacts", $data);
         }
     }
+    public function mediacontacts_filter(Request $request)
+    {  
+        $filter_country             =   $request->filter_country;
+        $filter_industry            =   $request->filter_industry;
+        $filter_media               =   $request->filter_media;
+
+        if($filter_country=="" && $filter_industry=="" && $filter_media =="")
+        {
+            $data["_media_contacts_filter"] = Tbl_press_release_recipient::get();  
+        }
+        elseif ($filter_country!="" && $filter_industry=="" && $filter_media =="")
+        {
+             $data["_media_contacts_filter"] = Tbl_press_release_recipient::where('country',$filter_country)
+                                                ->get();
+        }
+        elseif ($filter_country=="" && $filter_industry!="" && $filter_media =="")
+        {
+            $data["_media_contacts_filter"] = Tbl_press_release_recipient::where('industry_type',$filter_industry)
+                                                ->get();
+        }
+        elseif ($filter_country=="" && $filter_industry=="" && $filter_media !="") 
+        {
+            $data["_media_contacts_filter"] = Tbl_press_release_recipient::where('media_type',$filter_media)
+                                              ->get();
+        }
+        elseif ($filter_country!="" && $filter_industry!="" && $filter_media =="")
+        {
+            $data["_media_contacts_filter"] = Tbl_press_release_recipient::where('country',$filter_country)
+                                                ->where('industry_type',$filter_industry)
+                                                ->get();
+        }
+
+        elseif ($filter_country=="" && $filter_industry!="" && $filter_media !="")
+        {
+            $data["_media_contacts_filter"] = Tbl_press_release_recipient::where('industry_type',$filter_industry)
+                                                ->where('media_type',$filter_media)
+                                                ->get();
+        }
+
+        elseif ($filter_country!="" && $filter_industry=="" && $filter_media !="")
+        {
+            $data["_media_contacts_filter"] = Tbl_press_release_recipient::where('country',$filter_country)
+                                                ->where('media_type',$filter_media)
+                                                ->get();
+        }
+
+        elseif ($filter_country!="" && $filter_industry!="" && $filter_media !="") 
+        {
+           $data["_media_contacts_filter"] = Tbl_press_release_recipient::where('country',$filter_country)
+                                                ->where('industry_type',$filter_industry)
+                                                ->where('media_type',$filter_media)
+                                                ->get();
+        }
+
+        else    
+        {
+            $data["_media_contacts_filter"] = Tbl_press_release_recipient::get();  
+          
+        }
+
+        
+        return view("press_admin.filter_press_admin_media_contacts", $data);
+    }
 
     public function add_user(Request $request)  
     {
@@ -1912,6 +1975,26 @@ class ShopMemberController extends Shop
             $data['_recipients'][$key] = Tbl_press_release_recipient::where('recipient_id',$id)->first();
         }  
         return view("press_user.choose_recipient_view", $data);
+    }
+
+    public function mediacontacts_delete_all(Request $request)
+    {
+        $checkboxs = $request->checkboxs;
+        
+        if ($checkboxs == null) 
+        {
+           return redirect::back();
+        }
+        else
+        {
+            foreach($request->checkboxs as $key => $recipient_id) 
+            {
+                Tbl_press_release_recipient::where('recipient_id',$recipient_id)->delete();
+                 Session::flash('delete', "Recipient Already Deleted!");
+                
+            }
+            return "success";
+        }
     }
 
     public function pressreleases_image_upload()

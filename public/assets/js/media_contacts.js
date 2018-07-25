@@ -71,7 +71,7 @@ $(document).ready(function(){
 		$.ajax({
 			headers: 
 			{
-				      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 			},
 			method:'POST',
 			url:'/mediacontacts/delete_all',
@@ -85,9 +85,24 @@ $(document).ready(function(){
   	});
   	$(document).on('click','.pop_delete_all_confirm',function()
 	{
-		$('#viewPopupMediaDeleteAll').find('.modal-title').html('Are you sure you want to Delete All Checked Checkbox?');
-		$('#viewPopupMediaDeleteAll').modal('show');
-		
+		var length_check = $('input.checkbox:checked').length;
+		if(length_check == 0)			
+		{
+			var message = "No Selected Contacts!";
+			$('#viewPopupMediaDeleteAll').find('.modal-title').html(message);
+			$('#viewPopupMediaDeleteAll').find('.modal-footer .pop_delete_all').hide();
+			$('#viewPopupMediaDeleteAll').find('.modal-footer .pop_no_del').hide();
+			$('#viewPopupMediaDeleteAll').modal('show');
+		}
+		else
+		{
+			var message = "Are you sure you want to Delete Checked Checkbox?";
+			$('#viewPopupMediaDeleteAll').find('.modal-title').html(message);
+			$('#viewPopupMediaDeleteAll').find('.modal-footer .pop_delete_all').show();
+			$('#viewPopupMediaDeleteAll').find('.modal-footer .pop_no_del').show();
+			$('#viewPopupMediaDeleteAll').modal('show');
+		}
+
   	});
 });
 

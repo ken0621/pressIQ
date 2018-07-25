@@ -105,7 +105,27 @@
                                 <button type="button" name="filter_data" id="filter_data" class="btn btn-success" style="height: 35px; width: 100%">Filter Data</button><br>
                               </div>
                           </div>
-                      </div>
+                      </div><br>
+                      <div class="right-container" style="text-align: center;">
+                          <div class="col-md-4">
+                              <div class="button-container">
+                                <button type="button" class="btn btn-success center" id="select_all" name="select_all" style="width: 150px;">
+                                <i class="" name="recipient_id" aria-hidden="true"></i> Select All</button></a>  
+                              </div>
+                          </div>
+                          <div class="col-md-4">
+                              <div class="button-container">
+                                <button type="button" class="btn btn-success center" id="unselect_all" name="unselect_all" style="width: 150px;">
+                                <i class="" name="recipient_id" aria-hidden="true"></i> Unselect All</button></a>
+                              </div>
+                          </div>
+                          <div class="col-md-1">
+                              <div class="button-container">
+                                <button type="button" class="btn btn-danger center pop_delete_all_confirm" style="width: 150px;">
+                                <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i> Delete All</button></a>
+                              </div>
+                          </div> 
+                    </div><br><br>
                     <form action="" class="choose_recipient_form" method="POST" id="choose_recipient_form">
                       <div class="left-container" name="press_table" id="press_table1">
                           <table  class="table table-bordered" id="showHere_table1">
@@ -139,27 +159,7 @@
                           </table>
                      </div>
                     </form> 
-                   </div> 
-                   <div class="right-container">
-                        <div class="col-md-4">
-                              <div class="button-container">
-                                <button type="button" class="btn btn-success center" id="select_all" name="select_all" style="width: 150px;">
-                                <i class="" name="recipient_id" aria-hidden="true"></i> Select All</button></a>  
-                              </div>
-                          </div>
-                          <div class="col-md-4">
-                              <div class="button-container">
-                                <button type="button" class="btn btn-success center" id="unselect_all" name="unselect_all" style="width: 150px;">
-                                <i class="" name="recipient_id" aria-hidden="true"></i> Unselect All</button></a>
-                              </div>
-                          </div>
-                          <div class="col-md-1">
-                              <div class="button-container">
-                                <button type="button" class="btn btn-danger center pop_delete_all_confirm" style="width: 150px;">
-                                <i class="fa fa-trash" name="recipient_id" aria-hidden="true"></i> Delete All</button></a>
-                              </div>
-                          </div> 
-                      </div><br><br><br>  
+                   </div>   
                   </div>
               </div>
               <div id="add_media" class="tabcontent add-media-container">
@@ -344,14 +344,14 @@
   <div class="modal" id="viewPopupMediaDeleteAll" name="viewPopupMediaDeleteAll" role="dialog">
     <div class="modal-dialog modal-sm" >
       <div class="modal-content">
-          <div class="modal-header">
+          <div class="modal-header" style="text-align: center;">
               <h4 class="modal-title"></h4>
           </div>
           {{-- <div class="modal-body" >
           </div> --}}
-          <div class="modal-footer">
+          <div class="modal-footer" style="text-align: center;">
               <button class="btn btn-danger pop_delete_all">YES</button>
-              <button type="button" class="btn btn-default pull-right" data-dismiss="modal">NO</button>
+              <button type="button" class="btn btn-default pop_no_del" data-dismiss="modal">NO</button>
           </div>
         </div>
     </div>

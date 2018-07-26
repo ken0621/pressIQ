@@ -81,6 +81,7 @@ class ReportMerchantsCodeController extends Member
         if($report_type && !$load_view)
         {
             $view =  'member.reports.output.merchants_code'; 
+            $data["filter_type"] = Request::input("filter_type");
             return Report::check_report_type($report_type, $view, $data, 'Merchants Code-'.Carbon::now(), null, null, $return);
         }
         else
@@ -91,5 +92,9 @@ class ReportMerchantsCodeController extends Member
     public function report_header($data)
     {
         return view('member.reports.head', $data);
+    }
+    public function print_pdf()
+    {
+        return view('member.reports.pdf_selection');
     }
 }

@@ -17,6 +17,7 @@ use URL;
 use Carbon\Carbon;
 use App\Globals\Pdf_global;
 use App\Globals\Report;
+use App\Globals\Item;
 
 class Report
 {
@@ -215,7 +216,17 @@ class Report
 		                    });
                     	}
                     })->download('xls');
-
+            case 'per_file_in_pdf':
+            		if (isset($data["filter_type"])) 
+            		{
+            			if(isset($return["_" . $data["filter_type"]]))
+            			{
+            				$data['_item_product_code'] = $return["_" . $data["filter_type"]];
+	        				$data['view'] = view($view, $data)->render();
+	                		return Pdf_global::show_pdf($data['view'], $pdf_format == "landscape" ? $pdf_format : null,null, $paper_size);
+            			}
+            		}
+                break;
             default:
                     $return['status'] = 'success_plain';
                     $return['view'] = $_view->render();

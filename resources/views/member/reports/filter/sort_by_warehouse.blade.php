@@ -23,6 +23,7 @@
             <div class="col-md-3"><button class="btn btn-primary run-report" type="button" onclick="$('.report_type_i').val('plain')" >Run Report</button></div>
             
             <button class="btn btn-custom-green-white margin-right-10 btn-pdf pull-right" onclick="report_file('per_sheet_in_excel')"><i class="fa fa-file-excel-o"></i>&nbsp;Export to Excel</button>
+            <a href="javascript:" onclick="print_pdf();" class="btn btn-custom-green-white margin-right-10 btn-pdf pull-right"><i class="fa fa-file-pdf-o"></i>&nbsp;Export to PDF</a>
         </div>
         <div  style="margin-top: 15px" class=" row clearfix form-group">
             <div class="col-md-5 " style="padding: 5px"> 
@@ -88,5 +89,10 @@
         var link        = link + '?' + serialize + '&report_type=' + type;
         console.log(link);
         window.open(link);
+    }
+
+    function print_pdf()
+    {
+        action_load_link_to_modal("/member/report/merchants/code/print_pdf", "sm");
     }
 </script>

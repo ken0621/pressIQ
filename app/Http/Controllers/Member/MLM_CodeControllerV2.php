@@ -601,7 +601,7 @@ class MLM_CodeControllerV2 extends Member
         $data['_sold'] = Item::get_all_item_record_log('', "sold");
         $data['_printed'] = Item::get_all_item_record_log('', "printed");
         
-        $data['_distributed'] = Item::get_all_item_record_log('', "distributed");
+        $data['_activated'] = Item::get_all_item_record_log('', "distributed");
         $data['_unused'] = Item::get_all_item_record_log('','');
 
         Excel::create('Codes Report', function($excel) use ($data)

@@ -65,9 +65,9 @@
                 </td>
                 <td class="text-center">
                     @if($item->distributed)
-                        Distributed
+                        Activated
                     @else                        
-                        <a href="javascript:" class="popup" size="md" link="/member/mlm/product_code2/distribute?id={{ $item->record_log_id }}">Distribute</a>
+                        <a href="javascript:" class="popup" size="md" link="/member/mlm/product_code2/distribute?id={{ $item->record_log_id }}">Activate</a>
                     @endif
                 </td>
                 @endif

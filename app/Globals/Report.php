@@ -210,6 +210,12 @@ class Report
                     		$data_container["sheet_name"] = str_replace('_', " ", strtoupper($key));
                     		$data_container["return"] = $value;
                     		$data_container["status"] = $key;
+
+                    		if ($key == "_distributed") 
+                    		{
+                    			$key = "_activated";
+                    		}
+
 		                    $excel->sheet( str_replace('_', " ", $key) .' codes', function($sheet) use($data_container) 
 		                    {	//dd($data_container);
 		                        $sheet->loadView('member.reports.merchants.merchants_code_excel_table', $data_container);

@@ -29,7 +29,7 @@
         <li class="cursor-pointer change-tab block-tab" onClick="click_status('block');" mode="approved"><a class="cursor-pointer"><i class="fa fa-warning"></i> Blocked</a></li>
         <li class="cursor-pointer change-tab printed-tab" onClick="click_status('printed');" mode="approved"><a class="cursor-pointer"><i class="fa fa-print"></i> Printed</a></li>
         <li class="cursor-pointer change-tab released-tab" onClick="click_status('released');" mode="approved"><a class="cursor-pointer"><i class="fa fa-unlock-alt"></i> Released</a></li>
-        <li class="cursor-pointer change-tab distributed-tab" onClick="click_status('distributed');" mode="approved"><a class="cursor-pointer"><i class="fa fa-group"></i> Distributed</a></li>
+        <li class="cursor-pointer change-tab distributed-tab" onClick="click_status('distributed');" mode="approved"><a class="cursor-pointer"><i class="fa fa-group"></i> Activated</a></li>
     </ul>
     <div class="search-filter-box">
         <div class="col-md-3" style="padding: 10px">

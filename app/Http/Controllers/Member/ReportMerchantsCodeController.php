@@ -48,7 +48,7 @@ class ReportMerchantsCodeController extends Member
     public function index()
     {
         $data['shop_name']  = $this->user_info->shop_key; 
-        $data['head_title'] = 'Merchant Codes';
+        $data['head_title'] = 'Activated Sheet';
         $data['head_icon']  = 'fa fa-area-chart';
         $data['head_discription'] = '';
         $data['head']       = $this->report_header($data);
@@ -74,7 +74,7 @@ class ReportMerchantsCodeController extends Member
         $data['warehouse_name']= Warehouse2::get_warehouse_name($shop_id, $data['warehouse_id']);
         $data['_from'] = $data['from']." "."00:00:00";
         $data['_to'] = $data['to']." "."11:59:59";
-        $data['_item_product_code'] = Item::get_all_item_record_log('', "all", null, null, null, null, $data['from'], $data['to'], $data['warehouse_id']);
+        $data['_item_product_code'] = Item::get_all_item_record_log('', "distributed", null, null, null, null, $data['from'], $data['to'], $data['warehouse_id']);
         $return = Item::print_codes_report($data['_from'], $data['_to'], $data['warehouse_id']);
 
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */

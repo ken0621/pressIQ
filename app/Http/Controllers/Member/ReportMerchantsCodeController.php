@@ -50,7 +50,7 @@ class ReportMerchantsCodeController extends Member
         $data['shop_name']  = $this->user_info->shop_key; 
         $data['head_title'] = 'Activated Sheet';
         $data['head_icon']  = 'fa fa-area-chart';
-        $data['head_discription'] = '';
+        $data['head_discription'] = 'Report';
         $data['head']       = $this->report_header($data);
         $data['action']     = '/member/report/merchants/code';
         $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');

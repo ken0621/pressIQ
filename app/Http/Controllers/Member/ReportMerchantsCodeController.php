@@ -58,24 +58,24 @@ class ReportMerchantsCodeController extends Member
         $report_type    = Request::input('report_type');
         $load_view      = Request::input('load_view');
         $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
-        $date['start']  = Request::input('from');
-        $date['end']    = Request::input('to');
-        $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
-        $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
+        $start          = Request::input('from');
+        $end            = Request::input('to');
+        $date['start']  = Carbon::parse($start)->format("m/d/Y 00:00:00");
+        $date['end']    = Carbon::parse($end)->format("m/d/Y 11:59:59");
 
+        $data['from']   = Report::checkDatePeriod($period,  $date)['start_date'];
+        $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
+        
         $shop_id = $this->user_info->shop_id;
         $data['_warehouse'] = Warehouse2::get_all_warehouse_user_id($shop_id, $this->user_info->user_id);
-
         $data['warehouse_id'] = Warehouse2::get_current_warehouse($shop_id);
         if(Request::input('warehouse_id') != null)
         {
             $data['warehouse_id'] = Request::input('warehouse_id');
         }
         $data['warehouse_name']= Warehouse2::get_warehouse_name($shop_id, $data['warehouse_id']);
-        $data['_from'] = $data['from']." "."00:00:00";
-        $data['_to'] = $data['to']." "."11:59:59";
         $data['_item_product_code'] = Item::get_all_item_record_log('', "distributed", null, null, null, null, $data['from'], $data['to'], $data['warehouse_id']);
-        $return = Item::print_codes_report($data['_from'], $data['_to'], $data['warehouse_id']);
+        $return = Item::print_codes_report($data['from'], $data['to'], $data['warehouse_id']);
 
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
         if($report_type && !$load_view)

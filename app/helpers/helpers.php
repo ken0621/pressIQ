@@ -135,7 +135,7 @@ function currency($symbol,$amount)
 }
 function datepicker_input($date_str)
 {
-    return date("Y-m-d", strtotime($date_str));
+    return date("Y-m-d H:i:s", strtotime($date_str));
 }
 function convertToNumber($str)
 {

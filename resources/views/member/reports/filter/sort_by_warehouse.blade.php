@@ -8,14 +8,14 @@
                 <select class="form-control input-sm report_period" name="report_period">
                     <option value="all">All Dates</option>
                     <option value="custom">Custom</option>
-                    <option value="today">Today</option>
-                    <option value="this_week">This Week</option>
-                    <option value="this_week_to_date">This Week to Date</option>
-                    <option value="this_month">This Month</option>
-                    <option value="this_month_to_date">This Month to Date</option>
-                    <option value="this_quarter">This Quarter</option>
-                    <option value="this_quarter_to_date">This Quarter to Date</option>
-                    <option value="this_year">This Year</option>
+                    <option value="today">Daily</option>
+                    <option value="this_week">Weekly</option>
+                    {{-- <option value="this_week_to_date">This Week to Date</option> --}}
+                    <option value="this_month">Monthly</option>
+                    {{-- <option value="this_month_to_date">This Month to Date</option> --}}
+                    {{-- <option value="this_quarter">This Quarter</option> --}}
+                    {{-- <option value="this_quarter_to_date">This Quarter to Date</option> --}}
+                    <option value="this_year">Yearly</option>
                 </select>
             </div>
             <div class="col-md-2"><input type="text" class="form-control from_report_a datepicker" name="from" placeholder="Start Date"></div>

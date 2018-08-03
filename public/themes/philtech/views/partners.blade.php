@@ -21,7 +21,7 @@
         @foreach($_company_information as $company_information)
           <a href="/partners_views?i={{$company_information->company_id}}" style="text-decoration: none;color:#333">
           <div class="col-md-3 col-sm-6" style="padding: 4px;">
-             <div class="partners-div clearfix match-height" style="height: auto; padding-bottom: 15px;">
+             <div class="partners-div clearfix" style="padding-bottom: 15px;">
                 <div class="partner-header">
                    <img style="object-fit: contain;" src="{{ $company_information->company_logo }}" width="100%">
                 </div>
@@ -85,7 +85,7 @@
 
   .partners-div
   {
-    /*height:370px;*/
+    height: 450px;
     background:#FFFFFF;
     margin-top: 2px;
   }

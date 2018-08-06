@@ -33,7 +33,7 @@
 	<div class="dashboard">
 		<div class="row clearfix">
 			<div class="col-md-12">
-				<h4><img src="/themes/{{ $shop_theme }}/img/p-card.png"> Privilage Card Holder</h4>
+				<h4><img src="/themes/{{ $shop_theme }}/img/p-card.png"> Privilage Card Member</h4>
 			</div>
 		</div>
 		<div class="row clearfix">

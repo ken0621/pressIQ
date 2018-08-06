@@ -20,7 +20,7 @@
 	                        <!-- <a href="#" id="btn-buy-a-kit"><button class="btn-buy-a-kit">BUY A KIT</button></a> -->
 	                        <!-- <img src="/themes/{{ $shop_theme }}/img/or-1.png"><br> -->
 	                        <!-- <span class="or">OR</span> -->
-	                        <a href="javascript:" onclick="action_load_link_to_modal('/members/enter-code')" id="btn-enter-a-code"><button class="btn-enter-a-code">ENTER A CODE</button></a>
+	                        <a href="javascript:" onclick="action_load_link_to_modal('/members/enter-code')" id="btn-enter-a-code"><button class="btn-enter-a-code">ENTER ACTIVATION</button></a>
 	                    </div>
 	                </div>
 	            </div>

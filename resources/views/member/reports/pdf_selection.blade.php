@@ -29,9 +29,9 @@
 				<div class="form-check">
 				  <a href="javascript:" onclick="pdf_report_file('per_file_in_pdf', 'distributed')">Activated</a>
 				</div>
-				<div class="form-check">
+				{{-- <div class="form-check">
 				  <a href="javascript:" onclick="pdf_report_file('per_file_in_pdf', 'used')">Used</a>
-				</div>
+				</div> --}}
 			</div>
 		</form>
 	</div>

@@ -61,7 +61,7 @@ class ReportMerchantsCodeController extends Member
         $start          = Request::input('from');
         $end            = Request::input('to');
         $date['start']  = Carbon::parse($start)->format("m/d/Y 00:00:00");
-        $date['end']    = Carbon::parse($end)->format("m/d/Y 11:59:59");
+        $date['end']    = Carbon::parse($end)->format("m/d/Y 23:59:59");
 
         $data['from']   = Report::checkDatePeriod($period,  $date)['start_date'];
         $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];

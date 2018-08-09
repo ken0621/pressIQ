@@ -1324,7 +1324,7 @@
                 e.preventDefault();
             },
 
-            change = function (e) {
+            change = function (e) { 
                 var val = $(e.target).val().trim(),
                     parsedDate = val ? parseInputDate(val) : null;
                 setValue(parsedDate);

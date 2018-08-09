@@ -2494,7 +2494,7 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 
 .btn:not(:disabled):not(.disabled):active, .btn:not(:disabled):not(.disabled).active {
   background-image: none;
-}
+} 
 
 a.btn.disabled,
 fieldset:disabled a.btn {

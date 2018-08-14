@@ -140,7 +140,7 @@
                                     </div>
                                     <div class="form-group clearfix" style="margin-top: 15px;">
                                         <div class="checkbox agreement-checkbox">
-                                            <label><input type="checkbox" value="" required> I agree to the <span>Franchise Terms and Condition</span></label>
+                                            <label><input type="checkbox" value="" required> I agree to the <span>VIP Terms and Condition</span></label>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -166,7 +166,7 @@
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">Accept Philtech Franchise Terms and Conditions</div>
+            <div class="modal-header">Accept Philtech VIP Terms and Conditions</div>
             <div class="modal-body">
                 <div class="contract">
                     {!! get_content($shop_theme_info, "terms_and_conditions", "franchise_terms_and_condition") !!}

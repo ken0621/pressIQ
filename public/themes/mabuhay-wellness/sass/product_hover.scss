@@ -1,0 +1,130 @@
+@import "../../../assets/front/sass/mixin";
+
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,700");
+
+$montserrat: "Montserrat", sans-serif;
+$opensans: "Open Sans", sans-serif;
+
+//NON-MLM-MEMBER
+.prod-holder-nonmember {
+    .prod-image {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 182px;
+        max-width: 182px;
+        min-height: 182px;
+        max-height: 182px;
+
+        .shop-now-btn {
+            @include transition(0.2s);
+
+            position: absolute;
+            z-index: 5;
+            opacity: 0;
+            font-family: $opensans;
+            font-weight: 600;
+            font-size: 13px;
+            background-color: #1f8ddd;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 5px 15px;
+        }
+
+        .img-hover {
+            @include transition(0.2s);
+
+            z-index: 4;
+            object-fit: cover;
+        }
+
+        &:hover {
+            .shop-now-btn {
+                opacity: 1;
+            }
+
+            .img-hover {
+                opacity: 0.5;
+            }
+        }
+    }
+}
+
+//MLM-MEMBER
+.prod-holder-member {
+    .prod-image {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 182px;
+        max-width: 182px;
+        min-height: 182px;
+        max-height: 182px;
+
+        .prod-overlay {
+            @include transition(0.2s);
+
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(#05212f, 0.8);
+            z-index: 5;
+            opacity: 0;
+
+            .border {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid rgba(255, 255, 255, 0.5);
+                margin: 8px;
+                padding: 34px 15px;
+
+                .top, .bottom {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .bottom {
+                    margin-top: 8px;
+                }
+
+                .label {
+                    color: #dfd20a;
+                    font-family: $montserrat;
+                    font-weight: 400;
+                    font-size: 13px;
+                }
+
+                .price, .point {
+                    font-family: $montserrat;
+                    font-weight: 700;
+                    font-size: 18px;
+                    color: #fff;
+                }
+            }
+        }
+
+        .img-hover {
+            @include transition(0.2s);
+
+            z-index: 4;
+            object-fit: cover;
+        }
+
+        &:hover {
+            .prod-overlay {
+                opacity: 1;
+            }
+
+            .img-hover {
+                opacity: 0.5;
+            }
+        }
+    }
+}

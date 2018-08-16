@@ -146,7 +146,6 @@ class CustomerController extends Member
 	
     public function loadcustomer()
     {
-
         $str = Request::input('str');
         $archived = 0;
         if(Request::has('archive')){
@@ -186,10 +185,17 @@ class CustomerController extends Member
         }
         $update['archived'] = $arch;
 
-        $customer_data = Tbl_customer::where("customer_id",$id)->first()->toArray();
+        $customer_data = Tbl_customer::where("customer_id",$id)->first();
+        if($customer_data)
+        {
+            $customer_data = $customer_data->toArray();
+        }
         AuditTrail::record_logs("Archived","customer",$id,"",serialize($customer_data));
 
         Tbl_customer::where('customer_id',$id)->update($update);
+    
+
+
     }
 
 	public function modalcreatecustomer()

@@ -22,6 +22,7 @@ use App\Globals\Mlm_member;
 use App\Globals\Customer;
 use App\Globals\MLM2;
 use App\Globals\Item;
+use App\Globals\Digima;
 
 class Shop extends Controller
 {
@@ -36,6 +37,7 @@ class Shop extends Controller
     public static $lead;
     public function __construct()
     {
+        Digima::accessControl('frontend');
     	$domain = get_domain();
         $data['lead'] = null;
         $data['lead_code'] = null;

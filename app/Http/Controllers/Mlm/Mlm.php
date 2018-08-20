@@ -17,6 +17,8 @@ use App\Models\Tbl_mlm_encashment_settings;
 
 use App\Globals\Mlm_member;
 use App\Globals\Settings;
+use App\Globals\Digima;
+
 class Mlm extends Controller
 {
     public static $customer_id;
@@ -32,6 +34,8 @@ class Mlm extends Controller
     {	
         $this->middleware(function ($request, $next)
         {
+            Digima::accessControl('member');
+            
             Settings::set_mail_setting(Self::$shop_id);
 
             if(Session::get('mlm_member') != null)

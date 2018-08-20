@@ -7,7 +7,7 @@
 				<tr>
 					<td class="c1">
 						<div class="register-side">
-							<img src="/themes/{{ $shop_theme }}/img/forgot_password.jpg">
+							<img src="/themes/{{ $shop_theme }}/img/philtech-login.png">
 						</div>
 					</td>
 					<td class="c2">

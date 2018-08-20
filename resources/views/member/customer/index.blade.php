@@ -105,23 +105,23 @@
                                     </ul>
                                 </div> -->
                                 <div class="btn-group">
-                                  <button type="button" class="btn btn-sm btn-custom-white btn-action-{{$customer->customer_id1}} dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button type="button" class="btn btn-sm btn-custom-white btn-action-{{$customer->customer_id1}} dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Action <span class="caret"></span>
-                                  </button>
-                                  <ul class="dropdown-menu dropdown-menu-custom">
-                                    <li><a href="/member/customer/receive_payment?customer_id={{$customer->customer_id1}}">Receive Payment</a></li>
-                                    <li><a href="/member/customer/invoice?customer_id={{$customer->customer_id1}}">Create Invoice</a></li>
-                                    <li><a href="/member/customer/sales_receipt">Create Sales Receipt</a></li>
-                                    <!-- <li><a href="/member/customer/transaction_list">Transaction List</a></li> -->
-                                    @if(!$pis)
-                                    <li><a href="/member/customer/estimate">Create Estimate</li>
-                                   
+                                    </button>
+                                        <ul class="dropdown-menu dropdown-menu-custom">
+                                        <li><a href="/member/customer/receive_payment?customer_id={{$customer->customer_id1}}">Receive Payment</a></li>
+                                        <li><a href="/member/customer/invoice?customer_id={{$customer->customer_id1}}">Create Invoice</a></li>
+                                        <li><a href="/member/customer/sales_receipt">Create Sales Receipt</a></li>
+                                        <!-- <li><a href="/member/customer/transaction_list">Transaction List</a></li> -->
+                                        @if(!$pis)
+                                        <li><a href="/member/customer/estimate">Create Estimate</li>
+
                                         <li><a class="popup" link="/member/customer/viewlead/{{$customer->customer_id}}" size="md" data-toggle="modal">View Lead</li>   
-                                    @endif
-                                    <li><a href="/member/customer/details/{{$customer->customer_id1}}">View Customer Details</a></li>
-                                    <li><a class="popup" link="/member/customer/customeredit/{{$customer->customer_id1}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer Info</a></li>
-                                    <li><a class="active-toggle" data-content="{{$customer->customer_id1}}" data-target="#tr-customer-{{$customer->customer_id1}}" data-value="0" data-html="inactive">Make Inactive</a></li>
-                                  </ul>
+                                        @endif
+                                        <li><a href="/member/customer/details/{{$customer->customer_id1}}">View Customer Details</a></li>
+                                        <li><a class="popup" link="/member/customer/customeredit/{{$customer->customer_id1}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer Info</a></li>
+                                        <li><a class="active-toggle" data-content="{{$customer->customer_id1}}" data-target="#tr-customer-{{$customer->customer_id1}}" data-value="0" data-html="inactive">Make Inactive</a></li>
+                                    </ul>
                                 </div>
                             </td>
                         </tr>

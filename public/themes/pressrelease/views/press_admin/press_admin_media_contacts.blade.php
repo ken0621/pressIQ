@@ -43,7 +43,7 @@
           <div class="tab">
             <button class="tablinks" onclick="openCity(event, 'press_media')" id="defaultOpen">Press IQ Media Contacts</button>
             <button class="tablinks" onclick="openCity(event, 'add_media')" >Add Media Contacts</button>
-            <button class="tablinks" onclick="openCity(event, 'add_media_type')" >Add Media Type</button>
+            {{-- <button class="tablinks" onclick="openCity(event, 'add_media_type')" >Add Media Type</button> --}}
             <button class="tablinks" onclick="openCity(event, 'add_industry')" >Add Industry</button>
           </div>                        
             <div class="press-release-content">
@@ -197,11 +197,19 @@
                           </select> 
 
                       <div class="title">Media Type: *</div>
-                          <select class="form-control" id="media_type" name="media_type" style="width: 700px;background-color: #f1f1f1;" required> 
+                          <select class="form-control" id="media_type" name="media_type" style="width: 700px;background-color: #f1f1f1;"> 
+                              <option value="Newspaper">Newspaper</option>
+                              <option value="Online Newspaper">Online Newspaper</option>
+                              <option value="Magazine">Magazine</option>
+                              <option value="Online Magazine">Online Magazine</option>
+                              <option value="Blog">Blog</option>
+                              <option value="Trade Publication">Trade Publication</option>
+                          </select>
+                          {{-- <select class="form-control" id="media_type" name="media_type" style="width: 700px;background-color: #f1f1f1;" required> 
                             @foreach($_media_name_add as $_media_filter)
                               <option value="{{$_media_filter->media_name}}">{{$_media_filter->media_name}}</option>
                             @endforeach
-                          </select> 
+                          </select>  --}}
 
                       <div class="title">Industry: *</div>
                           <select class="form-control" id="industry_type" name="industry_type" style="width: 700px;background-color: #f1f1f1;" required> 
@@ -211,13 +219,23 @@
                           </select> 
 
                       <div class="title">Title: *</div>
-                      <input type="text" id="position" name="position" class="form-control" style="background-color: #f1f1f1;"  placeholder="Enter the title of the media contact" required>
+                          <select class="form-control" id="position" name="position" style="width: 700px;background-color: #f1f1f1;"> 
+                              <option value="Associate Editor">Associate Editor</option>
+                              <option value="Blogger">Blogger</option>
+                              <option value="Editor">Editor</option>
+                              <option value="Editor-in-Chief">Editor-in-Chief</option>
+                              <option value="Freelance Journalist">Freelance Journalist</option>
+                              <option value="Journalist">Journalist</option>
+                              <option value="News Desk">News Desk</option>
+                              <option value="Online News Desk">Online News Desk</option>
+                              <option value="Sub-Editor">Sub-Editor</option>
+                          </select> 
 
                       <div class="title">Website: *</div>
                       <input type="text"  id="contact_website" name="contact_website" class="form-control">
 
-                      {{-- <div class="title">Position: *</div> --}}
-                      {{-- <input type="text"  id="position" name="position" class="form-control" style="background-color: #f1f1f1;"  placeholder="Enter the position of the media contact" required> --}}
+                    {{--   <div class="title">Position: *</div>
+                      <input type="text"  id="position" name="position" class="form-control" style="background-color: #f1f1f1;"  placeholder="Enter the position of the media contact" required> --}}
 
                       <div class="title">Description: *</div>
                       <textarea id="description" name="description"></textarea>
@@ -227,7 +245,7 @@
                   </form>
               </div>
 
-              <div id="add_media_type" class="tabcontent insert-media-container">
+           {{--    <div id="add_media_type" class="tabcontent insert-media-container">
                 <div class="col-md-12">
                   <div class="press-holder-container"> 
                     <div class="title-container">Insert Media Type</div><br>
@@ -260,7 +278,7 @@
                       </div>
                   </div>
                 </div>
-              </div>
+              </div> --}}
 
               <div id="add_industry" class="tabcontent insert-media-container">
                 <div class="col-md-12">

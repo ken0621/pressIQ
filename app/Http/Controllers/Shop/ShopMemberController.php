@@ -1356,7 +1356,7 @@ class ShopMemberController extends Shop
                     $data["user_company_image"]          =$path_prefix.$path;
                 }        
                 Tbl_pressiq_user::insertGetId($data);
-                Session::flash('success_new_registered', 'New User Successfully Added!');
+                Session::flash('success_new_registered', 'New Customer Successfully Added!');
                 return redirect::back();
             }       
         }
@@ -1470,7 +1470,7 @@ class ShopMemberController extends Shop
             Session::put('user_company_image',$user_data->user_company_image);
             Session::put('pr_user_level',$user_data->user_level);
             Session::put('pr_user_id',$user_data->user_id);
-
+            Session::put('user_membership',$user_data->user_membership);
             return Redirect::to("/signin"); 
         }
     }
@@ -1530,7 +1530,7 @@ class ShopMemberController extends Shop
         if($request->action == 'delete')
         {
             Tbl_pressiq_user::where('user_id',$request->user_id)->delete();
-            Session::flash('delete_user', "User Already Deleted!");
+            Session::flash('delete_user', "Customer Already Deleted!");
         }
         return redirect::back();
     }

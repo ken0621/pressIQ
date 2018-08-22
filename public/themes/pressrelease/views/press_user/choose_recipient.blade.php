@@ -21,6 +21,9 @@
             <div class="" style="padding:10px 10px 10px 10px;">
                <label style="font-size:18px">Chosen Recipients: </label> <span class="result-container" style="font-weight:bold;font-size:18px" id="Chosen_total">0</span>
             </div>
+
+            <input  type="hidden" id="user_membership_value" name="user_membership_value" value="{{session('user_membership')}}">
+            
             <div class="col-md-12">
                <form action="/pressuser/pressrelease/recipient/done" method="POST" id="choose_recipient_form">
                   <div class="left-container"">
@@ -29,7 +32,7 @@
                            <tr>
                               <th style="text-align: center;width: 5%">ACTION</th>
                               <th style="text-align: center;width: 25%">COMPANY</th>
-                              <th style="text-align: center;width: 25%">RECIPIENT</th>
+                              <th class="hide_name" style="text-align: center;width: 25%">RECIPIENT</th>
                               <th style="text-align: center;width: 25%">POSITION</th>   
                               <th style="display:none;">Email</th>   
                            </tr>
@@ -40,7 +43,7 @@
                               <input type="hidden" id="recipient_id" name="recipient_id[]" value="{{$recipients->recipient_id}}">
                               <td style="text-align: center;"><input type="checkbox" class="recipient_checkbox" name="checkbox" value="{{$recipients->recipient_id}}" ></td>
                               <td class="rec_company_{{$recipients->recipient_id}}" style="text-align: center;">{{$recipients->company_name}}</td>
-                              <td class="rec_name_{{$recipients->recipient_id}}" style="text-align: center;">{{$recipients->name}}</td>
+                              <td class="rec_name_{{$recipients->recipient_id}} hide_name" style="text-align: center;">{{$recipients->name}}</td>
                               <td class="rec_position_{{$recipients->recipient_id}}" style="text-align: center;">{{$recipients->position}}</td>
                               <td class="rec_email_{{$recipients->recipient_id}}" style="display:none;">{{$recipients->research_email_address}}</td>
                               <td class="rec_id_{{$recipients->recipient_id}}" style="display:none;">{{$recipients->recipient_id}}</td>
@@ -63,4 +66,11 @@
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/choose_recipient.css">
 
 <script  src="/assets/js/choose_recipient_release.js"></script>
+
+
+
+
+
+
+
 

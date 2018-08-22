@@ -30,14 +30,14 @@
               </div>
             @endif   
           <div class="tab">
-            <button class="tablinks" onclick="openCity(event, 'new_user_account')" id="defaultOpen">Add User Account</button>
-            <button class="tablinks"  onclick="openCity(event, 'user_account')" >Users Account</button>
+            <button class="tablinks" onclick="openCity(event, 'new_user_account')" id="defaultOpen">Add Customer Account</button>
+            <button class="tablinks"  onclick="openCity(event, 'user_account')" >Customer Account</button>
             <button class="tablinks"  onclick="openCity(event, 'admin_account')" >Admin Account</button>
           </div>    
 
         <div class="press-release-content">
            <div id="new_user_account" class="tabcontent user-media-container">
-               <div class="title-container">Registration for New User</div>
+               <div class="title-container">Registration for New Customer</div>
                @if(session()->has('message'))
                   <div class="details">
                   <span style="color: red;">
@@ -49,7 +49,7 @@
                 {{csrf_field()}}
                 <div class="register-form" >
                   <select class="form-control" name="user_membership" id="user_membership" style="width: 740px">
-                    <option selected>--Costing Option--</option>
+                     <option selected>--Costing Option--</option>
                      <option value="1">1 Time sending</option>
                      <option value="3">3 Times sending</option>
                      <option value="5">5 Times sending</option>
@@ -132,7 +132,7 @@
                       <input placeholder="Search" type="text"  name="search_user" id="search_user">
                       <button  type="button" name="search_button_user" id="search_button_user" class="btn btn-success">Search</button>
                   </div>
-                  <div class="title">User Account</div>
+                  <div class="title">Customer Account</div>
                   <table  class="table table-bordered" id="showHere_table_search">
                      <tr>
                          <th style="width: 15%;">First Name</th>

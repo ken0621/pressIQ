@@ -60,6 +60,7 @@ class ShopLoginController extends Shop
                             Session::put('user_company_image',$user_data->user_company_image);
                             Session::put('pr_user_level',$user_data->user_level);
                             Session::put('pr_user_id',$user_data->user_id);
+                            Session::put('user_membership',$user_data->user_membership);
                             
                             $level=session('pr_user_level');
                            if($level!="1")

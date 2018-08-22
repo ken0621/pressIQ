@@ -486,7 +486,7 @@ class ShopMemberController extends Shop
             }
             else 
             {
-                Session::flash('message', "Release Successfully Sent!");
+                Session::flash('message', "Release Unsuccessfully Sent!");
                 if(Session::has('pr_edit'))
                 {
                     $date=Carbon::now();
@@ -1772,12 +1772,18 @@ class ShopMemberController extends Shop
 
         if($filter["country"]=="" && $filter["industry_type"]!="" && $filter["media_type"]!="" && $filter["position"]!="" && $filter["language"]!="")
         {
-            dd("Select Data Required!");           
+            echo '<div class="modal-header">
+                    <h4 class="modal-title" style="color:red;font-weight:bold"></i> Please Choose Country First!</h4>
+                  </div>';
+            dd();        
         }
 
         if($filter["country"]=="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["position"]=="" && $filter["language"]=="")
         {
-            dd("Select Data Required!");           
+            echo '<div class="modal-header">
+                      <h4 class="modal-title" style="color:red;font-weight:bold"></i> Please Choose Country First!</h4>
+                  </div>';
+            dd();       
         }
 
         if ($filter["country"]!="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["position"]=="" && $filter["language"]=="")

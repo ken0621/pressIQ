@@ -4771,14 +4771,23 @@ class ShopMemberController extends Shop
 
         $shop_id = $this->shop_info->shop_id;
 
-        $check = Item::check_unused_product_code($shop_id, $mlm_pin, $mlm_activation);
+        $check = Item::check_unused_product_code2($shop_id, $mlm_pin, $mlm_activation);
+
         $return = [];
         if($check)
         {
-            $return['status'] = 'success';
-            $return['mlm_pin'] = $mlm_pin;
-            $return['mlm_activation'] = $mlm_activation;
-            $return['call_function'] = 'success_validation';
+            if ($check->record_consume_ref_name != "block") 
+            {
+                $return['status'] = 'success';
+                $return['mlm_pin'] = $mlm_pin;
+                $return['mlm_activation'] = $mlm_activation;
+                $return['call_function'] = 'success_validation';
+            }
+            else
+            {
+                $return['status'] = 'error';
+                $return['message'] = "Pin number and activation code is blocked.";
+            }
         }
         else
         {

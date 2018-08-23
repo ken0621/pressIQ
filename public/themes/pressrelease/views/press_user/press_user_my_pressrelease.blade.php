@@ -2,7 +2,7 @@
 @section("pressview")
 <div class="background-container">
         @if (Session::has('email_sent'))
-        <div class="alert alert-success">
+        <div class="alert alert-success success_green">
             <center>{{ Session::get('email_sent') }}</center>
         </div>
         @endif 
@@ -41,4 +41,12 @@
         a.appendChild(r);
     })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
 </script>
+
+<script>
+  setTimeout(function() 
+  {
+    $('.success_green').fadeOut('fast');
+  }, 3000); 
+</script>
+
 @endsection

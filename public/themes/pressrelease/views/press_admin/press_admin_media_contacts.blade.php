@@ -4,37 +4,37 @@
     <div class="pressview">
         <div class="dashboard-container">
           @if (Session::has('success_industry'))
-            <div class="alert alert-success">
+            <div class="alert alert-success success_green">
               <center>{{ Session::get('success_industry') }}</center>
             </div>
           @endif
 
           @if (Session::has('success_industry_edit'))
-            <div class="alert alert-success">
+            <div class="alert alert-success success_green">
                 <center>{{ Session::get('success_industry_edit') }}</center>
             </div>
           @endif
 
           @if (Session::has('delete_industry'))
-            <div class="alert alert-danger">
+            <div class="alert alert-danger delete_media_contact">
               <center>{{ Session::get('delete_industry') }}</center>
             </div>
           @endif
 
           @if (Session::has('success_media_add'))
-            <div class="alert alert-success">
+            <div class="alert alert-success success_green">
               <center>{{ Session::get('success_media_add') }}</center>
             </div>
           @endif
 
           @if (Session::has('success_media_edit'))
-            <div class="alert alert-success">
+            <div class="alert alert-success success_green">
               <center>{{ Session::get('success_media_edit') }}</center>
             </div>
           @endif
 
           @if (Session::has('delete_media_name'))
-            <div class="alert alert-danger">
+            <div class="alert alert-danger delete_media_contact">
               <center>{{ Session::get('delete_media_name') }}</center>
             </div>
           @endif
@@ -49,13 +49,13 @@
             <div class="press-release-content">
               <div id="press_media" class="tabcontent press-media-container">
                     @if (Session::has('success_merchant'))
-                    <div class="alert alert-success">
+                    <div class="alert alert-success success_green">
                        <center>{{ Session::get('success_merchant') }}</center>
                     </div>
                     @endif 
 
                     @if (Session::has('delete'))
-                    <div class="alert alert-danger">
+                    <div class="alert alert-danger delete_media_contact">
                        <center>{{ Session::get('delete') }}</center>
                     </div>
                     @endif
@@ -601,6 +601,18 @@ document.getElementById("defaultOpen").click();
         }
       });
   });
+</script>
+
+<script>
+  setTimeout(function() {
+    $('.delete_media_contact').fadeOut('fast');
+}, 2000); 
+</script>
+
+<script>
+  setTimeout(function() {
+    $('.success_green').fadeOut('fast');
+}, 2000); 
 </script>
 
 @endsection

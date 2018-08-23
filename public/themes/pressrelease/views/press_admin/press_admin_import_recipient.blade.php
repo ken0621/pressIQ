@@ -4,7 +4,7 @@
 <div class="background-container">
     <div class="pressview">
       @if($message = Session::get('Success'))
-        <div class="alert alert-info alert-success fade in" role="alert">
+        <div class="alert alert-info alert-success fade in success_green" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -38,5 +38,12 @@
 @endsection
 
 @section("script")
+
+<script>
+  setTimeout(function() 
+  {
+    $('.success_green').fadeOut('fast');
+  }, 2000); 
+</script>
 
 @endsection

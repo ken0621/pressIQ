@@ -5,27 +5,27 @@
         <div class="dashboard-container">
         <div class="media-container">
            @if (Session::has('success_admin'))
-              <div class="alert alert-success">
+              <div class="alert alert-success success_green">
                  <center>{{ Session::get('success_admin') }}</center>
               </div>
             @endif  
             @if (Session::has('success_user'))
-              <div class="alert alert-success">
+              <div class="alert alert-success success_green">
                  <center>{{ Session::get('success_user') }}</center>
               </div>
             @endif  
             @if (Session::has('delete_admin'))
-              <div class="alert alert-danger">
+              <div class="alert alert-danger delete_red">
                  <center>{{ Session::get('delete_admin') }}</center>
               </div>
             @endif
             @if (Session::has('delete_user'))
-              <div class="alert alert-danger">
+              <div class="alert alert-danger delete_red">
                  <center>{{ Session::get('delete_user') }}</center>
               </div>
             @endif 
              @if (Session::has('success_new_registered'))
-              <div class="alert alert-success">
+              <div class="alert alert-success success_green">
                  <center>{{ Session::get('success_new_registered') }}</center>
               </div>
             @endif   
@@ -449,6 +449,20 @@ document.getElementById("defaultOpen").click();
         }
       });
   });
+</script>
+
+<script>
+  setTimeout(function() 
+  {
+    $('.success_green').fadeOut('fast');
+  }, 2000); 
+</script>
+
+<script>
+  setTimeout(function() 
+  {
+    $('.delete_red').fadeOut('fast');
+  }, 2000); 
 </script>
 
 

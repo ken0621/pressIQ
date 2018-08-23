@@ -6,7 +6,7 @@
    <div class="pressview">
       <div class="dashboard-container">
           @if (session('message'))
-            <div class="alert alert-danger">
+            <div class="alert alert-danger delete_red">
                 {{ session('message') }}
             </div>
           @endif
@@ -578,4 +578,12 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
     action_load_link_to_modal('/pressuser/choose_recipient?'+data, 'md');
 });
 </script>
+
+<script>
+  setTimeout(function() 
+  {
+    $('.delete_red').fadeOut('fast');
+  }, 2000); 
+</script>
+
 @endsection

@@ -251,6 +251,13 @@ class ShopMemberController extends Shop
         }
     }
 
+    public function getSummary()
+    {
+        $data = [];
+
+        return Self::load_view_for_members("member.summary", $data);
+    }
+
     public function getDirectReferrals()
     {
         if (Self::$customer_info) 

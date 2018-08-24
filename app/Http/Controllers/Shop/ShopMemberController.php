@@ -79,6 +79,7 @@ use App\Models\Tbl_pressiq_media_type;
 use App\Models\Tbl_item_redeemable_points;
 use App\Models\Tbl_item_redeemable_request;
 
+
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -1596,6 +1597,7 @@ class ShopMemberController extends Shop
 
     public function importExcel(Request $request)     
     {  
+        Session::forget('error_import');
         if($request->hasFile('import_file'))          
         {
 
@@ -1604,28 +1606,347 @@ class ShopMemberController extends Shop
             $first  = $_data[0]; 
             $count          = 0;
             $countPayee     = 0;
-            foreach($_data as $row)
+            $array = array();
+            foreach($_data as $key =>$row)
             {
-                $data['research_email_address']  = Self::nullables($row->email_address);
-                $data['company_name']            = Self::nullables($row->publication);
-                $data['name']                    = Self::nullables($row->first_name.' '.$row->last_name);
-                $data['position']                = Self::nullables($row->job_title);
-                $data['title_of_journalist']     = Self::nullables($row->position);
-                $data['country']                 = Self::nullables($row->country);
-                $data['industry_type']           = Self::nullables($row->category);
-                $data['website']                 = Self::nullables($row->website);
-                $data['description']             = Self::nullables($row->description);
-                $data['media_type']              = Self::nullables($row->media_type);
-                $data['language']                = Self::nullables($row->language);
-                
-                if(!empty($data)) 
+                $error = Self::import_validation($row);
+               
+                if($error == "no_error")
                 {
-                    DB::table('tbl_press_release_recipients')->insert($data);
+                    $data['research_email_address']  = Self::nullables($row->email_address);
+                    $data['company_name']            = Self::nullables($row->publication);
+                    $data['name']                    = Self::nullables($row->first_name.' '.$row->last_name);
+                    $data['position']                = Self::nullables($row->job_title);
+                    $data['title_of_journalist']     = Self::nullables($row->position);
+                    $data['country']                 = Self::nullables($row->country);
+                    $data['industry_type']           = Self::nullables($row->category);
+                    $data['website']                 = Self::nullables($row->website);
+                    $data['description']             = Self::nullables($row->description);
+                    $data['media_type']              = Self::nullables($row->media_type);
+                    $data['language']                = str_replace(' ',$row->language,' ');
+                    
+                    if(!empty($data)) 
+                    {
+                        DB::table('tbl_press_release_recipients')->insert($data);
+                    }
                 }
+                else
+                {
+                    $_data[$key]['error'] = $error;
+                    array_push($array,$row);
+                }
+                
             } 
+            if(count($array)!=0)
+            {
+
+                Session::put('error_import',$array);
+            }
+
         }
         Session::put('Success', 'Your file successfully import in database!!!');
         return back();
+    }
+    public static function import_validation($row)
+    {
+        /*VALDATION*/
+        $error         = "no_error";
+        $country       = Tbl_country::where('country_name',$row['country'])->count();
+        $email         = Self::validate_email($row['email_address']);
+        $language      = Self::language_check($row['language']);
+        $job_title     = Self::job_title_check($row['job_title']);
+        $industry_type = Self::industry_type_check($row['category']);
+        $media_type    = Self::media_type_check($row['media_type']);
+
+
+        if($country == 0||$row['country']=="")
+        {
+            $error = "COUNTRY DOES NOT EXIST!";
+        }
+        
+        else if($email == "error_email")
+        {
+            $error = "EMAIL ADDRESS IS NOT VALID!";
+        }
+        else if($language=="error")
+        {
+            $error = "LANGUAGE DOES NOT EXIST!";
+        }
+        else if($job_title=="error_title")
+        {
+            $error = "JOB TITLE DOES NOT EXIST!";
+        }
+        else if($industry_type=="error_industry")
+        {
+            $error = "INDUSTRY CATEGORY DOES NOT EXIST!";
+        }
+        else if($media_type=="error_media_type")
+        {
+            $error = "MEDIA TYPE DOES NOT EXIST!";
+        }
+        else
+        {
+            $error = "no_error";
+        }
+
+        return $error;
+    }
+
+    public static function validate_email($email)
+    {
+        
+        $emailB = filter_var($email, FILTER_SANITIZE_EMAIL);
+        if (filter_var($emailB, FILTER_VALIDATE_EMAIL) === false || $emailB != $email) 
+        {
+            return "error_email";
+        }
+        
+    }
+
+    public static function language_check($language)
+    {
+        if($language == "Chinese")
+        {
+            return "correct";
+        }
+        else if($language == "English")
+        {
+            return "correct";
+        }
+        else
+        {
+            return "error";
+        }
+    }
+
+    public static function job_title_check($job_title)
+    {
+        if($job_title == "Associate Editor")
+        {
+            return "correct";
+        }
+        else if($job_title == "Editor")
+        {
+            return "correct";
+        }
+        else if($job_title == "Blogger")
+        {
+            return "correct";
+        }
+        else if($job_title == "Editor-in-Chief")
+        {
+            return "correct";
+        }
+        else if($job_title == "Freelance Journalist")
+        {
+            return "correct";
+        }
+        else if($job_title == "Journalist")
+        {
+            return "correct";
+        }
+        else if($job_title == "News Desk")
+        {
+            return "correct";
+        }
+        else if($job_title == "Online News Desk")
+        {
+            return "correct";
+        }
+        else if($job_title == "Sub-Editor")
+        {
+            return "correct";
+        }
+        else if($job_title == " ")
+        {
+            return "correct";
+        }
+        else if($job_title == null)
+        {
+            return "correct";
+        }
+        else
+        {
+            return "error_title";
+        }
+    }
+
+    public static function industry_type_check($industry_type)
+    {
+        if($industry_type == "Beauty")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Business")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Computers")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Culture and Art")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Education")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Electronics")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Enviroment")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Family")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Fashion")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Financial Services")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Food and Beverage")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Health")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Hospitality")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Luxury")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Music and Entertainment")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Real Estate")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Sports")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Technology")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Watches and Jewellery")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Wine and Beer")
+        {
+            return "correct";
+        }
+        else if($industry_type == " ")
+        {
+            return "correct";
+        }
+        else if($industry_type == null)
+        {
+            return "correct";
+        }
+        else
+        {
+            return "error_industry";
+        }
+    }
+
+    public static function media_type_check($media_type)
+    {
+        if($media_type == "Newspaper")
+        {
+            return "correct";
+        }
+        else if($media_type == "Online Newspaper")
+        {
+            return "correct";
+        }
+        else if($media_type == "Magazine")
+        {
+            return "correct";
+        }
+        else if($media_type == "Online Magazine")
+        {
+            return "correct";
+        }
+        else if($media_type == "Blog")
+        {
+            return "correct";
+        }
+        else if($media_type == "Trade Publication")
+        {
+            return "correct";
+        }
+        else if($media_type == " ")
+        {
+            return "correct";
+        }
+        else if($media_type == null)
+        {
+            return "correct";
+        }
+        else
+        {
+            return "error_media_type";
+        }
+    }
+
+    public function export_error($ref)
+    {
+        if($ref=="get")
+        {
+            $excels['data'] =   ['COUNTRY','CATEGORY','PUBLICATION','MEDIA TYPE','FIRST NAME','LAST NAME','JOB TITLE','EMAIL ADDRESS','LANGUAGE','ERROR'];
+            $excels['_erros'] = Session::get('error_import');
+            Excel::create('ERROR LIST', function($excel) use ($excels) 
+            {
+
+                $excel->sheet('ERROR LIST FOUND', function($sheet) use ($excels) 
+                {
+                    $data   = $excels['data'];
+                    $sheet->fromArray($data, null, 'A1', false, false);
+                    $sheet->freezeFirstRow();
+                    $_erros = $excels['_erros'];
+                    foreach($excels['_erros'] as  $key => $errors)
+                    {
+                        $key = $key+=2;
+                        $sheet->setCellValue('A'.$key, $errors['country']);
+                        $sheet->setCellValue('B'.$key, $errors['category']);
+                        $sheet->setCellValue('C'.$key, $errors['publication']);
+                        $sheet->setCellValue('D'.$key, $errors['media_type']);
+                        $sheet->setCellValue('E'.$key, $errors['first_name']);
+                        $sheet->setCellValue('F'.$key, $errors['last_name']);
+                        $sheet->setCellValue('G'.$key, $errors['job_title']);
+                        $sheet->setCellValue('H'.$key, $errors['email_address']);
+                        $sheet->setCellValue('I'.$key, $errors['language']);
+                        $sheet->setCellValue('J'.$key, $errors['error']);
+                    }
+
+                });
+            })->download('xls');
+
+        }
+        else
+        {
+            Session::forget('error_import');
+            return Redirect::back();
+        }
+        
     }
 
     public function downloadExcel($type)

@@ -606,13 +606,13 @@ document.getElementById("defaultOpen").click();
 <script>
   setTimeout(function() {
     $('.delete_media_contact').fadeOut('fast');
-}, 2000); 
+}, 3000); 
 </script>
 
 <script>
   setTimeout(function() {
     $('.success_green').fadeOut('fast');
-}, 2000); 
+}, 3000); 
 </script>
 
 @endsection

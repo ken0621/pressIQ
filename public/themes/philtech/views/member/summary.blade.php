@@ -130,7 +130,7 @@
 								<tr>
 									<th>Slot No</th>
 									@foreach($_wallet_plan as $plan)
-									@if($plan->label == "Admin Refill" || $plan->label == "Vmoney" || $plan->label == "Wallet Refill" || $plan->label == "Wallet Transfer" || $plan->label == "Repurchase")
+									@if($plan->label == "Admin Refill" || $plan->label == "Wallet Refill" || $plan->label == "Wallet Transfer" || $plan->label == "Repurchase")
 									<th>{{ $plan->label }}</th>
 									@elseif($plan->label == "Vmoney")
 									<th>E-Money</th>

@@ -253,9 +253,16 @@ class ShopMemberController extends Shop
 
     public function getSummary()
     {
-        $data = [];
-
-        return Self::load_view_for_members("member.summary", $data);
+        if(Self::$customer_info)
+        {
+            $data = MLM2::customer_income_summary2($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            
+            return Self::load_view_for_members("member.summary", $data);
+        }
+        else
+        {
+            return Redirect::to("/members/login");
+        }
     }
 
     public function getDirectReferrals()

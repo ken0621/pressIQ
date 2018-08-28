@@ -85,18 +85,44 @@
                           <div class="col-md-3">
                                 <select class="form-control " id="industry_type_filter" name="industry_type_filter" style="width: 230px;background-color: #f1f1f1;" required> 
                                   <option value="">-- All Industry Category --</option>
+                                {{--   <option value="Beauty">Beauty</option>
+                                  <option value="Business">Business</option>
+                                  <option value="Computers">Computers</option>
+                                  <option value="Culture and Art">Culture and Art</option>
+                                  <option value="Education">Education</option>
+                                  <option value="Electronics">Electronics</option>
+                                  <option value="Enviroment">Enviroment</option>
+                                  <option value="Family">Family</option>
+                                  <option value="Fashion">Fashion</option>
+                                  <option value="Financial Services">Financial Services</option>
+                                  <option value="Food and Beverage">Food and Beverage</option>
+                                  <option value="Health">Health</option>
+                                  <option value="Hospitality">Hospitality</option>
+                                  <option value="Luxury">Luxury</option>
+                                  <option value="Music and Entertainment">Music and Entertainment</option>
+                                  <option value="Real Estate">Real Estate</option>
+                                  <option value="Sports">Sports</option>
+                                  <option value="Technology">Technology</option>
+                                  <option value="Watches and Jewellery">Watches and Jewellery</option>
+                                  <option value="Wine and Beer">Wine and Beer</option> --}}
                                   @foreach($_industry_name_add as $_industry_name)
                                     <option value="{{$_industry_name->industry_name}}">{{$_industry_name->industry_name}}</option>
-                                  @endforeach
+                                  @endforeach 
                                 </select>
                           </div>
 
                           <div class="col-md-3">
                                 <select class="form-control" id="media_type_filter" name="media_type_filter" style="width: 230px;background-color: #f1f1f1;" required> 
                                   <option value="">-- All Media Type --</option>
-                                  @foreach($_media_name_add as $_media_filter)
+                                  <option value="Newspaper">Newspaper</option>
+                                  <option value="Online Newspaper">Online Newspaper</option>
+                                  <option value="Magazine">Magazine</option>
+                                  <option value="Online Magazine">Online Magazine</option>
+                                  <option value="Blog">Blog</option>
+                                  <option value="Trade Publication">Trade Publication</option>
+                                  {{-- @foreach($_media_name_add as $_media_filter)
                                     <option value="{{$_media_filter->media_name}}">{{$_media_filter->media_name}}</option>
-                                  @endforeach
+                                  @endforeach --}}
                                 </select>
                           </div>
 
@@ -233,9 +259,6 @@
 
                       <div class="title">Website: *</div>
                       <input type="text"  id="contact_website" name="contact_website" class="form-control">
-
-                    {{--   <div class="title">Position: *</div>
-                      <input type="text"  id="position" name="position" class="form-control" style="background-color: #f1f1f1;"  placeholder="Enter the position of the media contact" required> --}}
 
                       <div class="title">Description: *</div>
                       <textarea id="description" name="description"></textarea>

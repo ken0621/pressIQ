@@ -53,6 +53,7 @@ class ShopLoginController extends Shop
                         /* CHECK IF PASSWORD IS CORRECT */
                         if($user_password == $password)
                         {
+                            Session::put('user_name', $user_data->user_name);
                             Session::put('user_email', $user_data->user_email);
                             Session::put('user_first_name',$user_data->user_first_name);
                             Session::put('user_last_name',$user_data->user_last_name);

@@ -1303,6 +1303,15 @@ class ShopMemberController extends Shop
         return view("press_admin.filter_press_admin_media_contacts", $data);
     }
 
+    public static function generate_user_name($data)
+    {
+        $id               = Tbl_pressiq_user::orderBy('user_id','DESC')->first();
+        $no_id            = $id->user_id + 1;
+        $uniq_username    =  $data["user_first_name"].".".$data["user_last_name"].".".$no_id;
+        
+        return  $uniq_username;
+    }
+
     public function add_user(Request $request)  
     {
 
@@ -1345,6 +1354,8 @@ class ShopMemberController extends Shop
                 $data["user_company_name"]               = $request->user_company_name;
                 $data["user_membership"]                 = $request->user_membership;
                 $data["user_country"]                    = $request->user_country;
+                $data["user_name"]                       = Self::generate_user_name($request);
+  
                 $sample="";
                 foreach ($data['user_country'] as $country) 
                 {

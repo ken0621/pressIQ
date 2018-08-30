@@ -22,6 +22,7 @@ use View;
 use Session;
 use Carbon\Carbon;
 use App\Globals\Mlm_seed;
+use App\Globals\Digima;
 
 class Member extends Controller
 {
@@ -29,6 +30,8 @@ class Member extends Controller
 	public $current_warehouse; 
 	function __construct()
 	{
+		Digima::accessControl('admin');
+		
 		$this->middleware(function ($request, $next)
 		{
 			/* IF SESSION FOR EMAIL OR PASSWORD DOESN'T EXIST - REDIRECT TO FRONTPAGE */

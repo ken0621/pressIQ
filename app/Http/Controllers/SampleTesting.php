@@ -7,11 +7,21 @@ use App\Http\Requests;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer;
 use Paypal;
+use App\Models\Tbl_mlm_slot_wallet_log;
+use App\Globals\Digima;
 
 
 class SampleTesting extends Controller
 {
-
+	public function digima()
+	{
+		$shop_id = 1;
+		$member_count = Tbl_customer::where("shop_id", $shop_id)->count();
+		$slot_count = Tbl_mlm_slot::where("shop_id", $shop_id)->count();
+		$total_pay_in = $slot_count * 8000;
+		$total_pay_out = Tbl_mlm_slot_wallet_log::where("shop_id", $shop_id)->where("wallet_log_amount", ">", 0)->sum("wallet_log_amount");
+		Digima::updateStatistic($member_count, $slot_count, $total_pay_in, $total_pay_out);
+	}
 	public function index($id)
 	{
 		$data["id"] = $id + 1;

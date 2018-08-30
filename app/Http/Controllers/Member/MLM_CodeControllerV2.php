@@ -402,120 +402,127 @@ class MLM_CodeControllerV2 extends Member
         if (!$exist) 
         {
             $record_log = Tbl_warehouse_inventory_record_log::where("record_log_id", $id)->first();
-
-            if ($record_log) 
+            if ($record_log->record_consume_ref_name != "block") 
             {
-                /* Use Product Code */
-                $mlm_pin         = $record_log->mlm_pin;
-                $mlm_activation  = $record_log->mlm_activation;
-                $slot_id         = Tbl_mlm_slot::where('slot_no', $slot_no)->where('slot_owner', $customer_id)->value('slot_id');
-                $shop_id         = $this->user_info->shop_id;
-                $consume['name'] = 'customer_product_code';
-                $consume['id']   = $customer_id;
-                $val             = Warehouse2::consume_product_codes($shop_id, $mlm_pin, $mlm_activation, $consume);
-                
-                if(is_numeric($val))
+                if ($record_log) 
                 {
-                    MLM2::purchase($shop_id, $slot_id, $val);
-                    $return['status']        = 'success';
-                    $return['call_function'] = 'success_used';
-
-
-                    $item = Tbl_warehouse_inventory_record_log::where('mlm_activation',$mlm_activation)
-                                                         ->where('mlm_pin',$mlm_pin)
-                                                         ->first();
+                    /* Use Product Code */
+                    $mlm_pin         = $record_log->mlm_pin;
+                    $mlm_activation  = $record_log->mlm_activation;
+                    $slot_id         = Tbl_mlm_slot::where('slot_no', $slot_no)->where('slot_owner', $customer_id)->value('slot_id');
+                    $shop_id         = $this->user_info->shop_id;
+                    $consume['name'] = 'customer_product_code';
+                    $consume['id']   = $customer_id;
+                    $val             = Warehouse2::consume_product_codes($shop_id, $mlm_pin, $mlm_activation, $consume);
                     
-                    $item_token = Tbl_item_token::where('item_id',$item->record_item_id)->first();
-
-                    if($item_token)
-                    {            
-                        $token_log['shop_id']                = $shop_id;
-                        $token_log['token_log_slot_owner']   = $customer_id;
-                        $token_log['token_log_date_created'] = Carbon::now();
-                        $token_log['token_id']               = $item_token->token_id;
-                        $token_log['amount']                 = $item_token->amount;
-
-                        Tbl_item_token_log::insert($token_log);
-                    }
-
-                    /* Insert Product Log */
-                    $insert["customer_id"]                  = $customer_id;
-                    $insert["record_log_id"]                = $id;
-                    $insert["receipt_number"]               = $receipt_number;
-                    $insert["amount"]                       = $amount;
-                    $insert["cellphone_number"]             = $cellphone_number;
-                    // $insert["email"]                        = $email;
-                    $insert["distribute_product_code_date"] = Carbon::now();
-                    $insert["user_id"]                      = $this->user_info->user_id;
-
-                    Tbl_distribute_product_code::insert($insert);
-                    
-                    /* Send SMS and E-mail */
-                    $code = DB::table("tbl_warehouse_inventory_record_log")->where("record_log_id", $id)->first();
-                    
-                    if ($code) 
+                    if(is_numeric($val))
                     {
-                        $customer            = DB::table("tbl_customer")->where("customer_id", $customer_id)->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')->join('tbl_membership', 'tbl_mlm_slot.slot_membership', '=', 'tbl_membership.membership_id');
-                        $repurchase_cashback = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'REPURCHASE_CASHBACK')->where('points_log_slot', $slot_id)->sum('points_log_points');
-                        $item_points         = MLM2::item_points($shop_id, $code->record_item_id, $code->mlm_slot_id_created)["REPURCHASE_CASHBACK"];
-
-                        $repurchase_points = Tbl_mlm_item_points::where('item_id', $code->record_item_id)->where('membership_id', 1)->first();
-                        $repurchase_points_total = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'REPURCHASE_POINTS')->where('points_log_slot', $slot_id)->sum('points_log_points');
-
-                        $privilegecard = $customer->where('tbl_membership.membership_id', 1)->first();
-                        //privilegecardholder
-                        if($privilegecard)
-                        {
-                            $text_message        = "Hi " . ($customer ? ucwords(strtolower($privilegecard->first_name)) : '') . "! You earned P". number_format($repurchase_points->REPURCHASE_POINTS, 2) ." Points from your purchase at ".$warehouse->warehouse_name. ". Your total points now is P" . number_format($repurchase_points_total, 2) . ". Congratulations!";
-
-                            $result              = Sms::SendSingleText($cellphone_number, $text_message, "", null);
-                            
-                            
-                            $sponsor = $privilegecard->slot_sponsor;
-
-                            $mail_recipient = DB::table('tbl_mlm_slot')->join('tbl_customer', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')->where('tbl_mlm_slot.slot_id', $sponsor)->first();
-                            
-                            // $mail_recipient = $request->email;
-
-                            $sponsor_cashback = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'UNILEVEL_CASHBACK_POINTS')->where('points_log_Sponsor', $slot_id)->where('points_log_slot',$sponsor)->orderBy('points_log_date_claimed', 'desc')->first();
-
-                            $sponsor_cashback_total = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'UNILEVEL_CASHBACK_POINTS')->where('points_log_slot', $sponsor)->sum('points_log_points');
+                        MLM2::purchase($shop_id, $slot_id, $val);
+                        $return['status']        = 'success';
+                        $return['call_function'] = 'success_used';
 
 
-                            $email_content["subject"] = "Loyalty and Rewards System";
-
-                            $email_content["content"] = "Hi " . ($mail_recipient ? ucwords(strtolower($mail_recipient->first_name)) : '') . "! You earned P". number_format($sponsor_cashback->points_log_points, 2) ." Cashback from ". ucwords(strtolower($privilegecard->first_name))." ".ucwords(strtolower($privilegecard->last_name)). " who purchased at ". $warehouse->warehouse_name." Your total Cashback is P" . number_format($sponsor_cashback_total + $sponsor_cashback->points_log_points, 2) . " Congratulations!";
-
-
-                            $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $mail_recipient->email);
-
-                        }
-                        //vip
-                        else
-                        {
-                            $vip = DB::table("tbl_customer")->where("customer_id", $customer_id)->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')->join('tbl_membership', 'tbl_mlm_slot.slot_membership', '=', 'tbl_membership.membership_id')->first();
-                            
-                            $repurchase_cashback_points = DB::table('tbl_mlm_slot_points_log')->where([['points_log_slot', $vip->slot_id],['points_log_Sponsor', $vip->slot_id],['points_log_complan', 'REPURCHASE_CASHBACK']])->orderBy('points_log_id', 'DESC')->first();
-                            $repurchase_cashback_total = DB::table('tbl_mlm_slot_points_log')->where([['points_log_slot', $vip->slot_id],['points_log_from', 'Repurchase Cashback Points']])->sum('points_log_points');
-
-                            $text_message        = "Hi " . ($vip ? ucwords(strtolower($vip->first_name)) : '') . "! You earned P". number_format($repurchase_cashback_points->points_log_points, 2) ." Cashback from your purchase at ". $warehouse->warehouse_name." Your total Cashback is P" . number_format($repurchase_cashback_total, 2) . ". Congratulations!";
-                            $result              = Sms::SendSingleText($cellphone_number, $text_message, "", null);
-                        }
+                        $item = Tbl_warehouse_inventory_record_log::where('mlm_activation',$mlm_activation)
+                                                             ->where('mlm_pin',$mlm_pin)
+                                                             ->first();
                         
-                    }
+                        $item_token = Tbl_item_token::where('item_id',$item->record_item_id)->first();
 
-                    $response["response_status"] = "success";
+                        if($item_token)
+                        {            
+                            $token_log['shop_id']                = $shop_id;
+                            $token_log['token_log_slot_owner']   = $customer_id;
+                            $token_log['token_log_date_created'] = Carbon::now();
+                            $token_log['token_id']               = $item_token->token_id;
+                            $token_log['amount']                 = $item_token->amount;
+
+                            Tbl_item_token_log::insert($token_log);
+                        }
+
+                        /* Insert Product Log */
+                        $insert["customer_id"]                  = $customer_id;
+                        $insert["record_log_id"]                = $id;
+                        $insert["receipt_number"]               = $receipt_number;
+                        $insert["amount"]                       = $amount;
+                        $insert["cellphone_number"]             = $cellphone_number;
+                        // $insert["email"]                        = $email;
+                        $insert["distribute_product_code_date"] = Carbon::now();
+                        $insert["user_id"]                      = $this->user_info->user_id;
+
+                        Tbl_distribute_product_code::insert($insert);
+                        
+                        /* Send SMS and E-mail */
+                        $code = DB::table("tbl_warehouse_inventory_record_log")->where("record_log_id", $id)->first();
+                        
+                        if ($code) 
+                        {
+                            $customer            = DB::table("tbl_customer")->where("customer_id", $customer_id)->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')->join('tbl_membership', 'tbl_mlm_slot.slot_membership', '=', 'tbl_membership.membership_id');
+                            $repurchase_cashback = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'REPURCHASE_CASHBACK')->where('points_log_slot', $slot_id)->sum('points_log_points');
+                            $item_points         = MLM2::item_points($shop_id, $code->record_item_id, $code->mlm_slot_id_created)["REPURCHASE_CASHBACK"];
+
+                            $repurchase_points = Tbl_mlm_item_points::where('item_id', $code->record_item_id)->where('membership_id', 1)->first();
+                            $repurchase_points_total = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'REPURCHASE_POINTS')->where('points_log_slot', $slot_id)->sum('points_log_points');
+
+                            $privilegecard = $customer->where('tbl_membership.membership_id', 1)->first();
+                            //privilegecardholder
+                            if($privilegecard)
+                            {
+                                $text_message        = "Hi " . ($customer ? ucwords(strtolower($privilegecard->first_name)) : '') . "! You earned P". number_format($repurchase_points->REPURCHASE_POINTS, 2) ." Points from your purchase at ".$warehouse->warehouse_name. ". Your total points now is P" . number_format($repurchase_points_total, 2) . ". Congratulations!";
+
+                                $result              = Sms::SendSingleText($cellphone_number, $text_message, "", null);
+                                
+                                
+                                $sponsor = $privilegecard->slot_sponsor;
+
+                                $mail_recipient = DB::table('tbl_mlm_slot')->join('tbl_customer', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')->where('tbl_mlm_slot.slot_id', $sponsor)->first();
+                                
+                                // $mail_recipient = $request->email;
+
+                                $sponsor_cashback = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'UNILEVEL_CASHBACK_POINTS')->where('points_log_Sponsor', $slot_id)->where('points_log_slot',$sponsor)->orderBy('points_log_date_claimed', 'desc')->first();
+
+                                $sponsor_cashback_total = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'UNILEVEL_CASHBACK_POINTS')->where('points_log_slot', $sponsor)->sum('points_log_points');
+
+
+                                $email_content["subject"] = "Loyalty and Rewards System";
+
+                                $email_content["content"] = "Hi " . ($mail_recipient ? ucwords(strtolower($mail_recipient->first_name)) : '') . "! You earned P". number_format($sponsor_cashback->points_log_points, 2) ." Cashback from ". ucwords(strtolower($privilegecard->first_name))." ".ucwords(strtolower($privilegecard->last_name)). " who purchased at ". $warehouse->warehouse_name." Your total Cashback is P" . number_format($sponsor_cashback_total + $sponsor_cashback->points_log_points, 2) . " Congratulations!";
+
+
+                                $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $mail_recipient->email);
+
+                            }
+                            //vip
+                            else
+                            {
+                                $vip = DB::table("tbl_customer")->where("customer_id", $customer_id)->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')->join('tbl_membership', 'tbl_mlm_slot.slot_membership', '=', 'tbl_membership.membership_id')->first();
+                                
+                                $repurchase_cashback_points = DB::table('tbl_mlm_slot_points_log')->where([['points_log_slot', $vip->slot_id],['points_log_Sponsor', $vip->slot_id],['points_log_complan', 'REPURCHASE_CASHBACK']])->orderBy('points_log_id', 'DESC')->first();
+                                $repurchase_cashback_total = DB::table('tbl_mlm_slot_points_log')->where([['points_log_slot', $vip->slot_id],['points_log_from', 'Repurchase Cashback Points']])->sum('points_log_points');
+
+                                $text_message        = "Hi " . ($vip ? ucwords(strtolower($vip->first_name)) : '') . "! You earned P". number_format(($repurchase_cashback_points ? $repurchase_cashback_points->points_log_points : 0.00), 2) ." Cashback from your purchase at ". $warehouse->warehouse_name." Your total Cashback is P" . number_format($repurchase_cashback_total, 2) . ". Congratulations!";
+                                $result              = Sms::SendSingleText($cellphone_number, $text_message, "", null);
+                            }
+                            
+                        }
+
+                        $response["response_status"] = "success";
+                    }
+                    else
+                    {
+                        $response['response_status'] = 'error';
+                        $response['message']         = $val;
+                    }
                 }
                 else
                 {
-                    $response['response_status'] = 'error';
-                    $response['message']         = $val;
+                    $response["response_status"] = "error";
+                    $response["message"]         = "This product code doesn't exist.";
                 }
             }
             else
             {
                 $response["response_status"] = "error";
-                $response["message"]         = "This product code doesn't exist.";
+                $response["message"]         = "This product code is blocked.";
             }
         }
         else
@@ -541,41 +548,49 @@ class MLM_CodeControllerV2 extends Member
 
         if (!$exist) 
         {
-            $customer_id      = $request->customer_id;
-            $receipt_number   = $request->receipt_number;
-            $amount           = $request->amount;
-            $cellphone_number = $request->cellphone_number;
-            $email            = $request->email;
-
-            $insert["customer_id"]               = $customer_id;
-            $insert["record_log_id"]             = $id;
-            $insert["receipt_number"]            = $receipt_number;
-            $insert["amount"]                    = $amount;
-            $insert["cellphone_number"]          = $cellphone_number;
-            $insert["email"]                     = $email;
-            $insert["release_product_code_date"] = Carbon::now();
-            $insert["user_id"]                   = $this->user_info->user_id;
-
-            Tbl_release_product_code::insert($insert);
-            $update['released'] = 1;
-            $update['record_log_date_updated'] = Carbon::now();
-            Tbl_warehouse_inventory_record_log::where('record_log_id', $id)->update($update);
-
-            /* Send SMS and E-mail */
             $code = DB::table("tbl_warehouse_inventory_record_log")->where("record_log_id", $id)->first();
 
-            if ($code) 
+            if ($code->record_consume_ref_name != "block") 
             {
-                $text_message = "PIN: " . $code->mlm_pin . " ACTIVATION: " . $code->mlm_activation;
-                $result = Sms::SendSingleText($cellphone_number, $text_message, "", null);
+                $customer_id      = $request->customer_id;
+                $receipt_number   = $request->receipt_number;
+                $amount           = $request->amount;
+                $cellphone_number = $request->cellphone_number;
+                $email            = $request->email;
 
-                $email_content["subject"] = "Reward Code Release";
-                $email_content["content"] = "PIN: " . $code->mlm_pin . "</br> ACTIVATION: " . $code->mlm_activation;
+                $insert["customer_id"]               = $customer_id;
+                $insert["record_log_id"]             = $id;
+                $insert["receipt_number"]            = $receipt_number;
+                $insert["amount"]                    = $amount;
+                $insert["cellphone_number"]          = $cellphone_number;
+                $insert["email"]                     = $email;
+                $insert["release_product_code_date"] = Carbon::now();
+                $insert["user_id"]                   = $this->user_info->user_id;
 
-                $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $email);
+                Tbl_release_product_code::insert($insert);
+                $update['released'] = 1;
+                $update['record_log_date_updated'] = Carbon::now();
+                Tbl_warehouse_inventory_record_log::where('record_log_id', $id)->update($update);
+
+                /* Send SMS and E-mail */
+                if ($code) 
+                {
+                    $text_message = "PIN: " . $code->mlm_pin . " ACTIVATION: " . $code->mlm_activation;
+                    $result = Sms::SendSingleText($cellphone_number, $text_message, "", null);
+
+                    $email_content["subject"] = "Reward Code Release";
+                    $email_content["content"] = "PIN: " . $code->mlm_pin . "</br> ACTIVATION: " . $code->mlm_activation;
+
+                    $return_mail = Mail_global::send_email(null, $email_content, Customer::getShopId(), $email);
+                }
+
+                $response["response_status"] = "success";
             }
-
-            $response["response_status"] = "success";
+            else
+            {
+                $response["response_status"] = "error";
+                $response["message"]         = "This product code is blocked.";
+            }
         }
         else
         {

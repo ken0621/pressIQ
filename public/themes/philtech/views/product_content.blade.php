@@ -33,7 +33,7 @@
                                 <div>
                                     @foreach($product_variant['image'] as $key => $image)
                                     <div class="holder" style="cursor: pointer;" key="{{ $key }}" variant-id="{{ $product_variant['evariant_id'] }}">
-                                        <img style="width: 100%; object-fit: cover;" id="yellow-bag-image"  class="item-image-large"  src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}">
+                                        <img style="width: 100%; object-fit: cover;" id="yellow-bag-image"  class="item-image-large {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}">
                                     </div>
                                     @endforeach
                                 </div>

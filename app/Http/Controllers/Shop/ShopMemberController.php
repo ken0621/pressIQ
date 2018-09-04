@@ -536,7 +536,7 @@ class ShopMemberController extends Shop
         {
             Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
             {
-                $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name'] . ' ' .'<'. $pr_info['pr_from'] .'>');
+                $message->from('noreply-'. $pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
                 $message->to($pr_info['pr_to']);
                 $message->subject($pr_info["pr_headline"]);
             });
@@ -860,7 +860,7 @@ class ShopMemberController extends Shop
             $explode_email = explode("@", Session::get('user_email'));
             $curl          = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/senders/info.json?key=UWTLQzFotM-rRUyOJqlvjw&address=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/senders/info.json?key=UWTLQzFotM-rRUyOJqlvjw&address=" . 'noreply-' . $explode_email[0] . '@press-iq.com',
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_ENCODING        => "",
                 CURLOPT_MAXREDIRS       => 10,
@@ -902,7 +902,7 @@ class ShopMemberController extends Shop
             $explode_email = explode("@", Session::get('user_email'));
             $curl                       = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=". 'noreply-' . $explode_email[0] . '@press-iq.com',
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_ENCODING        => "",
                 CURLOPT_MAXREDIRS       => 10,
@@ -929,7 +929,7 @@ class ShopMemberController extends Shop
                 $new_analytic_view = [];
                 foreach ($analytics_view as $key => $value) 
                 {
-                    if ($value->sender == $explode_email[0] . '@press-iq.com') 
+                    if ($value->sender == 'noreply-' . $explode_email[0] . '@press-iq.com') 
                     {
                         $new_analytic_view[$value->subject] = $value;
                     }
@@ -953,7 +953,7 @@ class ShopMemberController extends Shop
             $explode_email = explode("@", Session::get('user_email'));
             $curl = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . 'noreply-' . $explode_email[0] . '@press-iq.com',
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_ENCODING        => "",
                 CURLOPT_MAXREDIRS       => 10,
@@ -979,7 +979,7 @@ class ShopMemberController extends Shop
                 $analytics_view = json_decode($response);
                 foreach ($analytics_view as $key => $value) 
                 {
-                    if ($value->sender != $explode_email[0] . '@press-iq.com') 
+                    if ($value->sender != 'noreply-' . $explode_email[0] . '@press-iq.com') 
                     {
                         unset($analytics_view[$key]);
                     }
@@ -1093,7 +1093,7 @@ class ShopMemberController extends Shop
             $explode_email = explode("@", Session::get('user_email'));
             $curl = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . 'noreply-' . $explode_email[0] . '@press-iq.com',
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_ENCODING        => "",
                 CURLOPT_MAXREDIRS       => 10,
@@ -1119,7 +1119,7 @@ class ShopMemberController extends Shop
                 $new_analytic_view = [];
                 foreach ($analytics_view as $key => $value) 
                 {
-                    if ($value->sender != $explode_email[0] . '@press-iq.com') 
+                    if ($value->sender != 'noreply-' . $explode_email[0] . '@press-iq.com') 
                     {
                         $new_analytic_view[$value->subject] = $value;
                     }
@@ -1145,7 +1145,7 @@ class ShopMemberController extends Shop
             $curl          = curl_init();
             curl_setopt_array($curl, array
             (
-                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . 'noreply-' . $explode_email[0] . '@press-iq.com',
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_ENCODING        => "",
                 CURLOPT_MAXREDIRS       => 10,

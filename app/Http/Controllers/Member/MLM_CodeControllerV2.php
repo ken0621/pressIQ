@@ -379,9 +379,7 @@ class MLM_CodeControllerV2 extends Member
     }
 
     public function distribute_submit(Request $request)
-    {
-        
-        
+    {   
         $id               = $request->id;
         $exist            = Tbl_distribute_product_code::where("record_log_id", $id)->first();
         $customer_id      = $request->customer_id;

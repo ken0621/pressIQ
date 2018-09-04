@@ -27,13 +27,13 @@
                     <div class="featured-container">
                         <div class="row clearfix">
                             <div class="col-md-12">
-                                <div class="item-title">{{ $product["eprod_name"] }} </div>
+                                <div class="item-title">{{ $product["eprod_name"] }}</div>
                             </div>
                             <div class="col-md-5 product">
-                                <div class="thumb">
+                                <div>
                                     @foreach($product_variant['image'] as $key => $image)
                                     <div class="holder" style="cursor: pointer;" key="{{ $key }}" variant-id="{{ $product_variant['evariant_id'] }}">
-                                        <img id="yellow-bag-image"  class="item-image-large {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%; object-fit: cover;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}">
+                                        <img style="width: 100%; object-fit: cover;" id="yellow-bag-image"  class="item-image-large {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}">
                                     </div>
                                     @endforeach
                                 </div>

@@ -1609,7 +1609,7 @@ class ShopMemberController extends Shop
     public function importExcel(Request $request)     
     {  
         Session::forget('error_import');
-        if($request->hasFile('import_file'))          
+        if($request->hasFile('import_file'))            
         {
 
             $file   = $request->file('import_file')->getRealPath();
@@ -1620,31 +1620,34 @@ class ShopMemberController extends Shop
             $array = array();
             foreach($_data as $key =>$row)
             {
-                $error = Self::import_validation($row);
-               
-                if($error == "no_error")
+                if($row->country != null || $row->category != null || $row->publication != null)
                 {
-                    $data['research_email_address']  = Self::nullables($row->email_address);
-                    $data['company_name']            = Self::nullables($row->publication);
-                    $data['name']                    = Self::nullables($row->first_name.' '.$row->last_name);
-                    $data['position']                = Self::nullables($row->job_title);
-                    $data['title_of_journalist']     = Self::nullables($row->position);
-                    $data['country']                 = Self::nullables($row->country);
-                    $data['industry_type']           = Self::nullables($row->category);
-                    $data['website']                 = Self::nullables($row->website);
-                    $data['description']             = Self::nullables($row->description);
-                    $data['media_type']              = Self::nullables($row->media_type);
-                    $data['language']                = str_replace(' ',$row->language,' ');
-                    
-                    if(!empty($data)) 
+                    $error = Self::import_validation($row);
+                   
+                    if($error == "no_error")
                     {
-                        DB::table('tbl_press_release_recipients')->insert($data);
+                        $data['research_email_address']  = Self::nullables($row->email_address);
+                        $data['company_name']            = Self::nullables($row->publication);
+                        $data['name']                    = Self::nullables($row->first_name.' '.$row->last_name);
+                        $data['position']                = Self::nullables($row->job_title);
+                        $data['title_of_journalist']     = Self::nullables($row->position);
+                        $data['country']                 = Self::nullables($row->country);
+                        $data['industry_type']           = Self::nullables($row->category);
+                        $data['website']                 = Self::nullables($row->website);
+                        $data['description']             = Self::nullables($row->description);
+                        $data['media_type']              = Self::nullables($row->media_type);
+                        $data['language']                = str_replace(' ',$row->language,' ');
+                        
+                        if(!empty($data)) 
+                        {
+                            DB::table('tbl_press_release_recipients')->insert($data);
+                        }
                     }
-                }
-                else
-                {
-                    $_data[$key]['error'] = $error;
-                    array_push($array,$row);
+                    else
+                    {
+                        $_data[$key]['error'] = $error;
+                        array_push($array,$row);
+                    }
                 }
                 
             } 

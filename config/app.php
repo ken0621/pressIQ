@@ -185,7 +185,7 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Msurguy\Honeypot\HoneypotServiceProvider::class,
         niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
-        
+        Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
     ],
 
     /*
@@ -245,6 +245,7 @@ return [
         'Input'     => Illuminate\Support\Facades\Input::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
+        'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
 
     ],
 

@@ -376,6 +376,7 @@
                </div>
                <div class="login-register">Need an account?&nbsp;&nbsp;&nbsp;<a href="/account/register">Sign up</a></div>
                <div class="btn-container">
+                  {!! NoCaptcha::display() !!}
                   <button type="submit" class="login-button btn btn-primary">Log-in</button>
                </div>
             </form>
@@ -618,6 +619,7 @@
       
    </script>
    <!--End of Zopim Live Chat Script-->
+   {!! NoCaptcha::renderJs() !!}
    @yield('script')
 </html>
 

@@ -8,8 +8,8 @@
       <link rel="icon" type="image/png" href="resources/assets/frontend/img/favicon.png">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'> -->
-      <link href='http://fonts.googleapis.com/css?family=Lato:400,700,900,300' rel='stylesheet' type='text/css'>
-      <link href='http://fonts.googleapis.com/css?family=Quicksand:400,700' rel='stylesheet' type='text/css'>
+      <link href='https://fonts.googleapis.com/css?family=Lato:400,700,900,300' rel='stylesheet' type='text/css'>
+      <link href='https://fonts.googleapis.com/css?family=Quicksand:400,700' rel='stylesheet' type='text/css'>
       <link rel="stylesheet" href="resources/assets/frontend/css/global.css">
       <link rel="stylesheet" href="resources/assets/font-awesome/css/font-awesome.min.css">
       <link rel="stylesheet" href="resources/assets/remodal/src/remodal.css">

@@ -131,40 +131,22 @@
       					    </div>
 					        <div class="swiper-slide">
 						      	<div class="img-holder">
-						      		<img src="/themes/{{ $shop_theme }}/img/featured-img-1.jpg">
+						      		<img src="/themes/{{ $shop_theme }}/img/featured-img-7.jpg">
 						      	</div>
 						      	<div class="info-container">
-						      		<div class="title">General Consultancy</div>
+						      		<div class="title">Construction Services</div>
 						      		<div class="desc">Add Description Here</div>
 						      	</div>
 					      	</div>
 						     <div class="swiper-slide">
 	  					      	<div class="img-holder">
-	  					      		<img src="/themes/{{ $shop_theme }}/img/featured-img-2.jpg">
+	  					      		<img src="/themes/{{ $shop_theme }}/img/featured-img-8.jpg">
 	  					      	</div>
 	  					      	<div class="info-container">
-	  					      		<div class="title">Marketing</div>
+	  					      		<div class="title">Trade & Cryptocurrency</div>
 	  					      		<div class="desc">Add Description Here</div>
 	  					      	</div>
 	  					    </div>
-    				        <div class="swiper-slide">
-    					      	<div class="img-holder">
-    					      		<img src="/themes/{{ $shop_theme }}/img/featured-img-1.jpg">
-    					      	</div>
-    					      	<div class="info-container">
-    					      		<div class="title">General Consultancy</div>
-    					      		<div class="desc">Add Description Here</div>
-    					      	</div>
-    				      	</div>
-    					    <div class="swiper-slide">
-      					      	<div class="img-holder">
-      					      		<img src="/themes/{{ $shop_theme }}/img/featured-img-2.jpg">
-      					      	</div>
-      					      	<div class="info-container">
-      					      		<div class="title">Marketing</div>
-      					      		<div class="desc">Add Description Here</div>
-      					      	</div>
-      					    </div>
 					    </div>
 					</div>
 				</div>

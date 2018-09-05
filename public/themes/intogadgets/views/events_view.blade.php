@@ -95,7 +95,9 @@ iframe {
 <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
 <script type="text/javascript" src="resources/assets/frontend/js/events.js"></script>
 <script type="text/javascript">
+$('#wrap').hide();
 function resizeIframe(obj) {
+   $('#wrap').show();
    var _wrapWidth=$('#wrap').width();
    var _frameWidth=$($('#frame')[0].contentDocument).width();
 

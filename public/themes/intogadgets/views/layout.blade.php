@@ -488,7 +488,7 @@
    <script src="resources/assets/rutsen/js/lazy.js"></script>
    <script src="resources/assets/rutsen/js/global.js"></script>
    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
-   <script type="text/javascript" src="http://arrow.scrolltotop.com/arrow33.js"></script>
+   <!-- <script type="text/javascript" src="http://arrow.scrolltotop.com/arrow33.js"></script> -->
    <script src="resources/assets/slider/dist/slippry.min.js"></script>
    <script src="resources/assets/footable/js/footable.js" type="text/javascript"></script>
    <script type="text/javascript" src="js/match-height.js"></script>

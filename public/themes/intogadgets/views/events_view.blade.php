@@ -17,7 +17,7 @@
                      <img src="{{ $post->post_image }}">
                   </div>
                   <div class="desc" id="wrap">
-                     <iframe style="display: none;" id="frame" scrolling="no" src="{{ URL::to('/events/view_description/' . $post->post_id)  }}" allowfullscreen="true" allowtransparency="true" onload="resizeIframe(this)"></iframe>
+                     <iframe id="frame" scrolling="no" src="{{ URL::to('/events/view_description/' . $post->post_id)  }}" allowfullscreen="true" allowtransparency="true" onload="resizeIframe(this)"></iframe>
                   </div>
                </td>
                <td class="side-event">
@@ -96,7 +96,6 @@ iframe {
 <script type="text/javascript" src="resources/assets/frontend/js/events.js"></script>
 <script type="text/javascript">
 function resizeIframe(obj) {
-   $('#wrap').show();
    var _wrapWidth=$('#wrap').width();
    var _frameWidth=$($('#frame')[0].contentDocument).width();
 

@@ -1668,7 +1668,7 @@ class ShopMemberController extends Shop
     {
         /*VALDATION*/
         $error         = "no_error";
-        $country       = Tbl_country::where('country_name',$row['country'])->count();
+        $country       = Self::country_check($row['country']);
         $email         = Self::validate_email($row['email_address']);
         $language      = Self::language_check($row['language']);
         $job_title     = Self::job_title_check($row['job_title']);
@@ -1676,16 +1676,15 @@ class ShopMemberController extends Shop
         $media_type    = Self::media_type_check($row['media_type']);
 
 
-        if($country == 0||$row['country']=="")
+        if($country == "error_country")
         {
             $error = "COUNTRY DOES NOT EXIST!";
-        }
-        
+        }   
         else if($email == "error_email")
         {
             $error = "EMAIL ADDRESS IS NOT VALID!";
         }
-        else if($language=="error")
+        else if($language=="error_language")
         {
             $error = "LANGUAGE DOES NOT EXIST!";
         }
@@ -1710,14 +1709,53 @@ class ShopMemberController extends Shop
     }
 
     public static function validate_email($email)
-    {
-        
+    {  
         $emailB = filter_var($email, FILTER_SANITIZE_EMAIL);
         if (filter_var($emailB, FILTER_VALIDATE_EMAIL) === false || $emailB != $email) 
         {
             return "error_email";
+        }   
+    }
+
+
+    public static function country_check($country)
+    {
+        if($country == "Hong Kong")
+        {
+            return "correct";
         }
-        
+        else if($country == "Philippines")
+        {
+            return "correct";
+        }
+        else if($country == "Singapore")
+        {
+            return "correct";
+        }
+        else if($country == "China")
+        {
+            return "correct";
+        }
+        else if($country == "Indonesia")
+        {
+            return "correct";
+        }
+        else if($country == "Malaysia")
+        {
+            return "correct";
+        }
+        else if($country == "India")
+        {
+            return "correct";
+        }
+        else if($country == "Canada")
+        {
+            return "correct";
+        }
+        else
+        {
+            return "error_country";
+        }
     }
 
     public static function language_check($language)
@@ -1732,7 +1770,7 @@ class ShopMemberController extends Shop
         }
         else
         {
-            return "error";
+            return "error_language";
         }
     }
 

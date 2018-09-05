@@ -16,8 +16,8 @@
                   <div class="img">
                      <img src="{{ $post->post_image }}">
                   </div>
-                  <div class="desc">
-                     <iframe src="{{ URL::to('/events/view_description/' . $post->post_id)  }}" allowfullscreen="true" allowtransparency="true" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+                  <div class="desc" id="wrap">
+                     <iframe id="frame" scrolling="no" src="{{ URL::to('/events/view_description/' . $post->post_id)  }}" allowfullscreen="true" allowtransparency="true" onload="resizeIframe(this)"></iframe>
                   </div>
                </td>
                <td class="side-event">
@@ -81,8 +81,9 @@
 iframe {
   display: block;
   width: 100%;
-  height: 500px;
+  /*border: 1px solid #666;*/
   border: 0;
+  overflow-y: hidden;
   box-sizing: border-box;
   transform-origin: center top;
   transition: transform .05s linear;
@@ -95,117 +96,28 @@ iframe {
 <script type="text/javascript" src="resources/assets/frontend/js/events.js"></script>
 <script type="text/javascript">
 function resizeIframe(obj) {
- obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+   var _wrapWidth=$('#wrap').width();
+   var _frameWidth=$($('#frame')[0].contentDocument).width();
+
+   if(!this.contentLoaded)
+   this.initialWidth=_frameWidth;
+   this.contentLoaded=true;
+   var frame=$('#frame')[0];
+
+   var percent=_wrapWidth/this.initialWidth;
+
+   frame.style.width=100.0/percent+"%";
+   frame.style.height=100.0/percent+"%";
+
+   frame.style.zoom=percent;
+   frame.style.webkitTransform='scale('+percent+')';
+   frame.style.webkitTransformOrigin='top left';
+   frame.style.MozTransform='scale('+percent+')';
+   frame.style.MozTransformOrigin='top left';
+   frame.style.oTransform='scale('+percent+')';
+   frame.style.oTransformOrigin='top left';
+
+   obj.style.height = (obj.contentWindow.document.body.scrollHeight / percent) + 'px';
 }
-/**
- * Scaling <iframe>-elements.
- * 
- * Emanuel Kluge
- * twitter.com/Herschel_R
- */
-(function (win, doc) {
-
-  /** Below this point the scaling takes effect. */
-  var BREAKPOINT = 2000;
-  
-  /**
-   * The `window.resize`-callback gets throttled
-   * to an interval of 30ms.
-  */
-  var THROTTLE = 30;
-  
-  /** Just the declaration. Definition comes later. */
-  var IFRAME_HEIGHT;
-
-  var iframe = doc.getElementsByTagName('iframe')[0],
-      timestamp = 0;
-  
-  /** Defining the inital iframe-height. */
-  IFRAME_HEIGHT = parseInt(getComputedStyle(iframe).height, 10);
-  
-  /**
-   * Takes an object with CSS-transform-properties
-   * and generates a cross-browser-ready style string.
-   *
-   * @param  {Object} obj
-   * @return {String}
-   */
-  function transformStr(obj) {
-    var obj = obj || {},
-        val = '',
-        j;
-    for ( j in obj ) {
-      val += j + '(' + obj[j] + ') ';
-    }
-    val += 'translateZ(0)';
-    return '-webkit-transform: ' + val + '; ' +
-            '-moz-transform: ' + val + '; ' +
-            'transform: ' + val;
-  }
-  
-  /**
-   * Scaling the iframe if necessary.
-   *
-   * @return {Function}
-   */
-  function onResize() {
-  
-    var now = +new Date,
-        winWidth = win.innerWidth,
-        noResizing = winWidth > BREAKPOINT,
-        scale,
-        width,
-        height,
-        offsetLeft;
-    
-    if ( now - timestamp < THROTTLE || noResizing ) {
-      /** Remove the style-attr if we're out of the "scaling-zone". */
-      noResizing && iframe.hasAttribute('style') && iframe.removeAttribute('style');
-      return onResize;
-    }
-    
-    timestamp = now;
-    
-    /**
-     * The required scaling; using `Math.pow` to get
-     * a safely small enough value.
-     */
-    scale = Math.pow(winWidth / BREAKPOINT, 1.0);
-    
-    /**
-     * To get the corresponding width that compensates
-     * the shrinking and thus keeps the width of the
-     * iframe consistent, we have to divide 100 by the
-     * scale. This gives us the correct value in percent.
-     */
-    width = 100 / scale;
-    
-    /**
-     * We're using the initial height and the compen-
-     * sating width to compute the compensating height
-     * in px.
-     */
-    height = IFRAME_HEIGHT / scale;
-    
-    /**
-     * We have to correct the position of the iframe,
-     * when changing its width.
-     */
-    offsetLeft = (width - 100) / 2;
-    
-    /** Setting the styles. */
-    iframe.setAttribute('style', transformStr({
-      scale: scale,
-      translateX: '-' + offsetLeft + '%'
-    }) + '; width: ' + width + '%; ' + 'height: ' + height + 'px');
-    
-    return onResize;
-  
-  }
-  
-  /** Listening to `window.resize`. */
-  win.addEventListener('resize', onResize(), false);
-
-})(window.self, document);
 </script>
 @endsection

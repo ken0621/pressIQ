@@ -89,6 +89,8 @@
                                       <li><a href="#">Man Power Services</a></li>
                                       <li><a href="#">Marketing</a></li>
                                       <li><a href="#">Real Estate</a></li>
+                                      <li><a href="#">Construction Services</a></li>
+                                      <li><a href="#">Trade & Cryptocurrency</a></li>
                                     </ul>
                                   </div>
                                   <input type="text" class="form-control" aria-label="..." placeholder="Search product or services here...">

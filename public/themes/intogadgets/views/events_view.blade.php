@@ -105,6 +105,7 @@ function resizeIframe(obj) {
    this.initialWidth=_frameWidth;
    this.contentLoaded=true;
    var frame=$('#frame')[0];
+   var wrap=$('#wrap')[0];
 
    var percent=_wrapWidth/this.initialWidth;
 
@@ -119,7 +120,8 @@ function resizeIframe(obj) {
    frame.style.oTransform='scale('+percent+')';
    frame.style.oTransformOrigin='top left';
 
-   obj.style.height = (obj.contentWindow.document.body.scrollHeight) + 'px';
+   obj.style.height = (obj.contentWindow.document.body.scrollHeight / percent) + 'px';
+   wrap.style.height = (obj.contentWindow.document.body.scrollHeight * percent) + 'px';
 }
 </script>
 @endsection

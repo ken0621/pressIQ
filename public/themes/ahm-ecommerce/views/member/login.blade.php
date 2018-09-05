@@ -1,6 +1,6 @@
 @extends("layout")
 @section("content")
-<div class="signin-wrapper">
+<div class="login-wrapper">
 	<div class="top-banner">
 		<div class="container">
 			<div class="signin-container">
@@ -24,7 +24,7 @@
 				    </div>
 				@endif
 
-				<form method="post">
+				<form method="">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}">
 					<div class="form-group">
 						<div class="input-group input-group-lg">
@@ -38,14 +38,14 @@
 						  <input type="password" name="password" value="" class="form-control" placeholder="Password" aria-describedby="sizing-addon1">
 						</div>
 					</div>
-					<label onClick="location.href='/members/forgot-password'">Forgot Password? Click Here</label>
+					<label onClick="location.href='#'">Forgot Password? Click Here</label>
 					<div class="btn-container">
 						<button type="submit" class="btn-red">LOGIN</button>
 					</div>
 				</form>
 			</div>
 			<div class="border"></div>
-			<div class="register">
+			<div class="register-label">
 				<span>Dont have an account yet?</span><span onClick="location.href='/members/register'">REGISTER HERE</span>
 			</div>
 		</div>

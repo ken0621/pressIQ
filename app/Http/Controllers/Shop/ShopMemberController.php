@@ -1952,6 +1952,15 @@ class ShopMemberController extends Shop
                         $sheet->setCellValue('H'.$key, $errors['email_address']);
                         $sheet->setCellValue('I'.$key, $errors['language']);
                         $sheet->setCellValue('J'.$key, $errors['error']);
+
+                        $one = 1;
+                        $two = 2;
+                        $sheet->cell('J', function($row){ $row->setFontColor('#FF0000');});
+                        $sheet->cell('J'.$one, function($row) {$row->setFontColor('#FF0000');$row->setFontWeight('bold');});
+                        $sheet->cell('J'.$two, function($row) {$row->setFontColor('#FF0000');});
+                        $sheet->getStyle('J')->getAlignment()->applyFromArray(array('horizontal' => 'center'));
+                        $sheet->getStyle('J'.$one)->getAlignment()->applyFromArray(array('horizontal' => 'center'));
+                        $sheet->getStyle('J'.$two)->getAlignment()->applyFromArray(array('horizontal' => 'center'));
                     }
 
                 });

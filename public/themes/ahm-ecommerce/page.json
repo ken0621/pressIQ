@@ -1,0 +1,61 @@
+{
+	"home":
+	{
+		
+	},
+	"contact":
+	{
+ 		"contact_company_location" :
+ 		{
+ 			"label":"Company Address",
+ 			"type":"textbox",
+ 			"default":"No. 18 South AA Brgy. Paligsahan, Quezon City",
+ 			"size":"3"
+ 		},
+ 		"contact_company_phone" :
+ 		{
+ 			"label":"Company Phone Number",
+ 			"type":"textbox",
+ 			"default":"09283403364 (Smart) / 09173150099 (Globe)",
+ 			"size":"3"
+ 		},
+ 		"contact_company_telephone" :
+ 		{
+ 			"label":"Company Telephone Number",
+ 			"type":"textbox",
+ 			"default":"3764981 / 9842436",
+ 			"size":"3"
+ 		},
+ 		"contact_company_email" :
+ 		{
+ 			"label":"Comapny Email Address",
+ 			"type":"textbox",
+ 			"default":"heartzone811@gmail.com",
+ 			"size":"3"
+ 		}
+	},
+	"policies":
+	{
+		"policies_terms_and_agreement" :
+		{
+			"label":"Terms and Agreement",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"policies_privacy_policy" :
+		{
+			"label":"Privacy Policy",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"policies_return_policy" :
+		{
+			"label":"Return Policy",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		}
+	}
+}

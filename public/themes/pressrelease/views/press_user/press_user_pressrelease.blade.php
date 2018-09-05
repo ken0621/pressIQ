@@ -208,6 +208,8 @@
                   <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
                   <a href="javascript:" id="pop_chosen_recipient_btn">  VIEW</a>
 
+                  <input type="hidden" name="user_name" value="{{session('user_name')}}">
+
                   <div class="button-container">
                     <button class="tablinks" type="button" onclick="openCity(event, 'choose_recipient')" id="defaultOpen">&laquo; Back</button>
                     <button class="preview-button" type="button"  id="prev_btn_send">Preview</button>

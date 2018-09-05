@@ -409,6 +409,7 @@ class ShopMemberController extends Shop
         $pr_info["pr_content"]         = request('pr_content');
         $pr_info["pr_boiler_content"]  = request('pr_boiler_content');
         $pr_info["pr_from"]            = session('user_email');
+        $pr_info["pr_user_name"]       = session('user_name');
         $pr_info["pr_to"]              = request('pr_to');
         $pr_info["pr_status"]          = "Sent";
         $pr_info["pr_date_sent"]       = Carbon::now();
@@ -417,6 +418,7 @@ class ShopMemberController extends Shop
         $pr_info["pr_co_name"]         = session('user_company_name');
         $pr_info["pr_co_img"]          = session('user_company_image');
         $pr_info["pr_send_limit"]      = request('hidden_number');
+
         $pr_rules["pr_type"]           = ['required'];
         $pr_rules["pr_headline"]       = ['required'];
         $pr_rules["pr_content"]        = ['required'];
@@ -450,7 +452,7 @@ class ShopMemberController extends Shop
                     {
                         $message->from($pr_info["explode_email"][0] . '@press-iq.com');
                         $message->to('marketing@press-iq.com');
-                        $message->subject('PressIQ');
+                        $message->subject('PressIQ Account Expired');
                     });
                     $data["page"] = "Home";
                     return view("home", $data);
@@ -528,7 +530,7 @@ class ShopMemberController extends Shop
     public function send($pr_info)        
     {
         $to = explode(",", $pr_info['pr_to']);
-        $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
+        $pr_info["explode_email"] = $pr_info["pr_user_name"];
  
         $result = array_unique($to);
 
@@ -536,7 +538,7 @@ class ShopMemberController extends Shop
         {
             Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
             {
-                $message->from('noreply-'. $pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name']);
+                $message->from('noreply-'. $pr_info["explode_email"] . '@press-iq.com', $pr_info['pr_sender_name']);
                 $message->to($pr_info['pr_to']);
                 $message->subject($pr_info["pr_headline"]);
             });
@@ -548,7 +550,7 @@ class ShopMemberController extends Shop
         $contactus_info["contactus_first_name"]         =request('first_name');
         $contactus_info["contactus_last_name"]          =request('contactus_last_name');
         $contactus_info["contactus_phone_number"]       =request('contactus_phone_number');
-        $contactus_info["contactus_subject"]            ="New Contact Us Message";
+        $contactus_info["contactus_subject"]            ="PressIQ New Contact Us Message";
         $contactus_info["contactus_email"]              =request('contactus_email');
         $contactus_info["contactus_message"]            =request('contactus_message');
         $contactus_info["contactus_to"]                 =request('contactus_to');
@@ -572,7 +574,7 @@ class ShopMemberController extends Shop
         $demo_info["demo_email"]            =request('email');
         $demo_info["demo_phone_number"]     =request('number');
         $demo_info["demo_message"]          =request('message');
-        $demo_info["demo_subject"]          ="New Request Demo";
+        $demo_info["demo_subject"]          ="PressIQ New Request Demo";
     
         $demo_info["explode_email"] = explode("@", $demo_info['demo_email']);
 
@@ -590,7 +592,7 @@ class ShopMemberController extends Shop
     public function send_newsletter()
     {
         $newsletter_info["newsletter_email"]       = request('newsletter');
-        $newsletter_info["subject"]                = "New NewsLetter";
+        $newsletter_info["subject"]                = "PressIQ New NewsLetter";
         $newsletter_info["explode_email"]          = explode("@", $newsletter_info['newsletter_email']);
 
         Mail::send('emails.Newsletter_email',$newsletter_info, function($message) use ($newsletter_info)
@@ -857,10 +859,10 @@ class ShopMemberController extends Shop
         if (Session::exists('user_email')) 
         {
            
-            $explode_email = explode("@", Session::get('user_email'));
+            $explode_email = Session::get('user_name');
             $curl          = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/senders/info.json?key=UWTLQzFotM-rRUyOJqlvjw&address=" . 'noreply-' . $explode_email[0] . '@press-iq.com',
+                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/senders/info.json?key=UWTLQzFotM-rRUyOJqlvjw&address=" . 'noreply-' . $explode_email . '@press-iq.com',
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_ENCODING        => "",
                 CURLOPT_MAXREDIRS       => 10,
@@ -899,10 +901,10 @@ class ShopMemberController extends Shop
     {
         if (Session::exists('user_email')) 
         {
-            $explode_email = explode("@", Session::get('user_email'));
+            $explode_email              = Session::get('user_name');
             $curl                       = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=". 'noreply-' . $explode_email[0] . '@press-iq.com',
+                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=". 'noreply-' . $explode_email . '@press-iq.com',
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_ENCODING        => "",
                 CURLOPT_MAXREDIRS       => 10,
@@ -929,7 +931,7 @@ class ShopMemberController extends Shop
                 $new_analytic_view = [];
                 foreach ($analytics_view as $key => $value) 
                 {
-                    if ($value->sender == 'noreply-' . $explode_email[0] . '@press-iq.com') 
+                    if ($value->sender == 'noreply-' . $explode_email . '@press-iq.com') 
                     {
                         $new_analytic_view[$value->subject] = $value;
                     }
@@ -950,10 +952,10 @@ class ShopMemberController extends Shop
     {
         if (Session::exists('user_email')) 
          {
-            $explode_email = explode("@", Session::get('user_email'));
-            $curl = curl_init();
+            $explode_email              = Session::get('user_name');
+            $curl                       = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . 'noreply-' . $explode_email[0] . '@press-iq.com',
+                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . 'noreply-' . $explode_email . '@press-iq.com',
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_ENCODING        => "",
                 CURLOPT_MAXREDIRS       => 10,
@@ -979,7 +981,7 @@ class ShopMemberController extends Shop
                 $analytics_view = json_decode($response);
                 foreach ($analytics_view as $key => $value) 
                 {
-                    if ($value->sender != 'noreply-' . $explode_email[0] . '@press-iq.com') 
+                    if ($value->sender != 'noreply-' . $explode_email . '@press-iq.com') 
                     {
                         unset($analytics_view[$key]);
                     }
@@ -1090,10 +1092,10 @@ class ShopMemberController extends Shop
     {
         if (Session::exists('user_email')) 
         {
-            $explode_email = explode("@", Session::get('user_email'));
-            $curl = curl_init();
+            $explode_email              = Session::get('user_name');
+            $curl                       = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . 'noreply-' . $explode_email[0] . '@press-iq.com',
+                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . 'noreply-' . $explode_email . '@press-iq.com',
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_ENCODING        => "",
                 CURLOPT_MAXREDIRS       => 10,
@@ -1119,7 +1121,7 @@ class ShopMemberController extends Shop
                 $new_analytic_view = [];
                 foreach ($analytics_view as $key => $value) 
                 {
-                    if ($value->sender != 'noreply-' . $explode_email[0] . '@press-iq.com') 
+                    if ($value->sender != 'noreply-' . $explode_email . '@press-iq.com') 
                     {
                         $new_analytic_view[$value->subject] = $value;
                     }
@@ -1141,11 +1143,11 @@ class ShopMemberController extends Shop
     {
         if (Session::exists('user_email')) 
         {
-            $explode_email = explode("@", Session::get('user_email'));
+            $explode_email = Session::get('user_name');
             $curl          = curl_init();
             curl_setopt_array($curl, array
             (
-                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . 'noreply-' . $explode_email[0] . '@press-iq.com',
+                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . 'noreply-' . $explode_email . '@press-iq.com',
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_ENCODING        => "",
                 CURLOPT_MAXREDIRS       => 10,
@@ -1473,8 +1475,9 @@ class ShopMemberController extends Shop
             
             foreach ($_user_data as $user_data) 
             {
-               
+                 
             }
+            Session::put('user_name', $user_data->user_name);
             Session::put('user_email', $user_data->user_email);
             Session::put('user_first_name',$user_data->user_first_name);
             Session::put('user_last_name',$user_data->user_last_name);

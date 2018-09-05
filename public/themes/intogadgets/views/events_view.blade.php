@@ -119,7 +119,7 @@ function resizeIframe(obj) {
    frame.style.oTransform='scale('+percent+')';
    frame.style.oTransformOrigin='top left';
 
-   obj.style.height = (obj.contentWindow.document.body.scrollHeight / percent) + 'px';
+   obj.style.height = (obj.contentWindow.document.body.scrollHeight) + 'px';
 }
 </script>
 @endsection

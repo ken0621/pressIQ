@@ -217,7 +217,7 @@
                         </div>
                      </div>
                      <div class="cart-icon">
-                        <a href='{{ "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" }}#cart' style="color: white;">
+                        <a href='{{ URL::to("/#cart") }}' style="color: white;">
                            <div class="cart-qt">
                               <div class="cart-qt-text">0</div>
                            </div>

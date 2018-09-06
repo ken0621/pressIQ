@@ -68,6 +68,7 @@
 							{{-- End Billing Information --}}
 						</div>
 						<div class="form-group text-right">
+							{!! NoCaptcha::display() !!}
 							<button class="btn btn-primary">CONTINUE</button>
 						</div>
 					</form>
@@ -81,6 +82,13 @@
 
 @section('css')
 <link rel="stylesheet" type="text/css" href="resources/assets/frontend/css/checkout_login.css">
+<style type="text/css">
+.g-recaptcha div
+{
+ margin-left: auto;
+ margin-bottom: 15px;
+}
+</style>
 @endsection
 
 @section('script')

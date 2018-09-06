@@ -194,8 +194,6 @@ class CustomerController extends Member
 
         Tbl_customer::where('customer_id',$id)->update($update);
     
-
-
     }
 
 	public function modalcreatecustomer()

@@ -32,6 +32,15 @@ class ShopEventsController extends Shop
         // dd($data["_related"]);
     	return view("events_view", $data);
     }
+
+    public function view_description($id)
+    {
+        $data["page"] = "Events View";
+        $data["post"] = Post::get_post($id, $this->shop_info->shop_id);
+        
+        return view("events_description", $data);
+    }
+
     public function view_details(Request $request)
     {
         $data['event'] = ShopEvent::first($this->shop_info->shop_id, $request->id);

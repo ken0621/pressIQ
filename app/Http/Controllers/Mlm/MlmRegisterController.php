@@ -327,92 +327,104 @@ class MlmRegisterController extends MlmLoginController
     /* Start of E-commerce registration --Brain*/
     public function register_ecomm()
     {
-        $i['password'] = Request::input('pass');
-        $i['password_2'] = Request::input('pass2');
-        $i['customer_mobile'] = Request::input('customer_mobile');
+        $rules['g-recaptcha-response'] = 'required|captcha';
 
-        if ($i['customer_mobile'] != null) 
+        $validator = Validator::make(Request::input(), $rules);
+
+        if ($validator->passes())
         {
-            if($i['password'] == $i['password_2'])
+            $i['password'] = Request::input('pass');
+            $i['password_2'] = Request::input('pass2');
+            $i['customer_mobile'] = Request::input('customer_mobile');
+
+            if ($i['customer_mobile'] != null) 
             {
-                if(strlen($i['password']) >= 6)
-                {     
-                    $check_email = Tbl_customer::where('shop_id',Self::$shop_id)->where('email', Request::input('email'))->count();  
-                    //dd($check_email);
-                    //$check_email = Tbl_customer::where('shop_id', Self::$shop_id)->where('email', Request::input('email')->count();
-                
-                    if($check_email == 0)
-                    {
-                        $insert_customer = array(
-                            'shop_id'       => Self::$shop_id,
-                            'first_name'    => Request::input('first_name'),
-                            'last_name'     => Request::input('last_name'),
-                            'email'         => Request::input('email'),
-                            'password'      => Crypt::encrypt($i['password']),
-
-                            'IsWalkin'      => 0,
-                            'ismlm'         => 2,
-                        );
-
-                        $cus_id = Tbl_customer::insertGetId($insert_customer);
+                if($i['password'] == $i['password_2'])
+                {
+                    if(strlen($i['password']) >= 6)
+                    {     
+                        $check_email = Tbl_customer::where('shop_id',Self::$shop_id)->where('email', Request::input('email'))->count();  
+                        //dd($check_email);
+                        //$check_email = Tbl_customer::where('shop_id', Self::$shop_id)->where('email', Request::input('email')->count();
                     
-                        $data["customer_info"] = Tbl_customer::where("customer_id",$cus_id)->first();
-                        Mail_global::create_email_content($data,Self::$shop_id,"success_register_intogadgets");
-
-                        if ($cus_id)
+                        if($check_email == 0)
                         {
-                            $insert_address = array(  
-                                'customer_id'       => $cus_id,
-                                'country_id'        => 420, //default ph
-                                'customer_state'    => Request::input('customer_state'),
-                                'customer_city'     => Request::input('customer_city'),
-                                'customer_street'   => Request::input('customer_street'),
-                                'purpose'           => "billing",
-                                //'customer_mobile'   => Request::input('customer_mobile'),
+                            $insert_customer = array(
+                                'shop_id'       => Self::$shop_id,
+                                'first_name'    => Request::input('first_name'),
+                                'last_name'     => Request::input('last_name'),
+                                'email'         => Request::input('email'),
+                                'password'      => Crypt::encrypt($i['password']),
+
+                                'IsWalkin'      => 0,
+                                'ismlm'         => 2,
                             );
 
-                            DB::table('tbl_customer_address')->insert($insert_address);  
+                            $cus_id = Tbl_customer::insertGetId($insert_customer);
+                        
+                            $data["customer_info"] = Tbl_customer::where("customer_id",$cus_id)->first();
+                            Mail_global::create_email_content($data,Self::$shop_id,"success_register_intogadgets");
 
-                            $insert_other = array(  
-                                'customer_id'       => $cus_id,                                
-                                'customer_mobile'   => Request::input('customer_mobile'),
-                            );   
+                            if ($cus_id)
+                            {
+                                $insert_address = array(  
+                                    'customer_id'       => $cus_id,
+                                    'country_id'        => 420, //default ph
+                                    'customer_state'    => Request::input('customer_state'),
+                                    'customer_city'     => Request::input('customer_city'),
+                                    'customer_street'   => Request::input('customer_street'),
+                                    'purpose'           => "billing",
+                                    //'customer_mobile'   => Request::input('customer_mobile'),
+                                );
 
-                            DB::table('tbl_customer_other_info')->insert($insert_other); 
-                            
-                            Mlm_member::add_to_session(Self::$shop_id, $cus_id);     
+                                DB::table('tbl_customer_address')->insert($insert_address);  
 
-                            //echo "Registration successful! You will be redirect to your account page.";    
-                            return Redirect::to('/account');         
+                                $insert_other = array(  
+                                    'customer_id'       => $cus_id,                                
+                                    'customer_mobile'   => Request::input('customer_mobile'),
+                                );   
 
+                                DB::table('tbl_customer_other_info')->insert($insert_other); 
+                                
+                                Mlm_member::add_to_session(Self::$shop_id, $cus_id);     
+
+                                //echo "Registration successful! You will be redirect to your account page.";    
+                                return Redirect::to('/account');         
+
+                            }
+                            else
+                            {
+                                Session::flash('warning', 'Error! Please contact administrator(Err-Customer Model).');
+                                return Redirect::back()->withInput();   
+                            }                     
                         }
                         else
                         {
-                            Session::flash('warning', 'Error! Please contact administrator(Err-Customer Model).');
-                            return Redirect::back()->withInput();   
-                        }                     
+                            Session::flash('warning', 'Email is already exist in the record.');
+                            return Redirect::back()->withInput();  
+                        }      
                     }
                     else
                     {
-                        Session::flash('warning', 'Email is already exist in the record.');
-                        return Redirect::back()->withInput();  
-                    }      
+                        Session::flash('warning', 'Password length is mainimum of 6 character.');
+                        return Redirect::back()->withInput();
+                    }                
                 }
                 else
-                {
-                    Session::flash('warning', 'Password length is mainimum of 6 character.');
+                {   
+                    Session::flash('warning', 'Password do not match!');
                     return Redirect::back()->withInput();
-                }                
+                }
             }
             else
-            {   
-                Session::flash('warning', 'Password do not match!');
+            {
+                Session::flash('warning', 'Contact Number is required!');
                 return Redirect::back()->withInput();
             }
         }
         else
         {
-            Session::flash('warning', 'Contact Number is required!');
+            Session::flash('warning', 'Captcha is incorrect.');
             return Redirect::back()->withInput();
         }
     }

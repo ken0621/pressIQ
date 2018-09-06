@@ -16,7 +16,9 @@
                   <div class="img">
                      <img src="{{ $post->post_image }}">
                   </div>
-                  <div class="desc">{!! $post->post_content !!}</div>
+                  <div class="desc" id="wrap">
+                     <iframe id="frame" scrolling="no" src="{{ URL::to('/events/view_description/' . $post->post_id)  }}" allowfullscreen="true" allowtransparency="true" onload="resizeIframe(this)"></iframe>
+                  </div>
                </td>
                <td class="side-event">
                   @if(count($_related) > 1)
@@ -75,9 +77,51 @@
    object-fit: cover !important;
    max-width: 100%;
 }
+
+iframe {
+  display: block;
+  width: 100%;
+  /*border: 1px solid #666;*/
+  border: 0;
+  overflow-y: hidden;
+  box-sizing: border-box;
+  transform-origin: center top;
+  transition: transform .05s linear;
+  backface-visibility: hidden;
+}
 </style>
 @endsection
 @section('script')
 <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
 <script type="text/javascript" src="resources/assets/frontend/js/events.js"></script>
+<script type="text/javascript">
+$('#wrap').hide();
+function resizeIframe(obj) {
+   $('#wrap').show();
+   var _wrapWidth=$('#wrap').width();
+   var _frameWidth=$($('#frame')[0].contentDocument).width();
+
+   if(!this.contentLoaded)
+   this.initialWidth=_frameWidth;
+   this.contentLoaded=true;
+   var frame=$('#frame')[0];
+   var wrap=$('#wrap')[0];
+
+   var percent=_wrapWidth/this.initialWidth;
+
+   frame.style.width=100.0/percent+"%";
+   frame.style.height=100.0/percent+"%";
+
+   frame.style.zoom=percent;
+   frame.style.webkitTransform='scale('+percent+')';
+   frame.style.webkitTransformOrigin='top left';
+   frame.style.MozTransform='scale('+percent+')';
+   frame.style.MozTransformOrigin='top left';
+   frame.style.oTransform='scale('+percent+')';
+   frame.style.oTransformOrigin='top left';
+
+   obj.style.height = (obj.contentWindow.document.body.scrollHeight / percent) + 'px';
+   wrap.style.height = (obj.contentWindow.document.body.scrollHeight * percent) + 'px';
+}
+</script>
 @endsection

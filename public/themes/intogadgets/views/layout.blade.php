@@ -8,8 +8,8 @@
       <link rel="icon" type="image/png" href="resources/assets/frontend/img/favicon.png">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'> -->
-      <link href='http://fonts.googleapis.com/css?family=Lato:400,700,900,300' rel='stylesheet' type='text/css'>
-      <link href='http://fonts.googleapis.com/css?family=Quicksand:400,700' rel='stylesheet' type='text/css'>
+      <link href='https://fonts.googleapis.com/css?family=Lato:400,700,900,300' rel='stylesheet' type='text/css'>
+      <link href='https://fonts.googleapis.com/css?family=Quicksand:400,700' rel='stylesheet' type='text/css'>
       <link rel="stylesheet" href="resources/assets/frontend/css/global.css">
       <link rel="stylesheet" href="resources/assets/font-awesome/css/font-awesome.min.css">
       <link rel="stylesheet" href="resources/assets/remodal/src/remodal.css">
@@ -217,7 +217,7 @@
                         </div>
                      </div>
                      <div class="cart-icon">
-                        <a href='{{ "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" }}#cart' style="color: white;">
+                        <a href='{{ URL::to("/#cart") }}' style="color: white;">
                            <div class="cart-qt">
                               <div class="cart-qt-text">0</div>
                            </div>
@@ -376,6 +376,7 @@
                </div>
                <div class="login-register">Need an account?&nbsp;&nbsp;&nbsp;<a href="/account/register">Sign up</a></div>
                <div class="btn-container">
+                  {!! NoCaptcha::display() !!}
                   <button type="submit" class="login-button btn btn-primary">Log-in</button>
                </div>
             </form>
@@ -488,7 +489,7 @@
    <script src="resources/assets/rutsen/js/lazy.js"></script>
    <script src="resources/assets/rutsen/js/global.js"></script>
    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
-   <script type="text/javascript" src="http://arrow.scrolltotop.com/arrow33.js"></script>
+   <!-- <script type="text/javascript" src="http://arrow.scrolltotop.com/arrow33.js"></script> -->
    <script src="resources/assets/slider/dist/slippry.min.js"></script>
    <script src="resources/assets/footable/js/footable.js" type="text/javascript"></script>
    <script type="text/javascript" src="js/match-height.js"></script>
@@ -618,6 +619,7 @@
       
    </script>
    <!--End of Zopim Live Chat Script-->
+   {!! NoCaptcha::renderJs() !!}
    @yield('script')
 </html>
 

@@ -36,7 +36,7 @@ use App\Models\Tbl_email_template;
 use App\Globals\Mail_global;
 use App\Globals\Payment;
 // use App\Globals\Item_code;
-// use App\Globals\Mlm_slot_log;    
+// use App\Globals\Mlm_slot_log;
 
 /*4/29/17 this will import the data/class needed by ipay88 payment mode by:brain*/
 use App\Models\Tbl_online_pymnt_api;
@@ -48,11 +48,11 @@ class ShopCheckoutController extends Shop
     {
         $request = Request::all();
         $temp = DB::table("tbl_ipay88_temp")->where("reference_number", $request['RefNo'])->first();
-        if ($temp) 
+        if ($temp)
         {
             $shop_id = $temp->shop_id;
             $customer_id = $temp->customer_id;
-            
+
             /* Logs */
             $ipay88_logs["log_merchant_code"] = $request['MerchantCode'];
             $ipay88_logs["log_payment_id"] = $request['PaymentId'];
@@ -69,9 +69,9 @@ class ShopCheckoutController extends Shop
             $ipay88_logs["response"] = serialize($request);
             $ipay88_logs["from"] = "response";
 
-            if ($request) 
+            if ($request)
             {
-                try 
+                try
                 {
                     /* Success */
                     if($request['Status'] == 1)
@@ -79,42 +79,42 @@ class ShopCheckoutController extends Shop
                         // $payment_status = 1;
                         // $order_status   = "Processing";
                         // $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, $customer_id, 1, is_serialized($temp->cart) ? unserialize($temp->cart) : null);
-                        
+
                         // $ipay88_logs["order_id"] = $order_id;
                         DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
-                       
+
                         /* Confirmed Payment */
                         // $order = Tbl_ec_order::customer()->customer_otherinfo()->payment_method()->where("ec_order_id",$order_id)->first();
 
                         /* EMAIL SUCCESSFUL ORDER */
                         // $pass_data["order_details"] = $order;
                         // $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$order_id)->groupBy("ec_order_id")->get();
-                        // $pass_data["order_status"] = $order_status; 
+                        // $pass_data["order_status"] = $order_status;
                         // Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
 
                         /* Redirect */
                         return Redirect::to('/order_placed')->send();
-                    } 
+                    }
                     elseif($request['Status'] == 6)
                     {
                         DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
 
                         return Redirect::to("/product#pending_modal");
                     }
-                    elseif ($request['Status'] == 0) 
+                    elseif ($request['Status'] == 0)
                     {
                         DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
 
                         return Redirect::to("/product#fail_modal")->with("error", $request['ErrDesc']);
                     }
-                    else 
+                    else
                     {
                         DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
 
                         return redirect('/checkout')->withErrors($request['ErrDesc'])->send();
-                    }    
-                } 
-                catch (\Exception $e) 
+                    }
+                }
+                catch (\Exception $e)
                 {
                     $insert_error['response'] = $e->getMessage();
                     $insert_error['shop_id'] = $shop_id;
@@ -137,11 +137,11 @@ class ShopCheckoutController extends Shop
     {
         $request = Request::all();
         $temp = DB::table("tbl_ipay88_temp")->where("reference_number", $request['RefNo'])->first();
-        if ($temp) 
+        if ($temp)
         {
             $shop_id = $temp->shop_id;
             $customer_id = $temp->customer_id;
-            
+
             // LOGS
             $ipay88_logs["log_merchant_code"] = $request['MerchantCode'];
             $ipay88_logs["log_payment_id"] = $request['PaymentId'];
@@ -158,52 +158,63 @@ class ShopCheckoutController extends Shop
             $ipay88_logs["response"] = serialize($request);
             $ipay88_logs["from"] = "backend";
 
-            if ($request) 
+            if ($request)
             {
-                try 
+                try
                 {
                     /* Success */
                     if($request['Status'] == 1)
                     {
-                        $payment_status = 1;
-                        $order_status   = "Processing";
-                        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, $customer_id, 1, is_serialized($temp->cart) ? unserialize($temp->cart) : null);
-                        
-                        $ipay88_logs["order_id"] = $order_id;
-                        DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
-                       
-                        /* Confirmed Payment */
-                        $order = Tbl_ec_order::customer()->customer_otherinfo()->payment_method()->where("ec_order_id",$order_id)->first();
-                        
-                        /* EMAIL SUCCESSFUL ORDER */
-                        $pass_data["order_details"] = $order;
-                        $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$order_id)->groupBy("ec_order_id")->get();
-                        $pass_data["order_status"] = $order_status; 
-                        Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
+                        $check_if_paid = DB::table("tbl_ipay88_logs")->where("log_status", 1)
+                                                                     ->where("log_reference_number", $request['RefNo'])
+                                                                     ->where("from", "backend")
+                                                                     ->first();
+                        if ($check_if_paid)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            $payment_status = 1;
+                            $order_status   = "Processing";
+                            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, $customer_id, 1, is_serialized($temp->cart) ? unserialize($temp->cart) : null);
 
-                        /* Redirect */
-                        return true;
-                    } 
+                            $ipay88_logs["order_id"] = $order_id;
+                            DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+
+                            /* Confirmed Payment */
+                            $order = Tbl_ec_order::customer()->customer_otherinfo()->payment_method()->where("ec_order_id",$order_id)->first();
+
+                            /* EMAIL SUCCESSFUL ORDER */
+                            $pass_data["order_details"] = $order;
+                            $pass_data["order_item"] = Tbl_ec_order_item::item()->where("ec_order_id",$order_id)->groupBy("ec_order_id")->get();
+                            $pass_data["order_status"] = $order_status;
+                            Mail_global::create_email_content($pass_data, $shop_id, "successful_order");
+
+                            /* Redirect */
+                            return true;
+                        }
+                    }
                     elseif($request['Status'] == 6)
                     {
                         DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
 
                         return false;
                     }
-                    elseif ($request['Status'] == 0) 
+                    elseif ($request['Status'] == 0)
                     {
                         DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
 
                         return false;
                     }
-                    else 
+                    else
                     {
                         DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
 
                         return false;
-                    }    
-                } 
-                catch (\Exception $e) 
+                    }
+                }
+                catch (\Exception $e)
                 {
                     $insert_error['response'] = $e->getMessage();
                     $insert_error['shop_id'] = $shop_id;
@@ -223,14 +234,14 @@ class ShopCheckoutController extends Shop
         /* Email  */
         $data_order                = DB::table("tbl_ec_order")->where("ec_order_id", $order_id)->first();
         $data_customer             = DB::table("tbl_customer")->where("customer_id", $data_order->customer_id)->first();
-        if ($data_order) 
+        if ($data_order)
         {
             $data["template"]         = Tbl_email_template::where("shop_id", $this->shop_info->shop_id)->first();
             $data['mail_to']          = $data_order->customer_email;
             $data['mail_subject']     = "Account Verification";
             $data['account_password'] = Crypt::decrypt($data_customer->password);
             $data['mlm_username']     = $data_customer->mlm_username;
-            $data['mlm_email']        = $data_customer->email; 
+            $data['mlm_email']        = $data_customer->email;
             $result = Mail_global::password_mail($data, $data_order->shop_id);
         }
         /* End Email Checkout */
@@ -245,7 +256,7 @@ class ShopCheckoutController extends Shop
             $customer_info["new_account"] = false;
             $customer_info["password"] = Crypt::decrypt(Self::$customer_info->password);
             $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_account"));
-            if ($customer_set_info_response["status"] == "error") 
+            if ($customer_set_info_response["status"] == "error")
             {
                 return Redirect::to("/")->send();
             }
@@ -259,7 +270,7 @@ class ShopCheckoutController extends Shop
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
         /* DO NOT ALLOW ON THIS PAGE IF THERE IS NOT CART */
-        if (isset($data["get_cart"]['cart']) && isset($data["get_cart"]["tbl_customer"]) && isset($data["get_cart"]["tbl_customer_address"]) && isset($data["get_cart"]["tbl_ec_order"]) && isset($data["get_cart"]["tbl_ec_order_item"]) && isset($data["get_cart"]["sale_information"])) 
+        if (isset($data["get_cart"]['cart']) && isset($data["get_cart"]["tbl_customer"]) && isset($data["get_cart"]["tbl_customer_address"]) && isset($data["get_cart"]["tbl_ec_order"]) && isset($data["get_cart"]["tbl_ec_order_item"]) && isset($data["get_cart"]["sale_information"]))
         {
             $data['ec_order_load'] = 0;
             foreach($data['get_cart']['cart'] as $key => $value)
@@ -267,15 +278,15 @@ class ShopCheckoutController extends Shop
                 if($value['cart_product_information']['item_category_id'] == 17)
                 {
                     $data['ec_order_load'] = 1;
-                }      
+                }
             }
-        
-            if ($data["get_cart"]["new_account"] == false) 
+
+            if ($data["get_cart"]["new_account"] == false)
             {
                 $data["shipping_address"] = DB::table("tbl_customer_address")->where("purpose", "shipping")
                                                                              ->where("customer_id", $data["get_cart"]["tbl_customer"]["customer_id"])
-                                                                             ->first();                                                    
-                if ($data["shipping_address"]) 
+                                                                             ->first();
+                if ($data["shipping_address"])
                 {
                     $data["shipping_address"]->state_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->state_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->state_id)->first()->locale_id : null;
                     $data["shipping_address"]->city_id = isset(DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->city_id)->first()->locale_id) ? DB::table("tbl_locale")->where("locale_id", $data["shipping_address"]->city_id)->first()->locale_id : null;
@@ -286,9 +297,9 @@ class ShopCheckoutController extends Shop
                 else
                 {
                     $data["get_cart"]["new_account"] = true;
-                } 
+                }
             }
-            
+
             $data["customer"] = DB::table("tbl_customer")->leftJoin("tbl_customer_other_info", "tbl_customer.customer_id", "=", "tbl_customer_other_info.customer_id")
                                                          ->where("tbl_customer.customer_id", $data["get_cart"]["tbl_customer"]["customer_id"])
                                                          ->first();
@@ -296,7 +307,7 @@ class ShopCheckoutController extends Shop
             return view("checkout", $data);
         }
         else
-        { 
+        {
             return Redirect::to('/')->send();
         }
     }
@@ -326,7 +337,7 @@ class ShopCheckoutController extends Shop
 
         $order_product = $data["get_cart"]["tbl_ec_order_item"];
         $coupon_id = null;
-        // if ($data["get_cart"]["new_account"] == true) 
+        // if ($data["get_cart"]["new_account"] == true)
         // {
             // $validate["full_name"] = Request::input("full_name");
             // $validate["contact_number"] = Request::input("contact_number");
@@ -344,13 +355,13 @@ class ShopCheckoutController extends Shop
 
             // $validator = Validator::make($validate, $rules);
 
-            // if ($validator->fails()) 
+            // if ($validator->fails())
             // {
             //     return Redirect::back()
             //                 ->withErrors($validator)
             //                 ->withInput();
             // }
-        // } 
+        // }
         $return["status"] = "success";
         $coupon_code = Request::input("coupon_code");
         if($coupon_code)
@@ -365,7 +376,7 @@ class ShopCheckoutController extends Shop
             {
                 $coupon_id = $get_coupon->coupon_code_id;
                 $ctr = 0;
-                foreach ($order_product as $key => $value) 
+                foreach ($order_product as $key => $value)
                 {
                     $product = Tbl_coupon_code_product::where("coupon_code_id",$coupon_id)->where("coupon_code_product_id",$value['item_id'])->first();
                     if($product)
@@ -424,10 +435,10 @@ class ShopCheckoutController extends Shop
         if($return["status"] != "error")
         {
             $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
-        
+
 
             if($customer_set_info_response["status"] == "error")
-            { 
+            {
                 return Redirect::back()->with('error', $customer_set_info_response["status_message"])->withInput();
             }
             else
@@ -439,11 +450,11 @@ class ShopCheckoutController extends Shop
         {
             return Redirect::back()->with('error', $return["status_message"])->withInput();
         }
-        
+
     }
     public function update_method($method_id = null)
     {
-        if ($method_id) 
+        if ($method_id)
         {
             $customer_info["method_id"] = $method_id;
         }
@@ -456,7 +467,7 @@ class ShopCheckoutController extends Shop
         $customer_set_info_response = Cart::customer_set_info_ec_order($this->shop_info->shop_id, $old_session, $customer_info);
         $unique_id = Cart::get_unique_id($this->shop_info->shop_id);
         Session::put($unique_id, $customer_set_info_response);
-        echo json_encode("Success!"); 
+        echo json_encode("Success!");
     }
 
     public function locale_id_to_name($locale_id)
@@ -468,11 +479,11 @@ class ShopCheckoutController extends Shop
     {
         if(Request::isMethod("post"))
         {
-            if (Request::input("payment_method_id")) 
+            if (Request::input("payment_method_id"))
             {
                 $this->update_method(Request::input("payment_method_id"));
             }
-            
+
             return Cart::process_payment($this->shop_info->shop_id);
         }
         else
@@ -495,30 +506,30 @@ class ShopCheckoutController extends Shop
     {
         $id = Crypt::decrypt(Request::input("id"));
 
-        if (Request::isMethod("post")) 
+        if (Request::isMethod("post"))
         {
             $input = Input::all();
             $rules = array('payment_upload' => 'required|mimes:jpeg,png,gif,bmp');
             $validator = Validator::make($input, $rules);
 
-            if ($validator->fails()) 
+            if ($validator->fails())
             {
                 $messages = $validator->messages();
                 return Redirect::back()
                         ->withErrors($validator)
                         ->withInput();
-            } 
-            else 
+            }
+            else
             {
                 $file = Input::file("payment_upload");
                 /* SAVE THE IMAGE IN THE FOLDER */
-                if ($file) 
+                if ($file)
                 {
                     $extension          = $file->getClientOriginalExtension();
                     $filename           = str_random(15).".".$extension;
                     $destinationPath    = 'uploads/'.$this->shop_info->shop_key."-".$this->shop_info->shop_id.'/ecommerce-upload';
-                    
-                    if(!File::exists($destinationPath)) 
+
+                    if(!File::exists($destinationPath))
                     {
                         $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
                     }
@@ -528,7 +539,7 @@ class ShopCheckoutController extends Shop
                     /* SAVE THE IMAGE PATH IN THE DATABASE */
                     $image_path = $destinationPath."/".$filename;
 
-                    if( $upload_success ) 
+                    if( $upload_success )
                     {
                        $update['ec_order_id'] = $id;
                        $update['payment_upload'] = "/" . $image_path;
@@ -536,7 +547,7 @@ class ShopCheckoutController extends Shop
                        $update['payment_status'] = 0;
                        $order = Ec_order::update_ec_order($update);
 
-                       if ($order["status"] == "success") 
+                       if ($order["status"] == "success")
                        {
                            return Redirect::to("/");
                        }
@@ -544,8 +555,8 @@ class ShopCheckoutController extends Shop
                        {
                            return Redirect::back()->with('fail', 'Image upload failed. Please try again.')->send();
                        }
-                    } 
-                    else 
+                    }
+                    else
                     {
                        return Redirect::back()->with('fail', 'Image upload failed. Please try again.')->send();
                     }
@@ -564,17 +575,17 @@ class ShopCheckoutController extends Shop
             $shipping = 0;
             $total = 0;
 
-            foreach ($data['_order'] as $key => $value) 
+            foreach ($data['_order'] as $key => $value)
             {
                 $subtotal += $value->total;
             }
-            
+
             $data['summary']['subtotal'] = $subtotal;
 
             return view("checkout_payment_upload", $data);
         }
     }
-    
+
     public function get_payment_method()
     {
         $payment_method = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
@@ -586,7 +597,7 @@ class ShopCheckoutController extends Shop
 
         return $payment_method;
     }
-    
+
 
     public function addtocart()
     {
@@ -606,35 +617,35 @@ class ShopCheckoutController extends Shop
     {
         $data["page"] = "Checkout - Order Placed";
         $order = Request::input('order');
-        if (!$order) 
+        if (!$order)
         {
             return view("order_placed", $data);
         }
         else
         {
             $order_id = unserialize(Crypt::decrypt($order));
-        
+
             $data['order_data'] = Tbl_ec_order::where("ec_order_id",$order_id)->first();
-    
+
             $data['coupon_disc'] = Cart::get_coupon_discount($data['order_data']->coupon_id, $data['order_data']->total);
-    
+
             $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $order_id)
                                                ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
                                                ->get();
-    
+
             $data['summary'] = [];
             $subtotal = 0;
             $shipping = 0;
             $total = 0;
-    
-            foreach ($data['_order'] as $key => $value) 
+
+            foreach ($data['_order'] as $key => $value)
             {
                 $subtotal += $value->total;
             }
-            
+
             $data['summary']['subtotal'] = $subtotal;
             $data['order_id'] = $order_id;
-            
+
             return view("order_placed", $data);
         }
     }

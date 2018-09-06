@@ -2435,6 +2435,12 @@ class ShopMemberController extends Shop
         return view("press_user.thank_you", $data);
     }
 
+    public function get_admin_account()
+    {
+        $data["info_data"]             =  Tbl_pressiq_user::where('user_level',1)->get();
+        dd($data["info_data"]);
+    }
+
     public function add_industry(Request $request)
     {
         $data["industry_name"]                      = $request->industry_name;

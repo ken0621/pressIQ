@@ -1,0 +1,9 @@
+{
+	"theme_name":"Shell Canvas",
+	"description":"",
+	"colors":
+	{
+		"default" : ""
+	},
+	"exclusive":"shellcanvas"
+}

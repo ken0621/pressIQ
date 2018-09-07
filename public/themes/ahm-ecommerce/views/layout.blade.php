@@ -48,22 +48,61 @@
     </head>
 
     <body>
+            <nav class="pushmenu pushmenu-left">
+                <div class="space1"></div>
+                <span>Browse</span>
+                <ul class="links">
+                    <li><a href="/">Home</a></li>
+                    <div class="divider"></div>
+                    <li><a href="/">About Us</a></li>
+                    <div class="divider"></div>
+                    <li><a href="/">Support</a></li>
+                    <div class="divider"></div>
+                    <li><a href="/">Contact Us</a></li>
+                    <div class="divider"></div>
+                </ul>
+                <div class="space1"></div>
+                <span>Our Products & Services</span>
+                <ul class="links">
+                    <li><a href="/">Games</a></li>
+                    <div class="divider"></div>
+                    <li><a href="/">General Consultancy</a></li>
+                    <div class="divider"></div>
+                    <li><a href="/">General Supply Services</a></li>
+                    <div class="divider"></div>
+                    <li><a href="/">Holding Services</a></li>
+                    <div class="divider"></div>
+                    <li><a href="/">I.T. Services</a></li>
+                    <div class="divider"></div>
+                    <li><a href="/">Import & Export Services</a></li>
+                    <div class="divider"></div>
+                    <li><a href="/">Man Power Services</a></li>
+                    <div class="divider"></div>
+                    <li><a href="/">Marketing</a></li>
+                    <div class="divider"></div>
+                    <li><a href="/">Real Estate</a></li>
+                    <div class="divider"></div>
+                    <li><a href="/">Contruction Services</a></li>
+                    <div class="divider"></div>
+                    <li><a href="/">Trade & Cryptocurrency</a></li>
+                    <div class="divider"></div>
+                </ul>
+            </nav>
             <div id="overlay" onclick="off()"></div>
             <div class="subheader-container">
                 <div class="container">
                     <span class="right-container">
-                        <span><a href="#">About Us</a></span>
-                        <span>|</span>
-                        <span><a href="#">Support</a></span>
-                        <span>|</span>
-                        <span><a href="/members/login">Contact Us</a></span>
+                        <span><a href="#" class="others">About Us</a></span>
+                        <span class="others">|</span>
+                        <span><a href="#" class="others">Support</a></span>
+                        <span class="others">|</span>
+                        <span><a href="#" class="others">Contact Us</a></span>
                         <span><a class="sign-btn" href="/members/register">Sign Up</a></span>
                         <span>|</span>
                         <span><a class="log-btn" href="/members/login">Login</a></span>
                     </span>
                 </div>
             </div>
-
             <div class="header-container">
                 <div class="container">
                     <div class="row clearfix">
@@ -149,6 +188,32 @@
                     </div>
                 </div>
             </div>
+            <div class="mob-header-container">
+                <div class="container">
+                    <div class="main-header">
+                        <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
+                        <div class="mob-logo-container">
+                            <a href="/">
+                                <img src="/themes/{{ $shop_theme }}/img/logo-header.png">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mobile-search">
+                <div class="search-bar">
+                    <form action="/product" method="get" id="form-search">
+                        <div class="input-group">
+                             <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" style="border: none;" name="search" id="keyword2" aria-describedby="sizing-addon1" placeholder="Search product or services here...">
+                             <span class="input-group-addon search-button mob-search" id="sizing-addon1">
+                                <a href="javascript:" onclick="onSearch(2);" id="submit_link">
+                                    <img src="/themes/{{ $shop_theme }}/img/search-icon.png">
+                                </a>                          
+                             </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
             <!-- CONTENT -->
             <div id="scroll-to" class="clearfix">
@@ -160,7 +225,7 @@
                 <div class="container">
                     <div class="footer-container">
                         <div class="row clearfix">
-                            <div class="col-md-4">
+                            <div class="col-md-4 col-sm-4">
                                 <div class="title">SHOP</div>
                                 <ul>
                                     <li><a href="#">Games</a></li>
@@ -174,10 +239,10 @@
                                     <li><a href="#">Real Estate</a></li>
                                 </ul>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 col-sm-4">
                                 <div class="title">PAYMENT METHOD</div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4 col-sm-4">
                                 <div class="title">FOLLOW US ON</div>
                                 <div class="social-container">
                                     <span><img src="/themes/{{ $shop_theme }}/img/fb-icon.png"></span>

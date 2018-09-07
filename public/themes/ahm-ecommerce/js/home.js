@@ -30,6 +30,25 @@ function home()
        		delay: 2500,
        		disableOnInteraction: false
 	    },
+	    breakpoints: 
+	    {
+	      	1024: 
+	      	{
+	      		slidesPerView: 3,
+	      	},
+	      	768: 
+	      	{
+	      		slidesPerView: 2,
+	      	},
+	      	640: 
+	      	{
+	      		slidesPerView: 1,
+	      	},
+	      	320: 
+	      	{
+	      		slidesPerView: 1,
+	      	}
+	    },
 	    });
 	}
 
@@ -44,6 +63,25 @@ function home()
 	    {
        		delay: 2500,
        		disableOnInteraction: false
+	    },
+	    breakpoints: 
+	    {
+	      	1024: 
+	      	{
+	      		slidesPerView: 4,
+	      	},
+	      	768: 
+	      	{
+	      		slidesPerView: 3,
+	      	},
+	      	640: 
+	      	{
+	      		slidesPerView: 2,
+	      	},
+	      	320: 
+	      	{
+	      		slidesPerView: 1,
+	      	}
 	    },
         navigation: {
 	        nextEl: '.swiper-state-next',
@@ -63,6 +101,25 @@ function home()
 	    {
        		delay: 2500,
        		disableOnInteraction: false
+	    },
+	    breakpoints: 
+	    {
+	      	1024: 
+	      	{
+	      		slidesPerView: 3,
+	      	},
+	      	768: 
+	      	{
+	      		slidesPerView: 3,
+	      	},
+	      	640: 
+	      	{
+	      		slidesPerView: 2,
+	      	},
+	      	320: 
+	      	{
+	      		slidesPerView: 1,
+	      	}
 	    },
         navigation: {
 	        nextEl: '.swiper-games-next',

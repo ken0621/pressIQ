@@ -148,8 +148,8 @@
                                     <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
                                     <div class="image-logo-holder">
                                         <a class="clearfix" href="/">
-                                            <a href="/" class="w-logo"><img src="/themes/{{ $shop_theme }}/img/shell-canvas-logo.png"></a>
-                                            <a href="/" class="b-logo"><img src="/themes/{{ $shop_theme }}/img/shell-canvas-logo.png"></a>
+                                            <a href="/" class="w-logo"><img src="/themes/{{ $shop_theme }}/img/shell-canvas-logo-header.png"></a>
+                                            <a href="/" class="b-logo"><img src="/themes/{{ $shop_theme }}/img/shell-canvas-logo-header.png"></a>
                                         </a>                       
                                     </div>
                                     <div class="image-logo-mob">
@@ -207,7 +207,7 @@
                                         <li><a>Chairs</a></li>
                                         <li><a>Tables</a></li>
                                         <li><a>Beds</a></li>
-                                        <li><a>Lightnings</a></li>
+                                        <li><a>Lumiere Lights</a></li>
                                         <li><a>Awning with Mechanisms</a></li>
                                         <li class="dropdown-submenu"><a>Accessories<span class="fa fa-caret-right pull-right"></span></a>
                                             <ul class="dropdown-menu pull-right">
@@ -235,7 +235,6 @@
                                 <li><a class="smoth-scroll" href="#about">About Us</a></li>
                                 <li><a class="smoth-scroll" href="#gallery">Gallery</a></li>
                                 <li><a class="smoth-scroll" href="#contact">Contact Us</a></li>
-                                <li><a><i class="fas fa-search"></i></a></li> 
                             </ul>
                         </nav>
                     </div>

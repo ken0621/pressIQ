@@ -99,7 +99,7 @@
 				<div class="product-holder" style="background-image: url('/themes/shell-canvas/img/product-6.jpg');">
 					<div class="product-content">
 						<div class="product-header">
-							Lightnings
+							Lumiere Lights
 						</div>
 						<div class="product-body">
 							Qui ut ceteros comprehensam. Cu eos sale sanctus eligendi, id ius elitr saperet,ocurreret pertinacia pri an. No mei nibh consectetuer
@@ -181,7 +181,7 @@
 		<div class="container">
 			<div class="title-holder">
 				<div class="title-header">
-					Shell Canvas & Upholstery Corporation
+					Shell Canvas & Upholstery Supply
 				</div>
 				<div class="title-subheader">
 					We listen carefully about what clients needed
@@ -337,71 +337,86 @@
 			</div>
 			<div class="swiper-container swiper3">
 			    <div class="swiper-wrapper">
-					<div class="swiper-slide">
-						<div class="image-holder" style="background-image: url('/themes/shell-canvas/img/shell-canvas-1.jpg');">
+					<a href="/themes/shell-canvas/img/shell-canvas-1.jpg" class="swiper-slide" data-fancybox="images">
+						<div class="image-holder">
+							<img src="/themes/shell-canvas/img/shell-canvas-1.jpg" alt="">
 						</div>
-					</div>
-					<div class="swiper-slide" onclick="location.href='/themes/shell-canvas/img/shell-canvas-2.jpg'" data-fancybox="images">
+					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-2.jpg" class="swiper-slide" data-fancybox="images">
 						<div class="image-holder">
 							<img src="/themes/shell-canvas/img/shell-canvas-2.jpg" alt="">
 						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="image-holder" style="background-image: url('/themes/shell-canvas/img/shell-canvas-3.jpg');">
+					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-3.jpg" class="swiper-slide" data-fancybox="images">
+						<div class="image-holder">
+							<img src="/themes/shell-canvas/img/shell-canvas-3.jpg" alt="">
 						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="image-holder" style="background-image: url('/themes/shell-canvas/img/shell-canvas-4.jpg');">
+					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-4.jpg" class="swiper-slide" data-fancybox="images">
+						<div class="image-holder">
+							<img src="/themes/shell-canvas/img/shell-canvas-4.jpg" alt="">
 						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="image-holder" style="background-image: url('/themes/shell-canvas/img/shell-canvas-5.jpg');">
+					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-5.jpg" class="swiper-slide" data-fancybox="images">
+						<div class="image-holder">
+							<img src="/themes/shell-canvas/img/shell-canvas-5.jpg" alt="">
 						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="image-holder" style="background-image: url('/themes/shell-canvas/img/shell-canvas-6.jpg');">
+					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-6.jpg" class="swiper-slide" data-fancybox="images">
+						<div class="image-holder">
+							<img src="/themes/shell-canvas/img/shell-canvas-6.jpg" alt="">
 						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="image-holder" style="background-image: url('/themes/shell-canvas/img/shell-canvas-7.jpg');">
+					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-7.jpg" class="swiper-slide" data-fancybox="images">
+						<div class="image-holder">
+							<img src="/themes/shell-canvas/img/shell-canvas-7.jpg" alt="">
 						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="image-holder" style="background-image: url('/themes/shell-canvas/img/shell-canvas-8.jpg');">
+					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-8.jpg" class="swiper-slide" data-fancybox="images">
+						<div class="image-holder">
+							<img src="/themes/shell-canvas/img/shell-canvas-8.jpg" alt="">
 						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="image-holder" style="background-image: url('/themes/shell-canvas/img/shell-canvas-9.jpg');">
+					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-9.jpg" class="swiper-slide" data-fancybox="images">
+						<div class="image-holder">
+							<img src="/themes/shell-canvas/img/shell-canvas-9.jpg" alt="">
 						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="image-holder" style="background-image: url('/themes/shell-canvas/img/shell-canvas-10.jpg');">
+					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-10.jpg" class="swiper-slide" data-fancybox="images">
+						<div class="image-holder">
+							<img src="/themes/shell-canvas/img/shell-canvas-10.jpg" alt="">
 						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="image-holder" style="background-image: url('/themes/shell-canvas/img/shell-canvas-11.jpg');">
+					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-11.jpg" class="swiper-slide" data-fancybox="images">
+						<div class="image-holder">
+							<img src="/themes/shell-canvas/img/shell-canvas-11.jpg" alt="">
 						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="image-holder" style="background-image: url('/themes/shell-canvas/img/shell-canvas-12.jpg');">
+					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-12.jpg" class="swiper-slide" data-fancybox="images">
+						<div class="image-holder">
+							<img src="/themes/shell-canvas/img/shell-canvas-12.jpg" alt="">
 						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="image-holder" style="background-image: url('/themes/shell-canvas/img/shell-canvas-13.jpg');">
+					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-13.jpg" class="swiper-slide" data-fancybox="images">
+						<div class="image-holder">
+							<img src="/themes/shell-canvas/img/shell-canvas-13.jpg" alt="">
 						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="image-holder" style="background-image: url('/themes/shell-canvas/img/shell-canvas-14.jpg');">
+					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-14.jpg" class="swiper-slide" data-fancybox="images">
+						<div class="image-holder">
+							<img src="/themes/shell-canvas/img/shell-canvas-14.jpg" alt="">
 						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="image-holder" style="background-image: url('/themes/shell-canvas/img/shell-canvas-15.jpg');">
+					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-15.jpg" class="swiper-slide" data-fancybox="images">
+						<div class="image-holder">
+							<img src="/themes/shell-canvas/img/shell-canvas-15.jpg" alt="">
 						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="image-holder" style="background-image: url('/themes/shell-canvas/img/shell-canvas-16.jpg');">
+					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-16.jpg" class="swiper-slide" data-fancybox="images">
+						<div class="image-holder">
+							<img src="/themes/shell-canvas/img/shell-canvas-16.jpg" alt="">
 						</div>
-					</div>
+					</a>
 			    </div>
 			    <div class="swiper-pagination swiper-pagination3"></div>
 			</div>
@@ -415,7 +430,7 @@
 	    			Connect With Us
 	    		</div>
 	    		<div class="title-subheader">
-	    			We Care About You
+	    			'Shell Canvas' the biggest among other establishment if possible.
 	    		</div>
 	    	</div>
 	    	<div class="map-container">
@@ -577,7 +592,6 @@
 									<strong>
 									SM North Edsa Branch:<br>
 									Glorietta Branch:<br>
-									Greenbelt Residences Branch:<br>
 									Libis Ortigas Branch:<br>
 									SM Southmall Branch:<br>
 									Shangrila Branch:<br>
@@ -586,7 +600,6 @@
 								<div class="col-md-6 col-sm-6 col-xs-6">
 									(632) 782-0588 <br>
 									(632) 845-0129 <br>
-									(632) 542-6193 <br>
 									(632) 911-7162 <br>
 									(632) 703-7456 <br>
 									(632) 910-3228 <br>

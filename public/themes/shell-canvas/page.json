@@ -1,0 +1,17 @@
+{
+	"gallery":
+	{
+		"gallery_maintenance" :
+		{
+			"label":"Gallery Maintenance",
+			"type":"maintenance",
+			"default":"",
+			"field":[
+				{"name":"image", "type":"image_gallery"},
+				{"name":"title", "type":"text"},
+				{"name":"posted", "type":"timestamp"}
+			],
+			"size":"12"
+		}
+	}
+}

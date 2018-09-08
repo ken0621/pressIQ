@@ -117,5 +117,55 @@ body
 			    font-size: 13px;
 			}
 		}
+		@media screen and (max-width: 768px) 
+		{
+			.signin-container
+			{
+				width: 65%;
+				.icon-profile
+				{
+					width: 50%;
+					margin: auto;
+					padding: 30px 0px;
+					img
+					{
+						width: 100%;
+					}
+				}
+			}
+			.border
+			{
+				width: 65%;
+			}
+		}
+		@media screen and (max-width: 425px) 
+		{
+			.signin-container
+			{
+				padding-left: 15px;
+				padding-right: 15px;
+				width: 100%;
+				.icon-profile
+				{
+					width: 70%;
+				}
+				.input-group
+				{
+					width: 100%;
+				}
+				label
+				{
+					margin-right: 0px;
+				}
+				.btn-container
+				{
+					.btn-red
+					{
+						width: 100%;
+					}
+				}
+			}
+
+		}
 	}
 }

@@ -95,7 +95,7 @@
                                         </a>                       
                                     </div>
                                     <div class="image-logo-mob">
-                                        <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/shell-canvas-logo.png"></a>
+                                        <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/shell-canvas-logo-header.png"></a>
                                     </div>
                                 </div>
                                 <div class="col-md-8">

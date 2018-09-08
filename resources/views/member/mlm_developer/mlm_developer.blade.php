@@ -13,8 +13,9 @@
             </h1>
             <div class="dropdown-pull-right" style="text-align: right;">
             <!-- TESTING MENU -->
+                <a target="_blank" href="/member/mlm/developer/export_slot" class="btn btn-def-white btn-custom-white export-slot-link"><i class="fa fa-address-card" aria-hidden="true"></i> EXPORT SLOTS</a>
                 <div class="btn-group">
-                   
+
                     <button type="button" class="btn btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-wrench"></i> TESTING <span class="caret"></span>
                     </button>

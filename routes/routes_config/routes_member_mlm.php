@@ -353,18 +353,13 @@ Route::post('member/mlm/developer/sample_upload', 'Member\MlmDeveloperController
 Route::any('member/mlm/developer/myTest', 'Member\MlmDeveloperController@myTest');
 Route::any('member/mlm/developer/recompute', 'Member\MlmDeveloperController@recompute');
 Route::any('member/mlm/developer/recompute_reset', 'Member\MlmDeveloperController@recompute_reset');
-
 Route::get('member/mlm/developer/redistribute', 'Member\MlmDeveloperController@redistribute');
 Route::post('member/mlm/developer/redistribute', 'Member\MlmDeveloperController@redistribute_submit');
-
 Route::get('member/mlm/developer/modify_slot', 'Member\MlmDeveloperController@modify_slot');
 Route::post('member/mlm/developer/modify_slot', 'Member\MlmDeveloperController@modify_slot_submit');
-
 Route::any('member/mlm/developer/allow_multiple_slot', 'Member\MlmDeveloperController@allow_multiple_slot');
-
 Route::any('member/mlm/developer/tag_as_ambassador', 'Member\MlmDeveloperController@tag_as_ambassador');
-
-
+Route::get('member/mlm/developer/export_slot', 'Member\MlmDeveloperController@export_slot');
 
 Route::any('member/mlm/developer/popup_genealogy', 'Member\MlmDeveloperController@popup_genealogy');
 Route::any('member/mlm/developer/popup_slot_created', 'Member\MlmDeveloperController@popup_slot_created');

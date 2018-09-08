@@ -20,7 +20,14 @@ $bold: 700;
     z-index: 1000;
     position: fixed;
     overflow-y: auto;
-
+    .mob-banner
+    {
+        width: 100%;
+        img
+        {
+            width: 100%;
+        }
+    }
     @media screen and (max-width: 320px) {
         width: 250px;
     }

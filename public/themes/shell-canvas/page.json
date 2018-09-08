@@ -1,17 +1,175 @@
 {
+	"home":
+	{
+		"home_gallery" :
+		{
+			"label":"Home Top Banner Image (1600x700) Image Dimensions",
+			"type":"gallery",
+			"default":"",
+			"size":"12"
+		}
+	},
+	"about":
+	{
+		"about_title_header":
+		{
+			"label":"Header Title",
+			"type":"textbox",
+			"default":"",
+			"size":"6"
+		},
+		"about_title_subheader":
+		{
+			"label":"SubHeader Title",
+			"type":"textbox",
+			"default":"",
+			"size":"6"
+		},
+		"about_content_paragraph":
+		{
+			"label":"Content Body",
+			"type":"tinymce",
+			"default":"",
+			"size":"12"
+		},
+		"about_content_image_1":
+		{
+			"label":"Large-Left Image",
+			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"about_content_image_2":
+		{
+			"label":"Small-Right Image Top",
+			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"about_content_image_3":
+		{
+			"label":"Small-Right Image Bottom",
+			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"about_features_header_1":
+		{
+			"label":"Feature Header",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_features_header_2":
+		{
+			"label":"Feature Header",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_features_header_3":
+		{
+			"label":"Feature Header",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_features_body_1":
+		{
+			"label":"Feature Body",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"about_features_body_2":
+		{
+			"label":"Feature Body",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"about_features_body_3":
+		{
+			"label":"Feature Body",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"about_features_header_4":
+		{
+			"label":"Feature Header",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_features_header_5":
+		{
+			"label":"Feature Header",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_features_header_6":
+		{
+			"label":"Feature Header",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_features_body_4":
+		{
+			"label":"Feature Body",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"about_features_body_5":
+		{
+			"label":"Feature Body",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		},
+		"about_features_body_6":
+		{
+			"label":"Feature Body",
+			"type":"tinymce",
+			"default":"",
+			"size":"4"
+		}
+	},
 	"gallery":
 	{
-		"gallery_maintenance" :
+		"gallery_title_header":
 		{
-			"label":"Gallery Maintenance",
-			"type":"maintenance",
+			"label":"Header Title",
+			"type":"textbox",
 			"default":"",
-			"field":[
-				{"name":"image", "type":"image_gallery"},
-				{"name":"title", "type":"text"},
-				{"name":"posted", "type":"timestamp"}
-			],
-			"size":"12"
+			"size":"6"
+		},
+		"gallery_title_subheader":
+		{
+			"label":"SubHeader Title",
+			"type":"textbox",
+			"default":"",
+			"size":"6"
+		}
+	},
+	"contact":
+	{
+		"contact_title_header":
+		{
+			"label":"Header Title",
+			"type":"textbox",
+			"default":"",
+			"size":"6"
+		},
+		"contact_title_subheader":
+		{
+			"label":"SubHeader Title",
+			"type":"textbox",
+			"default":"",
+			"size":"6"
 		}
 	}
 }

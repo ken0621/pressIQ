@@ -38,7 +38,7 @@ function swiper3()
 					slidesPerColumn: 2
 				},
 				375: {
-					slidesPerView: 1,
+					slidesPerView: 2,
 					slidesPerColumn: 2
 				}
 			}

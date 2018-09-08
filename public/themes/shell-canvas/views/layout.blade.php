@@ -57,86 +57,28 @@
             <div id="overlay" onclick="off()"></div>
             <div class="side-nav">
                 <nav class="pushmenu pushmenu-left">
-                    @if($customer)
-                    <div class="space1"></div>
-                    <a href="/members/profile">
-                        <div class="profile-img-container">
-                            <div class="row-no-padding clearfix">
-                                <div class="col-xs-12">
-                                    <div class="profile-img"><img src="{{ $profile_image }}"></div>
-                                    <div class="text-holder">
-                                        <div class="name-text text-overflow">{{-- {{ $customer->first_name }} {{ $customer->middle_name }} {{ $customer->last_name }} --}}</div>
-                                        <div class="subtext text-overflow">{{-- {{ $customer->email }} --}}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+                    <div class="mob-banner">
+                        <img src="/themes/{{ $shop_theme }}/img/bg-mob.jpg" alt="">
+                    </div>
                     <div class="space1"></div>
                     <span>BROWSE</span>
                     <ul class="links">
-                        <li><a onclick="off()" href="/#home"><i class="fa fa-home" aria-hidden="true"></i> HOME</a></li>
-                        <li><a onclick="off()" href="/#about"><i class="fa fa-info" aria-hidden="true"></i> ABOUT US</a></li>
-                        <li><a onclick="off()" href="/#products"><i class="fa fa-shopping-cart" aria-hidden="true"></i> PRODUCTS</a></li>
-                        <li><a onclick="off()" href="/#contact"><i class="fa fa-phone" aria-hidden="true"></i> CONTACT US</a></li>
-                        <li><a onclick="off()" href="/legalities"><i class="fa fa-id-card-o" aria-hidden="true"></i> LEGALITIES</a></li>
-                        <li><a onclick="off()" href="/members/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+                        <li> 
+                            <a onclick="off()" href="#home"><i class="fa fa-home" aria-hidden="true"></i> HOME</a>
+                        </li>
+                        <li> 
+                            <a onclick="off()" href="#home"><i class="fa fa-shopping-cart" aria-hidden="true"></i> PRODUCTS & SERVICES</a>
+                        </li>
+                        <li> 
+                            <a onclick="off()" href="#about"><i class="fa fa-info" aria-hidden="true"></i> ABOUT US</a>
+                        </li>
+                        <li> 
+                            <a onclick="off()" href="#gallery"><i class="fa fa-picture-o" aria-hidden="true"></i> GALLERY</a>
+                        </li>
+                        <li> 
+                            <a onclick="off()" href="#contact"><i class="fa fa-phone" aria-hidden="true"></i> CONTACT US</a>
+                        </li>
                     </ul>
-                    
-                    <div class="space2"></div>
-                    <span>MEMBER'S AREA</span>
-                    <ul class="links">
-                        <li> <a href="/members"><i class="fa brown-icon-dashboard" aria-hidden="true"></i> Dashboard</a></li>
-                        <li> <a href="/members/profile"><i class="fa brown-icon-profile" aria-hidden="true"></i> Profile</a></li>
-                        @if($mlm_member)
-                            <!-- <li> <a href="/members/genealogy?mode=sponsor">Genealogy</a> </li> -->
-                            <li class="genealogy-mobile-dropdown">
-                                <a href="javascript:"><i class="fa brown-icon-flow-tree" area-hidden="true"></i> Genealogy <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a>
-                            </li>
-                                <ul class="genealogy-mobile-dropdown-list">
-                                    <li style="padding-left: 30px; list-style: none;">
-                                        <a href="/members/genealogy?mode=sponsor">Unilevel Tree</a>
-                                    </li>
-                                </ul>
-
-                            <li class="reports-mobile-dropdown">
-                                <a href="javascript:"><i class="fa fa-bar-chart" aria-hidden="true"></i> Reports <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a></a>
-                            </li>
-                                <ul class="reports-mobile-dropdown-list">
-                                    <li style="padding-left: 30px; list-style: none;">
-                                        <a href="/members/report">Income Reports</a>
-                                    </li>
-                                    <li style="padding-left: 30px; list-style: none;">
-                                        <a href="/members/report-gc">GC Reports</a>
-                                    </li>
-                                </ul>
-                            <li> 
-                                <a href="/members/report-points"><i class="fa brown-icon-flow-tree" area-hidden="true"></i> Network List</a>
-                            </li>
-                            <li> 
-                                <a href="/members/wallet-encashment"><i class="fa brown-icon-wallet" aria-hidden="true"></i> Wallet Encashment</a>
-                            </li>
-                            <li> 
-                                <a href="/members/codevault"><i class="fa fa-briefcase" aria-hidden="true"></i> Code Vault (Products)</a>
-                            </li>
-                            <li> 
-                                <a href="/members/order"><i class="fa fa-shopping-cart" aria-hidden="true"></i> My Orders</a>
-                            </li>
-                        @endif
-                    </ul>
-                    @else
-                    <div class="space1"></div>
-                    <span>BROWSE</span>
-                    <ul class="links">
-                        <li> <a onclick="off()" href="/#home"><i class="fa fa-home" aria-hidden="true"></i> HOME</a></li>
-                        <li> <a onclick="off()" href="/#product"><i class="fas fa-boxes" aria-hidden="true"></i> PRODUCTS & SERVICES</a></li>
-                        <li> <a onclick="off()" href="/#about"><i class="fas fa-info" aria-hidden="true"></i> ABOUT US</a></li>
-                        <li> <a onclick="off()" href="/#gallery"><i class="fas fa-images" aria-hidden="true"></i> GALLERY</a></li>
-                        <li> <a onclick="off()" href="/#contact"><i class="fas fa-mobile-alt" aria-hidden="true"></i> CONTACT US</a></li>
-                        {{-- <li> <a onclick="off()" href="/members/login"><i class="fa fa-sign-in" aria-hidden="true"></i> SIGNIN</a></li>
-                        <li> <a onclick="off()" href="/members/register"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> REGISTER</a></li> --}}
-                    </ul>
-                    @endif
                 </nav>
             </div>
             <div class="blur-me">
@@ -153,7 +95,7 @@
                                         </a>                       
                                     </div>
                                     <div class="image-logo-mob">
-                                        <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/shell-canvas-logo.png"></a>
+                                        <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/shell-canvas-logo-header.png"></a>
                                     </div>
                                 </div>
                                 <div class="col-md-8">

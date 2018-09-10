@@ -191,12 +191,20 @@ body {
             {
                 font-size: 25px;
             }
+            @media screen and (max-width: 425px)
+            {
+                font-size: 20px;
+            }
         }
         .title-subheader
         {
             margin: 20px 0px 40px;
             font-size: 16px;
             color: #ffffff;
+            @media screen and (max-width: 425px)
+            {
+                font-size: 14px;
+            }
         }
     }
     .about-content
@@ -301,6 +309,10 @@ body {
         {
             font-size: 25px;
         }
+        @media screen and (max-width: 425px)
+        {
+            font-size: 20px;
+        }
     }
     .features-content-1
     {
@@ -374,6 +386,10 @@ body {
                 {
                     font-size: 15px;
                 }
+                 @media screen and (max-width: 425px)
+                {
+                    font-size: 14px;
+                }
             }
             .content-body
             {
@@ -413,13 +429,20 @@ body {
             {
                 font-size: 25px;
             }
+            @media screen and (max-width: 425px)
+            {
+                font-size: 20px;
+            }
         }
         .title-subheader
         {
             margin: 20px 0px 40px;
             font-size: 16px;
             color: #ffffff;
-
+            @media screen and (max-width: 425px)
+            {
+                font-size: 14px;
+            }
         }
     }
     .swiper3
@@ -473,10 +496,18 @@ body {
             {
                 font-size: 25px;
             }
+             @media screen and (max-width: 425px)
+            {
+                font-size: 20px;
+            }
         }
         .title-subheader
         {
             font-size: 16px;
+             @media screen and (max-width: 425px)
+            {
+                font-size: 14px;
+            }
         }
     }
     .map-container
@@ -560,6 +591,10 @@ body {
                 text-align: center;
                 margin: auto;
             }
+             @media screen and (max-width: 320px)
+            {
+                margin-top: 15px;
+            }
         }
         .border-holder
         {
@@ -567,7 +602,7 @@ body {
             border: solid 1px #3a0c01;
             @media screen and (max-width: 425px)
             {
-                margin: auto;
+                margin: 10px auto;
             }
         }
     }
@@ -582,6 +617,10 @@ body {
             {
                 font-size: 14px;
             }
+            @media screen and (max-width: 425px)
+            {
+                text-align: center;
+            }
         }
         .content-container
         {
@@ -595,6 +634,10 @@ body {
             {
                 margin-bottom: 30px;
                 font-size: 20px;
+                @media screen and (max-width: 320px)
+                {
+                    margin-bottom: 0px;
+                }
             }
             .content-body-2
             {
@@ -604,6 +647,11 @@ body {
                 {
                     font-size: 12px;
                 }
+                @media screen and (max-width: 320px)
+                {
+                   margin-bottom: 5px;
+                   width: 200%;
+                }
             }
             .content-body-3
             {
@@ -612,6 +660,11 @@ body {
                 @media screen and (max-width: 768px)
                 {
                     font-size: 12px;
+                }
+                @media screen and (max-width: 320px)
+                {
+                    margin-bottom: 20px;
+                    width: 150%;
                 }
             }
         }
@@ -638,11 +691,15 @@ body {
     .title-holder
     {
         margin-bottom: 30px;
+        @media screen and (max-width: 425px) 
+        {
+            margin-bottom: 0px;
+        }
         .title-header
         {
             color: #3a0c01;
             font-size: 18px;
-            margin-bottom: 10px;
+            // margin-bottom: 10px;
             @media screen and (max-width: 768px) 
             {
                 font-size: 15px;
@@ -652,11 +709,17 @@ body {
                 text-align: center;
             }
         }
-        // .border-holder
-        // {
-        //     width: 5%;
-        //     border: solid 1px #3a0c01;
-        // }
+        .border-holder
+        {
+            display: none;
+            width: 5%;
+            border: solid 1px #3a0c01;
+            @media screen and (max-width: 425px) 
+            {
+                display: block;
+                margin: 10px auto 30px;
+            }
+        }
     }
     .info-container
     {
@@ -666,9 +729,13 @@ body {
             color: #3a0c01;
             text-align: left;
             margin-bottom: 20px;
-             @media screen and (max-width: 768px) 
+            @media screen and (max-width: 768px) 
             {
                 font-size: 14px;
+            }
+            @media screen and (max-width: 425px) 
+            {
+                text-align: center;
             }
         }
          .contact-container

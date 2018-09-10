@@ -191,19 +191,17 @@
 		<div class="container">
 			<div class="title-holder">
 				<div class="title-header">
-					{{-- Shell Canvas & Upholstery Supply --}}{!! get_content($shop_theme_info, "about", "about_title_header") !!}
+					{!! get_content($shop_theme_info, "about", "about_title_header") !!}
 				</div>
 				<div class="title-subheader">
-					{{-- We listen carefully about what clients needed --}}{!! get_content($shop_theme_info, "about", "about_title_subheader") !!}
+					{!! get_content($shop_theme_info, "about", "about_title_subheader") !!}
 				</div>
 			</div>
 			<div class="about-content">
 				<div class="row">
 					<div class="col-md-6 col-sm-6 col-xs-12">
 						<div class="about-paragraph">
-							{{-- Shell Canvas is the Philippines' leading fabrics and furnishing house for domestic and contract use. Our company has been established since 1967 and currently operating 8 branches in Metro Manila and 1 branch in Cebu City. We are a wholesale and retail house, selling to contract and residential interior designers, architects and interior design departments of fine retail and furniture stores. We provide a wide range of exclusive collections from the world's leading top manufacturers of interior decorative fabrics, carpets, blinds and wall coverings
-							<br><br>
-							Shell Canvas provides its customers with extraordinary personalized attention and a myriad of customer services. --}}{!! get_content($shop_theme_info, "about", "about_content_paragraph") !!}
+							{!! get_content($shop_theme_info, "about", "about_content_paragraph") !!}
 						</div>
 						<div class="button-holder">
 							<button>READ MORE</button>
@@ -211,16 +209,16 @@
 					</div>
 					<div class="col-md-4 col-sm-4 col-xs-12">
 						<div class="image-holder">
-							<img src="{{-- /themes/shell-canvas/img/shell-canvas-about.jpg --}}{!! get_content($shop_theme_info, "about", "about_content_image_1") !!}">
+							<img src="{!! get_content($shop_theme_info, "about", "about_content_image_1") !!}">
 						</div>
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
 						<div class="image-container">
 							<div class="image-holder-1">
-								<img src="{{-- /themes/shell-canvas/img/shell-canvas-about2.jpg --}}{!! get_content($shop_theme_info, "about", "about_content_image_2") !!}">
+								<img src="{!! get_content($shop_theme_info, "about", "about_content_image_2") !!}">
 							</div>
 							<div class="image-holder-2">
-								<img src="{{-- /themes/shell-canvas/img/shell-canvas-about1.jpg --}}{!! get_content($shop_theme_info, "about", "about_content_image_3") !!}">
+								<img src="{!! get_content($shop_theme_info, "about", "about_content_image_3") !!}">
 							</div>
 						</div>
 					</div>
@@ -232,7 +230,7 @@
 	<div class="wrapper-2 not-fullscreen background parallax" style="background-image: url('/themes/shell-canvas/img/bg-blur.jpg');" data-img-width="1600" data-img-height="835" data-diff="100">
 		<div class="container">
 			<div class="title-header">
-				Why Choose Us?
+				{!! get_content($shop_theme_info, "about", "about_features_title_header") !!}
 			</div>
 			<div class="features-content-1">
 				<div class="row">
@@ -244,10 +242,10 @@
 					<div class="col-md-3 col-sm-3 col-xs-8">
 						<div class="content-container">
 							<div class="content-header">
-								{{-- Modern Design --}}{!! get_content($shop_theme_info, "about", "about_features_header_1") !!}
+								{!! get_content($shop_theme_info, "about", "about_features_header_1") !!}
 							</div>
 							<div class="content-body">
-								{{-- Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste. --}}{!! get_content($shop_theme_info, "about", "about_features_body_1") !!}
+								{!! get_content($shop_theme_info, "about", "about_features_body_1") !!}
 							</div>
 						</div>
 					</div>
@@ -259,10 +257,10 @@
 					<div class="col-md-3 col-sm-3 col-xs-8">
 						<div class="content-container">
 							<div class="content-header">
-								{{-- Quality Products --}}{!! get_content($shop_theme_info, "about", "about_features_header_2") !!}
+								{!! get_content($shop_theme_info, "about", "about_features_header_2") !!}
 							</div>
 							<div class="content-body">
-								{{-- Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste. --}}{!! get_content($shop_theme_info, "about", "about_features_body_2") !!}
+								{!! get_content($shop_theme_info, "about", "about_features_body_2") !!}
 							</div>
 						</div>
 					</div>
@@ -274,10 +272,10 @@
 					<div class="col-md-3 col-sm-3 col-xs-8">
 						<div class="content-container">
 							<div class="content-header">
-								{{-- Trusted --}}{!! get_content($shop_theme_info, "about", "about_features_header_3") !!}
+								{!! get_content($shop_theme_info, "about", "about_features_header_3") !!}
 							</div>
 							<div class="content-body">
-								{{-- Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste. --}}{!! get_content($shop_theme_info, "about", "about_features_body_3") !!}
+								{!! get_content($shop_theme_info, "about", "about_features_body_3") !!}
 							</div>
 						</div>
 					</div>
@@ -293,10 +291,10 @@
 					<div class="col-md-3 col-sm-3 col-xs-8">
 						<div class="content-container">
 							<div class="content-header">
-								{{-- Contract Project --}}{!! get_content($shop_theme_info, "about", "about_features_header_4") !!}
+								{!! get_content($shop_theme_info, "about", "about_features_header_4") !!}
 							</div>
 							<div class="content-body">
-								{{-- Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste. --}}{!! get_content($shop_theme_info, "about", "about_features_body_4") !!}
+								{!! get_content($shop_theme_info, "about", "about_features_body_4") !!}
 							</div>
 						</div>
 					</div>
@@ -308,10 +306,10 @@
 					<div class="col-md-3 col-sm-3 col-xs-8">
 						<div class="content-container">
 							<div class="content-header">
-								{{-- Maintenance Support --}}{!! get_content($shop_theme_info, "about", "about_features_header_5") !!}
+								{!! get_content($shop_theme_info, "about", "about_features_header_5") !!}
 							</div>
 							<div class="content-body">
-								{{-- Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste. --}}{!! get_content($shop_theme_info, "about", "about_features_body_5") !!}
+								{!! get_content($shop_theme_info, "about", "about_features_body_5") !!}
 							</div>
 						</div>
 					</div>
@@ -323,10 +321,10 @@
 					<div class="col-md-3 col-sm-3 col-xs-8">
 						<div class="content-container">
 							<div class="content-header">
-								{{-- 24/7 Support --}}{!! get_content($shop_theme_info, "about", "about_features_header_6") !!}
+								{!! get_content($shop_theme_info, "about", "about_features_header_6") !!}
 							</div>
 							<div class="content-body">
-								{{-- Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste. --}}{!! get_content($shop_theme_info, "about", "about_features_body_6") !!}
+								{!! get_content($shop_theme_info, "about", "about_features_body_6") !!}
 							</div>
 						</div>
 					</div>
@@ -339,10 +337,10 @@
 		<div class="container">
 			<div class="title-holder">
 				<div class="title-header">
-					{{-- Take A Closer Look --}}{!! get_content($shop_theme_info, "gallery", "gallery_title_header") !!}
+					{!! get_content($shop_theme_info, "gallery", "gallery_title_header") !!}
 				</div>
 				<div class="title-subheader">
-					{{-- See our high quality and world class products. --}}{!! get_content($shop_theme_info, "gallery", "gallery_title_subheader") !!}
+					{!! get_content($shop_theme_info, "gallery", "gallery_title_subheader") !!}
 				</div>
 			</div>
 			<div class="swiper-container swiper3">
@@ -437,10 +435,10 @@
 	    <div class="container">
 	    	<div class="title-holder-1">
 	    		<div class="title-header">
-	    			{{-- Connect With Us --}}{!! get_content($shop_theme_info, "contact", "contact_title_header") !!}
+	    			{!! get_content($shop_theme_info, "contact", "contact_title_header") !!}
 	    		</div>
 	    		<div class="title-subheader">
-	    			{{-- 'Shell Canvas' the biggest among other establishment if possible. --}}{!! get_content($shop_theme_info, "contact", "contact_title_subheader") !!}
+	    			{!! get_content($shop_theme_info, "contact", "contact_title_subheader") !!}
 	    		</div>
 	    	</div>
 	    	<div class="map-container">
@@ -456,7 +454,7 @@
 			    	</div>
 	                <div class="info-container">
 	                    <div class="info-title">
-	                    	<strong>Main Branch: Buendia Gil Puyat Pasay</strong>
+	                    	<strong>Main Branch: {!! get_content($shop_theme_info, "contact", "contact_shellcanvas_mainbranch") !!}</strong>
 	                    </div>
 	                    <div class="content-container">
 	                    	<div class="row">
@@ -467,12 +465,12 @@
 	                    		</div>
 	                    		<div class="col-md-4 col-sm-4 col-xs-4">
 	                    			<div class="content-body-2">
-	                    				<p><strong>Address</strong></p>
+	                    				<strong>Main Address</strong>
 	                    			</div>
 	                    		</div>
 	                    		<div class="col-md-7 col-sm-7 col-xs-7">
 	                    			<div class="content-body-3">
-	                    				<p>1999 Sen. Gil Puyat Avenue, (Buendia Avenue)Pasay City, Philippines 1300</p>
+	                    				{!! get_content($shop_theme_info, "contact", "contact_shellcanvas_address") !!}
 	                    			</div>
 	                    		</div>
 	                    	</div>
@@ -484,12 +482,12 @@
 	                    		</div>
 	                    		<div class="col-md-4 col-sm-4 col-xs-4">
 	                    			<div class="content-body-2">
-	                    				<p><strong>Mobile Number</strong></p>
+	                    				<strong>Mobile Number</strong>
 	                    			</div>
 	                    		</div>
 	                    		<div class="col-md-7 col-sm-7 col-xs-7">
 	                    			<div class="content-body-3">
-	                    				<p>GLOBE (+ 63917-8572787)<br>SMART (+ 63919-9939328)<br>SUN (+ 63933-4388951)</p>
+	                    				{!! get_content($shop_theme_info, "contact", "contact_shellcanvas_mobile") !!}
 	                    			</div>
 	                    		</div>
 	                    	</div>
@@ -501,29 +499,29 @@
 	                    		</div>
 	                    		<div class="col-md-4 col-sm-4 col-xs-4">
 	                    			<div class="content-body-2">
-	                    				<p><strong>Store Office Hours</strong></p>
+	                    				<strong>Store Office Hours</strong>
 	                    			</div>
 	                    		</div>
 	                    		<div class="col-md-7 col-sm-7 col-xs-7">
 	                    			<div class="content-body-3">
-	                    				<p>Monday to Saturday: 8:30AM to 7:00PM</p>
+	                    				{!! get_content($shop_theme_info, "contact", "contact_shellcanvas_storeoffice") !!}
 	                    			</div>
 	                    		</div>
 	                    	</div>
 	                    	<div class="row">
 	                    		<div class="col-md-1 col-sm-1 col-xs-1">
 	                    			<div class="content-body-1">
-	                    				{{-- <i class="far fa-clock"></i> --}}
+	                    				{{-- <i class="far fa-clock"></i> --}}&nbsp;&nbsp;
 	                    			</div>
 	                    		</div>
 	                    		<div class="col-md-4 col-sm-4 col-xs-4">
 	                    			<div class="content-body-2">
-	                    				<p><strong>Mall Office Hours</strong></p>
+	                    				<strong>Mall Office Hours</strong>
 	                    			</div>
 	                    		</div>
 	                    		<div class="col-md-7 col-sm-7 col-xs-7">
 	                    			<div class="content-body-3">
-	                    				<p>Sunday to Thursday: 10AM to 9PM<br>Friday to Saturday: 10AM to 10PM</p>
+	                    				{!! get_content($shop_theme_info, "contact", "contact_shellcanvas_malloffice") !!}
 	                    			</div>
 	                    		</div>
 	                    	</div>
@@ -586,7 +584,7 @@
 				<div class="title-header">
 					MORE INFO
 				</div>
-				{{-- <div class="border-holder"></div> --}}
+				<div class="border-holder"></div>
 			</div>
 			<div class="info-container">
 				<div class="row">
@@ -598,21 +596,68 @@
 						</div>
 						<div class="contact-container">
 							<div class="row">
-								<div class="col-md-6 col-sm-6 col-xs-6">
-									<strong>
-									SM North Edsa Branch:<br>
-									Glorietta Branch:<br>
-									Libis Ortigas Branch:<br>
-									SM Southmall Branch:<br>
-									Shangrila Branch:<br>
-									</strong>
-								</div>
-								<div class="col-md-6 col-sm-6 col-xs-6">
-									(632) 782-0588 <br>
-									(632) 845-0129 <br>
-									(632) 911-7162 <br>
-									(632) 703-7456 <br>
-									(632) 910-3228 <br>
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									{!! get_content($shop_theme_info, "contact", "contact_shellcanvas_othercontact") !!}
+									{{-- <div class="row">
+										<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="other-contact-1">
+												<strong>SM North Edsa Branch:</strong>
+											</div>
+										</div>
+										<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="other-contact-1">
+												(632) 782-0588
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="other-contact-2">
+												<strong>Glorietta Branch:</strong>
+											</div>
+										</div>
+										<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="other-contact-2">
+												(632) 845-0129
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="other-contact-3">
+												<strong>Libis Ortigas Branch:</strong>
+											</div>
+										</div>
+										<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="other-contact-3">
+												(632) 911-7162
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="other-contact-4">
+												<strong>SM Southmall Branch:</strong>
+											</div>
+										</div>
+										<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="other-contact-4">
+												(632) 703-7456
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="other-contact-5">
+												<strong>Shangrila Branch:</strong>
+											</div>
+										</div>
+										<div class="col-md-6 col-sm-6 col-xs-6">
+											<div class="other-contact-5">
+												(632) 910-3228
+											</div>
+										</div>
+									</div> --}}
 								</div>
 							</div>
 						</div>
@@ -620,21 +665,11 @@
 					<div class="col-md-6 col-sm-6 col-xs-12">
 						<div class="content-header">
 							<strong>
-								OTHER BRANCHES
+								OUR BRANCHES
 							</strong>
 						</div>
 						<div class="branch-container">
-							Shell Canvas Buendia - (MAIN)<br> 
-							Shell Canvas Glorietta 4<br>
-							Shell Canvas Libis<br>
-							Shell Canvas SM North Edsa (Interior Zone)<br>
-							Shell Canvas SM Southmall<br>
-							Shell Canvas Greenbelt 3 - The Residences<br>
-							Shell Canvas Shangri-La Mall<br>
-							Shell Canvas Alabang<br>
-							Shell Canvas Cebu - Banilad Town Center<br>
-							Shell Canvas Cubao<br>
-							Shell Canvas West Gate Alabang Home Depot<br>
+							{!! get_content($shop_theme_info, "contact", "contact_shellcanvas_otherbranch") !!}
 						</div>
 					</div>
 				</div>
@@ -697,13 +732,13 @@
 </script>
 <script>
 	$('.btn-more').click(function() {
-	    $('#morecontact').fadeIn(500);
+	    $('#morecontact').slideDown(1000);
 	    $('.btn-more').hide(0);
 	    $('.btn-less').show(0);
 	});
 
 $('.btn-less').click(function() {
-	    $('#morecontact').fadeOut(500);
+	    $('#morecontact').slideUp(1000);
 	    $('.btn-more').show(0);
 	    $('.btn-less').hide(0);
 	});

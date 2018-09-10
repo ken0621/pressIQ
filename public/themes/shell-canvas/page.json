@@ -3,7 +3,7 @@
 	{
 		"home_gallery" :
 		{
-			"label":"Home Top Banner Image (1600x700) Image Dimensions",
+			"label":"Home Banner",
 			"type":"gallery",
 			"default":"",
 			"size":"12"
@@ -52,6 +52,13 @@
 			"type":"image",
 			"default":"",
 			"size":"4"
+		},
+		"about_features_title_header":
+		{
+			"label":"Title Header",
+			"type":"textbox",
+			"default":"",
+			"size":"12"
 		},
 		"about_features_header_1":
 		{
@@ -168,6 +175,55 @@
 		{
 			"label":"SubHeader Title",
 			"type":"textbox",
+			"default":"",
+			"size":"6"
+		},
+		"contact_shellcanvas_mainbranch":
+		{
+			"label":"Main Branch",
+			"type":"textbox",
+			"default":"",
+			"size":"12"
+		},
+		"contact_shellcanvas_address":
+		{
+			"label":"Address",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"contact_shellcanvas_mobile":
+		{
+			"label":"Mobile Number",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"contact_shellcanvas_storeoffice":
+		{
+			"label":"Store Office Hours",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"contact_shellcanvas_malloffice":
+		{
+			"label":"Mall Office Hours",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"contact_shellcanvas_othercontact":
+		{
+			"label":"Other Contacts",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"contact_shellcanvas_otherbranch":
+		{
+			"label":"Other Branches",
+			"type":"tinymce",
 			"default":"",
 			"size":"6"
 		}

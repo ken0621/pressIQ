@@ -54,10 +54,10 @@
 									<div class="name"><span>Total Earnings</span> <div class="name w2hpx">{{ $wallet->display_total_earnings }}</div></div>
 								</div>
 
-								<div class="holder">
+								<!-- <div class="holder">
 									<div class="color"></div>
 									<div class="name"><span>Total Points</span> <div class="name w2hpx">{{ $total_points }}</div></div>
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>

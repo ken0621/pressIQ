@@ -15,7 +15,7 @@
 									<th>Current Wallet</th>
 									<th>Total Pay-out</th>
 									<th>Total Earnings</th>
-									<th>Total Points</th>
+									<!-- <th>Total Points</th> -->
 								</tr>
 							</thead>
 							<tbody>
@@ -25,7 +25,7 @@
 										<td>PHP {{ number_format($wallet->current_wallet, 2) }}</td>
 										<td>PHP {{ number_format($wallet->total_payout, 2) }}</td>
 										<td>PHP {{ number_format($wallet->total_earnings, 2) }}</td>
-										<td>{{ number_format($wallet->total_points, 2) }}</td>
+										<!-- <td>{{ number_format($wallet->total_points, 2) }}</td> -->
 									</tr>
 								@endforeach
 							</tbody>

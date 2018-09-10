@@ -127,6 +127,20 @@ class ShopMemberController extends Shop
             $data["wallet"]             = $data["customer_summary"]["_wallet"];
             $data["points"]             = $data["customer_summary"]["_points"];
             $data["_wallet_plan"]       = $data["customer_summary"]["_wallet_plan"];
+
+            if($data['shop_id'] == 1)
+            {
+                if (isset($sort[4])) 
+                {
+                    $sort = $data["_wallet_plan"];
+                    $temp = $sort[4];
+                    $sort[4] = $sort[5];
+                    $sort[5] = $temp;
+
+                    $data["_wallet_plan"] = $sort;
+                }
+            }
+
             $data["_point_plan"]        = $data["customer_summary"]["_point_plan"];
             $data["_slot"]              = $_slot = MLM2::customer_slots($this->shop_info->shop_id, Self::$customer_info->customer_id);
             $data["_recent_rewards"]    = MLM2::customer_rewards($this->shop_info->shop_id, Self::$customer_info->customer_id, 5);
@@ -221,8 +235,22 @@ class ShopMemberController extends Shop
         {
             return Redirect::to('/members/login');
         }
-
     }
+    
+    public function getSummary()
+    {
+        if(Self::$customer_info)
+        {
+            $data = MLM2::customer_income_summary2($this->shop_info->shop_id, Self::$customer_info->customer_id);
+            
+            return Self::load_view_for_members("member.summary", $data);
+        }
+        else
+        {
+            return Redirect::to("/members/login");
+        }
+    }
+
     public function getDirectReferrals()
     {
         if (Self::$customer_info) 

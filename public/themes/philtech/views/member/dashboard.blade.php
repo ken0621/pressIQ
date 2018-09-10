@@ -122,6 +122,14 @@
 						@endif
 					</div>
 				</div>
+				<div class="square-container">
+					<div class="title"><i class="fa fa-asterisk" aria-hidden="true"></i> Details</div>
+					<div class="sub-container">
+						<div class="text-center" style="margin-top: 10px;">
+							<a href="/members/summary" class="btn btn-lblue">View More Details</a>
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<div class="col-md-6">

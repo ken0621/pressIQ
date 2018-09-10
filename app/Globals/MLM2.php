@@ -465,7 +465,215 @@ class MLM2
 
 		$return["_slot"] = $_slot;
 		$return["display_slot_count"] = number_format($return["slot_count"], 0) . " SLOT(S)";
-		$return["_wallet"]->display_total_points = number_format($return["_wallet"]->total_points, 2) . " POINT(S)";;
+		$return["_wallet"]->display_total_points = number_format($return["_wallet"]->total_points, 2) . " POINT(S)";
+		// if($shop_id = 1)
+		// {
+		// 	foreach($return["_point_plan"] as $key => $return)
+		// 	{
+		// 		if($return->label != "Repurchase Cashback")
+		// 		{
+		// 			$return["cashback"] = null;
+		// 			return $return;
+		// 		}
+		// 		else
+		// 		{
+		// 			return $return;
+		// 		}
+		// 	}
+		// }
+		return $return;
+	}
+	public static function customer_income_summary2($shop_id, $customer_id)
+	{
+		$return["_wallet"] = [];
+		$return["_points"] = [];
+
+		$_slot = Tbl_mlm_slot::where("slot_owner", $customer_id)->currentWallet()->get();
+		$_plan = Tbl_mlm_slot_wallet_log::groupBy("wallet_log_plan")->where("shop_id", $shop_id)->get();
+		$_plan_points = Tbl_mlm_slot_points_log::slot()->where("shop_id", $shop_id)->groupBy("points_log_complan")->get();
+		
+		if ($shop_id == 1) 
+		{
+			$_plan_ignore = array("E Money", "Tours Wallet Points", "Tours Wallet", "Encashment", "Cheque", "Undefined");
+		}
+		else
+		{
+			$_plan_ignore = array("E Money", "Repurchase", "Tours Wallet Points", "Tours Wallet", "Encashment", "Cheque", "Undefined");
+		}
+
+		$return["slot_count"] = 0;
+
+		foreach($_slot as $key =>  $slot)
+		{
+			$return["_wallet"][$slot->slot_no] = new stdClass();
+			$return["_points"][$slot->slot_no] = new stdClass();
+
+			foreach($_plan as $key => $plan)
+			{
+				$string_plan = "complan_" . strtolower($plan->wallet_log_plan);
+				$label = Self::complan_to_label($shop_id, $string_plan);
+
+				if(in_array($label, $_plan_ignore))
+				{
+					unset($_plan[$key]);
+				}
+				else
+				{
+					$_plan[$key]->string_plan			= $string_plan;
+					$_plan[$key]->label 				= $label;
+					$return["_wallet"][$slot->slot_no]->$string_plan 	= 0;
+
+				}
+			}
+
+			$return["_wallet_plan"] = $_plan;
+
+			foreach($_plan_points as $key=> $plan)
+			{
+				$string_plan 						= strtolower($plan->points_log_complan);
+				$_plan_points[$key]->string_plan	= $string_plan;
+				$_plan_points[$key]->label 			= Self::complan_to_label($shop_id, $string_plan);
+				$return["_points"][$slot->slot_no]->$string_plan 	= 0;
+			}
+
+			$return["_point_plan"] = $_plan_points;
+
+			$return["_wallet"][$slot->slot_no]->current_wallet = 0;
+			$return["_wallet"][$slot->slot_no]->total_earnings = 0;
+			$return["_wallet"][$slot->slot_no]->total_payout = 0;
+			$return["_wallet"][$slot->slot_no]->total_points = 0;
+			$return["_wallet"][$slot->slot_no]->complan_triangle 					= 0;
+			$return["_wallet"][$slot->slot_no]->complan_direct 						= 0;
+			$return["_wallet"][$slot->slot_no]->complan_builder 					= 0;
+			$return["_wallet"][$slot->slot_no]->complan_leader 						= 0;
+			$return["_wallet"][$slot->slot_no]->complan_repurchase_cashback 		= 0;
+			$return["_wallet"][$slot->slot_no]->complan_rank_repurchase_cashback 	= 0;
+			$return["_wallet"][$slot->slot_no]->complan_stairstep 					= 0;
+
+			$return["_points"][$slot->slot_no]->brown_builder_points 	= 0;
+			$return["_points"][$slot->slot_no]->brown_leader_points 	= 0;
+			$return["_points"][$slot->slot_no]->rank_pv 				= 0;
+			$return["_points"][$slot->slot_no]->rank_gpv 				= 0;
+			$return["_points"][$slot->slot_no]->stairstep_pv 			= 0;
+			$return["_points"][$slot->slot_no]->stairstep_gpv 			= 0;
+			$return["_points"][$slot->slot_no]->binary 					= 0;
+			$return["_points"][$slot->slot_no]->direct 					= 0;
+			$return["_points"][$slot->slot_no]->advertisement_bonus 	= 0;
+			$return["_points"][$slot->slot_no]->maintenance 			= 0;
+
+			$return["_wallet"][$slot->slot_no]->current_wallet += $slot->current_wallet;
+			$return["_wallet"][$slot->slot_no]->total_earnings += $slot->total_earnings;
+			$return["_wallet"][$slot->slot_no]->total_payout += ($slot->total_payout) * -1;
+			$return["slot_count"]++;	
+
+			$_slot_wallet = Tbl_mlm_slot_wallet_log::where("wallet_log_slot", $slot->slot_id)->get();
+
+			foreach($_slot_wallet as $slot_wallet)
+			{
+				if($slot_wallet->wallet_log_plan == "DIRECT_PASS_UP")
+				{
+					$proceed_passup_direct = 0;
+					$check_level_tree = Tbl_tree_sponsor::where("sponsor_tree_child_id",$slot_wallet->wallet_log_slot_sponsor)->where("sponsor_tree_parent_id",$slot->slot_id)->first();
+					if($check_level_tree)
+					{
+						if($check_level_tree->sponsor_tree_level == 1)
+						{
+							$proceed_passup_direct = 1;
+						}
+					}
+
+					if($proceed_passup_direct == 1)
+					{
+						$wallet_plan = strtolower("complan_DIRECT");
+
+						if(!isset($return["_wallet"][$slot->slot_no]->$wallet_plan))
+						{
+							$return["_wallet"][$slot->slot_no]->$wallet_plan = $slot_wallet->wallet_log_amount;
+						}
+						else
+						{
+							$return["_wallet"][$slot->slot_no]->$wallet_plan += $slot_wallet->wallet_log_amount;
+						}	
+					}
+					else
+					{
+						$wallet_plan = strtolower("complan_" .$slot_wallet->wallet_log_plan);
+
+						if(!isset($return["_wallet"][$slot->slot_no]->$wallet_plan))
+						{
+							$return["_wallet"][$slot->slot_no]->$wallet_plan = $slot_wallet->wallet_log_amount;
+						}
+						else
+						{
+							$return["_wallet"][$slot->slot_no]->$wallet_plan += $slot_wallet->wallet_log_amount;
+						}	
+					}
+				}
+				else
+				{
+					$wallet_plan = strtolower("complan_" .$slot_wallet->wallet_log_plan);
+
+					if(!isset($return["_wallet"][$slot->slot_no]->$wallet_plan))
+					{
+						$return["_wallet"][$slot->slot_no]->$wallet_plan = $slot_wallet->wallet_log_amount;
+					}
+					else
+					{
+						$return["_wallet"][$slot->slot_no]->$wallet_plan += $slot_wallet->wallet_log_amount;
+					}	
+				}
+			}
+
+			$_slot_points = Tbl_mlm_slot_points_log::where("points_log_slot", $slot->slot_id)->get();
+
+			foreach($_slot_points as $slot_points)
+			{
+				$wallet_plan = strtolower($slot_points->points_log_complan);
+				if(!isset($return["_points"][$slot->slot_no]->$wallet_plan))
+				{
+					$return["_points"][$slot->slot_no]->$wallet_plan = $slot_points->points_log_points;
+				}
+				else
+				{
+					$return["_points"][$slot->slot_no]->$wallet_plan += $slot_points->points_log_points;
+				}
+
+				$return["_wallet"][$slot->slot_no]->total_points += $slot_points->points_log_points;
+
+				if($wallet_plan == "repurchase_cashback")
+				{
+					if($slot_points->points_log_converted == 1)
+					{
+						$return["_points"][$slot->slot_no]->$wallet_plan -= $slot_points->points_log_points;
+
+					}
+					
+					$return["_wallet"][$slot->slot_no]->total_points -= $slot_points->points_log_points;
+
+				}
+			}
+		}
+
+		$_wallet = json_encode($return["_wallet"]);
+		$_points = json_encode($return["_points"]);
+		
+		/* DISPLAY FORMAT */
+		// foreach(json_decode($_wallet) as $key => $wallet)
+		// {
+		// 	$display_string = "display_" . $key;
+		// 	$return["_wallet"]->$display_string = Currency::format($wallet);
+		// }
+
+		/* DISPLAY FORMAT */
+		// foreach(json_decode($_points) as $key => $points)
+		// {
+		// 	$display_string = "display_" . $key;
+		// 	$return["_points"]->$display_string = number_format($points, 2) . " POINT(S)";
+		// }
+
+		$return["_slot"] = $_slot;
+		// $return["display_slot_count"] = number_format($return["slot_count"], 0) . " SLOT(S)";
+		// $return["_wallet"]->display_total_points = number_format($return["_wallet"]->total_points, 2) . " POINT(S)";
 		// if($shop_id = 1)
 		// {
 		// 	foreach($return["_point_plan"] as $key => $return)

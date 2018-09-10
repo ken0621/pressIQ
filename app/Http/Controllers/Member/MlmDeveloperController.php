@@ -100,6 +100,16 @@ class MlmDeveloperController extends Member
             $slot_query->where("slot_status", request("type"));
         }
 
+        if (request("date_from")) 
+        {
+            $slot_query->where("slot_created_date", ">=", date('Y-m-d H:i:s', strtotime(request("date_from"))));
+        }
+
+        if (request("date_to")) 
+        {
+            $slot_query->where("slot_created_date", "<=", date('Y-m-d H:i:s', strtotime(request("date_to"))));
+        }
+
         if ($excel) 
         {
             $data["_slot_page"] = $_slot = $slot_query->get();

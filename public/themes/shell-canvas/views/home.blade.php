@@ -4,21 +4,31 @@
 
 	<div class="swiper-container swiper1" id="home">
 		<div class="swiper-wrapper">
-			<div class="swiper-slide">
-				<div class="image-holder">
-					<img src="/themes/shell-canvas/img/shell-canvas-banner.jpg">
+			@if(loop_content_condition($shop_theme_info, "home", "home_gallery"))
+				@foreach(loop_content_get($shop_theme_info, "home", "home_gallery") as $slider)
+					<div class="swiper-slide">
+						<div class="image-holder">
+							<img src="{{ $slider }}">
+						</div>
+					</div>
+				@endforeach
+			@else
+				<div class="swiper-slide">
+					<div class="image-holder">
+						<img src="/themes/shell-canvas/img/shell-canvas-banner.jpg">
+					</div>
 				</div>
-			</div>
-			<div class="swiper-slide">
-				<div class="image-holder">
-					<img src="/themes/shell-canvas/img/shell-canvas-banner-1.jpg">
+				<div class="swiper-slide">
+					<div class="image-holder">
+						<img src="/themes/shell-canvas/img/shell-canvas-banner-1.jpg">
+					</div>
 				</div>
-			</div>
-			<div class="swiper-slide">
-				<div class="image-holder">
-					<img src="/themes/shell-canvas/img/shell-canvas-banner-2.jpg">
+				<div class="swiper-slide">
+					<div class="image-holder">
+						<img src="/themes/shell-canvas/img/shell-canvas-banner-2.jpg">
+					</div>
 				</div>
-			</div>
+			@endif
 		</div>
 		<div class="slider-next">
 			<img src="/themes/shell-canvas/img/icon-right-arrow.png">
@@ -181,19 +191,19 @@
 		<div class="container">
 			<div class="title-holder">
 				<div class="title-header">
-					Shell Canvas & Upholstery Supply
+					{{-- Shell Canvas & Upholstery Supply --}}{!! get_content($shop_theme_info, "about", "about_title_header") !!}
 				</div>
 				<div class="title-subheader">
-					We listen carefully about what clients needed
+					{{-- We listen carefully about what clients needed --}}{!! get_content($shop_theme_info, "about", "about_title_subheader") !!}
 				</div>
 			</div>
 			<div class="about-content">
 				<div class="row">
 					<div class="col-md-6 col-sm-6 col-xs-12">
 						<div class="about-paragraph">
-							Shell Canvas is the Philippines' leading fabrics and furnishing house for domestic and contract use. Our company has been established since 1967 and currently operating 8 branches in Metro Manila and 1 branch in Cebu City. We are a wholesale and retail house, selling to contract and residential interior designers, architects and interior design departments of fine retail and furniture stores. We provide a wide range of exclusive collections from the world's leading top manufacturers of interior decorative fabrics, carpets, blinds and wall coverings
+							{{-- Shell Canvas is the Philippines' leading fabrics and furnishing house for domestic and contract use. Our company has been established since 1967 and currently operating 8 branches in Metro Manila and 1 branch in Cebu City. We are a wholesale and retail house, selling to contract and residential interior designers, architects and interior design departments of fine retail and furniture stores. We provide a wide range of exclusive collections from the world's leading top manufacturers of interior decorative fabrics, carpets, blinds and wall coverings
 							<br><br>
-							Shell Canvas provides its customers with extraordinary personalized attention and a myriad of customer services.
+							Shell Canvas provides its customers with extraordinary personalized attention and a myriad of customer services. --}}{!! get_content($shop_theme_info, "about", "about_content_paragraph") !!}
 						</div>
 						<div class="button-holder">
 							<button>READ MORE</button>
@@ -201,16 +211,16 @@
 					</div>
 					<div class="col-md-4 col-sm-4 col-xs-12">
 						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-about.jpg">
+							<img src="{{-- /themes/shell-canvas/img/shell-canvas-about.jpg --}}{!! get_content($shop_theme_info, "about", "about_content_image_1") !!}">
 						</div>
 					</div>
 					<div class="col-md-2 col-sm-2 col-xs-12">
 						<div class="image-container">
 							<div class="image-holder-1">
-								<img src="/themes/shell-canvas/img/shell-canvas-about2.jpg">
+								<img src="{{-- /themes/shell-canvas/img/shell-canvas-about2.jpg --}}{!! get_content($shop_theme_info, "about", "about_content_image_2") !!}">
 							</div>
 							<div class="image-holder-2">
-								<img src="/themes/shell-canvas/img/shell-canvas-about1.jpg">
+								<img src="{{-- /themes/shell-canvas/img/shell-canvas-about1.jpg --}}{!! get_content($shop_theme_info, "about", "about_content_image_3") !!}">
 							</div>
 						</div>
 					</div>
@@ -234,10 +244,10 @@
 					<div class="col-md-3 col-sm-3 col-xs-8">
 						<div class="content-container">
 							<div class="content-header">
-								Modern Design
+								{{-- Modern Design --}}{!! get_content($shop_theme_info, "about", "about_features_header_1") !!}
 							</div>
 							<div class="content-body">
-								Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste.
+								{{-- Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste. --}}{!! get_content($shop_theme_info, "about", "about_features_body_1") !!}
 							</div>
 						</div>
 					</div>
@@ -249,10 +259,10 @@
 					<div class="col-md-3 col-sm-3 col-xs-8">
 						<div class="content-container">
 							<div class="content-header">
-								Quality Products
+								{{-- Quality Products --}}{!! get_content($shop_theme_info, "about", "about_features_header_2") !!}
 							</div>
 							<div class="content-body">
-								Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste.
+								{{-- Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste. --}}{!! get_content($shop_theme_info, "about", "about_features_body_2") !!}
 							</div>
 						</div>
 					</div>
@@ -264,10 +274,10 @@
 					<div class="col-md-3 col-sm-3 col-xs-8">
 						<div class="content-container">
 							<div class="content-header">
-								Trusted
+								{{-- Trusted --}}{!! get_content($shop_theme_info, "about", "about_features_header_3") !!}
 							</div>
 							<div class="content-body">
-								Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste.
+								{{-- Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste. --}}{!! get_content($shop_theme_info, "about", "about_features_body_3") !!}
 							</div>
 						</div>
 					</div>
@@ -283,10 +293,10 @@
 					<div class="col-md-3 col-sm-3 col-xs-8">
 						<div class="content-container">
 							<div class="content-header">
-								Contract Project
+								{{-- Contract Project --}}{!! get_content($shop_theme_info, "about", "about_features_header_4") !!}
 							</div>
 							<div class="content-body">
-								Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste.
+								{{-- Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste. --}}{!! get_content($shop_theme_info, "about", "about_features_body_4") !!}
 							</div>
 						</div>
 					</div>
@@ -298,10 +308,10 @@
 					<div class="col-md-3 col-sm-3 col-xs-8">
 						<div class="content-container">
 							<div class="content-header">
-								Maintenance Support
+								{{-- Maintenance Support --}}{!! get_content($shop_theme_info, "about", "about_features_header_5") !!}
 							</div>
 							<div class="content-body">
-								Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste.
+								{{-- Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste. --}}{!! get_content($shop_theme_info, "about", "about_features_body_5") !!}
 							</div>
 						</div>
 					</div>
@@ -313,10 +323,10 @@
 					<div class="col-md-3 col-sm-3 col-xs-8">
 						<div class="content-container">
 							<div class="content-header">
-								24/7 Support
+								{{-- 24/7 Support --}}{!! get_content($shop_theme_info, "about", "about_features_header_6") !!}
 							</div>
 							<div class="content-body">
-								Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste.
+								{{-- Sed ut perspiciatis unde omnis iste natus errorsit voluptatem accusantium natus error sit voluptatem accusantium iste. --}}{!! get_content($shop_theme_info, "about", "about_features_body_6") !!}
 							</div>
 						</div>
 					</div>
@@ -329,10 +339,10 @@
 		<div class="container">
 			<div class="title-holder">
 				<div class="title-header">
-					Take A Closer Look
+					{{-- Take A Closer Look --}}{!! get_content($shop_theme_info, "gallery", "gallery_title_header") !!}
 				</div>
 				<div class="title-subheader">
-					See our high quality and world class products.
+					{{-- See our high quality and world class products. --}}{!! get_content($shop_theme_info, "gallery", "gallery_title_subheader") !!}
 				</div>
 			</div>
 			<div class="swiper-container swiper3">
@@ -427,10 +437,10 @@
 	    <div class="container">
 	    	<div class="title-holder-1">
 	    		<div class="title-header">
-	    			Connect With Us
+	    			{{-- Connect With Us --}}{!! get_content($shop_theme_info, "contact", "contact_title_header") !!}
 	    		</div>
 	    		<div class="title-subheader">
-	    			'Shell Canvas' the biggest among other establishment if possible.
+	    			{{-- 'Shell Canvas' the biggest among other establishment if possible. --}}{!! get_content($shop_theme_info, "contact", "contact_title_subheader") !!}
 	    		</div>
 	    	</div>
 	    	<div class="map-container">

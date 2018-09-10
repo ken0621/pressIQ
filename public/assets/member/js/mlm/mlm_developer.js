@@ -84,6 +84,7 @@ function mlm_developer()
 		slot_table_data.search = $(".search-employee-name").val();
 		slot_table_data.membership = $(".change-filter-membership").val();
 		slot_table_data.type = $(".change-filter-type").val();
+		slot_table_data.date = $(".change-filter-date").val();
 
 		$(".load-test-slots").html($html_test_slots);
 		$(".export-slot-link").attr("href", "/member/mlm/developer/export_slot?" + $.param( slot_table_data ));

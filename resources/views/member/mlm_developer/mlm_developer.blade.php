@@ -90,12 +90,15 @@
                 <option value="CD">CD</option>
             </select>
         </div>
+        <div class="pull-left">
+            <input class="form-control change-filter-date" type="text">
+        </div>
         <div class="input-group pull-right" style="width: 300px;">
             <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
             <input type="text" class="form-control search-employee-name" placeholder="Search customer or slot number" aria-describedby="basic-addon1">
         </div>
     </div>
-    <div class="form-group panel-body employee-container">
+    <div class="form-group panel-body search-employee-name-container">
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
             <div class="table-responsive load-test-slots">

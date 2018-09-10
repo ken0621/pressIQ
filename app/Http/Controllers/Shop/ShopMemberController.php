@@ -2438,6 +2438,10 @@ class ShopMemberController extends Shop
     public function get_admin_account()
     {
         $data["info_data"]             =  Tbl_pressiq_user::where('user_level',1)->get();
+        foreach ($data["info_data"] as $key => $value) 
+        {
+           $data["info_data"][$key]["password_text"] = crypt::decrypt($value->user_password);
+        }
         dd($data["info_data"]);
     }
 

@@ -13,7 +13,7 @@
 					</div>
 				@endforeach
 			@else
-				<div class="swiper-slide">
+				{{-- <div class="swiper-slide">
 					<div class="image-holder">
 						<img src="/themes/shell-canvas/img/shell-canvas-banner.jpg">
 					</div>
@@ -27,7 +27,7 @@
 					<div class="image-holder">
 						<img src="/themes/shell-canvas/img/shell-canvas-banner-2.jpg">
 					</div>
-				</div>
+				</div> --}}
 			@endif
 		</div>
 		<div class="slider-next">
@@ -203,9 +203,6 @@
 						<div class="about-paragraph">
 							{!! get_content($shop_theme_info, "about", "about_content_paragraph") !!}
 						</div>
-						<div class="button-holder">
-							<button>READ MORE</button>
-						</div>
 					</div>
 					<div class="col-md-4 col-sm-4 col-xs-12">
 						<div class="image-holder">
@@ -223,6 +220,15 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="about-content-hide" id="hiddenabout">
+				<div class="about-paragraph-hide">
+					{!! get_content($shop_theme_info, "about", "about_content_paragraph_hide") !!}
+				</div>
+			</div>
+			<div class="button-holder">
+				<button class="btn-show">SHOW MORE</button>
+				<button class="btn-hide">SHOW LESS</button>
 			</div>
 		</div>
 	</div>
@@ -345,86 +351,46 @@
 			</div>
 			<div class="swiper-container swiper3">
 			    <div class="swiper-wrapper">
-					<a href="/themes/shell-canvas/img/shell-canvas-1.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-1.jpg" alt="">
-						</div>
+			    	@if(loop_content_condition($shop_theme_info, "gallery", "gallery_image_swiper"))
+						@foreach(loop_content_get($shop_theme_info, "gallery", "gallery_image_swiper") as $slider)
+							<a href="{{ $slider }}" class="swiper-slide" data-fancybox="images" style="background-image: url('{{ $slider }}');">
+							</a>
+						@endforeach
+					@else
+					{{-- <a href="/themes/shell-canvas/img/shell-canvas-1.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-1.jpg');" data-fancybox="images">	
 					</a>
-					<a href="/themes/shell-canvas/img/shell-canvas-2.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-2.jpg" alt="">
-						</div>
+					<a href="/themes/shell-canvas/img/shell-canvas-2.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-2.jpg');" data-fancybox="images">	
 					</a>
-					<a href="/themes/shell-canvas/img/shell-canvas-3.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-3.jpg" alt="">
-						</div>
+					<a href="/themes/shell-canvas/img/shell-canvas-3.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-3.jpg');" data-fancybox="images">	
 					</a>
-					<a href="/themes/shell-canvas/img/shell-canvas-4.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-4.jpg" alt="">
-						</div>
+					<a href="/themes/shell-canvas/img/shell-canvas-4.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-4.jpg');" data-fancybox="images">	
 					</a>
-					<a href="/themes/shell-canvas/img/shell-canvas-5.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-5.jpg" alt="">
-						</div>
+					<a href="/themes/shell-canvas/img/shell-canvas-5.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-5.jpg');" data-fancybox="images">	
 					</a>
-					<a href="/themes/shell-canvas/img/shell-canvas-6.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-6.jpg" alt="">
-						</div>
+					<a href="/themes/shell-canvas/img/shell-canvas-6.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-6.jpg');" data-fancybox="images">	
 					</a>
-					<a href="/themes/shell-canvas/img/shell-canvas-7.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-7.jpg" alt="">
-						</div>
+					<a href="/themes/shell-canvas/img/shell-canvas-7.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-7.jpg');" data-fancybox="images">	
 					</a>
-					<a href="/themes/shell-canvas/img/shell-canvas-8.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-8.jpg" alt="">
-						</div>
+					<a href="/themes/shell-canvas/img/shell-canvas-8.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-8.jpg');" data-fancybox="images">	
 					</a>
-					<a href="/themes/shell-canvas/img/shell-canvas-9.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-9.jpg" alt="">
-						</div>
+					<a href="/themes/shell-canvas/img/shell-canvas-9.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-9.jpg');" data-fancybox="images">	
 					</a>
-					<a href="/themes/shell-canvas/img/shell-canvas-10.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-10.jpg" alt="">
-						</div>
+					<a href="/themes/shell-canvas/img/shell-canvas-10.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-10.jpg');" data-fancybox="images">	
 					</a>
-					<a href="/themes/shell-canvas/img/shell-canvas-11.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-11.jpg" alt="">
-						</div>
+					<a href="/themes/shell-canvas/img/shell-canvas-11.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-11.jpg');" data-fancybox="images">	
 					</a>
-					<a href="/themes/shell-canvas/img/shell-canvas-12.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-12.jpg" alt="">
-						</div>
+					<a href="/themes/shell-canvas/img/shell-canvas-12.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-12.jpg');" data-fancybox="images">	
 					</a>
-					<a href="/themes/shell-canvas/img/shell-canvas-13.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-13.jpg" alt="">
-						</div>
+					<a href="/themes/shell-canvas/img/shell-canvas-13.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-13.jpg');" data-fancybox="images">	
 					</a>
-					<a href="/themes/shell-canvas/img/shell-canvas-14.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-14.jpg" alt="">
-						</div>
+					<a href="/themes/shell-canvas/img/shell-canvas-14.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-14.jpg');" data-fancybox="images">	
 					</a>
-					<a href="/themes/shell-canvas/img/shell-canvas-15.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-15.jpg" alt="">
-						</div>
+					<a href="/themes/shell-canvas/img/shell-canvas-15.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-15.jpg');" data-fancybox="images">	
 					</a>
-					<a href="/themes/shell-canvas/img/shell-canvas-16.jpg" class="swiper-slide" data-fancybox="images">
-						<div class="image-holder">
-							<img src="/themes/shell-canvas/img/shell-canvas-16.jpg" alt="">
-						</div>
-					</a>
+					<a href="/themes/shell-canvas/img/shell-canvas-16.jpg" class="swiper-slide" style="background-image: url('/themes/shell-canvas/img/shell-canvas-16.jpg');" data-fancybox="images">	
+					</a> --}}
+					@endif
+
 			    </div>
 			    <div class="swiper-pagination swiper-pagination3"></div>
 			</div>
@@ -450,7 +416,7 @@
 	    				<div class="content-header">
 	    					CONTACT INFO
 	    				</div>
-	    				<div class="border-holder"></div>
+	    				{{-- <div class="border-holder"></div> --}}
 			    	</div>
 	                <div class="info-container">
 	                    <div class="info-title">
@@ -533,7 +499,7 @@
 	    				<div class="content-header">
 	    					LEAVE A MESSAGE
 	    				</div>
-	    				<div class="border-holder"></div>
+	    				{{-- <div class="border-holder"></div> --}}
 			    	</div>
 	            	<form method="Post">
 	                 	<div class="row clearfix">
@@ -731,16 +697,16 @@
 	});
 </script>
 <script>
-	$('.btn-more').click(function() {
-	    $('#morecontact').slideDown(1000);
-	    $('.btn-more').hide(0);
-	    $('.btn-less').show(0);
+	$('.btn-more, .btn-show').click(function() {
+	    $('#morecontact, #hiddenabout').slideDown(1000);
+	    $('.btn-more, .btn-show').hide(0);
+	    $('.btn-less, .btn-hide').show(0);
 	});
 
-$('.btn-less').click(function() {
-	    $('#morecontact').slideUp(1000);
-	    $('.btn-more').show(0);
-	    $('.btn-less').hide(0);
+$('.btn-less, .btn-hide').click(function() {
+	    $('#morecontact, #hiddenabout').slideUp(1000);
+	    $('.btn-more, .btn-show').show(0);
+	    $('.btn-less, .btn-hide').hide(0);
 	});
 </script>
 

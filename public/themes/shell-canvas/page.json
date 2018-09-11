@@ -27,10 +27,17 @@
 		},
 		"about_content_paragraph":
 		{
-			"label":"Content Body",
+			"label":"Content Paragraph 1",
 			"type":"tinymce",
 			"default":"",
-			"size":"12"
+			"size":"6"
+		},
+		"about_content_paragraph_hide":
+		{
+			"label":"Content Paragraph 2",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
 		},
 		"about_content_image_1":
 		{
@@ -160,6 +167,13 @@
 			"type":"textbox",
 			"default":"",
 			"size":"6"
+		},
+		"gallery_image_swiper":
+		{
+			"label":"Image Gallery",
+			"type":"gallery",
+			"default":"",
+			"size":"12"
 		}
 	},
 	"contact":

@@ -62,7 +62,6 @@ class ShopHomeController extends Shop
                 $view = $new_view;
             }
         }
-     	
 
         return view($view, $data);
     }

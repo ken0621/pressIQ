@@ -1,0 +1,45 @@
+/* Button Red Outline */
+.btn-red-outline
+{
+	@include transition(0.3s);
+	font-family: $display-txt;
+	font-size: 15px;
+	color: #fff;
+	border: 1px solid $c-red;
+    padding: 8px 10px;
+    border-radius: 3px;
+	text-align: center;
+	background-color: transparent;
+	&:hover
+	{
+		background-color: $c-red;
+	}
+}
+
+/* Button Red */
+.btn-red
+{
+	@extend .btn-red-outline;
+	@include transition(0.3s);
+	background-color: $c-red;
+    padding: 8px 16px;
+    border-radius: 3px;
+	&:hover
+	{
+		opacity: 0.8;
+	}
+}
+
+/* Button Green Outline */
+.btn-green-outline
+{
+	@extend .btn-red-outline;
+	@include transition(0.3s);
+	color: #fff;
+	border: 1px solid $c-green;
+	&:hover
+	{
+		background-color: $c-green;
+	}
+}
+

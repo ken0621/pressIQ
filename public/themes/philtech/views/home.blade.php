@@ -54,10 +54,10 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-xs-12">
+						<div class="col-xs-12" style="height: 120px">
 							<div class="row-no-padding clearfix">
-								<div class="col-xs-6 grid-2">
-									<img src="/themes/{{ $shop_theme }}/img/slide/QRcode.png" style="height: 120px">
+								<div class="col-xs-6 grid-2" >
+									<img src="/themes/{{ $shop_theme }}/img/slide/QRcode.png" >
 								</div>
 								<div class="col-xs-6 grid-2">
 									<img src="/themes/{{ $shop_theme }}/img/slide/banner3.png">

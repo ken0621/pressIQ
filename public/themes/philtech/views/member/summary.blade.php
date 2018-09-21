@@ -86,7 +86,7 @@
 									@if($plan->label == "Admin Refill" || $plan->label == "Vmoney" || $plan->label == "Wallet Refill" || $plan->label == "Wallet Transfer" || $plan->label == "Repurchase")
 									@else
 									@if($plan->label == "Membership Matching")
-									<th>Matching</th>
+									<th>Matching Bonus</th>
 									@elseif($plan->label == "Vmoney")
 									<th>E-Money</th>
 									@elseif($plan->label == "Direct")

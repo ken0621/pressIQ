@@ -145,7 +145,7 @@
 										<div class="color"></div>
 
 										@if($plan->label == "Membership Matching")
-											<div class="name"><span>Matching</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+											<div class="name"><span>Matching Bonus</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 										@elseif($plan->label == "Vmoney")
 											<div class="name"><span>E-Money</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 										@elseif($plan->label == "Direct")

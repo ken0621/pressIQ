@@ -428,14 +428,15 @@
 					Stay tuned for something amazing.
 				</p>
 				<div class="icon-container">
-					<a target="_blank" href="mail_to:ahmtoken@gmail.com" class="icn"><img width="32" src="/themes/{{ $shop_theme }}/img/mail.svg"></a>
-					<a target="_blank" href="https://www.instagram.com/ahm_token/" class="icn"><img width="32" src="/themes/{{ $shop_theme }}/img/ig.svg"></a>
+					<!-- <a data-tooltip="ahmtoken@gmail.com" class="icn"><img width="32" src="/themes/{{ $shop_theme }}/img/mail.svg"></a> -->
 					<a target="_blank" href="https://twitter.com/AHMToken" class="icn"><img width="32" src="/themes/{{ $shop_theme }}/img/twt.svg"></a>
+					<a target="_blank" href="https://www.instagram.com/ahm_token/" class="icn"><img width="32" src="/themes/{{ $shop_theme }}/img/ig.svg"></a>
 					<a target="_blank" href="https://t.me/ahmtoken" class="icn"><img width="32" src="/themes/{{ $shop_theme }}/img/tele.svg"></a>
 				</div>
 				<p class="coming-soon-ftr">
 					GAMES&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;GENERAL CONSULTANCY&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;HOLDING SERVICES&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;IT SERVICES&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;IMPORT & EXPORT SERVICES&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;MARKETING SERVICES&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;REAL ESTATE&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;TRADE & CRYPTOCURRENCY
 				</p>
+				<p style="color: #f86d18;">Email Us: ahmtoken@gmail.com</p>
 			</div>
 		</div>
 	</div>

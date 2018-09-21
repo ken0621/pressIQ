@@ -48,7 +48,7 @@
     </head>
 
     <body>
-            <nav class="pushmenu pushmenu-left">
+            <!-- <nav class="pushmenu pushmenu-left" style="display: none;">
                 <div class="space1"></div>
                 <span>Browse</span>
                 <ul class="links">
@@ -88,8 +88,8 @@
                     <div class="divider"></div>
                 </ul>
             </nav>
-            <div id="overlay" onclick="off()"></div>
-            <div class="subheader-container">
+            <div id="overlay" onclick="off()" style="display: none;"></div>
+            <div class="subheader-container" style="display: none;">
                 <div class="container">
                     <span class="right-container">
                         <span><a href="#" class="others">About Us</a></span>
@@ -103,7 +103,7 @@
                     </span>
                 </div>
             </div>
-            <div class="header-container">
+            <div class="header-container" style="display: none;">
                 <div class="container">
                     <div class="row clearfix">
                         <div class="col-md-3">
@@ -188,7 +188,7 @@
                     </div>
                 </div>
             </div>
-            <div class="mob-header-container">
+            <div class="mob-header-container" style="display: none;">
                 <div class="container">
                     <div class="main-header">
                         <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
@@ -200,7 +200,7 @@
                     </div>
                 </div>
             </div>
-            <div class="mobile-search">
+            <div class="mobile-search" style="display: none;">
                 <div class="search-bar">
                     <form action="/product" method="get" id="form-search">
                         <div class="input-group">
@@ -213,7 +213,7 @@
                         </div>
                     </form>
                 </div>
-            </div>
+            </div> -->
 
             <!-- CONTENT -->
             <div id="scroll-to" class="clearfix">
@@ -221,7 +221,7 @@
             </div>
 
             <!-- FOOTER -->
-            <footer id="bottom-footer">
+            <footer id="bottom-footer" style="display: none;">
                 <div class="container">
                     <div class="footer-container">
                         <div class="row clearfix">
@@ -255,7 +255,7 @@
                     </div>
                 </div>
             </footer>
-            <div class="bottom">
+            <div class="bottom" style="display: none;">
                 <div class="container">                        
                     <div class="ftr-title">© 2018 AHM. All Rights Reserved</div>
                     <div class="ftr-title-2">

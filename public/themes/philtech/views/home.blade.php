@@ -54,10 +54,10 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-xs-12">
+						<div class="col-xs-12" >
 							<div class="row-no-padding clearfix">
 								<div class="col-xs-6 grid-2">
-									<img src="/themes/{{ $shop_theme }}/img/slide/banner2.png">
+									<img src="/themes/{{ $shop_theme }}/img/slide/QR_ads.jpg" >
 								</div>
 								<div class="col-xs-6 grid-2">
 									<img src="/themes/{{ $shop_theme }}/img/slide/banner3.png">
@@ -277,7 +277,7 @@
 						</div>
 						<div class="col-xs-4">
 							<div class="grid-2">
-								<img src="/themes/{{ $shop_theme }}/img/slide/banner2.png">
+								<img src="/themes/{{ $shop_theme }}/img/slide/QR_ads.jpg">
 							</div>
 							<div class="grid-2">
 								<img src="/themes/{{ $shop_theme }}/img/slide/banner3.png">

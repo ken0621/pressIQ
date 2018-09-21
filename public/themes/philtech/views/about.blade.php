@@ -8,13 +8,13 @@
 			<div class="row clearfix">
 				<div class="col-md-8">
 					<div class="greet">GREETINGS!</div>
-					<div class="welcome">WELCOME to the FRANCHISE BUSINESS OPPORTUNITY!</div>
+					<div class="welcome">WELCOME to the BUSINESS OPPORTUNITY!</div>
 					<p>
 						This is a very unique business model that would make all of us realize and achieve our DREAMS. My greatest vision and passion have been to help more Filipinos to own an affordable and profitable BUSINESS and be truly successful holistically in their lives, thus the PhilTECH company was founded.<br><br> 
 
 						For me, SUCCESS is not just about FINANCIAL FREEDOM, it is also about the TOTAL LIFE TRANSFORMATION: FINANCIALLY, EMOTIONALLY AND SPIRITUALLY. To MENTOR, MOTIVATE and INSPIRE other people regardless of age, gender, socio-economic status and educational background. <br><br>
 
-						PhilTECH, INC. has been established to provide the right vehicle to ride on to earn limitless passive income and to become MILLIONAIRE in the future. PhilTECH, INC. is soaring at its highest potential to offer the FRANCHISE BUSINESS PACKAGES to all FILIPINOS anywhere in the world. It is one of my dreams that many people will be successful for the rest of their lives. <br><br>
+						PhilTECH, INC. has been established to provide the right vehicle to ride on to earn limitless passive income and to become MILLIONAIRE in the future. PhilTECH, INC. is soaring at its highest potential to offer the BUSINESS PACKAGES to all FILIPINOS anywhere in the world. It is one of my dreams that many people will be successful for the rest of their lives. <br><br>
 
 						Again, I would like to welcome you all to this Life-Changing- Opportunity!<br><br>
 

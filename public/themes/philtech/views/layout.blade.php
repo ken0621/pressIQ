@@ -53,7 +53,7 @@
                         <div class="dropdown">
                           <a class="">BUSINESS PRESENTATION <span><i class="fa fa-angle-down"></i></span></a>
                           <div class="dropdown-content">
-                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">FRANCHISE BUSINESS PRESENTATION</a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>
                             <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}">MERCHANT PRESENTATION</a>
                             <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PRIVILEGE CARD PRESENTATION</a>
                             <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}">MARKETING PLAN PRESENTATION</a>
@@ -251,12 +251,12 @@
                             <a href="/legalities"><li>LEGALITIES</li></a>
                             <a href="/contact"><li>CONTACT US</li></a>
                             {{-- <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a> --}}
-                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>FRANCHISE BUSINESS PRESENTATION</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a>
                             {{-- <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
                             <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
                             <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MARKETING PLAN PRESENTATION</li></a> --}}
                             @if($mlm_member)
-                            {{-- <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>FRANCHISE BUSINESS PRESENTATION</li></a> --}}
+                            {{-- <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a> --}}
                             <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
                             <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
                             <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MARKETING PLAN PRESENTATION</li></a>
@@ -377,7 +377,7 @@
                             <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech.jpg">
                         </div>
                         <p>PHILTECH, INC. “Business and Benefits”
-offers New Franchise Business Model and New Rewards System using New Generation of Advanced Technology. PHILTECH, INC. is a pioneer...<a style="color: #fff" href="/about">See more</a></p>
+offers New Business Model and New Rewards System using New Generation of Advanced Technology. PHILTECH, INC. is a pioneer...<a style="color: #fff" href="/about">See more</a></p>
                     </div> 
                     <div class="col-md-2 col-sm-6 match-height">
                         <div class="btm-title">INFORMATION</div>
@@ -395,7 +395,7 @@ offers New Franchise Business Model and New Rewards System using New Generation 
                             <li><a href="javascript:" onClick="alert('Under Development');">News</a></li>
                             <li><a href="/return_policy">Return Policy</a></li>
                             <li><a href="/privacy_policy">Privacy Policy</a></li>
-                            {{-- <li><a href="/franchise_terms_and_condition">Franchise Terms and Conditions</a></li> --}}
+                            {{-- <li><a href="/franchise_terms_and_condition">Terms and Conditions</a></li> --}}
                             <li><a href="/general_terms_and_condition">General Terms and Conditions</a></li>
                         </ul>
                     </div>

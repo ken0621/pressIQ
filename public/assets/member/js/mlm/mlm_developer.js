@@ -9,6 +9,11 @@ function mlm_developer()
 		action_load_table();
 	}
 
+	this.action_reset_page = function()
+	{
+		slot_table_data.page = 1;
+	}
+
 	init();
 	function init()
 	{
@@ -25,6 +30,9 @@ function mlm_developer()
 		add_event_filter();
 		add_event_allow_slot();
 		event_tag_as_ambassador();
+
+		$(".change-filter-date-from").datepicker();
+		$(".change-filter-date-to").datepicker();
 	}
 	function add_event_filter()
 	{
@@ -84,6 +92,8 @@ function mlm_developer()
 		slot_table_data.search = $(".search-employee-name").val();
 		slot_table_data.membership = $(".change-filter-membership").val();
 		slot_table_data.type = $(".change-filter-type").val();
+		slot_table_data.date_from = $(".change-filter-date-from").val();
+		slot_table_data.date_to = $(".change-filter-date-to").val();
 
 		$(".load-test-slots").html($html_test_slots);
 		$(".export-slot-link").attr("href", "/member/mlm/developer/export_slot?" + $.param( slot_table_data ));

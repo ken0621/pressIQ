@@ -86,7 +86,7 @@ function mlm_developer()
 		slot_table_data.type = $(".change-filter-type").val();
 
 		$(".load-test-slots").html($html_test_slots);
-
+		$(".export-slot-link").attr("href", "/member/mlm/developer/export_slot?" + $.param( slot_table_data ));
 		$.ajax(
 		{
 			url:"/member/mlm/developer/table",

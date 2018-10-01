@@ -52,12 +52,18 @@
                     <div class="holder">
                         <div class="dropdown">
                           <a class="">BUSINESS PRESENTATION <span><i class="fa fa-angle-down"></i></span></a>
-                          <div class="dropdown-content">
-                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}">MERCHANT PRESENTATION</a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PRIVILEGE CARD PRESENTATION</a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}">MARKETING PLAN PRESENTATION</a>
-                          </div>
+                              <div class="dropdown-content">
+                                @if($slot_membership == 1)
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}">MERCHANT PRESENTATION</a>
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PRIVILEGE CARD PRESENTATION</a>
+                                @else 
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}">MERCHANT PRESENTATION</a>
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PRIVILEGE CARD PRESENTATION</a>  
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}">MARKETING PLAN PRESENTATION</a>
+                                @endif
+                              </div>
                         </div>
                     </div>
                     @else

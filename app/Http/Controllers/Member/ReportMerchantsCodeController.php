@@ -77,6 +77,7 @@ class ReportMerchantsCodeController extends Member
         $data['_item_product_code'] = Item::get_all_item_record_log('', "distributed", null, null, null, null, $data['from'], $data['to'], $data['warehouse_id']);
         $return = Item::print_codes_report($data['from'], $data['to'], $data['warehouse_id']);
 
+    
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
         if($report_type && !$load_view)
         {

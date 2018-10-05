@@ -67,7 +67,7 @@
                         </div>
                     </div>
                     @else
-                        @if($customer)
+                        {{-- @if($customer) --}}
                         <div class="holder">
                             {{-- <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a> --}}
                             <div class="dropdown">
@@ -79,11 +79,11 @@
                                 </div>
                             </div>
                         </div>
-                        @else
+                        {{-- @else
                         <div class="holder">
                             <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>  
                         </div>  
-                        @endif
+                        @endif --}}
                     @endif
                     <div class="holder"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
 

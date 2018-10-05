@@ -137,6 +137,7 @@
 									@else		
 									@endif
 									@endforeach
+									<th>Cheque</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -148,6 +149,7 @@
 									<td>{{ number_format($wallet->{ $plan->string_plan }, 2) }}</td>
 									@endif
 									@endforeach
+									<td>{{ number_format(abs($total_cheque),2) }}</td>
 								</tr>
 								@endforeach
 							</tbody>

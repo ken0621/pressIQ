@@ -242,7 +242,14 @@ class ShopMemberController extends Shop
         if(Self::$customer_info)
         {
             $data = MLM2::customer_income_summary2($this->shop_info->shop_id, Self::$customer_info->customer_id);
-            
+            $slot_id = [];
+            $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+            foreach ($slot as $key => $value) 
+            {
+                $slot_id[$key] = $value->slot_id;
+            }
+            $data["total_cheque"] = Tbl_mlm_slot_wallet_log::where("shop_id", $this->shop_info->shop_id)->whereIn("wallet_log_slot", $slot_id)->where("wallet_log_plan", "CHEQUE")->sum("wallet_log_amount");
+
             return Self::load_view_for_members("member.summary", $data);
         }
         else

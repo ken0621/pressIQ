@@ -158,7 +158,16 @@ class Shop extends Controller
                 if (isset($account["email"])) 
                 {
                     $check_account      = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
-                    $customer_id        = $check_account->customer_id;
+
+                    if ($check_account) 
+                    {
+                        $customer_id        = $check_account->customer_id;
+                    }
+                    else
+                    {
+                        $check_account      = null;
+                        $customer_id        = 0;
+                    }
                 }
                 else
                 {

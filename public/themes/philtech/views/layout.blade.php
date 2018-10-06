@@ -350,6 +350,8 @@
                         <a href="/legalities"><li>LEGALITIES</li></a>
                         <a href="/contact"><li>CONTACT US</li></a>
                         <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a>
+                        <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
+                        <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
                     </ul>
                 @endif
             </nav>

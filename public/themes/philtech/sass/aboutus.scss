@@ -1,191 +1,173 @@
-.top-content 
+.greetings 
 {
-    background-color: white;
-    margin-top: 40px;
-
-    .top-title
+    background-color: #fff;
+    padding: 100px 0px;
+    .title-holder
     {
-        font-size: 24px;
-        margin-top: 100px;
-        position: relative;
-
-        .welcome 
+        font-weight: 700;
+        margin: 0;
+        text-align: center;
+        color: #006cc5;
+        font-size: 2rem;
+        span
         {
-            font-weight: 700;
-        }
-
-        .shopshoshop 
-        {
-            position: absolute;
-            left: 165px;
-            top: 0;
-            color: #2e3192;
-            font-weight: 700;
+            color: #ff8500;
         }
     }
-
-    .paragraph 
+    .paragraph
     {
-        margin-top: 40px;
-        margin-bottom: 40px;
+        padding-top: 50px;
+        font-weight: 300;
+        margin: 0;
+        text-align: justify;
+        font-size: 1.5rem;
+        line-height: 200%;
     }
 
-    .paragraph1 
+    .owner
     {
-        margin-top: 200px;
+        width: 30%;
+        margin-top: 50px;
+        margin-left: auto;
+        .image-holder
+        {
+            width: 100%;
+            img
+            {
+                width: 100%;
+            }
+        }
+        .name-holder
+        {
+            height: 156px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            .name
+            {
+                color: #ff8500;
+                font-weight: 700;
+                line-height: 200%;
+                font-size: 1.4rem;
+            }
+        }
+        .position
+        {
+            color: #006cc5;
+        }
     }
+}
 
-    .paragraph2 
+.about
+{
+    background-color: #f4f4f4;
+    padding: 100px 0px;
+    .title-holder
     {
-        margin-top: 40px;
+        font-weight: 700;
+        margin: 0;
+        text-align: left;
+        color: #006cc5;
+        font-size: 2rem;
+        span
+        {
+            color: #ff8500;
+        }
     }
-
-    .top-content-image 
+    .paragraph
     {
-    	margin-top: 70px;
-    	margin-bottom: 40px;
-
+        padding-top: 50px;
+        font-weight: 300;
+        margin: 0;
+        text-align: justify;
+        font-size: 1.5rem;
+        line-height: 200%;
+    }
+    .image-holder
+    {
+        width: 30%;
+        margin-left: auto;
         img
-        { 
+        {
             width: 100%;
         }
     }
 }
 
-.bottom-content 
-{
-    text-align: center;
-    margin-top: 40px;
-    margin-bottom: 40px;
-    background-color: white;
-
-    .title 
-    {
-        position: relative;
-        font-size: 24px;
-        font-weight: 700;
-
-        .our 
-        {
-            margin-right: 85px;
-        }
-
-        .mission 
-        {
-            color: #2e3192;
-            position: absolute;
-            left: 60px;
-            right: 0;
-            top: 0;
-        }
-
-        .vision 
-        {
-            color: #2e3192;
-            position: absolute;
-            left: 40px;
-            right: 0;
-            top: 0;
-        }
-    }
-
-    .bottom-image 
-    {
-        margin-top: 50px;
-        margin-bottom: 50px;
-    }
-
-    .bottom-par 
-    {
-        left: 0;
-        right: 0;
-        margin: auto;
-        margin-top: 40px;
-        color: #313131;
-        font-size: 14px;
-        line-height: 25px;
-        max-width: 800px;
-    }
-
-    .bottom-par-two 
-    {
-        margin-bottom: 120px;
-    }
-}
-
-.values 
+.mission-and-vision
 {
     background-color: #fff;
-    margin-top: 40px;
-    padding: 50px;
-
-    @media screen and (max-width: 425px)
-    {
-        padding: 65px 15px 15px 15px;
-    }
-
-    .holder 
-    {
-        margin-bottom: 50px;
-        &:last-child 
-        {
-            margin-bottom: 0;
-        }
-    }
-
-    .title
+    padding: 100px 0px;
+    .title-holder
     {
         font-weight: 700;
         margin: 0;
         text-align: center;
-    }
-
-    .list
-    {
-        margin-top: 25px;
-
-        ul 
+        color: #006cc5;
+        font-size: 2rem;
+        span
         {
-            margin: 0;
-            margin-top: 25px;
-            columns: 2;
-            -webkit-columns: 2;
-            -moz-columns: 2;
-            text-align: center;
-
-            li 
-            {
-                font-size: 16px;
-                font-weight: 400;
-                display: block;
-                text-align: center;
-            }
+            color: #ff8500;
         }
     }
-
-    .message 
+    .paragraph
+    {
+        width: 50%;
+        padding-top: 50px;
+        font-weight: 300;
+        margin: auto;
+        text-align: justify;
+        font-size: 1.5rem;
+        line-height: 200%;
+    }
+    .vision
     {
         margin-top: 50px;
+    }
+}
 
-        .greet 
+.core-values
+{
+    background-color: #f4f4f4;
+    padding: 100px 0px;
+     .title-holder
+    {
+        font-weight: 700;
+        margin: 0;
+        text-align: center;
+        color: #006cc5;
+        font-size: 2rem;
+        span
         {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 30px;
+            color: #ff8500;
         }
-
-        .welcome 
+    }
+    .image-holder
+    {
+        width: 65%;
+        margin: 100px auto 0px;
+        img
         {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 30px;
+            width: 100%;
         }
+    }
+}
 
-        .text 
+.organizational-chart
+{
+    background-color: #1c6cb6;
+    padding: 100px 0px;
+      .title-holder
         {
-            font-size: 14px;
-            font-size: 400;
-            white-space: pre-wrap;
+        font-weight: 700;
+        margin: 0;
+        text-align: center;
+        color: #fff;
+        font-size: 2rem;
+        span
+        {
+            color: #ff8500;
         }
     }
 }

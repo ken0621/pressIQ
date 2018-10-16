@@ -19,12 +19,12 @@
 			</div>
 			<div class="owner">
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-6 col-sm-6 col-xs-12">
 						<div class="image-holder">
 							<img src="/themes/{{ $shop_theme }}/img/greeting-owner.jpg">
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-6 col-sm-6 col-xs-12">
 						<div class="name-holder">
 							<div class="name">ARNOLD A. ARBILLERA</div>
 							<div class="position">President & CEO</div>
@@ -39,12 +39,12 @@
 		<div class="container">
 			<div class="header">
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-6 col-sm-6 col-xs-12">
 						<div class="title-holder">
 							Welcome to <span>Philtech</span>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-6 col-sm-6 col-xs-12">
 						<div class="image-holder">
 							<img src="/themes/{{ $shop_theme }}/img/gold-logo.png">
 						</div>
@@ -103,6 +103,340 @@
 		<div class="container">
 			<div class="title-holder">
 				PHILTECH INC. <span>BOARD OF DIRECTOR</span>
+			</div>
+			<div class="org-chart-holder-1">
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							ARNOLD A. ARBILLERA
+						</div>
+						<div class="people-class">
+							Chairman / President & CEO
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="org-chart-holder-2">
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							MARK ROBERT F. LANDICHO
+						</div>
+						<div class="people-class">
+							Vice President for I.T. BOD
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							LENIM W. GAN
+						</div>
+						<div class="people-class">
+							Corporate Secretary BOD
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							BELSIE AGUSTIN
+						</div>
+						<div class="people-class">
+							Vice President for Marketing and Media Affairs / BOD
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							ZENAIDA M. ARBILLERA
+						</div>
+						<div class="people-class">
+							Corporate Treasurer / BOD
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="org-chart-holder-3">
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							SATURNINO APDAL, JR>
+						</div>
+						<div class="people-class">
+							Operations Manager / MT
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="org-chart-holder-4">
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							QUINCY BERNARDO
+						</div>
+						<div class="people-class">
+							Admin Officer / MT
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							RAMIL DUQUE
+						</div>
+						<div class="people-class">
+							Assistant OM / Finance Head / MT
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="org-chart-holder-5">
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							FATIMA ARCILLAS
+						</div>
+						<div class="people-class">
+							HR Head
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							JOSENOVER C. CENTINO
+						</div>
+						<div class="people-class">
+							Speaker / Trainer
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							JASMINE ABDULLA
+						</div>
+						<div class="people-class">
+							Product Managers - True Money / Micro ATM
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							MITCH FUENTES
+						</div>
+						<div class="people-class">
+							Product Managers - Travel & Tours
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="org-chart-holder-6">
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							RAMIL DUQUE
+						</div>
+						<div class="people-class">
+							Accounting Head
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							QUINCY BERNARDO
+						</div>
+						<div class="people-class">
+							System Admin Officer
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							JEANNIELLE MONTANTE
+						</div>
+						<div class="people-class">
+							CSR Head
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="org-chart-holder-7">
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							RUBEN RUBLICO
+						</div>
+						<div class="people-class">
+							Technical Support
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							MIA MICULOB
+						</div>
+						<div class="people-class">
+							Cashier
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							FRITCHIE DELOS SANTOS
+						</div>
+						<div class="people-class">
+							Accounting Assistant
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							JOHN MARK COLENDRES
+						</div>
+						<div class="people-class">
+							System Admin Asst. E-COMMERCE
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
+				<div class="org-chart-container">
+					<div class="image-holder">
+						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+					</div>
+					<div class="info-box">
+						<div class="people-name">
+							CZAR UZMAN
+						</div>
+						<div class="people-class">
+							CSR Staff
+						</div>
+						<button>
+							<i class="fab fa-linkedin-in"></i>
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

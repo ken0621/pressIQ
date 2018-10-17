@@ -11,11 +11,10 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
-        <link rel="icon" href="/themes/{{ $shop_theme }}/img/header-logo.jpg" type="image/jpg" />
+        <link rel="icon" href="/themes/{{ $shop_theme }}/img/fav.svg" type="image/svg" />
     
         <!-- GOOGLE FONT -->
-        <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet"> 
-        <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet">    
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">   
 
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
@@ -46,37 +45,6 @@
     </div>
 
     <!-- HEADER -->
-    <div id="home" class="subheader-container">
-        <div class="container">
-            @if($customer)
-            <div class="left-container">
-                <span><i class="fa fa-envelope" aria-hidden="true"></i></span>
-                <span>{!! get_content($shop_theme_info, "contact_details", "contact_company_email-address") !!}</span>
-                <span><i class="fa fa-phone" aria-hidden="true"></i></span>
-                <span>{!! get_content($shop_theme_info, "contact_details", "contact_company_contact-number") !!}</span>
-            </div>
-            <div class="right-container">
-                <span><i class="fa fa-facebook" aria-hidden="true"></i></span>
-                <span><i class="fa fa-twitter" aria-hidden="true"></i></span>
-                <span><i class="fa fa-instagram" aria-hidden="true"></i></span>
-                <span><a href="http://payrolldigima.com/employee_login">LOGIN</a></span>
-            </div>
-            @else
-            <div class="left-container">
-                 <span><i class="fa fa-envelope" aria-hidden="true"></i></span>
-                <span>{!! get_content($shop_theme_info, "contact_details", "contact_company_email-address") !!}</span>
-                <span><i class="fa fa-phone" aria-hidden="true"></i></span>
-                <span>{!! get_content($shop_theme_info, "contact_details", "contact_company_contact-number") !!}</span>
-            </div>
-            <div class="right-container">
-                <span><i class="fa fa-facebook" aria-hidden="true"></i></span>
-                <span><i class="fa fa-twitter" aria-hidden="true"></i></span>
-                <span><i class="fa fa-instagram" aria-hidden="true"></i></span>
-                <span><a href="http://payrolldigima.com/employee_login">LOGIN</a></span>
-            </div>
-            @endif
-        </div>
-    </div>
     <div class="header-container">
         <div class="container">
             <div class="row clearfix">
@@ -86,7 +54,7 @@
 
                     <div class="image-logo-holder">
                         <a class="clearfix" href="/">
-                            <img src="/themes/{{ $shop_theme }}/img/header-logo.jpg">
+                            <img src="/themes/{{ $shop_theme }}/img/header-logo.svg">
                         </a>                       
                     </div>
                     <div class="menu-nav">
@@ -96,38 +64,27 @@
                     </div>
                     <div class="menu-mobile-nav">
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="#home">HOME</a></span>
+                        <span><a class="smoth-scroll" href="#home">ABOUT</a></span>
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="#services">SERVICES</a></span>
+                        <span><a class="smoth-scroll" href="#services">FOUNDERS</a></span>
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="#aboutus">ABOUT US</a></span>
+                        <span><a class="smoth-scroll" href="#aboutus">PARTNERS</a></span>
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="#expertise">NEWS AND ANNOUNCEMENT</a></span>
+                        <span><a class="smoth-scroll" href="#expertise">CANDIDATES</a></span>
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="#careers">CAREERS</a></span>
+                        <span><a class="smoth-scroll" href="#careers">ADVISORY</a></span>
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="#contactus">CONTACT US</a></span>
                     </div>
                 </div>
                 <div class="col-md-10">
                 <!-- NAVIGATION -->
                     <nav class="navirino">
                         <ul>
-                            @if(Request::segment(1)=="members")
-                                <li><a class="smoth-scroll" href="#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="#services">SERVICES</a></li>
-                                <li><a class="smoth-scroll" href="#aboutus">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="#expertise">NEWS AND ANNOUNCEMENT</a></li>
-                                <li><a class="smoth-scroll" href="#careers">CAREERS</a></li>
-                                <li><a class="smoth-scroll" href="#contactus">CONTACT US</a></li>
-                            @else
-                                <li><a class="smoth-scroll" href="#home">HOME</a></li>
-                                <li><a class="smoth-scroll" href="#services">SERVICES</a></li>
-                                <li><a class="smoth-scroll" href="#aboutus">ABOUT US</a></li>
-                                <li><a class="smoth-scroll" href="#expertise">NEWS AND ANNOUNCEMENT</a></li>
-                                <li><a class="smoth-scroll" href="#careers">CAREERS</a></li>
-                                <li><a class="smoth-scroll" href="#contactus">CONTACT US</a></li>
-                            @endif
+                            <li><a class="smoth-scroll" href="#home">ABOUT</a></li>
+                            <li><a class="smoth-scroll" href="#services">FOUNDERS</a></li>
+                            <li><a class="smoth-scroll" href="#aboutus">PARTNERS</a></li>
+                            <li><a class="smoth-scroll" href="#expertise">CANDIDATES</a></li>
+                            <li><a class="smoth-scroll" href="#careers">ADVISORY</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -141,50 +98,67 @@
     </div>
 
     <!-- FOOTER -->
-    <footer id="bottom-footer">
+
+    <footer>
         <div class="container">
-            <div class="footer-container">
-                <div class="upper row clearfix">
-                    <div class="col-md-4">
-                        <div class="footer-icon-container">
-                            <img src="\themes\paptsi-v2\img\paptsi-icon-footer.png">
-                        </div>
-                        <div>
-                            <p>Philippine Archipelago Ports and Terminal Services Inc. aims to be a key player in the industry of port operation and management. We provide safe, clean and convenient port facilities and passenger terminal buildings.</p>
-                        </div>
-                        <div class="footer-image">
-                            <img src="\themes\paptsi-v2\img\footer-image.jpg">
+            <div class="footer__upper">
+                <div class="row clearfix">
+                    <div class="col-md-3">
+                        <div class="footer__upper__title">DOCUMENTS</div>
+                        <div class="footer__upper__content">
+                            <a class="footer__upper__content__link" href=""><div>GABC ICO Verification</div></a>
+                            <a class="footer__upper__content__link" href=""><div>GABC Terms Partnership and Support</div></a>
+                            <a class="footer__upper__content__link" href=""><div>GABC Advisory Board Concept</div></a>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                         <div class="footer-title-container">
-                            <p class="footer-title">INFORMATION</p>
+                    <div class="col-md-3">
+                        <div class="footer__upper__title">FOLLOW US</div>
+                        <div class="footer__upper__content">
+                            <div class="grid-container">
+                                <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_tele.png"></div>
+                                <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_fb.png"></div>
+                                <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_twitter.png"></div>
+                                <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_in.png"></div>
+                                <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_ig.png"></div>
+                                <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_ytube.png"></div>
+                                <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_skype.png"></div>
+                                <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_gplus.png"></div>
+                            </div>
                         </div>
-                        <a class="smoth-scroll" href="#"><p>HOME</p></a>
-                        <a class="smoth-scroll" href="#"><p>SERVICES</p></a>
-                        <a class="smoth-scroll" href="#"><p>ABOUT US</p></a>
-                        <a class="smoth-scroll" href="#"><p>EXPERTISE</p></a>
-                        <a class="smoth-scroll" href="#"><p>CAREERS</p></a>
-                        <a class="smoth-scroll" href="#"><p>CONTACT US</p></a>
                     </div>
-                    <div class="col-md-4">
-                        <div class="footer-title-container">
-                            <p class="footer-title">CONTACT INFORMATION</p>
+                    <div class="col-md-3">
+                        <div class="footer__upper__title">CONTACT US</div>
+                        <div class="footer__upper__content">
+                            <div class="footer__upper__content__link">
+                                <div>
+                                    <span><i class="fa fa-envelope-open"></i>&nbsp;&nbsp;</span>
+                                    <span>support@gabc.com</span>
+                                </div>
+                            </div>
+                            <div class="footer__upper__content__link">
+                                <div>
+                                    <span><i class="fa fa-phone"></i>&nbsp;&nbsp;</span>
+                                    <span>+63 912 345 6789</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="contact-info"><i class="fa fa-map-marker" aria-hidden="true"></i><span>{!! get_content($shop_theme_info, "contact_details", "contact_company_address") !!}</span></div>
-                        <div class="contact-info"><i class="fa fa-envelope" aria-hidden="true"></i><span>{!! get_content($shop_theme_info, "contact_details", "contact_company_email-address") !!}</span></div>
-                        <div class="contact-info"><i class="fa fa-phone" aria-hidden="true"></i><span>{!! get_content($shop_theme_info, "contact_details", "contact_company_contact-number") !!}</span></div>
                     </div>
+                    <div class="col-md-3">
+                        <div class="footer__upper__title">STRATEGIC PARTNERS</div>
+                        <div class="footer__upper__content">
+                            <div class="footer__upper__content__icon"><img src="/themes/{{ $shop_theme }}/img/digima_icon.png"></div>
+                            <div class="footer__upper__content__icon"><img src="/themes/{{ $shop_theme }}/img/dmsph_icon.png"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__lower">
+                <div class="container">
+                    
                 </div>
             </div>
         </div>
     </footer>
-    <div class="container">
-        <div class="bottom">                           
-            <div class="ftr-title">© 2017 Archipelago Ports and Terminal Services, INC. All Rights Reserved</div>
-            <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
-        </div>
-    </div>
     
     @include("frontend.gfoot")
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>

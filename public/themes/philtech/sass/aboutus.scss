@@ -236,6 +236,10 @@
                     font-weight: 700;
                     color: #006cc5;
                     margin: 40px 0px 20px;
+                     @media screen and (max-width: 425px)
+                    {
+                        font-size: 1rem;
+                    }
                 }
                 .people-class
                 {
@@ -251,10 +255,18 @@
                     padding: 10px;
                     background-color: #0747a6;
                     border: none;
+                    @media screen and (max-width: 425px)
+                    {
+                        width: 40px;
+                    }
                     i
                     {
                         color: #fff;
                         font-size: 2rem;
+                        @media screen and (max-width: 425px)
+                        {
+                            font-size: 1.5rem;
+                        }
                     }
                 }
             }
@@ -270,10 +282,10 @@
             {
                 width: 50%;
             }
-            @media screen and (max-width: 425px)
-            {
-                width: 80%;
-            }
+            // @media screen and (max-width: 425px)
+            // {
+            //     width: 80%;
+            // }
             @media screen and (max-width: 320px)
             {
                 width: 100%;
@@ -295,6 +307,10 @@
         @media screen and (max-width: 425px)
         {
             padding: 50px 0px 0px;
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @media screen and (max-width: 320px)
+        {
             grid-template-columns: repeat(1, 1fr);
         }
         .org-chart-container
@@ -307,7 +323,7 @@
             }
             @media screen and (max-width: 425px)
             {
-                width: 80%;
+                width: 100%;
             }
              @media screen and (max-width: 320px)
             {
@@ -330,10 +346,10 @@
             {
                 width: 50%;
             }
-            @media screen and (max-width: 425px)
-            {
-                width: 80%;
-            }
+            // @media screen and (max-width: 425px)
+            // {
+            //     width: 80%;
+            // }
              @media screen and (max-width: 320px)
             {
                 width: 100%;
@@ -353,8 +369,12 @@
         }
         @media screen and (max-width: 425px)
         {
-            grid-template-columns: repeat(1, 1fr);
+            // grid-template-columns: repeat(2, 1fr);
             padding: 70px 0px 0px;
+        }
+        @media screen and (max-width: 320px)
+        {
+            grid-template-columns: repeat(1, 1fr);
         }
         .org-chart-container
         {
@@ -366,7 +386,7 @@
             }
             @media screen and (max-width: 425px)
             {
-                width: 80%;
+                // width: 80%;
                 margin: 50px auto;
             }
              @media screen and (max-width: 320px)
@@ -389,6 +409,10 @@
         }
         @media screen and (max-width: 425px)
         {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @media screen and (max-width: 320px)
+        {
             grid-template-columns: repeat(1, 1fr);
         }
         .org-chart-container
@@ -401,7 +425,7 @@
             }
             @media screen and (max-width: 425px)
             {
-                width: 80%;
+                width: 100%;
             }
              @media screen and (max-width: 320px)
             {
@@ -423,6 +447,10 @@
         }
         @media screen and (max-width: 425px)
         {
+            // grid-template-columns: repeat(1, 1fr);
+        }
+        @media screen and (max-width: 320px)
+        {
             grid-template-columns: repeat(1, 1fr);
         }
         .org-chart-container
@@ -436,11 +464,11 @@
             }
             @media screen and (max-width: 425px)
             {
-                width: 80%;
+                // width: 80%;
             }
              @media screen and (max-width: 320px)
             {
-                width: 100%;
+                // width: 100%;
             }
         }
     }
@@ -458,6 +486,10 @@
         }
         @media screen and (max-width: 425px)
         {
+            // grid-template-columns: repeat(2, 1fr);
+        }
+        @media screen and (max-width: 320px)
+        {
             grid-template-columns: repeat(1, 1fr);
         }
         .org-chart-container
@@ -470,11 +502,11 @@
             }
             @media screen and (max-width: 425px)
             {
-                width: 80%;
+                width: 100%;
             }
              @media screen and (max-width: 320px)
             {
-                width: 100%;
+                // width: 100%;
             }
         }
     }

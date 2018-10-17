@@ -195,12 +195,33 @@ h3
 				.page__content--grid__item__child-1
 				{
 					flex: 1 50px;
-					background-size: contain;
+					img 
+					{
+						width: 100%;
+						object-fit: cover;
+					}
 				}
 				
 				.page__content--grid__item__child-2
 				{
 					flex: 3 50px;
+
+					.info-name
+					{
+						color: white;
+					}
+					.info-bottom
+					{
+						color: rgba(255,255,255, .5);
+						.flag 
+						{
+							max-width: 31px;
+							img 
+							{
+								width: 100%;
+							}
+						}
+					}
 				}
 			}
 		}

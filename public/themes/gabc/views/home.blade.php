@@ -177,10 +177,35 @@
                 <div class="page__content--grid">
                     <div class="page__content--grid__item">
                         <div class="page__content--grid__item__child-1">
-                            asd
+                            <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
                         </div>
                         <div class="page__content--grid__item__child-2">
-                            asd
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"></div><span>City, Country</span>
+                            </div>
                         </div>  
                     </div>
                 </div>

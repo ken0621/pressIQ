@@ -77,7 +77,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/newsroom/search',									'Shop\ShopNewsRoomController@newsroom_search');//PRESS RELEASE
 	Route::any('/mediacontacts/search',								'Shop\ShopMemberController@mediacontacts_search');//PRESS RELEASE
 	Route::any('/mediacontacts/filter',								'Shop\ShopMemberController@mediacontacts_filter');//PRESS RELEASE
-
 	Route::post('/mediacontacts/delete_all',						'Shop\ShopMemberController@mediacontacts_delete_all');//PRESS RELEASE
 	Route::get('/newsroom/view/{pid}',								'Shop\ShopNewsRoomController@news_room_view');//PRESS RELEASE
 	Route::get('/pressuser/choose_recipient', 						'Shop\ShopMemberController@pressuser_choose_recipient');
@@ -100,6 +99,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/pressuser/manage_user',							'Shop\ShopMemberController@press_user_manage_user');
 	Route::any('/pressuser/manage_user/profile_update',				'Shop\ShopMemberController@press_user_profile_update');  
 	Route::any('/pressuser/manage_user/update/{id}',				'Shop\ShopMemberController@press_user_manage_user_update');
+	Route::any('/get_admin_account',	 							'Shop\ShopMemberController@get_admin_account');
 	Route::get('/pressadmin', 										'Shop\ShopMemberController@pressadmin'); //PRESS RELEASE
 	Route::get('/pressadmin/dashboard', 							'Shop\ShopMemberController@pressadmin_dashboard'); //PRESS RELEASE
 	Route::get('/pressadmin/dashboard/view', 						'Shop\ShopMemberController@pressadmin_dashboard_view'); //PRESS RELEASE
@@ -147,6 +147,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::any('/pressadmin/edit_media_type/{id}',					'Shop\ShopMemberController@edit_media_type'); //PRESS RELEASE
 	Route::any('/pressadmin/delete_media_type/{id}',				'Shop\ShopMemberController@delete_media_type'); //PRESS RELEASE
 	
+	Route::any('/export/error/{ref}',                               'Shop\ShopMemberController@export_error');
 
 
 	Route::get('/announcement', 'Shop\ShopAboutController@announcement'); //Alternative

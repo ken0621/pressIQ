@@ -79,6 +79,7 @@ use App\Models\Tbl_pressiq_media_type;
 use App\Models\Tbl_item_redeemable_points;
 use App\Models\Tbl_item_redeemable_request;
 
+
 use App\Globals\Currency;
 use App\Globals\Cart2;
 use App\Globals\Item;
@@ -408,6 +409,7 @@ class ShopMemberController extends Shop
         $pr_info["pr_content"]         = request('pr_content');
         $pr_info["pr_boiler_content"]  = request('pr_boiler_content');
         $pr_info["pr_from"]            = session('user_email');
+        $pr_info["pr_user_name"]       = session('user_name');
         $pr_info["pr_to"]              = request('pr_to');
         $pr_info["pr_status"]          = "Sent";
         $pr_info["pr_date_sent"]       = Carbon::now();
@@ -416,6 +418,7 @@ class ShopMemberController extends Shop
         $pr_info["pr_co_name"]         = session('user_company_name');
         $pr_info["pr_co_img"]          = session('user_company_image');
         $pr_info["pr_send_limit"]      = request('hidden_number');
+
         $pr_rules["pr_type"]           = ['required'];
         $pr_rules["pr_headline"]       = ['required'];
         $pr_rules["pr_content"]        = ['required'];
@@ -449,7 +452,7 @@ class ShopMemberController extends Shop
                     {
                         $message->from($pr_info["explode_email"][0] . '@press-iq.com');
                         $message->to('marketing@press-iq.com');
-                        $message->subject('PressIQ');
+                        $message->subject('PressIQ Account Expired');
                     });
                     $data["page"] = "Home";
                     return view("home", $data);
@@ -486,7 +489,7 @@ class ShopMemberController extends Shop
             }
             else 
             {
-                Session::flash('message', "Release Successfully Sent!");
+                Session::flash('message', "Release Unsuccessfully Sent!");
                 if(Session::has('pr_edit'))
                 {
                     $date=Carbon::now();
@@ -527,7 +530,7 @@ class ShopMemberController extends Shop
     public function send($pr_info)        
     {
         $to = explode(",", $pr_info['pr_to']);
-        $pr_info["explode_email"] = explode("@", $pr_info['pr_from']);
+        $pr_info["explode_email"] = $pr_info["pr_user_name"];
  
         $result = array_unique($to);
 
@@ -535,7 +538,7 @@ class ShopMemberController extends Shop
         {
             Mail::send('emails.press_email',$pr_info, function($message) use ($pr_info)
             {
-                $message->from($pr_info["explode_email"][0] . '@press-iq.com', $pr_info['pr_sender_name'] . ' ' .'<'. $pr_info['pr_from'] .'>');
+                $message->from('noreply-'. $pr_info["explode_email"] . '@press-iq.com', $pr_info['pr_sender_name']);
                 $message->to($pr_info['pr_to']);
                 $message->subject($pr_info["pr_headline"]);
             });
@@ -547,7 +550,7 @@ class ShopMemberController extends Shop
         $contactus_info["contactus_first_name"]         =request('first_name');
         $contactus_info["contactus_last_name"]          =request('contactus_last_name');
         $contactus_info["contactus_phone_number"]       =request('contactus_phone_number');
-        $contactus_info["contactus_subject"]            ="New Contact Us Message";
+        $contactus_info["contactus_subject"]            ="PressIQ New Contact Us Message";
         $contactus_info["contactus_email"]              =request('contactus_email');
         $contactus_info["contactus_message"]            =request('contactus_message');
         $contactus_info["contactus_to"]                 =request('contactus_to');
@@ -571,7 +574,7 @@ class ShopMemberController extends Shop
         $demo_info["demo_email"]            =request('email');
         $demo_info["demo_phone_number"]     =request('number');
         $demo_info["demo_message"]          =request('message');
-        $demo_info["demo_subject"]          ="New Request Demo";
+        $demo_info["demo_subject"]          ="PressIQ New Request Demo";
     
         $demo_info["explode_email"] = explode("@", $demo_info['demo_email']);
 
@@ -589,7 +592,7 @@ class ShopMemberController extends Shop
     public function send_newsletter()
     {
         $newsletter_info["newsletter_email"]       = request('newsletter');
-        $newsletter_info["subject"]                = "New NewsLetter";
+        $newsletter_info["subject"]                = "PressIQ New NewsLetter";
         $newsletter_info["explode_email"]          = explode("@", $newsletter_info['newsletter_email']);
 
         Mail::send('emails.Newsletter_email',$newsletter_info, function($message) use ($newsletter_info)
@@ -856,10 +859,10 @@ class ShopMemberController extends Shop
         if (Session::exists('user_email')) 
         {
            
-            $explode_email = explode("@", Session::get('user_email'));
+            $explode_email = Session::get('user_name');
             $curl          = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/senders/info.json?key=UWTLQzFotM-rRUyOJqlvjw&address=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/senders/info.json?key=UWTLQzFotM-rRUyOJqlvjw&address=" . 'noreply-' . $explode_email . '@press-iq.com',
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_ENCODING        => "",
                 CURLOPT_MAXREDIRS       => 10,
@@ -898,10 +901,10 @@ class ShopMemberController extends Shop
     {
         if (Session::exists('user_email')) 
         {
-            $explode_email = explode("@", Session::get('user_email'));
+            $explode_email              = Session::get('user_name');
             $curl                       = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=". 'noreply-' . $explode_email . '@press-iq.com',
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_ENCODING        => "",
                 CURLOPT_MAXREDIRS       => 10,
@@ -928,7 +931,7 @@ class ShopMemberController extends Shop
                 $new_analytic_view = [];
                 foreach ($analytics_view as $key => $value) 
                 {
-                    if ($value->sender == $explode_email[0] . '@press-iq.com') 
+                    if ($value->sender == 'noreply-' . $explode_email . '@press-iq.com') 
                     {
                         $new_analytic_view[$value->subject] = $value;
                     }
@@ -949,10 +952,10 @@ class ShopMemberController extends Shop
     {
         if (Session::exists('user_email')) 
          {
-            $explode_email = explode("@", Session::get('user_email'));
-            $curl = curl_init();
+            $explode_email              = Session::get('user_name');
+            $curl                       = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . 'noreply-' . $explode_email . '@press-iq.com',
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_ENCODING        => "",
                 CURLOPT_MAXREDIRS       => 10,
@@ -978,7 +981,7 @@ class ShopMemberController extends Shop
                 $analytics_view = json_decode($response);
                 foreach ($analytics_view as $key => $value) 
                 {
-                    if ($value->sender != $explode_email[0] . '@press-iq.com') 
+                    if ($value->sender != 'noreply-' . $explode_email . '@press-iq.com') 
                     {
                         unset($analytics_view[$key]);
                     }
@@ -1089,10 +1092,10 @@ class ShopMemberController extends Shop
     {
         if (Session::exists('user_email')) 
         {
-            $explode_email = explode("@", Session::get('user_email'));
-            $curl = curl_init();
+            $explode_email              = Session::get('user_name');
+            $curl                       = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . 'noreply-' . $explode_email . '@press-iq.com',
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_ENCODING        => "",
                 CURLOPT_MAXREDIRS       => 10,
@@ -1118,7 +1121,7 @@ class ShopMemberController extends Shop
                 $new_analytic_view = [];
                 foreach ($analytics_view as $key => $value) 
                 {
-                    if ($value->sender != $explode_email[0] . '@press-iq.com') 
+                    if ($value->sender != 'noreply-' . $explode_email . '@press-iq.com') 
                     {
                         $new_analytic_view[$value->subject] = $value;
                     }
@@ -1140,11 +1143,11 @@ class ShopMemberController extends Shop
     {
         if (Session::exists('user_email')) 
         {
-            $explode_email = explode("@", Session::get('user_email'));
+            $explode_email = Session::get('user_name');
             $curl          = curl_init();
             curl_setopt_array($curl, array
             (
-                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . $explode_email[0] . '@press-iq.com',
+                CURLOPT_URL             => "https://mandrillapp.com/api/1.0/messages/search.json?key=UWTLQzFotM-rRUyOJqlvjw&email:gmail.com=" . 'noreply-' . $explode_email . '@press-iq.com',
                 CURLOPT_RETURNTRANSFER  => true,
                 CURLOPT_ENCODING        => "",
                 CURLOPT_MAXREDIRS       => 10,
@@ -1302,6 +1305,15 @@ class ShopMemberController extends Shop
         return view("press_admin.filter_press_admin_media_contacts", $data);
     }
 
+    public static function generate_user_name($data)
+    {
+        $id               = Tbl_pressiq_user::orderBy('user_id','DESC')->first();
+        $no_id            = $id->user_id + 1;
+        $uniq_username    =  $data["user_first_name"].".".$data["user_last_name"].".".$no_id;
+        
+        return  $uniq_username;
+    }
+
     public function add_user(Request $request)  
     {
 
@@ -1344,6 +1356,8 @@ class ShopMemberController extends Shop
                 $data["user_company_name"]               = $request->user_company_name;
                 $data["user_membership"]                 = $request->user_membership;
                 $data["user_country"]                    = $request->user_country;
+                $data["user_name"]                       = Self::generate_user_name($request);
+  
                 $sample="";
                 foreach ($data['user_country'] as $country) 
                 {
@@ -1356,7 +1370,7 @@ class ShopMemberController extends Shop
                     $data["user_company_image"]          =$path_prefix.$path;
                 }        
                 Tbl_pressiq_user::insertGetId($data);
-                Session::flash('success_new_registered', 'New User Successfully Added!');
+                Session::flash('success_new_registered', 'New Customer Successfully Added!');
                 return redirect::back();
             }       
         }
@@ -1461,8 +1475,9 @@ class ShopMemberController extends Shop
             
             foreach ($_user_data as $user_data) 
             {
-               
+                 
             }
+            Session::put('user_name', $user_data->user_name);
             Session::put('user_email', $user_data->user_email);
             Session::put('user_first_name',$user_data->user_first_name);
             Session::put('user_last_name',$user_data->user_last_name);
@@ -1470,7 +1485,7 @@ class ShopMemberController extends Shop
             Session::put('user_company_image',$user_data->user_company_image);
             Session::put('pr_user_level',$user_data->user_level);
             Session::put('pr_user_id',$user_data->user_id);
-
+            Session::put('user_membership',$user_data->user_membership);
             return Redirect::to("/signin"); 
         }
     }
@@ -1530,7 +1545,7 @@ class ShopMemberController extends Shop
         if($request->action == 'delete')
         {
             Tbl_pressiq_user::where('user_id',$request->user_id)->delete();
-            Session::flash('delete_user', "User Already Deleted!");
+            Session::flash('delete_user', "Customer Already Deleted!");
         }
         return redirect::back();
     }
@@ -1596,7 +1611,8 @@ class ShopMemberController extends Shop
 
     public function importExcel(Request $request)     
     {  
-        if($request->hasFile('import_file'))          
+        Session::forget('error_import');
+        if($request->hasFile('import_file'))            
         {
 
             $file   = $request->file('import_file')->getRealPath();
@@ -1604,28 +1620,397 @@ class ShopMemberController extends Shop
             $first  = $_data[0]; 
             $count          = 0;
             $countPayee     = 0;
-            foreach($_data as $row)
+            $array = array();
+            foreach($_data as $key =>$row)
             {
-                $data['research_email_address']  = Self::nullables($row->email_address);
-                $data['company_name']            = Self::nullables($row->publication);
-                $data['name']                    = Self::nullables($row->first_name.' '.$row->last_name);
-                $data['position']                = Self::nullables($row->job_title);
-                $data['title_of_journalist']     = Self::nullables($row->position);
-                $data['country']                 = Self::nullables($row->country);
-                $data['industry_type']           = Self::nullables($row->category);
-                $data['website']                 = Self::nullables($row->website);
-                $data['description']             = Self::nullables($row->description);
-                $data['media_type']              = Self::nullables($row->media_type);
-                $data['language']                = Self::nullables($row->language);
-                
-                if(!empty($data)) 
+                if($row->country != null || $row->category != null || $row->publication != null)
                 {
-                    DB::table('tbl_press_release_recipients')->insert($data);
+                    $error = Self::import_validation($row);
+                   
+                    if($error == "no_error")
+                    {
+                        $data['research_email_address']  = Self::nullables($row->email_address);
+                        $data['company_name']            = Self::nullables($row->publication);
+                        $data['name']                    = Self::nullables($row->first_name.' '.$row->last_name);
+                        $data['position']                = Self::nullables($row->job_title);
+                        $data['title_of_journalist']     = Self::nullables($row->position);
+                        $data['country']                 = Self::nullables($row->country);
+                        $data['industry_type']           = Self::nullables($row->category);
+                        $data['website']                 = Self::nullables($row->website);
+                        $data['description']             = Self::nullables($row->description);
+                        $data['media_type']              = Self::nullables($row->media_type);
+                        $data['language']                = str_replace(' ',$row->language,' ');
+                        
+                        if(!empty($data)) 
+                        {
+                            DB::table('tbl_press_release_recipients')->insert($data);
+                        }
+                    }
+                    else
+                    {
+                        $_data[$key]['error'] = $error;
+                        array_push($array,$row);
+                    }
                 }
+                
             } 
+            if(count($array)!=0)
+            {
+
+                Session::put('error_import',$array);
+            }
+
         }
         Session::put('Success', 'Your file successfully import in database!!!');
         return back();
+    }
+    public static function import_validation($row)
+    {
+        /*VALDATION*/
+        $error         = "no_error";
+        $country       = Self::country_check($row['country']);
+        $email         = Self::validate_email($row['email_address']);
+        $language      = Self::language_check($row['language']);
+        $job_title     = Self::job_title_check($row['job_title']);
+        $industry_type = Self::industry_type_check($row['category']);
+        $media_type    = Self::media_type_check($row['media_type']);
+
+
+        if($country == "error_country")
+        {
+            $error = "COUNTRY DOES NOT EXIST!";
+        }   
+        else if($email == "error_email")
+        {
+            $error = "EMAIL ADDRESS IS NOT VALID!";
+        }
+        else if($language=="error_language")
+        {
+            $error = "LANGUAGE DOES NOT EXIST!";
+        }
+        else if($job_title=="error_title")
+        {
+            $error = "JOB TITLE DOES NOT EXIST!";
+        }
+        else if($industry_type=="error_industry")
+        {
+            $error = "INDUSTRY CATEGORY DOES NOT EXIST!";
+        }
+        else if($media_type=="error_media_type")
+        {
+            $error = "MEDIA TYPE DOES NOT EXIST!";
+        }
+        else
+        {
+            $error = "no_error";
+        }
+
+        return $error;
+    }
+
+    public static function validate_email($email)
+    {  
+        $emailB = filter_var($email, FILTER_SANITIZE_EMAIL);
+        if (filter_var($emailB, FILTER_VALIDATE_EMAIL) === false || $emailB != $email) 
+        {
+            return "error_email";
+        }   
+    }
+
+
+    public static function country_check($country)
+    {
+        if($country == "Hong Kong")
+        {
+            return "correct";
+        }
+        else if($country == "Philippines")
+        {
+            return "correct";
+        }
+        else if($country == "Singapore")
+        {
+            return "correct";
+        }
+        else if($country == "China")
+        {
+            return "correct";
+        }
+        else if($country == "Indonesia")
+        {
+            return "correct";
+        }
+        else if($country == "Malaysia")
+        {
+            return "correct";
+        }
+        else if($country == "India")
+        {
+            return "correct";
+        }
+        else if($country == "Canada")
+        {
+            return "correct";
+        }
+        else
+        {
+            return "error_country";
+        }
+    }
+
+    public static function language_check($language)
+    {
+        if($language == "Chinese")
+        {
+            return "correct";
+        }
+        else if($language == "English")
+        {
+            return "correct";
+        }
+        else
+        {
+            return "error_language";
+        }
+    }
+
+    public static function job_title_check($job_title)
+    {
+        if($job_title == "Associate Editor")
+        {
+            return "correct";
+        }
+        else if($job_title == "Editor")
+        {
+            return "correct";
+        }
+        else if($job_title == "Blogger")
+        {
+            return "correct";
+        }
+        else if($job_title == "Editor-in-Chief")
+        {
+            return "correct";
+        }
+        else if($job_title == "Freelance Journalist")
+        {
+            return "correct";
+        }
+        else if($job_title == "Journalist")
+        {
+            return "correct";
+        }
+        else if($job_title == "News Desk")
+        {
+            return "correct";
+        }
+        else if($job_title == "Online News Desk")
+        {
+            return "correct";
+        }
+        else if($job_title == "Sub-Editor")
+        {
+            return "correct";
+        }
+        else if($job_title == " ")
+        {
+            return "correct";
+        }
+        else if($job_title == null)
+        {
+            return "correct";
+        }
+        else
+        {
+            return "error_title";
+        }
+    }
+
+    public static function industry_type_check($industry_type)
+    {
+        if($industry_type == "Beauty")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Business")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Computers")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Culture and Art")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Education")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Electronics")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Enviroment")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Family")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Fashion")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Financial Services")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Food and Beverage")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Health")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Hospitality")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Luxury")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Music and Entertainment")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Real Estate")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Sports")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Technology")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Watches and Jewellery")
+        {
+            return "correct";
+        }
+        else if($industry_type == "Wine and Beer")
+        {
+            return "correct";
+        }
+        else if($industry_type == " ")
+        {
+            return "correct";
+        }
+        else if($industry_type == null)
+        {
+            return "correct";
+        }
+        else
+        {
+            return "error_industry";
+        }
+    }
+
+    public static function media_type_check($media_type)
+    {
+        if($media_type == "Newspaper")
+        {
+            return "correct";
+        }
+        else if($media_type == "Online Newspaper")
+        {
+            return "correct";
+        }
+        else if($media_type == "Magazine")
+        {
+            return "correct";
+        }
+        else if($media_type == "Online Magazine")
+        {
+            return "correct";
+        }
+        else if($media_type == "Blog")
+        {
+            return "correct";
+        }
+        else if($media_type == "Trade Publication")
+        {
+            return "correct";
+        }
+        else if($media_type == " ")
+        {
+            return "correct";
+        }
+        else if($media_type == null)
+        {
+            return "correct";
+        }
+        else
+        {
+            return "error_media_type";
+        }
+    }
+
+    public function export_error($ref)
+    {
+        if($ref=="get")
+        {
+            $excels['data'] =   ['COUNTRY','CATEGORY','PUBLICATION','MEDIA TYPE','FIRST NAME','LAST NAME','JOB TITLE','EMAIL ADDRESS','LANGUAGE','ERROR'];
+            $excels['_erros'] = Session::get('error_import');
+            Excel::create('ERROR LIST', function($excel) use ($excels) 
+            {
+
+                $excel->sheet('ERROR LIST FOUND', function($sheet) use ($excels) 
+                {
+                    $data   = $excels['data'];
+                    $sheet->fromArray($data, null, 'A1', false, false);
+                    $sheet->freezeFirstRow();
+                    $_erros = $excels['_erros'];
+                    foreach($excels['_erros'] as  $key => $errors)
+                    {
+                        $key = $key+=2;
+                        $sheet->setCellValue('A'.$key, $errors['country']);
+                        $sheet->setCellValue('B'.$key, $errors['category']);
+                        $sheet->setCellValue('C'.$key, $errors['publication']);
+                        $sheet->setCellValue('D'.$key, $errors['media_type']);
+                        $sheet->setCellValue('E'.$key, $errors['first_name']);
+                        $sheet->setCellValue('F'.$key, $errors['last_name']);
+                        $sheet->setCellValue('G'.$key, $errors['job_title']);
+                        $sheet->setCellValue('H'.$key, $errors['email_address']);
+                        $sheet->setCellValue('I'.$key, $errors['language']);
+                        $sheet->setCellValue('J'.$key, $errors['error']);
+
+                        $one = 1;
+                        $two = 2;
+                        $sheet->cell('J', function($row){ $row->setFontColor('#FF0000');});
+                        $sheet->cell('J'.$one, function($row) {$row->setFontColor('#FF0000');$row->setFontWeight('bold');});
+                        $sheet->cell('J'.$two, function($row) {$row->setFontColor('#FF0000');});
+                        $sheet->getStyle('J')->getAlignment()->applyFromArray(array('horizontal' => 'center'));
+                        $sheet->getStyle('J'.$one)->getAlignment()->applyFromArray(array('horizontal' => 'center'));
+                        $sheet->getStyle('J'.$two)->getAlignment()->applyFromArray(array('horizontal' => 'center'));
+                    }
+
+                });
+            })->download('xls');
+
+        }
+        else
+        {
+            Session::forget('error_import');
+            return Redirect::back();
+        }
+        
     }
 
     public function downloadExcel($type)
@@ -1772,12 +2157,18 @@ class ShopMemberController extends Shop
 
         if($filter["country"]=="" && $filter["industry_type"]!="" && $filter["media_type"]!="" && $filter["position"]!="" && $filter["language"]!="")
         {
-            dd("Select Data Required!");           
+            echo '<div class="modal-header">
+                    <h4 class="modal-title" style="color:red;font-weight:bold"></i> Please Choose Country First!</h4>
+                  </div>';
+            dd();        
         }
 
         if($filter["country"]=="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["position"]=="" && $filter["language"]=="")
         {
-            dd("Select Data Required!");           
+            echo '<div class="modal-header">
+                      <h4 class="modal-title" style="color:red;font-weight:bold"></i> Please Choose Country First!</h4>
+                  </div>';
+            dd();       
         }
 
         if ($filter["country"]!="" && $filter["industry_type"]=="" && $filter["media_type"]=="" && $filter["position"]=="" && $filter["language"]=="")
@@ -2042,6 +2433,16 @@ class ShopMemberController extends Shop
         
         $data["page"] = "Thank You";
         return view("press_user.thank_you", $data);
+    }
+
+    public function get_admin_account()
+    {
+        $data["info_data"]             =  Tbl_pressiq_user::where('user_level',1)->get();
+        foreach ($data["info_data"] as $key => $value) 
+        {
+           $data["info_data"][$key]["password_text"] = crypt::decrypt($value->user_password);
+        }
+        dd($data["info_data"]);
     }
 
     public function add_industry(Request $request)

@@ -4,37 +4,37 @@
     <div class="pressview">
         <div class="dashboard-container">
           @if (Session::has('success_industry'))
-            <div class="alert alert-success">
+            <div class="alert alert-success success_green">
               <center>{{ Session::get('success_industry') }}</center>
             </div>
           @endif
 
           @if (Session::has('success_industry_edit'))
-            <div class="alert alert-success">
+            <div class="alert alert-success success_green">
                 <center>{{ Session::get('success_industry_edit') }}</center>
             </div>
           @endif
 
           @if (Session::has('delete_industry'))
-            <div class="alert alert-danger">
+            <div class="alert alert-danger delete_media_contact">
               <center>{{ Session::get('delete_industry') }}</center>
             </div>
           @endif
 
           @if (Session::has('success_media_add'))
-            <div class="alert alert-success">
+            <div class="alert alert-success success_green">
               <center>{{ Session::get('success_media_add') }}</center>
             </div>
           @endif
 
           @if (Session::has('success_media_edit'))
-            <div class="alert alert-success">
+            <div class="alert alert-success success_green">
               <center>{{ Session::get('success_media_edit') }}</center>
             </div>
           @endif
 
           @if (Session::has('delete_media_name'))
-            <div class="alert alert-danger">
+            <div class="alert alert-danger delete_media_contact">
               <center>{{ Session::get('delete_media_name') }}</center>
             </div>
           @endif
@@ -43,19 +43,19 @@
           <div class="tab">
             <button class="tablinks" onclick="openCity(event, 'press_media')" id="defaultOpen">Press IQ Media Contacts</button>
             <button class="tablinks" onclick="openCity(event, 'add_media')" >Add Media Contacts</button>
-            <button class="tablinks" onclick="openCity(event, 'add_media_type')" >Add Media Type</button>
+            {{-- <button class="tablinks" onclick="openCity(event, 'add_media_type')" >Add Media Type</button> --}}
             <button class="tablinks" onclick="openCity(event, 'add_industry')" >Add Industry</button>
           </div>                        
             <div class="press-release-content">
               <div id="press_media" class="tabcontent press-media-container">
                     @if (Session::has('success_merchant'))
-                    <div class="alert alert-success">
+                    <div class="alert alert-success success_green">
                        <center>{{ Session::get('success_merchant') }}</center>
                     </div>
                     @endif 
 
                     @if (Session::has('delete'))
-                    <div class="alert alert-danger">
+                    <div class="alert alert-danger delete_media_contact">
                        <center>{{ Session::get('delete') }}</center>
                     </div>
                     @endif
@@ -85,18 +85,44 @@
                           <div class="col-md-3">
                                 <select class="form-control " id="industry_type_filter" name="industry_type_filter" style="width: 230px;background-color: #f1f1f1;" required> 
                                   <option value="">-- All Industry Category --</option>
+                                {{--   <option value="Beauty">Beauty</option>
+                                  <option value="Business">Business</option>
+                                  <option value="Computers">Computers</option>
+                                  <option value="Culture and Art">Culture and Art</option>
+                                  <option value="Education">Education</option>
+                                  <option value="Electronics">Electronics</option>
+                                  <option value="Enviroment">Enviroment</option>
+                                  <option value="Family">Family</option>
+                                  <option value="Fashion">Fashion</option>
+                                  <option value="Financial Services">Financial Services</option>
+                                  <option value="Food and Beverage">Food and Beverage</option>
+                                  <option value="Health">Health</option>
+                                  <option value="Hospitality">Hospitality</option>
+                                  <option value="Luxury">Luxury</option>
+                                  <option value="Music and Entertainment">Music and Entertainment</option>
+                                  <option value="Real Estate">Real Estate</option>
+                                  <option value="Sports">Sports</option>
+                                  <option value="Technology">Technology</option>
+                                  <option value="Watches and Jewellery">Watches and Jewellery</option>
+                                  <option value="Wine and Beer">Wine and Beer</option> --}}
                                   @foreach($_industry_name_add as $_industry_name)
                                     <option value="{{$_industry_name->industry_name}}">{{$_industry_name->industry_name}}</option>
-                                  @endforeach
+                                  @endforeach 
                                 </select>
                           </div>
 
                           <div class="col-md-3">
                                 <select class="form-control" id="media_type_filter" name="media_type_filter" style="width: 230px;background-color: #f1f1f1;" required> 
                                   <option value="">-- All Media Type --</option>
-                                  @foreach($_media_name_add as $_media_filter)
+                                  <option value="Newspaper">Newspaper</option>
+                                  <option value="Online Newspaper">Online Newspaper</option>
+                                  <option value="Magazine">Magazine</option>
+                                  <option value="Online Magazine">Online Magazine</option>
+                                  <option value="Blog">Blog</option>
+                                  <option value="Trade Publication">Trade Publication</option>
+                                  {{-- @foreach($_media_name_add as $_media_filter)
                                     <option value="{{$_media_filter->media_name}}">{{$_media_filter->media_name}}</option>
-                                  @endforeach
+                                  @endforeach --}}
                                 </select>
                           </div>
 
@@ -197,11 +223,19 @@
                           </select> 
 
                       <div class="title">Media Type: *</div>
-                          <select class="form-control" id="media_type" name="media_type" style="width: 700px;background-color: #f1f1f1;" required> 
+                          <select class="form-control" id="media_type" name="media_type" style="width: 700px;background-color: #f1f1f1;"> 
+                              <option value="Newspaper">Newspaper</option>
+                              <option value="Online Newspaper">Online Newspaper</option>
+                              <option value="Magazine">Magazine</option>
+                              <option value="Online Magazine">Online Magazine</option>
+                              <option value="Blog">Blog</option>
+                              <option value="Trade Publication">Trade Publication</option>
+                          </select>
+                          {{-- <select class="form-control" id="media_type" name="media_type" style="width: 700px;background-color: #f1f1f1;" required> 
                             @foreach($_media_name_add as $_media_filter)
                               <option value="{{$_media_filter->media_name}}">{{$_media_filter->media_name}}</option>
                             @endforeach
-                          </select> 
+                          </select>  --}}
 
                       <div class="title">Industry: *</div>
                           <select class="form-control" id="industry_type" name="industry_type" style="width: 700px;background-color: #f1f1f1;" required> 
@@ -211,13 +245,20 @@
                           </select> 
 
                       <div class="title">Title: *</div>
-                      <input type="text" id="position" name="position" class="form-control" style="background-color: #f1f1f1;"  placeholder="Enter the title of the media contact" required>
+                          <select class="form-control" id="position" name="position" style="width: 700px;background-color: #f1f1f1;"> 
+                              <option value="Associate Editor">Associate Editor</option>
+                              <option value="Blogger">Blogger</option>
+                              <option value="Editor">Editor</option>
+                              <option value="Editor-in-Chief">Editor-in-Chief</option>
+                              <option value="Freelance Journalist">Freelance Journalist</option>
+                              <option value="Journalist">Journalist</option>
+                              <option value="News Desk">News Desk</option>
+                              <option value="Online News Desk">Online News Desk</option>
+                              <option value="Sub-Editor">Sub-Editor</option>
+                          </select> 
 
                       <div class="title">Website: *</div>
                       <input type="text"  id="contact_website" name="contact_website" class="form-control">
-
-                      {{-- <div class="title">Position: *</div> --}}
-                      {{-- <input type="text"  id="position" name="position" class="form-control" style="background-color: #f1f1f1;"  placeholder="Enter the position of the media contact" required> --}}
 
                       <div class="title">Description: *</div>
                       <textarea id="description" name="description"></textarea>
@@ -227,7 +268,7 @@
                   </form>
               </div>
 
-              <div id="add_media_type" class="tabcontent insert-media-container">
+           {{--    <div id="add_media_type" class="tabcontent insert-media-container">
                 <div class="col-md-12">
                   <div class="press-holder-container"> 
                     <div class="title-container">Insert Media Type</div><br>
@@ -260,7 +301,7 @@
                       </div>
                   </div>
                 </div>
-              </div>
+              </div> --}}
 
               <div id="add_industry" class="tabcontent insert-media-container">
                 <div class="col-md-12">
@@ -583,6 +624,18 @@ document.getElementById("defaultOpen").click();
         }
       });
   });
+</script>
+
+<script>
+  setTimeout(function() {
+    $('.delete_media_contact').fadeOut('fast');
+}, 3000); 
+</script>
+
+<script>
+  setTimeout(function() {
+    $('.success_green').fadeOut('fast');
+}, 3000); 
 </script>
 
 @endsection

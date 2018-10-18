@@ -4,7 +4,7 @@
      <tr>
          <th style="text-align: center;width: 5%;">ACTION</th>
          <th style="text-align: center;width: 25%;">COMPANY</th>
-         <th style="text-align: center;width: 25%;">RECIPIENT</th>
+         <th class="hide_name" style="text-align: center;width: 25%;">RECIPIENT</th>
          <th style="text-align: center;width: 25%;">POSITION</th>   
          <th style="display:none;">Email</th>   
      </tr>
@@ -15,7 +15,7 @@
          <input type="hidden" id="recipient_id" name="recipient_id[]" value="{{$recipients->recipient_id}}">
          <td style="text-align: center;"><input type="checkbox" class="recipient_checkbox" name="checkbox" value="{{$recipients->recipient_id}}" ></td>
          <td style="text-align: center;">{{$recipients->company_name}}</td>
-         <td class="rec_name_{{$recipients->recipient_id}}" style="text-align: center;">{{$recipients->name}}</td>
+         <td class="rec_name_{{$recipients->recipient_id}} hide_name" style="text-align: center;">{{$recipients->name}}</td>
          <td style="text-align: center;">{{$recipients->position}}</td>
          <td class="rec_email_{{$recipients->recipient_id}}" style="display:none;">{{$recipients->research_email_address}}</td>
 
@@ -36,5 +36,34 @@
   });
 </script>
 
+<script type="text/javascript">
+  
+$(document).ready(function() 
+{ 
+  var hidden_number = $('#user_membership_value').val();
+  var number_one    = '1';
+  var number_five   = '5';
+  var number_three  = '3';
 
+   if (hidden_number == number_one) 
+   {
+     $(".hide_name").hide();
+   } 
+   
+   else if (hidden_number == number_five) 
+   {
+     $(".hide_name").hide();
+   } 
+   
+   else if  (hidden_number == number_three) 
+   {
+     $(".hide_name").hide();
+   } 
+   else 
+   {
+      $(".hide_name").show();
+   }  
+});
+</script>
 
+ 

@@ -1,4 +1,32 @@
 
+$(document).ready(function() 
+{ 
+  var hidden_number = $('#user_membership_value').val();
+  var number_one    = '1';
+  var number_five   = '5';
+  var number_three  = '3';
+
+   if (hidden_number == number_one) 
+   {
+     $(".hide_name").hide();
+   } 
+   
+   else if (hidden_number == number_five) 
+   {
+     $(".hide_name").hide();
+   } 
+   
+   else if  (hidden_number == number_three) 
+   {
+     $(".hide_name").hide();
+   } 
+   else 
+   {
+      $(".hide_name").show();
+   }  
+});
+ 
+
 $(document).ready(function () 
 { 
 	$(document).on('click',"#select_all",function()

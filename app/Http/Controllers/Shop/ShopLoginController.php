@@ -53,6 +53,7 @@ class ShopLoginController extends Shop
                         /* CHECK IF PASSWORD IS CORRECT */
                         if($user_password == $password)
                         {
+                            Session::put('user_name', $user_data->user_name);
                             Session::put('user_email', $user_data->user_email);
                             Session::put('user_first_name',$user_data->user_first_name);
                             Session::put('user_last_name',$user_data->user_last_name);
@@ -60,6 +61,7 @@ class ShopLoginController extends Shop
                             Session::put('user_company_image',$user_data->user_company_image);
                             Session::put('pr_user_level',$user_data->user_level);
                             Session::put('pr_user_id',$user_data->user_id);
+                            Session::put('user_membership',$user_data->user_membership);
                             
                             $level=session('pr_user_level');
                            if($level!="1")

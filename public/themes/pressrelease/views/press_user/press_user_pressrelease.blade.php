@@ -6,7 +6,7 @@
    <div class="pressview">
       <div class="dashboard-container">
           @if (session('message'))
-            <div class="alert alert-danger">
+            <div class="alert alert-danger delete_red">
                 {{ session('message') }}
             </div>
           @endif
@@ -208,6 +208,8 @@
                   <span class="result-container" style="font-size:15px"><span id="results_number_sendto" style="font-size:15px"></span></span>
                   <a href="javascript:" id="pop_chosen_recipient_btn">  VIEW</a>
 
+                  <input type="hidden" name="user_name" value="{{session('user_name')}}">
+
                   <div class="button-container">
                     <button class="tablinks" type="button" onclick="openCity(event, 'choose_recipient')" id="defaultOpen">&laquo; Back</button>
                     <button class="preview-button" type="button"  id="prev_btn_send">Preview</button>
@@ -225,15 +227,14 @@
   <div class="modal" id="previewPopup" name="previewPopup" role="dialog">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Preview</h4>
-        </div>
-           
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Preview</h4>
+      </div>  
         <div class="modal-body">
           <div class="row-no-padding clearfix">
             <div class="col-md-9">
-              <div id="preview_headline"></div>
+              <div id="preview_headline" style="color:black;"></div>
             </div>
             <div class="col-md-3">
               <div class="logo-holder">
@@ -257,6 +258,7 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
+        </div>
       </div>
     </div>
   </div>
@@ -578,4 +580,12 @@ toolbar: 'undo redo | fontsizeselect | bold italic | alignleft aligncenter align
     action_load_link_to_modal('/pressuser/choose_recipient?'+data, 'md');
 });
 </script>
+
+<script>
+  setTimeout(function() 
+  {
+    $('.delete_red').fadeOut('fast');
+  }, 2000); 
+</script>
+
 @endsection

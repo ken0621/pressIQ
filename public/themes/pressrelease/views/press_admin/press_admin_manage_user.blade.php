@@ -5,39 +5,39 @@
         <div class="dashboard-container">
         <div class="media-container">
            @if (Session::has('success_admin'))
-              <div class="alert alert-success">
+              <div class="alert alert-success success_green">
                  <center>{{ Session::get('success_admin') }}</center>
               </div>
             @endif  
             @if (Session::has('success_user'))
-              <div class="alert alert-success">
+              <div class="alert alert-success success_green">
                  <center>{{ Session::get('success_user') }}</center>
               </div>
             @endif  
             @if (Session::has('delete_admin'))
-              <div class="alert alert-danger">
+              <div class="alert alert-danger delete_red">
                  <center>{{ Session::get('delete_admin') }}</center>
               </div>
             @endif
             @if (Session::has('delete_user'))
-              <div class="alert alert-danger">
+              <div class="alert alert-danger delete_red">
                  <center>{{ Session::get('delete_user') }}</center>
               </div>
             @endif 
              @if (Session::has('success_new_registered'))
-              <div class="alert alert-success">
+              <div class="alert alert-success success_green">
                  <center>{{ Session::get('success_new_registered') }}</center>
               </div>
             @endif   
           <div class="tab">
-            <button class="tablinks" onclick="openCity(event, 'new_user_account')" id="defaultOpen">Add User Account</button>
-            <button class="tablinks"  onclick="openCity(event, 'user_account')" >Users Account</button>
+            <button class="tablinks" onclick="openCity(event, 'new_user_account')" id="defaultOpen">Add Customer Account</button>
+            <button class="tablinks"  onclick="openCity(event, 'user_account')" >Customer Account</button>
             <button class="tablinks"  onclick="openCity(event, 'admin_account')" >Admin Account</button>
           </div>    
 
         <div class="press-release-content">
            <div id="new_user_account" class="tabcontent user-media-container">
-               <div class="title-container">Registration for New User</div>
+               <div class="title-container">Registration for New Customer</div>
                @if(session()->has('message'))
                   <div class="details">
                   <span style="color: red;">
@@ -49,7 +49,7 @@
                 {{csrf_field()}}
                 <div class="register-form" >
                   <select class="form-control" name="user_membership" id="user_membership" style="width: 740px">
-                    <option selected>--Costing Option--</option>
+                     <option selected>--Costing Option--</option>
                      <option value="1">1 Time sending</option>
                      <option value="3">3 Times sending</option>
                      <option value="5">5 Times sending</option>
@@ -101,53 +101,33 @@
             </div>
 
             <div id="user_account" class="tabcontent press-media-container">
-             {{--  <div class="user-update-container">
-                @if(session::has('edit_user'))
-                 @foreach($_user_edit as $_user_edits)
-                  <div class="title-container">UPDATE USER ACCOUNT</div>
-                    <form method="post" action="">
-                      {{csrf_field()}}
-                      <div class="title">First Name:</div>
-                    <input type="text" id="first_name" name="first_name" class="form-control" value="{{$_user_edits->user_first_name}}" autofocus>
-
-                      <div class="title">Last Name:</div>
-                      <input type="text"  id="last_name" name="last_name" class="form-control" value="{{$_user_edits->user_last_name}}">
-
-                      <div class="title">Email:</div>
-                      <input type="text" id="email" name="email" class="form-control" value="{{$_user_edits->user_email}}" readonly>
-
-                      <div class="title">Company Name:</div>
-                      <input type="text" id="company_name" name="company_name" class="form-control" value="{{$_user_edits->user_company_name}}">
-
-                      <div class="button-container">
-                          <button type="submit" id="submit_button" name="submit_button" formaction="/pressadmin/manage_user_edit">Submit</button>
-                      </div>
-                  </form>
-                 @endforeach
-                @endif
-              </div> --}}
-
               <div class="user-container"><br>
                   <div class="search-container pull-right">
                       <input placeholder="Search" type="text"  name="search_user" id="search_user">
                       <button  type="button" name="search_button_user" id="search_button_user" class="btn btn-success">Search</button>
                   </div>
-                  <div class="title">User Account</div>
+                  <div class="title">Customer Account</div>
                   <table  class="table table-bordered" id="showHere_table_search">
                      <tr>
-                         <th style="width: 15%;">First Name</th>
-                         <th style="width: 15%;">Last Name</th>
+                         <th style="width: 15%;">Name</th>
                          <th style="width: 15%;">Email</th>
                          <th style="width: 15%;">Company Name</th>
+                         <th style="width: 15%;">Membership Plan</th>
                          <th style="width: 15%;">Date Started</th>
                          <th style="width: 20%;">Action</th>
                      </tr>
                         @foreach($_user as $_user_account)
                         <tr>
-                           <td>{{$_user_account->user_first_name}}</td>
-                           <td>{{$_user_account->user_last_name}}</td>
+                           <td>{{$_user_account->user_first_name}} {{$_user_account->user_last_name}}</td>
                            <td>{{$_user_account->user_email}}</td>
-                           <td>{{$_user_account->user_company_name}}</td>
+                           <td>{{$_user_account->user_company_name}}</td> 
+                           <td>
+                            {{($_user_account['user_membership']=="1") ? '1 Time Sending' : ''}}
+                            {{($_user_account['user_membership']=="3") ? '3 Times Sending' : ''}}
+                            {{($_user_account['user_membership']=="5") ? '5 Times Sending' : ''}}
+                            {{($_user_account['user_membership']=="30") ? '6 Months Contract' : ''}}
+                            {{($_user_account['user_membership']=="60") ? '12 Months Contract' : ''}}
+                           </td>
                            <td>{{date("F d, Y - H:i:s", strtotime($_user_account->user_date_created))}}</td>
                            <td>
                             <button type="button"  class="btn btn-warning center pop_user_btn" data-id="{{$_user_account->user_id}}">
@@ -166,7 +146,7 @@
                         </tr>
                         @endforeach
                   </table>
-                </div>    
+              </div>    
             </div>
 
             <div id="admin_account" class="tabcontent add-media-container"><br>
@@ -449,6 +429,20 @@ document.getElementById("defaultOpen").click();
         }
       });
   });
+</script>
+
+<script>
+  setTimeout(function() 
+  {
+    $('.success_green').fadeOut('fast');
+  }, 2000); 
+</script>
+
+<script>
+  setTimeout(function() 
+  {
+    $('.delete_red').fadeOut('fast');
+  }, 2000); 
 </script>
 
 

@@ -5,7 +5,7 @@
 		<div class="container">
 			<div class="row clearfix">	
 				@if (session('forgot_password'))
-                    <div class="alert alert-success">
+                    <div class="alert alert-success success_green">
                         {{ session('forgot_password') }}
                     </div>
             	@endif
@@ -45,6 +45,12 @@
   gtag('js', new Date());
 
   gtag('config', 'UA-113245030-1');
+</script>
+
+<script>
+  setTimeout(function() {
+    $('.success_green').fadeOut('fast');
+}, 3000); 
 </script>
 
 @endsection

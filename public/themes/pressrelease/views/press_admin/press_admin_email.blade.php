@@ -4,7 +4,7 @@
     <div class="pressview">
         <div class="press-container">
               @if (Session::has('delete_email'))
-              <div class="alert alert-danger">
+              <div class="alert alert-danger delete_red">
                  <center>{{ Session::get('delete_email') }}</center>
               </div>
               @endif 
@@ -79,6 +79,13 @@
         }
       });
   });
+</script>
+
+<script>
+  setTimeout(function() 
+  {
+    $('.delete_red').fadeOut('fast');
+  }, 2000); 
 </script>
 
 @endsection

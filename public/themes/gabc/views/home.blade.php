@@ -106,7 +106,7 @@
                         <div class="image-container">
                             <img src="/themes/{{ $shop_theme }}/img/founder_3.png">
                             <div class="flag-badge">
-                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_japan.png">
                             </div>
                         </div>
                         <div class="info__name">Kanji Sakae</div>
@@ -130,7 +130,7 @@
                         <div class="image-container">
                             <img src="/themes/{{ $shop_theme }}/img/founder_5.png">
                             <div class="flag-badge">
-                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_mal.png">
                             </div>
                         </div>
                         <div class="info__name">Effendy Zulkifly</div>
@@ -142,7 +142,7 @@
                         <div class="image-container">
                             <img src="/themes/{{ $shop_theme }}/img/founder_6.png">
                             <div class="flag-badge">
-                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_canada.png">
                             </div>
                         </div>
                         <div class="info__name">Oliver Koncz</div>
@@ -179,67 +179,628 @@
                 <div class="page__content--grid read-more-wrap">
                     <div class="page__content--grid__item">
                         <div class="page__content--grid__item__child-1">
-                            <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/1.jpg">
                         </div>
                         <div class="page__content--grid__item__child-2">
-                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-name">Ahmad Piraiee</div>
                             <div class="info-bottom">
-                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flag_dummy.jpg"></div><span>City, Country</span>
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/1.png"></div><span>Poland</span>
                             </div>
                         </div>  
                     </div>
                     <div class="page__content--grid__item">
                         <div class="page__content--grid__item__child-1">
-                            <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/3.jpg">
                         </div>
                         <div class="page__content--grid__item__child-2">
                             <div class="info-name">Lorem Ipsum Dolor</div>
                             <div class="info-bottom">
-                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flag_dummy.jpg"></div><span>City, Country</span>
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/2.png"></div><span>City, Country</span>
                             </div>
                         </div>  
                     </div>
                     <div class="page__content--grid__item">
                         <div class="page__content--grid__item__child-1">
-                            <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/4.jpg">
                         </div>
                         <div class="page__content--grid__item__child-2">
                             <div class="info-name">Lorem Ipsum Dolor</div>
                             <div class="info-bottom">
-                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flag_dummy.jpg"></div><span>City, Country</span>
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/3.png"></div><span>City, Country</span>
                             </div>
                         </div>  
                     </div>
                     <div class="page__content--grid__item">
                         <div class="page__content--grid__item__child-1">
-                            <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/5.jpg">
                         </div>
                         <div class="page__content--grid__item__child-2">
                             <div class="info-name">Lorem Ipsum Dolor</div>
                             <div class="info-bottom">
-                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flag_dummy.jpg"></div><span>City, Country</span>
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/4.png"></div><span>City, Country</span>
                             </div>
                         </div>  
                     </div>
                     <div class="page__content--grid__item">
                         <div class="page__content--grid__item__child-1">
-                            <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/6.jpg">
                         </div>
                         <div class="page__content--grid__item__child-2">
                             <div class="info-name">Lorem Ipsum Dolor</div>
                             <div class="info-bottom">
-                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flag_dummy.jpg"></div><span>City, Country</span>
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/5.png"></div><span>City, Country</span>
                             </div>
                         </div>  
                     </div>
                     <div class="page__content--grid__item">
                         <div class="page__content--grid__item__child-1">
-                            <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/7.jpg">
                         </div>
                         <div class="page__content--grid__item__child-2">
                             <div class="info-name">Lorem Ipsum Dolor</div>
                             <div class="info-bottom">
-                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flag_dummy.jpg"></div><span>City, Country</span>
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/6.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/9.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/7.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/10.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/8.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/11.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/9.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/12.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/10.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/13.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/11.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/14.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/12.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/15.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/13.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/16.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/14.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/17.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/15.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/18.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/16.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/19.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/17.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/20.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/18.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/21.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/19.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/22.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/20.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/23.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/21.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/24.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/22.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/25.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/23.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/26.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/24.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/27.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/25.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/28.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/26.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/29.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/27.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/30.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/28.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/31.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/29.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/32.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/30.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/33.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/31.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/34.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/32.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/35.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/33.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/36.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/34.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/37.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/35.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/38.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/36.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/39.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/37.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/40.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/38.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/41.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/39.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/42.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/40.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/43.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/41.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/44.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/42.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/45.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/43.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/46.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/44.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/47.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/45.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/48.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/46.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/49.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/47.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/50.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/48.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/51.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/49.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/52.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/50.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/53.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/51.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/54.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/52.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/55.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/53.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/56.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/54.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/57.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/55.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/58.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/56.png"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidates/59.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/57.png"></div><span>City, Country</span>
                             </div>
                         </div>  
                     </div>

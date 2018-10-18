@@ -287,8 +287,8 @@ h3
 		.page__content--grid
 		{
 			display: grid;
-			grid-template-columns: auto auto auto;
-			grid-gap: 20px;
+			grid-template-columns: 1fr 1fr 1fr;
+			// grid-gap: 20px;
 			padding-bottom: 20px;
 
 			@media screen and (max-width: 600px)
@@ -311,7 +311,7 @@ h3
 
 				.page__content--grid__item__child-1
 				{
-					flex: 1 50px;
+					flex: 1 25px;
 					img 
 					{
 						width: 100%;
@@ -321,7 +321,7 @@ h3
 				
 				.page__content--grid__item__child-2
 				{
-					flex: 3 50px;
+					flex: 3 25px;
 
 					@media screen and (max-width: 600px)
 					{

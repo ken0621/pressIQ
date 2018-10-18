@@ -64,15 +64,17 @@
                     </div>
                     <div class="menu-mobile-nav">
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="#home">ABOUT</a></span>
+                        <span><a class="smoth-scroll" href="#home">HOME</a></span>
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="#services">FOUNDERS</a></span>
+                        <span><a class="smoth-scroll" href="#about">ABOUT</a></span>
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="#aboutus">PARTNERS</a></span>
+                        <span><a class="smoth-scroll" href="#founders">FOUNDERS</a></span>
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="#expertise">CANDIDATES</a></span>
+                        <span><a class="smoth-scroll" href="#partners">PARTNERS</a></span>
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="#careers">ADVISORY</a></span>
+                        <span><a class="smoth-scroll" href="#candidates">CANDIDATES</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="#advisory">ADVISORY</a></span>
                         <div class="border-container"></div>
                     </div>
                 </div>
@@ -80,11 +82,12 @@
                 <!-- NAVIGATION -->
                     <nav class="navirino">
                         <ul>
-                            <li><a class="smoth-scroll" href="#home">ABOUT</a></li>
-                            <li><a class="smoth-scroll" href="#services">FOUNDERS</a></li>
-                            <li><a class="smoth-scroll" href="#aboutus">PARTNERS</a></li>
-                            <li><a class="smoth-scroll" href="#expertise">CANDIDATES</a></li>
-                            <li><a class="smoth-scroll" href="#careers">ADVISORY</a></li>
+                            <li><a class="smoth-scroll" href="#home">HOME</a></li>
+                            <li><a class="smoth-scroll" href="#about">ABOUT</a></li>
+                            <li><a class="smoth-scroll" href="#founders">FOUNDERS</a></li>
+                            <li><a class="smoth-scroll" href="#partners">PARTNERS</a></li>
+                            <li><a class="smoth-scroll" href="#candidates">CANDIDATES</a></li>
+                            <li><a class="smoth-scroll" href="#advisory">ADVISORY</a></li>
                         </ul>
                     </nav>
                 </div>

@@ -2,7 +2,7 @@
 @section("content")
 <div class="content">
     <!-- Media Slider -->
-    <section class="content__section-1">
+    <section id="home" class="content__section-1">
         <div class="container">
             <h1>Global Association for<br>Blockchain and Cryptocurrency</h1>
             <div class="content__section-1__img-container">
@@ -12,7 +12,7 @@
         </div>
     </section>
     <!-- About -->
-    <section class="content__section-2">
+    <section id="about" class="content__section-2">
         <div class="container">
             <div class="content__section-2__title">
                 <h2>About GABC</h2>
@@ -70,7 +70,7 @@
         </div>
     </section>
     <!-- Founders -->
-    <section class="content__section-3">
+    <section id="founders" class="content__section-3">
         <div class="container">
             <div class="content__section-3__title">
                 <h2>Founders</h2>
@@ -155,7 +155,7 @@
         </div>
     </section>
     <!-- Business Partners -->           
-    <section class="content__section-4">
+    <section id="partners" class="content__section-4">
         <div class="container">
             <div class="content__section-4__title">
                 <h2>Business Partners</h2>
@@ -167,14 +167,16 @@
         </div>
     </section>
 
-    <section class="content__section-5">
+    <section id="candidates" class="content__section-5">
         <div class="container">
             <div class="content__section-5__title">
                 <h2>Candidates for GABC Position</h2>
             </div>
             <div class="title-border"></div>
             <div class="page__content">
-                <div class="page__content--grid">
+                <input type="checkbox" class="read-more-state" id="post-2" />
+
+                <div class="page__content--grid read-more-wrap">
                     <div class="page__content--grid__item">
                         <div class="page__content--grid__item__child-1">
                             <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
@@ -182,7 +184,7 @@
                         <div class="page__content--grid__item__child-2">
                             <div class="info-name">Lorem Ipsum Dolor</div>
                             <div class="info-bottom">
-                                <div class="flag"></div><span>City, Country</span>
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flag_dummy.jpg"></div><span>City, Country</span>
                             </div>
                         </div>  
                     </div>
@@ -193,7 +195,7 @@
                         <div class="page__content--grid__item__child-2">
                             <div class="info-name">Lorem Ipsum Dolor</div>
                             <div class="info-bottom">
-                                <div class="flag"></div><span>City, Country</span>
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flag_dummy.jpg"></div><span>City, Country</span>
                             </div>
                         </div>  
                     </div>
@@ -204,11 +206,46 @@
                         <div class="page__content--grid__item__child-2">
                             <div class="info-name">Lorem Ipsum Dolor</div>
                             <div class="info-bottom">
-                                <div class="flag"></div><span>City, Country</span>
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flag_dummy.jpg"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flag_dummy.jpg"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flag_dummy.jpg"></div><span>City, Country</span>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="page__content--grid__item read-more-target">
+                        <div class="page__content--grid__item__child-1">
+                            <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
+                        </div>
+                        <div class="page__content--grid__item__child-2">
+                            <div class="info-name">Lorem Ipsum Dolor</div>
+                            <div class="info-bottom">
+                                <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flag_dummy.jpg"></div><span>City, Country</span>
                             </div>
                         </div>  
                     </div>
                 </div>
+
+                <label for="post-2" class="read-more-trigger"></label>
             </div>
         </div>
     </section> 

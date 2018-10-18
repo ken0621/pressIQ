@@ -49,9 +49,7 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-2">
-
                     <div id="nav_list" style="display: none;"><i class="fa fa-bars hamburger" onclick="on()"></i></div>
-
                     <div class="image-logo-holder">
                         <a class="clearfix" href="/">
                             <img src="/themes/{{ $shop_theme }}/img/header-logo.svg">
@@ -121,10 +119,10 @@
                                 <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_fb.png"></div>
                                 <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_twitter.png"></div>
                                 <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_in.png"></div>
-                                <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_ig.png"></div>
+                                {{-- <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_ig.png"></div>
                                 <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_ytube.png"></div>
                                 <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_skype.png"></div>
-                                <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_gplus.png"></div>
+                                <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_gplus.png"></div> --}}
                             </div>
                         </div>
                     </div>

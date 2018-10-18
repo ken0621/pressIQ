@@ -23,7 +23,7 @@
                     <div class="col__title">
                         <img src="/themes/{{ $shop_theme }}/img/aim_icon.png"><span>WHAT WE AIM</span>
                     </div>
-                    <p class="col__p">
+                    <div class="col__p">
                         <ul>
                             <li>
                                 To promote the use of Blockchain Technology and Cryptocurrency around the globe.
@@ -50,7 +50,7 @@
                                 To facilitate partnership between all kinds of organization to move forward with blockchain.
                             </li>
                         </ul>
-                    </p>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div class="col__title">
@@ -210,7 +210,7 @@
                             </div>
                         </div>  
                     </div>
-                    <div class="page__content--grid__item read-more-target">
+                    <div class="page__content--grid__item">
                         <div class="page__content--grid__item__child-1">
                             <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
                         </div>
@@ -221,7 +221,7 @@
                             </div>
                         </div>  
                     </div>
-                    <div class="page__content--grid__item read-more-target">
+                    <div class="page__content--grid__item">
                         <div class="page__content--grid__item__child-1">
                             <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
                         </div>
@@ -232,7 +232,7 @@
                             </div>
                         </div>  
                     </div>
-                    <div class="page__content--grid__item read-more-target">
+                    <div class="page__content--grid__item">
                         <div class="page__content--grid__item__child-1">
                             <img src="/themes/{{ $shop_theme }}/img/candidate_dummy.jpg">
                         </div>
@@ -253,7 +253,7 @@
     <!-- Advisory Board -->
     <section id="advisory" class="content__section-6">
         <div class="container">
-            <div class="content__section-5__title">
+            <div class="content__section-6__title">
                 <h2>GABC Advisory Membership</h2>
             </div>
             <div class="content__btn-container">

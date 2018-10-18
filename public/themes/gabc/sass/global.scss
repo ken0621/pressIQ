@@ -86,7 +86,7 @@ section
 		width: 100%;
 		.border-container
 		{
-			border: 0.5px solid #ededed;
+			border: 0.5px solid rgba(255,255,255, .2);
 			text-align: center;
 			margin: 10px 5px;
 
@@ -98,8 +98,7 @@ section
 				display: block;
 				a
 				{
-					color: #585858;
-					font-weight: 700;
+					color: white;
 					text-decoration: none;
 					font-size: 15px;
 				}
@@ -212,6 +211,40 @@ section
 		width: 100%;
 	}
 
+	@media screen and (max-width: 991px)
+	{
+		width: 25%;
+		img 
+		{
+			margin-top: -12px;
+		}
+
+		> a
+		{
+			display: inline-block;
+			float: left;
+
+			@media screen and (max-width: 600px)
+			{
+				margin-top: 14px;
+			}
+
+			@media screen and (max-width: 425px)
+			{
+				margin-top: 0;
+			}
+		}
+	}
+
+	@media screen and (max-width: 475px)
+	{
+		width: 40%;
+		img 
+		{
+			margin-top: 0;
+		}
+	}
+
 	&:hover
 	{
 		cursor: pointer;
@@ -229,19 +262,30 @@ section
 		padding: 7.5px 12px 7.5px 12px;
 		margin-left: auto;
 		margin-top: 20px;
-		background-color: #003b66;
+		border: 1px solid rgba(255,255,255, .5);
+
 		span
 		{
 			display: block;
 			height: 3px;
-			background-color: #fcc205;
+			background-color: #fff;
 			margin: 5px 0;
 		}
 	}
 
-	@media screen and (max-width: 475px)
+	@media screen and (max-width: 768px)
 	{
-			margin-top: 10px;
+		margin-right: 25px; 
+	}
+
+	@media screen and (max-width: 600px)
+	{
+		margin-right: 10px;
+	}
+
+	@media screen and (max-width: 425px)
+	{
+		margin-right: 5px;
 	}
 }
 
@@ -253,6 +297,12 @@ footer
 	.footer__upper
 	{
 		padding-bottom: 20px;
+
+		@media screen and (max-width: 768px)
+		{
+			text-align: center;
+		}
+
 		.footer__upper__title
 		{
 			color: white;
@@ -279,7 +329,14 @@ footer
 			{
 				display: grid;
 				grid-template-columns: auto auto auto auto;
-				grid-gap: 10px;
+				grid-gap: 5px;
+
+				@media screen and (max-width: 768px)
+				{
+					grid-template-columns: repeat(4,50px);
+					justify-content: center;
+					padding-bottom: 10px;
+				}
 
 				.grid-container__item
 				{

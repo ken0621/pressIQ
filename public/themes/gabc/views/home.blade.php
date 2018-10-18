@@ -249,6 +249,198 @@
             </div>
         </div>
     </section> 
+
+    <!-- Advisory Board -->
+    <section id="advisory" class="content__section-6">
+        <div class="container">
+            <div class="content__section-5__title">
+                <h2>GABC Advisory Membership</h2>
+            </div>
+            <div class="content__btn-container">
+                <button class="btn-primary">BECOME PROFESSIONAL</button>
+                <button class="btn-primary">BECOME ADVISOR</button>
+                <button class="btn-primary">GET AN ADVISOR</button>
+            </div>
+            <div class="page__content">
+                <div class="page__content--grid">
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/advisory_1.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Karl Landicho</div>
+                        <div class="info__in"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></div>
+                        <div class="info__details">
+                            Crypto Marketer at Lokalize Junior Product Specialist at Digima Web Solutions, Inc.
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/advisory_1.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Karl Landicho</div>
+                        <div class="info__in"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></div>
+                        <div class="info__details">
+                            Crypto Marketer at Lokalize Junior Product Specialist at Digima Web Solutions, Inc.
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/advisory_1.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Karl Landicho</div>
+                        <div class="info__in"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></div>
+                        <div class="info__details">
+                            Crypto Marketer at Lokalize Junior Product Specialist at Digima Web Solutions, Inc.
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/advisory_1.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Karl Landicho</div>
+                        <div class="info__in"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></div>
+                        <div class="info__details">
+                            Crypto Marketer at Lokalize Junior Product Specialist at Digima Web Solutions, Inc.
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/advisory_1.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Karl Landicho</div>
+                        <div class="info__in"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></div>
+                        <div class="info__details">
+                            Crypto Marketer at Lokalize Junior Product Specialist at Digima Web Solutions, Inc.
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/advisory_1.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Karl Landicho</div>
+                        <div class="info__in"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></div>
+                        <div class="info__details">
+                            Crypto Marketer at Lokalize Junior Product Specialist at Digima Web Solutions, Inc.
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/advisory_1.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Karl Landicho</div>
+                        <div class="info__in"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></div>
+                        <div class="info__details">
+                            Crypto Marketer at Lokalize Junior Product Specialist at Digima Web Solutions, Inc.
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/advisory_1.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Karl Landicho</div>
+                        <div class="info__in"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></div>
+                        <div class="info__details">
+                            Crypto Marketer at Lokalize Junior Product Specialist at Digima Web Solutions, Inc.
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/advisory_1.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Karl Landicho</div>
+                        <div class="info__in"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></div>
+                        <div class="info__details">
+                            Crypto Marketer at Lokalize Junior Product Specialist at Digima Web Solutions, Inc.
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/advisory_1.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Karl Landicho</div>
+                        <div class="info__in"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></div>
+                        <div class="info__details">
+                            Crypto Marketer at Lokalize Junior Product Specialist at Digima Web Solutions, Inc.
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/advisory_1.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Karl Landicho</div>
+                        <div class="info__in"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></div>
+                        <div class="info__details">
+                            Crypto Marketer at Lokalize Junior Product Specialist at Digima Web Solutions, Inc.
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/advisory_1.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Karl Landicho</div>
+                        <div class="info__in"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></div>
+                        <div class="info__details">
+                            Crypto Marketer at Lokalize Junior Product Specialist at Digima Web Solutions, Inc.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Countries -->
+    <section class="content__section-7">
+        <div class="container">
+            <div class="page__content">
+                <div class="page__content__item-upper">
+                    <img src="/themes/{{ $shop_theme }}/img/country_1.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_2.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_3.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_4.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_5.png">
+                </div>
+                <div class="page__content__item__lower">
+                    GABC Countries
+                </div>
+            </div>
+        </div>
+    </section>
     
     <!-- SCROLL TO TOP -->
     <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>

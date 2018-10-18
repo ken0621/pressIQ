@@ -25,13 +25,25 @@ h3
 	margin: auto;
 }
 
+/* Scroll to top */
+.scroll-up
+{
+	padding: 15px 15px 18px 15px;
+	position: fixed;
+	bottom: 100px;
+	right: 20px;
+	background-color: #ffcf16;
+	z-index: 999;
+}
+
+/* Sections */
 .content__section-1 
 {
 	background-color: #002f90;
 	color: white;
 	display: flex;
 	justify-content: center;
-	height: 100vh;
+	height: 95vh;
 	align-items: center;
 	text-align: center;
 
@@ -234,6 +246,116 @@ h3
 				}
 			}
 
+		}
+	}
+}
+
+.content__section-6
+{
+	background-color: #002a81;
+
+	.content__section-5__title
+	{
+		text-align: center;
+		color: white;
+	}
+	.content__btn-container
+	{
+		padding: 35px;
+		text-align: center;
+
+		.btn-primary
+		{
+			padding: 15px 0;
+			display: inline-block;
+			font-size: 14px;
+			color: white;
+			width: 255px;
+		}
+	}
+	.page__content 
+	{
+		padding-top: 55px;
+
+		.page__content--grid
+		{
+			display: grid;
+			grid-template-columns: auto auto auto;
+			grid-gap: 5px;
+
+			.page__content--grid__item
+			{
+				text-align: center;
+				padding: 40px 20px;
+
+				.image-container	
+				{
+					width: 109px;
+					height: 109px;
+					position: relative;
+					margin: auto;
+
+					.flag-badge
+					{
+						position: absolute;
+						z-index: 99;
+						bottom: -10px;
+						left: 34px;
+					}
+				}
+
+				.info__name
+				{
+					padding-top: 15px;
+					font-size: 18px;
+					color: white;
+				}
+				.info__in
+				{
+					padding: 8px 0;
+				}
+				.info__details
+				{
+					max-width: 250px;
+					margin: auto;
+					font-size: 13px;
+					color: rgba(255,255,255, 0.5);
+				}
+			}
+		}
+	}
+}
+
+.content__section-7
+{
+	background-color: #002a81;
+
+	.page__content
+	{
+		border-top: 1px solid rgba(255,255,255, .1);
+		padding-top: 55px;
+		height: 40vh;
+		background-image: url('../img/map.png');
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: cover;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+
+		.page__content__item-upper
+		{
+			display: grid;
+			grid-template-columns: auto auto auto auto auto;
+			grid-gap: 20px;
+		}
+		.page__content__item__lower
+		{
+			font-size: 24px;
+			color: white;
+			padding-top: 50px;
 		}
 	}
 }

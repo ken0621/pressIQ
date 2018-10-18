@@ -101,7 +101,6 @@
     </div>
 
     <!-- FOOTER -->
-
     <footer>
         <div class="container">
             <div class="footer__upper">
@@ -155,9 +154,15 @@
                     </div>
                 </div>
             </div>
-            <div class="footer__lower">
-                <div class="container">
-                    
+        </div>
+        <div class="footer__lower">
+            <div class="container">
+                <div class="footer__lower__left">Copyright © 2018</div>
+                <div class="footer__lower__right">
+                    <a href="">Terms of Use</a>
+                    <a href="">Privacy Policy</a>
+                    <a href="">Disclaimers</a>
+                    <a href="">Risk Factor</a>
                 </div>
             </div>
         </div>

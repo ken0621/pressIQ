@@ -1309,8 +1309,10 @@ class ShopMemberController extends Shop
     {
         $id               = Tbl_pressiq_user::orderBy('user_id','DESC')->first();
         $no_id            = $id->user_id + 1;
-        $uniq_username    =  $data["user_first_name"].".".$data["user_last_name"].".".$no_id;
+        $username         = $data["user_first_name"].".".$data["user_last_name"].".".$no_id;
         
+        $uniq_username    = str_replace(' ', '', $username);  
+
         return  $uniq_username;
     }
 

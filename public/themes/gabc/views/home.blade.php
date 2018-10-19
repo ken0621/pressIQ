@@ -5,8 +5,11 @@
     <section id="home" class="content__section-1">
         <div class="container">
             <h1>Global Association for<br>Blockchain and Cryptocurrency</h1>
-            <div class="content__section-1__img-container">
+            <div class="content__section-1__img-container splash-desktop">
                 <img src="/themes/{{ $shop_theme }}/img/splash_img.png">
+            </div>
+            <div class="content__section-1__img-container splash-mob">
+                <img src="/themes/{{ $shop_theme }}/img/splash.svg">
             </div>
             <h3>Your Organization, Your Gateway to<br> Blockchain and Cryptocurrency</h3>
         </div>

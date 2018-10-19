@@ -115,10 +115,11 @@
                         <div class="footer__upper__title">FOLLOW US</div>
                         <div class="footer__upper__content">
                             <div class="grid-container">
-                                <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_tele.png"></div>
-                                <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_fb.png"></div>
-                                <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_twitter.png"></div>
-                                <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_in.png"></div>
+                                <a target="_blank" href="https://t.me/GABC_Global"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_tele.png"></div></a>
+                                <a target="_blank" href="fb.me/GABC.Global"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_fb.png"></div></a>
+                                <a target="_blank" href="https://twitter.com/GABC_Global"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_twitter.png"></div></a>
+                                <a target="_blank" href="https://www.linkedin.com/groups/10400076/"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_in.png"></div></a>
+             
                                 {{-- <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_ig.png"></div>
                                 <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_ytube.png"></div>
                                 <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_skype.png"></div>
@@ -135,12 +136,12 @@
                                     <span>support@gabc.com</span>
                                 </div>
                             </div>
-                            <div class="footer__upper__content__link">
+                            {{-- <div class="footer__upper__content__link">
                                 <div>
                                     <span><i class="fa fa-phone"></i>&nbsp;&nbsp;</span>
                                     <span>+63 912 345 6789</span>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="col-md-3">

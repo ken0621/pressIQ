@@ -177,7 +177,7 @@
                 <input type="checkbox" class="read-more-state" id="post-2" />
 
                 <div class="page__content--grid read-more-wrap">
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/piraiee/">
                         <div class="page__content--grid__item">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/1.jpg">
@@ -190,7 +190,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/alexander-lempka-67494b109/">
                         <div class="page__content--grid__item">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/3.jpg">
@@ -203,7 +203,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/alexandre-payneau-899b9154/">
                         <div class="page__content--grid__item">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/4.jpg">
@@ -216,7 +216,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="http://linkedin.com/in/a-p-86ba20103">
                         <div class="page__content--grid__item">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/5.jpg">
@@ -229,7 +229,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/armandaguillon/">
                         <div class="page__content--grid__item">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/6.jpg">
@@ -242,7 +242,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/asim-tariq/">
                         <div class="page__content--grid__item">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/7.jpg">
@@ -255,7 +255,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/bilal-el-alamy/">
                         <div class="page__content--grid__item">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/9.jpg">
@@ -268,7 +268,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/bluennechaye/">
                         <div class="page__content--grid__item">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/10.jpg">
@@ -281,7 +281,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/cherylnunn/">
                         <div class="page__content--grid__item">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/11.jpg">
@@ -294,7 +294,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/constantin-kloecker/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/12.jpg">
@@ -307,7 +307,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/curtis-fluker-l-i-o-n-69559036/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/13.jpg">
@@ -320,7 +320,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/serebryakov/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/14.jpg">
@@ -333,7 +333,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/dmitriy-sheludko-462378156/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/15.jpg">
@@ -346,7 +346,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/rapidbuildingsystem">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/16.jpg">
@@ -359,7 +359,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://fr.linkedin.com/company/apakasha">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/17.jpg">
@@ -372,7 +372,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/evan-william/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/18.jpg">
@@ -385,7 +385,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/flavia-richardson-8a995037/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/19.jpg">
@@ -398,7 +398,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/FrederikBussler">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/20.jpg">
@@ -411,7 +411,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/grahamrleach">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/21.jpg">
@@ -424,7 +424,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/hdahn/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/22.jpg">
@@ -437,7 +437,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/harryhorsfall/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/23.jpg">
@@ -450,7 +450,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/hunyoung-joung-1b5a50109">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/24.jpg">
@@ -463,7 +463,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/bigtangle-net-9459a6100/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/25.jpg">
@@ -476,7 +476,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/jagsporandla/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/26.jpg">
@@ -489,7 +489,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/jahn-ludwig-789532107/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/27.jpg">
@@ -502,7 +502,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/jamesmrp">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/28.jpg">
@@ -515,7 +515,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/jeromeclaraz">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/29.jpg">
@@ -528,7 +528,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/jochenbiedermann/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/30.jpg">
@@ -541,7 +541,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/josef-victorino-4a099a23/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/31.jpg">
@@ -554,7 +554,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/josina-rodrigues/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/32.jpg">
@@ -567,7 +567,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/profkarenwendt/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/33.jpg">
@@ -580,7 +580,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/marc-couzic-fieldcoin/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/34.jpg">
@@ -593,7 +593,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/mardo-soo-00a05ab0/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/35.jpg">
@@ -606,7 +606,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/markreidprofile/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/36.jpg">
@@ -619,7 +619,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/mickael-damour/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/37.jpg">
@@ -632,7 +632,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/sanusi-enwubiye-muhammed-1013b7116/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/38.jpg">
@@ -645,7 +645,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/mustorfa-harbiolar-07a945168">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/39.jpg">
@@ -658,7 +658,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/nancy-james-consultant">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/40.jpg">
@@ -671,7 +671,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/ninadpandya/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/41.jpg">
@@ -684,7 +684,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/olivier-kleindienst-837a5b/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/42.jpg">
@@ -697,7 +697,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/paulsullivan6/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/43.jpg">
@@ -710,7 +710,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/qusai-sharef-505178164">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/44.jpg">
@@ -723,7 +723,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://in.linkedin.com/in/rajeevsingh8">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/45.jpg">
@@ -736,7 +736,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/rendolf">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/46.jpg">
@@ -749,7 +749,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/romainlavernhe/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/47.jpg">
@@ -762,7 +762,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/romainlombardo/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/48.jpg">
@@ -775,7 +775,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/sadia-bruce-782471ab/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/49.jpg">
@@ -788,7 +788,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/sanemavcil/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/50.jpg">
@@ -801,7 +801,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/shelleyfacius">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/51.jpg">
@@ -814,7 +814,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/tebourbislim/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/52.jpg">
@@ -827,7 +827,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/stephen-l-2090202/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/53.jpg">
@@ -840,7 +840,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/thibault-gobert-55605458/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/54.jpg">
@@ -853,7 +853,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/toby-sperrin-b17872101/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/55.jpg">
@@ -866,7 +866,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/walidelgendy/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/56.jpg">
@@ -879,7 +879,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/ike-wasongolwa-06287895/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/57.jpg">
@@ -892,7 +892,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/zaidalissa/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/58.jpg">
@@ -905,7 +905,7 @@
                             </div>  
                         </div>
                     </a>
-                    <a href="">
+                    <a href="https://www.linkedin.com/in/ziyi-li-24a469131/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
                                 <img src="/themes/{{ $shop_theme }}/img/candidates/59.jpg">

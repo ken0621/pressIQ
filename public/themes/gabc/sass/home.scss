@@ -306,6 +306,11 @@ h3
 				grid-template-columns: auto;
 			}
 
+			a 
+			{
+				text-decoration: none;
+			}
+
 			.page__content--grid__item
 			{
 				background-color: rgba(0,0,0, 0.1);

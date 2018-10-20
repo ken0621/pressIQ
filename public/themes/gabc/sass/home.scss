@@ -64,7 +64,11 @@ h3
 
 /* Sections */
 .content__section-1 
-{
+{	
+	@media screen and (max-width: 600px)
+	{
+		margin-top: -59px;
+	}
 	.splash-desktop
 	{
 		@media screen and (max-width: 600px)
@@ -88,6 +92,11 @@ h3
 	height: 95vh;
 	align-items: center;
 	text-align: center;
+
+	@media screen and (max-width: 600px)
+	{
+		height: 97vh;
+	}
 
 	h1 
 	{

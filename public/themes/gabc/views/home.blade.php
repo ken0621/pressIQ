@@ -138,7 +138,7 @@
                         </div>
                         <div class="info__name">Effendy Zulkifly</div>
                         <div class="info__details">
-                            Founder, Crypto Valley Malaysia, Ceo, Academy Asia, ICO Adviser
+                            Founder, Crypto Valley Malaysia, Ceo, Blockchain Academy Asia, ICO Adviser
                         </div>
                     </div>
                     <div class="page__content--grid__item">

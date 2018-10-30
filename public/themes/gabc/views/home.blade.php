@@ -921,6 +921,71 @@
                             </div>  
                         </div>
                     </a>
+                    <a href="https://www.linkedin.com/in/angel-colon-0bb2455/">
+                        <div class="page__content--grid__item read-more-target">
+                            <div class="page__content--grid__item__child-1">
+                                <img src="/themes/{{ $shop_theme }}/img/candidates/60.jpg">
+                            </div>
+                            <div class="page__content--grid__item__child-2">
+                                <div class="info-name">Angel Colon</div>
+                                <div class="info-bottom">
+                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/58.png"></div><span>USA</span>
+                                </div>
+                            </div>  
+                        </div>
+                    </a>
+                    <a href="https://www.linkedin.com/in/dicemoney/">
+                        <div class="page__content--grid__item read-more-target">
+                            <div class="page__content--grid__item__child-1">
+                                <img src="/themes/{{ $shop_theme }}/img/candidates/61.jpg">
+                            </div>
+                            <div class="page__content--grid__item__child-2">
+                                <div class="info-name">Anthony Johnson</div>
+                                <div class="info-bottom">
+                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/59.png"></div><span>United Kingdom</span>
+                                </div>
+                            </div>  
+                        </div>
+                    </a>
+                    <a href="https://www.linkedin.com/in/bilal-el-fakir-7850549b/">
+                        <div class="page__content--grid__item read-more-target">
+                            <div class="page__content--grid__item__child-1">
+                                <img src="/themes/{{ $shop_theme }}/img/candidates/62.jpg">
+                            </div>
+                            <div class="page__content--grid__item__child-2">
+                                <div class="info-name">Bilal Fakir</div>
+                                <div class="info-bottom">
+                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/60.png"></div><span>morocco</span>
+                                </div>
+                            </div>  
+                        </div>
+                    </a>
+                    <a href="https://www.linkedin.com/in/gerhard-drobits-208a5331/">
+                        <div class="page__content--grid__item read-more-target">
+                            <div class="page__content--grid__item__child-1">
+                                <img src="/themes/{{ $shop_theme }}/img/candidates/63.jpg">
+                            </div>
+                            <div class="page__content--grid__item__child-2">
+                                <div class="info-name">Gerhard Drobits</div>
+                                <div class="info-bottom">
+                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/61.png"></div><span>malta</span>
+                                </div>
+                            </div>  
+                        </div>
+                    </a>
+                    <a href="https://www.linkedin.com/in/coachmarkdavis/">
+                        <div class="page__content--grid__item read-more-target">
+                            <div class="page__content--grid__item__child-1">
+                                <img src="/themes/{{ $shop_theme }}/img/candidates/64.jpg">
+                            </div>
+                            <div class="page__content--grid__item__child-2">
+                                <div class="info-name">Mark Davis</div>
+                                <div class="info-bottom">
+                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/62.png"></div><span>Australia</span>
+                                </div>
+                            </div>  
+                        </div>
+                    </a>
                 </div>
 
                 <label for="post-2" class="read-more-trigger"></label>

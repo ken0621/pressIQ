@@ -116,7 +116,7 @@
                         <div class="footer__upper__content">
                             <div class="grid-container">
                                 <a target="_blank" href="https://t.me/GABC_Global"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_tele.png"></div></a>
-                                <a target="_blank" href="fb.me/GABC.Global"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_fb.png"></div></a>
+                                <a target="_blank" href="facebook.com/GABC.Global"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_fb.png"></div></a>
                                 <a target="_blank" href="https://twitter.com/GABC_Global"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_twitter.png"></div></a>
                                 <a target="_blank" href="https://www.linkedin.com/groups/10400076/"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_in.png"></div></a>
              

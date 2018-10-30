@@ -924,7 +924,7 @@
                     <a href="https://www.linkedin.com/in/angel-colon-0bb2455/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/60.jpg">
+                                <img src="/themes/{{ $shop_theme }}/img/candidates/60_1.jpg">
                             </div>
                             <div class="page__content--grid__item__child-2">
                                 <div class="info-name">Angel Colon</div>
@@ -937,7 +937,7 @@
                     <a href="https://www.linkedin.com/in/dicemoney/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/61.jpg">
+                                <img src="/themes/{{ $shop_theme }}/img/candidates/61_1.jpg">
                             </div>
                             <div class="page__content--grid__item__child-2">
                                 <div class="info-name">Anthony Johnson</div>
@@ -950,7 +950,7 @@
                     <a href="https://www.linkedin.com/in/bilal-el-fakir-7850549b/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/62.jpg">
+                                <img src="/themes/{{ $shop_theme }}/img/candidates/62_1.jpg">
                             </div>
                             <div class="page__content--grid__item__child-2">
                                 <div class="info-name">Bilal Fakir</div>
@@ -963,7 +963,7 @@
                     <a href="https://www.linkedin.com/in/gerhard-drobits-208a5331/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/63.jpg">
+                                <img src="/themes/{{ $shop_theme }}/img/candidates/63_1.jpg">
                             </div>
                             <div class="page__content--grid__item__child-2">
                                 <div class="info-name">Gerhard Drobits</div>
@@ -976,7 +976,7 @@
                     <a href="https://www.linkedin.com/in/coachmarkdavis/">
                         <div class="page__content--grid__item read-more-target">
                             <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/64.jpg">
+                                <img src="/themes/{{ $shop_theme }}/img/candidates/64_1.jpg">
                             </div>
                             <div class="page__content--grid__item__child-2">
                                 <div class="info-name">Mark Davis</div>

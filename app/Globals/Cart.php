@@ -975,17 +975,20 @@ class Cart
         $_cart = isset(Self::get_cart($shop_id)["cart"]) ? Self::get_cart($shop_id)["cart"] : null;
         unset($data["tbl_ec_order_item"]);
         /* ITEM ON CART */
-        foreach($_cart as $key => $cart)
+        if (count($_cart) > 0)
         {
-            $data["tbl_ec_order_item"][$key]["item_id"]     = $cart["cart_product_information"]["variant_id"];
-            $data["tbl_ec_order_item"][$key]["price"]       = $cart["cart_product_information"]["product_price"];
-            $data["tbl_ec_order_item"][$key]["quantity"]    = $cart["quantity"];
-            $data["tbl_ec_order_item"][$key]["subtotal"]    = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
-            $data["tbl_ec_order_item"][$key]["total"]       = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
-            $data["tbl_ec_order_item"][$key]["tax"]         = 0;
-            $data["tbl_ec_order_item"][$key]["ec_order_id"] = $data["tbl_ec_order"]["ec_order_id"];
+            foreach($_cart as $key => $cart)
+            {
+                $data["tbl_ec_order_item"][$key]["item_id"]     = $cart["cart_product_information"]["variant_id"];
+                $data["tbl_ec_order_item"][$key]["price"]       = $cart["cart_product_information"]["product_price"];
+                $data["tbl_ec_order_item"][$key]["quantity"]    = $cart["quantity"];
+                $data["tbl_ec_order_item"][$key]["subtotal"]    = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
+                $data["tbl_ec_order_item"][$key]["total"]       = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
+                $data["tbl_ec_order_item"][$key]["tax"]         = 0;
+                $data["tbl_ec_order_item"][$key]["ec_order_id"] = $data["tbl_ec_order"]["ec_order_id"];
 
-            $subtotal += $data["tbl_ec_order_item"][$key]["total"];
+                $subtotal += $data["tbl_ec_order_item"][$key]["total"];
+            }
         }
 
         /* SUMMARY OF DATA FOR ORDER */

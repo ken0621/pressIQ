@@ -142,7 +142,7 @@ class Shop extends Controller
             $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
             View::share("_categories", $product_category);
         }
-        elseif ($this->shop_theme == "3xcell") 
+        elseif ($this->shop_theme == "3xcell" || $this->shop_theme == "shell-canvas") 
         {
             $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
             View::share("_categories", $product_category);

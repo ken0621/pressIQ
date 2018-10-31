@@ -136,13 +136,15 @@ button:hover
         background-color: white;
         position: absolute;
         top: 120%;
-        right: 2%;
+        right: -20%;
         padding: 15px;
         border-top: 1px solid #efefef;
         z-index: 100;
         -moz-box-shadow: 0px 1px 10px rgba(0,0,0,0.1);
         -webkit-box-shadow: 0px 1px 10px rgba(0,0,0,0.1);
         box-shadow: 0px 1px 10px rgba(0,0,0,0.1);
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
 
         .cat-container 
         {

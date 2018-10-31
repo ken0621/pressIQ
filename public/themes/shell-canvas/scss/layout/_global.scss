@@ -135,8 +135,8 @@ button:hover
         border-radius: 1px;
         background-color: white;
         position: absolute;
-        top: 120%;
-        right: -20%;
+        top: 210%;
+        right: -190%;
         padding: 15px;
         border-top: 1px solid #efefef;
         z-index: 100;
@@ -144,7 +144,9 @@ button:hover
         -webkit-box-shadow: 0px 1px 10px rgba(0,0,0,0.1);
         box-shadow: 0px 1px 10px rgba(0,0,0,0.1);
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(8, 1fr);
+        max-height: 170px;
+        overflow-y: scroll;
 
         .cat-container 
         {

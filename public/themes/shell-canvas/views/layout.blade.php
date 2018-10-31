@@ -67,7 +67,7 @@
                             <a onclick="off()" href="#home"><i class="fa fa-home" aria-hidden="true"></i> HOME</a>
                         </li>
                         <li> 
-                            <a onclick="off()" href="#home"><i class="fa fa-shopping-cart" aria-hidden="true"></i> PRODUCTS & SERVICES</a>
+                            <a onclick="off()" href="/product"><i class="fa fa-shopping-cart" aria-hidden="true"></i> PRODUCTS & SERVICES</a>
                         </li>
                         <li> 
                             <a onclick="off()" href="#about"><i class="fa fa-info" aria-hidden="true"></i> ABOUT US</a>

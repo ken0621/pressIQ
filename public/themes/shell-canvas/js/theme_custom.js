@@ -130,6 +130,17 @@ function theme_custom()
                 $('.product-dropdown').fadeOut(400);
             });
 
+        $('.product-hovers').hover(function()
+            {
+                $('.product-dropdown-ftr').stop();
+                $('.product-dropdown-ftr').fadeIn(400);
+            },
+            function()
+            {
+                $('.product-dropdown-ftr').stop();
+                $('.product-dropdown-ftr').fadeOut(400);
+            });
+
         $('.company-hover').hover(function()
             {
                 $('.company-dropdown').stop();

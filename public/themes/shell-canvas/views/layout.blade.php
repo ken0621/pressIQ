@@ -204,13 +204,86 @@
                         <div class="image-holder">
                             <img src="/themes/{{ $shop_theme }}/img/shell-canvas-logo.png">
                         </div>
-                        <nav class="footer-navigation">
+                        {{-- <nav class="footer-navigation">
                             <ul>
                                 <li><a class="smoth-scroll" href="#home">Home</a></li>
                                 <li><a class="smoth-scroll dropdown-toggle" href="/product">Products & Services</a></li>
                                 <li><a class="smoth-scroll" href="#products">About Us</a></li>
                                 <li><a class="smoth-scroll" href="#contact">Gallery</a></li>
                                 <li><a class="smoth-scroll" href="/legalities">Contact Us</a></li> 
+                            </ul>
+                        </nav> --}}
+                        <nav class="footer-navigation">
+                            <ul>
+                                @if(Request::segment(1)=="product")
+                                    <li><a class="smoth-scroll" href="/#home">Home</a></li>
+                                    <li class="dropdown product-hovers">
+                                        <a href="#">Products & Services<span class="caret"></span>
+                                        </a>
+
+                                        <!-- PRODUCT DROPDOWN -->
+                                        <div class="product-dropdown-ftr" style="display: none;">
+                                            @if(count($_categories) > 0)
+                                                @foreach($_categories as $categories)
+                                                <div class="cat-container">
+                                                    <a href="/product?type={{ $categories["type_id"] }}">
+                                                        <div class="per-cat">
+                                                            <div class="cat-img-container"><img style="width: 124px; height: 100px; object-fit: cover;" src="{{ $categories["type_image"] }}"></div>
+                                                            <div class="cat-name">{{ $categories["type_name"] }}</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                @endforeach
+                                            @else
+                                                <div class="cat-container-ftr">
+                                                    <a href="/product">
+                                                        <div class="per-cat">
+                                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/beauty-prod.png"></div>
+                                                            <div class="cat-name">BEAUTY SKIN CARE</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </li>
+                                    <li><a class="smoth-scroll" href="/#about">About Us</a></li>
+                                    <li><a class="smoth-scroll" href="/#gallery">Gallery</a></li>
+                                    <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
+                                @else
+                                    <li><a class="smoth-scroll" href="#home">Home</a></li>
+                                    <li class="dropdown product-hover">
+                                        <a href="#">Products & Services<span class="caret"></span>
+                                        </a>
+
+                                        <!-- PRODUCT DROPDOWN -->
+                                        <div class="product-dropdown-ftr" style="display: none;">
+                                            @if(count($_categories) > 0)
+                                                @foreach($_categories as $categories)
+                                                <div class="cat-container">
+                                                    <a href="/product?type={{ $categories["type_id"] }}">
+                                                        <div class="per-cat">
+                                                            <div class="cat-img-container"><img style="width: 124px; height: 100px; object-fit: cover;" src="{{ $categories["type_image"] }}"></div>
+                                                            <div class="cat-name">{{ $categories["type_name"] }}</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                @endforeach
+                                            @else
+                                                <div class="cat-container-ftr">
+                                                    <a href="/product">
+                                                        <div class="per-cat">
+                                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/beauty-prod.png"></div>
+                                                            <div class="cat-name">BEAUTY SKIN CARE</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </li>
+                                    <li><a class="smoth-scroll" href="#about">About Us</a></li>
+                                    <li><a class="smoth-scroll" href="#gallery">Gallery</a></li>
+                                    <li><a class="smoth-scroll" href="#contact">Contact Us</a></li>
+                                @endif
                             </ul>
                         </nav>
                         <div class="social-nav">

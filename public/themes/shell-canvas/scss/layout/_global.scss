@@ -462,6 +462,72 @@ button:hover
                     }
                 }
             }
+
+             .product-dropdown-ftr 
+            {
+                border-radius: 1px;
+                background-color: white;
+                position: absolute;
+                top: 0px;
+                right: -190%;
+                padding: 15px;
+                border-top: 1px solid #efefef;
+                z-index: 100;
+                -moz-box-shadow: 0px 1px 10px rgba(0,0,0,0.1);
+                -webkit-box-shadow: 0px 1px 10px rgba(0,0,0,0.1);
+                box-shadow: 0px 1px 10px rgba(0,0,0,0.1);
+                display: grid;
+                grid-template-columns: repeat(8, 1fr);
+                max-height: 300px;
+                overflow-y: auto;
+
+                .cat-container-ftr
+                {
+                    float: left;
+                    a:hover 
+                    {
+                        text-decoration: none;
+                    }
+
+                    .per-cat 
+                    {
+                        padding: 10px;
+                        &:hover 
+                        {
+                            cursor: pointer;
+                        
+                            img 
+                            {
+                                opacity: 0.7;
+                                transition: 0.3s all ease;
+                            }
+                            .cat-name 
+                            {
+                                color: #ffcf16;
+                                transition: 0.3s all ease;
+                            }
+                        }
+
+                        .cat-image-container
+                        {
+                            width: 100%;
+
+                            img 
+                            {
+                                width: 100%;
+                            }
+                        }
+
+                        .cat-name
+                        {
+                            padding-top: 8px;
+                            font-size: 12px;
+                            font-family: Verdana,Geneva,sans-serif;
+                            color: #1c1c1c;
+                        }
+                    }
+                }
+            }
             
             li 
             {

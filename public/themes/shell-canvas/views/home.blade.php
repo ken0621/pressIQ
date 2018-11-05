@@ -38,7 +38,7 @@
     	</div>
 	</div>
 
-	<div class="swiper-container swiper2" id="product">
+	{{-- <div class="swiper-container swiper2" id="product">
 		<div class="swiper-wrapper">
 				<div class="swiper-slide">
 				<div class="product-holder" style="background-image: url('/themes/shell-canvas/img/product-1.jpg');">
@@ -185,7 +185,7 @@
 			</div>
 			</div>
 		<div class="swiper-pagination swiper-pagination2"></div>
-    </div>
+    </div> --}}
 
 	<div class="wrapper-1" id="about">
 		<div class="container">

@@ -204,7 +204,7 @@
                         <div class="image-holder">
                             <img src="/themes/{{ $shop_theme }}/img/shell-canvas-logo.png">
                         </div>
-                        <nav class="footer-navigation">
+                        {{-- <nav class="footer-navigation">
                             <ul>
                                 <li><a class="smoth-scroll" href="#home">Home</a></li>
                                 <li><a class="smoth-scroll dropdown-toggle" href="/product">Products & Services</a></li>
@@ -212,7 +212,7 @@
                                 <li><a class="smoth-scroll" href="#contact">Gallery</a></li>
                                 <li><a class="smoth-scroll" href="/legalities">Contact Us</a></li> 
                             </ul>
-                        </nav>
+                        </nav> --}}
                         <div class="social-nav">
                             <ul>
                                 <li><a><i class="fa fa-facebook"></i></a></li>

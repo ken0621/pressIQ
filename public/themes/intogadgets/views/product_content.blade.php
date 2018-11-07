@@ -395,6 +395,9 @@
 @endsection
 
 @section('social-script')
+<script>
+$(".fb-comments").attr("data-href", window.location.href);
+</script>
 
 <div id="fb-root"></div>
 
@@ -433,5 +436,4 @@
        }(document, 'script', 'facebook-jssdk'));
 
 </script>
-
 @endsection

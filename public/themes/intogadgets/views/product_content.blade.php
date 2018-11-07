@@ -383,11 +383,11 @@
 
 <meta property="og:url" content="{{ URL::to($_SERVER['REQUEST_URI']) }}" />
 
-<meta property="og:type" content="og:product" />
+<meta property="og:type" content="article" />
 
 <meta property="og:title" content="{{ $product['eprod_name'] }}" />
 
-<meta property="og:image" content = "{{ $product['variant'][0]['variant_image'][0]['image_path'] }}"/>
+<meta property="og:image" content = "{{ URL::to($product['variant'][0]['variant_image'][0]['image_path']) }}"/>
 
 <meta property="og:description" content="{{ $product['eprod_details'] ? strip_tags($product['eprod_details']) : "Placeholder description" }}"/>
 

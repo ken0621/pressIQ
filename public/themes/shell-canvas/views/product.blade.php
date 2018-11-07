@@ -147,6 +147,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="pagination-bottom text-right">
+                            {!! $_product->appends(Request::input())->render() !!}
+                        </div>
                     </div>
                 </div>
             </div>

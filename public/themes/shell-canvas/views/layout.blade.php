@@ -64,19 +64,30 @@
                     <span>BROWSE</span>
                     <ul class="links">
                         <li> 
-                            <a onclick="off()" href="#home"><i class="fa fa-home" aria-hidden="true"></i> HOME</a>
+                            <a onclick="off()" href="/#home"><i class="fa fa-home" aria-hidden="true"></i> HOME</a>
+                        </li>
+                        <li class="product-mobile-dropdown">
+                            <a href="javascript:"><i class="fa fa-shopping-cart" aria-hidden="true"></i> PRODUCTS & SERVICES <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a>
+                        </li>
+                            @if(count($_categories) > 0)
+                                <ul class="product-mobile-dropdown-list">
+                                    @foreach($_categories as $categories)
+                                        <li>
+                                            <a href="/product?type={{ $categories["type_id"] }}">
+                                                {{ $categories["type_name"] }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        <li> 
+                            <a onclick="off()" href="/#about"><i class="fa fa-info" aria-hidden="true"></i> ABOUT US</a>
                         </li>
                         <li> 
-                            <a onclick="off()" href="/product"><i class="fa fa-shopping-cart" aria-hidden="true"></i> PRODUCTS & SERVICES</a>
+                            <a onclick="off()" href="/#gallery"><i class="fa fa-picture-o" aria-hidden="true"></i> GALLERY</a>
                         </li>
                         <li> 
-                            <a onclick="off()" href="#about"><i class="fa fa-info" aria-hidden="true"></i> ABOUT US</a>
-                        </li>
-                        <li> 
-                            <a onclick="off()" href="#gallery"><i class="fa fa-picture-o" aria-hidden="true"></i> GALLERY</a>
-                        </li>
-                        <li> 
-                            <a onclick="off()" href="#contact"><i class="fa fa-phone" aria-hidden="true"></i> CONTACT US</a>
+                            <a onclick="off()" href="/#contact"><i class="fa fa-phone" aria-hidden="true"></i> CONTACT US</a>
                         </li>
                     </ul>
                 </nav>
@@ -130,38 +141,6 @@
                                                         </div>
                                                     </a>
                                                 </div>
-                                                <div class="cat-container">
-                                                    <a href="/product">
-                                                        <div class="per-cat">
-                                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/supplement.png"></div>
-                                                            <div class="cat-name">FOOD SUPPLEMENT</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="cat-container">
-                                                    <a href="/product">
-                                                        <div class="per-cat">
-                                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/healthy-drinks.png"></div>
-                                                            <div class="cat-name">HEALTHY DRINKS</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="cat-container">
-                                                    <a href="/product">
-                                                        <div class="per-cat">
-                                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/p-a.png"></div>
-                                                            <div class="cat-name">HEALTHY PACKAGES</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="cat-container">
-                                                    <a href="/product">
-                                                        <div class="per-cat">
-                                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/p-b.png"></div>
-                                                            <div class="cat-name">RETAIL PACKAGES</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
                                             @endif
                                         </div>
                                     </li>
@@ -196,38 +175,6 @@
                                                         </div>
                                                     </a>
                                                 </div>
-                                                <div class="cat-container">
-                                                    <a href="/product">
-                                                        <div class="per-cat">
-                                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/supplement.png"></div>
-                                                            <div class="cat-name">FOOD SUPPLEMENT</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="cat-container">
-                                                    <a href="/product">
-                                                        <div class="per-cat">
-                                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/healthy-drinks.png"></div>
-                                                            <div class="cat-name">HEALTHY DRINKS</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="cat-container">
-                                                    <a href="/product">
-                                                        <div class="per-cat">
-                                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/p-a.png"></div>
-                                                            <div class="cat-name">HEALTHY PACKAGES</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div class="cat-container">
-                                                    <a href="/product">
-                                                        <div class="per-cat">
-                                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/p-b.png"></div>
-                                                            <div class="cat-name">RETAIL PACKAGES</div>
-                                                        </div>
-                                                    </a>
-                                                </div>
                                             @endif
                                         </div>
                                     </li>
@@ -257,7 +204,7 @@
                         <div class="image-holder">
                             <img src="/themes/{{ $shop_theme }}/img/shell-canvas-logo.png">
                         </div>
-                        <nav class="footer-navigation">
+                        {{-- <nav class="footer-navigation">
                             <ul>
                                 <li><a class="smoth-scroll" href="#home">Home</a></li>
                                 <li><a class="smoth-scroll dropdown-toggle" href="/product">Products & Services</a></li>
@@ -265,7 +212,7 @@
                                 <li><a class="smoth-scroll" href="#contact">Gallery</a></li>
                                 <li><a class="smoth-scroll" href="/legalities">Contact Us</a></li> 
                             </ul>
-                        </nav>
+                        </nav> --}}
                         <div class="social-nav">
                             <ul>
                                 <li><a><i class="fa fa-facebook"></i></a></li>

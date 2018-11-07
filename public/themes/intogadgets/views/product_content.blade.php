@@ -413,7 +413,7 @@ $(".fb-comments").attr("data-href", window.location.href);
 
           xfbml      : true,
 
-          version    : 'v2.3'
+          version    : 'v2.8'
 
         });
 

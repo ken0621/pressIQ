@@ -384,7 +384,7 @@
 
 <meta property="og:image" content = "{{ $product['variant'][0]['variant_image'][0]['image_path'] }}"/>
 
-<meta property="og:description" content="{{ strip_tags($product['eprod_details']) }}"/>
+<meta property="og:description" content="{{ $product['eprod_details'] ? strip_tags($product['eprod_details']) : "Placeholder description" }}"/>
 
 <meta property="product:price:currency"    content="PHP"/>
 

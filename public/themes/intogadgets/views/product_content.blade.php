@@ -380,15 +380,15 @@
 
 <meta property="og:type" content="og:product" />
 
-<meta property="og:title" content="" />
+<meta property="og:title" content="{{ $product['eprod_name'] }}" />
 
-<meta property="og:image" content = ""/>
+<meta property="og:image" content = "{{ $product['variant'][0]['variant_image'][0]['image_path'] }}"/>
 
-<meta property="og:description" content=""/>
+<meta property="og:description" content="{{ strip_tags($product['eprod_details']) }}"/>
 
 <meta property="product:price:currency"    content="PHP"/>
 
-<meta property="product:price:amount" content="" />
+<meta property="product:price:amount" content="{{ $product['variant'][0]['evariant_price'] }}" />
 
 <meta property="fb:app_id" content="1920870814798104" />
 

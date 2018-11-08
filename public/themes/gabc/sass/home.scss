@@ -186,6 +186,20 @@ h3
 					text-align: left;
 				}
 		}
+
+		.page__content__title 
+		{
+			font-size: 20px;
+			padding-bottom: 10px;	
+		}
+
+		@media screen and (max-width: 600px)
+		{
+			.page__content__title, .p-statement
+			{
+				text-align: center;
+			}
+		}
 	}
 }
 
@@ -205,6 +219,11 @@ h3
 
 		.page__content--grid
 		{
+			a 
+			{
+				text-decoration: none !important;
+			}
+
 			display: grid;
 			grid-template-columns: auto auto auto;
 			grid-gap: 55px;
@@ -227,6 +246,11 @@ h3
 				border: 1px solid #1d54c5;
 				text-align: center;
 				padding: 40px 20px;
+
+				&:hover 
+				{
+					background-color: rgba(0,0,0, 0.2);
+				}
 
 				@media screen and (max-width: 375px)
 				{

@@ -450,9 +450,9 @@
 	    				{{-- <div class="border-holder"></div> --}}
 			    	</div>
 			    	<form action="Post"> 
-                       @if (session('message_concern'))
+                       @if (session('message_concern_shell'))
                            <div class="alert alert-success">
-                               {{ session('message_concern') }}
+                               {{ session('message_concern_shell') }}
                            </div>
                        @endif
                         <div class="row clearfix">

@@ -25,7 +25,7 @@
 }	
 .header-container
 {
-	background-color: #c42c2a;
+	background-color: #4E0301;
 	text-align: center;
 	padding: 20px;
 	font-family: 'Cantarell', sans-serif;
@@ -86,7 +86,7 @@
 	<div class="background-container">
 		<div class="container">
 			<div class="header-container">Get Intouch With Us</div>
-			<div class="greetings-container">Good Day Heartzone Enterprises INC.</div>
+			<div class="greetings-container">Good Day Shell Canvas</div>
 			<div class="content-container">
 				<div class="details">There is someone who emailed you</div>
 				<div class="info-container"><span class="title">From: </span><span class="info">{{$contactus_first_name}} {{$contactus_last_name}}</span></div>

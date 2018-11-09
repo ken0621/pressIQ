@@ -215,10 +215,10 @@
                         </nav> --}}
                         <div class="social-nav">
                             <ul>
-                                <li><a href="https://www.facebook.com/F0reverSalePH/"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="https://www.facebook.com/F0reverSalePH/" target="_blank"><i class="fa fa-facebook"></i></a></li>
                                 {{-- <li><a><i class="fab fa-twitter"></i></a></li>
                                 <li><a><i class="fab fa-google-plus-g"></i></a></li> --}}
-                                <li><a href="https://www.instagram.com/foreversale.ph"><i class="fab fa-instagram"></i></a></li>
+                                <li><a href="https://www.instagram.com/foreversale.ph" target="_blank"><i class="fab fa-instagram"></i></a></li>
                             </ul>
                         </div>
                     </div>

@@ -122,7 +122,7 @@ body {
                 {
                     margin-bottom: 20px;
                     font-size: 20px;
-                    color: #ffcf16;
+                    color: #ffd019;
                     @media screen and (max-width: 768px)
                     {
                         font-size: 17px;
@@ -142,7 +142,7 @@ body {
                 {
                     font-size: 13px;
                     font-weight: 700;
-                    background-color: #ffcf16;
+                    background-color: #ffd019;
                     padding: 10px 25px;
                     border: none;
                     border-radius: 4px;
@@ -163,14 +163,14 @@ body {
     }
     .swiper-pagination-bullet-active
     {
-        background: #ffcf16;
+        background: #ffd019;
     }
 }
 
 .wrapper-1
 {
     padding: 100px 0px;
-    background-color: #3a0c01;
+    background-color: #6d0401;
      @media screen and (max-width: 768px)
     {
         padding: 75px 0px;
@@ -185,7 +185,7 @@ body {
         .title-header
         {
             font-size: 30px;
-            color: #ffcf16;
+            color: #ffd019;
             font-weight: 700;
             @media screen and (max-width: 768px)
             {
@@ -287,7 +287,7 @@ body {
         {
             font-size: 15px;
             font-weight: 700;
-            background-color: #ffcf16;
+            background-color: #ffd019;
             padding: 10px 25px;
             border: none;
             border-radius: 4px;
@@ -307,7 +307,7 @@ body {
             display: none;
             font-size: 15px;
             font-weight: 700;
-            background-color: #ffcf16;
+            background-color: #ffd019;
             padding: 10px 25px;
             border: none;
             border-radius: 4px;
@@ -323,121 +323,69 @@ body {
             }
         }
     }
-}
-
-.wrapper-2
-{
-    padding: 100px 0px;
-    @media screen and (max-width: 768px)
+    .choose-container
     {
-        padding: 75px 0px;
-        margin: -25px 0px;
-    }
-    .title-header
-    {
-        text-align: center;
-        font-size: 30px;
-        color: #ffffff;
-        font-weight: 700;
-        margin-bottom: 60px;
-        @media screen and (max-width: 768px)
+        margin-top: 60px;
+        .title-header
         {
-            font-size: 25px;
-        }
-        @media screen and (max-width: 425px)
-        {
-            font-size: 20px;
-        }
-    }
-    .features-content-1
-    {
-        margin-bottom: 60px;
-        @media screen and (max-width: 425px)
-        {
-            margin-bottom: 0px;
-        }
-         .icon-holder
-        {
-            width: 100%;
+            text-align: center;
+            font-size: 30px;
+            color: #ffffff;
+            font-weight: 700;
+            margin-bottom: 30px;
+            @media screen and (max-width: 768px)
+            {
+                font-size: 25px;
+            }
             @media screen and (max-width: 425px)
             {
-                width: 40%;
-                margin: auto;
+                font-size: 20px;
             }
-            img
+        }
+        .features-content-1
+        {
+            margin-bottom: 60px;
+            @media screen and (max-width: 425px)
+            {
+                margin-bottom: 0px;
+            }
+             .icon-holder
             {
                 width: 100%;
-            }
-        }
-        .content-container
-        {
-            .content-header
-            {
-                font-size: 18px;
-                color: #ffcf16;
-                @media screen and (max-width: 768px)
-                {
-                    font-size: 15px;
-                }
-            }
-            .content-body
-            {
-                font-size: 15px;
-                color: #ffffff;
-                text-align: justify;
-                @media screen and (max-width: 768px)
-                {
-                    font-size: 12px;
-                }
                 @media screen and (max-width: 425px)
                 {
-                    margin-bottom: 20px;
+                    width: 40%;
+                    margin: auto;
+                }
+                img
+                {
+                    width: 100%;
                 }
             }
-        }
-    }
-    .features-content-2
-    {
-        .icon-holder
-        {
-            width: 100%;
-             @media screen and (max-width: 425px)
+            .content-container
             {
-                width: 40%;
-                margin: auto;
-            }
-            img
-            {
-                width: 100%;
-            }
-        }
-        .content-container
-        {
-            .content-header
-            {
-                font-size: 18px;
-                color: #ffcf16;
-                @media screen and (max-width: 768px)
+                .content-header
+                {
+                    font-size: 18px;
+                    color: #ffd019;
+                    @media screen and (max-width: 768px)
+                    {
+                        font-size: 15px;
+                    }
+                }
+                .content-body
                 {
                     font-size: 15px;
-                }
-                 @media screen and (max-width: 425px)
-                {
-                    font-size: 14px;
-                }
-            }
-            .content-body
-            {
-                font-size: 15px;
-                color: #ffffff;
-                text-align: justify;
-                @media screen and (max-width: 768px)
-                {
-                    font-size: 12px;
-                }
-                @media screen and (max-width: 425px)
-                {
-                    margin-bottom: 20px;
+                    color: #ffffff;
+                    text-align: justify;
+                    @media screen and (max-width: 768px)
+                    {
+                        font-size: 12px;
+                    }
+                    @media screen and (max-width: 425px)
+                    {
+                        margin-bottom: 20px;
+                    }
                 }
             }
         }
@@ -446,7 +394,7 @@ body {
 
 .wrapper-3
 {
-    background-color: #3a0c01;
+    background-color: #4e0301;
     padding: 100px 0px;
     @media screen and (max-width: 768px)
     {
@@ -458,7 +406,7 @@ body {
         .title-header
         {
             font-size: 30px;
-            color: #ffcf16;
+            color: #ffd019;
             font-weight: 700;
             @media screen and (max-width: 768px)
             {
@@ -507,7 +455,7 @@ body {
         }
         .swiper-pagination-bullet-active
         {
-            background: #ffcf16;
+            background: #ffd019;
         }
     }
 }
@@ -524,7 +472,7 @@ body {
     {
         text-align: center;
         margin-bottom: 40px;
-        color: #3a0c01;
+        color: #6d0401;
         .title-header
         {
             margin-bottom: 10px;
@@ -561,11 +509,11 @@ body {
     input
     {
         padding: 0px 10px;
-        color: #3a0c01;
+        color: #6d0401;
         height: 50px;
         font-size: 15px;
         width: 100%;
-        border: 1px solid #3a0c01;
+        border: 1px solid #6d0401;
         @media screen and (max-width: 768px)
         {
             height: 40px;
@@ -575,7 +523,7 @@ body {
     textarea
     {
         padding: 10px 10px;
-        color: #3a0c01;
+        color: #6d0401;
         height: 50px;
         font-size: 15px;
         width: 100%;
@@ -583,7 +531,7 @@ body {
         max-width: 100%;
         min-height: 150px;
         min-width: 100%;
-        border: 1px solid #3a0c01;
+        border: 1px solid #6d0401;
         @media screen and (max-width: 768px)
         {
             margin-left: 0px;
@@ -600,8 +548,8 @@ body {
         .btn-send
         {
             color: #ffffff;
-            background-color: #3a0c01;
-            border: solid 1px #3a0c01;
+            background-color: #6d0401;
+            border: solid 1px #6d0401;
             margin-top: 10px;
             padding: 10px 70px;
             @media screen and (max-width: 768px)
@@ -617,7 +565,7 @@ body {
         margin-bottom: 30px;
         .content-header
         {
-            color: #3a0c01;
+            color: #6d0401;
             font-size: 18px;
             margin-bottom: 10px;
             @media screen and (max-width: 768px)
@@ -637,7 +585,7 @@ body {
         // .border-holder
         // {
         //     width: 5%;
-        //     border: solid 1px #3a0c01;
+        //     border: solid 1px #6d0401;
         //     @media screen and (max-width: 425px)
         //     {
         //         margin: 10px auto;
@@ -649,7 +597,7 @@ body {
         .info-title
         {
             font-size: 16px;
-            color: #3a0c01;
+            color: #6d0401;
             text-align: left;
             @media screen and (max-width: 768px)
             {
@@ -663,7 +611,7 @@ body {
         .content-container
         {
             margin-top: 20px;
-            color: #3a0c01;
+            color: #6d0401;
             @media screen and (max-width: 425px)
             {
                 text-align: left;
@@ -735,7 +683,7 @@ body {
         }
         .title-header
         {
-            color: #3a0c01;
+            color: #6d0401;
             font-size: 18px;
             // margin-bottom: 10px;
             @media screen and (max-width: 768px) 
@@ -751,7 +699,7 @@ body {
         {
             display: none;
             width: 5%;
-            border: solid 1px #3a0c01;
+            border: solid 1px #6d0401;
             @media screen and (max-width: 425px) 
             {
                 display: block;
@@ -764,7 +712,7 @@ body {
         .content-header
         {
             font-size: 16px;
-            color: #3a0c01;
+            color: #6d0401;
             text-align: left;
             margin-bottom: 20px;
             @media screen and (max-width: 768px) 
@@ -778,7 +726,7 @@ body {
         }
          .contact-container
         {
-            color: #3a0c01;
+            color: #6d0401;
             margin-bottom: 30px;
             font-size: 15px;
              @media screen and (max-width: 768px) 
@@ -788,7 +736,7 @@ body {
         }
         .branch-container
         {
-            color: #3a0c01;
+            color: #6d0401;
             margin-bottom: 30px;
             font-size: 15px;
              @media screen and (max-width: 768px) 
@@ -811,7 +759,7 @@ body {
         padding: 10px 70px;
         cursor: pointer;
         font-size: 13px;
-        color: #3a0c01;
+        color: #6d0401;
 
         animation: bounce 1s;
         animation-direction: alternate;
@@ -841,7 +789,7 @@ body {
         padding: 10px 70px;
         cursor: pointer;
         font-size: 13px;
-        color: #3a0c01;
+        color: #6d0401;
 
         animation: bounce 1s;
         animation-direction: alternate;

@@ -102,340 +102,230 @@
 
 	<div class="organizational-chart">
 		<div class="container">
-			<div class="title-holder">
-				PHILTECH INC. <span>BOARD OF DIRECTOR</span>
+			<div class="title-holder-1">
+				THE BOARD <span>OF DIRECTORS</span>
 			</div>
-			<div class="org-chart-holder-1">
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+			<div class="org-chart-holder">
+				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/greeting-owner.jpg')">
 					</div>
 					<div class="info-box">
-						<div class="people-name">
-							ARNOLD A. ARBILLERA
-						</div>
-						<div class="people-class">
-							Chairman / President & CEO
-						</div>
-						<button>
+						<a href="https://www.linkedin.com/in/arnold-arbillera-a84646159/">
 							<i class="fab fa-linkedin-in"></i>
-						</button>
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Arnold A. Arbillera
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								Chairman, President / CEO
+							</div>
+						</div>
 					</div>
 				</div>
+				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/karl.jpg')">
+					</div>
+					<div class="info-box">
+						<a href="https://www.linkedin.com/in/mark-karl-landicho-b593a048/">
+							<i class="fab fa-linkedin-in"></i>
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Karl Landicho
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								BOD / Vice President for IT
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/lenin.jpg')">
+					</div>
+					<div class="info-box">
+						<a>
+							<i class="fab fa-linkedin-in"></i>
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Lenim Gan
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								BOD / Corporate Secretary
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/zenaida.jpg')">
+					</div>
+					<div class="info-box">
+						<a>
+							<i class="fab fa-linkedin-in"></i>
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Zenaida M. Arbillera
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								BOD / Vice President for Finance
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/Belsie.jpg')">
+					</div>
+					<div class="info-box">
+						<a href="https://www.linkedin.com/in/belsie-agustin-b608711a/">
+							<i class="fab fa-linkedin-in"></i>
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Belsie Agustin
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								BOD / Vice President for Marketing
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>	
+			
+			<div class="title-holder-2">
+				THE MANAGEMENT <span>TEAMS</span>
 			</div>
-			<div class="org-chart-holder-2">
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+			<div class="org-chart-holder">
+				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
 					</div>
 					<div class="info-box">
-						<div class="people-name">
-							MARK ROBERT F. LANDICHO
-						</div>
-						<div class="people-class">
-							Vice President for I.T. BOD
-						</div>
-						<button>
+						<a>
 							<i class="fab fa-linkedin-in"></i>
-						</button>
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Vacant
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								Director Sales & Marketing Department
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/saturn.jpg')">
 					</div>
 					<div class="info-box">
-						<div class="people-name">
-							LENIM W. GAN
-						</div>
-						<div class="people-class">
-							Corporate Secretary BOD
-						</div>
-						<button>
+						<a>
 							<i class="fab fa-linkedin-in"></i>
-						</button>
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Saturnino C. Apdal, Jr.
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								Director, Operations Department
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/ramil.jpg')">
 					</div>
 					<div class="info-box">
-						<div class="people-name">
-							BELSIE AGUSTIN
-						</div>
-						<div class="people-class">
-							Vice President for Marketing and Media Affairs / BOD
-						</div>
-						<button>
+						<a>
 							<i class="fab fa-linkedin-in"></i>
-						</button>
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Ramil Duque
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								Head, Accounting Department
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
 					</div>
 					<div class="info-box">
-						<div class="people-name">
-							ZENAIDA M. ARBILLERA
-						</div>
-						<div class="people-class">
-							Corporate Treasurer / BOD
-						</div>
-						<button>
+						<a>
 							<i class="fab fa-linkedin-in"></i>
-						</button>
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Quincy Bernardo
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								Head, System Admin
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="org-chart-holder-3">
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
 					</div>
 					<div class="info-box">
-						<div class="people-name">
-							SATURNINO APDAL, JR>
-						</div>
-						<div class="people-class">
-							Operations Manager / MT
-						</div>
-						<button>
+						<a>
 							<i class="fab fa-linkedin-in"></i>
-						</button>
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Luisa Marcelo
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								Head, Business Development
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="org-chart-holder-4">
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
 					</div>
 					<div class="info-box">
-						<div class="people-name">
-							QUINCY BERNARDO
-						</div>
-						<div class="people-class">
-							Admin Officer / MT
-						</div>
-						<button>
+						<a>
 							<i class="fab fa-linkedin-in"></i>
-						</button>
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Digima Web Solutions
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								System Development Partner
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
+				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
 					</div>
 					<div class="info-box">
-						<div class="people-name">
-							RAMIL DUQUE
-						</div>
-						<div class="people-class">
-							Assistant OM / Finance Head / MT
-						</div>
-						<button>
+						<a>
 							<i class="fab fa-linkedin-in"></i>
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="org-chart-holder-5">
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
-					</div>
-					<div class="info-box">
-						<div class="people-name">
-							FATIMA ARCILLAS
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Castillo & Climaco Law
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								Legal Council
+							</div>
 						</div>
-						<div class="people-class">
-							HR Head
-						</div>
-						<button>
-							<i class="fab fa-linkedin-in"></i>
-						</button>
-					</div>
-				</div>
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
-					</div>
-					<div class="info-box">
-						<div class="people-name">
-							JOSENOVER C. CENTINO
-						</div>
-						<div class="people-class">
-							Speaker / Trainer
-						</div>
-						<button>
-							<i class="fab fa-linkedin-in"></i>
-						</button>
-					</div>
-				</div>
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
-					</div>
-					<div class="info-box">
-						<div class="people-name">
-							JASMINE ABDULLA
-						</div>
-						<div class="people-class">
-							Product Managers - True Money / Micro ATM
-						</div>
-						<button>
-							<i class="fab fa-linkedin-in"></i>
-						</button>
-					</div>
-				</div>
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
-					</div>
-					<div class="info-box">
-						<div class="people-name">
-							MITCH FUENTES
-						</div>
-						<div class="people-class">
-							Product Managers - Travel & Tours
-						</div>
-						<button>
-							<i class="fab fa-linkedin-in"></i>
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="org-chart-holder-6">
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
-					</div>
-					<div class="info-box">
-						<div class="people-name">
-							RAMIL DUQUE
-						</div>
-						<div class="people-class">
-							Accounting Head
-						</div>
-						<button>
-							<i class="fab fa-linkedin-in"></i>
-						</button>
-					</div>
-				</div>
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
-					</div>
-					<div class="info-box">
-						<div class="people-name">
-							QUINCY BERNARDO
-						</div>
-						<div class="people-class">
-							System Admin Officer
-						</div>
-						<button>
-							<i class="fab fa-linkedin-in"></i>
-						</button>
-					</div>
-				</div>
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
-					</div>
-					<div class="info-box">
-						<div class="people-name">
-							JEANNIELLE MONTANTE
-						</div>
-						<div class="people-class">
-							CSR Head
-						</div>
-						<button>
-							<i class="fab fa-linkedin-in"></i>
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="org-chart-holder-7">
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
-					</div>
-					<div class="info-box">
-						<div class="people-name">
-							RUBEN RUBLICO
-						</div>
-						<div class="people-class">
-							Technical Support
-						</div>
-						<button>
-							<i class="fab fa-linkedin-in"></i>
-						</button>
-					</div>
-				</div>
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
-					</div>
-					<div class="info-box">
-						<div class="people-name">
-							MIA MICULOB
-						</div>
-						<div class="people-class">
-							Cashier
-						</div>
-						<button>
-							<i class="fab fa-linkedin-in"></i>
-						</button>
-					</div>
-				</div>
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
-					</div>
-					<div class="info-box">
-						<div class="people-name">
-							FRITCHIE DELOS SANTOS
-						</div>
-						<div class="people-class">
-							Accounting Assistant
-						</div>
-						<button>
-							<i class="fab fa-linkedin-in"></i>
-						</button>
-					</div>
-				</div>
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
-					</div>
-					<div class="info-box">
-						<div class="people-name">
-							JOHN MARK COLENDRES
-						</div>
-						<div class="people-class">
-							System Admin Asst. E-COMMERCE
-						</div>
-						<button>
-							<i class="fab fa-linkedin-in"></i>
-						</button>
-					</div>
-				</div>
-				<div class="org-chart-container">
-					<div class="image-holder">
-						<img src="/themes/{{ $shop_theme }}/img/people.jpg">
-					</div>
-					<div class="info-box">
-						<div class="people-name">
-							CZAR UZMAN
-						</div>
-						<div class="people-class">
-							CSR Staff
-						</div>
-						<button>
-							<i class="fab fa-linkedin-in"></i>
-						</button>
 					</div>
 				</div>
 			</div>

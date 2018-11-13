@@ -34,13 +34,18 @@
     {
         padding-top: 50px;
         font-weight: 300;
-        margin: 0;
+        margin: auto;
         text-align: justify;
         font-size: 1.5rem;
         line-height: 200%;
         @media screen and (max-width: 768px)
         {
             font-size: 1.3rem;
+            width: 90%;
+        }
+        @media screen and (max-width: 425px)
+        {
+            width: 80%;
         }
     }
 
@@ -115,17 +120,19 @@
     {
         padding-top: 50px;
         font-weight: 300;
-        margin: 0;
+        margin: auto;
         text-align: justify;
         font-size: 1.5rem;
         line-height: 200%;
         @media screen and (max-width: 768px)
         {
             font-size: 1.3rem;
+            width: 90%;
         }
          @media screen and (max-width: 425px)
         {
             padding-top: 0px;
+            width: 80%;
         }
     }
     .image-holder
@@ -176,6 +183,10 @@
         @media screen and (max-width: 768px)
         {
             font-size: 1.3rem;
+            width: 90%;
+        }
+        @media screen and (max-width: 425px)
+        {
             width: 80%;
         }
     }
@@ -207,7 +218,7 @@
         margin: 50px auto 0px;
         @media screen and (max-width: 768px)
         {
-            width: 95%;
+            width: 75%;
         }
         img
         {

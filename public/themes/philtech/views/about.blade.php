@@ -146,7 +146,7 @@
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/lenin.jpg')">
 					</div>
 					<div class="info-box">
-						<a>
+						<a href="_blank">
 							<i class="fab fa-linkedin-in"></i>
 						</a>
 						<div class="info-container">
@@ -164,7 +164,7 @@
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/zenaida.jpg')">
 					</div>
 					<div class="info-box">
-						<a>
+						<a href="_blank">
 							<i class="fab fa-linkedin-in"></i>
 						</a>
 						<div class="info-container">
@@ -206,7 +206,7 @@
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
 					</div>
 					<div class="info-box">
-						<a>
+						<a href="_blank">
 							<i class="fab fa-linkedin-in"></i>
 						</a>
 						<div class="info-container">
@@ -224,7 +224,7 @@
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/saturn.jpg')">
 					</div>
 					<div class="info-box">
-						<a>
+						<a href="_blank">
 							<i class="fab fa-linkedin-in"></i>
 						</a>
 						<div class="info-container">
@@ -242,7 +242,7 @@
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/ramil.jpg')">
 					</div>
 					<div class="info-box">
-						<a>
+						<a href="_blank">
 							<i class="fab fa-linkedin-in"></i>
 						</a>
 						<div class="info-container">
@@ -260,7 +260,7 @@
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
 					</div>
 					<div class="info-box">
-						<a>
+						<a href="_blank">
 							<i class="fab fa-linkedin-in"></i>
 						</a>
 						<div class="info-container">
@@ -278,7 +278,7 @@
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
 					</div>
 					<div class="info-box">
-						<a>
+						<a href="_blank">
 							<i class="fab fa-linkedin-in"></i>
 						</a>
 						<div class="info-container">
@@ -296,7 +296,7 @@
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
 					</div>
 					<div class="info-box">
-						<a>
+						<a href="_blank">
 							<i class="fab fa-linkedin-in"></i>
 						</a>
 						<div class="info-container">
@@ -314,7 +314,7 @@
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
 					</div>
 					<div class="info-box">
-						<a>
+						<a href="_blank">
 							<i class="fab fa-linkedin-in"></i>
 						</a>
 						<div class="info-container">

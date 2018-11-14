@@ -101,6 +101,11 @@ section
 					color: white;
 					text-decoration: none;
 					font-size: 15px;
+
+					button
+					{
+						padding: 10px 28px;
+					}
 				}
 			}
 		}
@@ -199,6 +204,11 @@ section
 		{
 			color: #2684ff !important;
 			cursor: pointer;
+		}
+
+		button
+		{
+			padding: 10px 28px;
 		}
 	}
 }

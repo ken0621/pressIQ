@@ -22,7 +22,7 @@ body {
         
         .cat-title-container {
           padding: 10px 10px 10px 15px;
-          background-color: #3A0C01;
+          background-color: #6d0401;
           border-radius: 5px 5px 0px 0px;
           
           span {
@@ -47,7 +47,7 @@ body {
             
             &:hover, &.active {
               cursor: pointer;
-              color: #6a2110;
+              color: #6d0401;
             }
           }
         }
@@ -103,7 +103,7 @@ body {
               }
               .detail-container {
                 .item-name {
-                  color: #6a2110;
+                  color: #6d0401;
                   transition: 0.3s all ease;
                 }
                 .button-container {
@@ -156,6 +156,14 @@ body {
             }
           }
         }
+      }
+    }
+    .pagination-bottom
+    {
+      text-align: right;
+      @media screen and (max-width: 768px)
+      {
+        text-align: center;
       }
     }
   }

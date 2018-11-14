@@ -213,6 +213,7 @@
                                 <li><a class="smoth-scroll" href="/legalities">Contact Us</a></li> 
                             </ul>
                         </nav> --}}
+
                         <nav class="footer-navigation">
                             <ul>
                                 @if(Request::segment(1)=="product")
@@ -286,12 +287,13 @@
                                 @endif
                             </ul>
                         </nav>
+
                         <div class="social-nav">
                             <ul>
-                                <li><a><i class="fa fa-facebook"></i></a></li>
-                                <li><a><i class="fab fa-twitter"></i></a></li>
-                                <li><a><i class="fab fa-google-plus-g"></i></a></li>
-                                <li><a><i class="fab fa-instagram"></i></a></li>
+                                <li><a href="https://www.facebook.com/F0reverSalePH/" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                                {{-- <li><a><i class="fab fa-twitter"></i></a></li>
+                                <li><a><i class="fab fa-google-plus-g"></i></a></li> --}}
+                                <li><a href="https://www.instagram.com/foreversale.ph" target="_blank"><i class="fab fa-instagram"></i></a></li>
                             </ul>
                         </div>
                     </div>

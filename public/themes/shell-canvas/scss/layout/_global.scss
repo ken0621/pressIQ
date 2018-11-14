@@ -429,7 +429,7 @@ button:hover
 /* FOOTER */
 #bottom-footer
 {
-    background-color: #3a0c01;
+    background-color: #3E0301;
     padding: 50px 0px 10px;
     margin: auto;
     @media screen and (max-width: 768px)
@@ -584,6 +584,10 @@ button:hover
                 }
             }
                 
+            ul
+            {
+                padding: 0px;
+            }
             li 
             {
                 display: inline-block;
@@ -597,7 +601,7 @@ button:hover
 
             a 
             {
-                color: #3a0c01;
+                color: #6D0401;
                 @media screen and (max-width: 1024px)
                 {
                     font-size: 11px;
@@ -605,7 +609,7 @@ button:hover
                 &:hover 
                 {
                     @include transition(0.3s);
-                    color: #3a0c01;
+                    color: #6D0401;
                     text-decoration: none;
                     cursor: pointer;
                 }

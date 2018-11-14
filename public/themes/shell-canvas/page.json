@@ -108,49 +108,8 @@
 			"type":"tinymce",
 			"default":"",
 			"size":"4"
-		},
-		"about_features_header_4":
-		{
-			"label":"Feature Header",
-			"type":"textbox",
-			"default":"",
-			"size":"4"
-		},
-		"about_features_header_5":
-		{
-			"label":"Feature Header",
-			"type":"textbox",
-			"default":"",
-			"size":"4"
-		},
-		"about_features_header_6":
-		{
-			"label":"Feature Header",
-			"type":"textbox",
-			"default":"",
-			"size":"4"
-		},
-		"about_features_body_4":
-		{
-			"label":"Feature Body",
-			"type":"tinymce",
-			"default":"",
-			"size":"4"
-		},
-		"about_features_body_5":
-		{
-			"label":"Feature Body",
-			"type":"tinymce",
-			"default":"",
-			"size":"4"
-		},
-		"about_features_body_6":
-		{
-			"label":"Feature Body",
-			"type":"tinymce",
-			"default":"",
-			"size":"4"
 		}
+		
 	},
 	"gallery":
 	{

@@ -21,6 +21,18 @@
                 <h2>About GABC</h2>
             </div>
             <div class="title-border"></div>
+            <div class="page__content">
+                <div class="page__content__title">
+                    <span>What is </span><strong>GABC?</strong>
+                </div>
+                <p class="p-statement">
+                    The Global Association for Blockchain and Cryptocurrency (GABC) is an association dedicated to promote Blockchain Technology and the use of Cryptocurrency around the globe.<br><br>
+                    Education, training and self-regulation are important components of the GABCs mission.<br><br>
+                    Blockchain and Cryptocurrency experts, professionals, start-ups, investors, organization representatives, and other public and private sectors are invited to collaborate in furthering the goals of the GABC.<br><br> 
+                    GABC has several classes of membership: Individual, Corporate, Professional and Advisor.
+
+                </p>
+            </div>
             <div class="page__content row clearfix">
                 <div class="col-md-6">
                     <div class="col__title">
@@ -29,28 +41,29 @@
                     <div class="col__p">
                         <ul>
                             <li>
-                                To promote the use of Blockchain Technology and Cryptocurrency around the globe.
+                                To promote the use of Blockchain Technology and Cryptocurrency around globe.
                             </li>
                             <li>
-                                To build a strong community of experts and non-experts, leaders and professionals in Blockchain and Cryptocurrency space.
+                                To build a strong community of experts, leaders and professionals in Blockchain and Cryptocurrency space.
+
                             </li>
                             <li>
-                                To guide start-ups, companies and protect investors.
+                                To guide start-ups, companies and protect investors and participants.
                             </li>
                             <li>
-                                To foster an environment for innovation and adaptation of blockchain used for business.
+                                To foster an environment for the innovation and adaptation of blockchain by businesses.
                             </li>
                             <li>
                                 To share news, knowledge and events related to Blockchain and Cryptocurrency.
                             </li>
                             <li>
-                                To engage with experts, regulators, policy makers, lawyers and organizations making GABC the frontruner organization in collaborating with regulatory bodies.
+                                To engage with experts, regulators, policymakers, lawyers and organizations with a view to making GABC the premier organization for Blockchain and cryptocurrency knowledge and use, in collaborating with regulatory bodies.
                             </li>
                             <li>
                                 To form strategic partnership with major organizations or entities.
                             </li>
                             <li>
-                                To facilitate partnership between all kinds of organization to move forward with blockchain.
+                                To facilitate partnerships between all kinds of organizations to foster the experimentation and establishment of Blockchain-based projects throughout the globe.
                             </li>
                         </ul>
                     </div>
@@ -60,13 +73,13 @@
                         <img src="/themes/{{ $shop_theme }}/img/mission_icon.png"><span>OUR MISSION</span>
                     </div>
                     <p class="col__p">
-                        To build a strong community of experts and professionals on related emerging Blockchain Technology and Cryptocurrency, sharing news and knowledge, organizations, public and private sector with collaborative participation of regulatory bodies.
+                        To enable the widespread adoption of Blockchain and Cryptocurrency at all levels. To build a strong community of experts and professionals with respect to emerging Blockchain Technology and Cryptocurrency; sharing news and knowledge, organizing events and promoting blockchain based solutions for start-ups, organizations, and other public and private sectors, along with the collaborative participation of regulatory bodies.
                     </p>
                     <div class="col__title">
                         <img src="/themes/{{ $shop_theme }}/img/vision_icon.png"><span>OUR VISION</span>
                     </div>
                     <p class="col__p">
-                        To be the front-runner Blockchain and Crypto Association that helps the society on adapting widely used of blockchain and cryptocurrency, forming alliances with various industries and regulatory institutions.
+                        To be an advocate for Blockchain and Cryptocurrency as the premier Blockchain and Crypto Association; guiding, developing and promoting Blockchain and Cryptocurrency for widespread adoption by all sectors of society and business, forming alliances with various industries and regulatory institutions. 
                     </p>
                 </div>
             </div>
@@ -81,7 +94,7 @@
             <div class="title-border"></div>
             <div class="page__content">
                 <div class="page__content--grid">
-                    <div class="page__content--grid__item">
+                    <a target="_blank" href="https://www.bloomberg.com/research/stocks/people/person.asp?personId=20700685&privcapId=11236094/" class="page__content--grid__item">
                         <div class="image-container">
                             <img src="/themes/{{ $shop_theme }}/img/founder_1.png">
                             <div class="flag-badge">
@@ -92,8 +105,8 @@
                         <div class="info__details">
                             Senior VP / Pres & CEO of MYSolid Tech. Solid Group Inc.
                         </div>
-                    </div>
-                    <div class="page__content--grid__item">
+                    </a>
+                    <a target="_blank" href="https://www.linkedin.com/in/mark-karl-landicho-b593a048/" class="page__content--grid__item">
                         <div class="image-container">
                             <img src="/themes/{{ $shop_theme }}/img/founder_2.png">
                             <div class="flag-badge">
@@ -104,44 +117,8 @@
                         <div class="info__details">
                             CEO of 2 Companies, Blockchain Speaker, ICO Adviser | DLT
                         </div>
-                    </div>
-                    <div class="page__content--grid__item">
-                        <div class="image-container">
-                            <img src="/themes/{{ $shop_theme }}/img/founder_3.png">
-                            <div class="flag-badge">
-                                <img src="/themes/{{ $shop_theme }}/img/badge_japan.png">
-                            </div>
-                        </div>
-                        <div class="info__name">Kanji Sakae</div>
-                        <div class="info__details">
-                            Founder, Snowball Capital
-                        </div>
-                    </div>
-                    <div class="page__content--grid__item">
-                        <div class="image-container">
-                            <img src="/themes/{{ $shop_theme }}/img/founder_4.png">
-                            <div class="flag-badge">
-                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
-                            </div>
-                        </div>
-                        <div class="info__name">Guillermo Tabligan</div>
-                        <div class="info__details">
-                            Chief Information Officer at Digima Web Solutions, Inc.
-                        </div>
-                    </div>
-                    <div class="page__content--grid__item">
-                        <div class="image-container">
-                            <img src="/themes/{{ $shop_theme }}/img/founder_5.png">
-                            <div class="flag-badge">
-                                <img src="/themes/{{ $shop_theme }}/img/badge_mal.png">
-                            </div>
-                        </div>
-                        <div class="info__name">Effendy Zulkifly</div>
-                        <div class="info__details">
-                            Founder, Crypto Valley Malaysia, Ceo, Blockchain Academy Asia, ICO Adviser
-                        </div>
-                    </div>
-                    <div class="page__content--grid__item">
+                    </a>
+                    <a target="_blank" href="https://www.linkedin.com/in/oliverkoncz/" class="page__content--grid__item">
                         <div class="image-container">
                             <img src="/themes/{{ $shop_theme }}/img/founder_6.png">
                             <div class="flag-badge">
@@ -152,7 +129,43 @@
                         <div class="info__details">
                             President at Falcan Holdings Limited
                         </div>
-                    </div>
+                    </a>
+                    <a target="_blank" href="https://www.linkedin.com/in/guillermo-tabligan-54323960/" class="page__content--grid__item">
+                        <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/founder_4.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_ph.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Guillermo Tabligan</div>
+                        <div class="info__details">
+                            Chief Information Officer at Digima Web Solutions, Inc.
+                        </div>
+                    </a>
+                    <a target="_blank" href="https://www.linkedin.com/in/kanji-sakae-347a761/" class="page__content--grid__item">
+                        <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/founder_3.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_japan.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Kanji Sakae</div>
+                        <div class="info__details">
+                            Founder, Snowball Capital
+                        </div>
+                    </a>
+                    <a target="_blank" href="https://www.linkedin.com/in/effendyzulkifly/" class="page__content--grid__item">
+                        <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/founder_5.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/badge_mal.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Effendy Zulkifly</div>
+                        <div class="info__details">
+                            Founder, Crypto Valley Malaysia, Ceo, Blockchain Academy Asia, ICO Adviser
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -991,7 +1004,7 @@
                 <label for="post-2" class="read-more-trigger"></label>
             </div>
         </div>
-    </section> 
+    </section>
 
     <!-- Advisory Board -->
     <section id="advisory" class="content__section-6">
@@ -1000,9 +1013,9 @@
                 <h2>GABC Advisory Membership</h2>
             </div>
             <div class="content__btn-container">
-                <button class="btn-primary">BECOME PROFESSIONAL</button>
-                <button class="btn-primary">BECOME ADVISOR</button>
-                <button class="btn-primary">GET AN ADVISOR</button>
+                <button type="button" data-toggle="modal" data-target="#myModal" class="btn-primary">BECOME PROFESSIONAL</button>
+                <button type="button" data-toggle="modal" data-target="#myModal" class="btn-primary">BECOME ADVISOR</button>
+                <button type="button" data-toggle="modal" data-target="#myModal" class="btn-primary">GET AN ADVISOR</button>
             </div>
             <div class="page__content">
                 <div class="page__content--grid">
@@ -1184,6 +1197,31 @@
             </div>
         </div>
     </section>
+
+    <!-- Modal Popup -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #002f90; color: white;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Get In Touch With Us!</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <div class="text-center">
+                            <h3 style="padding-bottom: 15px;">Email us at:</h3>
+                            <span><i class="fa fa-envelope-open"></i>&nbsp;&nbsp;</span>
+                            <span>support@gabc.com</span>
+                        </div>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" style="padding: 5px 18px;" class="btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+      </div>
     
     <!-- SCROLL TO TOP -->
     <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
@@ -1191,7 +1229,7 @@
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=1.3">
+<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css?version=1.4">
 @endsection
 
 @section("script")

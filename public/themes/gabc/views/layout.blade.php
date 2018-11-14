@@ -17,7 +17,7 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700" rel="stylesheet">   
 
         <!-- GLOBAL CSS -->
-        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
+        <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1.0">
 
         @include("frontend.ghead")
 
@@ -74,6 +74,11 @@
                         <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="#advisory">ADVISORY</a></span>
                         <div class="border-container"></div>
+                        <span>
+                            <a href="http://gabc-election.digimahouse.com/login">
+                                <button class="btn-primary">LOGIN</button>
+                            </a>
+                        </span>
                     </div>
                 </div>
                 <div class="col-md-10">
@@ -86,6 +91,7 @@
                             <li><a class="smoth-scroll" href="#partners">PARTNERS</a></li>
                             <li><a class="smoth-scroll" href="#candidates">CANDIDATES</a></li>
                             <li><a class="smoth-scroll" href="#advisory">ADVISORY</a></li>
+                            <li><a href="http://gabc-election.digimahouse.com/login"><button class="btn-primary">LOGIN</button></a></li>
                         </ul>
                     </nav>
                 </div>
@@ -116,7 +122,7 @@
                         <div class="footer__upper__content">
                             <div class="grid-container">
                                 <a target="_blank" href="https://t.me/GABC_Global"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_tele.png"></div></a>
-                                <a target="_blank" href="facebook.com/GABC.Global"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_fb.png"></div></a>
+                                <a target="_blank" href="https://facebook.com/GABC.Global"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_fb.png"></div></a>
                                 <a target="_blank" href="https://twitter.com/GABC_Global"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_twitter.png"></div></a>
                                 <a target="_blank" href="https://www.linkedin.com/groups/10400076/"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_in.png"></div></a>
              

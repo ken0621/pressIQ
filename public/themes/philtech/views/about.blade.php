@@ -202,7 +202,7 @@
 				THE MANAGEMENT <span>TEAMS</span>
 			</div>
 			<div class="org-chart-holder">
-				<div class="people">
+				{{-- <div class="people">
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
 					</div>
 					<div class="info-box">
@@ -219,7 +219,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> --}}
 				<div class="people">
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/saturn.jpg')">
 					</div>
@@ -257,7 +257,7 @@
 					</div>
 				</div>
 				<div class="people">
-					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/Quincy.jpg')">
 					</div>
 					<div class="info-box">
 						<a href="_blank">
@@ -293,10 +293,10 @@
 					</div>
 				</div>
 				<div class="people">
-					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/dig-logo.jpg')">
 					</div>
 					<div class="info-box">
-						<a href="_blank">
+						<a href="https://ph.linkedin.com/in/digima-web-solutions-incorporated-00058b146">
 							<i class="fab fa-linkedin-in"></i>
 						</a>
 						<div class="info-container">

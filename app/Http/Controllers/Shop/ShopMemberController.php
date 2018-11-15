@@ -610,8 +610,8 @@ class ShopMemberController extends Shop
         $p4ward_contactus["explode_email"] = explode("@", $p4ward_contactus['contactus_email']);
         Mail::send('email.contact_us',$p4ward_contactus, function($message) use ($p4ward_contactus)
         {
-            $message->from($p4ward_contactus["explode_email"][0] . '@p4ward.com',$p4ward_contactus['contactus_email']);
-            $message->to("shell_canvas@gmail.com");  
+            $message->from($p4ward_contactus["explode_email"][0] . '@digimahouse.com',$p4ward_contactus['contactus_email']);
+            $message->to("carlosegovia5@gmail.com");  
             $message->subject($p4ward_contactus['contactus_subject']);
            
         });

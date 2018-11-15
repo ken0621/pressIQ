@@ -151,6 +151,13 @@
 			"default":"",
 			"size":"6"
 		},
+		"contact_shellcanvas_map":
+		{
+			"label":"Map",
+			"type":"textbox",
+			"default":"",
+			"size":"12"
+		},
 		"contact_shellcanvas_mainbranch":
 		{
 			"label":"Main Branch",

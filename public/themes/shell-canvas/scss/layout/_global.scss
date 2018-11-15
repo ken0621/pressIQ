@@ -441,26 +441,15 @@ button:hover
         text-align: center;
         .image-holder
         {
-
+            margin: auto;
         }
         .footer-navigation
         {
             margin: 25px;
             font-size: 14px;
-            @media screen and (max-width: 900px)
+            @media screen and (max-width: 768px)
             {
-                width: 100%;
                 display: none;
-                ul 
-                {
-                    list-style:none;
-                    padding-left: 10px;
-                    li 
-                    {
-                        padding: 10px 0px;
-                        border-bottom: 1px solid #efefef;
-                    }
-                }
             }
 
              .product-dropdown-ftr 
@@ -536,7 +525,7 @@ button:hover
 
                 @media screen and (max-width: 991px)
                 {
-                    display: none;
+                    // display: none;
                 }
             }
 
@@ -566,23 +555,23 @@ button:hover
         }
         .social-nav
         {
-            margin: 25px;
+            margin: 25px auto;
             font-size: 20px;
-            @media screen and (max-width: 900px)
-            {
-                width: 100%;
-                display: none;
-                ul 
-                {
-                    list-style:none;
-                    padding-left: 10px;
-                    li 
-                    {
-                        padding: 10px 0px;
-                        border-bottom: 1px solid #efefef;
-                    }
-                }
-            }
+            // @media screen and (max-width: 900px)
+            // {
+            //     width: 100%;
+            //     display: none;
+            //     ul 
+            //     {
+            //         list-style:none;
+            //         padding-left: 10px;
+            //         li 
+            //         {
+            //             padding: 10px 0px;
+            //             border-bottom: 1px solid #efefef;
+            //         }
+            //     }
+            // }
                 
             ul
             {
@@ -595,7 +584,7 @@ button:hover
 
                 @media screen and (max-width: 991px)
                 {
-                    display: none;
+                    // display: none;
                 }
             }
 
@@ -629,6 +618,12 @@ button:hover
                 width: 35px;
                 background-color: #ffcf16;
                 padding-top: 8px;
+                @media screen and (max-width: 768px)
+                {
+                    padding-top: 10px;
+                    height: 30px;
+                    width: 30px;
+                }
             }
         }
     }

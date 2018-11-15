@@ -356,7 +356,7 @@
 	    		</div>
 	    	</div>
 	    	<div class="map-container">
-	    		<iframe class="shellcanvas-map" src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d15447.103061996984!2d120.9979633916792!3d14.554811672121508!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1s+1999+Sen.+Gil+Puyat+Avenue%2C+(Buendia+Avenue)Pasay+City%2C+Philippines+1300!5e0!3m2!1sen!2sph!4v1536118919269" width="1200" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
+	    		<iframe class="shellcanvas-map" src="{!! get_content($shop_theme_info, "contact", "contact_shellcanvas_map") !!}" width="1200" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
 	    	</div>
 	        <div class="row clearfix">
 	        	<div class="col-md-6 col-sm-6 col-xs-12">

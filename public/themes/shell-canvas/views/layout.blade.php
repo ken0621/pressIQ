@@ -10,7 +10,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
-        <link rel="icon" href="/themes/{{ $shop_theme }}/img/favicon.png" type="image/jpg" />
+        <link rel="icon" href="/themes/{{ $shop_theme }}/img/shell-canvas.png" type="image/jpg" />
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">

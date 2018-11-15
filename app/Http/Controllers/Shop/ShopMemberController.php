@@ -611,7 +611,7 @@ class ShopMemberController extends Shop
         Mail::send('email.contact_us',$p4ward_contactus, function($message) use ($p4ward_contactus)
         {
             $message->from('no-reply@digimahouse.com',$p4ward_contactus['contactus_email']);
-            $message->to("carlosegovia5@gmail.com");  
+            $message->to("shellcanvasbuendia@gmail.com");  
             $message->subject($p4ward_contactus['contactus_subject']);
            
         });

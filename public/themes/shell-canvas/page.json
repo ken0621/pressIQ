@@ -1,13 +1,14 @@
 {
 	"home":
 	{
-		"home_gallery" :
-		{
-			"label":"Home Banner",
-			"type":"gallery",
-			"default":"",
-			"size":"12"
-		}
+		
+		"home_banner_main" :
+        {
+            "label":"Main Banner Maintenance",
+            "type":"gallery_links",
+            "default":"",
+            "size":"12"
+        }
 	},
 	"about":
 	{

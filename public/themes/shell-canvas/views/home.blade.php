@@ -4,7 +4,7 @@
 
 	<div class="swiper-container swiper1" id="home">
 		<div class="swiper-wrapper">
-			@if(loop_content_condition($shop_theme_info, "home", "home_gallery"))
+			{{-- @if(loop_content_condition($shop_theme_info, "home", "home_gallery"))
 				@foreach(loop_content_get($shop_theme_info, "home", "home_gallery") as $slider)
 					<div class="swiper-slide">
 						<div class="image-holder">
@@ -13,7 +13,7 @@
 					</div>
 				@endforeach
 			@else
-				{{-- <div class="swiper-slide">
+				<div class="swiper-slide">
 					<div class="image-holder">
 						<img src="/themes/shell-canvas/img/shell-canvas-banner.jpg">
 					</div>
@@ -27,8 +27,17 @@
 					<div class="image-holder">
 						<img src="/themes/shell-canvas/img/shell-canvas-banner-2.jpg">
 					</div>
-				</div> --}}
-			@endif
+				</div>
+			@endif --}}
+			@if(is_serialized(get_content($shop_theme_info, "home", "home_banner_main")))
+               @foreach(unserialize(get_content($shop_theme_info, "home", "home_banner_main")) as $slider)
+	                <div class="swiper-slide">
+	                   	<div class="image-holder">
+	                   		<img src="{{ $slider["image"] }}">
+	                   	</div>
+                   </div>
+               @endforeach
+            @endif
 		</div>
 		<div class="slider-next">
 			<img src="/themes/shell-canvas/img/icon-right-arrow.png">

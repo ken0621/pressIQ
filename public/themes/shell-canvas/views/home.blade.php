@@ -31,7 +31,7 @@
 			@endif --}}
 			@if(is_serialized(get_content($shop_theme_info, "home", "home_banner_main")))
                @foreach(unserialize(get_content($shop_theme_info, "home", "home_banner_main")) as $slider)
-	                <div class="swiper-slide" target="_blank" onclick="window.location.href='{{ $slider["link"] }}'">
+	                <div class="swiper-slide" target="_blank" onclick="window.open( '{{ $slider["link"] }}' )" style="cursor: pointer;">
 	                   	<div class="image-holder">
 	                   		<img src="{{ $slider["image"] }}">
 	                   	</div>

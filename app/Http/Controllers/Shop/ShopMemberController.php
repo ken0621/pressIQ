@@ -599,20 +599,21 @@ class ShopMemberController extends Shop
 
     public function send_contact_us_shell()
     {
-        $p4ward_contactus["contactus_first_name"]         =request('contactus_first_name');
-        $p4ward_contactus["contactus_last_name"]          =request('contactus_last_name');
-        $p4ward_contactus["contactus_phone_number"]       =request('contactus_phone_number');
-        $p4ward_contactus["contactus_subject"]            =request('contactus_subject');
-        $p4ward_contactus["contactus_email"]              =request('contactus_email');
-        $p4ward_contactus["contactus_message"]            =request('contactus_message');
-        $p4ward_contactus["contactus_to"]                 =request('contactus_to');
+        $shell_contactus["contactus_first_name"]         =request('contactus_first_name');
+        $shell_contactus["contactus_last_name"]          =request('contactus_last_name');
+        $shell_contactus["contactus_phone_number"]       =request('contactus_phone_number');
+        $shell_contactus["contactus_subject"]            =request('contactus_subject');
+        $shell_contactus["contactus_email"]              =request('contactus_email');
+        $shell_contactus["contactus_message"]            =request('contactus_message');
+        $shell_contactus["contactus_to"]                 =request('contactus_to');
 
-        $p4ward_contactus["explode_email"] = explode("@", $p4ward_contactus['contactus_email']);
-        Mail::send('email.contact_us',$p4ward_contactus, function($message) use ($p4ward_contactus)
+        $shell_contactus["explode_email"] = explode("@", $shell_contactus['contactus_email']);
+        Mail::send('email.contact_us',$shell_contactus, function($message) use ($shell_contactus)
         {
-            $message->from('no-reply@digimahouse.com',$p4ward_contactus['contactus_email']);
-            $message->to("shellcanvasbuendia@gmail.com");  
-            $message->subject($p4ward_contactus['contactus_subject']);
+            $message->from('no-reply@digimahouse.com',$shell_contactus['contactus_email']);
+            // $message->to("shellcanvasbuendia@gmail.com");  
+            $message->to("carlosegovia5@gmail.com");  
+            $message->subject($shell_contactus['contactus_subject']);
            
         });
         Session::flash('message_concern_shell', 'Message Successfully Sent!');

@@ -611,7 +611,8 @@ class ShopMemberController extends Shop
         Mail::send('email.contact_us',$shell_contactus, function($message) use ($shell_contactus)
         {
             $message->from('no-reply@digimahouse.com',$shell_contactus['contactus_email']);
-            $message->to("shellcanvasbuendia@gmail.com");  
+            // $message->to("shellcanvasbuendia@gmail.com");  
+            $message->to("carlosegovia5@gmail.com");  
             $message->subject($shell_contactus['contactus_subject']);
            
         });

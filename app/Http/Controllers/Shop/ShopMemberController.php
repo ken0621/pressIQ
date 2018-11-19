@@ -619,6 +619,28 @@ class ShopMemberController extends Shop
         Session::flash('message_concern_shell', 'Message Successfully Sent!');
         return Redirect::to('/#contact');  
     }
+
+    public function send_contact_us_living()
+    {
+        $living_contactus["contactus_first_name"]         =request('contactus_first_name');
+        $living_contactus["contactus_last_name"]          =request('contactus_last_name');
+        $living_contactus["contactus_phone_number"]       =request('contactus_phone_number');
+        $living_contactus["contactus_subject"]            =request('contactus_subject');
+        $living_contactus["contactus_email"]              =request('contactus_email');
+        $living_contactus["contactus_message"]            =request('contactus_message');
+        $living_contactus["contactus_to"]                 =request('contactus_to');
+
+        $living_contactus["explode_email"] = explode("@", $living_contactus['contactus_email']);
+        Mail::send('email.contact_us',$living_contactus, function($message) use ($living_contactus)
+        {
+            $message->from('no-reply@digimahouse.com',$living_contactus['contactus_email']);
+            $message->to("cyrilmea@gmail.com");  
+            $message->subject($living_contactus['contactus_subject']);
+           
+        });
+        Session::flash('message_concern_living', 'Message Successfully Sent!');
+        return Redirect::to('/#contact');  
+    }
                     
     public function send_demo()                             
     {

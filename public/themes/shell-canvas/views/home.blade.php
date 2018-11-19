@@ -497,7 +497,7 @@
                            </div>
                            <div class="col-md-12">
                                <div class="btn-holder">
-                                   <button class="btn-send" type="submit" formaction="/contact_us/send">SEND</button>
+                                   <button class="btn-send" type="submit" formaction="/contact_us/shell/send">SEND</button>
                                </div>
                            </div>
                        </div>

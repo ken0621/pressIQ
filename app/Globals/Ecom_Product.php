@@ -682,7 +682,8 @@ class Ecom_Product
 		$slot = $_slot->toArray();
 		$slot = array_column($slot, 'custom_price');
 		
-		if ($slot) 
+		
+		if($slot) 
 		{
 			return min($slot);
 		}

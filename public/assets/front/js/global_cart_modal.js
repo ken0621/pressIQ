@@ -1,6 +1,6 @@
 var cart_modal = new cart_modal();
 var jqxhr = {abort: function () {}};
-
+var quantity_change = "";
 function cart_modal()
 {
 	init();
@@ -25,6 +25,7 @@ function cart_modal()
 		$(".item-qty").unbind("change");
 		$(".item-qty").bind("change", function(e)
 		{
+			quantity_change = e.currentTarget;
 			action_quantity_price(e.currentTarget);
 		});
 	}
@@ -101,9 +102,9 @@ function cart_modal()
 			cart_loader_hide();
 			document_ready();
 
-			if (quantity) 
+			if(quantity) 
 			{
-				$(".item-qty").val(quantity);
+				$(quantity_change).val(quantity);
 			}
 		});
 	}

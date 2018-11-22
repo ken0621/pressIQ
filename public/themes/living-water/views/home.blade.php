@@ -218,9 +218,9 @@
                         <span class="icon-container"><img src="/themes/living-water/img/water-drops.png"></span><span class="title">GET IN TOUCH WITH US</span>
                     </div>
                      <form action="Post"> 
-                        @if (session('message_concern_p4ward'))
+                        @if (session('message_concern_living'))
                             <div class="alert alert-success">
-                                {{ session('message_concern_p4ward') }}
+                                {{ session('message_concern_living') }}
                             </div>
                         @endif
                          <div class="row clearfix">
@@ -256,7 +256,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="button-container">
-                                    <button type="submit" formaction="/contact_us/send">SEND</button>
+                                    <button type="submit" formaction="/contact_us/living/send">SEND</button>
                                 </div>
                             </div>
                         </div>

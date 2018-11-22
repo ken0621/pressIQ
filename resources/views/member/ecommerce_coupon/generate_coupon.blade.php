@@ -15,7 +15,7 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                <label>Coupon Code</label>
-                               <input type="text" class="form-control input-sm" name="coupon_amount" value="{{$coupon->coupon_code}}" disabled>                    
+                               <input type="text" class="form-control input-sm" name="coupon_code" value="{{$coupon->coupon_code}}">                    
                             </div>
                         </div>
                     @endif

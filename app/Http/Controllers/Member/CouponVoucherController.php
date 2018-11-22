@@ -96,7 +96,7 @@ class CouponVoucherController extends Member
             }
             else
             {
-                $coupon = Cart::update_coupon_code($coupon_code_id, $coupon_amount,$coupon_product_id, $coupon_minimum_quantity, $coupon_type, $all_product_id);
+                $coupon = Cart::update_coupon_code($coupon_code_id, $coupon_amount,$coupon_product_id, $coupon_minimum_quantity, $coupon_type, $all_product_id, request('coupon_code'));
             }
             $generate_count--;
         }

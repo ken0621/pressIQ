@@ -623,7 +623,7 @@ class Cart
 
         return $message;
     }
-    public static function update_coupon_code($coupon_id, $price,$coupon_product_id, $minimum_quantity = 0, $type="fixed",$all_product_id = false)
+    public static function update_coupon_code($coupon_id, $price,$coupon_product_id, $minimum_quantity = 0, $type="fixed",$all_product_id = false, $coupon_code)
     {
 
         $shop_id = Cart::get_shop_info();
@@ -642,6 +642,11 @@ class Cart
             $update["coupon_code_amount"] = $price;
             $update["coupon_discounted"]       =  $type;
             $update["coupon_minimum_quantity"] =  $minimum_quantity;
+
+            if ($coupon_code) 
+            {
+                $update["coupon_code"] = $coupon_code;
+            }
 
             Tbl_coupon_code::where("coupon_code_id",$coupon_id)->update($update);
 

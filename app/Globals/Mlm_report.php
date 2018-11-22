@@ -38,6 +38,7 @@ use App\Models\Tbl_mlm_slot_wallet_log_transfer;
 use App\Models\Tbl_mlm_slot_wallet_log_refill;
 use App\Models\Tbl_ec_order;
 use App\Models\Tbl_inventory_slip;
+use App\Models\Tbl_transaction_list;
 class Mlm_report
 {   
     public static function general($shop_id, $filter)
@@ -1452,5 +1453,34 @@ class Mlm_report
         }
 
         return view('member.mlm_report.report.payin',$data);
+    }
+    /*JAMES SALES REPORT*/
+    public static function sales_report($shop_id,$filters)
+    {
+        $data['sales_person'] = "--------";
+        $query  = Tbl_transaction_list::where('tbl_transaction_list.shop_id',$shop_id)->GetTransaction();
+        $query  = $query->where('transaction_date_created', '>=', $filters['from'])->where('transaction_date_created', '<=', $filters['to']);
+     
+        if(Request::input('user_id') != 0)
+        {
+            $sales_person = DB::table('tbl_user')->where('tbl_user.user_id',Request::input('user_id'))->first();
+            $data['sales_person'] = $sales_person->user_first_name." ".$sales_person->user_last_name;
+            $query = $query->where('tbl_transaction_list.transaction_sales_person',Request::input('user_id'));
+        }
+
+        $data['sales']          = $query->get();
+        $data['sales_subtotal'] = currency('Php',$query->sum('subtotal'));
+        $data['sales_total']    = currency('Php',$query->sum('subtotal'));
+
+        $data['page'] = "sales_report";
+
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+
+        
+
+        return view('member.mlm_report.report.sales_report',$data);
     }
 }

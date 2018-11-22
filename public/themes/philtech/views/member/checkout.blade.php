@@ -104,6 +104,14 @@
 									
 									<!-- SUMMARY TOTAL CONTAINER -->
 									<div class="total-container row clearfix">
+										<div class="col-md-6">
+											<div class="left-detail">Shipping Fee</div>
+										</div>
+										<div class="col-md-6">
+											<div class="right-detail">200.00</div>
+										</div>
+									</div>
+									<div class="total-container row clearfix">
 										<!-- SUBTOTAL -->
 										<!--<div class="col-md-6">-->
 										<!--	<div class="left-detail">Subtotal</div>-->
@@ -120,7 +128,7 @@
 										</div>
 									</div>
 									<!-- SHIPPING FEE -->
-									<div class="shipping-fee">Shipping Fee is included</div>
+									{{-- <div class="shipping-fee">Shipping Fee is included</div> --}}
 								@else
 									<div class="text-center" style="padding: 50px;">CART IS EMPTY</div>
 								@endif

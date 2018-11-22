@@ -129,13 +129,14 @@ class Transaction
         $transaction_sales_person = isset($transaction_id["transaction_sales_person"]) ? $transaction_id["transaction_sales_person"] : null;
         if($source == null)
         {
-            $cart = Cart2::get_cart_info($customer_id);
+            /*CHANGE BY JAMES*/
+            // $cart = Cart2::get_cart_info($customer_id); ORIGINAL
+            $cart = Cart2::get_cart_info($customer_id ? $customer_id : $transaction_id["transaction_reference_id"]);
         }
         else
         {
             $cart = null;
         }
-        
         if($cart || $source != null) //INSERT ONLY IF CART IS NOT ZERO OR THERE IS SOURCE
         {
             if(!is_numeric($transaction_id)) //CREATE NEW IF TRANSACTION ID if $transaction_id is an ARRAY
@@ -626,7 +627,6 @@ class Transaction
         }
         
         $data->transaction(); //join table transaction
-        
         if(isset($transaction_type))
         {
             if($transaction_type != 'all')
@@ -647,12 +647,18 @@ class Transaction
                 {
                     $data->where('transaction_type','proof')->where('payment_status','reject')->where('order_status','reject');
                 }
+                else if($transaction_type == "cashier")
+                {
+                    $data->where('tbl_transaction_list.transaction_sales_person','!=',null);
+                }
                 else
                 {
                     $data->where('transaction_type', $transaction_type)->where('order_status','!=','reject');
                 }
             }
+            
         }
+        
         if($shop_id == 1)
         {
             $data->orderBy('transaction_date_created','DESC');
@@ -699,6 +705,9 @@ class Transaction
         }
         if($paginate)
         {
+            /*JAMES APPEND THIS CODE FOR GROUPING THE LIST*/
+            $data->groupBy("tbl_transaction_list.transaction_id");
+            /*END JAMES*/
             $data = $data->paginate($paginate);
         }
         else
@@ -807,6 +816,7 @@ class Transaction
         $type[1] = 'receipt';
         $type[2] = 'failed';
         $type[3] = 'pending';
+        $type[4] = 'cashier';
         return $type;
     }
     public static function shop_increment($shop_id)

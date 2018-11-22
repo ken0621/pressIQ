@@ -102,4 +102,14 @@ class Tbl_mlm_slot extends Model
               ->where("tbl_price_level_item.item_id", $item_id);
         return $query;
     }
+
+    public function scopePriceLevelV2($query, $item_id)
+    {
+        $query->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership')
+              ->join('tbl_price_level', 'tbl_price_level.price_level_id', '=', 'tbl_membership.membership_price_level')
+              ->join('tbl_price_level_item', 'tbl_price_level_item.price_level_id', '=', 'tbl_price_level.price_level_id')
+              ->join('tbl_item', 'tbl_item.item_id', '=', 'tbl_price_level_item.item_id')
+              ->where("tbl_price_level_item.item_id", $item_id);
+        return $query;
+    }
 }

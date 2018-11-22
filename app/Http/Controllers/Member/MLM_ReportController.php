@@ -47,6 +47,7 @@ use App\Models\Tbl_membership_code_invoice;
 use App\Models\Tbl_item_code_invoice;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_journal_entry_line;
+use App\Models\Tbl_transaction_list;
 use App\Globals\Category;
 use App\Models\Tbl_mlm_slot_wallet_log_transfer;
 use Crypt;
@@ -175,6 +176,11 @@ class MLM_ReportController extends Member
         $data['report_list_d']['payin']['to'] = $to;
         $data['report_list_d']['payin']['count'] = $count;
 
+        // ----------------------------------------------------------------- James Omosora
+        $data['report_list']['sales_report'] = 'Sales Report';
+        $data['report_list_d']['sales_report']['from'] = $from;
+        $data['report_list_d']['sales_report']['to'] = $to;
+        $data['report_list_d']['sales_report']['count'] = $count;
 
         foreach($data['report_list_d'] as $key => $value)
         {
@@ -183,7 +189,7 @@ class MLM_ReportController extends Member
             $data['report_list_d'][$key]['cashiers'] = 'hide';
             $data['report_list_d'][$key]['warehouse'] = 'hide';
 
-            if($key == 'product_sales_report_warehouse' || $key == 'product_sales_report')
+            if($key == 'product_sales_report_warehouse' || $key == 'product_sales_report' || $key == 'sales_report')
             {
                 $data['report_list_d'][$key]['cashiers'] = 'show';
                 $data['report_list_d'][$key]['warehouse'] = 'show';
@@ -206,21 +212,21 @@ class MLM_ReportController extends Member
     {
 
         $filter['from'] = Request::input('from');
-        $filter['to'] = Request::input('to');
-        $from = Carbon::parse($filter['from']);
-        $to = Carbon::parse($filter['to'])->addDay(1);
-        $filter['to'] = $to;
+        $filter['to']   = Request::input('to');
+        $from           = Carbon::parse($filter['from']);
+        $to             = Carbon::parse($filter['to'])->addDay(1);
+        $filter['to']   = $to;
         $filter['from'] = $from;
         $filter['skip'] = Request::input('skip');
         $filter['take'] = Request::input('take');
 
-        $report = Request::input('report_choose');
-        $pdf= Request::input('pdf');
-        $shop_id = $this->user_info->shop_id;
-        $view =  Mlm_report::$report($shop_id, $filter);
+        $report         = Request::input('report_choose');
+        $pdf            = Request::input('pdf');
+        $shop_id        = $this->user_info->shop_id;
+        $view           =  Mlm_report::$report($shop_id, $filter);
         $data['status'] = 'success';
-        $view['from'] = date_format($from, 'd/M/Y');
-        $view['to'] = date_format($to, 'd/M/Y');
+        $view['from']   = date_format($from, 'd/M/Y');
+        $view['to']     = date_format($to, 'd/M/Y');
 
         
 
@@ -239,10 +245,11 @@ class MLM_ReportController extends Member
         }
         else if($pdf == 'excel')
         {
+            // dd($pdf,$view,$view['page']);
             Excel::create('New file', function($excel) use($view) {
                
                 $excel->sheet('New sheet', function($sheet) use($view) {
-                    $sheet->loadView('member.mlm_report.report.' . $view['page'], $view);
+                    $sheet->loadView('member.mlm_report.report.sales_report', $view);
 
                 });
 

@@ -93,7 +93,6 @@ class ShopManualCheckout extends Shop
       Transaction::create_update_proof($path);
       Transaction::create_update_proof_details(request()->except(['proofupload', '_token', "tid", "method_id"]));
       $transaction_list_id  = Transaction::create($shop_id, $transaction_id, $transaction_type, $transaction_date, null, $source);
-    
     }
     public function success()
     {

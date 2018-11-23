@@ -9,11 +9,13 @@
             <h1>
             <span class="page-title">All Transaction List</span>
             <small>
-                This are the list of TRANSACTIONS that happened in the system.
+                These are the list of TRANSACTIONS that happened in the system.
             </small>
             </h1>
-            <div class="dropdown pull-right">
-                {{-- <a href="javascript:" class="btn btn-def-white btn-custom-white"><i class="fa fa-check"></i> Secondary Command</a> --}}
+
+            <div class="dropdown pull-right col-md-3">
+                <!-- COMMENT -->
+                <button class="btn btn-custom-green-white margin-right-10 btn-pdf pull-right" onClick="export_excel()"><i class="fa fa-file-excel-o"></i>&nbsp;Export to Excel</button>
                 <a data-toggle="modal" data-target="#filter-date-modal" href="javascript:" target="_blank" class="btn btn-primary"><i class="fa fa-search"></i> &nbsp;Filter Date</a>
             </div>
         </div>

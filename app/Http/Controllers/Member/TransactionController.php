@@ -60,6 +60,20 @@ class TransactionController extends Member
         
         return view("member.transaction.all_transaction_list", $data);
     }
+
+    public function transaction_export_excel(Request $request)
+    {
+                        // <!-- COMMENT -->
+        $data['_list'] = Transaction::get_transaction_list($this->user_info->shop_id, request('transaction_type'), request('search_keyword'), 5, 0, request('from_date'), request('to_date'));
+        Excel::create("Transaction List", function($excel) use($data) 
+        {
+            $excel->sheet('New sheet', function($sheet) use($data) 
+            {
+                $sheet->loadView("member.transaction.all_transaction_list_table", $data);
+            });
+        })->export('xls');
+    }
+
     public function transaction_list_table(Request $request)
     {
         $data['_list'] = Transaction::get_transaction_list($this->user_info->shop_id, $request->transaction_type, $request->search_keyword, 5, 0, request('from_date'), request('to_date'));

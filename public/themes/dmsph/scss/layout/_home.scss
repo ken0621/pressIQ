@@ -215,5 +215,225 @@ body {
             text-align: center;
             padding-bottom: 50px;
         }
+        .product-tabs
+        {
+            
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            a
+            {
+                font-size: 16px;
+                font-weight: 800;
+                background-color: #017aff;
+                padding: 20px 15px;
+                width: 100%;
+                text-align: center;
+                text-decoration: none;
+                color: #fff;
+                border-left: solid 1px #fff;
+                border-right: solid 1px #fff;
+                // line-height: 10px;
+            }
+            .active , a:hover
+            {
+                background-color: #fff;
+                color: #333;
+            }
+        }
+        .tab-content
+        {
+            background-color: #fff;
+            padding: 50px 0px;
+            .tab-pane
+            {
+                padding: 0px 40px;
+                .product-desc-container
+                {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    grid-gap: 2rem;
+                    color: #1d1e30;
+                    .product-desc-container-1
+                    {
+                        text-align: justify;
+                        font-size: 15px;
+                        font-weight: 400;
+                        line-height: 170%;
+                        .product-header
+                        {
+                            color: #1d1e30;
+                            font-size: 16px;
+                            font-weight: 800;
+                            padding-bottom: 25px;
+                        }
+                    }
+                    .product-desc-container-2
+                    {
+                        font-size: 15px;
+                        font-weight: 400;
+                        border-collapse: collapse;
+                        width: 100%;
+                        tr
+                        {
+                            td
+                            {
+                                border: 1px solid #dfdfdf;
+                                padding: 8px 20px;
+                            }
+                            th
+                            {
+                                padding: 15px 20px;
+                                text-align: left;
+                                background-color: #14c77a;
+                                color: #fff;
+                            }
+                        }
+                    }
+                }
+                .button-container
+                {
+                    font-size: 13px;
+                    font-weight: 800;
+                    color: #fff;
+                    display: grid;
+                    grid-gap: 2rem;
+                    grid-template-columns: repeat(2, 1fr);
+                    margin: 40px 0px 0px;
+                    .btn-feature
+                    {
+                        justify-self: end;
+                        width: 200px;
+                        padding: 15px 0px;
+                        background-color: #017aff;
+                        border: none;
+                        border-radius: 4px;
+                        border-bottom: solid 5px #0066d7;
+                    }
+                    .btn-inquire
+                    {
+                        justify-self: start;
+                        width: 200px;
+                        padding: 15px 0px;
+                        background-color: #14c77a;
+                        border: none;
+                        border-radius: 4px;
+                        border-bottom: solid 5px #10ad6a;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.wrapper-4
+{
+    padding: 100px 0px;
+    .service-container
+    {
+        .service-title
+        {
+            color: #1d1e30;
+            font-size: 25px;
+            font-weight: 800;
+            text-align: center;
+            padding-bottom: 50px;
+        }
+        .service-holder
+        {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 1rem;
+            .service-content
+            {
+                width: 100%;
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                height: 200px;
+                display: flex;
+                align-items: flex-end;
+                text-align: left;
+                padding: 10px;
+                .title-holder
+                {
+                    border-left: solid 2px #fff;
+                    padding-left: 10px;
+                    .title-1
+                    {
+                        color: #fff;
+                        font-size: 12px;
+                        font-weight: 400;
+                    }
+                    .title-2
+                    {
+                        color: #fff;
+                        font-size: 14px;
+                        font-weight: 800;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.wrapper-5
+{
+    padding: 100px 0px;
+    background-color: #ebf7ff;
+    .expertise-container
+    {
+        .expertise-title
+        {
+            color: #1d1e30;
+            font-size: 25px;
+            font-weight: 800;
+            text-align: center;
+        }
+        .expertise-holder
+        {
+            margin-top: 50px;
+            width: 100%;
+            background-color: #fff;
+            padding: 50px 0px;
+            .expertise-header
+            {
+                color: #017aff;
+                font-size: 20px;
+                font-weight: 800;
+                text-align: center;
+                margin-bottom: 30px; 
+            }
+            .expertise-list-container
+            {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                grid-gap: 4rem;
+                .expertise-list
+                {
+                    justify-self: center;
+                    color: #1d1e30;
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 30px;
+                }
+            }
+            .button-container
+            {
+                text-align: center;
+                .btn-more
+                {
+                    width: 200px;
+                    padding: 15px 0px;
+                    background-color: #017aff;
+                    border: none;
+                    border-radius: 4px;
+                    border-bottom: solid 5px #0066d7;
+                    font-size: 13px;
+                    font-weight: 800;
+                    color: #fff;
+                    margin-top: 30px;
+                }
+            }
+        }
     }
 }

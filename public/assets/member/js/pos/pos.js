@@ -244,11 +244,13 @@ function pos()
 	}
 	function event_change_quantity()
 	{
-		$("body").on("keyup", ".input-change-qty", function(e)
+		$("body").on("change", ".input-change-qty", function(e)
 		{
+			alert($(this).val());
 			var qty_item_id = $(e.currentTarget).attr('item-id');
 			var qty = $(e.currentTarget).val();
-			if(e.which == 13) //ENTER KEY
+			// if(e.which == 13) //ENTER KEY AMES CHANGE THIS<<< THIS IS THE ORIGINAL
+			if(qty > 0)
 			{
 				$.ajax({
 					url : '/member/cashier/pos/change_qty',

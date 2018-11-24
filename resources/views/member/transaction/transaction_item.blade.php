@@ -66,6 +66,12 @@
                         <td colspan='4' class="text-right"><b>TOTAL</b></td>
                         <td class="text-center">{{currency('PHP', $list->transaction_total)}}</td>
                     </tr>
+                    @if($list->transaction_sales_person == 0)
+                    <tr>
+                        <td colspan='5' class="text-right"><b>Shipping Fee Included</b></td>
+                    </tr>
+                    @endif
+                    
                 </tfoot>
             </table>
         </div>

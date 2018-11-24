@@ -13,10 +13,11 @@
             </small>
             </h1>
 
-            <div class="dropdown pull-right col-md-3">
+            <div class="dropdown pull-right col-md-5">
                 <!-- COMMENT -->
-                <button class="btn btn-custom-green-white margin-right-10 btn-pdf pull-right" onClick="export_excel()"><i class="fa fa-file-excel-o"></i>&nbsp;Export to Excel</button>
-                <a data-toggle="modal" data-target="#filter-date-modal" href="javascript:" target="_blank" class="btn btn-primary"><i class="fa fa-search"></i> &nbsp;Filter Date</a>
+                <button class="btn btn-success margin-right-10 btn-excel pull-right" onClick="export_excel()"><i class="fa fa-file-excel-o"></i>&nbsp;Export to Excel</button>
+                {{-- <button class="btn btn-danger margin-right-10 btn-pdf pull-right" onClick="export_pdf()"><i class="fa fa-file-excel-o"></i>&nbsp;Export to PDF</button> --}}
+                <a data-toggle="modal" data-target="#filter-date-modal" href="javascript:" target="_blank" class="btn btn-primary margin-right-10 pull-right"><i class="fa fa-search"></i> &nbsp;Filter Date</a>
             </div>
         </div>
     </div>
@@ -74,11 +75,11 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>From</label>
-                        <input class="form-control datepicker" type="text" name="from_date">
+                        <input class="form-control datepicker from_date" type="text" name="from_date">
                     </div>
                     <div class="form-group">
                         <label>To</label>
-                        <input class="form-control datepicker" type="text" name="to_date">
+                        <input class="form-control datepicker to_date" type="text" name="to_date">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -91,5 +92,26 @@
 </div>
 @endsection
 @section('script')
+<script type="text/javascript">
+    function export_excel()
+    {
+        var transaction_type    = $('.filter-type').val();
+        var search_keyword      = $('.search-keyword').val();
+        var from_date           = $('.from_date').val();
+        var to_date             = $('.to_date').val();
+
+        window.open('/member/cashier/transactions_list/export_excel?transaction_type=' + transaction_type + '&search_keyword='+ search_keyword +'&from_date=' + from_date +'&to_date=' + to_date);
+    }
+    function export_pdf()
+    {
+        var transaction_type    = $('.filter-type').val();
+        var search_keyword      = $('.search-keyword').val();
+        var from_date           = $('.from_date').val();
+        var to_date             = $('.to_date').val();
+
+        window.open('/member/cashier/transactions_list/export_pdf?transaction_type=' + transaction_type + '&search_keyword='+ search_keyword +'&from_date=' + from_date +'&to_date=' + to_date);
+    }
+
+</script>
 <script type="text/javascript" src="/assets/member/js/transaction/transaction_list.js"></script>
 @endsection

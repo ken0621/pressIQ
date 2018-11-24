@@ -14,7 +14,9 @@
                 <td class='text-center'>{{$list->transaction_number}}</td>
                 <td class='text-center'>{{$list->customer_name}}</td>
                 <td class='text-center'>{{currency('PHP',$list->transaction_total)}}</td>
+                @if($base == "get")
                 <td class='text-center'><a class="popup" size="md" link="/member/cashier/transactions/view_item/{{$list->transaction_list_id}}">View</a></td>
+                @endif
             </tr>
         @endforeach
         @else
@@ -24,4 +26,13 @@
         @endif
     </tbody>
 </table>
+@if($base == "get")
 {{ $_list->render() }}
+@else
+<style>
+    table,th,td,tr
+    {
+        border:1px !important;
+    }
+</style>
+@endif

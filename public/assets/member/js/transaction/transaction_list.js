@@ -22,13 +22,7 @@ function transaction_list()
 		action_onload_view_receipt();
 		event_filter_date();
 	}
-
-	function export_excel()
-	{
-	    window.open('/member/cashier/transactions_list/export?transaction_type=' + load_table_data.transaction_type + '&search_keyword='+ load_table_data.search_keyword +'&from_date=' + load_table_data.from_date +'&to_date=' + load_table_data.to_date);
-	}
-
-	function action_onload_view_receipt()
+    function action_onload_view_receipt()
 	{
 		if($('.view-receipt').val() != '')
 		{			

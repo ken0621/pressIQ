@@ -26,7 +26,8 @@ Route::group(array('prefix' => '/member/cashier'), function()
 	Route::any('/transactions/view_item/{transaction_list_id}','Member\TransactionController@view_item');
 	
 	Route::any('/transactions_list','Member\TransactionController@transaction_list');
-	Route::any('/transactions_list/export','Member\TransactionController@transaction_export_excel');
+	Route::any('/transactions_list/export_excel','Member\TransactionController@transaction_export_excel');
+	Route::any('/transactions_list/export_pdf','Member\TransactionController@transaction_export_pdf');
 	Route::any('/transactions_list/table','Member\TransactionController@transaction_list_table');
 	Route::any('/transactions_list/view/{id}','Member\TransactionController@view_pdf');
 	Route::any('/transactions_list/view_receipt/{id}','Member\TransactionController@view_receipt');

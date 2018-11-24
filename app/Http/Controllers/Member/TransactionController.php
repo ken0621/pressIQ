@@ -14,6 +14,7 @@ use App\Globals\Transaction;
 use App\Globals\Pdf_global;
 use DB;
 use Excel;
+use PDF2;
 
 class TransactionController extends Member
 {
@@ -61,22 +62,62 @@ class TransactionController extends Member
         return view("member.transaction.all_transaction_list", $data);
     }
 
+    public function transaction_export_pdf(Request $request)
+    {
+        $data['_list'] = Transaction::get_transaction_list($this->user_info->shop_id, request('transaction_type'), request('search_keyword'), null, 0, request('from_date'), request('to_date'));
+        $data['base']  = "export";
+
+        $format["title"] = "A4";
+        $format["format"] = "A4";
+        $format["default_font"] = "sans-serif";
+        // $format["margin_top"] = "0";
+        // $format["margin_bottom"] = "0";
+        // $format["margin_left"] = "0";
+        // $format["margin_right"] = "0";
+
+        $pdf = PDF2::loadView('member.transaction.all_transaction_list_table', $data, [], $format);
+        return $pdf->stream('document.pdf');
+    }
+
     public function transaction_export_excel(Request $request)
     {
-                        // <!-- COMMENT -->
-        $data['_list'] = Transaction::get_transaction_list($this->user_info->shop_id, request('transaction_type'), request('search_keyword'), 5, 0, request('from_date'), request('to_date'));
-        Excel::create("Transaction List", function($excel) use($data) 
+        $type['type'] = ['order','receipt','failed','pending','cashier'];
+        foreach($type['type'] as $key=>$value)
         {
-            $excel->sheet('New sheet', function($sheet) use($data) 
+            $response[$value] = Transaction::get_transaction_list($this->user_info->shop_id, $value, request('search_keyword'), null, 0, request('from_date'), request('to_date'));
+        }
+        $data['list']     = $response;
+        $data['_column']  =   ['Transaction Number','Customer Name','Total Amount'];
+        Excel::create('Transaction List', function($excel) use ($data)
+        {
+            $listss = $data['list'];
+            foreach($listss as $keys => $lists)
             {
-                $sheet->loadView("member.transaction.all_transaction_list_table", $data);
-            });
+                $data['listed'] = $lists;
+                $excel->sheet($keys, function($sheet) use($data)
+                {
+                    $list = $data['listed'];
+                    $column = $data['_column'];
+                    $sheet->fromArray($column, null, 'A1', false, false);
+                    $sheet->freezeFirstRow();
+                    $key = 1;
+                    foreach($list as  $keyss => $listed)
+                    {
+                        // dd($listed);
+                        $key = $key + 1;
+                        $sheet->setCellValue('A'.$key, $listed['transaction_number']);
+                        $sheet->setCellValue('B'.$key, $listed['customer_name']);
+                        $sheet->setCellValue('C'.$key, $listed['transaction_total']);
+                    }
+                });
+            }
         })->export('xls');
     }
 
     public function transaction_list_table(Request $request)
     {
         $data['_list'] = Transaction::get_transaction_list($this->user_info->shop_id, $request->transaction_type, $request->search_keyword, 5, 0, request('from_date'), request('to_date'));
+        $data['base']  = "get";
         return view("member.transaction.all_transaction_list_table", $data);
     }
     public function view_pdf(Request $request, $transaction_list_id)

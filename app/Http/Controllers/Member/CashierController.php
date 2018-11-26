@@ -18,7 +18,7 @@ class CashierController extends Member
         Cart2::set_cart_key("cashier-" . $this->user_info->user_id);
     	$data["page"]           = "Point of Sale";
         $data["cart"]           = $_items = Cart2::get_cart_info();
-        $data["_price_level"]   = Item::list_price_level($this->user_info->shop_id);
+        $data["_price_level"]   = Item::list_price_level($this->user_info->shop_id,null,null,null);
         $data["current_level"]  = ($data["cart"]["info"] ? $data["cart"]["info"]->price_level_id : 0);
         $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
         $data['_salesperson'] = Utilities::get_all_users($this->user_info->shop_id, $this->user_info->user_id);

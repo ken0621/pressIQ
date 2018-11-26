@@ -595,7 +595,7 @@ class Item
         return $item;
     }
     /* READ DATA END */
-    public static function list_price_level($shop_id, $type = null, $search_keyword = null)
+    public static function list_price_level($shop_id, $type = null, $search_keyword = null,$paginate = 5)
     {
         $_price_level = Tbl_price_level::where("shop_id", $shop_id);
 
@@ -607,8 +607,15 @@ class Item
         {
             $_price_level->where('price_level_name','LIKE','%'.$search_keyword.'%');
         }
-
-        return $_price_level->paginate(5);
+        if($paginate)
+        {
+            $_price_level = $_price_level->paginate($paginate);
+        }
+        else
+        {
+            $_price_level = $_price_level->get();
+        }
+        return $_price_level;
     }
     public static function insert_price_level($shop_id, $price_level_name, $price_level_type, $fixed_percentage_mode, $fixed_percentage_source, $fixed_percentage_value)
     {  

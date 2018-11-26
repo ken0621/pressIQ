@@ -335,7 +335,7 @@ class Cart2
 					$_cart[$key]->item_sku 				= $item_info->item_sku;
 					$_cart[$key]->item_price 			= $item_info->item_price;
 
-					if ($customer_id) 
+					if($customer_id) 
 		            {
 		            	$price_level = Tbl_mlm_slot::priceLevel($item_info->item_id)->where("tbl_mlm_slot.slot_owner", $customer_id)->first();
 

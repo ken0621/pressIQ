@@ -130,8 +130,8 @@ class Transaction
         if($source == null)
         {
             /*CHANGE BY JAMES*/
-            // $cart = Cart2::get_cart_info($customer_id); ORIGINAL
-            $cart = Cart2::get_cart_info($customer_id ? $customer_id : $transaction_id["transaction_reference_id"]);
+            $cart = Cart2::get_cart_info($customer_id); //ORIGINAL
+            // $cart = Cart2::get_cart_info($customer_id ? $customer_id : $transaction_id["transaction_reference_id"]);
         }
         else
         {

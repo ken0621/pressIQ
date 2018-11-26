@@ -4404,9 +4404,10 @@ class ShopMemberController extends Shop
     }
     public function postCheckout()
     {
-        $shop_id  = $this->shop_info->shop_id;
-        $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
-        $cart = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
+        $shop_id        = $this->shop_info->shop_id;
+        $warehouse_id   = Warehouse2::get_main_warehouse($shop_id);
+        $customer_id    = isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null;
+        $cart           = Cart2::get_cart_info($customer_id);
         $validate = null;
         if($cart)
         {   
@@ -4419,7 +4420,6 @@ class ShopMemberController extends Shop
                 }
             }
         }
-
         if(!$validate)
         {
             /* Update Address */
@@ -4462,7 +4462,14 @@ class ShopMemberController extends Shop
             
             Transaction::create_set_method($method);
             Transaction::create_set_method_id($method_id);
-            $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
+            if($customer_id)
+            {
+                $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-",null, null, $customer_id);
+            }
+            else
+            {
+                $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
+            }
 
             if(is_numeric($transaction_list_id))
             {

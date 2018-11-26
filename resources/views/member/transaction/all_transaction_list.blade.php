@@ -100,7 +100,7 @@
         var from_date           = $('.from_date').val();
         var to_date             = $('.to_date').val();
 
-        window.open('/member/cashier/transactions_list/export_excel?transaction_type=' + transaction_type + '&search_keyword='+ search_keyword +'&from_date=' + from_date +'&to_date=' + to_date);
+        window.open('/member/cashier/transactions_list/export_excel?search_keyword='+ search_keyword +'&from_date=' + from_date +'&to_date=' + to_date);
     }
     function export_pdf()
     {

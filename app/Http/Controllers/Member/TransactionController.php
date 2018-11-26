@@ -82,6 +82,7 @@ class TransactionController extends Member
     public function transaction_export_excel(Request $request)
     {
         $type['type'] = ['order','receipt','failed','pending','cashier'];
+
         foreach($type['type'] as $key=>$value)
         {
             $response[$value] = Transaction::get_transaction_list($this->user_info->shop_id, $value, request('search_keyword'), null, 0, request('from_date'), request('to_date'));

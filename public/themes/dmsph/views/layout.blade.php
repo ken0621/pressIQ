@@ -64,19 +64,25 @@
                     <span>BROWSE</span>
                     <ul class="links">
                         <li> 
-                            <a onclick="off()" href="/#home"><i class="fa fa-home" aria-hidden="true"></i> HOME</a>
+                            <a onclick="off()" href="/#home"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
                         </li>
                         <li>
-                            <a onclick="off()" href="/#about"><i class="fa fa-info" aria-hidden="true"></i> ABOUT US</a>
+                            <a onclick="off()" href="/#about"><i class="fa fa-info" aria-hidden="true"></i> About Us</a>
                         </li>
                         <li> 
-                            <a onclick="off()" href="/#gallery"><i class="fa fa-picture-o" aria-hidden="true"></i> PRODUCT</a>
+                            <a onclick="off()" href="/#gallery"><i class="fa fa-picture-o" aria-hidden="true"></i> Products</a>
                         </li>
                         <li> 
-                            <a onclick="off()" href="/#gallery"><i class="fa fa-picture-o" aria-hidden="true"></i> SERVICES</a>
+                            <a onclick="off()" href="/#gallery"><i class="fa fa-picture-o" aria-hidden="true"></i> Services</a>
                         </li>
                         <li> 
-                            <a onclick="off()" href="/#contact"><i class="fa fa-phone" aria-hidden="true"></i> CONTACT</a>
+                            <a onclick="off()" href="/#contact"><i class="fa fa-phone" aria-hidden="true"></i> Expertise</a>
+                        </li>
+                        <li> 
+                            <a onclick="off()" href="/#contact"><i class="fa fa-phone" aria-hidden="true"></i> Partners</a>
+                        </li>
+                        <li> 
+                            <a onclick="off()" href="/#contact"><i class="fa fa-phone" aria-hidden="true"></i> Contact Us</a>
                         </li>
                     </ul>
                 </nav>
@@ -86,7 +92,7 @@
                     <div class="nav-holder">
                         <div class="container">
                             <div class="row-clearfix">
-                                <div class="col-md-4">
+                                <div class="col-md-1">
                                     <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
                                     <div class="image-logo-holder">
                                         <a class="clearfix" href="/">
@@ -98,25 +104,34 @@
                                         <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/dms-logo.png"></a>
                                     </div>
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-9">
                     <!-- NAVIGATION -->
                         <nav class="navigation">
                             <ul>
                                 @if(Request::segment(1)=="product")
-                                    <li><a class="smoth-scroll" href="/#home">HOME</a></li>
-                                    <li><a class="smoth-scroll" href="/#about">ABOUT US</a></li>
-                                    <li><a class="smoth-scroll" href="/#about">PRODUCTS</a></li>
-                                    <li><a class="smoth-scroll" href="/#gallery">SERVICES</a></li>
-                                    <li><a class="smoth-scroll" href="/#contact">CONTACT</a></li>
+                                    <li><a class="smoth-scroll" href="/#home">Home</a></li>
+                                    <li><a class="smoth-scroll" href="/#about">About Us</a></li>
+                                    <li><a class="smoth-scroll" href="/#about">Products</a></li>
+                                    <li><a class="smoth-scroll" href="/#gallery">Services</a></li>
+                                    <li><a class="smoth-scroll" href="/#gallery">Expertise</a></li>
+                                    <li><a class="smoth-scroll" href="/#gallery">Partners</a></li>
+                                    <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
                                 @else
-                                    <li><a class="smoth-scroll" href="#home">HOME</a></li>
-                                    <li><a class="smoth-scroll" href="#about">ABOUT US</a></li>
-                                    <li><a class="smoth-scroll" href="/#about">PRODUCTS</a></li>
-                                    <li><a class="smoth-scroll" href="#gallery">SERVICES</a></li>
-                                    <li><a class="smoth-scroll" href="#contact">CONTACT</a></li>
+                                    <li><a class="smoth-scroll" href="/#home">Home</a></li>
+                                    <li><a class="smoth-scroll" href="/#about">About Us</a></li>
+                                    <li><a class="smoth-scroll" href="/#about">Products</a></li>
+                                    <li><a class="smoth-scroll" href="/#gallery">Services</a></li>
+                                    <li><a class="smoth-scroll" href="/#gallery">Expertise</a></li>
+                                    <li><a class="smoth-scroll" href="/#gallery">Partners</a></li>
+                                    <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
                                 @endif
                             </ul>
                         </nav>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="button-container">
+                            <button class="btn-inquire">INQUIRE NOW!</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -140,11 +155,13 @@
 
                         <nav class="footer-navigation">
                             <ul>
-                                    <li><a class="smoth-scroll" href="#home">HOME</a></li>
-                                    <li><a class="smoth-scroll" href="#about">ABOUT US</a></li>
-                                    <li><a class="smoth-scroll" href="#about">PRODUCTS</a></li>
-                                    <li><a class="smoth-scroll" href="#gallery">SERVICES</a></li>
-                                    <li><a class="smoth-scroll" href="#contact">CONTACT</a></li>
+                                    <li><a class="smoth-scroll" href="/#home">Home</a></li>
+                                    <li><a class="smoth-scroll" href="/#about">About Us</a></li>
+                                    <li><a class="smoth-scroll" href="/#about">Products</a></li>
+                                    <li><a class="smoth-scroll" href="/#gallery">Services</a></li>
+                                    <li><a class="smoth-scroll" href="/#gallery">Expertise</a></li>
+                                    <li><a class="smoth-scroll" href="/#gallery">Partners</a></li>
+                                    <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
                             </ul>
                         </nav>
 

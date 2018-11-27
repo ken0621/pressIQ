@@ -57,8 +57,9 @@ button:hover
     right: 0;
     top: 0;
     background-color: #fff ;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Roboto';
     font-size: 12px;
+    border-bottom: 1px solid #ddd;
     @media screen and (max-width: 900px)
     {
          padding: 10px 0px 10px 0px;
@@ -126,8 +127,8 @@ button:hover
 
 .navigation
 {
-    float: right;
-    margin-top: 20px;
+    float: left;
+    margin-top: 16px;
     font-size: 14px;
     @media screen and (max-width: 900px)
     {
@@ -150,7 +151,7 @@ button:hover
     li 
     {
         display: inline-block;
-        padding: 0px 20px;
+        padding: 0px 12px;
 
         @media screen and (max-width: 991px)
         {
@@ -161,7 +162,7 @@ button:hover
     a 
     {
         color: #333;
-        font-weight: 700;
+        font-weight: 400;
         @media screen and (max-width: 1024px)
         {
             font-size: 11px;
@@ -249,8 +250,7 @@ button:hover
 
 .image-logo-holder
 {
-    width: 35%;
-    margin-left: 5px;
+    width: 175%;
     @media screen and (max-width: 991px)
     {
         display: none;
@@ -283,6 +283,24 @@ button:hover
                 margin: 5px 0;
             }
         }
+    }
+}
+
+.button-container
+{
+    margin-top: 2px;
+    .btn-inquire
+    {
+        float: left;
+        width: 180px;
+        padding: 13px 0px;
+        background-color: #017aff;
+        border: none;
+        border-radius: 4px;
+        border-bottom: solid 5px #0066d7;
+        font-size: 13px;
+        font-weight: 800;
+        color: #fff;
     }
 }
 .image-logo-mob
@@ -325,12 +343,12 @@ button:hover
     .footer-container
     {
         display: grid;
-        grid-template-columns: 30% 40% 30%;
+        grid-template-columns: 20% 60% 20%;
         grid-gap: 1rem;
         .footer-logo
         {
             grid-template-columns: 150px 1fr;
-            width: 45%;
+            width: 70%;
             img
             {
                 width: 100%;
@@ -339,7 +357,7 @@ button:hover
         .footer-navigation
         {
             font-size: 14px;
-            margin: 30px 0px;
+            margin: 30px auto;
             @media screen and (max-width: 768px)
             {
                 display: none;

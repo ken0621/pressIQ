@@ -2,7 +2,7 @@
 @section("content")
 <div class="content">
 
-	<section class="wrapper-1 parallax" style="background-image: url('/themes/{{ $shop_theme }}/img/home-banner-v1.jpg')">
+	<section class="wrapper-1 not-fullscreen background parallax" style="background-image: url('/themes/{{ $shop_theme }}/img/home-banner-v1.jpg')" data-img-width="1600" data-img-height="835" data-diff="100">
 		<div class="home-container">
 			<div class="container">
 				<div class="home-content">
@@ -223,8 +223,8 @@
 						    </div>
 					    </div>
 					    <div class="button-container">
-					    	<button class="btn-feature">SEE FULL FEATURES</button>
-					    	<button class="btn-inquire">INQUIRE NOW</button>
+					    	<a class="btn-feature" role="button" href='/product'>SEE FULL FEATURES</a>
+					    	<button type="button" class="btn-inquire" data-toggle="modal" data-target="#myModal">INQUIRE NOW</button>
 					    </div>
 				    </div>
 				    <div id="product2" class="tab-pane fade">
@@ -245,8 +245,8 @@
 						    </div>
 					    </div>
 					    <div class="button-container">
-					    	<button class="btn-feature">SEE FULL FEATURES</button>
-					    	<button class="btn-inquire">INQUIRE NOW</button>
+					    	<a class="btn-feature" role="button" href='/product_1'>SEE FULL FEATURES</a>
+					    	<button type="button" class="btn-inquire" data-toggle="modal" data-target="#myModal">INQUIRE NOW</button>
 					    </div>
 				    </div>
 				    <div id="product3" class="tab-pane fade">
@@ -265,8 +265,8 @@
 						    </div>
 					    </div>
 					    <div class="button-container">
-					    	<button class="btn-feature">SEE FULL FEATURES</button>
-					    	<button class="btn-inquire">INQUIRE NOW</button>
+					    	<a class="btn-feature" role="button" href='/product_2'>SEE FULL FEATURES</a>
+					    	<button type="button" class="btn-inquire" data-toggle="modal" data-target="#myModal">INQUIRE NOW</button>
 					    </div>
 				    </div>
 				</div>
@@ -281,7 +281,8 @@
 					QUICKBOOKS SERVICES
 				</div>
 				<div class="service-holder">
-					<div class="service-content" style="background-image: url('/themes/{{ $shop_theme }}/img/service-1.jpg');">
+					<div class="service-content">
+						<img src="/themes/{{ $shop_theme }}/img/img-1.jpg">
 						<div class="title-holder">
 							<div class="title-1">
 							QuickBooks
@@ -291,7 +292,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="service-content" style="background-image: url('/themes/{{ $shop_theme }}/img/service-2.jpg');">
+					<div class="service-content">
+						<img src="/themes/{{ $shop_theme }}/img/img-2.jpg">
 						<div class="title-holder">
 							<div class="title-1">
 							QuickBooks
@@ -301,7 +303,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="service-content" style="background-image: url('/themes/{{ $shop_theme }}/img/service-3.jpg');">
+					<div class="service-content">
+						<img src="/themes/{{ $shop_theme }}/img/img-3.jpg">
 						<div class="title-holder">
 							<div class="title-1">
 							QuickBooks
@@ -311,7 +314,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="service-content" style="background-image: url('/themes/{{ $shop_theme }}/img/service-4.jpg');">
+					<div class="service-content">
+						<img src="/themes/{{ $shop_theme }}/img/img-4.jpg">
 						<div class="title-holder">
 							<div class="title-1">
 							QuickBooks
@@ -321,7 +325,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="service-content" style="background-image: url('/themes/{{ $shop_theme }}/img/service-5.jpg');">
+					<div class="service-content">
+						<img src="/themes/{{ $shop_theme }}/img/img-5.jpg">
 						<div class="title-holder">
 							<div class="title-1">
 							QuickBooks
@@ -331,7 +336,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="service-content" style="background-image: url('/themes/{{ $shop_theme }}/img/service-6.jpg');">
+					<div class="service-content">
+						<img src="/themes/{{ $shop_theme }}/img/img-6.jpg">
 						<div class="title-holder">
 							<div class="title-1">
 							QuickBooks
@@ -341,7 +347,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="service-content" style="background-image: url('/themes/{{ $shop_theme }}/img/service-7.jpg');">
+					<div class="service-content">
+						<img src="/themes/{{ $shop_theme }}/img/img-7.jpg">
 						<div class="title-holder">
 							<div class="title-1">
 							QuickBooks
@@ -351,7 +358,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="service-content" style="background-image: url('/themes/{{ $shop_theme }}/img/service-8.jpg');">
+					<div class="service-content">
+						<img src="/themes/{{ $shop_theme }}/img/img-8.jpg">
 						<div class="title-holder">
 							<div class="title-1">
 							QuickBooks
@@ -539,12 +547,119 @@
 					</div>
 
 					<div class="contact-content-2">
-						
+						<div class="content-title">
+							CONTACT INFORMATION
+						</div>
+						<div class="contact-info-holder">
+							<div class="icon-holder">
+								<img src="/themes/{{ $shop_theme }}/img/contact-1.png">
+							</div>
+							<div class="info-holder">
+								<strong>Business Hour</strong><br>
+								Monday - Friday at 9:00am - 6:00pm
+							</div>
+						</div>
+						<div class="contact-info-holder">
+							<div class="icon-holder">
+								<img src="/themes/{{ $shop_theme }}/img/contact-2.png">
+							</div>
+							<div class="info-holder">
+								<strong>Email at</strong><br>
+								sales@dmsph.com
+							</div>
+						</div>
+						<div class="contact-info-holder">
+							<div class="icon-holder">
+								<img src="/themes/{{ $shop_theme }}/img/contact-3.png">
+							</div>
+							<div class="info-holder">
+								<strong>Mobile Landline</strong> 02 587 0063<br>
+								<strong>Office Landline</strong> 02 350 4248
+							</div>
+						</div>
+						<div class="contact-info-holder">
+							<div class="icon-holder">
+								<img src="/themes/{{ $shop_theme }}/img/contact-4.png">
+							</div>
+							<div class="info-holder">
+								<strong>SMART Mobile Number</strong> 0929 402 1269<br>
+								<strong>Globe Mobile Number</strong> 0917 317 8535
+							</div>
+						</div>
+						<div class="contact-info-holder">
+							<div class="icon-holder">
+								<img src="/themes/{{ $shop_theme }}/img/contact-5.png">
+							</div>
+							<div class="info-holder">
+								<strong>Digital Marketing Solutions PH Inc.</strong> Tower 1 Unit 1525 The Linear Makati, Mayapis St. corner Malugay & Yakal Sts., San Antonio Village, Makati City 1203
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
+
+	<div class="modal fade" id="myModal" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="title-header">
+						INQUIRE NOW!
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="title-header">
+						Send us a Message
+					</div>
+					<form action="Post"> 
+						{{-- @if (session('message_concern_shell'))
+						   <div class="alert alert-success">
+						       {{ session('message_concern_shell') }}
+						   </div>
+						@endif --}}
+						<div class="row clearfix">
+						   	<div class="col-md-6">
+						       	<div class="form-group">
+						        	<input type="text" class="form-control" id="contactus_first_name" name="contactus_first_name" placeholder="First Name*" required>
+						       	</div>
+						   	</div>
+						   	<div class="col-md-6">
+						       	<div class="form-group">
+						        	<input type="text" class="form-control" id="contactus_last_name" name="contactus_last_name" placeholder="Last Name*" required>
+						       	</div>
+						   	</div>
+						   	<div class="col-md-6">
+						       	<div class="form-group">
+						            <input type="phone" class="form-control" id="contactus_phone_number" name="contactus_phone_number" placeholder="Phone Number*" required>
+						       	</div>
+						   	</div>
+						   	<div class="col-md-6">
+						       	<div class="form-group">
+						        	<input type="email" class="form-control" id="contactus_email" name="contactus_email" placeholder="Email Address*" required>
+						       	</div>
+						   </div>
+						   	<div class="col-md-6">
+						       	<div class="form-group">
+						           <input type="text area" class="form-control" id="contactus_subject" name="contactus_subject" placeholder="Subject*" required> 
+						       	</div>
+						   	</div>
+						   	<div class="col-md-12">
+						       	<div class="form-group">
+						        	<textarea type="text" class="form-control text-message" id="contactus_message" name="contactus_message" placeholder="Message*" required></textarea>
+						       	</div>
+						   	</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<div class="btn-holder">
+			        	<button class="btn-send" type="submit" formaction="">SEND</button>
+			       	</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>

@@ -74,6 +74,16 @@ class ShopProductController extends Shop
 
         return $data;
     }
+    public function product_1()
+    {
+        $data["page"] = "Product";
+        return view("product_1", $data);
+    }
+    public function product_2()
+    {
+        $data["page"] = "Product";
+        return view("product_2", $data);
+    }
     public function index()
     {
         $data["page"] = "Product";

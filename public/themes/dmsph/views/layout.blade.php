@@ -130,7 +130,7 @@
                     </div>
                     <div class="col-md-1">
                         <div class="button-container">
-                            <button class="btn-inquire">INQUIRE NOW!</button>
+                            <button type="button" class="btn-inquire" data-toggle="modal" data-target="#myModal">INQUIRE NOW!</button>
                         </div>
                     </div>
                 </div>
@@ -189,6 +189,9 @@
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
         <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="/path/to/parallax.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.5/js/swiper.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.5/js/swiper.min.js"></script>

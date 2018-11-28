@@ -57,8 +57,9 @@ button:hover
     right: 0;
     top: 0;
     background-color: #fff ;
-    font-family: 'Roboto';
-    font-size: 12px;
+    font-family: 'Montserrat';
+    font-size: 14px;
+    font-weight: 300;
     border-bottom: 1px solid #ddd;
     @media screen and (max-width: 900px)
     {
@@ -97,30 +98,6 @@ button:hover
             {
                 color: #fff;
             }
-        }
-        .btn-red
-        {
-            &:hover
-            {
-                background-color: #d84d4c;
-                border-color: #d84d4c;
-                opacity: 1;
-            }
-        }
-        @media screen and (max-width: 1024px)
-        {
-            span
-            {
-                font-size: 8px;
-            }
-            a
-            {
-                right: 15px;
-            }
-        }
-        @media screen and (max-width: 900px)
-        {
-            display: none;
         }
     }
 }
@@ -169,7 +146,7 @@ button:hover
         }
         &:hover 
         {
-            @include transition(0.3s);
+            // @include transition(0.3s);
             color: #000;
             font-weight: 800;
             text-decoration: none;
@@ -218,17 +195,6 @@ button:hover
     {
         @include transition(0.3s);
         color: $c-black;
-    }
-    .btn-green-outline
-    {
-        @include transition(0.3s);
-        color: #151515;
-        &:hover
-        {
-            @include transition(0.3s);
-            background-color: $c-green;
-            color: #fff;
-        }
     }
     .b-logo
     {
@@ -291,6 +257,7 @@ button:hover
     margin-top: 2px;
     .btn-inquire
     {
+        font-family: 'Poppins';
         float: left;
         width: 180px;
         padding: 13px 0px;
@@ -298,8 +265,8 @@ button:hover
         border: none;
         border-radius: 4px;
         border-bottom: solid 5px #0066d7;
-        font-size: 13px;
-        font-weight: 800;
+        font-size: 14px;
+        font-weight: 600;
         color: #fff;
     }
 }

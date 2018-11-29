@@ -658,6 +658,13 @@ class Transaction
             }
             
         }
+
+        if(Session::get('warehouse_id_'.$shop_id))
+        {
+            $data->join('tbl_warehouse_inventory_record_log','tbl_warehouse_inventory_record_log.record_consume_ref_id','=','tbl_transaction_list.transaction_list_id')
+                ->where('tbl_warehouse_inventory_record_log.record_consume_ref_name','transaction_list')
+                ->where('tbl_warehouse_inventory_record_log.record_warehouse_id',Session::get('warehouse_id_'.$shop_id));
+        }
         
         if($shop_id == 1)
         {

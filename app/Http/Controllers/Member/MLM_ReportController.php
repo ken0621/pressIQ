@@ -210,11 +210,18 @@ class MLM_ReportController extends Member
     }
     public function get_report()
     {
-
         $filter['from'] = Request::input('from');
         $filter['to']   = Request::input('to');
         $from           = Carbon::parse($filter['from']);
-        $to             = Carbon::parse($filter['to'])->addDay(1);
+        if(Request::input('report_choose') == "sales_report")
+        {
+            $to             = Carbon::parse($filter['to']);
+        }
+        else
+        {
+            $to             = Carbon::parse($filter['to'])->addDay(1);
+        }
+        
         $filter['to']   = $to;
         $filter['from'] = $from;
         $filter['skip'] = Request::input('skip');
@@ -246,7 +253,7 @@ class MLM_ReportController extends Member
         else if($pdf == 'excel')
         {
             // dd($pdf,$view,$view['page']);
-            Excel::create('New file', function($excel) use($view) {
+            Excel::create('Sales Report', function($excel) use($view) {
                
                 $excel->sheet('New sheet', function($sheet) use($view) {
                     $sheet->loadView('member.mlm_report.report.sales_report', $view);

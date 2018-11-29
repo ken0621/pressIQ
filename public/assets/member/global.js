@@ -417,7 +417,13 @@ function select_current_warehouse($this)
                         commission_report.action_change_warehouse();
                         console.log('commission report table loading');
                     }
+                    if(commission == 'transactions_list')
+                    {
+                         location.reload();
+                    }
+                    
                 }
+
                 //end
             }
         },

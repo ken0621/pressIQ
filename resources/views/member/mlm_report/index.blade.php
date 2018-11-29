@@ -120,21 +120,21 @@ function filter_update(ito)
     if(warehouse == 'show')
     {
         $('.cashiers_c').removeClass('hide');
-        // $('.warehouse_c').removeClass('hide');
-        if(choose =! "sales_report")
-        {
-            $('.warehouse_c').removeClass('hide');
-        }
+        $('.warehouse_c').removeClass('hide');
+        // if(choose =! "sales_report")
+        // {
+        //     $('.warehouse_c').removeClass('hide');
+        // }
 
     }
     else
     {
         $('.cashiers_c').addClass('hide');
-        // $('.warehouse_c').addClass('hide');
-        if(choose == "sales_report")
-        {
-            $('.warehouse_c').addClass('hide');
-        }
+        $('.warehouse_c').addClass('hide');
+        // if(choose == "sales_report")
+        // {
+        //     $('.warehouse_c').addClass('hide');
+        // }
     }
 
 }

@@ -11,13 +11,19 @@
             <th class="text-center">Sales Person : </th>
             <td class="text-center">{{$sales_person}}</td>
             <th class="text-center">Sales Tax</th>
+            <td class="text-center">0</td>
+        </tr>
+        <tr>
+            <th class="text-center">Warehouse Name :</th>
+            <td class="text-center">{{$warehouse_name}}</td>
+            <th class="text-center">Sales Total : </th>
             <td class="text-center">{{$sales_total}}</td>
         </tr>
         <tr>
-            <th class="text-center"></th>
-            <th class="text-center"></th>
-            <th class="text-center">Sales Total : </th>
-            <td class="text-center">{{$sales_total}}</td>
+            <th class="text-center">Date From :</th>
+            <td class="text-center">{{$from}}</td>
+            <th class="text-center">Date To : </th>
+            <td class="text-center">{{$to}}</td>
         </tr>
     </thead>
     

@@ -2,9 +2,13 @@
 @section("content")
 <div class="content">
 
-	<section class="wrapper-1 not-fullscreen background parallax" style="background-image: url('/themes/{{ $shop_theme }}/img/home-banner-v1.jpg')" data-img-width="1600" data-img-height="835" data-diff="100">
-		<div class="home-container">
-			<div class="container">
+	<section class="wrapper-1" style="background-image: url('/themes/{{ $shop_theme }}/img/home-banner-v1.jpg')" data-img-width="1600" data-img-height="835" data-diff="100">
+		<div class="title-container">
+			<div class="title-content anim-typewriter">
+				Welcome to the <span>Digital Marketing Solutions</span> PH, Inc.
+			</div>
+		</div>
+			<div class="home-container">
 				<div class="home-content">
 					<div class="home-content-1">
 						<div class="title-1">
@@ -29,7 +33,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
 	</section>
 
 	<section class="wrapper-2">
@@ -431,7 +434,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="button-container">
+					<div class="button-holder">
 						<button class="btn-more">SEE MORE</button>
 						<button class="btn-less">SEE LESS</button>
 					</div>
@@ -440,7 +443,7 @@
 		</div>
 	</section>
 
-	<section class="wrapper-7">
+	{{-- <section class="wrapper-7">
 		<div class="container">
 			<div class="partner-container">
 				<div class="partner-title">
@@ -482,7 +485,7 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</section> --}}
 
 	<section class="wrapper-8">
 		<div class="container">

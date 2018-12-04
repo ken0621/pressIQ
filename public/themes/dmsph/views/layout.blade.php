@@ -10,7 +10,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
-        <link rel="icon" href="/themes/{{ $shop_theme }}/img/dms-logo.png" type="image/jpg" />
+        <link rel="icon" href="/themes/{{ $shop_theme }}/img/dms-white-logo.png" type="image/jpg" />
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
@@ -57,23 +57,23 @@
             <div id="overlay" onclick="off()"></div>
             <div class="side-nav">
                 <nav class="pushmenu pushmenu-left">
-                    <div class="mob-banner">
+                    {{-- <div class="mob-banner">
                         <img src="/themes/{{ $shop_theme }}/img/bg-mob.jpg" alt="">
-                    </div>
+                    </div> --}}
                     <div class="space1"></div>
                     <span>BROWSE</span>
                     <ul class="links">
                         <li> 
                             <a onclick="off()" href="/#home"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
                         </li>
-                        <li>
+                        <li> 
                             <a onclick="off()" href="/#about"><i class="fa fa-info" aria-hidden="true"></i> About Us</a>
                         </li>
                         <li> 
-                            <a onclick="off()" href="/#gallery"><i class="fa fa-picture-o" aria-hidden="true"></i> Products</a>
+                            <a onclick="off()" href="/#gallery"><i class="fas fa-boxes" aria-hidden="true"></i> Products</a>
                         </li>
                         <li> 
-                            <a onclick="off()" href="/#gallery"><i class="fa fa-picture-o" aria-hidden="true"></i> Services</a>
+                            <a onclick="off()" href="/#contact"><i class="fa fa-phone" aria-hidden="true"></i> Services</a>
                         </li>
                         <li> 
                             <a onclick="off()" href="/#contact"><i class="fa fa-phone" aria-hidden="true"></i> Expertise</a>
@@ -105,49 +105,49 @@
                                     </div>
                                 </div>
                                 <div class="col-md-9">
-                    <!-- NAVIGATION -->
-                        <nav class="navigation">
-                            <ul>
-                                @if(Request::segment(1)=="product")
-                                    <li><a class="smoth-scroll" href="/#home">Home</a></li>
-                                    <li><a class="smoth-scroll" href="/#about">About Us</a></li>
-                                    <li><a class="smoth-scroll" href="/#about">Products</a></li>
-                                    <li><a class="smoth-scroll" href="/#gallery">Services</a></li>
-                                    <li><a class="smoth-scroll" href="/#gallery">Expertise</a></li>
-                                    <li><a class="smoth-scroll" href="/#gallery">Partners</a></li>
-                                    <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
-                                @else
-                                    <li><a class="smoth-scroll" href="/#home">Home</a></li>
-                                    <li><a class="smoth-scroll" href="/#about">About Us</a></li>
-                                    <li><a class="smoth-scroll" href="/#about">Products</a></li>
-                                    <li><a class="smoth-scroll" href="/#gallery">Services</a></li>
-                                    <li><a class="smoth-scroll" href="/#gallery">Expertise</a></li>
-                                    <li><a class="smoth-scroll" href="/#gallery">Partners</a></li>
-                                    <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
-                                @endif
-                            </ul>
-                        </nav>
-                    </div>
-                    <div class="col-md-1">
-                        <div class="button-container">
-                            <button type="button" class="btn-inquire" data-toggle="modal" data-target="#myModal">INQUIRE NOW!</button>
+                                    <nav class="navigation">
+                                        <ul>
+                                            @if(Request::segment(1)=="product")
+                                                <li><a class="smoth-scroll" href="/#home">Home</a></li>
+                                                <li><a class="smoth-scroll" href="/#about">About Us</a></li>
+                                                <li><a class="smoth-scroll" href="/#gallery">Products</a></li>
+                                                <li><a class="smoth-scroll" href="/#contact">Services</a></li>
+                                                <li><a class="smoth-scroll" href="/#contact">Expertise</a></li>
+                                                <li><a class="smoth-scroll" href="/#contact">Partners</a></li>
+                                                <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
+                                            @else
+                                                <li><a class="smoth-scroll" href="/#home">Home</a></li>
+                                                <li><a class="smoth-scroll" href="/#about">About Us</a></li>
+                                                <li><a class="smoth-scroll" href="/#gallery">Products</a></li>
+                                                <li><a class="smoth-scroll" href="/#contact">Services</a></li>
+                                                <li><a class="smoth-scroll" href="/#contact">Expertise</a></li>
+                                                <li><a class="smoth-scroll" href="/#contact">Partners</a></li>
+                                                <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
+                                            @endif
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="button-keeper">
+                                        <button type="button" class="btn-inquire" data-toggle="modal" data-target="#myModal">INQUIRE NOW</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </header>
             </div>
-        </div>
-    </header>
-</div>
            
 
             <!-- CONTENT -->
             <div id="scroll-to" class="clearfix">
-        	   @yield("content")
+               @yield("content")
             </div>
 
             <!-- FOOTER -->
             <footer id="bottom-footer">
                 <div class="container">
+
                     <div class="footer-container">
                         <div class="footer-logo">
                             <img src="/themes/{{ $shop_theme }}/img/dms-white-logo.png">
@@ -155,33 +155,42 @@
 
                         <nav class="footer-navigation">
                             <ul>
+                                @if(Request::segment(1)=="product")
                                     <li><a class="smoth-scroll" href="/#home">Home</a></li>
                                     <li><a class="smoth-scroll" href="/#about">About Us</a></li>
-                                    <li><a class="smoth-scroll" href="/#about">Products</a></li>
-                                    <li><a class="smoth-scroll" href="/#gallery">Services</a></li>
-                                    <li><a class="smoth-scroll" href="/#gallery">Expertise</a></li>
-                                    <li><a class="smoth-scroll" href="/#gallery">Partners</a></li>
+                                    <li><a class="smoth-scroll" href="/#gallery">Products</a></li>
+                                    <li><a class="smoth-scroll" href="/#contact">Services</a></li>
+                                    <li><a class="smoth-scroll" href="/#contact">Expertise</a></li>
+                                    <li><a class="smoth-scroll" href="/#contact">Partners</a></li>
                                     <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
+                                @else
+                                    <li><a class="smoth-scroll" href="/#home">Home</a></li>
+                                    <li><a class="smoth-scroll" href="/#about">About Us</a></li>
+                                    <li><a class="smoth-scroll" href="/#gallery">Products</a></li>
+                                    <li><a class="smoth-scroll" href="/#contact">Services</a></li>
+                                    <li><a class="smoth-scroll" href="/#contact">Expertise</a></li>
+                                    <li><a class="smoth-scroll" href="/#contact">Partners</a></li>
+                                    <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
+                                @endif
                             </ul>
                         </nav>
 
                         <div class="social-nav">
                             <ul>
-                                <li><a><i class="fa fa-facebook"></i></a></li>
-                                <li><a><i class="fab fa-twitter"></i></a></li>
-                                <li><a><i class="fab fa-google-plus-g"></i></a></li>
-                                {{-- <li><a href="https://www.instagram.com/foreversale.ph" target="_blank"><i class="fab fa-instagram"></i></a></li> --}}
+                                <li><a href="" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="" target="_blank"><i class="fab fa-google-plus-g"></i></a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="bottom">
-                    <div class="container">
-                        <div class="ftr-title">©2018 Digital & Marketing Solutions PH Inc. All Rights Reserved</div>
-                        <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
-                    </div>                       
-                </div>
             </footer>
+            <div class="bottom">
+                <div class="container">
+                    <div class="ftr-title">©2018 Shell Canvas & Upholstery Supply.All Rights Reserved</div>
+                    <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
+                </div>                    
+            </div>
 
         @include("frontend.gfoot")
         <!-- FB WIDGET -->
@@ -189,9 +198,6 @@
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
         <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
-
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <script src="/path/to/parallax.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.5/js/swiper.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.5/js/swiper.min.js"></script>

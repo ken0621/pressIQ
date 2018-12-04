@@ -50,21 +50,16 @@ button:hover
 .header-container
 {
     @include transition(0.3s);
-    padding: 10px 0px 10px 0px;
+    padding: 10px 0px;
     position: fixed;
     z-index: 99;
     left: 0;
     right: 0;
     top: 0;
-    background-color: #fff ;
-    font-family: 'Montserrat';
-    font-size: 14px;
-    font-weight: 300;
-    border-bottom: 1px solid #ddd;
-    @media screen and (max-width: 900px)
-    {
-         padding: 10px 0px 10px 0px;
-    }
+    background-color: #fff;
+    border-bottom: solid 1px #dddddd;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
     .b-logo
     {
         img
@@ -99,13 +94,37 @@ button:hover
                 color: #fff;
             }
         }
+        .btn-red
+        {
+            &:hover
+            {
+                background-color: #d84d4c;
+                border-color: #d84d4c;
+                opacity: 1;
+            }
+        }
+        @media screen and (max-width: 1024px)
+        {
+            span
+            {
+                font-size: 8px;
+            }
+            a
+            {
+                right: 15px;
+            }
+        }
+        @media screen and (max-width: 900px)
+        {
+            display: none;
+        }
     }
 }
 
 .navigation
 {
     float: left;
-    margin-top: 16px;
+    margin: 15px 10px 0px;
     font-size: 14px;
     @media screen and (max-width: 900px)
     {
@@ -116,7 +135,7 @@ button:hover
         ul 
         {
             list-style:none;
-            // padding-left: 10px;
+            padding-left: 10px;
             li 
             {
                 padding: 10px 0px;
@@ -128,7 +147,7 @@ button:hover
     li 
     {
         display: inline-block;
-        padding: 0px 12px;
+        padding: 0px 10px;
 
         @media screen and (max-width: 991px)
         {
@@ -138,20 +157,20 @@ button:hover
 
     a 
     {
-        color: #333;
-        font-weight: 400;
+        color: #000;
+        font-size: 15px;
+        font-weight: 500;
         @media screen and (max-width: 1024px)
         {
             font-size: 11px;
         }
-        &:hover 
-        {
-            // @include transition(0.3s);
-            color: #000;
-            font-weight: 800;
-            text-decoration: none;
-            cursor: pointer;
-        }
+        // &:hover 
+        // {
+        //     @include transition(0.3s);
+        //     color: #ffcf16;
+        //     text-decoration: none;
+        //     cursor: pointer;
+        // }
         &__link 
         {
             &.active 
@@ -163,6 +182,24 @@ button:hover
     }
 }
 
+.btn-inquire
+{
+    font-weight: 600;
+    font-family: 'Poppins';
+    color: #fff;
+    width: 180px;
+    padding: 12px 0px;
+    background-color: #017aff;
+    border: none;
+    border-radius: 4px;
+    border-bottom: solid 5px #0066d7;
+    font-size: 15px;
+    @media screen and (max-width: 768px)
+    {
+        display: none
+    }
+}
+
 /* HEADER-FIXED */
 .header-fixed
 {
@@ -171,13 +208,16 @@ button:hover
         &.header-container
         {
             @include transition(0.3s);
+            // padding-top: 25px;
             position: fixed;
             width: 100%;
             z-index: 999;
             top: 0;
+            background-color: #fff;
+            border-bottom: solid 1px #dddddd;
             a
             {
-                color: #333;
+                color: #000;
                 top: -17px;
                 .fa
                 {
@@ -195,6 +235,17 @@ button:hover
     {
         @include transition(0.3s);
         color: $c-black;
+    }
+    .btn-green-outline
+    {
+        @include transition(0.3s);
+        color: #151515;
+        &:hover
+        {
+            @include transition(0.3s);
+            background-color: $c-green;
+            color: #fff;
+        }
     }
     .b-logo
     {
@@ -217,13 +268,10 @@ button:hover
 .image-logo-holder
 {
     width: 175%;
+    margin-left: 5px;
     @media screen and (max-width: 991px)
     {
         display: none;
-    }
-    &:hover
-    {
-        cursor: pointer;
     }
     img
     {
@@ -251,25 +299,6 @@ button:hover
         }
     }
 }
-
-.button-container
-{
-    margin-top: 2px;
-    .btn-inquire
-    {
-        font-family: 'Poppins';
-        float: left;
-        width: 180px;
-        padding: 13px 0px;
-        background-color: #017aff;
-        border: none;
-        border-radius: 4px;
-        border-bottom: solid 5px #0066d7;
-        font-size: 14px;
-        font-weight: 600;
-        color: #fff;
-    }
-}
 .image-logo-mob
 {
     display: none;
@@ -280,20 +309,22 @@ button:hover
         width: 100%;
     }
 
-    @media screen and (max-width: 991px)
+    @media screen and (max-width: 768px)
     {
-        width: 30%;
+        width: 13%;
         display: block;
     }
     @media screen and (max-width: 425px)
     {
-        padding-top: 7px;
-        width: 40%;
+        width: 23%;
     }
-    @media screen and (max-width: 425px)
+    @media screen and (max-width: 375px)
     {
-        padding-top: 7px;
-        width: 50%;
+        width: 25%;
+    }
+    @media screen and (max-width: 375px)
+    {
+        width: 30%;
     }
 }
 
@@ -312,10 +343,23 @@ button:hover
         display: grid;
         grid-template-columns: 20% 60% 20%;
         grid-gap: 1rem;
+        @media screen and (max-width: 768px)
+        {
+            grid-template-columns: repeat(1, 1fr);
+        }
         .footer-logo
         {
             grid-template-columns: 150px 1fr;
             width: 70%;
+            @media screen and (max-width: 768px)
+            {
+                margin: auto;
+                width: 20%;
+            }
+            @media screen and (max-width: 425px)
+            {
+                width: 35%;
+            }
             img
             {
                 width: 100%;
@@ -323,12 +367,16 @@ button:hover
         }
         .footer-navigation
         {
-            font-size: 14px;
+            // font-size: 14px;
             margin: 30px auto;
             @media screen and (max-width: 768px)
             {
+                margin: 20px auto 0px;
+            }
+            @media screen and (max-width: 425px)
+            {
                 display: none;
-            } 
+            }
             ul
             {
                 padding: 0px;
@@ -349,6 +397,10 @@ button:hover
                     {
                         font-size: 11px;
                     }
+                    @media screen and (max-width: 768px)
+                    {
+                        font-size: 13px;
+                    }
                     &:hover 
                     {
                         @include transition(0.3s);
@@ -362,7 +414,11 @@ button:hover
         {
             text-align: right;
             margin: 25px 0px;
-            font-size: 20px; 
+            font-size: 20px;
+            @media screen and (max-width: 768px)
+            {
+                margin: auto;
+            }
             ul
             {
                 padding: 0px;
@@ -406,6 +462,11 @@ button:hover
                     padding-top: 10px;
                     height: 30px;
                     width: 30px;
+                    font-size: 20px;
+                }
+                @media screen and (max-width: 425px)
+                {
+                    font-size: 18px;
                 }
             }
         }
@@ -414,7 +475,7 @@ button:hover
 .bottom
     {
         background-color: #000f1f;
-        padding: 25px 0;
+        padding: 25px 0px;
         color: #ffffff;
         .ftr-title
         {
@@ -462,7 +523,7 @@ button:hover
                 font-size: 5px
             }
         }
-    }     
+    }      
 
 
 /* SCROLL TO TOP */

@@ -25,13 +25,22 @@
                     <div class="item-name">{{ $item->item_name }}</div>
                     <div class="item-sku">{{ $item->item_sku }}</div>
                 </td>
-                <td class="text-center">{{ $item->display_item_price }}</td>
-                <td class="text-center td-change-qty" item-id={{ $item->item_id }}>
-                  <!--   <a href="javascript:" class="change-quantity {{ $item->item_id }}" item-id="{{ $item->item_id }}">{{ $item->quantity }}</a> -->
-                    <input type="text" class="text-right form-control input-change-qty" item-id="{{ $item->item_id }}" value="{{ $item->quantity }}">
-                </td>
-                <td class="text-center"><a href="javascript:">{{ $item->discount }} %</a></td>
-                <td class="text-right">{{ $item->display_subtotal }}</td>
+                @if($item->type_category == "inventory")
+                    <td class="text-center">{{ $item->display_item_price }}</td>
+                    <td class="text-center td-change-qty" item-id={{ $item->item_id }}>
+                      <!--   <a href="javascript:" class="change-quantity {{ $item->item_id }}" item-id="{{ $item->item_id }}">{{ $item->quantity }}</a> -->
+                        <input type="text" class="text-right form-control input-change-qty" item-id="{{ $item->item_id }}" value="{{ $item->quantity }}">
+                    </td>
+                    <td class="text-center"><a href="javascript:">{{ $item->discount }} %</a></td>
+                    <td class="text-right">{{ $item->display_subtotal }}</td>
+                @else
+                    <td class="text-center">{{ $item->quantity }}Non-inventory</td>
+                    <td class="text-center">Non-inventory</td>
+                    <td class="text-center">Non-inventory</td>
+                    <td class="text-center">
+                        <input type="number" class="form-control non_inventory_amount" item-id="{{ $item->item_id }}" value="{{ $item->non_inventory_price }}">
+                    </td>
+                @endif
                 <td class="text-center red-button remove-item-from-cart"><i class="fa fa-close fa-fw"></i></td>
             </tr>
            <!--  @if(count($item->pin_code) > 0)

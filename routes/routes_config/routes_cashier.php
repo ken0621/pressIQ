@@ -6,6 +6,7 @@ Route::group(array('prefix' => '/member/cashier'), function()
 	Route::post('/pos/search_item','Member\CashierController@pos_search_item');
 	Route::post('/pos/scan_item','Member\CashierController@pos_scan_item');
 	Route::post('/pos/change_qty','Member\CashierController@pos_change_qty');
+	Route::post('/pos/change_price','Member\CashierController@pos_change_non_inventory_price');
 	Route::any('/pos/remove_item','Member\CashierController@pos_remove_item');
 	Route::any('/pos/set_cart_info/{key}/{value}','Member\CashierController@set_cart_info');
 	Route::any('/pos/process_sale','Member\CashierController@process_sale');

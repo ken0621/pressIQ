@@ -36,7 +36,7 @@ function pos()
 		event_click_add_payment();
 		event_click_remove_payment();
 		event_change_slot_id();
-
+		event_change_non_inventory_price();
         event_load_popover();
         action_click_change_qty();
 	}
@@ -246,7 +246,6 @@ function pos()
 	{
 		$("body").on("change", ".input-change-qty", function(e)
 		{
-			alert($(this).val());
 			var qty_item_id = $(e.currentTarget).attr('item-id');
 			var qty = $(e.currentTarget).val();
 			// if(e.which == 13) //ENTER KEY AMES CHANGE THIS<<< THIS IS THE ORIGINAL
@@ -268,6 +267,34 @@ function pos()
 			}
 		});
 	}
+
+	function event_change_non_inventory_price()
+	{
+		$("body").on("change", ".non_inventory_amount", function(e)
+		{
+			var new_item_id = $(e.currentTarget).attr('item-id');
+			var new_price = $(e.currentTarget).val();
+			// if(e.which == 13) //ENTER KEY AMES CHANGE THIS<<< THIS IS THE ORIGINAL
+			// if(new_price > 0)
+			// {
+				alert(new_price+"jhfdsygbdfhg");
+				$.ajax({
+					url : '/member/cashier/pos/change_price',
+					type : 'post',
+					data : {item_id : new_item_id, new_price : new_price, _token : $('#_token').val()},
+					success : function(data)
+					{
+						action_load_item_table();
+						if(data.status == 'error')
+						{
+							toastr.warning(data.status_message);
+						}
+					}
+				})
+			// }
+		});
+	}
+
 	function event_search_customer()
 	{
 		$("body").on("keyup", ".event_search_customer", function(e)

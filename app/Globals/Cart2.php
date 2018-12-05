@@ -95,7 +95,7 @@ class Cart2
 	public static function set_payment_method_information($payment_method_info)
 	{
 	}
-	public static function add_item_to_cart($shop_id, $item_id, $quantity, $change_qty = false)
+	public static function add_item_to_cart($shop_id, $item_id, $quantity, $change_qty = false, $change_price = 0)
 	{
 		$cart_key = Self::get_cart_key();
 
@@ -109,6 +109,13 @@ class Cart2
 				if($change_qty == true)
 				{
 					$update["quantity"] = $quantity;
+				}
+
+				/*FOR NONINVENTORY PROCESSING*/
+				if($change_price > 0)
+				{
+					$update["quantity"] = 1;
+					$update["non_inventory_price"] = $change_price;
 				}
 				Tbl_cart::where("cart_id", $check_cart->cart_id)->update($update);
 			}
@@ -292,7 +299,7 @@ class Cart2
 		
 		if($cart_key)
 		{
-			$_cart 			= Tbl_cart::where("unique_id_per_pc", $cart_key)->where("status", "Not Processed")->get();
+			$_cart 			= Tbl_cart::Category()->where("unique_id_per_pc", $cart_key)->where("tbl_cart.status", "Not Processed")->get();
 			$cart_info 		= Tbl_cart_info::where("unique_id_per_pc", $cart_key)->first();
 
 			if(!$cart_info)
@@ -333,7 +340,8 @@ class Cart2
 					$_cart[$key]->item_id 				= $item_info->item_id;
 					$_cart[$key]->item_name 			= $item_info->item_name;
 					$_cart[$key]->item_sku 				= $item_info->item_sku;
-					$_cart[$key]->item_price 			= $item_info->item_price;
+					// $_cart[$key]->item_price 			= $item_info->item_price;
+					$_cart[$key]->item_price            = $_cart[$key]->type_category == "non-inventory" ? $_cart[$key]->non_inventory_price : $_cart[$key]->item_price;
 
 					if($customer_id) 
 		            {
@@ -355,19 +363,20 @@ class Cart2
 		            	}
 		            }
 		            /*THIS IS THE ORIGINAL CODE - IT WAS CHANGE BY JAMES OMOSORA*/
-					// $_cart[$key]->discount 				= 0;
-					// $_cart[$key]->subtotal 				= $_cart[$key]->item_price * $cart->quantity;
-					// $_cart[$key]->display_item_price 	= Currency::format($_cart[$key]->item_price);
-					// $_cart[$key]->display_subtotal 		= Currency::format($_cart[$key]->subtotal);
-					// $_cart[$key]->pin_code 				= null;
-
-					$shop_id = Tbl_customer::where("customer_id", $customer_id)->value("shop_id");
-		            $_cart[$key]->item_price            = Ecom_Product::getPriceLevel($shop_id, $customer_id, $cart->item_id, $_cart[$key]->item_price);
+		            
 					$_cart[$key]->discount 				= 0;
 					$_cart[$key]->subtotal 				= $_cart[$key]->item_price * $cart->quantity;
 					$_cart[$key]->display_item_price 	= Currency::format($_cart[$key]->item_price);
 					$_cart[$key]->display_subtotal 		= Currency::format($_cart[$key]->subtotal);
 					$_cart[$key]->pin_code 				= null;
+
+					// $shop_id = Tbl_customer::where("customer_id", $customer_id)->value("shop_id");
+		   //          $_cart[$key]->item_price            = Ecom_Product::getPriceLevel($shop_id, $customer_id, $cart->item_id, $_cart[$key]->item_price);
+					// $_cart[$key]->discount 				= 0;
+					// $_cart[$key]->subtotal 				= $_cart[$key]->item_price * $cart->quantity;
+					// $_cart[$key]->display_item_price 	= Currency::format($_cart[$key]->non_inventory_price) : Currency::format($_cart[$key]->item_price);
+					// $_cart[$key]->display_subtotal 		= Currency::format($_cart[$key]->subtotal);
+					// $_cart[$key]->pin_code 				= null;
 
 
 					$total += $_cart[$key]->subtotal;

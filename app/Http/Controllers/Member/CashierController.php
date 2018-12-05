@@ -228,6 +228,30 @@ class CashierController extends Member
 
         echo json_encode($return);
     }
+
+    public function pos_change_non_inventory_price()
+    {
+        $data["shop_id"]    = $shop_id = $this->user_info->shop_id;
+        $data["item_id"]    = $item_id = Request::input("item_id");
+        $new_price          = Request::input("new_price");
+        $data["item"]       = $item = Cart2::scan_item($data["shop_id"], $data["item_id"]);
+        
+
+        if($data["item"])
+        {
+            $return["status"]   = "success";
+            $return["status_message"]  = "New Price Posted";
+            Cart2::add_item_to_cart($shop_id, $item_id, 0, false, $new_price);
+            $return["call_function"] = "";
+        }
+        else
+        {
+            $return["status"]   = "error";
+            $return["status_message"]  = "The ITEM you scanned didn't match any record.";
+        }   
+        echo json_encode($return);
+    }
+
     public function set_cart_info($key, $value)
     {
         $cart_key           = Cart2::get_cart_key();

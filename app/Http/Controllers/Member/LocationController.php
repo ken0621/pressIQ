@@ -52,8 +52,15 @@ class LocationController extends Member
         if($search_city) $data["_city"]->where("locale_name","like","%" . $search_city . "%");
         $data["_city"]      = $data["_city"]->orderBy("locale_name")->get();
 
-
-        $barangay_parent    = Request::input("barangay_parent") ? Request::input("barangay_parent") : $data["_city"][0]->locale_id; 
+        if (isset($data["_city"][0])) 
+        {
+            $barangay_parent    = Request::input("barangay_parent") ? Request::input("barangay_parent") : $data["_city"][0]->locale_id; 
+        }
+        else
+        {
+            $barangay_parent = null;
+        }
+        
         $data["_barangay"]  = Tbl_locale::where("locale_parent", $barangay_parent);
         if($search_barangay) $data["_barangay"]->where("locale_name","like","%" . $search_barangay . "%");
         $data["_barangay"]  = $data["_barangay"]->orderBy("locale_name")->get();

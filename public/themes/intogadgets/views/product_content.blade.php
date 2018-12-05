@@ -353,6 +353,12 @@
 @section('css')
 
 <link rel="stylesheet" href="resources/assets/frontend/css/single-product.css">
+<style type="text/css">
+  .content .single-product-content .single-product-container .single-product-holder .single-order-content .single-order-description
+  {
+    white-space: normal;
+  }
+</style>
 
 <link rel="stylesheet" type="text/css" href="resources/assets/flexslider/css/flexslider.css">
 

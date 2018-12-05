@@ -33,6 +33,7 @@ body {
         font-weight: 400;
         border-collapse: collapse;
         width: 100%;
+        overflow: scroll;
         .product-table
         {
           background-color: #fff;
@@ -47,12 +48,20 @@ body {
               text-align: left;
               background-color: #14c77a;
               color: #fff;
+              @media screen and (max-width: 425px)
+              {
+                  font-size: 15px;
+              }
             }
             td
             {
               font-size: 16px;
               border: 1px solid #dfdfdf;
               padding: 8px 20px;
+              @media screen and (max-width: 425px)
+              {
+                  font-size: 13px;
+              }
             }
           }
         }

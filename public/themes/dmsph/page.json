@@ -2,211 +2,139 @@
 	"home":
 	{
 		
-		"home_banner_main" :
+		"home_dms_banner" :
         {
-            "label":"Main Banner Maintenance",
-            "type":"gallery_links",
+            "label":"(Home) Home Banner",
+            "type":"image",
             "default":"",
             "size":"12"
-        }
-	},
-	"about":
-	{
-		"about_title_header":
+        },
+        "home_dms_about_whoweare" :
+        {
+            "label":"(About) Who We Are",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_about_whatwedo" :
+        {
+            "label":"(About) What We Do",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_about_vision" :
+        {
+            "label":"(About) Vision",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_about_mission" :
+        {
+            "label":"(About) Mission",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_productdesc_enterprise" :
+        {
+            "label":"(Product) Description Enterprise",
+            "type":"tinymce",
+            "default":"",
+            "size":"4"
+        },
+        "home_dms_productdesc_premier" :
+        {
+            "label":"(Product) Description Premier",
+            "type":"tinymce",
+            "default":"",
+            "size":"4"
+        },
+        "home_dms_productdesc_pro" :
+        {
+            "label":"(Product) Description Pro",
+            "type":"tinymce",
+            "default":"",
+            "size":"4"
+        },
+        "home_dms_expertise_1" :
+        {
+            "label":"(Expertise) Visible",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_expertise_2" :
+        {
+            "label":"(Expertise) Visible",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_expertise_3" :
+        {
+            "label":"(Expertise) Hidden",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_expertise_4" :
+        {
+            "label":"(Expertise) Hidden",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_relationship":
 		{
-			"label":"Header Title",
-			"type":"textbox",
-			"default":"",
-			"size":"6"
-		},
-		"about_title_subheader":
-		{
-			"label":"SubHeader Title",
-			"type":"textbox",
-			"default":"",
-			"size":"6"
-		},
-		"about_content_paragraph":
-		{
-			"label":"Content Paragraph 1",
-			"type":"tinymce",
-			"default":"",
-			"size":"6"
-		},
-		"about_content_paragraph_hide":
-		{
-			"label":"Content Paragraph 2",
-			"type":"tinymce",
-			"default":"",
-			"size":"6"
-		},
-		"about_content_image_1":
-		{
-			"label":"Large-Left Image",
-			"type":"image",
-			"default":"",
-			"size":"4"
-		},
-		"about_content_image_2":
-		{
-			"label":"Small-Right Image Top",
-			"type":"image",
-			"default":"",
-			"size":"4"
-		},
-		"about_content_image_3":
-		{
-			"label":"Small-Right Image Bottom",
-			"type":"image",
-			"default":"",
-			"size":"4"
-		},
-		"about_features_title_header":
-		{
-			"label":"Title Header",
-			"type":"textbox",
-			"default":"",
-			"size":"12"
-		},
-		"about_features_header_1":
-		{
-			"label":"Feature Header",
-			"type":"textbox",
-			"default":"",
-			"size":"4"
-		},
-		"about_features_header_2":
-		{
-			"label":"Feature Header",
-			"type":"textbox",
-			"default":"",
-			"size":"4"
-		},
-		"about_features_header_3":
-		{
-			"label":"Feature Header",
-			"type":"textbox",
-			"default":"",
-			"size":"4"
-		},
-		"about_features_body_1":
-		{
-			"label":"Feature Body",
-			"type":"tinymce",
-			"default":"",
-			"size":"4"
-		},
-		"about_features_body_2":
-		{
-			"label":"Feature Body",
-			"type":"tinymce",
-			"default":"",
-			"size":"4"
-		},
-		"about_features_body_3":
-		{
-			"label":"Feature Body",
-			"type":"tinymce",
-			"default":"",
-			"size":"4"
-		}
-		
-	},
-	"gallery":
-	{
-		"gallery_title_header":
-		{
-			"label":"Header Title",
-			"type":"textbox",
-			"default":"",
-			"size":"6"
-		},
-		"gallery_title_subheader":
-		{
-			"label":"SubHeader Title",
-			"type":"textbox",
-			"default":"",
-			"size":"6"
-		},
-		"gallery_image_swiper":
-		{
-			"label":"Image Gallery",
+			"label":"(Relationship) Our Partners",
 			"type":"gallery",
 			"default":"",
 			"size":"12"
-		}
-	},
-	"contact":
-	{
-		"contact_title_header":
-		{
-			"label":"Header Title",
-			"type":"textbox",
-			"default":"",
-			"size":"6"
 		},
-		"contact_title_subheader":
+		"home_dms_contact_map":
 		{
-			"label":"SubHeader Title",
-			"type":"textbox",
-			"default":"",
-			"size":"6"
-		},
-		"contact_shellcanvas_map":
-		{
-			"label":"Map",
+			"label":"(Contact) Map",
 			"type":"textbox",
 			"default":"",
 			"size":"12"
 		},
-		"contact_shellcanvas_mainbranch":
+		"home_dms_contact_businesshour":
 		{
-			"label":"Main Branch",
-			"type":"textbox",
+			"label":"(Contact) Business Hours",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"home_dms_contact_email":
+		{
+			"label":"(Contact) Email",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"home_dms_contact_landline":
+		{
+			"label":"(Contact) Landline Number",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"home_dms_contact_phonenumber":
+		{
+			"label":"(Contact) Phone Number",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"home_dms_contact_address":
+		{
+			"label":"(Contact) Adress",
+			"type":"tinymce",
 			"default":"",
 			"size":"12"
-		},
-		"contact_shellcanvas_address":
-		{
-			"label":"Address",
-			"type":"tinymce",
-			"default":"",
-			"size":"6"
-		},
-		"contact_shellcanvas_mobile":
-		{
-			"label":"Mobile Number",
-			"type":"tinymce",
-			"default":"",
-			"size":"6"
-		},
-		"contact_shellcanvas_storeoffice":
-		{
-			"label":"Store Office Hours",
-			"type":"tinymce",
-			"default":"",
-			"size":"6"
-		},
-		"contact_shellcanvas_malloffice":
-		{
-			"label":"Mall Office Hours",
-			"type":"tinymce",
-			"default":"",
-			"size":"6"
-		},
-		"contact_shellcanvas_othercontact":
-		{
-			"label":"Other Contacts",
-			"type":"tinymce",
-			"default":"",
-			"size":"6"
-		},
-		"contact_shellcanvas_otherbranch":
-		{
-			"label":"Other Branches",
-			"type":"tinymce",
-			"default":"",
-			"size":"6"
 		}
 	}
 }
+	

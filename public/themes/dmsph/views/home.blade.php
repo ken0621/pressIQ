@@ -2,40 +2,48 @@
 @section("content")
 <div class="content">
 
-	<section class="wrapper-1" style="background-image: url('/themes/{{ $shop_theme }}/img/home-banner-v1.jpg')" data-img-width="1600" data-img-height="835" data-diff="100">
+	<section class="wrapper-1" id="home" style="background-image: url('{!! get_content($shop_theme_info, "home", "home_dms_banner") !!}')" data-img-width="1600" data-img-height="835" data-diff="100">
 		<div class="title-container">
-			<div class="title-content anim-typewriter">
-				Welcome to the <span>Digital Marketing Solutions</span> PH, Inc.
-			</div>
+			<p class="anim-typewriter">
+				Welcome to the <span>Digital Marketing Solutions</span>
+			</p>
 		</div>
-			<div class="home-container">
-				<div class="home-content">
-					<div class="home-content-1">
-						<div class="title-1">
-							GROW YOUR BUSINESS WITH US!
-						</div>
-						<div class="title-2">
-							We Offer Excellent Systems in Improving Your Business.
-						</div>
-					</div>
-					<div class="home-content-2">
-						<div class="title-1">
-							We are QuickBooks
-						</div>
-						<div class="title-2">
-							Certified <i class="far fa-check-square"></i>
+		<div class="home-container">
+			<div class="home-content">
+				<div class="row">
+					<div class="col-md-8 col-sm-6 col-xs-12">
+						<div class="home-content-1">
+							<div class="title-1">
+								GROW YOUR BUSINESS WITH US!
+							</div>
+							<div class="title-2">
+								We Offer Excellent Systems in Improving Your Business.
+							</div>
 						</div>
 					</div>
-					<div class="home-content-3">
-						<div class="image-holder">
-							<img src="/themes/{{ $shop_theme }}/img/QB-Badges.png">
+					<div class="col-md-2 col-sm-3 col-xs-6">
+						<div class="home-content-2">
+							<div class="title-1">
+								We are QuickBooks
+							</div>
+							<div class="title-2">
+								Certified <i class="far fa-check-square"></i>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2 col-sm-3 col-xs-6">
+						<div class="home-content-3">
+							<div class="image-holder">
+								<img src="/themes/{{ $shop_theme }}/img/QB-Badges.png">
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+		</div>
 	</section>
 
-	<section class="wrapper-2">
+	<section class="wrapper-2" id="about">
 		<div class="container">
 			<div class="about-container-company">
 				<div class="title-holder">
@@ -54,7 +62,7 @@
 								Who We Are
 							</div>
 							<div class="about-content">
-								Digital & Marketing Solutions PH, Inc., also referred as DMSPH, was established and registered to Securities and Exchange Commission (SEC) on February 19, 2013. Inspired by accounting process automation and business management development, Ms. Rose Ann Amarillo and Mr. Karl Landicho ventured to create an institution and a family named DMSPH.
+								{!! get_content($shop_theme_info, "home", "home_dms_about_whoweare") !!}
 							</div>
 						</div>
 						<div class="company-vision">
@@ -62,7 +70,7 @@
 								Vision
 							</div>
 							<div class="about-content">
-								To be the top software developer first in Philippines before we venture the Globe. We envision ourselves to be the top service provider of innovative accounting and management process which will support all growing businesses and will inspire huge businesses to soar even bigger.
+								{!! get_content($shop_theme_info, "home", "home_dms_about_vision") !!}
 							</div>
 						</div>
 						<div class="company-mission">
@@ -70,7 +78,7 @@
 								Mission
 							</div>
 							<div class="about-content">
-								To inform every business entity that accounting process and business transaction recording should be easy, fast, secured, convenient and we exist to help them apply it in reality.
+								{!! get_content($shop_theme_info, "home", "home_dms_about_mission") !!}
 							</div>
 						</div>
 					</div>
@@ -83,7 +91,7 @@
 								What We Do
 							</div>
 							<div class="about-content">
-								We are called Intuit ProAdvisor who resells Intuit Products such as QuickBooks Accounting Software and QuickBooks Point of Sale (POS). Selling QuickBooks Accounting as our main line of business, we also offer complimentary services such as training and implementation. We mean to help your business grow. We improve and automate business from accounting, inventory, sales, billing and collection.
+								{!! get_content($shop_theme_info, "home", "home_dms_about_whatwedo") !!}
 							</div>
 						</div>
 					</div>
@@ -152,7 +160,7 @@
 		</div>
 	</section>
 
-	<section class="wrapper-4">
+	<section class="wrapper-4" id="product">
 		<div class="container">
 			<div class="product-container">
 				<div class="product-title">
@@ -168,17 +176,7 @@
 					    <div class="product-desc-container">
 					    	<div class="product-desc-container-1">
 					    		<div class="product-header">Product Description</div>
-					    		QuickBooks Enterprise Subscription Plan:
-					    		<br>
-					    		Be updated by subscribing to QuickBooks Enterprise Yearly Upgrade and Update Policy
-					    		<br><br>
-					    		QuickBooks Enterprise One Time Payment Policy:
-					    		<br>
-					    		Don’t ant yearly payment? Of course! Inquire now to get our QuickBooks One Time Payment Policy Promo! *Promo until supplies last*
-					    		<br><br>
-					    		QuickBooks Enterprise Old Version:
-					    		<br>
-					    		Nostalgic for past versions? Or maybe you just can’t move from this specific version? Is it the price? Come on! You all have reasons but we got you covered!
+					    		{!! get_content($shop_theme_info, "home", "home_dms_productdesc_enterprise") !!}
 						    </div>
 						    <div class="product-desc-container-2">
 						    	<table class="product-table">
@@ -234,17 +232,7 @@
 					    <div class="product-desc-container">
 					    	<div class="product-desc-container-1">
 					    		<div class="product-header">Product Description</div>
-					    		• All the features of Pro
-					    		<br>
-								• Industry-specific reports
-								<br>
-								• Create sales orders
-								<br>
-								• Track costs for products and inventory
-								<br>
-								• Set product and service prices by customer type
-								<br>
-								• Up to 5 users8
+					    		{!! get_content($shop_theme_info, "home", "home_dms_productdesc_premier") !!}
 						    </div>
 					    </div>
 					    <div class="button-container">
@@ -256,15 +244,7 @@
 					    <div class="product-desc-container">
 					    	<div class="product-desc-container-1">
 					    		<div class="product-header">Product Description</div>
-					    		• Helps you maximize tax deductions with organized expenses
-					    		<br>
-								• Track business performance to make better decisions
-								<br>
-								• One-click financial, sales and tax reports
-								<br>
-								• Easy-to-use tools and simple setup
-								<br>
-								• No accounting knowledge necessary
+					    		{!! get_content($shop_theme_info, "home", "home_dms_productdesc_pro") !!}
 						    </div>
 					    </div>
 					    <div class="button-container">
@@ -277,7 +257,7 @@
 		</div>
 	</section>
 
-	<section class="wrapper-5">
+	<section class="wrapper-5" id="services">
 		<div class="container">
 			<div class="service-container">
 				<div class="service-title">
@@ -377,7 +357,7 @@
 		</div>
 	</section>
 
-	<section class="wrapper-6">
+	<section class="wrapper-6" id="expertise">
 		<div class="container">
 			<div class="expertise-container">
 				<div class="expertise-title">
@@ -390,47 +370,20 @@
 					<div class="expertise-show" id="morecontent">
 						<div class="expertise-list-container">
 							<div class="expertise-list">
-								• Accounting or Bookkeeping<br>
-								• Advertising or Public Relations<br>
-								• Agriculture, Ranching, or Farming<br>
-								• Art, Writing or Photography<br>
-								• Automotive Sales or Repair<br>
-								• Church or Religious Organization<br>
-								• Construction General Contractor<br>
-								• Construction Trades (Plumber, Electrician, HVAC)<br>
+								{!! get_content($shop_theme_info, "home", "home_dms_expertise_1") !!}
 							</div>
 							<div class="expertise-list">
-								• Manufacturer or Representative or Agent<br>
-								• Manufacturing<br>
-								• Medical, Dental, Or Health Service<br>
-								• Non-Profit<br>
-								• Professional Consulting<br>
-								• Property Management or Home Association<br>
-								• Real Estate Brokerage or Developer<br>
-								• Rental<br>
+								{!! get_content($shop_theme_info, "home", "home_dms_expertise_2") !!}
 							</div>
 						</div>
 					</div>
 					<div class="expertise-hide" id="hidecontent">
 						<div class="expertise-list-container">
 							<div class="expertise-list">
-								• Design, Architecture, or Engineering<br>
-								• Financial Services other than Accounting or Book<br>
-								• Hair Salon, Beauty Salon, or Barber Shop<br>
-								• Information Technology (Computers, Software)<br>
-								• Insurance Agency or Broker<br>
-								• Lawn Care or Landscaping<br>
-								• Legal Services<br>
-								• Lodging (Hotel, Motel)<br>
+								{!! get_content($shop_theme_info, "home", "home_dms_expertise_3") !!}
 							</div>
 							<div class="expertise-list">
-								• Repair and Maintenance<br>
-								• Restaurant, Caterer or Bar<br>
-								• Retail Shop or Online Commerce<br>
-								• Sales: Independent Agent<br>
-								• Transportation, Trucking, or Delivery<br>
-								• General Product-based Business<br>
-								• General Service-based Business<br>
+								{!! get_content($shop_theme_info, "home", "home_dms_expertise_4") !!}
 							</div>
 						</div>
 					</div>
@@ -443,7 +396,7 @@
 		</div>
 	</section>
 
-	{{-- <section class="wrapper-7">
+	<section class="wrapper-7" id="partnership">
 		<div class="container">
 			<div class="partner-container">
 				<div class="partner-title">
@@ -451,7 +404,14 @@
 				</div>
 				<div class="swiper-container swiper">
 					<div class="swiper-wrapper">
-						<a href="_blank" class="swiper-slide">
+						@if(loop_content_condition($shop_theme_info, "home", "home_dms_relationship"))
+							@foreach(loop_content_get($shop_theme_info, "home", "home_dms_relationship") as $slider)
+								<div class="swiper-slide">
+									<img src="{{ $slider }}">
+								</div>
+							@endforeach
+						@else
+						{{-- <a href="_blank" class="swiper-slide">
 							<img src="/themes/{{ $shop_theme }}/img/logo-1.png">
 						</a>
 						<a href="_blank" class="swiper-slide">
@@ -480,21 +440,22 @@
 						</a>
 						<a href="_blank" class="swiper-slide">
 							<img src="/themes/{{ $shop_theme }}/img/logo-10.png">
-						</a>
+						</a> --}}
+						@endif
 					</div>
 				</div>
 			</div>
 		</div>
-	</section> --}}
+	</section>
 
-	<section class="wrapper-8">
+	<section class="wrapper-8" id="contact">
 		<div class="container">
 			<div class="contact-container">
 				<div class="contact-title">
 					CONNECT WITH US
 				</div>
 				<div class="map-container">
-					<iframe class="map-dms" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.7047307522976!2d121.00578151483978!3d14.558870289829036!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c9077966d0e5%3A0xd0aa1e2c8f082740!2sThe+Linear+Makati+by+Filinvest!5e0!3m2!1sen!2sph!4v1543311437118" width="1200" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
+					<iframe class="map-dms" src="{!! get_content($shop_theme_info, "home", "home_dms_contact_map") !!}" width="1200" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
 				</div>
 				<div class="contact-content">
 					<div class="contact-content-1">
@@ -558,8 +519,7 @@
 								<img src="/themes/{{ $shop_theme }}/img/contact-1.png">
 							</div>
 							<div class="info-holder">
-								<strong>Business Hour</strong><br>
-								Monday - Friday at 9:00am - 6:00pm
+								{!! get_content($shop_theme_info, "home", "home_dms_contact_businesshour") !!}
 							</div>
 						</div>
 						<div class="contact-info-holder">
@@ -567,8 +527,7 @@
 								<img src="/themes/{{ $shop_theme }}/img/contact-2.png">
 							</div>
 							<div class="info-holder">
-								<strong>Email at</strong><br>
-								sales@dmsph.com
+								{!! get_content($shop_theme_info, "home", "home_dms_contact_email") !!}
 							</div>
 						</div>
 						<div class="contact-info-holder">
@@ -576,8 +535,7 @@
 								<img src="/themes/{{ $shop_theme }}/img/contact-3.png">
 							</div>
 							<div class="info-holder">
-								<strong>Mobile Landline</strong> 02 587 0063<br>
-								<strong>Office Landline</strong> 02 350 4248
+								{!! get_content($shop_theme_info, "home", "home_dms_contact_landline") !!}
 							</div>
 						</div>
 						<div class="contact-info-holder">
@@ -585,8 +543,7 @@
 								<img src="/themes/{{ $shop_theme }}/img/contact-4.png">
 							</div>
 							<div class="info-holder">
-								<strong>SMART Mobile Number</strong> 0929 402 1269<br>
-								<strong>Globe Mobile Number</strong> 0917 317 8535
+								{!! get_content($shop_theme_info, "home", "home_dms_contact_phonenumber") !!}
 							</div>
 						</div>
 						<div class="contact-info-holder">
@@ -594,7 +551,7 @@
 								<img src="/themes/{{ $shop_theme }}/img/contact-5.png">
 							</div>
 							<div class="info-holder">
-								<strong>Digital Marketing Solutions PH Inc.</strong> Tower 1 Unit 1525 The Linear Makati, Mayapis St. corner Malugay & Yakal Sts., San Antonio Village, Makati City 1203
+								{!! get_content($shop_theme_info, "home", "home_dms_contact_address") !!}
 							</div>
 						</div>
 					</div>
@@ -608,7 +565,12 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<div class="title-header">
-						INQUIRE NOW!
+						<div class="title-content">
+							INQUIRE NOW!
+						</div>
+						<div class="close-container">
+							<button type="button" class="btn-close" data-dismiss="modal"><i class="fas fa-times"></i></button>
+						</div>
 					</div>
 				</div>
 				<div class="modal-body">

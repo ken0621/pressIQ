@@ -30,8 +30,14 @@ function swiper2()
 			clickable: true,
 			},
 			breakpoints: {
+				768: {
+					slidesPerView: 4,
+				},
 				425: {
-					slidesPerView: 1,
+					slidesPerView: 3,
+				},
+				375: {
+					slidesPerView: 2,
 				}
 			}
 		});

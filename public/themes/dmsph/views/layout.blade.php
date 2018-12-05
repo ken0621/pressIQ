@@ -57,11 +57,11 @@
             <div id="overlay" onclick="off()"></div>
             <div class="side-nav">
                 <nav class="pushmenu pushmenu-left">
-                    {{-- <div class="mob-banner">
-                        <img src="/themes/{{ $shop_theme }}/img/bg-mob.jpg" alt="">
-                    </div> --}}
+                    <div class="mob-banner">
+                        <img src="/themes/{{ $shop_theme }}/img/mob-bg.jpg" alt="">
+                    </div>
                     <div class="space1"></div>
-                    <span>BROWSE</span>
+                    <span><i class="fa fa-bars" aria-hidden="true"></i> BROWSE</span>
                     <ul class="links">
                         <li> 
                             <a onclick="off()" href="/#home"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
@@ -70,16 +70,16 @@
                             <a onclick="off()" href="/#about"><i class="fa fa-info" aria-hidden="true"></i> About Us</a>
                         </li>
                         <li> 
-                            <a onclick="off()" href="/#gallery"><i class="fas fa-boxes" aria-hidden="true"></i> Products</a>
+                            <a onclick="off()" href="/#product"><i class="fa fa-cubes" aria-hidden="true"></i> Products</a>
                         </li>
                         <li> 
-                            <a onclick="off()" href="/#contact"><i class="fa fa-phone" aria-hidden="true"></i> Services</a>
+                            <a onclick="off()" href="/#services"><i class="fa fa-wrench" aria-hidden="true"></i> Services</a>
                         </li>
                         <li> 
-                            <a onclick="off()" href="/#contact"><i class="fa fa-phone" aria-hidden="true"></i> Expertise</a>
+                            <a onclick="off()" href="/#expertise"><i class="fa fa-list-alt" aria-hidden="true"></i> Expertise</a>
                         </li>
                         <li> 
-                            <a onclick="off()" href="/#contact"><i class="fa fa-phone" aria-hidden="true"></i> Partners</a>
+                            <a onclick="off()" href="/#partnership"><i class="fa fa-users" aria-hidden="true"></i> Partners</a>
                         </li>
                         <li> 
                             <a onclick="off()" href="/#contact"><i class="fa fa-phone" aria-hidden="true"></i> Contact Us</a>
@@ -110,26 +110,26 @@
                                             @if(Request::segment(1)=="product")
                                                 <li><a class="smoth-scroll" href="/#home">Home</a></li>
                                                 <li><a class="smoth-scroll" href="/#about">About Us</a></li>
-                                                <li><a class="smoth-scroll" href="/#gallery">Products</a></li>
-                                                <li><a class="smoth-scroll" href="/#contact">Services</a></li>
-                                                <li><a class="smoth-scroll" href="/#contact">Expertise</a></li>
-                                                <li><a class="smoth-scroll" href="/#contact">Partners</a></li>
+                                                <li><a class="smoth-scroll" href="/#product">Products</a></li>
+                                                <li><a class="smoth-scroll" href="/#services">Services</a></li>
+                                                <li><a class="smoth-scroll" href="/#expertise">Expertise</a></li>
+                                                <li><a class="smoth-scroll" href="/#partnership">Partners</a></li>
                                                 <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
                                             @else
-                                                <li><a class="smoth-scroll" href="/#home">Home</a></li>
-                                                <li><a class="smoth-scroll" href="/#about">About Us</a></li>
-                                                <li><a class="smoth-scroll" href="/#gallery">Products</a></li>
-                                                <li><a class="smoth-scroll" href="/#contact">Services</a></li>
-                                                <li><a class="smoth-scroll" href="/#contact">Expertise</a></li>
-                                                <li><a class="smoth-scroll" href="/#contact">Partners</a></li>
-                                                <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
+                                                <li><a class="smoth-scroll" href="#home">Home</a></li>
+                                                <li><a class="smoth-scroll" href="#about">About Us</a></li>
+                                                <li><a class="smoth-scroll" href="#product">Products</a></li>
+                                                <li><a class="smoth-scroll" href="#services">Services</a></li>
+                                                <li><a class="smoth-scroll" href="#expertise">Expertise</a></li>
+                                                <li><a class="smoth-scroll" href="#partnership">Partners</a></li>
+                                                <li><a class="smoth-scroll" href="#contact">Contact Us</a></li>
                                             @endif
                                         </ul>
                                     </nav>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="button-keeper">
-                                        <button type="button" class="btn-inquire" data-toggle="modal" data-target="#myModal">INQUIRE NOW</button>
+                                        <button type="button" class="btn-ask" data-toggle="modal" data-target="#myModal">INQUIRE NOW</button>
                                     </div>
                                 </div>
                             </div>
@@ -158,19 +158,19 @@
                                 @if(Request::segment(1)=="product")
                                     <li><a class="smoth-scroll" href="/#home">Home</a></li>
                                     <li><a class="smoth-scroll" href="/#about">About Us</a></li>
-                                    <li><a class="smoth-scroll" href="/#gallery">Products</a></li>
-                                    <li><a class="smoth-scroll" href="/#contact">Services</a></li>
-                                    <li><a class="smoth-scroll" href="/#contact">Expertise</a></li>
-                                    <li><a class="smoth-scroll" href="/#contact">Partners</a></li>
+                                    <li><a class="smoth-scroll" href="/#product">Products</a></li>
+                                    <li><a class="smoth-scroll" href="/#services">Services</a></li>
+                                    <li><a class="smoth-scroll" href="/#expertise">Expertise</a></li>
+                                    <li><a class="smoth-scroll" href="/#partnership">Partners</a></li>
                                     <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
                                 @else
-                                    <li><a class="smoth-scroll" href="/#home">Home</a></li>
-                                    <li><a class="smoth-scroll" href="/#about">About Us</a></li>
-                                    <li><a class="smoth-scroll" href="/#gallery">Products</a></li>
-                                    <li><a class="smoth-scroll" href="/#contact">Services</a></li>
-                                    <li><a class="smoth-scroll" href="/#contact">Expertise</a></li>
-                                    <li><a class="smoth-scroll" href="/#contact">Partners</a></li>
-                                    <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
+                                    <li><a class="smoth-scroll" href="#home">Home</a></li>
+                                    <li><a class="smoth-scroll" href="#about">About Us</a></li>
+                                    <li><a class="smoth-scroll" href="#product">Products</a></li>
+                                    <li><a class="smoth-scroll" href="#services">Services</a></li>
+                                    <li><a class="smoth-scroll" href="#expertise">Expertise</a></li>
+                                    <li><a class="smoth-scroll" href="#partnership">Partners</a></li>
+                                    <li><a class="smoth-scroll" href="#contact">Contact Us</a></li>
                                 @endif
                             </ul>
                         </nav>

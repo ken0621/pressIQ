@@ -12,7 +12,7 @@ $bold: 700;
 
 .pushmenu {
     /*this is the nav*/
-    background-color: #4E0301;
+    background-color: #017aff;
     text-align: left;
     width: 300px;
     height: 100%;
@@ -44,7 +44,7 @@ $bold: 700;
         font-family: $display-text;
         font-size: 16px;
         font-weight: $semi-bold;
-        color: #ffd019;
+        color: #fff;
         padding-left: 22px;
     }
 
@@ -111,7 +111,7 @@ $bold: 700;
         // padding-left: 10px;
 
         .fa {
-            color: #ffd019;
+            color: #fff;
             width: 25px;
             text-align: center;
         }
@@ -121,7 +121,7 @@ $bold: 700;
             display: block;
 
             /* drops the nav vertically*/
-            color: #ffd019;
+            color: #fff;
             font-size: 16px;
             text-decoration: none;
         }

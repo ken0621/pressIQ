@@ -364,19 +364,19 @@ class Cart2
 		            }
 		            /*THIS IS THE ORIGINAL CODE - IT WAS CHANGE BY JAMES OMOSORA*/
 		            
+					// $_cart[$key]->discount 				= 0;
+					// $_cart[$key]->subtotal 				= $_cart[$key]->item_price * $cart->quantity;
+					// $_cart[$key]->display_item_price 	= Currency::format($_cart[$key]->item_price);
+					// $_cart[$key]->display_subtotal 		= Currency::format($_cart[$key]->subtotal);
+					// $_cart[$key]->pin_code 				= null;
+
+					$shop_id = Tbl_customer::where("customer_id", $customer_id)->value("shop_id");
+		            $_cart[$key]->item_price            = Ecom_Product::getPriceLevel($shop_id, $customer_id, $cart->item_id, $_cart[$key]->item_price);
 					$_cart[$key]->discount 				= 0;
 					$_cart[$key]->subtotal 				= $_cart[$key]->item_price * $cart->quantity;
 					$_cart[$key]->display_item_price 	= Currency::format($_cart[$key]->item_price);
 					$_cart[$key]->display_subtotal 		= Currency::format($_cart[$key]->subtotal);
 					$_cart[$key]->pin_code 				= null;
-
-					// $shop_id = Tbl_customer::where("customer_id", $customer_id)->value("shop_id");
-		   //          $_cart[$key]->item_price            = Ecom_Product::getPriceLevel($shop_id, $customer_id, $cart->item_id, $_cart[$key]->item_price);
-					// $_cart[$key]->discount 				= 0;
-					// $_cart[$key]->subtotal 				= $_cart[$key]->item_price * $cart->quantity;
-					// $_cart[$key]->display_item_price 	= Currency::format($_cart[$key]->non_inventory_price) : Currency::format($_cart[$key]->item_price);
-					// $_cart[$key]->display_subtotal 		= Currency::format($_cart[$key]->subtotal);
-					// $_cart[$key]->pin_code 				= null;
 
 
 					$total += $_cart[$key]->subtotal;

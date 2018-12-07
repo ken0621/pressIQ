@@ -341,7 +341,7 @@ class Cart2
 					$_cart[$key]->item_name 			= $item_info->item_name;
 					$_cart[$key]->item_sku 				= $item_info->item_sku;
 					// $_cart[$key]->item_price 			= $item_info->item_price;
-					$_cart[$key]->item_price            = $_cart[$key]->type_category == "non-inventory" ? $_cart[$key]->non_inventory_price : $_cart[$key]->item_price;
+					$_cart[$key]->item_price            = $_cart[$key]->type_category == "non-inventory" ? $_cart[$key]->non_inventory_price : $item_info->item_price;
 
 					if($customer_id) 
 		            {

@@ -171,7 +171,7 @@
         </div>
     </section>
     <!-- Business Partners -->           
-    <section id="partners" class="content__section-4">
+    {{-- <section id="partners" class="content__section-4">
         <div class="container">
             <div class="content__section-4__title">
                 <h2>Business Partners</h2>
@@ -181,827 +181,472 @@
                 <img src="/themes/{{ $shop_theme }}/img/brands.png">
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <section id="candidates" class="content__section-5">
         <div class="container">
-            <div class="content__section-5__title">
+            {{-- <div class="content__section-5__title">
                 <h2>Candidates for GABC Position</h2>
+            </div> --}}
+            {{-- <div class="title-border"></div> --}}
+            <div class="page__content">
+                <h3 class="title">BOARD OF TRUSTEES</h3>
+                <div class="border-title"></div>
+                <div class="page-content__grid">
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/47.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/45.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Romain Lavernhe</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/romainlavernhe/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/51.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/49.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Shelley Facius</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/shelleyfacius\"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/50.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/48.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Sanem Avcil</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/sanemavcil/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/27.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/25.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Jahn Ludwig</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/jahn-ludwig-789532107/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/40.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/38.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Nancy James</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/nancy-james-consultant"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="title">GLOBAL BOARD OF DIRECTORS</h3>
+                <div class="border-title"></div>
+                <div class="page-content__grid">
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/30.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/28.jpg">
+                            </div>
+                        </div>
+                        <div class="info__name">Jochen Biedermann</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/jochenbiedermann/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/16.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/14.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Elma Neimar-Saric</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/rapidbuildingsystem"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/37.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/35.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Mickael Damour</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/mickael-damour/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/44.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/42.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Qusai Sharef</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/qusai-sharef-505178164"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/7.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/6.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Asim Tariq</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/asim-tariq/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/22.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/20.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Hans Dahn</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/hdahn/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/60_1.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/58.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Angel Colon</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/angel-colon-0bb2455/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/21.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/19.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Graham Leach</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/grahamrleach"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="title">REGIONAL BOARD OF DIRECTOR</h3>
+                <div class="border-title"></div>
+                <div class="page-content__grid">
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/23.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/21.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Harry Horsfall</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/harryhorsfall/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/11.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/9.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Cheryl Nunn</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/cherylnunn/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/34.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/32.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Marc Couzic</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/marc-couzic-fieldcoin/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/19.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/17.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Flavia Richardson</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/flavia-richardson-8a995037/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/43.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/41.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Paul Sullivan</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/paulsullivan6/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/54.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/52.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Thibault Gobert</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/thibault-gobert-55605458/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/56.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/54.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Walid El Gendy</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/walidelgendy/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/33.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/31.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Karen Wendt</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/profkarenwendt/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/6.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/5.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Armand Aguillon</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/armandaguillon/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/1.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/1.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Ahmad Piraiee</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/piraiee/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
+                            <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/61_1.jpg">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/flags/59.png">
+                            </div>
+                        </div>
+                        <div class="info__name">Anthony Johnson</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/dicemoney/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="title">AMBASSADORS</h3>
+                <div class="border-title"></div>
+                <div class="page-content__grid">
+                <div class="page__content--grid__item">
+                    <div class="image-container">
+                        <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/3.jpg">
+                        <div class="flag-badge">
+                            <img src="/themes/{{ $shop_theme }}/img/flags/2.png">
+                        </div>
+                    </div>
+                    <div class="info__name">Alexander Lempka</div>
+                    <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/alexander-lempka-67494b109/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                    </div>
+                </div>
+                <div class="page__content--grid__item">
+                    <div class="image-container">
+                        <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/26.jpg">
+                        <div class="flag-badge">
+                            <img src="/themes/{{ $shop_theme }}/img/flags/24.png">
+                        </div>
+                    </div>
+                    <div class="info__name">Jags Porandla</div>
+                    <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/jagsporandla/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                    </div>
+                </div>
+                <div class="page__content--grid__item">
+                    <div class="image-container">
+                        <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/12.jpg">
+                        <div class="flag-badge">
+                            <img src="/themes/{{ $shop_theme }}/img/flags/10.png">
+                        </div>
+                    </div>
+                    <div class="info__name">Constantin Kloecker</div>
+                    <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/constantin-kloecker/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                    </div>
+                </div>
+                <div class="page__content--grid__item">
+                    <div class="image-container">
+                        <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/45.jpg">
+                        <div class="flag-badge">
+                            <img src="/themes/{{ $shop_theme }}/img/flags/43.png">
+                        </div>
+                    </div>
+                    <div class="info__name">Rajeev Singh</div>
+                    <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/rajeevsingh8?originalSubdomain=in"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                    </div>
+                </div>
+                <div class="page__content--grid__item">
+                    <div class="image-container">
+                        <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/49.jpg">
+                        <div class="flag-badge">
+                            <img src="/themes/{{ $shop_theme }}/img/flags/47.png">
+                        </div>
+                    </div>
+                    <div class="info__name">Sadia Bruce</div>
+                    <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/sadia-bruce-782471ab/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                    </div>
+                </div>
+                <div class="page__content--grid__item">
+                    <div class="image-container">
+                        <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/24.jpg">
+                        <div class="flag-badge">
+                            <img src="/themes/{{ $shop_theme }}/img/flags/22.png">
+                        </div>
+                    </div>
+                    <div class="info__name">Hunyoung Joung</div>
+                    <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/hunyoung-joung-1b5a50109/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                    </div>
+                </div>
+                <div class="page__content--grid__item">
+                    <div class="image-container">
+                        <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/10.jpg">
+                        <div class="flag-badge">
+                            <img src="/themes/{{ $shop_theme }}/img/flags/8.png">
+                        </div>
+                    </div>
+                    <div class="info__name">Bluenne Chaye</div>
+                    <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/bluennechaye/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                    </div>
+                </div>
+                <div class="page__content--grid__item">
+                    <div class="image-container">
+                        <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/32.jpg">
+                        <div class="flag-badge">
+                            <img src="/themes/{{ $shop_theme }}/img/flags/30.png">
+                        </div>
+                    </div>
+                    <div class="info__name">Josina Rodrigues</div>
+                    <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/josina-rodrigues/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                    </div>
+                </div>
+                <div class="page__content--grid__item">
+                    <div class="image-container">
+                        <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/59.jpg">
+                        <div class="flag-badge">
+                            <img src="/themes/{{ $shop_theme }}/img/flags/57.png">
+                        </div>
+                    </div>
+                    <div class="info__name">Ziyi Li</div>
+                    <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/ziyi-li-24a469131/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                    </div>
+                </div>
+                <div class="page__content--grid__item">
+                    <div class="image-container">
+                        <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/31.jpg">
+                        <div class="flag-badge">
+                            <img src="/themes/{{ $shop_theme }}/img/flags/29.png">
+                        </div>
+                    </div>
+                    <div class="info__name">Josef Harry Victorino</div>
+                    <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/josef-victorino-4a099a23/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                    </div>
+                </div>
+                <div class="page__content--grid__item">
+                    <div class="image-container">
+                        <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/36.jpg">
+                        <div class="flag-badge">
+                            <img src="/themes/{{ $shop_theme }}/img/flags/34.png">
+                        </div>
+                    </div>
+                    <div class="info__name">Mark Reid</div>
+                    <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/markreidprofile/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                    </div>
+                </div>
+                <div class="page__content--grid__item">
+                    <div class="image-container">
+                        <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/48.jpg">
+                        <div class="flag-badge">
+                            <img src="/themes/{{ $shop_theme }}/img/flags/46.png">
+                        </div>
+                    </div>
+                    <div class="info__name">Romain Lombardo</div>
+                    <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/romainlombardo/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="strategic-partners" class="strategic__partners">
+        <div class="container">
+            <div class="strategic__partners-title">
+                <h2>Strategic Partners</h2>
             </div>
             <div class="title-border"></div>
-            <div class="page__content">
-                <input type="checkbox" class="read-more-state" id="post-2" />
-
-                <div class="page__content--grid read-more-wrap">
-                    <a href="https://www.linkedin.com/in/piraiee/">
-                        <div class="page__content--grid__item">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/1.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Ahmad Piraiee</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/1.png"></div><span>Poland</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/alexander-lempka-67494b109/">
-                        <div class="page__content--grid__item">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/3.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Alexander Lempka</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/2.png"></div><span>Germany</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/alexandre-payneau-899b9154/">
-                        <div class="page__content--grid__item">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/4.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Alexandre Payneau</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/3.png"></div><span>France</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="http://linkedin.com/in/a-p-86ba20103">
-                        <div class="page__content--grid__item">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/5.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Amit Panchal</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/4.png"></div><span>United Kingdom</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/armandaguillon/">
-                        <div class="page__content--grid__item">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/6.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Armand Aguillon</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/5.png"></div><span>Australia</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/asim-tariq/">
-                        <div class="page__content--grid__item">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/7.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Asim Tariq</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/6.png"></div><span>United Kingdom</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/bilal-el-alamy/">
-                        <div class="page__content--grid__item">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/9.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Bilal El Alamy</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/7.png"></div><span>France</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/bluennechaye/">
-                        <div class="page__content--grid__item">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/10.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Bluenne Chaye</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/8.png"></div><span>France</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/cherylnunn/">
-                        <div class="page__content--grid__item">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/11.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Cheryl Nunn</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/9.png"></div><span>USA</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/constantin-kloecker/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/12.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Constantin Kloecker</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/10.png"></div><span>Italy</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/curtis-fluker-l-i-o-n-69559036/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/13.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Curtis Fluker</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/11.png"></div><span>USA</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/serebryakov/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/14.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Denis Serebryakov</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/12.png"></div><span>Canada</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/dmitriy-sheludko-462378156/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/15.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Dmitriy Sheludko</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/13.png"></div><span>Bahamas</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/rapidbuildingsystem">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/16.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Elma Neimar-Saric</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/14.png"></div><span>Australia</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://fr.linkedin.com/company/apakasha">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/17.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Essoukan Mouangue</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/15.png"></div><span>France</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/evan-william/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/18.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Evan William</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/16.png"></div><span>USA</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/flavia-richardson-8a995037/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/19.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Flavia Richardson</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/17.png"></div><span>United Kingdom</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/FrederikBussler">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/20.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Frederik Bussler</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/18.png"></div><span>Nertherlands</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/grahamrleach">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/21.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Graham Leach</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/19.png"></div><span>China</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/hdahn/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/22.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Hans Dahn</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/20.png"></div><span>Germany</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/harryhorsfall/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/23.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Harry Horsfall</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/21.png"></div><span>United Kingdom</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/hunyoung-joung-1b5a50109">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/24.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Hunyoung Joung</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/22.png"></div><span>Japan</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/bigtangle-net-9459a6100/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/25.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">J Cui</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/23.png"></div><span>Germany</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/jagsporandla/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/26.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Jags Porandla</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/24.png"></div><span>USA</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/jahn-ludwig-789532107/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/27.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Jahn Ludwig</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/25.png"></div><span>Germany</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/jamesmrp">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/28.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">James Perry</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/26.png"></div><span>United Kingdom</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/jeromeclaraz">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/29.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Jerome Claraz</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/27.png"></div><span>France</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/jochenbiedermann/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/30.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Jochen Biedermann</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/28.jpg"></div><span>Hong Kong</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/josef-victorino-4a099a23/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/31.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Josef Harry Victorino</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/29.png"></div><span>Philippines</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/josina-rodrigues/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/32.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Josina Rodrigues</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/30.png"></div><span>Portugal</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/profkarenwendt/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/33.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Karen Wendt</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/31.png"></div><span>Switzerland</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/marc-couzic-fieldcoin/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/34.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Marc Couzic</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/32.png"></div><span>France</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/mardo-soo-00a05ab0/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/35.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Mardo Soo</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/33.png"></div><span>Estonia</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/markreidprofile/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/36.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Mark Reid</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/34.png"></div><span>United Kingdom</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/mickael-damour/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/37.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Mickael Damour</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/35.png"></div><span>France</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/sanusi-enwubiye-muhammed-1013b7116/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/38.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Muhammed Sanusi</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/36.png"></div><span>Nigeria</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/mustorfa-harbiolar-07a945168">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/39.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Mustapha Abiola</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/37.png"></div><span>Nigeria</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/nancy-james-consultant">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/40.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Nancy James</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/38.png"></div><span>United Kingdom</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/ninadpandya/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/41.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Ninad Pandya</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/39.png"></div><span>India</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/olivier-kleindienst-837a5b/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/42.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Olivier Kleindienst</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/40.png"></div><span>France</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/paulsullivan6/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/43.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Paul Sullivan</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/41.png"></div><span>United Kingdom</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/qusai-sharef-505178164">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/44.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Quisai Sharef</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/42.png"></div><span>Palestine</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://in.linkedin.com/in/rajeevsingh8">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/45.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Rajeev Singh</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/43.png"></div><span>United Kingdom</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/rendolf">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/46.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Rene Darmos</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/44.png"></div><span>Slovakia</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/romainlavernhe/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/47.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Romain Lavernhe</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/45.png"></div><span>France</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/romainlombardo/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/48.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Romain Lombardo</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/46.png"></div><span>France</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/sadia-bruce-782471ab/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/49.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Sadia Bruce</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/47.png"></div><span>Pakistan</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/sanemavcil/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/50.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Sanem Avcil</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/48.png"></div><span>San Francisco Bay Area</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/shelleyfacius">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/51.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Shelley Facius</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/49.png"></div><span>United Kingdom</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/tebourbislim/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/52.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Slim Tebourbi</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/50.png"></div><span>Tunisia</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/stephen-l-2090202/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/53.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Stephen Lovell</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/51.png"></div><span>Ireland</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/thibault-gobert-55605458/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/54.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Thibault Gobert</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/52.png"></div><span>France</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/toby-sperrin-b17872101/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/55.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Tobias Sperrin</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/53.png"></div><span>United Kingdom</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/walidelgendy/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/56.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Walid ElGendy</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/54.png"></div><span>Egypt</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/ike-wasongolwa-06287895/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/57.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Wasongolwa Ike</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/55.png"></div><span>Democratic Republic of Congo</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/zaidalissa/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/58.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Zaid Almaliki</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/56.png"></div><span>Spain</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/ziyi-li-24a469131/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/59.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Ziyi Li</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/57.png"></div><span>Netherlands</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/angel-colon-0bb2455/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/60_1.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Angel Colon</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/58.png"></div><span>USA</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/dicemoney/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/61_1.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Anthony Johnson</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/59.png"></div><span>United Kingdom</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/bilal-el-fakir-7850549b/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/62_1.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Bilal Fakir</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/60.png"></div><span>morocco</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/gerhard-drobits-208a5331/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/63_1.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Gerhard Drobits</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/61.png"></div><span>malta</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/coachmarkdavis/">
-                        <div class="page__content--grid__item read-more-target">
-                            <div class="page__content--grid__item__child-1">
-                                <img src="/themes/{{ $shop_theme }}/img/candidates/64_1.jpg">
-                            </div>
-                            <div class="page__content--grid__item__child-2">
-                                <div class="info-name">Mark Davis</div>
-                                <div class="info-bottom">
-                                    <div class="flag"><img src="/themes/{{ $shop_theme }}/img/flags/62.png"></div><span>Australia</span>
-                                </div>
-                            </div>  
-                        </div>
-                    </a>
+            <div class="content__btn-container">
+                <button type="button" data-toggle="modal" data-target="#strategicPartner" class="btn-primary">BECOME A STRATEGIC PARTNER</button>
+            </div>
+            <div class="page-content__grid">
+                <div class="grid-item">
+                    <div class="img-holder">
+                        <a href="http://www.digimaweb.solutions/">
+                            <img src="/themes/{{ $shop_theme }}/img/digima_logo.jpg" alt="">
+                        </a>
+                    </div>
+                    <div class="page-content__description">
+                        <p class="col__p">
+                            Digima Web Solutions, Inc. A web and software company with more than 200 plus completed and installed software such as ICO, Payroll System, Inventory System, E-Commerce System, MLM System and more. Digima has 40 young and vibrant employees consisting of developers, designers, support, marketing and admin.
+                        </p>
+                    </div>
                 </div>
-
-                <label for="post-2" class="read-more-trigger"></label>
+                <div class="grid-item">
+                    <div class="img-holder">
+                        <a href="https://lokalize.io/">
+                            <img src="/themes/{{ $shop_theme }}/img/lokalize_logo.jpg" alt="">
+                        </a>
+                    </div>
+                    <div class="page-content__description">
+                        <p class="col__p">
+                            LOKALIZE platform is an End to End Crypto Solutions Platform for SME’s who want to launch their ICO and their token listed in a trading platform providing the following:
+                            <ul>
+                                <li>Build Your Own Website</li>
+                                <li>ICO Community and Advisers Service</li>
+                                <li>Crypto Payment Gateway</li>
+                                <li>Token Exchange Platform</li>
+                                <li>Mobile Wallet</li>
+                                <li>Crypto News</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1013,9 +658,9 @@
                 <h2>GABC Advisory Membership</h2>
             </div>
             <div class="content__btn-container">
-                <button type="button" data-toggle="modal" data-target="#myModal" class="btn-primary">BECOME PROFESSIONAL</button>
-                <button type="button" data-toggle="modal" data-target="#myModal" class="btn-primary">BECOME ADVISOR</button>
-                <button type="button" data-toggle="modal" data-target="#myModal" class="btn-primary">GET AN ADVISOR</button>
+                <button type="button" data-toggle="modal" data-target="#becomeProfessional" class="btn-primary">BECOME PROFESSIONAL</button>
+                <button type="button" data-toggle="modal" data-target="#becomeAdvisor" class="btn-primary">BECOME ADVISOR</button>
+                <button type="button" data-toggle="modal" data-target="#getAdvisor" class="btn-primary">GET AN ADVISOR</button>
             </div>
             <div class="page__content">
                 <div class="page__content--grid">
@@ -1029,7 +674,7 @@
                         <div class="info__name">Alexander Graebe</div>
                         <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/graebe/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a></div>
                         <div class="info__details">
-                            Adviser
+                            Advisor
                         </div>
                     </div>
                     <div class="page__content--grid__item">
@@ -1094,7 +739,7 @@
                         <div class="info__name">Eugene Tay</div>
                         <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/eugenealmighty/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a></div>
                         <div class="info__details">
-                            Adviser
+                            Advisor
                         </div>
                     </div>
                     <div class="page__content--grid__item">
@@ -1107,7 +752,7 @@
                         <div class="info__name">Gheehoe Cheng</div>
                         <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/chenggh/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a></div>
                         <div class="info__details">
-                            Adviser
+                            Advisor
                         </div>
                     </div>
                     <div class="page__content--grid__item">
@@ -1133,7 +778,7 @@
                         <div class="info__name">Philip Bugeja</div>
                         <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/philip-bugeja-b3838b46/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a></div>
                         <div class="info__details">
-                            Adviser (Financial Crime at AML Compliance)
+                            Advisor (Financial Crime at AML Compliance)
                         </div>
                     </div>
                     <div class="page__content--grid__item">
@@ -1146,7 +791,7 @@
                         <div class="info__name">Rehan Qureshi</div>
                         <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/rehan-qureshi-4693a3166/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a></div>
                         <div class="info__details">
-                            Adviser
+                            Advisor
                         </div>
                     </div>
                     <div class="page__content--grid__item">
@@ -1159,7 +804,7 @@
                         <div class="info__name">Salman Qadir</div>
                         <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/salq811/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a></div>
                         <div class="info__details">
-                            Adviser
+                            Advisor
                         </div>
                     </div>
                     <div class="page__content--grid__item">
@@ -1172,7 +817,7 @@
                         <div class="info__name">Yankun Guo</div>
                         <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/yankun-guo-985b9015/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a></div>
                         <div class="info__details">
-                           Adviser (Legal)
+                           Advisor (Legal)
                         </div>
                     </div>
                 </div>
@@ -1190,6 +835,21 @@
                     <img src="/themes/{{ $shop_theme }}/img/country_3.png">
                     <img src="/themes/{{ $shop_theme }}/img/country_4.png">
                     <img src="/themes/{{ $shop_theme }}/img/country_5.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_7.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_6.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_8.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_9.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_10.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_11.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_12.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_13.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_14.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_15.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_16.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_17.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_18.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_19.png">
+                    <img src="/themes/{{ $shop_theme }}/img/country_20.png">
                 </div>
                 <div class="page__content__item__lower">
                     GABC Countries
@@ -1199,21 +859,23 @@
     </section>
 
     <!-- Modal Popup -->
-    <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal fade" id="strategicPartner" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #002f90; color: white;">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Get In Touch With Us!</h4>
+                    <h4 class="modal-title">BECOME A STRATEGIC PARTNER</h4>
                 </div>
                 <div class="modal-body">
                     <p>
-                        <div class="text-center">
-                            <h3 style="padding-bottom: 15px;">Email us at:</h3>
-                            <span><i class="fa fa-envelope-open"></i>&nbsp;&nbsp;</span>
-                            <span>support@gabc.com</span>
-                        </div>
+                        A <strong>GABC Strategic Partner</strong> has something valuable to offer and combining the two will create something bigger and better and also to utilize their viral techniques and expertise to contribute to the growth and success of GABC and our Strategic Partner.
+                        <br><br>
+                        <strong>Be part of the advocacy of the Blockchain and Cryptocurrency as a GABC Strategic Partner!</strong>
+                        <br><br>
+                        Email: <strong>support@gabc.global</strong>
+                        <br>
+                        Phone: <strong>+63 917 831 0244 / +63 939 932 0422</strong>
                     </p>
                 </div>
                 <div class="modal-footer">
@@ -1221,7 +883,107 @@
                 </div>
             </div>
         </div>
-      </div>
+    </div>
+
+    <div class="modal fade" id="becomeProfessional" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #002f90; color: white;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">BECOME PROFESSIONAL</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        GABC <strong>Professional</strong> Membership level:
+                        <br><br>
+                        A GABC <strong>Professional</strong> in has solid experience Blockchain/Cryptocurrency. They share their skills and experience with all the members in the Association.
+                        <br><br>
+                        GABC <strong>Professionals</strong> help the Association grow and make valued contributions.
+                        <br><br>
+                        GABC <strong>Professionals</strong> encourage other members to join our premier Global Blockchain and Crypto Association to broaden the base of support and encourage Blockchain use among the general public.
+                        <br><br>
+                        As members of GABC, GABC <strong>Professionals</strong> have the opportunity to connect at a professional level with other Association members locally and internationally.
+                        <br><br>
+                        <strong>Be part of the advocacy of the Blockchain and Cryptocurrency as a GABC Professional!</strong>
+                        <br><br>
+                        Email: <strong>support@gabc.global</strong>
+                        <br>
+                        Phone: <strong>+63 917 831 0244 / +63 939 932 0422</strong>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" style="padding: 5px 18px;" class="btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="becomeAdvisor" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #002f90; color: white;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">BECOME ADVISOR</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        GABC <strong>Advisor</strong> Membership level:
+                        <br><br>
+                        A GABC <strong>Advisor</strong> is a verified Blockchain/Cryptocurrency expert. GABC benefits by aligning itself with such top experts as their reputations will solidify GABC’s industry reach.
+                        <br><br>
+                        GABC <strong>Advisor</strong> use their knowledge to ensure that GABC follows industry best-practices.
+                        <br><br>
+                        GABC <strong>Advisor</strong> meet on a regular basis to ensure that GABC stays at the cutting edge of developments in our industry.
+                        <br><br>
+                        As members of GABC, GABC <strong>Advisor</strong> solidify their professional reputation as experts in the industry. 
+                        <br><br>
+                        <strong>Be part of the advocacy of the Blockchain and Cryptocurrency as a GABC Professional!</strong>
+                        <br><br>
+                        Email: <strong>support@gabc.global</strong>
+                        <br>
+                        Phone: <strong>+63 917 831 0244 / +63 939 932 0422</strong>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" style="padding: 5px 18px;" class="btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="getAdvisor" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #002f90; color: white;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">GET AN ADVISOR</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        GABC offers <strong>Advisors</strong> as Consultants
+                        <br><br>
+                        GABC <strong>Advisors</strong> are matched on a consulting basis with SMEs in the ICO Process and other stages of building their Blockchain/Cryptocurrency entity.
+                        <br><br>
+                        A GABC <strong>Advisors</strong> serves as an invaluable source of experience and inspiration, mentoring the start-up to success.
+                        <br><br>
+                        GABC <strong>Advisors</strong> are available on a case-by-case basis or can be attached to a project. 
+                        <br><br>
+                        <strong>Use a GABC Advisor to guide your business! </strong>
+                        <br><br>
+                        Email: <strong>support@gabc.global</strong>
+                        <br>
+                        Phone: <strong>+63 917 831 0244 / +63 939 932 0422</strong>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" style="padding: 5px 18px;" class="btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- SCROLL TO TOP -->
     <div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>

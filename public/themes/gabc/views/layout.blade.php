@@ -109,7 +109,7 @@
         <div class="container">
             <div class="footer__upper">
                 <div class="row clearfix">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="footer__upper__title">DOCUMENTS</div>
                         <div class="footer__upper__content">
                             <a class="footer__upper__content__link" href=""><div>GABC ICO Verification</div></a>
@@ -117,7 +117,7 @@
                             <a class="footer__upper__content__link" href=""><div>GABC Advisory Board Concept</div></a>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="footer__upper__title">FOLLOW US</div>
                         <div class="footer__upper__content">
                             <div class="grid-container">
@@ -133,13 +133,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="footer__upper__title">CONTACT US</div>
                         <div class="footer__upper__content">
                             <div class="footer__upper__content__link">
                                 <div>
                                     <span><i class="fa fa-envelope-open"></i>&nbsp;&nbsp;</span>
-                                    <span>support@gabc.com</span>
+                                    <span>support@gabc.global</span>
+                                </div>
+                                <div>
+                                    <span><i class="fa fa-phone"></i>&nbsp;&nbsp;</span>
+                                    <span>+63 939 932 0422 / +63 917 831 0244</span>
                                 </div>
                             </div>
                             {{-- <div class="footer__upper__content__link">
@@ -149,14 +153,6 @@
                                 </div>
                             </div> --}}
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="footer__upper__title">STRATEGIC PARTNERS</div>
-                        <div class="footer__upper__content">
-                            <div class="footer__upper__content__icon"><img src="/themes/{{ $shop_theme }}/img/digima_icon.png"></div>
-                            <div class="footer__upper__content__icon"><img src="/themes/{{ $shop_theme }}/img/dmsph_icon.png"></div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

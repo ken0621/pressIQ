@@ -277,7 +277,6 @@ function pos()
 			// if(e.which == 13) //ENTER KEY AMES CHANGE THIS<<< THIS IS THE ORIGINAL
 			// if(new_price > 0)
 			// {
-				alert(new_price+"jhfdsygbdfhg");
 				$.ajax({
 					url : '/member/cashier/pos/change_price',
 					type : 'post',

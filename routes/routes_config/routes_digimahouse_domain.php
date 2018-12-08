@@ -201,5 +201,5 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	/* Alternative */
 	Route::get('/product2', 'Shop\ShopProductController@product2'); //Carlo
 	Route::any('/contact_us/shell/send', 'Shop\ShopMemberController@send_contact_us_shell'); //Carlo
-	Route::any('/karl_landicho', 'Shop\SHopAboutController@karl_biography'); //Carlo
+	Route::any('/karl_landicho', 'Shop\ShopAboutController@karl_biography'); //Carlo
 }

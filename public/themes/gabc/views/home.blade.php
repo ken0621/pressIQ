@@ -770,6 +770,19 @@
                     </div>
                     <div class="page__content--grid__item">
                         <div class="image-container">
+                            <img src="/themes/{{ $shop_theme }}/img/advisers/13.png">
+                            <div class="flag-badge">
+                                <img src="/themes/{{ $shop_theme }}/img/advisory_badge/badge_ph.png">
+                            </div>
+                        </div>
+                        <div class="info__name">ROSE ANNE AMARILLO</div>
+                        <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/rose-anne-amarillo-02814953/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a></div>
+                        <div class="info__details">
+                            CFO, DIGITAL & MARKETING SOLUTIONS PH, INC.
+                        </div>
+                    </div>
+                    <div class="page__content--grid__item">
+                        <div class="image-container">
                             <img src="/themes/{{ $shop_theme }}/img/advisers/9.png">
                             <div class="flag-badge">
                                 <img src="/themes/{{ $shop_theme }}/img/advisory_badge/badge_malta.png">

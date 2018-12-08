@@ -1,0 +1,48 @@
+.biography-container
+{
+    padding: 100px 0px !important;
+    .biography-profile
+    {
+        color: #585858;
+        display: flex;
+        align-items: center;
+        .img-holder
+        {
+            @media screen and (max-width: 425px) 
+            {
+                text-align: center;    
+            }
+        }
+       .title
+       {
+           margin-left: 20px;
+           padding-top: 10px;
+           strong
+           {
+               font-size: 16px;
+           }
+           @media screen and (max-width: 425px) 
+           {
+                text-align: center;    
+           }
+       }
+    }
+    ul
+    {
+        margin-top: 10px;
+        li
+        {
+            
+            line-height: 24px;
+        }
+    }
+    .description-container
+    {
+        padding-top: 10px;
+        p
+        {
+            color: #585858;
+            line-height: 24px;
+        }
+    }
+}

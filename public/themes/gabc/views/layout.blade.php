@@ -61,6 +61,26 @@
                         <span></span>
                     </div>
                     <div class="menu-mobile-nav">
+                        @if(Request::segment(1)=="karl_landicho")
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/#home">HOME</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/#about">ABOUT</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/#founders">FOUNDERS</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/#strategic-partners">PARTNERS</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/#candidates">CANDIDATES</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/#advisory">ADVISORY</a></span>
+                        <div class="border-container"></div>
+                        <span>
+                            <a href="http://gabc-election.digimahouse.com/login">
+                                <button class="btn-primary">LOGIN</button>
+                            </a>
+                        </span>
+                        @else
                         <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="#home">HOME</a></span>
                         <div class="border-container"></div>
@@ -68,7 +88,7 @@
                         <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="#founders">FOUNDERS</a></span>
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="#partners">PARTNERS</a></span>
+                        <span><a class="smoth-scroll" href="#strategic-partners">PARTNERS</a></span>
                         <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="#candidates">CANDIDATES</a></span>
                         <div class="border-container"></div>
@@ -79,19 +99,30 @@
                                 <button class="btn-primary">LOGIN</button>
                             </a>
                         </span>
+                        @endif
                     </div>
                 </div>
                 <div class="col-md-10">
                 <!-- NAVIGATION -->
                     <nav class="navirino">
                         <ul>
+                            @if(Request::segment(1)=="karl_landicho")
+                            <li><a class="smoth-scroll" href="/#home">HOME</a></li>
+                            <li><a class="smoth-scroll" href="/#about">ABOUT</a></li>
+                            <li><a class="smoth-scroll" href="/#founders">FOUNDERS</a></li>
+                            <li><a class="smoth-scroll" href="/#strategic-partners">PARTNERS</a></li>
+                            <li><a class="smoth-scroll" href="/#candidates">CANDIDATES</a></li>
+                            <li><a class="smoth-scroll" href="/#advisory">ADVISORY</a></li>
+                            <li><a href="http://gabc-election.digimahouse.com/login"><button class="btn-primary">LOGIN</button></a></li>
+                            @else
                             <li><a class="smoth-scroll" href="#home">HOME</a></li>
                             <li><a class="smoth-scroll" href="#about">ABOUT</a></li>
                             <li><a class="smoth-scroll" href="#founders">FOUNDERS</a></li>
-                            <li><a class="smoth-scroll" href="#partners">PARTNERS</a></li>
+                            <li><a class="smoth-scroll" href="#strategic-partners">PARTNERS</a></li>
                             <li><a class="smoth-scroll" href="#candidates">CANDIDATES</a></li>
                             <li><a class="smoth-scroll" href="#advisory">ADVISORY</a></li>
                             <li><a href="http://gabc-election.digimahouse.com/login"><button class="btn-primary">LOGIN</button></a></li>
+                            @endif
                         </ul>
                     </nav>
                 </div>

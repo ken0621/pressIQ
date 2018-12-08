@@ -775,7 +775,7 @@
                                 <img src="/themes/{{ $shop_theme }}/img/advisory_badge/badge_ph.png">
                             </div>
                         </div>
-                        <div class="info__name">ROSE ANNE AMARILLO</div>
+                        <div class="info__name">Rose Anne Amarillo</div>
                         <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/rose-anne-amarillo-02814953/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a></div>
                         <div class="info__details">
                             CEO, DIGITAL & MARKETING SOLUTIONS PH, INC.

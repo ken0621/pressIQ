@@ -778,7 +778,7 @@
                         <div class="info__name">ROSE ANNE AMARILLO</div>
                         <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/rose-anne-amarillo-02814953/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a></div>
                         <div class="info__details">
-                            CFO, DIGITAL & MARKETING SOLUTIONS PH, INC.
+                            CEO, DIGITAL & MARKETING SOLUTIONS PH, INC.
                         </div>
                     </div>
                     <div class="page__content--grid__item">

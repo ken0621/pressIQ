@@ -765,7 +765,7 @@
                         <div class="info__name">Karl Landicho</div>
                         <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/mark-karl-landicho-b593a048/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a></div>
                         <div class="info__details">
-                            Co-Founder, GABC / CEO, DMSPH, DIGIMA
+                            Co-Founder, GABC / CEO, DIGIMA / Founder and Board of Directors, DMSPH
                         </div>
                     </div>
                     <div class="page__content--grid__item">

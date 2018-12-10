@@ -159,13 +159,33 @@
                                 @include('member.cashier.pos_payment_method')
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-4 text-right" for="email">Add Payment</label>
-                                <div class="col-sm-8">
+                                <label class="control-label col-sm-12 text-right" for="email">Add Payment</label>
+                                <div class="col-sm-12">
                                     <input type="hidden" name="payment_method" class="input-payment-method" value="cash">
                                     <a href="javascript:" class="btn btn-primary cash btn-payment" onClick="select_payment('cash')">Cash</a>
                                     <a href="javascript:" class="btn btn-custom-white check btn-payment" onClick="select_payment('check')">Check</a>
                                     <a href="javascript:" class="btn btn-custom-white gc btn-payment" onClick="select_payment('gc')">GC</a>
                                     <a href="javascript:" class="btn btn-custom-white wallet btn-payment" onClick="select_payment('wallet')">Wallet</a>
+                                    <a href="javascript:" class="btn btn-custom-white others btn-payment" onClick="select_payment('others')">Others</a>
+                                </div>
+                                <div class="col-sm-12" id="method_type" style="display:none;">
+                                    <label class="control-label col-sm-12 text-right" for="email">Method Type</label>
+                                    <select name="payment_method_type" id="input-payment-method-type" class="form-control">
+                                        <option value="">SELECT TYPE</option>
+                                        <option>BDO</option>
+                                        <option>RCBC</option>
+                                        <option>PNB</option>
+                                        <option>BPI</option>
+                                        <option>PALAWAN EXPRESS</option>
+                                        <option>LBC</option>
+                                        <option>CEBUANA LHUILLIER</option>
+                                        <option>MLHUILLIER</option>
+                                        <option>RD PAWNSHOP</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label col-sm-12 text-right" for="email">Remarks</label>
+                                    <textarea name="transaction_remark" id="transaction_remark" cols="10" rows="5" class="form-control"></textarea>
                                 </div>
                             </div>
                             <div class="form-group">

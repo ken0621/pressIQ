@@ -23,7 +23,6 @@ class CashierController extends Member
         $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
         $data['_salesperson'] = Utilities::get_all_users($this->user_info->shop_id, $this->user_info->user_id);
         $data['_payment'] = Cart2::load_payment($this->user_info->shop_id);
-        
         if(Session::has('customer_id'))
         {
             $data['customer'] = Customer::info(Session::get('customer_id'), $this->user_info->shop_id);
@@ -278,8 +277,14 @@ class CashierController extends Member
         $consume_inventory                                  = Request::input('consume_inventory');
             
         $method                                             = Request::input('payment_method');
+        $payment_method_type                                = Request::input('payment_method_type');
+        $transaction_remark                                 = Request::input('transaction_remark');
         $amount                                             = Request::input('payment_amount');
         $slot_id                                            = Request::input('slot_id');
+
+        $transaction_payment_method      = $method;
+        $transaction_payment_method_type = $payment_method_type;
+        $transaction_remark              = $transaction_remark;
 
         $shop_id                                            = $this->user_info->shop_id;
         $transaction_new["transaction_reference_table"]     = "tbl_customer";
@@ -317,7 +322,9 @@ class CashierController extends Member
                 {
                     Transaction::create_set_method('pos');
                     Transaction::create_set_method_id(0);
-                    $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, '-');
+                    /*FROM NEGATIVE SIGN> JAMES CHANGE*/
+                    $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, '-', null, null, null,$transaction_payment_method,$transaction_payment_method_type,$transaction_remark);
+                    // $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, '-');
 
                     if(is_numeric($transaction_list_id))
                     {
@@ -358,7 +365,8 @@ class CashierController extends Member
 
                             if(is_numeric($validate))
                             {
-                                $transaction_receipt_list_id      = Transaction::create($shop_id, $get_transaction_list->transaction_id, 'RECEIPT', $transaction_date, '+');
+                                /*FROM POSITIVE SIGN> JAMES CHANGE*/
+                                $transaction_receipt_list_id      = Transaction::create($shop_id, $get_transaction_list->transaction_id, 'RECEIPT', $transaction_date, '+', null, null, null,$transaction_payment_method,$transaction_payment_method_type,$transaction_remark);
                                 
                                 if(is_numeric($transaction_receipt_list_id))
                                 {

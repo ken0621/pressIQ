@@ -124,7 +124,7 @@ class Transaction
         $store['create_set_method_id'] = $method;
         session($store);
     }
-    public static function create($shop_id, $transaction_id, $transaction_type, $transaction_date, $posted = false, $source = null, $transaction_number = null, $customer_id = null)
+    public static function create($shop_id, $transaction_id, $transaction_type, $transaction_date, $posted = false, $source = null, $transaction_number = null, $customer_id = null,$transaction_payment_method = null,$transaction_payment_method_type = null,$transaction_remark = null)
     {
         $transaction_sales_person = isset($transaction_id["transaction_sales_person"]) ? $transaction_id["transaction_sales_person"] : null;
         if($source == null)
@@ -159,6 +159,9 @@ class Transaction
             /* INSERT NEW LIST */
             $insert_list["transaction_id"]              = $transaction_id;
             $insert_list["shop_id"]                     = $shop_id;
+            $insert_list["transaction_payment_method"]       = $transaction_payment_method;
+            $insert_list["transaction_payment_method_type"] = $transaction_payment_method_type;
+            $insert_list["transaction_remark"]            = $transaction_remark;
             $insert_list["transaction_date"]            = $transaction_date;
             $insert_list["transaction_due_date"]        = $transaction_date;
             $insert_list["transaction_date_created"]    = Carbon::now();
@@ -184,6 +187,10 @@ class Transaction
                 $insert_list["transaction_discount"]        = $source_transaction_list->transaction_discount;
                 $insert_list["transaction_total"]           = $source_transaction_list->transaction_total;
                 $total                                      = $source_transaction_list->transaction_total;
+                
+                $insert_list["transaction_payment_method"]       = $source_transaction_list->transaction_payment_method;
+                $insert_list["transaction_payment_method_type"]  = $source_transaction_list->transaction_payment_method_type;
+                $insert_list["transaction_remark"]               = $source_transaction_list->transaction_remark;
             }
             
             if($posted == "-")

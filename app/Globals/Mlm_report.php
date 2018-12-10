@@ -1461,6 +1461,7 @@ class Mlm_report
         $data['warehouse_name'] = "All Warehouse";
         $query  = Tbl_transaction_list::where('tbl_transaction_list.shop_id',$shop_id)->GetTransaction(); 
         $query  = $query->whereDate('transaction_date_created', '>=', $filters['from'])->whereDate('transaction_date_created', '<=', $filters['to']);
+        $query  = $query->where('tbl_transaction_list.transaction_type',"RECEIPT");
      
         if(Request::input('user_id') != 0)
         {
@@ -1478,7 +1479,7 @@ class Mlm_report
                             ->where('tbl_warehouse_inventory_record_log.record_consume_ref_name','transaction_list')
                             ->where('tbl_warehouse_inventory_record_log.record_warehouse_id',Request::input('warehouse_id'));
         }
-        $data['sales']          = $query->get();
+        $data['sales']          = $query->orderBy('tbl_transaction_list.transaction_date_created','DESC')->get();
         $data['sales_subtotal'] = currency('Php',$query->sum('subtotal'));
         $data['sales_total']    = currency('Php',$query->sum('subtotal'));
 

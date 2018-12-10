@@ -689,6 +689,15 @@ function select_payment(type = '')
 {
 	$('.btn-payment').addClass('btn-custom-white');
 	$('.input-payment-method').val(type);
+
+	if(type=="others" || type=="check")
+	{
+		$('#method_type').css('display','block');
+	}
+	else
+	{
+		$('#method_type').css('display','none');
+	}
 	$('.'+type).removeClass('btn-custom-white');
 	$('.'+type).addClass('btn-primary');
 }

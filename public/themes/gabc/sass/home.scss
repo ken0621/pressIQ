@@ -51,6 +51,13 @@ h3
 	margin: auto;
 }
 
+.border-title
+{
+	max-width: 32px;
+	border-bottom: 3px solid #2684ff;
+	margin: 20px auto 20px auto;
+}
+
 /* Scroll to top */
 .scroll-up
 {
@@ -306,119 +313,196 @@ h3
 	}
 }
 
-.content__section-4
-{
-	background-color: white;
+// .content__section-4
+// {
+// 	background-color: white;
 
-	.content__section-4__title
+// 	.content__section-4__title
+// 	{
+// 		text-align: center;
+// 		color: #0c0c0c;
+// 	}
+// 	.page__content 
+// 	{
+// 		padding-top: 55px;
+// 		text-align: center;
+
+// 		@media screen and (max-width: 768px)
+// 		{
+// 			img 
+// 			{
+// 				width: 100%;
+// 			}
+// 		}
+// 	}
+// }
+
+.content__section-5
+{
+	background-color: #002a81;
+	.page__content 
+	{
+		text-align: center;
+		color: #fff;
+		.title
+		{
+			margin-bottom: 10px;
+			margin-top: 70px;
+		}
+		.page-content__grid
+		{
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			grid-gap: 5px;
+			@media screen and (max-width: 425px)
+			{
+				grid-template-columns: repeat(2, 1fr);
+			}
+			@media screen and (max-width: 320px)
+			{
+				grid-template-columns: repeat(1, 1fr);
+			}
+			.page__content--grid__item
+			{
+				text-align: center;
+				padding: 20px 20px;
+
+				.image-container	
+				{
+					width: 109px;
+					height: 109px;
+					position: relative;
+					margin: auto;
+
+					.avatar
+					{
+						vertical-align: middle;
+						width: 106px;
+						height: 106px;
+						border-radius: 50%;
+					}
+
+					.flag-badge
+					{
+						img 
+						{
+							width: 26px;
+						}
+					}
+				}
+
+				.info__name
+				{
+					padding-top: 15px;
+					font-size: 18px;
+					color: white;
+				}
+				.info__in
+				{
+					padding: 8px 0;
+				}
+				.info__details
+				{
+					max-width: 250px;
+					margin: auto;
+					font-size: 13px;
+					color: rgba(255,255,255, 0.5);
+				}
+			}
+		}
+		
+	}
+}
+
+.strategic__partners
+{
+	background-color: #fff;
+	.strategic__partners-title
 	{
 		text-align: center;
 		color: #0c0c0c;
 	}
-	.page__content 
+	.content__btn-container
 	{
-		padding-top: 55px;
+		padding: 35px;
 		text-align: center;
 
-		@media screen and (max-width: 768px)
+		@media screen and (max-width: 375px)
 		{
-			img 
+			padding: 35px 0 0 0;
+		}
+
+		.btn-primary
+		{
+			padding: 15px 0;
+			display: inline-block;
+			font-size: 14px;
+			color: white;
+			width: 255px;
+
+			@media screen and (max-width: 768px)
+			{
+				width: 185px;
+			}
+			@media screen and (max-width: 600px)
 			{
 				width: 100%;
+				margin-bottom: 5px;
 			}
 		}
 	}
-}
-
-.content__section-5
-{
-	background-color: #002f90;
-	.content__section-5__title
-	{
-		text-align: center;
-		color: white;
-	}
-	.page__content 
+	.page-content__grid
 	{
 		padding-top: 55px;
-		text-align: center;
-
-		.page__content--grid
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		grid-column-gap: 20px;
+		@media screen and (max-width: 425px)
 		{
-			display: grid;
-			grid-template-columns: 1fr 1fr 1fr;
-			// grid-gap: 20px;
-			padding-bottom: 20px;
-
-			@media screen and (max-width: 600px)
+			grid-template-columns: repeat(1, 1fr);
+			grid-row-gap: 40px;
+		}
+		.grid-item
+		{
+			.img-holder
 			{
-				grid-template-columns: auto auto;
-			}
-
-			@media screen and (max-width: 425px)
-			{
-				grid-template-columns: auto;
-			}
-
-			a 
-			{
-				text-decoration: none;
-			}
-
-			.page__content--grid__item
-			{
-				background-color: rgba(0,0,0, 0.1);
-				border: 1px solid #1d54c5;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-
-				.page__content--grid__item__child-1
+				width: 70%;
+				text-align: center;
+				margin: auto;
+				@media screen and (max-width: 425px)
 				{
-					flex: 1 25px;
-					img 
-					{
-						width: 100%;
-						object-fit: cover;
-					}
+					width: 90%;
 				}
-				
-				.page__content--grid__item__child-2
+				img
 				{
-					flex: 3 25px;
+					width: 100%;
+				}
+			}
+			.page-content__description
+			{
+				padding: 20px;
+				.col__p
+				{
+					padding-top: 24px;
+					color: #585858;
+					line-height: 24px;
 
-					@media screen and (max-width: 600px)
+					@media screen and (max-width: 768px)
 					{
-						flex: 4 50px;
+						padding-bottom: 25px;
+						text-align: center;
 					}
-
-					.info-name
+					
+				}
+				ul 
+				{
+					@media screen and (max-width: 768px)
 					{
-						color: white;
-					}
-					.info-bottom
-					{
-						padding-top: 5px;
-						color: rgba(255,255,255, .5);
-						.flag 
-						{
-							display: inline-block;
-							max-width: 25px;
-							margin-left: -25px;
-							img 
-							{
-								width: 100%;
-							}
-						}
-						span
-						{
-							font-size: 12px;
-							padding-left: 5px;
-						}
+						padding-bottom: 25px;
+						text-align: left;
 					}
 				}
 			}
-
 		}
 	}
 }

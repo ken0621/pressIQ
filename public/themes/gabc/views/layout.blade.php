@@ -61,6 +61,26 @@
                         <span></span>
                     </div>
                     <div class="menu-mobile-nav">
+                        @if(Request::segment(1)=="karl_landicho")
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/#home">HOME</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/#about">ABOUT</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/#founders">FOUNDERS</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/#strategic-partners">PARTNERS</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/#candidates">CANDIDATES</a></span>
+                        <div class="border-container"></div>
+                        <span><a class="smoth-scroll" href="/#advisory">ADVISORY</a></span>
+                        <div class="border-container"></div>
+                        <span>
+                            <a href="http://gabc-election.digimahouse.com/login">
+                                <button class="btn-primary">LOGIN</button>
+                            </a>
+                        </span>
+                        @else
                         <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="#home">HOME</a></span>
                         <div class="border-container"></div>
@@ -68,7 +88,7 @@
                         <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="#founders">FOUNDERS</a></span>
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="#partners">PARTNERS</a></span>
+                        <span><a class="smoth-scroll" href="#strategic-partners">PARTNERS</a></span>
                         <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="#candidates">CANDIDATES</a></span>
                         <div class="border-container"></div>
@@ -79,19 +99,30 @@
                                 <button class="btn-primary">LOGIN</button>
                             </a>
                         </span>
+                        @endif
                     </div>
                 </div>
                 <div class="col-md-10">
                 <!-- NAVIGATION -->
                     <nav class="navirino">
                         <ul>
+                            @if(Request::segment(1)=="karl_landicho")
+                            <li><a class="smoth-scroll" href="/#home">HOME</a></li>
+                            <li><a class="smoth-scroll" href="/#about">ABOUT</a></li>
+                            <li><a class="smoth-scroll" href="/#founders">FOUNDERS</a></li>
+                            <li><a class="smoth-scroll" href="/#strategic-partners">PARTNERS</a></li>
+                            <li><a class="smoth-scroll" href="/#candidates">CANDIDATES</a></li>
+                            <li><a class="smoth-scroll" href="/#advisory">ADVISORY</a></li>
+                            <li><a href="http://gabc-election.digimahouse.com/login"><button class="btn-primary">LOGIN</button></a></li>
+                            @else
                             <li><a class="smoth-scroll" href="#home">HOME</a></li>
                             <li><a class="smoth-scroll" href="#about">ABOUT</a></li>
                             <li><a class="smoth-scroll" href="#founders">FOUNDERS</a></li>
-                            <li><a class="smoth-scroll" href="#partners">PARTNERS</a></li>
+                            <li><a class="smoth-scroll" href="#strategic-partners">PARTNERS</a></li>
                             <li><a class="smoth-scroll" href="#candidates">CANDIDATES</a></li>
                             <li><a class="smoth-scroll" href="#advisory">ADVISORY</a></li>
                             <li><a href="http://gabc-election.digimahouse.com/login"><button class="btn-primary">LOGIN</button></a></li>
+                            @endif
                         </ul>
                     </nav>
                 </div>
@@ -109,7 +140,7 @@
         <div class="container">
             <div class="footer__upper">
                 <div class="row clearfix">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="footer__upper__title">DOCUMENTS</div>
                         <div class="footer__upper__content">
                             <a class="footer__upper__content__link" href=""><div>GABC ICO Verification</div></a>
@@ -117,7 +148,7 @@
                             <a class="footer__upper__content__link" href=""><div>GABC Advisory Board Concept</div></a>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="footer__upper__title">FOLLOW US</div>
                         <div class="footer__upper__content">
                             <div class="grid-container">
@@ -133,13 +164,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="footer__upper__title">CONTACT US</div>
                         <div class="footer__upper__content">
                             <div class="footer__upper__content__link">
                                 <div>
                                     <span><i class="fa fa-envelope-open"></i>&nbsp;&nbsp;</span>
-                                    <span>support@gabc.com</span>
+                                    <span>support@gabc.global</span>
+                                </div>
+                                <div>
+                                    <span><i class="fa fa-phone"></i>&nbsp;&nbsp;</span>
+                                    <span>+63 939 932 0422 / +63 917 831 0244</span>
                                 </div>
                             </div>
                             {{-- <div class="footer__upper__content__link">
@@ -149,14 +184,6 @@
                                 </div>
                             </div> --}}
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="footer__upper__title">STRATEGIC PARTNERS</div>
-                        <div class="footer__upper__content">
-                            <div class="footer__upper__content__icon"><img src="/themes/{{ $shop_theme }}/img/digima_icon.png"></div>
-                            <div class="footer__upper__content__icon"><img src="/themes/{{ $shop_theme }}/img/dmsph_icon.png"></div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

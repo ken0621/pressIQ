@@ -340,13 +340,12 @@ class Cart2
 					$_cart[$key]->item_id 				= $item_info->item_id;
 					$_cart[$key]->item_name 			= $item_info->item_name;
 					$_cart[$key]->item_sku 				= $item_info->item_sku;
-					// $_cart[$key]->item_price 			= $item_info->item_price;
+					$_cart[$key]->item_price 			= $item_info->item_price;
 
-					$type_category = Tbl_item::where('item_id',$item_info->item_id)->Category()->value('type_category');
-
+					$type_category = Tbl_item::where('item_id',$cart->product_id)->Category()->value('type_category');
+					$_cart[$key]->item_price            = $type_category != "inventory" ? $_cart[$key]->non_inventory_price : $_cart[$key]->item_price;
 					$_cart[$key]->type_category 		= $type_category;
-					$_cart[$key]->item_price            = $type_category == "non-inventory" ? $_cart[$key]->non_inventory_price : $item_info->item_price;
-
+					
 					if($customer_id) 
 		            {
 		            	$price_level = Tbl_mlm_slot::priceLevel($item_info->item_id)->where("tbl_mlm_slot.slot_owner", $customer_id)->first();
@@ -375,9 +374,11 @@ class Cart2
 					// $_cart[$key]->pin_code 				= null;
 
 					$shop_id = Tbl_customer::where("customer_id", $customer_id)->value("shop_id");
-		            $_cart[$key]->item_price            = Ecom_Product::getPriceLevel($shop_id, $customer_id, $cart->item_id, $_cart[$key]->item_price);
-					$_cart[$key]->discount 				= 0;
-					$_cart[$key]->subtotal 				= $_cart[$key]->item_price * $cart->quantity;
+
+					$_cart[$key]->item_price            = Ecom_Product::getPriceLevel($shop_id, $customer_id, $cart->item_id, $_cart[$key]->item_price);
+					
+		            $_cart[$key]->discount 				= 0;
+					$_cart[$key]->subtotal 				= $_cart[$key]->item_price * $_cart[$key]->quantity;
 					$_cart[$key]->display_item_price 	= Currency::format($_cart[$key]->item_price);
 					$_cart[$key]->display_subtotal 		= Currency::format($_cart[$key]->subtotal);
 					$_cart[$key]->pin_code 				= null;
@@ -386,7 +387,6 @@ class Cart2
 					$total += $_cart[$key]->subtotal;
 				}
 			}
-
 			$grand_total = $total;
 			if($cart_info->global_discount == 0 || $cart_info->global_discount == 0.0) //with added condition JAMES global discount computation
 			{

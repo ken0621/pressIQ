@@ -34,7 +34,7 @@
                     <td class="text-center"><a href="javascript:">{{ $item->discount }} %</a></td>
                     <td class="text-right">{{ $item->display_subtotal }}</td>
                 @else
-                    <td class="text-center">{{ $item->quantity }}Non-inventory</td>
+                    <td class="text-center">Non-inventory</td>
                     <td class="text-center">Non-inventory</td>
                     <td class="text-center">Non-inventory</td>
                     <td class="text-center">

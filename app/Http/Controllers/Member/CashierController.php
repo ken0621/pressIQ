@@ -10,7 +10,7 @@ use App\Globals\Utilities;
 use Request;
 use Session;
 use Carbon\Carbon;
-
+use App\Models\Tbl_payment_method;
 class CashierController extends Member
 {
     public function pos()
@@ -271,6 +271,25 @@ class CashierController extends Member
         $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id, $warehouse_id);
         return view('member.cashier.pos_load_warehouse',$data);
     }
+
+    public function settings()
+    {
+        $data["page"]           = "Cashier Settings";
+        $data['_list']          = Tbl_payment_method::where('shop_id',$this->user_info->shop_id)->where('isDefault',0)->get();
+        return view('member.cashier.settings.cashier_settings',$data);
+    }
+
+    
+
+    
+
+    public function settings_add()
+    {
+
+    }
+
+
+    
     public function process_sale()
     {
         $cart = Cart2::get_cart_info();

@@ -299,7 +299,7 @@ class Cart2
 		
 		if($cart_key)
 		{
-			$_cart 			= Tbl_cart::Category()->where("unique_id_per_pc", $cart_key)->where("tbl_cart.status", "Not Processed")->get();
+			$_cart 			= Tbl_cart::where("unique_id_per_pc", $cart_key)->where("tbl_cart.status", "Not Processed")->get();
 			$cart_info 		= Tbl_cart_info::where("unique_id_per_pc", $cart_key)->first();
 
 			if(!$cart_info)
@@ -341,7 +341,11 @@ class Cart2
 					$_cart[$key]->item_name 			= $item_info->item_name;
 					$_cart[$key]->item_sku 				= $item_info->item_sku;
 					// $_cart[$key]->item_price 			= $item_info->item_price;
-					$_cart[$key]->item_price            = $_cart[$key]->type_category == "non-inventory" ? $_cart[$key]->non_inventory_price : $item_info->item_price;
+
+					$type_category = Tbl_item::where('item_id',$item_info->item_id)->Category()->value('type_category');
+
+					$_cart[$key]->type_category 		= $type_category;
+					$_cart[$key]->item_price            = $type_category == "non-inventory" ? $_cart[$key]->non_inventory_price : $item_info->item_price;
 
 					if($customer_id) 
 		            {

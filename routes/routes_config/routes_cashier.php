@@ -16,6 +16,14 @@ Route::group(array('prefix' => '/member/cashier'), function()
 	Route::any('/pos/load_warehouse','Member\CashierController@load_warehouse');
 	Route::get('/pos/get_current_gc','Member\CashierController@get_current_gc');
 
+
+	/*SETTINGS JAMES*/
+	Route::get('/settings','Member\CashierController@settings');
+	Route::get('/settings/add','Member\CashierController@settings_add');
+
+
+
+
 	/* CUSTOMER */
 	Route::any('/pos/search_customer','Member\CashierController@pos_search_customer');
 	Route::any('/pos/scan_customer','Member\CashierController@pos_scan_customer');

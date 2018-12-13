@@ -1459,9 +1459,9 @@ class Mlm_report
     {
         $data['sales_person'] = "All Sales Person";
         $data['warehouse_name'] = "All Warehouse";
-        $query  = Tbl_transaction_list::where('tbl_transaction_list.shop_id',$shop_id)->GetTransaction(); 
+        $query  = Tbl_transaction_list::Payment()->where('tbl_transaction_list.shop_id',$shop_id)->GetTransaction(); 
         $query  = $query->whereDate('transaction_date_created', '>=', $filters['from'])->whereDate('transaction_date_created', '<=', $filters['to']);
-        $query  = $query->where('tbl_transaction_list.transaction_type',"RECEIPT");
+        $query  = $query->where('tbl_transaction_list.transaction_type',"ORDER");
      
         if(Request::input('user_id') != 0)
         {

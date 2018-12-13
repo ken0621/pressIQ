@@ -31,9 +31,9 @@
 <table class="table table-bordered table-striped table-condensed">
     <thead style="text-transform: uppercase">
         <tr>
-            <th class="text-center">Item No</th>
+            <th class="text-center">Order #</th>
+            <th class="text-center">Customer Name</th>
             <th class="text-center">Item Name</th>
-            <th class="text-center">Item Description</th>
             <th class="text-center">Payment Method</th>
             <th class="text-center">Remarks</th>
             <th class="text-center">Price</th>
@@ -47,22 +47,13 @@
     <tbody>
         @foreach($sales as $sale)
         <tr>
-            <td class="text-center">{{ $sale->item_id }}</td>
+            <td class="text-center">{{ $sale->transaction_number }}</td>
+            <td class="text-center">{{ $sale->first_name." ".$sale->last_name }}</td>
             <td class="text-center">{{ $sale->item_sku }}</td>
-            <td class="text-center">{{ $sale->item_sales_information }}</td>
+            <td class="text-center" style="text-transform:uppercase;">
+                {{$sale->transaction_payment_type}}
+            </td>
             
-            @if($sale->transaction_payment_method == "check" || $sale->transaction_payment_method == "others")
-            <td class="text-center" style="text-transform:uppercase;">
-                {{$sale->transaction_payment_method}}
-                 ({{ $sale->transaction_payment_method_type}})
-            </td>
-            @elseif($sale->transaction_payment_method == "")
-            <td class="text-center" style="text-transform:uppercase;">
-                Cash
-            </td>
-            @else
-            <td class="text-center" style="text-transform:uppercase;">Cash</td>
-            @endif
             <td class="text-center">{{ $sale->transaction_remark }}</td>
             <td class="text-center">{{ currency('Php',$sale->item_price) }}</td>
             <td class="text-center">{{ $sale->quantity }}</td>

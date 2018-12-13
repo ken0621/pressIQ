@@ -45,8 +45,7 @@ class CashierController extends Member
             $data['_method'][$key]['_type'] = DB::table('tbl_payment_tag')->where('tbl_payment_tag.payment_method_id',$value->payment_method_id)->join('tbl_payment_type','tbl_payment_type.payment_type_id','=','tbl_payment_tag.payment_type_id')->get();
         }
 
-        
-       	return view("member.cashier.pos", $data);
+        return view("member.cashier.pos", $data);
     }
     public function add_payment()
     {

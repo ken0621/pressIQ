@@ -137,7 +137,7 @@
                                 @foreach($_payment_list as $payment)
                                 <div class="rows">
                                     <div class="{{$total_tendered += $payment->transaction_payment_amount}}" style="width:750px;margin-left: 30px;">
-                                        <span style="width: 375px">{{strtoupper($payment->transaction_payment_type)}}({{strtoupper($payment->transaction_payment_method_type)}})</span>
+                                        <span style="width: 375px">{{strtoupper($payment->transaction_payment_type)}}({{strtoupper($list->transaction_payment_method_type)}})</span>
                                         <span  class="pull-right" style="width: 175px">{{currency('',$payment->transaction_payment_amount)}}</span>
                                     </div>
                                 </div>

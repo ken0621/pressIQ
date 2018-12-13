@@ -160,7 +160,40 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-sm-12 text-right" for="email">Add Payment</label>
+                                <input type="hidden" name="payment_method" class="input-payment-method" value="cash">
                                 <div class="col-sm-12">
+                                    @foreach($_method as $key=>$method)
+                                    @if($key == 0)
+                                    <a style="margin:5px 0px 5px 0px;" href="javascript:" class="btn btn-primary {{strtolower($method->payment_name)}} btn-payment" onClick="select_payment('{{strtolower($method->payment_name)}}')">{{$method->payment_name}}</a>
+                                    @else
+                                    <a style="margin:5px 0px 5px 0px;" href="javascript:" class="btn btn-custom-white {{strtolower($method->payment_name)}} btn-payment" onClick="select_payment('{{strtolower($method->payment_name)}}')">{{$method->payment_name}}</a>
+                                    @endif
+                                    @endforeach
+                                </div>
+                            
+                                    @foreach($_method as $key=>$method)
+                                    @if($key == 0)
+                                        <div class="col-sm-12 method_types" id="method_type_{{strtolower($method->payment_name)}}">
+                                            <label class="control-label col-sm-12 text-right" for="email">Method Type</label>
+                                            <select name="payment_method_type" id="input-payment-method-type" class="form-control">
+                                                @foreach($method->_type as $type)
+                                                <option>{{$type->payment_type_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @else
+                                        <div class="col-sm-12 method_types" id="method_type_{{strtolower($method->payment_name)}}" style="display:none;">
+                                            <label class="control-label col-sm-12 text-right" for="email">Method Type</label>
+                                            <select name="payment_method_type" id="input-payment-method-type" class="form-control">
+                                                @foreach($method->_type as $type)
+                                                <option>{{$type->payment_type_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @endif
+                                    @endforeach
+                              
+                                {{-- <div class="col-sm-12">
                                     <input type="hidden" name="payment_method" class="input-payment-method" value="cash">
                                     <a href="javascript:" class="btn btn-primary cash btn-payment" onClick="select_payment('cash')">Cash</a>
                                     <a href="javascript:" class="btn btn-custom-white check btn-payment" onClick="select_payment('check')">Check</a>
@@ -182,7 +215,7 @@
                                         <option>MLHUILLIER</option>
                                         <option>RD PAWNSHOP</option>
                                     </select>
-                                </div>
+                                </div> --}}
                                 <div class="col-sm-12">
                                     <label class="control-label col-sm-12 text-right" for="email">Remarks</label>
                                     <textarea name="transaction_remark" id="transaction_remark" cols="10" rows="5" class="form-control"></textarea>

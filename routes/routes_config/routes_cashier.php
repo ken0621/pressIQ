@@ -19,7 +19,7 @@ Route::group(array('prefix' => '/member/cashier'), function()
 
 	/*SETTINGS JAMES*/
 	Route::get('/settings','Member\CashierController@settings');
-	Route::get('/settings/add','Member\CashierController@settings_add');
+	Route::any('/settings/{id}','Member\CashierController@settings_action');
 
 
 

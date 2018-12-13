@@ -22,6 +22,7 @@ function pos()
 	}
 	function document_ready()
 	{
+		change_type();
 		action_load_item_table();
 		event_search_item();
 		event_search_customer();
@@ -39,6 +40,14 @@ function pos()
 		event_change_non_inventory_price();
         event_load_popover();
         action_click_change_qty();
+	}
+
+	function change_type()
+	{
+		$('body').on('change','.payment_type_change', function(e)
+		{
+			$('.payment_method_type').val($(this).val());
+		});
 	}
 	function event_change_slot_id()
 	{
@@ -693,7 +702,8 @@ function select_payment(type = '')
 
 	$('.method_types').css('display','none');
 	$('#method_type_'+type).css('display','block');
-	
+	var val = $('select.method_type_'+type).val();
+	$('.payment_method_type').val(val);
 	$('.'+type).removeClass('btn-custom-white');
 	$('.'+type).addClass('btn-primary');
 }

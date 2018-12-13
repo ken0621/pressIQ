@@ -161,6 +161,7 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-12 text-right" for="email">Add Payment</label>
                                 <input type="hidden" name="payment_method" class="input-payment-method" value="cash">
+                                <input type="hidden" name="payment_method_type" class="payment_method_type" value="">
                                 <div class="col-sm-12">
                                     @foreach($_method as $key=>$method)
                                     @if($key == 0)
@@ -175,7 +176,8 @@
                                     @if($key == 0)
                                         <div class="col-sm-12 method_types" id="method_type_{{strtolower($method->payment_name)}}">
                                             <label class="control-label col-sm-12 text-right" for="email">Method Type</label>
-                                            <select name="payment_method_type" id="input-payment-method-type" class="form-control">
+                                            <select id="input-payment-method-type" class="form-control payment_type_change method_type_{{strtolower($method->payment_name)}}">
+                                                <option value="">Select Type</option>
                                                 @foreach($method->_type as $type)
                                                 <option>{{$type->payment_type_name}}</option>
                                                 @endforeach
@@ -184,7 +186,7 @@
                                     @else
                                         <div class="col-sm-12 method_types" id="method_type_{{strtolower($method->payment_name)}}" style="display:none;">
                                             <label class="control-label col-sm-12 text-right" for="email">Method Type</label>
-                                            <select name="payment_method_type" id="input-payment-method-type" class="form-control">
+                                            <select id="input-payment-method-type" class="form-control payment_type_change method_type_{{strtolower($method->payment_name)}}">
                                                 @foreach($method->_type as $type)
                                                 <option>{{$type->payment_type_name}}</option>
                                                 @endforeach

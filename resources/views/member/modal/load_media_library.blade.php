@@ -1,9 +1,6 @@
-<!-- @for($i=1;$i<5;$i++)
-    <div class="image-container">
-        <div class="check-logo"><i class="fa fa-check" aria-hidden="true"></i></div>
-        <img src="/uploads/image{{$i}}.jpg">
-    </div>
-@endfor -->
+@if(!Request::input("page"))
+<div class="wew-container">
+@endif
 
 <div class="loader-aa">
 	@if(isset($_image))
@@ -15,14 +12,55 @@
 		    </div>
 			@endif
 		@endforeach
+
+		<div class="text-right image-pagination">
+			{{ $_image->appends(Request::input())->links() }}
+		</div>
 	@endif
 </div>
 
+@if(!Request::input("page"))
+</div>
+@endif
+
+@if(!Request::input("page"))
 <div class="text-center loader-bb hide">
 	<img src="/assets/member/img/91.gif">
 </div>
 
 <script type="text/javascript">
+$('body').off('click', '.image-pagination a');
+$('body').on('click', '.image-pagination a', function(event)
+{
+	$(".loader-aa").addClass('hide');
+	$(".loader-bb").removeClass('hide');
+
+	event.stopPropagation();
+	event.preventDefault();
+
+	var page_url = $(event.currentTarget).attr("href");
+
+	$.ajax({
+		url: page_url,
+		type: 'GET',
+		dataType: 'html',
+	})
+	.done(function(html) 
+	{
+		$(".loader-aa").removeClass('hide');
+		$(".loader-bb").addClass('hide');
+		$(".wew-container").html(html);
+	})
+	.fail(function() 
+	{
+		console.log("error");
+	})
+	.always(function() 
+	{
+		console.log("complete");
+	});
+});
+
 $('body').off('click', '.delete-image');
 $('body').on('click', '.delete-image', function(event) 
 {
@@ -71,3 +109,4 @@ $('body').on('click', '.delete-image', function(event)
 	display: none;
 }
 </style>
+@endif

@@ -707,7 +707,7 @@
                         <div class="image-container">
                             <img src="/themes/{{ $shop_theme }}/img/advisers/4.png">
                             <div class="flag-badge">
-                                <img src="/themes/{{ $shop_theme }}/img/advisory_badge/badge_ph.png">
+                                <img src="/themes/{{ $shop_theme }}/img/advisory_badge/badge_indonesia.png">
                             </div>
                         </div>
                         <div class="info__name">Bari Arijono</div>

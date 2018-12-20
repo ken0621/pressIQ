@@ -71,7 +71,7 @@
                         <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="/#strategic-partners">PARTNERS</a></span>
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="/#candidates">CANDIDATES</a></span>
+                        <span><a class="smoth-scroll" href="/#candidates">BOARD MEMBERS</a></span>
                         <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="/#advisory">ADVISORY</a></span>
                         <div class="border-container"></div>
@@ -90,7 +90,7 @@
                         <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="#strategic-partners">PARTNERS</a></span>
                         <div class="border-container"></div>
-                        <span><a class="smoth-scroll" href="#candidates">CANDIDATES</a></span>
+                        <span><a class="smoth-scroll" href="#candidates">BOARD MEMBERS</a></span>
                         <div class="border-container"></div>
                         <span><a class="smoth-scroll" href="#advisory">ADVISORY</a></span>
                         <div class="border-container"></div>
@@ -155,7 +155,7 @@
                                 <a target="_blank" href="https://t.me/GABC_Global"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_tele.png"></div></a>
                                 <a target="_blank" href="https://facebook.com/GABC.Global"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_fb.png"></div></a>
                                 <a target="_blank" href="https://twitter.com/GABC_Global"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_twitter.png"></div></a>
-                                <a target="_blank" href="https://www.linkedin.com/groups/10400076/"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_in.png"></div></a>
+                                <a target="_blank" href="https://www.linkedin.com/company/global-association-for-blockchain-and-cryptocurrency/about/"><div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_in.png"></div></a>
              
                                 {{-- <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_ig.png"></div>
                                 <div class="grid-container__item"><img src="/themes/{{ $shop_theme }}/img/f_icon_ytube.png"></div>

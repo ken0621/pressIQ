@@ -111,7 +111,7 @@
                             <li><a class="smoth-scroll" href="/#about">ABOUT</a></li>
                             <li><a class="smoth-scroll" href="/#founders">FOUNDERS</a></li>
                             <li><a class="smoth-scroll" href="/#strategic-partners">PARTNERS</a></li>
-                            <li><a class="smoth-scroll" href="/#candidates">CANDIDATES</a></li>
+                            <li><a class="smoth-scroll" href="/#candidates">BOARD MEMBERS</a></li>
                             <li><a class="smoth-scroll" href="/#advisory">ADVISORY</a></li>
                             <li><a href="http://gabc-election.digimahouse.com/login"><button class="btn-primary">LOGIN</button></a></li>
                             @else
@@ -119,7 +119,7 @@
                             <li><a class="smoth-scroll" href="#about">ABOUT</a></li>
                             <li><a class="smoth-scroll" href="#founders">FOUNDERS</a></li>
                             <li><a class="smoth-scroll" href="#strategic-partners">PARTNERS</a></li>
-                            <li><a class="smoth-scroll" href="#candidates">CANDIDATES</a></li>
+                            <li><a class="smoth-scroll" href="#candidates">BOARD MEMBERS</a></li>
                             <li><a class="smoth-scroll" href="#advisory">ADVISORY</a></li>
                             <li><a href="http://gabc-election.digimahouse.com/login"><button class="btn-primary">LOGIN</button></a></li>
                             @endif

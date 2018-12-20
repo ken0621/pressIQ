@@ -451,16 +451,16 @@ offers New Business Model and New Rewards System using New Generation of Advance
                         <table>
                             <tr>
                                 <td><img src="/themes/{{ $shop_theme }}/img/icon/location.png"></td>
-                                <td>PhilTECH Building, Gallera Road, Paseo de<br>Putik, Guiwan, Zamboanga City, Philippines</td>
+                                <td>{{ isset($company_info['company_address']) ? $company_info['company_address']->value : 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.' }}</td>
                             </tr>
                             <tr>
                                 <td><img src="/themes/{{ $shop_theme }}/img/icon/phone.png"></td>
-                                <td>Tel No. (062) 310-2256, Cel No. 0917-542- 2614<br>Tel No. (062) 310-2256, Cel No. 0917-542- 2614</td>
+                                <td>{{ isset($company_info['company_mobile']) ? $company_info['company_mobile']->value : '+44 870 888 88 88' }}</td>
                             </tr>
                             <tr>
                                 <td><img src="/themes/{{ $shop_theme }}/img/icon/email.png"></td>
                                 <td>
-                                    philtechglobal@yahoo.com<br>philtechglobalmainoffice@gmail.com
+                                    {{ isset($company_info['company_email']) ? $company_info['company_email']->value : 'youremailhere@company.com' }}
                                 </td>
                             </tr>
                         </table>

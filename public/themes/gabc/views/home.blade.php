@@ -469,7 +469,7 @@
                 <h3 class="title">AMBASSADORS</h3>
                 <div class="border-title"></div>
                 <div class="page-content__grid">
-                <div class="page__content--grid__item">
+                {{-- <div class="page__content--grid__item">
                     <div class="image-container">
                         <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/3.jpg">
                         <div class="flag-badge">
@@ -479,7 +479,7 @@
                     <div class="info__name">Alexander Lempka</div>
                     <div class="info__in"><a target="_blank" href="https://www.linkedin.com/in/alexander-lempka-67494b109/"><img src="/themes/{{ $shop_theme }}/img/in_icon.png"></a>
                     </div>
-                </div>
+                </div> --}}
                 <div class="page__content--grid__item">
                     <div class="image-container">
                         <img class="avatar" src="/themes/{{ $shop_theme }}/img/candidates/26.jpg">

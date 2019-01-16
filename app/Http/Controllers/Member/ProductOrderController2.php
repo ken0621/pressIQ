@@ -56,25 +56,34 @@ class ProductOrderController2 extends Member
             $paginate = 20;
         }
 
-        if($active_tab == "paid")
+        if($shop_id == 1)
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate);
-        }
-        elseif($active_tab == "unconfirmed")
-        {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'proof',$keyword,$paginate);
-        }
-        elseif($active_tab == "pending")
-        {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'order',$keyword,$paginate);
-        }
-        elseif($active_tab == "reject")
-        {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'reject',$keyword,$paginate);
+            $pos = "pos";
         }
         else
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate);
+            $pos = null;
+        }
+
+        if($active_tab == "paid")
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate, 0, null,null,$pos);
+        }
+        elseif($active_tab == "unconfirmed")
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'proof',$keyword,$paginate, 0, null,null,$pos);
+        }
+        elseif($active_tab == "pending")
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'order',$keyword,$paginate, 0, null,null,$pos);
+        }
+        elseif($active_tab == "reject")
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'reject',$keyword,$paginate, 0, null,null,$pos);
+        }
+        else
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate, 0, null,null,$pos);
         }
 
         foreach($data["_raw_table"] as $key => $raw_table)
@@ -111,7 +120,7 @@ class ProductOrderController2 extends Member
         {
             if($shop_id == 1)
             {
-                $default[]          = ["ADDRESS","customer_state", true];
+                $default[]          = ["ADDRESS","customer_street", true];
             }        
         }
         

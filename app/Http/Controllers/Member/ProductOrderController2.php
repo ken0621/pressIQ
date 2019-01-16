@@ -39,7 +39,6 @@ class ProductOrderController2 extends Member
                                                     ->leftJoin("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_code_name", "=", "tbl_online_pymnt_link.link_reference_name")
                                                     ->groupBy("link_reference_name")
                                                     ->get();
-        
         return view('member.product_order2.product_order2', $data);
     }
     public function table()
@@ -108,6 +107,15 @@ class ProductOrderController2 extends Member
         $default[]          = ["E-MAIL","email", true];
         $default[]          = ["CONTACT","phone_number", true];
         $default[]          = ["ACTIONS","action", true];
+        if($active_tab == "pending") 
+        {
+            if($shop_id == 1)
+            {
+                $default[]          = ["ADDRESS","customer_state", true];
+            }        
+        }
+        
+
         $data["_table"]     = Columns::filterColumns($this->user_info->shop_id, $this->user_info->user_id, "Order List V2", $data["_raw_table"], $default);
         // dd($data['_table']);
         return view('member.global_table', $data);

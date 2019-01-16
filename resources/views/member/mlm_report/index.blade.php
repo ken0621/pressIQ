@@ -89,6 +89,7 @@
                         <input type="number" class="form-control take_in" value="50" name="take">
                     </div>
                 </div>
+                
             </form>
         </div>
     </div>
@@ -97,13 +98,14 @@
 @endsection
 @section('script')
 <script type="text/javascript">
-function submit_done (data) {
-// body...
-if(data.status =='success')
+function submit_done (data) 
 {
-toastr.success('Fetched Report');
-$('.append_report').html(data.view);
-}
+// body...
+    if(data.status =='success')
+    {
+        toastr.success('Fetched Report');
+        $('.append_report').html(data.view);
+    }
 }
 function filter_update(ito)
 {

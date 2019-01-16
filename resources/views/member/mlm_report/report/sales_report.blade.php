@@ -64,6 +64,19 @@
         </tr>
         @endforeach
     </tbody>
+    <tfoot>
+        <tr></tr>
+        <tr>
+            <td class="text-center">Prepared By:</td>
+            <td class="text-center">Approved By:</td>
+            <td class="text-center">Checked By:</td>
+        </tr>
+        <tr>
+            <td class="text-center">__________________</td>
+            <td class="text-center">__________________</td>
+            <td class="text-center">__________________</td>
+        </tr>
+    </tfoot>
 </table>
 @else
 <div class="text-center" style="padding: 100px 0;"><b>NO DATA</b></div>

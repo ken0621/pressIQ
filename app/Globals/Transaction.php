@@ -621,9 +621,11 @@ class Transaction
         $store["get_transaction_customer_details_v2"] = true;
         session($store);
     }
-    public static function get_transaction_list($shop_id, $transaction_type = 'all', $search_keyword = '', $paginate = 5, $transaction_id = 0, $from_date = null, $to_date = null)
+    public static function get_transaction_list($shop_id, $transaction_type = 'all', $search_keyword = '', $paginate = 5, $transaction_id = 0, $from_date = null, $to_date = null, $pos = null)
     {
         $data = Tbl_transaction_list::where('tbl_transaction_list.shop_id',$shop_id);
+       
+
         if($transaction_id != 0)
         {
             $data = Tbl_transaction_list::where('tbl_transaction_list.transaction_id',$transaction_id)->where('tbl_transaction_list.shop_id',$shop_id);
@@ -634,7 +636,10 @@ class Transaction
         {
             $data->whereBetween("tbl_transaction_list.transaction_date", [date("Y-m-d", strtotime($from_date)), date("Y-m-d", strtotime($to_date))]);
         }
-        
+        if($pos == "pos")
+        {
+            $data->where('transaction_sales_person', null);
+        }
         $data->transaction(); //join table transaction
         if(isset($transaction_type))
         {

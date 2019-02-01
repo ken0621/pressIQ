@@ -121,7 +121,7 @@
 										</div>
 									</div>
 									<!-- SHIPPING FEE -->
-									<div class="shipping-fee">Shipping Fee is included</div>
+									{{-- <div class="shipping-fee">Shipping Fee is included</div> --}}
 								@else
 									<div class="text-center" style="padding: 50px;">CART IS EMPTY</div>
 								@endif

@@ -165,7 +165,7 @@
             <div class="collapse navbar-collapse navbar-center" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
-                    <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR MERCHANTS</a></li>
+                    <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR MERCHANTS & IBPs</a></li>
                     <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li> 
                     <li class="nav-border"><a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb">HOTEL BOOKING</a></li>
                     <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
@@ -266,7 +266,7 @@
                     <span>BROWSE</span>
                     <ul class="links">
                             <a href="/"><li>HOME</li></a>
-                            <a href="/partners"><li>OUR MERCHANTS</li></a>
+                            <a href="/partners"><li>OUR MERCHANTS & IBPs</li></a>
                             <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
                             <a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb"><li>HOTEL BOOKING</li></a>
                             <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
@@ -343,7 +343,7 @@
                     <span>BROWSE</span>
                     <ul class="links">
                         <a href="/"><li>HOME</li></a>
-                        <a href="/partners"><li>OUR MERCHANTS</li></a>
+                        <a href="/partners"><li>OUR MERCHANTS & IBPs</li></a>
                         <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
                         <a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb"><li>HOTEL BOOKING</li></a>
                         <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>

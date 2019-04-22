@@ -426,6 +426,7 @@ class CashierController extends Member
         $transaction_sales_person                           = Request::input('transaction_sales_person');
         $amount                                             = Request::input('payment_amount');
         $slot_id                                            = Request::input('slot_id');
+        $use_product_code                                   = Request::input('use_product_code');
 
         $transaction_payment_method      = $method;
         $transaction_payment_method_type = $payment_method_type;
@@ -480,7 +481,8 @@ class CashierController extends Member
 
                         if($consume_inventory == 'instant')
                         {
-                            Transaction::consume_in_warehouse($shop_id, $transaction_list_id, $remarks, $warehouse_id);
+                            /* NAG ADD AKO NG SLOT ID */
+                            Transaction::consume_in_warehouse($shop_id, $transaction_list_id, $remarks, $warehouse_id,$slot_id,$use_product_code);
                             $validate = 1;
                         }
                         if($consume_inventory == 'wis')

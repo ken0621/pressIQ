@@ -138,6 +138,13 @@
                                     <label class="radio-inline"><input type="radio" class="wis-click" onclick="toggle_destination('.warehouse-destination')"  name="consume_inventory" value="wis">WIS</label>
                                 </div>
                             </div>
+                            <div class="form-group use_product_code_box">
+                                <label class="control-label col-sm-4 text-right" for="email">Use Product Code</label>
+                                <div class="col-sm-8">
+                                    <label class="radio-inline"><input type="radio" name="use_product_code" checked value="yes">Yes</label>
+                                    <label class="radio-inline"><input type="radio" name="use_product_code" value="no">No</label>
+                                </div>
+                            </div>
                             <div class="form-group warehouse-destination" style="display: none">
                                 <label class="control-label col-sm-4 text-right" for="email">Warehouse Destination</label>
                                 <div class="col-sm-8 warehouse-container"> 

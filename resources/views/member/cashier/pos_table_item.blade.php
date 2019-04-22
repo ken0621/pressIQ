@@ -43,16 +43,7 @@
                 @endif
                 <td class="text-center red-button remove-item-from-cart"><i class="fa fa-close fa-fw"></i></td>
             </tr>
-           <!--  @if(count($item->pin_code) > 0)
-                @foreach($item->pin_code as $pin)
-                    <tr>
-                        <td></td>
-                        <td colspan="2" class="text-center">{!! $pin['pin'] !!}</td>
-                        <td colspan="2" class="text-center">{!! $pin['code'] !!}</td>
-                        <td class="text-center red-button remove-pin-code"><i class="fa fa-close fa-fw"></i></td>
-                    </tr>
-                @endforeach
-            @endif -->
+
             @endforeach
 
         </tbody>

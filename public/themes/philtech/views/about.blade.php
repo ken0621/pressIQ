@@ -238,7 +238,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="people">
+				{{-- <div class="people">
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/ramil.jpg')">
 					</div>
 					<div class="info-box">
@@ -255,8 +255,8 @@
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="people">
+				</div> --}}
+				{{-- <div class="people">
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/Quincy.jpg')">
 					</div>
 					<div class="info-box">
@@ -273,7 +273,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> --}}
 				<div class="people">
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
 					</div>

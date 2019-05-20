@@ -58,11 +58,11 @@
                                 @if($slot_membership == 1)
                                     <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>
                                     <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}">MERCHANT PRESENTATION</a>
-                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PRIVILEGE CARD PRESENTATION</a>
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PAYMAYA PRESENTATION</a>
                                 @else 
                                     <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>
                                     <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}">MERCHANT PRESENTATION</a>
-                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PRIVILEGE CARD PRESENTATION</a>  
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PAYMAYA PRESENTATION</a>  
                                     <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}">MARKETING PLAN PRESENTATION</a>
                                 @endif
                               </div>
@@ -77,7 +77,7 @@
                                 <div class="dropdown-content">
                                     <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>
                                     <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}">MERCHANT PRESENTATION</a>
-                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PRIVILEGE CARD PRESENTATION</a>
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PAYMAYA PRESENTATION</a>
                                 </div>
                             </div>
                         </div>
@@ -277,18 +277,18 @@
                             {{-- <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a> --}}
                             <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a>
                             <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PAYMAYA PRESENTATION</li></a>
                             {{-- <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PAYMAYA PRESENTATION</li></a>
                             <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MARKETING PLAN PRESENTATION</li></a> --}}
                             @if($mlm_member)
                             {{-- <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a> --}}
                                 @if($slot_membership == 1)
                                     {{-- <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
-                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a> --}}
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PAYMAYA PRESENTATION</li></a> --}}
                                 @else
                                     {{-- <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
-                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a> --}}
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PAYMAYA PRESENTATION</li></a> --}}
                                     <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MARKETING PLAN PRESENTATION</li></a>
                                 @endif
                             @endif
@@ -353,7 +353,7 @@
                         <a href="/contact"><li>CONTACT US</li></a>
                         <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a>
                         <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
-                        <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
+                        <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PAYMAYA PRESENTATION</li></a>
                     </ul>
                 @endif
             </nav>

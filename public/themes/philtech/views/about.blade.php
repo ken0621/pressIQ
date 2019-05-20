@@ -221,6 +221,42 @@
 					</div>
 				</div> --}}
 				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/greeting-owner.jpg')">
+					</div>
+					<div class="info-box">
+						<a href="https://www.linkedin.com/in/arnold-arbillera-a84646159/">
+							<i class="fab fa-linkedin-in"></i>
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Arnold A. Arbillera
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								CEO
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/zenaida.jpg')">
+					</div>
+					<div class="info-box">
+						<a href="_blank">
+							<i class="fab fa-linkedin-in"></i>
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Zenaida M. Arbillera
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								CFO
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="people">
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/saturn.jpg')">
 					</div>
 					<div class="info-box">

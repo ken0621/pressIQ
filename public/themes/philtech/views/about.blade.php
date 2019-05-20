@@ -275,7 +275,7 @@
 					</div>
 				</div> --}}
 				<div class="people">
-					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/luisa.jpg')">
 					</div>
 					<div class="info-box">
 						<a href="_blank">
@@ -287,7 +287,7 @@
 							</div>
 							<div class="border-holder"></div>
 							<div class="position-holder">
-								Head, Business Development
+								Chief Marketing Officer
 							</div>
 						</div>
 					</div>

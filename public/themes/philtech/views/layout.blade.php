@@ -440,9 +440,7 @@
                             <li><a href="javascript:">Electronics</a></li>
                             <li><a href="javascript:">Services</a></li>
                             <li><a href="javascript:">Entertainment</a></li>
-                            <li><a href="javascript:">Apparel</a></li>
                             <li><a href="javascript:">Accessories</a></li>
-                            <li><a href="javascript:">Health & Wellness</a></li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-6 match-height">

@@ -409,8 +409,7 @@
                         <div class="img-footer">
                             <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech.jpg">
                         </div>
-                        <p>PHILTECH, INC. “Business and Benefits”
-offers New Business Model and New Rewards System using New Generation of Advanced Technology. PHILTECH, INC. is a pioneer...<a style="color: #fff" href="/about">See more</a></p>
+                        <p>PHILTECH, INC. is a corporation company registered under the SEC with Trade Name PHILIPPINE TECHNOLOGY FOR ENTREPRENEURS AND CONSUMERS HUB, INC.  The company is...<a style="color: #fff" href="/about">See more</a></p>
                     </div> 
                     <div class="col-md-2 col-sm-6 match-height">
                         <div class="btm-title">INFORMATION</div>

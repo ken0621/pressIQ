@@ -199,7 +199,7 @@
 			</div>	
 			
 			<div class="title-holder-2">
-				THE MANAGEMENT <span>TEAMS</span>
+				THE MANAGEMENT <span>TEAM</span>
 			</div>
 			<div class="org-chart-holder">
 				{{-- <div class="people">
@@ -269,7 +269,7 @@
 							</div>
 							<div class="border-holder"></div>
 							<div class="position-holder">
-								Director, Operations Department
+								Operations Manager
 							</div>
 						</div>
 					</div>

@@ -16,6 +16,10 @@
                     <th style="text-align: left; width: 30;">RECEIVER'S NAME</th>
                     <th style="text-align: left; width: 30;">RECEIVER'S CONTACT NUMBER</th>
                 @endif
+                @if($method == "paymaya")
+                    <th style="text-align: left; width: 30;">RECEIVER'S NAME</th>
+                    <th style="text-align: left; width: 30;">RECEIVER'S CONTACT NUMBER</th>
+                @endif
                 @if($method == "coinsph")
                     <th style="text-align: left; width: 30;">WALLET ADDRESS</th>
                 @endif
@@ -45,6 +49,10 @@
                     <td>{{ "'" . $slot->slot_eon_card_no . "'" }}</td>
                 @endif
                 @if($method == "palawan_express")
+                    <td>{{$slot->remittance_fname .' '.$slot->remittance_mname.' '.$slot->remittance_lname}}</td>
+                    <td>{{$slot->remittance_contact_number}}</td>
+                @endif
+                @if($method == "paymaya")
                     <td>{{$slot->remittance_fname .' '.$slot->remittance_mname.' '.$slot->remittance_lname}}</td>
                     <td>{{$slot->remittance_contact_number}}</td>
                 @endif

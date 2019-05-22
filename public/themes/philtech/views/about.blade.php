@@ -137,7 +137,7 @@
 							</div>
 							<div class="border-holder"></div>
 							<div class="position-holder">
-								BOD / Vice President for IT
+								BOD
 							</div>
 						</div>
 					</div>
@@ -173,7 +173,7 @@
 							</div>
 							<div class="border-holder"></div>
 							<div class="position-holder">
-								BOD / Vice President for Finance
+								BOD / CFO
 							</div>
 						</div>
 					</div>

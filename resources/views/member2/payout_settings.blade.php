@@ -211,6 +211,49 @@
 	            </div>
 	        </div>
 		</div>
+		{{-- PAYMAYA --}}
+		<div class="row bank-table payout-mode-container" content="paymaya">
+	        <div class="clearfix modal-body">
+	            <div class="col-md-12">
+	                <div class="table-responsive">
+	                    <table class="table table-bordered">
+	                        <thead style="text-transform: uppercase">
+	                            <tr>
+	                                <th class="text-center" style="width: 100px;">SLOT CODE</th>
+	                                <th class="text-center" width="120px">NAME</th>
+	                                <th class="text-center" width="120px">Contact Number</th>
+	                            </tr>
+	                        </thead>
+	                        <tbody>
+	                        	@foreach($_slot as $slot)
+	                            <tr>
+	                            	<input type="hidden" name="remittance_slot_no[]" value="{{ $slot->slot_no }}">
+	                            	<input type="hidden" name="money_remittance_type[]" value="paymaya">
+	                                <td class="text-center" style="vertical-align: middle;">{{ $slot->slot_no }}</td>
+	                                <td class="text-center">
+	                                	<div class="row clearfix">
+	                                		<div class="col-md-4">
+	                                			<input type="text" class="form-control" placeholder="First Name" name="first_name[]" value="{{ $slot->first_name }}">
+	                                		</div>
+	                                		<div class="col-md-4">
+	                                			<input type="text" class="form-control" placeholder="Middle Name" name="middle_name[]" value="{{ $slot->middle_name }}">
+	                                		</div>
+	                                		<div class="col-md-4">
+	                                			<input type="text" class="form-control" placeholder="Last Name" name="last_name[]" value="{{ $slot->last_name }}">	                                		
+	                                		</div>
+	                                	</div>
+	                                </td>
+	                              	<td class="text-center">
+	                                	<input name="contact_number[]" type="text" value="{{ $slot->contact_number }}" class="form-control text-center" >
+	                                </td>
+	                            </tr>
+	                            @endforeach
+	                        </tbody>
+	                    </table>
+	                </div>
+	            </div>
+	        </div>
+		</div>
 
 		{{-- COINS.PH CARD --}}
 		<div class="row payout-mode-container" content="coinsph">

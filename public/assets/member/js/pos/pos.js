@@ -707,7 +707,8 @@ function select_payment(type = '')
 {
 
 	$('.btn-payment').addClass('btn-custom-white');
-	$('.input-payment-method').val(type);
+	$valtype = type.replace("-"," ");
+	$('.input-payment-method').val($valtype);
 
 	$('.method_types').css('display','none');
 	$('#method_type_'+type).css('display','block');

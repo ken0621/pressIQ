@@ -221,7 +221,7 @@
 	                            <tr>
 	                                <th class="text-center" style="width: 100px;">SLOT CODE</th>
 	                                <th class="text-center" width="120px">NAME</th>
-	                                <th class="text-center" width="120px">Contact Number</th>
+	                                <th class="text-center" width="120px">Paymaya Number</th>
 	                            </tr>
 	                        </thead>
 	                        <tbody>

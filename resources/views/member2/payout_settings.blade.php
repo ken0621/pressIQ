@@ -224,7 +224,7 @@
 	                                <th class="text-center" width="120px">Paymaya Number</th>
 	                            </tr>
 	                        </thead>
-	                        <tbody>
+	                        <tbody> 
 	                        	@foreach($_slot as $slot)
 	                            <tr>
 	                            	<input type="hidden" name="remittance_slot_no[]" value="{{ $slot->slot_no }}">

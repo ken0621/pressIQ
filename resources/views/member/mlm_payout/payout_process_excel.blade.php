@@ -18,7 +18,7 @@
                 @endif
                 @if($method == "paymaya")
                     <th style="text-align: left; width: 30;">RECEIVER'S NAME</th>
-                    <th style="text-align: left; width: 30;">RECEIVER'S CONTACT NUMBER</th>
+                    <th style="text-align: left; width: 30;">PAYMAYA NUMBER</th>
                 @endif
                 @if($method == "coinsph")
                     <th style="text-align: left; width: 30;">WALLET ADDRESS</th>

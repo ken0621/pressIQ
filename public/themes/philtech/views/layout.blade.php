@@ -238,7 +238,7 @@
                         @foreach($_categories as $category)
                             <div class="links">                   
                                 @if($category['subcategory'])
-                                    <div class="shop-container">
+                                    <div class="shop-container" onClick="location.href='/product?type={{ $category['type_id'] }}'">
                                         {{ $category['type_name'] }}
                                     </div>
                                     <div class="subshop-container">

@@ -1098,15 +1098,15 @@ body {
                     {
                         font-family: 'Poppins';
                         color: #fff;
-                        font-size: 25px;
+                        font-size: 22px;
                         font-weight: 600;
                         @media screen and (max-width: 768px)
                         {
-                            font-size: 20px;
+                            font-size: 18px;
                         }
                         @media screen and (max-width: 425px)
                         {
-                            font-size: 18px;
+                            font-size: 16px;
                         }
                     }
                     .close-container
@@ -1133,28 +1133,30 @@ body {
                 {
                     font-family: 'Poppins';
                     color: #333;
-                    font-size: 22px;
+                    font-size: 16px;
                     font-weight: 600;
                     margin-bottom: 20px;
                     @media screen and (max-width: 768px)
                     {
-                        font-size: 18px;
+                        font-size: 14px;
                     }
-                    @media screen and (max-width: 425px)
-                    {
-                        font-size: 16px;
-                    }
+                    // @media screen and (max-width: 425px)
+                    // {
+                    //     font-size: 13px;
+                    // }
                 }
                 input
                 {
-                    font-weight: 800;
+                    font-weight: 500;
                     padding: 0px 10px;
-                    color: #3f3f3f;
-                    height: 50px;
-                    font-size: 15px;
+                    color: #141414;
+                    height: 45px;
+                    font-size: 14px;
                     width: 100%;
-                    border-radius: 2px;
-                    border-color: #cce4ff;
+                    background-color: #f5f5f5;
+                    border: none;
+                    // border-radius: 2px;
+                    // border-color: #cce4ff;
                     @media screen and (max-width: 768px)
                     {
                         height: 40px;
@@ -1163,18 +1165,20 @@ body {
                 }
                 textarea
                 {
-                    font-weight: 800;
+                    font-weight: 500;
                     padding: 10px 10px;
-                    color: #3f3f3f;
-                    height: 50px;
+                    color: #141414;
+                    height: 45px;
                     font-size: 15px;
                     width: 100%;
-                    max-height: 150px;
+                    max-height: 140px;
                     max-width: 100%;
-                    min-height: 150px;
+                    min-height: 140px;
                     min-width: 100%;
-                    border-radius: 2px;
-                    border-color: #cce4ff;
+                    background-color: #f5f5f5;
+                    border: none;
+                    // border-radius: 2px;
+                    // border-color: #cce4ff;
                     @media screen and (max-width: 768px)
                     {
                         max-height: 130px;
@@ -1185,11 +1189,12 @@ body {
                 ::placeholder
                 {
                     font-weight: 300;
-                    color: #939393;
+                    color: #696969;
                 }
             }
             .modal-footer
             {
+            background-color: #f5f5f5;
                 .btn-holder
                 {
                     text-align: center;

@@ -51,7 +51,7 @@
 					“Choose the provider who Cares. Choose DMS”
 					</div>
 					<div class="subheader-title">
-						A company that serves as your whole package business integration 
+						A company that serves as your whole package business integration
 						<br> from technology to marketing!
 					</div>
 				</div>
@@ -463,7 +463,7 @@
 							KEEP IN TOUCH
 						</div>
 						<div class="content-body">
-							<form action="Post"> 
+							<form action="Post">
 								{{-- @if (session('message_concern_shell'))
 								   <div class="alert alert-success">
 								       {{ session('message_concern_shell') }}
@@ -492,7 +492,7 @@
 								   </div>
 								   	<div class="col-md-6">
 								       	<div class="form-group">
-								           <input type="text area" class="form-control" id="contactus_subject" name="contactus_subject" placeholder="Subject*" required> 
+								           <input type="text area" class="form-control" id="contactus_subject" name="contactus_subject" placeholder="Subject*" required>
 								       	</div>
 								   	</div>
 								   	<div class="col-md-12">
@@ -577,7 +577,7 @@
 					<div class="title-header">
 						Send us a Message
 					</div>
-					<form action="Post"> 
+					<form action="Post">
 						{{-- @if (session('message_concern_shell'))
 						   <div class="alert alert-success">
 						       {{ session('message_concern_shell') }}
@@ -606,7 +606,7 @@
 						   </div>
 						   	<div class="col-md-6">
 						       	<div class="form-group">
-						           <input type="text area" class="form-control" id="contactus_subject" name="contactus_subject" placeholder="Subject*" required> 
+						           <input type="text area" class="form-control" id="contactus_subject" name="contactus_subject" placeholder="Subject*" required>
 						       	</div>
 						   	</div>
 						   	<div class="col-md-12">
@@ -695,5 +695,3 @@
 </script>
 
 @endsection
-
-

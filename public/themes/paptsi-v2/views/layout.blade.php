@@ -12,10 +12,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
         <link rel="icon" href="/themes/{{ $shop_theme }}/img/header-logo.jpg" type="image/jpg" />
-    
+
         <!-- GOOGLE FONT -->
-        <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet"> 
-        <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet">    
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet">
 
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
@@ -87,7 +87,7 @@
                     <div class="image-logo-holder">
                         <a class="clearfix" href="/">
                             <img src="/themes/{{ $shop_theme }}/img/header-logo.jpg">
-                        </a>                       
+                        </a>
                     </div>
                     <div class="menu-nav">
                         <span></span>
@@ -133,8 +133,8 @@
                 </div>
             </div>
         </div>
-    </div> 
-    
+    </div>
+
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
        @yield("content")
@@ -180,23 +180,23 @@
         </div>
     </footer>
     <div class="container">
-        <div class="bottom">                           
+        <div class="bottom">
             <div class="ftr-title">© 2017 Archipelago Ports and Terminal Services, INC. All Rights Reserved</div>
             <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
         </div>
     </div>
-    
+
     @include("frontend.gfoot")
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
     <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
-    
+
     <!-- HEADER FIXED -->
     <script type="text/javascript">
         $window = $(window);
         $window.scroll(function() {
           $scroll_position = $window.scrollTop();
-            if ($scroll_position > 100) { 
+            if ($scroll_position > 100) {
                 $('.header-container').addClass('header-fixed');
 
                 header_height = $('.your-header').innerHeight();

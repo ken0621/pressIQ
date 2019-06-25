@@ -132,19 +132,19 @@ button:hover
         float: left;
         width: 100%;
         display: none;
-        ul 
+        ul
         {
             list-style:none;
             padding-left: 10px;
-            li 
+            li
             {
                 padding: 10px 0px;
                 border-bottom: 1px solid #efefef;
             }
         }
     }
-    
-    li 
+
+    li
     {
         display: inline-block;
         padding: 0px 10px;
@@ -155,7 +155,7 @@ button:hover
         }
     }
 
-    a 
+    a
     {
         color: #000;
         font-size: 15px;
@@ -165,17 +165,17 @@ button:hover
         {
             font-size: 11px;
         }
-        // &:hover 
+        // &:hover
         // {
         //     @include transition(0.3s);
         //     color: #ffcf16;
         //     text-decoration: none;
         //     cursor: pointer;
         // }
-        &__link 
+        &__link
         {
-            &.active 
-            { 
+            &.active
+            {
                 //border-bottom: 2px solid #fff;
                 color: #bb8725;
             }
@@ -305,7 +305,7 @@ button:hover
     display: none;
     width: 50%;
     margin: auto;
-    img 
+    img
     {
         width: 100%;
     }
@@ -381,7 +381,7 @@ button:hover
             ul
             {
                 padding: 0px;
-                li 
+                li
                 {
                     display: inline-block;
                     padding: 0px 10px;
@@ -391,7 +391,7 @@ button:hover
                     }
                 }
 
-                a 
+                a
                 {
                     text-decoration: none;
                     color: $c-white;
@@ -403,7 +403,7 @@ button:hover
                     {
                         font-size: 13px;
                     }
-                    &:hover 
+                    &:hover
                     {
                         @include transition(0.3s);
                         text-decoration: none;
@@ -425,30 +425,30 @@ button:hover
             {
                 padding: 0px;
             }
-            li 
+            li
             {
                 display: inline-block;
                 padding: 0px 5px;
             }
 
-            a 
+            a
             {
                 color: #fff;
                 @media screen and (max-width: 1024px)
                 {
                     font-size: 11px;
                 }
-                &:hover 
+                &:hover
                 {
                     @include transition(0.3s);
                     color: #fff;
                     text-decoration: none;
                     cursor: pointer;
                 }
-                &__link 
+                &__link
                 {
-                    &.active 
-                    { 
+                    &.active
+                    {
                         color: #bb8725;
                     }
                 }
@@ -473,7 +473,7 @@ button:hover
             }
         }
     }
-} 
+}
 .bottom
     {
         background-color: #000f1f;
@@ -525,7 +525,7 @@ button:hover
                 font-size: 5px
             }
         }
-    }      
+    }
 
 
 /* SCROLL TO TOP */

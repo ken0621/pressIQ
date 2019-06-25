@@ -351,7 +351,7 @@ body {
             }
             @media screen and (max-width: 768px)
             {
-                
+
             }
             @media screen and (max-width: 425px)
             {
@@ -381,7 +381,7 @@ body {
                 }
                 .values-icon
                 {
-                    margin: 0px auto;   
+                    margin: 0px auto;
                     width: 30%;
                     img
                     {
@@ -429,7 +429,7 @@ body {
         }
         .product-tabs
         {
-            
+
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             @media screen and (max-width: 375px)
@@ -676,7 +676,7 @@ body {
                     transition: all 0.3s;
                 }
                 &:hover {
-                    img 
+                    img
                     {
                         -moz-transform: scale(1.1);
                         -webkit-transform: scale(1.1);
@@ -821,7 +821,7 @@ body {
                     }
                 }
             }
-            
+
             .button-holder
             {
                 text-align: center;
@@ -1096,142 +1096,6 @@ body {
                         {
                             font-size: 13px;
                         }
-                    }
-                }
-            }
-        }
-    }
-}
-
-.modal
-{
-    .modal-dialog
-    {
-        .modal-content
-        {
-            .modal-header
-            {
-                background-color: #017aff;
-                .title-header
-                {
-                    display: grid;
-                    grid-template-columns: repeat(2, 1fr);
-                    .title-content
-                    {
-                        font-family: 'Poppins';
-                        color: #fff;
-                        font-size: 22px;
-                        font-weight: 600;
-                        @media screen and (max-width: 768px)
-                        {
-                            font-size: 18px;
-                        }
-                        @media screen and (max-width: 425px)
-                        {
-                            font-size: 16px;
-                        }
-                    }
-                    .close-container
-                    {
-                        text-align: right;
-                        .btn-close
-                        {
-                            border: solid 1px #017aff;
-                            background-color: #017aff;
-                            height: 30px;
-                            width: 30px;
-                            float: right;
-                            i
-                            {
-                                color: #fff;
-                            }
-                        }
-                    }
-                }
-            }
-            .modal-body
-            {
-                .title-header
-                {
-                    font-family: 'Poppins';
-                    color: #333;
-                    font-size: 16px;
-                    font-weight: 600;
-                    margin-bottom: 20px;
-                    @media screen and (max-width: 768px)
-                    {
-                        font-size: 14px;
-                    }
-                    // @media screen and (max-width: 425px)
-                    // {
-                    //     font-size: 13px;
-                    // }
-                }
-                input
-                {
-                    font-weight: 500;
-                    padding: 0px 10px;
-                    color: #141414;
-                    height: 45px;
-                    font-size: 14px;
-                    width: 100%;
-                    background-color: #f5f5f5;
-                    border: none;
-                    // border-radius: 2px;
-                    // border-color: #cce4ff;
-                    @media screen and (max-width: 768px)
-                    {
-                        height: 40px;
-                        font-size: 13px;
-                    }
-                }
-                textarea
-                {
-                    font-weight: 500;
-                    padding: 10px 10px;
-                    color: #141414;
-                    height: 45px;
-                    font-size: 15px;
-                    width: 100%;
-                    max-height: 140px;
-                    max-width: 100%;
-                    min-height: 140px;
-                    min-width: 100%;
-                    background-color: #f5f5f5;
-                    border: none;
-                    // border-radius: 2px;
-                    // border-color: #cce4ff;
-                    @media screen and (max-width: 768px)
-                    {
-                        max-height: 130px;
-                        min-height: 130px;
-                        font-size: 13px;
-                    }
-                }
-                ::placeholder
-                {
-                    font-weight: 300;
-                    color: #696969;
-                }
-            }
-            .modal-footer
-            {
-            background-color: #f5f5f5;
-                .btn-holder
-                {
-                    text-align: center;
-                    .btn-send
-                    {
-                        font-size: 13px;
-                        font-weight: 800;
-                        color: #fff;
-                        justify-self: start;
-                        width: 250px;
-                        padding: 15px 0px;
-                        background-color: #14c77a;
-                        border: none;
-                        border-radius: 4px;
-                        border-bottom: solid 5px #10ad6a;
                     }
                 }
             }

@@ -63,25 +63,25 @@
                     <div class="space1"></div>
                     <span><i class="fa fa-bars" aria-hidden="true"></i> BROWSE</span>
                     <ul class="links">
-                        <li> 
+                        <li>
                             <a onclick="off()" href="/#home"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
                         </li>
-                        <li> 
+                        <li>
                             <a onclick="off()" href="/#about"><i class="fa fa-info" aria-hidden="true"></i> About Us</a>
                         </li>
-                        <li> 
+                        <li>
                             <a onclick="off()" href="/#product"><i class="fa fa-cubes" aria-hidden="true"></i> Products</a>
                         </li>
-                        <li> 
+                        <li>
                             <a onclick="off()" href="/#services"><i class="fa fa-wrench" aria-hidden="true"></i> Services</a>
                         </li>
-                        <li> 
+                        <li>
                             <a onclick="off()" href="/#expertise"><i class="fa fa-list-alt" aria-hidden="true"></i> Expertise</a>
                         </li>
-                        <li> 
+                        <li>
                             <a onclick="off()" href="/#partnership"><i class="fa fa-users" aria-hidden="true"></i> Partners</a>
                         </li>
-                        <li> 
+                        <li>
                             <a onclick="off()" href="/#contact"><i class="fa fa-phone" aria-hidden="true"></i> Contact Us</a>
                         </li>
                     </ul>
@@ -98,7 +98,7 @@
                                         <a class="clearfix" href="/">
                                             <a href="/" class="w-logo"><img src="/themes/{{ $shop_theme }}/img/dms-logo.png"></a>
                                             <a href="/" class="b-logo"><img src="/themes/{{ $shop_theme }}/img/dms-logo.png"></a>
-                                        </a>                       
+                                        </a>
                                     </div>
                                     <div class="image-logo-mob">
                                         <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/dms-logo.png"></a>
@@ -108,6 +108,22 @@
                                     <nav class="navigation">
                                         <ul>
                                             @if(Request::segment(1)=="product")
+                                                <li><a class="smoth-scroll" href="/#home">Home</a></li>
+                                                <li><a class="smoth-scroll" href="/#about">About Us</a></li>
+                                                <li><a class="smoth-scroll" href="/#product">Products</a></li>
+                                                <li><a class="smoth-scroll" href="/#services">Services</a></li>
+                                                <li><a class="smoth-scroll" href="/#expertise">Expertise</a></li>
+                                                <li><a class="smoth-scroll" href="/#partnership">Partners</a></li>
+                                                <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
+                                            @elseif(Request::segment(1)=="product_1")
+                                                <li><a class="smoth-scroll" href="/#home">Home</a></li>
+                                                <li><a class="smoth-scroll" href="/#about">About Us</a></li>
+                                                <li><a class="smoth-scroll" href="/#product">Products</a></li>
+                                                <li><a class="smoth-scroll" href="/#services">Services</a></li>
+                                                <li><a class="smoth-scroll" href="/#expertise">Expertise</a></li>
+                                                <li><a class="smoth-scroll" href="/#partnership">Partners</a></li>
+                                                <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
+                                            @elseif(Request::segment(1)=="product_2")
                                                 <li><a class="smoth-scroll" href="/#home">Home</a></li>
                                                 <li><a class="smoth-scroll" href="/#about">About Us</a></li>
                                                 <li><a class="smoth-scroll" href="/#product">Products</a></li>
@@ -129,7 +145,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="button-keeper">
-                                        <button type="button" class="btn-ask" data-toggle="modal" data-target="#myModal">INQUIRE NOW</button>
+                                            <button type="button" class="btn-ask" data-toggle="modal" data-target="#myModal">INQUIRE NOW</button>
                                     </div>
                                 </div>
                             </div>
@@ -137,7 +153,72 @@
                     </div>
                 </header>
             </div>
-           
+
+            <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <div class="title-header">
+                                    <div class="title-content">
+                                        INQUIRE NOW!
+                                    </div>
+                                    <div class="close-container">
+                                        <button type="button" class="btn-close" data-dismiss="modal"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-body">
+                                <div class="title-header">
+                                    Send us a Message
+                                </div>
+                                <form action="Post">
+                                    {{-- @if (session('message_concern_shell'))
+                                       <div class="alert alert-success">
+                                           {{ session('message_concern_shell') }}
+                                       </div>
+                                    @endif --}}
+                                    <div class="row clearfix">
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                <input type="text" class="form-control" id="contactus_first_name" name="contactus_first_name" placeholder="First Name*" required>
+                                               </div>
+                                           </div>
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                <input type="text" class="form-control" id="contactus_last_name" name="contactus_last_name" placeholder="Last Name*" required>
+                                               </div>
+                                           </div>
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                <input type="phone" class="form-control" id="contactus_phone_number" name="contactus_phone_number" placeholder="Phone Number*" required>
+                                               </div>
+                                           </div>
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                                <input type="email" class="form-control" id="contactus_email" name="contactus_email" placeholder="Email Address*" required>
+                                               </div>
+                                       </div>
+                                           <div class="col-md-6">
+                                               <div class="form-group">
+                                               <input type="text area" class="form-control" id="contactus_subject" name="contactus_subject" placeholder="Subject*" required>
+                                               </div>
+                                           </div>
+                                           <div class="col-md-12">
+                                               <div class="form-group">
+                                                <textarea type="text" class="form-control text-message" id="contactus_message" name="contactus_message" placeholder="Message*" required></textarea>
+                                               </div>
+                                           </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="btn-holder">
+                                    <button class="btn-send" type="submit" formaction="">SEND</button>
+                                   </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             <!-- CONTENT -->
             <div id="scroll-to" class="clearfix">
@@ -189,7 +270,7 @@
                 <div class="container">
                     <div class="ftr-title">©2018 Digital & Marketing Solution PH.All Rights Reserved</div>
                     <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
-                </div>                    
+                </div>
             </div>
 
         @include("frontend.gfoot")
@@ -210,10 +291,10 @@
 
         <script type="text/javascript">
             $window = $(window);
-            $window.scroll(function() 
+            $window.scroll(function()
             {
               $scroll_position = $window.scrollTop();
-                if ($scroll_position > 100) { 
+                if ($scroll_position > 100) {
                     $('.header-container').addClass('header-fixed');
 
                     header_height = $('.your-header').innerHeight();
@@ -233,10 +314,10 @@
                 event.preventDefault();
             });
         </script>
-        <script> 
-          $(window).load(function() { 
-            $.fn.lightspeedBox(); 
-          }); 
+        <script>
+          $(window).load(function() {
+            $.fn.lightspeedBox();
+          });
         </script>
         <script>
             $(document).ready(function(){

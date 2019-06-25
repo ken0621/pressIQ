@@ -380,7 +380,7 @@
             </div>
         </div>
     </section>
-    
+
 	<!-- SCROLL TO TOP -->
 	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
@@ -411,6 +411,3 @@
     })
 </script>
 @endsection
-
-
-

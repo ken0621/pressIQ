@@ -268,7 +268,7 @@
             </footer>
             <div class="bottom">
                 <div class="container">
-                    <div class="ftr-title">©2018 Digital & Marketing Solution PH.All Rights Reserved</div>
+                    <div class="ftr-title">©2018 Digital & Marketing Solution Inc. All Rights Reserved</div>
                     <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
                 </div>
             </div>

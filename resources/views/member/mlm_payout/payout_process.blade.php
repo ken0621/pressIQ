@@ -51,6 +51,7 @@
                                 <option value="bank">Bank</option>
                                 <option value="bank">Cheque</option>
                                 <option value="palawan_express">Palawan Express</option>
+                                <option value="paymaya">Paymaya</option>
                                 <option value="coinsph">COINS.PH</option>
                             </select>
                         </div>

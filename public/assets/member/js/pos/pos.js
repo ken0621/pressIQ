@@ -693,12 +693,22 @@ function toggle_destination(className)
     {
     	$(className).slideUp();
     }
+
+    if($('.wis-click').prop('checked'))
+    {
+    	$(".use_product_code_box").hide();
+    }
+    else 
+    {
+        $(".use_product_code_box").show();
+    }
 }
 function select_payment(type = '')
 {
 
 	$('.btn-payment').addClass('btn-custom-white');
-	$('.input-payment-method').val(type);
+	$valtype = type.replace("-"," ");
+	$('.input-payment-method').val($valtype);
 
 	$('.method_types').css('display','none');
 	$('#method_type_'+type).css('display','block');

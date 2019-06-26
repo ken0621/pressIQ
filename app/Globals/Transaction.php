@@ -260,7 +260,7 @@ class Transaction
     public static function insert_payment($shop_id, $transaction_id, $method = array(), $amount = array())
     {
     }
-    public static function consume_in_warehouse($shop_id, $transaction_list_id, $remarks = 'Enroll kit', $get_to_warehouse = 0)
+    public static function consume_in_warehouse($shop_id, $transaction_list_id, $remarks = 'Enroll kit', $get_to_warehouse = 0, $slot_id = 0,$use_product_code = "no")
     {
         $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
         if($get_to_warehouse != 0)
@@ -272,6 +272,13 @@ class Transaction
         
         $consume['name'] = 'transaction_list';
         $consume['id'] = $transaction_list_id;
+
+        if($slot_id != 0 && $use_product_code == "yes")
+        {
+            $consume['is_cashier'] = 1;
+            $consume['slot_id'] = $slot_id;
+        }
+
         foreach ($get_item as $key => $value) 
         {
             $item_type = Item::get_item_type($value->item_id);

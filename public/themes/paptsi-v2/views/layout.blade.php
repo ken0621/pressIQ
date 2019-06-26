@@ -147,7 +147,7 @@
                 <div class="upper row clearfix">
                     <div class="col-md-4">
                         <div class="footer-icon-container">
-                            <img src="\themes\paptsi-v2\img\paptsi-icon-footer.png">
+                            <img src="/themes/{{ $shop_theme }}/img/header-logo.jpg">
                         </div>
                         <div>
                             <p>Philippine Archipelago Ports and Terminal Services Inc. aims to be a key player in the industry of port operation and management. We provide safe, clean and convenient port facilities and passenger terminal buildings.</p>

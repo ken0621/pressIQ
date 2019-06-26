@@ -270,6 +270,10 @@ class MLM_PayoutController extends Member
 		{
 			$slot_query->where("customer_payout_method", "palawan_express");
 		}
+		if($method == "paymaya")
+		{
+			$slot_query->where("customer_payout_method", "paymaya");
+		}
 		if($method == "coinsph")
 		{
 			$slot_query->where("customer_payout_method", "coinsph");
@@ -341,6 +345,17 @@ class MLM_PayoutController extends Member
 			$_slot[$key]->display_net = Currency::format($compute_net);
 
 			if($method == "palawan_express")
+			{
+			 	$remittance_details = Tbl_mlm_slot_money_remittance::where('slot_id',$slot->slot_id)->first();
+			 	if($remittance_details)
+			 	{
+				 	$_slot[$key]->remittance_fname = $remittance_details->first_name;
+				 	$_slot[$key]->remittance_mname = $remittance_details->middle_name;
+				 	$_slot[$key]->remittance_lname = $remittance_details->last_name;
+				 	$_slot[$key]->remittance_contact_number = $remittance_details->contact_number;			 		
+			 	}
+			}
+			if($method == "paymaya")
 			{
 			 	$remittance_details = Tbl_mlm_slot_money_remittance::where('slot_id',$slot->slot_id)->first();
 			 	if($remittance_details)

@@ -137,7 +137,7 @@
 							</div>
 							<div class="border-holder"></div>
 							<div class="position-holder">
-								BOD / Vice President for IT
+								BOD
 							</div>
 						</div>
 					</div>
@@ -173,7 +173,7 @@
 							</div>
 							<div class="border-holder"></div>
 							<div class="position-holder">
-								BOD / Vice President for Finance
+								BOD / CFO
 							</div>
 						</div>
 					</div>
@@ -199,7 +199,7 @@
 			</div>	
 			
 			<div class="title-holder-2">
-				THE MANAGEMENT <span>TEAMS</span>
+				THE MANAGEMENT <span>TEAM</span>
 			</div>
 			<div class="org-chart-holder">
 				{{-- <div class="people">
@@ -221,6 +221,42 @@
 					</div>
 				</div> --}}
 				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/greeting-owner.jpg')">
+					</div>
+					<div class="info-box">
+						<a href="https://www.linkedin.com/in/arnold-arbillera-a84646159/">
+							<i class="fab fa-linkedin-in"></i>
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Arnold A. Arbillera
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								CEO
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="people">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/zenaida.jpg')">
+					</div>
+					<div class="info-box">
+						<a href="_blank">
+							<i class="fab fa-linkedin-in"></i>
+						</a>
+						<div class="info-container">
+							<div class="name-holder">
+								Zenaida M. Arbillera
+							</div>
+							<div class="border-holder"></div>
+							<div class="position-holder">
+								CFO
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="people">
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/saturn.jpg')">
 					</div>
 					<div class="info-box">
@@ -233,12 +269,12 @@
 							</div>
 							<div class="border-holder"></div>
 							<div class="position-holder">
-								Director, Operations Department
+								Operations Manager
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="people">
+				{{-- <div class="people">
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/ramil.jpg')">
 					</div>
 					<div class="info-box">
@@ -255,8 +291,8 @@
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="people">
+				</div> --}}
+				{{-- <div class="people">
 					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/Quincy.jpg')">
 					</div>
 					<div class="info-box">
@@ -273,9 +309,9 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> --}}
 				<div class="people">
-					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/blank.jpg')">
+					<div class="image-holder" style="background-image: url('/themes/{{ $shop_theme }}/img/luisa.jpg')">
 					</div>
 					<div class="info-box">
 						<a href="_blank">
@@ -287,7 +323,7 @@
 							</div>
 							<div class="border-holder"></div>
 							<div class="position-holder">
-								Head, Business Development
+								Chief Marketing Officer
 							</div>
 						</div>
 					</div>

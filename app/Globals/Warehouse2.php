@@ -779,6 +779,25 @@ class Warehouse2
                 Warehouse2::insert_item_history($id);
                 Tbl_warehouse_inventory_record_log::where('record_log_id',$id)->update($insert);
                 session(['consume_offset_inventory' => null]);
+
+                if(isset($consume["is_cashier"]))
+                {
+                    if($consume["is_cashier"] == 1)
+                    {
+                        $purchase_inventory  = Tbl_warehouse_inventory_record_log::where("record_log_id",$id)->first();
+                        if($purchase_inventory)
+                        {
+                            $purchase_pin        = $purchase_inventory->mlm_pin;
+                            $purchase_activation = $purchase_inventory->mlm_activation;
+
+                            $update_to_consume['record_log_date_updated']   = Carbon::now();
+                            $update_to_consume['item_in_use']               = "used";
+                            Tbl_warehouse_inventory_record_log::where('record_log_id',$purchase_inventory->record_log_id)->update($update_to_consume);
+
+                            MLM2::purchase($shop_id, $consume['slot_id'], $purchase_inventory->record_item_id);
+                        }
+                    }
+                }
             }
             else
             {

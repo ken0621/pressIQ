@@ -41,6 +41,7 @@
 							<div><label><input {{ hasWord('cheque', $user_info->shop_payout_method) ? 'checked' : '' }} class="payout_method" value="cheque" type="checkbox" name="payout_method[]"> CHEQUE</label></div>
 							<div><label><input {{ hasWord('eon', $user_info->shop_payout_method) ? 'checked' : '' }} class="payout_method" value="eon" type="checkbox" name="payout_method[]"> EON</label></div>
 							<div><label><input {{ hasWord('palawan_express', $user_info->shop_payout_method) ? 'checked' : '' }} class="payout_method" value="palawan_express" type="checkbox" name="payout_method[]"> PALAWAN EXPRESS</label></div>
+							<div><label><input {{ hasWord('paymaya', $user_info->shop_payout_method) ? 'checked' : '' }} class="payout_method" value="paymaya" type="checkbox" name="payout_method[]"> PAYMAYA</label></div>
 							<div><label><input {{ hasWord('coinsph', $user_info->shop_payout_method) ? 'checked' : '' }} class="payout_method" value="coinsph" type="checkbox" name="payout_method[]"> COINS.PH</label></div>
 						</div>
 						<div class="col-md-6">

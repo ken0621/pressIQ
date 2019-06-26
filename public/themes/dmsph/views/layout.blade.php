@@ -14,6 +14,7 @@
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
         <!-- GLOBAL CSS -->

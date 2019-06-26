@@ -1,0 +1,140 @@
+{
+	"home":
+	{
+		
+		"home_dms_banner" :
+        {
+            "label":"(Home) Home Banner",
+            "type":"image",
+            "default":"",
+            "size":"12"
+        },
+        "home_dms_about_whoweare" :
+        {
+            "label":"(About) Who We Are",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_about_whatwedo" :
+        {
+            "label":"(About) What We Do",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_about_vision" :
+        {
+            "label":"(About) Vision",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_about_mission" :
+        {
+            "label":"(About) Mission",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_productdesc_enterprise" :
+        {
+            "label":"(Product) Description Enterprise",
+            "type":"tinymce",
+            "default":"",
+            "size":"4"
+        },
+        "home_dms_productdesc_premier" :
+        {
+            "label":"(Product) Description Premier",
+            "type":"tinymce",
+            "default":"",
+            "size":"4"
+        },
+        "home_dms_productdesc_pro" :
+        {
+            "label":"(Product) Description Pro",
+            "type":"tinymce",
+            "default":"",
+            "size":"4"
+        },
+        "home_dms_expertise_1" :
+        {
+            "label":"(Expertise) Visible",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_expertise_2" :
+        {
+            "label":"(Expertise) Visible",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_expertise_3" :
+        {
+            "label":"(Expertise) Hidden",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_expertise_4" :
+        {
+            "label":"(Expertise) Hidden",
+            "type":"tinymce",
+            "default":"",
+            "size":"6"
+        },
+        "home_dms_relationship":
+		{
+			"label":"(Relationship) Our Partners",
+			"type":"gallery",
+			"default":"",
+			"size":"12"
+		},
+		"home_dms_contact_map":
+		{
+			"label":"(Contact) Map",
+			"type":"textbox",
+			"default":"",
+			"size":"12"
+		},
+		"home_dms_contact_businesshour":
+		{
+			"label":"(Contact) Business Hours",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"home_dms_contact_email":
+		{
+			"label":"(Contact) Email",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"home_dms_contact_landline":
+		{
+			"label":"(Contact) Landline Number",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"home_dms_contact_phonenumber":
+		{
+			"label":"(Contact) Phone Number",
+			"type":"tinymce",
+			"default":"",
+			"size":"6"
+		},
+		"home_dms_contact_address":
+		{
+			"label":"(Contact) Adress",
+			"type":"tinymce",
+			"default":"",
+			"size":"12"
+		}
+	}
+}
+	

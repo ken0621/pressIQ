@@ -15,13 +15,13 @@
 
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">   
+        <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet">
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
 
         @include("frontend.ghead")
-        
+
         <!-- OTHER CSS -->
         @yield("css")
         <style type="text/css">
@@ -45,7 +45,7 @@
         <div id="overlay" onclick="off()"></div>
 
         <div class="side-nav">
-            
+
             <nav class="pushmenu pushmenu-left">
 
                 @if($customer)
@@ -80,7 +80,7 @@
                     <li onclick="off()"> <a class="smoth-scroll" href="/#mission-vision"><i class="fa fa-rocket" aria-hidden="true"></i> MISSION & VISION</a></li>
                     <li onclick="off()"> <a class="smoth-scroll" href="/#products"><i class="fa fa-list-ul" aria-hidden="true"></i> PRODUCTS</a></li>
                 </ul>
-                
+
                 <div class="space2"></div>
                 <span>MEMBER'S AREA</span>
                 <ul class="links">
@@ -136,7 +136,7 @@
                         <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/login'">LOGIN</span>
                         <span class="smoth-scroll" style="cursor: pointer;" onClick="location.href='/members/register'">REGISTER</span>
                     </div>
-                     @endif 
+                     @endif
                 </div>
             </div>
 
@@ -151,7 +151,7 @@
                             </div> -->
                             <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
                             <div class="image-logo-holder">
-                                <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/header-logo.png"></a>                       
+                                <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/header-logo.png"></a>
                             </div>
                         </div>
                         <div class="col-md-10">
@@ -167,7 +167,7 @@
                                         <li><a class="smoth-scroll" href="/#home">HOME</a></li>
                                         <li><a class="smoth-scroll" href="/#aboutus">ABOUT US</a></li>
                                         <li><a class="smoth-scroll" href="/#mission-vision">MISSION & VISION</a></li>
-                                        <li><a class="smoth-scroll" href="/#products">PRODUCTS</a></li>    
+                                        <li><a class="smoth-scroll" href="/#products">PRODUCTS</a></li>
                                     @else
                                         <li><a class="smoth-scroll" href="#home">HOME</a></li>
                                         <li><a class="smoth-scroll" href="#aboutus">ABOUT US</a></li>
@@ -183,8 +183,8 @@
                         </div>
                     </div>
                 </div>
-            </div> 
-            
+            </div>
+
             <!-- CONTENT -->
             <div id="scroll-to" class="clearfix">
                @yield("content")
@@ -232,7 +232,7 @@
                                         <p class="footer-detail-list">Disclaimer</p>
                                     </a>
                                     <a href="javascript:">
-                                       <p class="footer-detail-list">Terms & Condition</p> 
+                                       <p class="footer-detail-list">Terms & Condition</p>
                                     </a>
                                     <a href="javascript:">
                                         <p class="footer-detail-list">Privacy Policy</p>
@@ -248,31 +248,31 @@
                                 </div>
                                 <div class="jca-footer-details-container">
 
-                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_marketing_plan") }}" class="lsb-preview"> 
+                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_marketing_plan") }}" class="lsb-preview">
                                         <p class="footer-detail-list">Marketing Plan</p>
                                     </a>
-                                    
-                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_packages") }}" class="lsb-preview"> 
+
+                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_packages") }}" class="lsb-preview">
                                         <p class="footer-detail-list">Packages</p>
                                     </a>
-                                    
-                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_service_packages") }}" class="lsb-preview"> 
+
+                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_service_packages") }}" class="lsb-preview">
                                         <p class="footer-detail-list">Service Packages</p>
                                     </a>
 
-                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_packages") }}" class="lsb-preview"> 
+                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_packages") }}" class="lsb-preview">
                                         <p class="footer-detail-list">Product Packages</p>
                                     </a>
-                                    
-                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_sales_commission") }}" class="lsb-preview"> 
+
+                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_sales_commission") }}" class="lsb-preview">
                                         <p class="footer-detail-list">Sales Commission</p>
                                     </a>
 
-                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_override_sales_commission") }}" class="lsb-preview"> 
+                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_override_sales_commission") }}" class="lsb-preview">
                                         <p class="footer-detail-list">Overide Sales Commission</p>
                                     </a>
 
-                                    <a href="/terms_and_conditions"> 
+                                    <a href="/terms_and_conditions">
                                         <p class="footer-detail-list">General Terms and Conditions</p>
                                     </a>
 
@@ -283,39 +283,39 @@
                                     <p class="footer-title">Product Portfolio</p>
                                 </div>
                                 <div class="jca-footer-details-container">
-                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_portfolio1") }}" class="lsb-preview"> 
+                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_portfolio1") }}" class="lsb-preview">
                                         <p class="footer-detail-list">Swiss Apple Stem Cell Serum</p>
                                     </a>
-                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_portfolio2") }}" class="lsb-preview"> 
+                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_portfolio2") }}" class="lsb-preview">
                                         <p class="footer-detail-list">Swiss Apple Stem Cell Soap with Glutathione and Collagen</p>
                                     </a>
-                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_portfolio3") }}" class="lsb-preview"> 
+                                    <a href="{{ get_content($shop_theme_info, "footer_details", "footer_product_portfolio3") }}" class="lsb-preview">
                                         <p class="footer-detail-list">Stem Cell Therapy- The Anti-Aging and Rejuvenation Therapy</p>
                                     </a>
                                 </div>
-                            </div> 
+                            </div>
                         </div>
                     </div>
                 </div>
             </footer>
 
             <div class="container">
-                <div class="bottom">                           
+                <div class="bottom">
                     <div class="ftr-title">© JCA Wellness International Corp. All Right Reserved</div>
                     <div class="ftr-title-2">Powered By: DIGIMA WEB SOLUTIONS, Inc.</div>
                 </div>
             </div>
         </div>
-        
+
         @include("frontend.gfoot")
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/global.js"></script>
         <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/theme_custom.js"></script>
 
         @yield("script")
-        <script> 
-          $(window).load(function() { 
-            $.fn.lightspeedBox(); 
-          }); 
-        </script> 
+        <script>
+          $(window).load(function() {
+            $.fn.lightspeedBox();
+          });
+        </script>
     </body>
 </html>

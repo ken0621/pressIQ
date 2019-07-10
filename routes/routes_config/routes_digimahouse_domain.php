@@ -126,7 +126,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('importExport', 										'Shop\ShopMemberController@importExport');//PRESS RELEASE
 	Route::get('downloadExcel/{type}',  							'Shop\ShopMemberController@downloadExcel');//PRESS RELEASE
 	Route::post('importExcel', 										'Shop\ShopMemberController@importExcel');//PRESS RELEASE
-	
 
 	Route::get('/announcement', 'Shop\ShopAboutController@announcement'); //Alternative
 	Route::get('/blog', 'Shop\ShopBlogController@index');

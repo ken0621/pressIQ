@@ -151,7 +151,7 @@ function add_search_events()
 
     $(".search-input").on('keyup',function()
     {
-        
+        var dakey = $(this).val();   
         request.abort();
         
         $('.live-search-result-content').empty();
@@ -229,7 +229,7 @@ function add_search_events()
                         {
                             $append += '<div class="search-popup-holder">' +
                                         '<div class="see-all-results">'+
-                                            '<a href="/product?search='+$(".search-input").val()+'">View more results</a>'+
+                                            '<a href="/product?search='+dakey+'">View more results</a>'+
                                         '</div>'+
                                    '</div>';
                             

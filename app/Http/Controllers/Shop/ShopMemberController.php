@@ -242,7 +242,12 @@ class ShopMemberController extends Shop
         if(Self::$customer_info)
         {
             $data = MLM2::customer_income_summary2($this->shop_info->shop_id, Self::$customer_info->customer_id);
-            
+            $slot = Tbl_mlm_slot::where("slot_owner", Self::$customer_info->customer_id)->get();
+            foreach ($slot as $key => $value) 
+            {
+                $data["total_cheque"][$value->slot_no] = Tbl_mlm_slot_wallet_log::where("shop_id", $this->shop_info->shop_id)->where("wallet_log_slot", $value->slot_id)->where("wallet_log_plan", "CHEQUE")->sum("wallet_log_amount");
+            }
+
             return Self::load_view_for_members("member.summary", $data);
         }
         else
@@ -590,6 +595,52 @@ class ShopMemberController extends Shop
         });
         Session::flash('message_concern', 'Message Successfully Sent!');
         return Redirect::back();
+    }
+
+    public function send_contact_us_shell()
+    {
+        $shell_contactus["contactus_first_name"]         =request('contactus_first_name');
+        $shell_contactus["contactus_last_name"]          =request('contactus_last_name');
+        $shell_contactus["contactus_phone_number"]       =request('contactus_phone_number');
+        $shell_contactus["contactus_subject"]            =request('contactus_subject');
+        $shell_contactus["contactus_email"]              =request('contactus_email');
+        $shell_contactus["contactus_message"]            =request('contactus_message');
+        $shell_contactus["contactus_to"]                 =request('contactus_to');
+
+        $shell_contactus["explode_email"] = explode("@", $shell_contactus['contactus_email']);
+        Mail::send('email.contact_us',$shell_contactus, function($message) use ($shell_contactus)
+        {
+            $message->from('no-reply@digimahouse.com',$shell_contactus['contactus_email']);
+            $message->to("shellcanvasbuendia@gmail.com");  
+            // $message->to("carlosegovia5@gmail.com");  
+            $message->subject($shell_contactus['contactus_subject']);
+           
+        });
+        Session::flash('message_concern_shell', 'Message Successfully Sent!');
+        return Redirect::to('/#contact');  
+    }
+
+    public function send_contact_us_living()
+    {
+        $living_contactus["contactus_first_name"]         =request('contactus_first_name');
+        $living_contactus["contactus_last_name"]          =request('contactus_last_name');
+        $living_contactus["contactus_phone_number"]       =request('contactus_phone_number');
+        $living_contactus["contactus_subject"]            =request('contactus_subject');
+        $living_contactus["contactus_email"]              =request('contactus_email');
+        $living_contactus["contactus_message"]            =request('contactus_message');
+        $living_contactus["contactus_to"]                 =request('contactus_to');
+
+        $living_contactus["explode_email"] = explode("@", $living_contactus['contactus_email']);
+        Mail::send('email.contact_us',$living_contactus, function($message) use ($living_contactus)
+        {
+            $message->from('no-reply@digimahouse.com',$living_contactus['contactus_email']);
+            $message->to("franchising_livingwater@yahoo.com.ph");  
+            // $message->to("cyrilmea@gmail.com");  
+            $message->subject($living_contactus['contactus_subject']);
+           
+        });
+        Session::flash('message_concern_living', 'Message Successfully Sent!');
+        return Redirect::to('/#contact');  
     }
                     
     public function send_demo()                             
@@ -4337,7 +4388,7 @@ class ShopMemberController extends Shop
         $data["_payment"]   = $_payment = Payment::get_list($shop_id);
         $data["_locale"]    = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
         $data["cart"]       = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
-        
+        $data["_slot"]    = Tbl_mlm_slot::where('slot_owner', Self::$customer_info->customer_id)->membership()->get();
         if(!Self::$customer_info)
         {
             $store["checkout_after_register"] = true;
@@ -4353,9 +4404,10 @@ class ShopMemberController extends Shop
     }
     public function postCheckout()
     {
-        $shop_id  = $this->shop_info->shop_id;
-        $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
-        $cart = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
+        $shop_id        = $this->shop_info->shop_id;
+        $warehouse_id   = Warehouse2::get_main_warehouse($shop_id);
+        $customer_id    = isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null;
+        $cart           = Cart2::get_cart_info($customer_id);
         $validate = null;
         if($cart)
         {   
@@ -4368,7 +4420,6 @@ class ShopMemberController extends Shop
                 }
             }
         }
-
         if(!$validate)
         {
             /* Update Address */
@@ -4411,7 +4462,14 @@ class ShopMemberController extends Shop
             
             Transaction::create_set_method($method);
             Transaction::create_set_method_id($method_id);
-            $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
+            if($customer_id)
+            {
+                $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-",null, null, $customer_id);
+            }
+            else
+            {
+                $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, "-");
+            }
 
             if(is_numeric($transaction_list_id))
             {

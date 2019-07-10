@@ -397,6 +397,7 @@
                                 </div>
                                 <div class="pull-right">
                                     <!-- <button type="button" class="btn btn-custom-white" data-dismiss="modal">Cancel</button> -->
+                                    <button type="button" class="btn btn-danger" id="delete-selected-image">Delete Selected Image</button>
                                     <button type="button" class="btn btn-primary" id="get-selected-image">Get Selected Image</button>
                                 </div>
                             </div>

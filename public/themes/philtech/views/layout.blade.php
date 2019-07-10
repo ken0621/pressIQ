@@ -20,6 +20,8 @@
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
 
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+
         <!-- GLOBAL CSS -->
         @include("frontend.ghead")
 
@@ -52,16 +54,38 @@
                     <div class="holder">
                         <div class="dropdown">
                           <a class="">BUSINESS PRESENTATION <span><i class="fa fa-angle-down"></i></span></a>
-                          <div class="dropdown-content">
-                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}">MERCHANT PRESENTATION</a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PRIVILEGE CARD PRESENTATION</a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}">MARKETING PLAN PRESENTATION</a>
-                          </div>
+                              <div class="dropdown-content">
+                                @if($slot_membership == 1)
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}">MERCHANT PRESENTATION</a>
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PAYMAYA PRESENTATION</a>
+                                @else 
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}">MERCHANT PRESENTATION</a>
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PAYMAYA PRESENTATION</a>  
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}">MARKETING PLAN PRESENTATION</a>
+                                @endif
+                              </div>
                         </div>
                     </div>
                     @else
-                    <div class="holder"><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a></div>
+                        {{-- @if($customer) --}}
+                        <div class="holder">
+                            {{-- <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a> --}}
+                            <div class="dropdown">
+                                <a class="">BUSINESS PRESENTATION <span><i class="fa fa-angle-down"></i></span></a>
+                                <div class="dropdown-content">
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}">MERCHANT PRESENTATION</a>
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PAYMAYA PRESENTATION</a>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- @else
+                        <div class="holder">
+                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>  
+                        </div>  
+                        @endif --}}
                     @endif
                     <div class="holder"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
 
@@ -142,9 +166,9 @@
                 <ul class="nav navbar-nav">
                     <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
                     <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR MERCHANTS</a></li>
-                    <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li> 
+                    <li class="nav-border"><a href="https://www.cashbackworld.com/ph-en/registration/taflink?r=6cW7UUNsyoLQfy3qV%2BLFXek98pBL1PKK3d%2Fs7QVm1wIGPQXqhpYHo8unCDKTwyHr&t=81dea562-0729-4d8f-82e8-35bb6349a1f8">CASHBACK SYSTEM</a></li> 
                     <li class="nav-border"><a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb">HOTEL BOOKING</a></li>
-                    <li class="nav-border"><a href="https://philtechglobalinc.vmoney.com">E-MONEY</a></li>
+                    <li class="nav-border"><a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwiZmvKj-5HhAhVNjY8KHXVSDzwYABAAGgJzYg&ae=1&ohost=www.google.com&cid=CAESEeD2Xc5bI6KoIrkYoBEWupwe&sig=AOD64_1EdtsBF_3V8idbJaCKzKDmTL2__w&q&adurl=https://www.paymaya.com/?gclid%3DCjwKCAjwycfkBRAFEiwAnLX5IUBbvQBsYFD2WZKJKI9uVllkDKBXiRyDMDU3slHbDklqbiCrnl7e5BoClbQQAvD_BwE&ved=2ahUKEwje0u2j-5HhAhX17nMBHSi3BgcQ0Qx6BAgMEAE">E-MONEY</a></li>
                     <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">CAREER</a></li>
                     <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">EVENTS</a></li>
                     <li class="nav-border {{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">LEGALITIES</a></li>
@@ -214,7 +238,7 @@
                         @foreach($_categories as $category)
                             <div class="links">                   
                                 @if($category['subcategory'])
-                                    <div class="shop-container">
+                                    <div class="shop-container" onClick="location.href='/product?type={{ $category['type_id'] }}'">
                                         {{ $category['type_name'] }}
                                     </div>
                                     <div class="subshop-container">
@@ -243,23 +267,30 @@
                     <ul class="links">
                             <a href="/"><li>HOME</li></a>
                             <a href="/partners"><li>OUR MERCHANTS</li></a>
-                            <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
+                            <a href="https://www.cashbackworld.com/ph-en/registration/taflink?r=6cW7UUNsyoLQfy3qV%2BLFXek98pBL1PKK3d%2Fs7QVm1wIGPQXqhpYHo8unCDKTwyHr&t=81dea562-0729-4d8f-82e8-35bb6349a1f8"><li>CASHBACK SYSTEM</li></a>
                             <a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb"><li>HOTEL BOOKING</li></a>
-                            <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
+                            <a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwiZmvKj-5HhAhVNjY8KHXVSDzwYABAAGgJzYg&ae=1&ohost=www.google.com&cid=CAESEeD2Xc5bI6KoIrkYoBEWupwe&sig=AOD64_1EdtsBF_3V8idbJaCKzKDmTL2__w&q&adurl=https://www.paymaya.com/?gclid%3DCjwKCAjwycfkBRAFEiwAnLX5IUBbvQBsYFD2WZKJKI9uVllkDKBXiRyDMDU3slHbDklqbiCrnl7e5BoClbQQAvD_BwE&ved=2ahUKEwje0u2j-5HhAhX17nMBHSi3BgcQ0Qx6BAgMEAE"><li>E-MONEY</li></a>
                             <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
                             <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
                             <a href="/legalities"><li>LEGALITIES</li></a>
                             <a href="/contact"><li>CONTACT US</li></a>
                             {{-- <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a> --}}
                             <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PAYMAYA PRESENTATION</li></a>
                             {{-- <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
+                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PAYMAYA PRESENTATION</li></a>
                             <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MARKETING PLAN PRESENTATION</li></a> --}}
                             @if($mlm_member)
                             {{-- <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a> --}}
-                            <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PRIVILEGE CARD PRESENTATION</li></a>
-                            <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MARKETING PLAN PRESENTATION</li></a>
+                                @if($slot_membership == 1)
+                                    {{-- <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PAYMAYA PRESENTATION</li></a> --}}
+                                @else
+                                    {{-- <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PAYMAYA PRESENTATION</li></a> --}}
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}"><li>MARKETING PLAN PRESENTATION</li></a>
+                                @endif
                             @endif
                         </ul>
                     <div class="space2"></div>
@@ -313,14 +344,16 @@
                     <ul class="links">
                         <a href="/"><li>HOME</li></a>
                         <a href="/partners"><li>OUR MERCHANTS</li></a>
-                        <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
+                        <a href="https://www.cashbackworld.com/ph-en/registration/taflink?r=6cW7UUNsyoLQfy3qV%2BLFXek98pBL1PKK3d%2Fs7QVm1wIGPQXqhpYHo8unCDKTwyHr&t=81dea562-0729-4d8f-82e8-35bb6349a1f8"><li>CASHBACK SYSTEM</li></a>
                         <a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb"><li>HOTEL BOOKING</li></a>
-                        <a href="https://philtechglobalinc.vmoney.com"><li>E-MONEY</li></a>
+                        <a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwiZmvKj-5HhAhVNjY8KHXVSDzwYABAAGgJzYg&ae=1&ohost=www.google.com&cid=CAESEeD2Xc5bI6KoIrkYoBEWupwe&sig=AOD64_1EdtsBF_3V8idbJaCKzKDmTL2__w&q&adurl=https://www.paymaya.com/?gclid%3DCjwKCAjwycfkBRAFEiwAnLX5IUBbvQBsYFD2WZKJKI9uVllkDKBXiRyDMDU3slHbDklqbiCrnl7e5BoClbQQAvD_BwE&ved=2ahUKEwje0u2j-5HhAhX17nMBHSi3BgcQ0Qx6BAgMEAE"><li>E-MONEY</li></a>
                         <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
                         <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
                         <a href="/legalities"><li>LEGALITIES</li></a>
                         <a href="/contact"><li>CONTACT US</li></a>
                         <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}"><li>BUSINESS PRESENTATION</li></a>
+                        <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}"><li>MERCHANT PRESENTATION</li></a>
+                        <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}"><li>PAYMAYA PRESENTATION</li></a>
                     </ul>
                 @endif
             </nav>
@@ -376,18 +409,17 @@
                         <div class="img-footer">
                             <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech.jpg">
                         </div>
-                        <p>PHILTECH, INC. “Business and Benefits”
-offers New Business Model and New Rewards System using New Generation of Advanced Technology. PHILTECH, INC. is a pioneer...<a style="color: #fff" href="/about">See more</a></p>
+                        <p>PHILTECH, INC. is a corporation company registered under the SEC with Trade Name PHILIPPINE TECHNOLOGY FOR ENTREPRENEURS AND CONSUMERS HUB, INC.  The company is...<a style="color: #fff" href="/about">See more</a></p>
                     </div> 
                     <div class="col-md-2 col-sm-6 match-height">
                         <div class="btm-title">INFORMATION</div>
                         <ul>
                             <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partner Merchants</a></li>
-                            <li><a href="https://loadcentral.net">E-loading Business</a></li>
+                            <li><a href="https://www.cashbackworld.com/ph-en/registration/taflink?r=6cW7UUNsyoLQfy3qV%2BLFXek98pBL1PKK3d%2Fs7QVm1wIGPQXqhpYHo8unCDKTwyHr&t=81dea562-0729-4d8f-82e8-35bb6349a1f8">CASHBACK SYSTEM</a></li>
                             <li><a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb">Hotel Booking</a></li>
                             {{-- <li><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></li>
                             <li><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></li> --}}
-                            <li><a href="https://philtechglobalinc.vmoney.com/">E-money</a></li>
+                            <li><a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwiZmvKj-5HhAhVNjY8KHXVSDzwYABAAGgJzYg&ae=1&ohost=www.google.com&cid=CAESEeD2Xc5bI6KoIrkYoBEWupwe&sig=AOD64_1EdtsBF_3V8idbJaCKzKDmTL2__w&q&adurl=https://www.paymaya.com/?gclid%3DCjwKCAjwycfkBRAFEiwAnLX5IUBbvQBsYFD2WZKJKI9uVllkDKBXiRyDMDU3slHbDklqbiCrnl7e5BoClbQQAvD_BwE&ved=2ahUKEwje0u2j-5HhAhX17nMBHSi3BgcQ0Qx6BAgMEAE">E-money</a></li>
                             <li><a href="javascript:" onClick="alert('Under Development');">Career</a></li>
                             <li><a href="javascript:" onClick="alert('Under Development');">Events</a></li>
                             <li class="{{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">Legalities</a></li>
@@ -408,9 +440,7 @@ offers New Business Model and New Rewards System using New Generation of Advance
                             <li><a href="javascript:">Electronics</a></li>
                             <li><a href="javascript:">Services</a></li>
                             <li><a href="javascript:">Entertainment</a></li>
-                            <li><a href="javascript:">Apparel</a></li>
                             <li><a href="javascript:">Accessories</a></li>
-                            <li><a href="javascript:">Health & Wellness</a></li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-6 match-height">
@@ -418,16 +448,16 @@ offers New Business Model and New Rewards System using New Generation of Advance
                         <table>
                             <tr>
                                 <td><img src="/themes/{{ $shop_theme }}/img/icon/location.png"></td>
-                                <td>PhilTECH Building, Gallera Road, Paseo de<br>Putik, Guiwan, Zamboanga City, Philippines</td>
+                                <td>{{ isset($company_info['company_address']) ? $company_info['company_address']->value : 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.' }}</td>
                             </tr>
                             <tr>
                                 <td><img src="/themes/{{ $shop_theme }}/img/icon/phone.png"></td>
-                                <td>Tel No. (062) 310-2256, Cel No. 0917-542- 2614<br>Tel No. (062) 310-2256, Cel No. 0917-542- 2614</td>
+                                <td>{{ isset($company_info['company_mobile']) ? $company_info['company_mobile']->value : '+44 870 888 88 88' }}</td>
                             </tr>
                             <tr>
                                 <td><img src="/themes/{{ $shop_theme }}/img/icon/email.png"></td>
                                 <td>
-                                    philtechglobal@yahoo.com<br>philtechglobalmainoffice@gmail.com
+                                    {{ isset($company_info['company_email']) ? $company_info['company_email']->value : 'youremailhere@company.com' }}
                                 </td>
                             </tr>
                         </table>

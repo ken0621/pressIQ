@@ -138,6 +138,13 @@
                                     <label class="radio-inline"><input type="radio" class="wis-click" onclick="toggle_destination('.warehouse-destination')"  name="consume_inventory" value="wis">WIS</label>
                                 </div>
                             </div>
+                            <div class="form-group use_product_code_box">
+                                <label class="control-label col-sm-4 text-right" for="email">Use Product Code</label>
+                                <div class="col-sm-8">
+                                    <label class="radio-inline"><input type="radio" name="use_product_code" checked value="yes">Yes</label>
+                                    <label class="radio-inline"><input type="radio" name="use_product_code" value="no">No</label>
+                                </div>
+                            </div>
                             <div class="form-group warehouse-destination" style="display: none">
                                 <label class="control-label col-sm-4 text-right" for="email">Warehouse Destination</label>
                                 <div class="col-sm-8 warehouse-container"> 
@@ -159,13 +166,68 @@
                                 @include('member.cashier.pos_payment_method')
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-4 text-right" for="email">Add Payment</label>
-                                <div class="col-sm-8">
+                                <label class="control-label col-sm-12 text-right" for="email">Add Payment</label>
+                                <input type="hidden" name="payment_method" class="input-payment-method" value="paymaya qr code">
+                                <input type="hidden" name="payment_method_type" class="payment_method_type" value="">
+                                <div class="col-sm-12">
+                                    @foreach($_method as $key=>$method)
+                                    @if($key == 0)
+                                    <a style="margin:5px 0px 5px 0px;" href="javascript:" class="btn btn-primary {{strtolower($method->payment_name)}} btn-payment" onClick="select_payment('{{strtolower($method->payment_name)}}')">{{$method->payment_name}}</a>
+                                    @else
+                                    <a style="margin:5px 0px 5px 0px;" href="javascript:" class="btn btn-custom-white {{str_replace(' ','-',strtolower($method->payment_name))}} btn-payment" onClick="select_payment('{{str_replace(' ','-',strtolower($method->payment_name))}}')">{{$method->payment_name}}</a>
+                                    @endif
+                                    @endforeach
+                                </div>
+                            
+                                    @foreach($_method as $key=>$method)
+                                    @if($key == 0)
+                                        <div class="col-sm-12 method_types" id="method_type_{{str_replace(' ','-',strtolower($method->payment_name))}}">
+                                            <label class="control-label col-sm-12 text-right" for="email">Method Type</label>
+                                            <select id="input-payment-method-type" class="form-control payment_type_change method_type_{{str_replace(' ','-',strtolower($method->payment_name))}}">
+                                                <option value="">Select Type</option>
+                                                @foreach($method->_type as $type)
+                                                <option>{{$type->payment_type_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @else
+                                        <div class="col-sm-12 method_types" id="method_type_{{str_replace(' ','-',strtolower($method->payment_name))}}" style="display:none;">
+                                            <label class="control-label col-sm-12 text-right" for="email">Method Type</label>
+                                            <select id="input-payment-method-type" class="form-control payment_type_change method_type_{{str_replace(' ','-',strtolower($method->payment_name))}}">
+                                                @foreach($method->_type as $type)
+                                                <option>{{$type->payment_type_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @endif
+                                    @endforeach
+                              
+                                {{-- <div class="col-sm-12">
                                     <input type="hidden" name="payment_method" class="input-payment-method" value="cash">
                                     <a href="javascript:" class="btn btn-primary cash btn-payment" onClick="select_payment('cash')">Cash</a>
                                     <a href="javascript:" class="btn btn-custom-white check btn-payment" onClick="select_payment('check')">Check</a>
                                     <a href="javascript:" class="btn btn-custom-white gc btn-payment" onClick="select_payment('gc')">GC</a>
                                     <a href="javascript:" class="btn btn-custom-white wallet btn-payment" onClick="select_payment('wallet')">Wallet</a>
+                                    <a href="javascript:" class="btn btn-custom-white others btn-payment" onClick="select_payment('others')">Others</a>
+                                </div>
+                                <div class="col-sm-12" id="method_type" style="display:none;">
+                                    <label class="control-label col-sm-12 text-right" for="email">Method Type</label>
+                                    <select name="payment_method_type" id="input-payment-method-type" class="form-control">
+                                        <option value="">SELECT TYPE</option>
+                                        <option>BDO</option>
+                                        <option>RCBC</option>
+                                        <option>PNB</option>
+                                        <option>BPI</option>
+                                        <option>PALAWAN EXPRESS</option>
+                                        <option>LBC</option>
+                                        <option>CEBUANA LHUILLIER</option>
+                                        <option>MLHUILLIER</option>
+                                        <option>RD PAWNSHOP</option>
+                                    </select>
+                                </div> --}}
+                                <div class="col-sm-12">
+                                    <label class="control-label col-sm-12 text-right" for="email">Remarks</label>
+                                    <textarea name="transaction_remark" id="transaction_remark" cols="10" rows="5" class="form-control"></textarea>
                                 </div>
                             </div>
                             <div class="form-group">

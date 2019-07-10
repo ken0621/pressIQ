@@ -119,68 +119,138 @@
 	},
 	"about":
 	{
-		"about_title" :
+		"about_title_1" :
 		{
-			"label":"About Title",
+			"label":"About Section1 Title Blue",
 			"type":"textbox",
-			"default":"Welcome to Shopshoshop.com",
-			"size":"12"
+			"default":"",
+			"size":"6"
 		},
-		"about_image" :
+		"about_title_2" :
 		{
-			"label":"About Image",
-			"type":"image",
+			"label":"About Section1 Title Orange",
+			"type":"textbox",
+			"default":"",
+			"size":"6"
+		},
+		"about_content_1" :
+		{
+			"label":"About Section1 Content",
+			"type":"tinymce",
 			"default":"",
 			"size":"12"
 		},
-		"about_content" :
+		"about_image_1" :
 		{
-			"label":"About Content",
-			"type":"textarea",
-			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue.",
-			"size":"12"
-		},
-		"about_mission_image" :
-		{
-			"label":"Mission Image",
+			"label":"About Section1 Author Image",
 			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"about_author" :
+		{
+			"label":"About Section1 Author Name",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_position" :
+		{
+			"label":"About Section1 Author Position",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_title_3" :
+		{
+			"label":"About Section2 Title Blue",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_title_4" :
+		{
+			"label":"About Section2 Title Orange",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_image_2" :
+		{
+			"label":"About Section2 Image",
+			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"about_content_2" :
+		{
+			"label":"About Section2 Content",
+			"type":"tinymce",
 			"default":"",
 			"size":"12"
 		},
-		"about_mission_title" : 
+		"about_mission_title_1" : 
 		{
-			"label":"Mission Title",
+			"label":"Mission Title Blue",
 			"type":"textbox",
-			"default":"Our Mission",
-			"size":"12"
+			"default":"",
+			"size":"6"
+		},
+		"about_mission_title_2" : 
+		{
+			"label":"Mission Title Orange",
+			"type":"textbox",
+			"default":"",
+			"size":"6"
 		},
 		"about_mission_content" :
 		{
 			"label":"Mission Content",
-			"type":"textarea",
-			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.",
-			"size":"12"
-		},
-		"about_vision_image" :
-		{
-			"label":"Vision Image",
-			"type":"image",
+			"type":"tinymce",
 			"default":"",
 			"size":"12"
 		},
-		"about_vision_title" :
+		"about_vision_title_1" :
 		{
-			"label":"Vision Title",
+			"label":"Vision Title Blue",
 			"type":"textbox",
-			"default":"Our Vision",
-			"size":"12"
+			"default":"",
+			"size":"6"
+		},
+		"about_vision_title_2" :
+		{
+			"label":"Vision Title Orange",
+			"type":"textbox",
+			"default":"",
+			"size":"6"
 		},
 		"about_vision_content" :
 		{
 			"label":"Vision Content",
-			"type":"textarea",
-			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.",
+			"type":"tinymce",
+			"default":"",
 			"size":"12"
+		},
+		"about_corevalues_title_1" :
+		{
+			"label":"CoreValues Title Blue",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_corevalues_title_2" :
+		{
+			"label":"CoreValues Title Orange",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_corevalues_image" :
+		{
+			"label":"CoreValues Image",
+			"type":"image",
+			"default":"",
+			"size":"4"
 		}
 	},
 	"contact":

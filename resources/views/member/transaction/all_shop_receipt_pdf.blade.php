@@ -132,17 +132,21 @@
                         @else
                          <div class="payment-detail pull-left">
                             <div class="rows"><strong>Payment Date :</strong> {{date('M d, Y',strtotime($list->transaction_date_created))}}</div>
-                            <div class="rows" ><strong>Payment Type :</strong> </div>
+                            <div class="rows" ><strong>Payment Method :</strong> </div>
                             @if(count($_payment_list) > 0)
                                 @foreach($_payment_list as $payment)
                                 <div class="rows">
                                     <div class="{{$total_tendered += $payment->transaction_payment_amount}}" style="width:750px;margin-left: 30px;">
-                                        <span style="width: 375px">{{strtoupper($payment->transaction_payment_type)}}</span>
+                                        <span style="width: 375px">{{strtoupper($payment->transaction_payment_type)}}({{strtoupper($list->transaction_payment_method_type)}})</span>
                                         <span  class="pull-right" style="width: 175px">{{currency('',$payment->transaction_payment_amount)}}</span>
                                     </div>
                                 </div>
                                 @endforeach
                             @endif
+                            <div class="rows" ><strong>Remarks :</strong> </div>
+                            <div class="rows">
+                                <p class="text-center">{{$list->transaction_remark}}</p>
+                            </div>
                         </div>
                         @endif
                     </div>

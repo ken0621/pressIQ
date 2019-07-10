@@ -149,7 +149,7 @@
          <div class="single-detail-content">
             <div class="single-detail-review min-300 hide">
                 <?PHP    
-                $url = $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+                $url = URL::to($_SERVER['REQUEST_URI']);
                 echo "<div class='fb-comments' data-href='$url' data-num-posts='10' data-width='100%'></div>";
                 ?>
                <div id="prod-comments-header" style="display: none;">
@@ -353,6 +353,12 @@
 @section('css')
 
 <link rel="stylesheet" href="resources/assets/frontend/css/single-product.css">
+<style type="text/css">
+  .content .single-product-content .single-product-container .single-product-holder .single-order-content .single-order-description
+  {
+    white-space: normal;
+  }
+</style>
 
 <link rel="stylesheet" type="text/css" href="resources/assets/flexslider/css/flexslider.css">
 
@@ -370,68 +376,46 @@
     padding: 5px !important;
   }
 }
+
+.fb-comments iframe
+{
+    width: 100% !important;
+}
 </style>
 
 @endsection
 
 @section('meta')
 
-<meta property="og:url" content="{{'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']}}" />
+<meta property="og:url" content="{{ URL::to($_SERVER['REQUEST_URI']) }}" />
 
-<meta property="og:type" content="og:product" />
+<meta property="og:type" content="article" />
 
-<meta property="og:title" content="" />
+<meta property="og:title" content="{{ $product['eprod_name'] }}" />
 
-<meta property="og:image" content = ""/>
+<meta property="og:image" content = "{{ URL::to($product['variant'][0]['variant_image'][0]['image_path']) }}"/>
 
-<meta property="og:description" content=""/>
+<meta property="og:description" content="{{ $product['eprod_details'] ? strip_tags($product['eprod_details']) : "Placeholder description" }}"/>
 
 <meta property="product:price:currency"    content="PHP"/>
 
-<meta property="product:price:amount" content="" />
+<meta property="product:price:amount" content="{{ $product['variant'][0]['evariant_price'] }}" />
 
 <meta property="fb:app_id" content="1920870814798104" />
 
 @endsection
 
 @section('social-script')
-
-<div id="fb-root"></div>
-
-<script type="text/javascript">
-
-
-
-      window.fbAsyncInit = function() {
-
-        FB.init({
-
-          appId      : '995401150483992',
-
-          xfbml      : true,
-
-          version    : 'v2.3'
-
-        });
-
-      };
-
-
-
-      (function(d, s, id){
-
-         var js, fjs = d.getElementsByTagName(s)[0];
-
-         if (d.getElementById(id)) {return;}
-
-         js = d.createElement(s); js.id = id;
-
-         js.src = "//connect.facebook.net/en_US/sdk.js";
-
-         fjs.parentNode.insertBefore(js, fjs);
-
-       }(document, 'script', 'facebook-jssdk'));
-
+<script>
+$(".fb-comments").attr("data-href", window.location.href);
 </script>
 
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=1920870814798104&autoLogAppEvents=1';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 @endsection

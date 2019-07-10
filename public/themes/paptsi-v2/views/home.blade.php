@@ -270,7 +270,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="title-container">Location:</div>
-                    <div class="contact-info"><i class="fa fa-map-marker" aria-hidden="true"></i><span>{!! get_content($shop_theme_info, "home", "home_company_address") !!}</span></div>
+                    <div class="contact-info"><i class="fa fa-map-marker" aria-hidden="true"></i><span>{!! get_content($shop_theme_info, "contact_details", "contact_company_address") !!}</span></div>
                     <div class="title-container">Email Address:</div>
                     <div class="contact-info"><i class="fa fa-envelope" aria-hidden="true"></i><span>{!! get_content($shop_theme_info, "home", "home_company_email-address") !!}</span></div>
                     <div class="title-container">Contact Number:</div>

@@ -1,77 +1,160 @@
 @extends("layout")
 @section("content")
 <div class="content">
-	   <div class="main-container">
-        
-        </div>
-        <div class="top-1-container">
+    <div class="top-1-container">
             <div class="container">
                 <div class="prod-container">
                     <div class="row clearfix">
-                        <div class="product-list-holder col-md-12 col-sm-12 col-xs-12">
-                            <div class="prod-list-container">
-                                <div class="title-container">All Products<div class="line-bot"></div></div>
-                                <div class="prod-list">
-                                    <div class="row-no-padding clearfix">
-                                        @if(count($_product) > 0)
-                                            @foreach($_product as $product)
-                                            <div class="col-md-2 col-sm-4 col-xs-6 prod-border">
-                                                @if($mlm_member)
-                                                    <div class="prod-holder match-height" style="cursor: pointer;" onClick="location.href='/product/view2/{{ $product['eprod_id'] }}'">
-                                                        <div class="prod-image prod-holder-member">
-                                                            <div class="prod-overlay">
-                                                                <div class="border">
-                                                                    <div class="top">
-                                                                        <div class="label"><i class="fa fa-tag"></i> Member’s Price</div>
-                                                                        <div class="price">{{ $product['variant'][0]['item_price'] }}</div>
-                                                                    </div>
-                                                                    <div class="bottom">
-                                                                        <div class="label"><i class="fa fa-star"></i> Point Value</div>
-                                                                        @if(isset($product['pv']))
-                                                                        <div class="point">{{$product['pv']['UNILEVEL_TW']}}</div>
-                                                                        @endif
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <img src="{{ get_product_first_image($product) }}">
-                                                        </div>
-                                                        <div class="details-container">
-                                                            <div class="prod-name">{{ get_product_first_name($product) }}</div>
-                                                            <div class="prod-price">{{ get_product_first_price($product) }}</div>
-                                                        </div>
-                                                        <div class="btn-container">
-                                                            <button class="btn-red" onClick="location.href='/product/view2/{{ $product['eprod_id'] }}'">SHOP NOW</button>
-                                                        </div>
-                                                    </div>
-                                                @else
-                                                    <div class="prod-holder match-height" style="cursor: pointer;" onClick="location.href='/product/view2/{{ $product['eprod_id'] }}'">
-                                                        <div class="prod-image">
-                                                            <img src="{{ get_product_first_image($product) }}">
-                                                        </div>
-                                                        <div class="details-container">
-                                                            <div class="prod-name">{{ get_product_first_name($product) }}</div>
-                                                            <div class="prod-price">{{ get_product_first_price($product) }}</div>
-                                                        </div>
-                                                        <div class="btn-container">
-                                                            <button class="btn-red" onClick="location.href='/product/view2/{{ $product['eprod_id'] }}'">SHOP NOW</button>
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            @endforeach
-                                        @else
-                                           <div class="col-md-3" >
-                                                <strong>"NO ITEMS FOUND"</strong>
-                                           </div>
-                                        @endif
-                                    </div>
+                        <div class="cat-promo-holder col-md-3 col-sm-3 col-xs-4">
+                            <!-- PRODUCT CATEGORIES -->
+                            <div class="cat-container">
+                                <div class="cat-title-container">
+                                    <span><i class="fa fa-bars" aria-hidden="true"></i></span>
+                                    <span>Categories</span>
+                                </div>
+                                <div class="cat-list-container">
+                                    @if(count($_category) > 0)
+                                        @foreach($_category as $category)
+                                            <div class="cat-list {{ $category['type_id'] == Request::input('type') ? 'active' : '' }}" onClick="location.href='/product?type={{ $category['type_id'] }}'">{{ $category['type_name'] }}</div>
+                                        @endforeach
+                                    @else
+                                        <div class="cat-list">Beauty Skin Care</div>
+                                        <div class="cat-list">Food Supplement</div>
+                                        <div class="cat-list">Healthy Drinks</div>
+                                        <div class="cat-list">Business Packages</div>
+                                        <div class="cat-list">Retail Packages</div>
+                                    @endif
                                 </div>
                             </div>
+                            <!-- PROMO CONTAINER -->
+                            {{-- <div class="promo-container">
+                                <div class="title-container">Promo</div>
+                                <div class="promo-content">
+                                    <img src="/themes/{{ $shop_theme }}/img/promo-img.png">
+                                    <div class="learn-more-button">LEARN MORE</div>
+                                </div>
+                            </div> --}}
+                        </div>
+                        <div class="product-list-holder col-md-9 col-sm-12 col-xs-12">
+                            <div class="prod-list-container">
+                                <div class="title-container">PRODUCT AND SERVICES<div class="line-bot"></div></div>
+                                <div class="prod-list row clearfix">
+                                    <!-- PER ITEM -->
+                                    @if(count($_product) > 0)
+                                        @foreach($_product as $product)
+                                        <a {{-- href="/product/view2/{{ $product['eprod_id'] }}" --}}
+                                        data-fancybox="images" href="{{ get_product_first_image($product) }}">
+                                            <div class="col-md-4 col-sm-4 col-xs-6">
+                                                <div class="per-item">
+                                                    <div class="image-container">
+                                                        <img class="1-1-ratio" src="{{ get_product_first_image($product) }}">
+                                                    </div>
+                                                    <div class="detail-container">
+                                                        <div class="item-name">
+                                                            {{ get_product_first_name($product) }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        @endforeach
+                                    @else
+                                        <a href="/product/view/test">
+                                            <div class="col-md-4 col-sm-4 col-xs-6">
+                                                <div class="per-item">
+                                                    <div class="image-container">
+                                                        <img src="/themes/{{ $shop_theme }}/img/item-sample.png">
+                                                    </div>
+                                                    <div class="detail-container">
+                                                        <div class="item-name">
+                                                            3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a href="/product/view/test">
+                                            <div class="col-md-4 col-sm-4 col-xs-6>
+                                                <div class="per-item">
+                                                    <div class="image-container">
+                                                        <img src="/themes/{{ $shop_theme }}/img/item-sample.png">
+                                                    </div>
+                                                    <div class="detail-container">
+                                                        <div class="item-name">
+                                                            3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a href="/product/view/test">
+                                            <div class="col-md-4 col-sm-4 col-xs-6">
+                                                <div class="per-item">
+                                                    <div class="image-container">
+                                                        <img src="/themes/{{ $shop_theme }}/img/item-sample.png">
+                                                    </div>
+                                                    <div class="detail-container">
+                                                        <div class="item-name">
+                                                            3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a href="/product/view/test">
+                                            <div class="col-md-4 col-sm-4 col-xs-6">
+                                                <div class="per-item">
+                                                    <div class="image-container">
+                                                        <img src="/themes/{{ $shop_theme }}/img/item-sample.png">
+                                                    </div>
+                                                    <div class="detail-container">
+                                                        <div class="item-name">
+                                                            3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a href="/product/view/test">
+                                            <div class="col-md-4 col-sm-4 col-xs-6">
+                                                <div class="per-item">
+                                                    <div class="image-container">
+                                                        <img src="/themes/{{ $shop_theme }}/img/item-sample.png">
+                                                    </div>
+                                                    <div class="detail-container">
+                                                        <div class="item-name">
+                                                            3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a href="/product/view/test">
+                                            <div class="col-md-4 col-sm-4 col-xs-6">
+                                                <div class="per-item">
+                                                    <div class="image-container">
+                                                        <img src="/themes/{{ $shop_theme }}/img/item-sample.png">
+                                                    </div>
+                                                    <div class="detail-container">
+                                                        <div class="item-name">
+                                                            3XCELL Neuro Proprietary Herbal Bend Food Supplement Capsules
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pagination-bottom">
+                            {!! $_product->appends(Request::input())->render() !!}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 	<!-- SCROLL TO TOP -->
 	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>

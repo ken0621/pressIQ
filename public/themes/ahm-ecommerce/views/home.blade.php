@@ -1,6 +1,6 @@
 @extends("layout")
 @section("content")
-<div class="content">
+<!-- <div class="content">
 	<div class="home-wrapper">
 		<div class="container">
 			<div class="row clearfix">
@@ -72,7 +72,7 @@
 					</div>
 				</div>
 				<div class="col-md-9">
-					<!-- Swiper -->
+					// Swipper
 					<div class="swiper-container featured-swiper-container">
 					    <div class="swiper-wrapper">
 					        <div class="swiper-slide">
@@ -163,7 +163,7 @@
 					<div class="line"></div>
 				</div>
 			</div>
-			<!-- Swiper -->
+			// Swiper
 			<div class="swiper-container real-estate-container">
 			    <div class="swiper-wrapper">
 				    <div class="swiper-slide">
@@ -221,7 +221,7 @@
 				    	</div>
 				    </div>
 			    </div>
-			    <!-- Add Pagination -->
+			    // Add Pagination
 			    <div class="swiper-state-next">
 			    	<img src="/themes/{{ $shop_theme }}/img/arrow-right.png">
 			    </div>
@@ -414,7 +414,33 @@
 		</div>
 	</div>
 	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
-</div>
+</div> -->
+<div class="content">
+	<div class="wrapper">
+		<div class="container">
+			<div class="inner-child">
+				<div class="logo-container">
+					<img src="/themes/{{ $shop_theme }}/img/logo.png">
+				</div>
+				<h1>WE ARE COMING SOON</h1>
+				<p>
+					The largest Billionaire E-commerce Platform is now here in the Philippines! <br>
+					Stay tuned for something amazing.
+				</p>
+				<div class="icon-container">
+					<!-- <a data-tooltip="ahmtoken@gmail.com" class="icn"><img width="32" src="/themes/{{ $shop_theme }}/img/mail.svg"></a> -->
+					<a target="_blank" href="https://twitter.com/AHMToken" class="icn"><img width="32" src="/themes/{{ $shop_theme }}/img/twt.svg"></a>
+					<a target="_blank" href="https://www.instagram.com/ahm_token/" class="icn"><img width="32" src="/themes/{{ $shop_theme }}/img/ig.svg"></a>
+					<a target="_blank" href="https://t.me/ahmtoken" class="icn"><img width="32" src="/themes/{{ $shop_theme }}/img/tele.svg"></a>
+				</div>
+				<p class="coming-soon-ftr">
+					GAMES&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;GENERAL CONSULTANCY&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;HOLDING SERVICES&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;IT SERVICES&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;IMPORT & EXPORT SERVICES&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;MARKETING SERVICES&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;REAL ESTATE&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;TRADE & CRYPTOCURRENCY
+				</p>
+				<p style="color: #f86d18;">Email Us: ahmtoken@gmail.com</p>
+			</div>
+		</div>
+	</div>
+</div>	
 @endsection
 
 @section("css")

@@ -213,6 +213,9 @@ class ShopAboutController extends Shop
         return view("member.certificate", $data);
     }
 
-
-
+    public function karl_biography()
+    {
+        $data["page"] = "Biography";
+        return view("karl_biography", $data);
+    }
 }

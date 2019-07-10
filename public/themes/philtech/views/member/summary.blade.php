@@ -86,7 +86,7 @@
 									@if($plan->label == "Admin Refill" || $plan->label == "Vmoney" || $plan->label == "Wallet Refill" || $plan->label == "Wallet Transfer" || $plan->label == "Repurchase")
 									@else
 									@if($plan->label == "Membership Matching")
-									<th>Franchise Matching</th>
+									<th>Matching Bonus</th>
 									@elseif($plan->label == "Vmoney")
 									<th>E-Money</th>
 									@elseif($plan->label == "Direct")
@@ -137,6 +137,7 @@
 									@else		
 									@endif
 									@endforeach
+									<th>Cheque</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -148,6 +149,7 @@
 									<td>{{ number_format($wallet->{ $plan->string_plan }, 2) }}</td>
 									@endif
 									@endforeach
+									<td>{{ isset($total_cheque[$key]) ? number_format(abs($total_cheque[$key]),2) : 0.00 }}</td>
 								</tr>
 								@endforeach
 							</tbody>

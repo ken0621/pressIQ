@@ -23,7 +23,7 @@ class ShopPartnersController extends Shop
 
 
         $data["_company_information"]  = Tbl_partners::orderBy('company_name', 'asc')->where("shop_id", $this->shop_info->shop_id)->where("archived",0)->get();
-        $data['locationList'] = Tbl_partners::select('company_location')->distinct()->where("archived","0")->get();
+        $data['locationList'] = Tbl_partners::select('company_location')->distinct()->where("archived","0") ->orderByRaw('company_location ASC')->get();
 
         return view("partners", $data);
     }

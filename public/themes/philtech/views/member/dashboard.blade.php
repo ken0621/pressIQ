@@ -145,7 +145,7 @@
 										<div class="color"></div>
 
 										@if($plan->label == "Membership Matching")
-											<div class="name"><span>Franchise Matching</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
+											<div class="name"><span>Matching Bonus</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 										@elseif($plan->label == "Vmoney")
 											<div class="name"><span>E-Money</span> <div class="name w2hpx">{{ $wallet->{ "display_" . $plan->string_plan } }}</div></div>
 										@elseif($plan->label == "Direct")
@@ -233,7 +233,7 @@
 		<div class="row clearfix">
 			<div class="col-md-6">
 				<div class="square-container">
-					<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Direct Franchisee</div>
+					<div class="title"><i class="align-icon brown-icon-globe"></i> Newest Direct</div>
 					<div class="sub-container border-holder">
 						<div class="clearfix wow hidden">
 							<div class="badge right">6 New Members</div>

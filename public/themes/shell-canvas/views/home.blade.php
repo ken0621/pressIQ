@@ -4,7 +4,7 @@
 
 	<div class="swiper-container swiper1" id="home">
 		<div class="swiper-wrapper">
-			@if(loop_content_condition($shop_theme_info, "home", "home_gallery"))
+			{{-- @if(loop_content_condition($shop_theme_info, "home", "home_gallery"))
 				@foreach(loop_content_get($shop_theme_info, "home", "home_gallery") as $slider)
 					<div class="swiper-slide">
 						<div class="image-holder">
@@ -13,7 +13,7 @@
 					</div>
 				@endforeach
 			@else
-				{{-- <div class="swiper-slide">
+				<div class="swiper-slide">
 					<div class="image-holder">
 						<img src="/themes/shell-canvas/img/shell-canvas-banner.jpg">
 					</div>
@@ -27,8 +27,17 @@
 					<div class="image-holder">
 						<img src="/themes/shell-canvas/img/shell-canvas-banner-2.jpg">
 					</div>
-				</div> --}}
-			@endif
+				</div>
+			@endif --}}
+			@if(is_serialized(get_content($shop_theme_info, "home", "home_banner_main")))
+               @foreach(unserialize(get_content($shop_theme_info, "home", "home_banner_main")) as $slider)
+	                <div class="swiper-slide" target="_blank" onclick="window.open( '{{ $slider["link"] }}' )" style="cursor: pointer;">
+	                   	<div class="image-holder">
+	                   		<img src="{{ $slider["image"] }}">
+	                   	</div>
+                   </div>
+               @endforeach
+            @endif
 		</div>
 		<div class="slider-next">
 			<img src="/themes/shell-canvas/img/icon-right-arrow.png">
@@ -38,7 +47,7 @@
     	</div>
 	</div>
 
-	<div class="swiper-container swiper2" id="product">
+	{{-- <div class="swiper-container swiper2" id="product">
 		<div class="swiper-wrapper">
 				<div class="swiper-slide">
 				<div class="product-holder" style="background-image: url('/themes/shell-canvas/img/product-1.jpg');">
@@ -185,7 +194,7 @@
 			</div>
 			</div>
 		<div class="swiper-pagination swiper-pagination2"></div>
-    </div>
+    </div> --}}
 
 	<div class="wrapper-1" id="about">
 		<div class="container">
@@ -230,107 +239,55 @@
 				<button class="btn-show">SHOW MORE</button>
 				<button class="btn-hide">SHOW LESS</button>
 			</div>
-		</div>
-	</div>
-
-	<div class="wrapper-2 not-fullscreen background parallax" style="background-image: url('/themes/shell-canvas/img/bg-blur.jpg');" data-img-width="1600" data-img-height="835" data-diff="100">
-		<div class="container">
-			<div class="title-header">
-				{!! get_content($shop_theme_info, "about", "about_features_title_header") !!}
-			</div>
-			<div class="features-content-1">
-				<div class="row">
-					<div class="col-md-1 col-sm-1 col-xs-4">
-						<div class="icon-holder">
-							<img src="/themes/shell-canvas/img/icon-1.png">
-						</div>
-					</div>
-					<div class="col-md-3 col-sm-3 col-xs-8">
-						<div class="content-container">
-							<div class="content-header">
-								{!! get_content($shop_theme_info, "about", "about_features_header_1") !!}
-							</div>
-							<div class="content-body">
-								{!! get_content($shop_theme_info, "about", "about_features_body_1") !!}
-							</div>
-						</div>
-					</div>
-					<div class="col-md-1 col-sm-1 col-xs-4">
-						<div class="icon-holder">
-							<img src="/themes/shell-canvas/img/icon-2.png">
-						</div>
-					</div>
-					<div class="col-md-3 col-sm-3 col-xs-8">
-						<div class="content-container">
-							<div class="content-header">
-								{!! get_content($shop_theme_info, "about", "about_features_header_2") !!}
-							</div>
-							<div class="content-body">
-								{!! get_content($shop_theme_info, "about", "about_features_body_2") !!}
-							</div>
-						</div>
-					</div>
-					<div class="col-md-1 col-sm-1 col-xs-4">
-						<div class="icon-holder">
-							<img src="/themes/shell-canvas/img/icon-3.png">
-						</div>
-					</div>
-					<div class="col-md-3 col-sm-3 col-xs-8">
-						<div class="content-container">
-							<div class="content-header">
-								{!! get_content($shop_theme_info, "about", "about_features_header_3") !!}
-							</div>
-							<div class="content-body">
-								{!! get_content($shop_theme_info, "about", "about_features_body_3") !!}
-							</div>
-						</div>
-					</div>
+			<div class="choose-container">
+				<div class="title-header">
+					{!! get_content($shop_theme_info, "about", "about_features_title_header") !!}
 				</div>
-			</div>
-			<div class="features-content-2">
-				<div class="row">
-					<div class="col-md-1 col-sm-1 col-xs-4">
-						<div class="icon-holder">
-							<img src="/themes/shell-canvas/img/icon-4.png">
-						</div>
-					</div>
-					<div class="col-md-3 col-sm-3 col-xs-8">
-						<div class="content-container">
-							<div class="content-header">
-								{!! get_content($shop_theme_info, "about", "about_features_header_4") !!}
-							</div>
-							<div class="content-body">
-								{!! get_content($shop_theme_info, "about", "about_features_body_4") !!}
+				<div class="features-content-1">
+					<div class="row">
+						<div class="col-md-1 col-sm-1 col-xs-4">
+							<div class="icon-holder">
+								<img src="/themes/shell-canvas/img/icon-1.png">
 							</div>
 						</div>
-					</div>
-					<div class="col-md-1 col-sm-1 col-xs-4">
-						<div class="icon-holder">
-							<img src="/themes/shell-canvas/img/icon-5.png">
-						</div>
-					</div>
-					<div class="col-md-3 col-sm-3 col-xs-8">
-						<div class="content-container">
-							<div class="content-header">
-								{!! get_content($shop_theme_info, "about", "about_features_header_5") !!}
-							</div>
-							<div class="content-body">
-								{!! get_content($shop_theme_info, "about", "about_features_body_5") !!}
+						<div class="col-md-3 col-sm-3 col-xs-8">
+							<div class="content-container">
+								<div class="content-header">
+									{!! get_content($shop_theme_info, "about", "about_features_header_1") !!}
+								</div>
+								<div class="content-body">
+									{!! get_content($shop_theme_info, "about", "about_features_body_1") !!}
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="col-md-1 col-sm-1 col-xs-4">
-						<div class="icon-holder">
-							<img src="/themes/shell-canvas/img/icon-6.png">
-						</div>
-					</div>
-					<div class="col-md-3 col-sm-3 col-xs-8">
-						<div class="content-container">
-							<div class="content-header">
-								{!! get_content($shop_theme_info, "about", "about_features_header_6") !!}
+						<div class="col-md-1 col-sm-1 col-xs-4">
+							<div class="icon-holder">
+								<img src="/themes/shell-canvas/img/icon-2.png">
 							</div>
-							<div class="content-body">
-								{!! get_content($shop_theme_info, "about", "about_features_body_6") !!}
+						</div>
+						<div class="col-md-3 col-sm-3 col-xs-8">
+							<div class="content-container">
+								<div class="content-header">
+									{!! get_content($shop_theme_info, "about", "about_features_header_2") !!}
+								</div>
+								<div class="content-body">
+									{!! get_content($shop_theme_info, "about", "about_features_body_2") !!}
+								</div>
+							</div>
+						</div>
+						<div class="col-md-1 col-sm-1 col-xs-4">
+							<div class="icon-holder">
+								<img src="/themes/shell-canvas/img/icon-3.png">
+							</div>
+						</div>
+						<div class="col-md-3 col-sm-3 col-xs-8">
+							<div class="content-container">
+								<div class="content-header">
+									{!! get_content($shop_theme_info, "about", "about_features_header_3") !!}
+								</div>
+								<div class="content-body">
+									{!! get_content($shop_theme_info, "about", "about_features_body_3") !!}
+								</div>
 							</div>
 						</div>
 					</div>
@@ -408,7 +365,7 @@
 	    		</div>
 	    	</div>
 	    	<div class="map-container">
-	    		<iframe class="shellcanvas-map" src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d15447.103061996984!2d120.9979633916792!3d14.554811672121508!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1s+1999+Sen.+Gil+Puyat+Avenue%2C+(Buendia+Avenue)Pasay+City%2C+Philippines+1300!5e0!3m2!1sen!2sph!4v1536118919269" width="1200" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
+	    		<iframe class="shellcanvas-map" src="{!! get_content($shop_theme_info, "contact", "contact_shellcanvas_map") !!}" width="1200" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
 	    	</div>
 	        <div class="row clearfix">
 	        	<div class="col-md-6 col-sm-6 col-xs-12">
@@ -501,45 +458,50 @@
 	    				</div>
 	    				{{-- <div class="border-holder"></div> --}}
 			    	</div>
-	            	<form method="Post">
-	                 	<div class="row clearfix">
-	                        <div class="col-md-6 col-sm-6 col-xs-12">
-	                            <div class="form-group">
-	                                <input type="text" class="form-control" placeholder="Firstname*" required>
-	                            </div>
-	                        </div>
-	                        <div class="col-md-6 col-sm-6 col-xs-12">
-	                            <div class="form-group">
-	                                <input type="text" class="form-control" placeholder="Lastname*" required>
-	                            </div>
-	                        </div>
-	                        <div class="col-md-6 col-sm-6 col-xs-12">
-	                            <div class="form-group">
-	                                    <input type="phone" class="form-control"  placeholder="Contact Number*" required>
-	                            </div>
-	                        </div>
-	                        <div class="col-md-6 col-sm-6 col-xs-12">
-	                            <div class="form-group">
-	                                <input type="email" class="form-control" placeholder="Email*" required>
-	                            </div>
-	                        </div>
-	                        <div class="col-md-6 col-sm-6 col-xs-12">
-	                            <div class="form-group">
-	                                <input type="text area" class="form-control"  placeholder="Subject*" required> 
-	                            </div>
-	                        </div>
-	                        <div class="col-md-12 col-sm-12 col-xs-12">
-	                            <div class="form-group">
-	                                <textarea type="text" class="form-control text-message" placeholder="Message*" required></textarea>
-	                            </div>
-	                        </div>
-	                        <div class="col-md-12 col-sm-12 col-xs-12">
-	                            <div class="btn-holder">
-	                                <button class="btn-send" type="submit">SEND</button>
-	                            </div>
-	                        </div>
-	                	</div>
-	            	</form>
+			    	<form action="Post"> 
+                       @if (session('message_concern_shell'))
+                           <div class="alert alert-success">
+                               {{ session('message_concern_shell') }}
+                           </div>
+                       @endif
+                        <div class="row clearfix">
+                           <div class="col-md-6">
+                               <div class="form-group">
+                                   <input type="text" class="form-control" id="contactus_first_name" name="contactus_first_name" placeholder="First Name*" required>
+                               </div>
+                           </div>
+                           <div class="col-md-6">
+                               <div class="form-group">
+                                   <input type="text" class="form-control" id="contactus_last_name" name="contactus_last_name" placeholder="Last Name*" required>
+                               </div>
+                           </div>
+                           <div class="col-md-6">
+                               <div class="form-group">
+                                       <input type="phone" class="form-control" id="contactus_phone_number" name="contactus_phone_number" placeholder="Phone Number*" required>
+                               </div>
+                           </div>
+                           <div class="col-md-6">
+                               <div class="form-group">
+                                   <input type="email" class="form-control" id="contactus_email" name="contactus_email" placeholder="Email Address*" required>
+                               </div>
+                           </div>
+                           <div class="col-md-6">
+                               <div class="form-group">
+                                   <input type="text area" class="form-control" id="contactus_subject" name="contactus_subject" placeholder="Subject*" required> 
+                               </div>
+                           </div>
+                           <div class="col-md-12">
+                               <div class="form-group">
+                                   <textarea type="text" class="form-control text-message" id="contactus_message" name="contactus_message" placeholder="Message*" required></textarea>
+                               </div>
+                           </div>
+                           <div class="col-md-12">
+                               <div class="btn-holder">
+                                   <button class="btn-send" type="submit" formaction="/contact_us/shell/send">SEND</button>
+                               </div>
+                           </div>
+                       </div>
+                   </form>
 	            </div>
 	        </div>
 	    </div>

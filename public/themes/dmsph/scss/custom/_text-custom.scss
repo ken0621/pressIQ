@@ -1,0 +1,76 @@
+/* Title Text Gold */
+.txt-title-b
+{
+	font-size: 30px;
+	color: $c-black;
+	font-family: $display-txt;
+	font-weight: 600;
+}
+
+.txt-title-w
+{
+	@extend .txt-title-b;
+	color: $c-white;
+}
+
+/* Content Text Black */
+.cnt-txt-b
+{
+	font-size: 15px;
+	color: $cnt-b;
+	font-family: $cnt-text;
+	line-height: 1.6;
+}
+
+/* Content Text White */
+.cnt-txt-w
+{
+	@extend .cnt-txt-b;
+	color: $cnt-w;
+}
+
+@media screen and (max-width: 425px) 
+{
+	.txt-title-b
+	{
+		font-size: 25px;
+	}
+	.txt-title-w
+	{
+		font-size: 25px;
+		color: $c-white;
+	}
+	.cnt-txt-b
+	{
+		font-size: 13px;
+	}
+	.cnt-txt-w
+	{
+		font-size: 13px;
+		color: $cnt-w;
+	}
+}
+@media screen and (max-width: 375px) 
+{
+	.txt-title-b
+	{
+		font-size: 17px;
+	}
+	.txt-title-w
+	{
+		font-size: 17px;
+		color: $c-white;
+	}
+}
+@media screen and (max-width: 320px) 
+{
+	.txt-title-b
+	{
+		font-size: 16px;
+	}
+	.txt-title-w
+	{
+		font-size: 16px;
+		color: $c-white;
+	}
+}

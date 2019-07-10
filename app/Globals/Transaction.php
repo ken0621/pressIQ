@@ -124,18 +124,19 @@ class Transaction
         $store['create_set_method_id'] = $method;
         session($store);
     }
-    public static function create($shop_id, $transaction_id, $transaction_type, $transaction_date, $posted = false, $source = null, $transaction_number = null, $customer_id = null)
+    public static function create($shop_id, $transaction_id, $transaction_type, $transaction_date, $posted = false, $source = null, $transaction_number = null, $customer_id = null,$transaction_payment_method = null,$transaction_payment_method_type = null,$transaction_remark = null,$transaction_sales_person = null)
     {
-        $transaction_sales_person = isset($transaction_id["transaction_sales_person"]) ? $transaction_id["transaction_sales_person"] : null;
+        $transaction_sales_person = isset($transaction_id["transaction_sales_person"]) ? $transaction_id["transaction_sales_person"] : $transaction_sales_person;
         if($source == null)
         {
-            $cart = Cart2::get_cart_info($customer_id);
+            /*CHANGE BY JAMES*/
+            $cart = Cart2::get_cart_info($customer_id); //ORIGINAL
+            // $cart = Cart2::get_cart_info($customer_id ? $customer_id : $transaction_id["transaction_reference_id"]);
         }
         else
         {
             $cart = null;
         }
-        
         if($cart || $source != null) //INSERT ONLY IF CART IS NOT ZERO OR THERE IS SOURCE
         {
             if(!is_numeric($transaction_id)) //CREATE NEW IF TRANSACTION ID if $transaction_id is an ARRAY
@@ -158,6 +159,9 @@ class Transaction
             /* INSERT NEW LIST */
             $insert_list["transaction_id"]              = $transaction_id;
             $insert_list["shop_id"]                     = $shop_id;
+            $insert_list["transaction_payment_method"]       = $transaction_payment_method;
+            $insert_list["transaction_payment_method_type"] = $transaction_payment_method_type;
+            $insert_list["transaction_remark"]            = $transaction_remark;
             $insert_list["transaction_date"]            = $transaction_date;
             $insert_list["transaction_due_date"]        = $transaction_date;
             $insert_list["transaction_date_created"]    = Carbon::now();
@@ -177,12 +181,18 @@ class Transaction
             }
             else
             {
+                /*TRASACTION BY JAMES*/
                 $source_transaction_list = Tbl_transaction_list::where("transaction_list_id", $source)->first();
                 $insert_list["transaction_subtotal"]        = $source_transaction_list->transaction_subtotal;
                 $insert_list["transaction_tax"]             = $source_transaction_list->transaction_tax;
                 $insert_list["transaction_discount"]        = $source_transaction_list->transaction_discount;
                 $insert_list["transaction_total"]           = $source_transaction_list->transaction_total;
-                $total                                      = $source_transaction_list->transaction_total;
+                $total                                           = $source_transaction_list->transaction_total;
+
+                $insert_list["transaction_sales_person"]         = $source_transaction_list->transaction_sales_person;
+                $insert_list["transaction_payment_method"]       = $source_transaction_list->transaction_payment_method;
+                $insert_list["transaction_payment_method_type"]  = $source_transaction_list->transaction_payment_method_type;
+                $insert_list["transaction_remark"]               = $source_transaction_list->transaction_remark;
             }
             
             if($posted == "-")
@@ -250,7 +260,7 @@ class Transaction
     public static function insert_payment($shop_id, $transaction_id, $method = array(), $amount = array())
     {
     }
-    public static function consume_in_warehouse($shop_id, $transaction_list_id, $remarks = 'Enroll kit', $get_to_warehouse = 0)
+    public static function consume_in_warehouse($shop_id, $transaction_list_id, $remarks = 'Enroll kit', $get_to_warehouse = 0, $slot_id = 0,$use_product_code = "no")
     {
         $warehouse_id = Warehouse2::get_main_warehouse($shop_id);
         if($get_to_warehouse != 0)
@@ -262,6 +272,13 @@ class Transaction
         
         $consume['name'] = 'transaction_list';
         $consume['id'] = $transaction_list_id;
+
+        if($slot_id != 0 && $use_product_code == "yes")
+        {
+            $consume['is_cashier'] = 1;
+            $consume['slot_id'] = $slot_id;
+        }
+
         foreach ($get_item as $key => $value) 
         {
             $item_type = Item::get_item_type($value->item_id);
@@ -611,9 +628,11 @@ class Transaction
         $store["get_transaction_customer_details_v2"] = true;
         session($store);
     }
-    public static function get_transaction_list($shop_id, $transaction_type = 'all', $search_keyword = '', $paginate = 5, $transaction_id = 0, $from_date = null, $to_date = null)
+    public static function get_transaction_list($shop_id, $transaction_type = 'all', $search_keyword = '', $paginate = 5, $transaction_id = 0, $from_date = null, $to_date = null, $pos = null)
     {
         $data = Tbl_transaction_list::where('tbl_transaction_list.shop_id',$shop_id);
+       
+
         if($transaction_id != 0)
         {
             $data = Tbl_transaction_list::where('tbl_transaction_list.transaction_id',$transaction_id)->where('tbl_transaction_list.shop_id',$shop_id);
@@ -624,9 +643,11 @@ class Transaction
         {
             $data->whereBetween("tbl_transaction_list.transaction_date", [date("Y-m-d", strtotime($from_date)), date("Y-m-d", strtotime($to_date))]);
         }
-        
+        if($pos == "pos")
+        {
+            $data->where('transaction_sales_person', null);
+        }
         $data->transaction(); //join table transaction
-        
         if(isset($transaction_type))
         {
             if($transaction_type != 'all')
@@ -647,12 +668,25 @@ class Transaction
                 {
                     $data->where('transaction_type','proof')->where('payment_status','reject')->where('order_status','reject');
                 }
+                else if($transaction_type == "cashier")
+                {
+                    $data->where('tbl_transaction_list.transaction_sales_person','!=',null);
+                }
                 else
                 {
                     $data->where('transaction_type', $transaction_type)->where('order_status','!=','reject');
                 }
             }
+            
         }
+
+        // if(Session::get('warehouse_id_'.$shop_id))
+        // {
+        //     $data->join('tbl_warehouse_inventory_record_log','tbl_warehouse_inventory_record_log.record_consume_ref_id','=','tbl_transaction_list.transaction_list_id')
+        //         ->where('tbl_warehouse_inventory_record_log.record_consume_ref_name','transaction_list')
+        //         ->where('tbl_warehouse_inventory_record_log.record_warehouse_id',Session::get('warehouse_id_'.$shop_id));
+        // }
+        
         if($shop_id == 1)
         {
             $data->orderBy('transaction_date_created','DESC');
@@ -699,6 +733,9 @@ class Transaction
         }
         if($paginate)
         {
+            /*JAMES APPEND THIS CODE FOR GROUPING THE LIST*/
+            $data->groupBy("tbl_transaction_list.transaction_id");
+            /*END JAMES*/
             $data = $data->paginate($paginate);
         }
         else
@@ -807,6 +844,7 @@ class Transaction
         $type[1] = 'receipt';
         $type[2] = 'failed';
         $type[3] = 'pending';
+        $type[4] = 'cashier';
         return $type;
     }
     public static function shop_increment($shop_id)

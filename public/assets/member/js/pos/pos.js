@@ -22,6 +22,7 @@ function pos()
 	}
 	function document_ready()
 	{
+		change_type();
 		action_load_item_table();
 		event_search_item();
 		event_search_customer();
@@ -36,9 +37,17 @@ function pos()
 		event_click_add_payment();
 		event_click_remove_payment();
 		event_change_slot_id();
-
+		event_change_non_inventory_price();
         event_load_popover();
         action_click_change_qty();
+	}
+
+	function change_type()
+	{
+		$('body').on('change','.payment_type_change', function(e)
+		{
+			$('.payment_method_type').val($(this).val());
+		});
 	}
 	function event_change_slot_id()
 	{
@@ -244,11 +253,12 @@ function pos()
 	}
 	function event_change_quantity()
 	{
-		$("body").on("keyup", ".input-change-qty", function(e)
+		$("body").on("change", ".input-change-qty", function(e)
 		{
 			var qty_item_id = $(e.currentTarget).attr('item-id');
 			var qty = $(e.currentTarget).val();
-			if(e.which == 13) //ENTER KEY
+			// if(e.which == 13) //ENTER KEY AMES CHANGE THIS<<< THIS IS THE ORIGINAL
+			if(qty > 0)
 			{
 				$.ajax({
 					url : '/member/cashier/pos/change_qty',
@@ -266,6 +276,33 @@ function pos()
 			}
 		});
 	}
+
+	function event_change_non_inventory_price()
+	{
+		$("body").on("change", ".non_inventory_amount", function(e)
+		{
+			var new_item_id = $(e.currentTarget).attr('item-id');
+			var new_price = $(e.currentTarget).val();
+			// if(e.which == 13) //ENTER KEY AMES CHANGE THIS<<< THIS IS THE ORIGINAL
+			// if(new_price > 0)
+			// {
+				$.ajax({
+					url : '/member/cashier/pos/change_price',
+					type : 'post',
+					data : {item_id : new_item_id, new_price : new_price, _token : $('#_token').val()},
+					success : function(data)
+					{
+						action_load_item_table();
+						if(data.status == 'error')
+						{
+							toastr.warning(data.status_message);
+						}
+					}
+				})
+			// }
+		});
+	}
+
 	function event_search_customer()
 	{
 		$("body").on("keyup", ".event_search_customer", function(e)
@@ -656,11 +693,27 @@ function toggle_destination(className)
     {
     	$(className).slideUp();
     }
+
+    if($('.wis-click').prop('checked'))
+    {
+    	$(".use_product_code_box").hide();
+    }
+    else 
+    {
+        $(".use_product_code_box").show();
+    }
 }
 function select_payment(type = '')
 {
+
 	$('.btn-payment').addClass('btn-custom-white');
-	$('.input-payment-method').val(type);
+	$valtype = type.replace("-"," ");
+	$('.input-payment-method').val($valtype);
+
+	$('.method_types').css('display','none');
+	$('#method_type_'+type).css('display','block');
+	var val = $('select.method_type_'+type).val();
+	$('.payment_method_type').val(val);
 	$('.'+type).removeClass('btn-custom-white');
 	$('.'+type).addClass('btn-primary');
 }

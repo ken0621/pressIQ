@@ -39,7 +39,6 @@ class ProductOrderController2 extends Member
                                                     ->leftJoin("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_code_name", "=", "tbl_online_pymnt_link.link_reference_name")
                                                     ->groupBy("link_reference_name")
                                                     ->get();
-        
         return view('member.product_order2.product_order2', $data);
     }
     public function table()
@@ -57,25 +56,34 @@ class ProductOrderController2 extends Member
             $paginate = 20;
         }
 
-        if($active_tab == "paid")
+        if($shop_id == 1)
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate);
-        }
-        elseif($active_tab == "unconfirmed")
-        {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'proof',$keyword,$paginate);
-        }
-        elseif($active_tab == "pending")
-        {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'order',$keyword,$paginate);
-        }
-        elseif($active_tab == "reject")
-        {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'reject',$keyword,$paginate);
+            $pos = "pos";
         }
         else
         {
-            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate);
+            $pos = null;
+        }
+
+        if($active_tab == "paid")
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate, 0, null,null,$pos);
+        }
+        elseif($active_tab == "unconfirmed")
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'proof',$keyword,$paginate, 0, null,null,$pos);
+        }
+        elseif($active_tab == "pending")
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'order',$keyword,$paginate, 0, null,null,$pos);
+        }
+        elseif($active_tab == "reject")
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'reject',$keyword,$paginate, 0, null,null,$pos);
+        }
+        else
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate, 0, null,null,$pos);
         }
 
         foreach($data["_raw_table"] as $key => $raw_table)
@@ -108,6 +116,15 @@ class ProductOrderController2 extends Member
         $default[]          = ["E-MAIL","email", true];
         $default[]          = ["CONTACT","phone_number", true];
         $default[]          = ["ACTIONS","action", true];
+        if($active_tab == "pending") 
+        {
+            if($shop_id == 1)
+            {
+                $default[]          = ["ADDRESS","customer_street", true];
+            }        
+        }
+        
+
         $data["_table"]     = Columns::filterColumns($this->user_info->shop_id, $this->user_info->user_id, "Order List V2", $data["_raw_table"], $default);
         // dd($data['_table']);
         return view('member.global_table', $data);
@@ -515,18 +532,15 @@ class ProductOrderController2 extends Member
     public function settings()
     {
         $data["shipping_fee"] = isset(Settings::get_settings_php_shop_id("shipping_fee", $this->user_info->shop_id)["settings_value"]) ? Settings::get_settings_php_shop_id("shipping_fee", $this->user_info->shop_id)["settings_value"] : 0;
-
         return view("member.product_order2.settings", $data);
     }
 
     public function settings_submit()
     {
         $shipping_fee = Request::input("shipping_fee");
-
-        if ($shipping_fee) 
+        if(is_numeric($shipping_fee)) 
         {
             $shipping_exist = Settings::get_settings_php_shop_id("shipping_fee", $this->user_info->shop_id);
-
             if ($shipping_exist["response_status"] == "success") 
             {
                 $result = Settings::update_settings_shop_id("shipping_fee", $shipping_fee, $this->user_info->shop_id);
@@ -541,7 +555,6 @@ class ProductOrderController2 extends Member
                 dd($data["message"]);
             }
         }
-
         return Redirect::back();
     }
 }

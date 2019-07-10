@@ -4,267 +4,167 @@ body {
     font-family: 'Montserrat', sans-serif;
     color: #747474;
 }
-.main-container
-{
-    background-color: $c-blue !important;
-    min-height: 100px;
-    margin: 0px !important;
-    @media screen and (max-width: 768px) 
-    {
-        min-height: 75px !important;
-    }
-}
 .top-1-container {
-    padding-bottom: 100px;
-    min-height: 450px;
-    background-color: #fff !important;
+  padding: 120px 0px 40px 0px;
+  background-color: #ededed;
 
+  .prod-container {
+  
+    .cat-promo-holder
+    {
+      @media screen and (max-width: 991px)
+      {
+        display: none;
+      }
 
-    @media screen and (max-width: 800px) {
-        padding: 30px 0px 40px 0px;
-    }
-
-    .prod-container {
-        .cat-promo-holder {
-            @media screen and (max-width: 991px) {
-                display: none;
-            }
-
-            /* CATEGORIES */
-            .cat-container {
-                .cat-title-container {
-                    padding: 10px 10px 10px 15px;
-                    background-color: #000;
-                    border-radius: 5px 5px 0px 0px;
-
-                    span {
-                        color: white;
-                        font-size: 18px;
-                        font-weight: 600;
-                        margin-left: 5px;
-                    }
-                }
-
-                .cat-list-container {
-                    background-color: #fff;
-
-                    .cat-list {
-                        color: #1c1c1c;
-                        font-size: 13px;
-                        font-weight: 400;
-                        padding: 18px;
-                        border-bottom: 1px solid #ededed;
-
-                        &:last-child {
-                            border-bottom: none;
-                        }
-
-                        &:hover, &.active {
-                            cursor: pointer;
-                            color: #585858;
-                        }
-                    }
-                }
-            }
-
-            /* PROMOS */
-            .promo-container {
-                margin-top: 20px;
-
-                .title-container {
-                    padding: 10px 10px 10px 15px;
-                    border-radius: 5px 5px 0px 0px;
-                    background-color: #585858;
-                    color: white;
-                    font-size: 18px;
-                }
-
-                .promo-content {
-                    position: relative;
-                    border-radius: 0px 0px 5px 5px;
-
-                    img {
-                        width: 100%;
-                    }
-
-                    .learn-more-button {
-                        position: absolute;
-                        bottom: 10px;
-                        right: 10px;
-                        width: 40%;
-                        background-color: #585858;
-                        padding: 10px 0px 10px 0px;
-                        text-align: center;
-                        font-size: 13px;
-                        font-weight: 600;
-                        color: white;
-
-                        &:hover {
-                            cursor: pointer;
-                            background-color: #2869d1;
-                        }
-                    }
-                }
-            }
+      /* CATEGORIES */
+      .cat-container {
+        
+        .cat-title-container {
+          padding: 10px 10px 10px 15px;
+          background-color: #6d0401;
+          border-radius: 5px 5px 0px 0px;
+          
+          span {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            margin-left: 5px;
+          }
         }
+        .cat-list-container {
+          background-color: #fff;
+          .cat-list {
+            color: #1c1c1c;
+            font-size: 13px;
+            font-weight: 400;
+            padding: 18px;
+            border-bottom: 1px solid #ededed;
+            
+            &:last-child {
+              border-bottom: none;
+            }
+            
+            &:hover, &.active {
+              cursor: pointer;
+              color: #6d0401;
+            }
+          }
+        }
+      }
+    }
+    .product-list-holder
+    {
+      @media screen and (max-width: 414px)
+      {
+        width: 100%;
+      }
 
-        .product-list-holder {
-            @media screen and (max-width: 414px) {
+      /* PRODUCT LISTING */
+      .prod-list-container {
+
+        .title-container {
+          position: relative;
+          padding: 10px 10px 10px 0px;
+          font-size: 18px;
+          font-weight: 600;
+          color: #1c1c1c;
+          border-bottom: 1px solid #d1d1d1;
+
+          .line-bot {
+            position: absolute;
+            width: 5%;
+            height: 1px;
+            bottom: -1px;
+            left: 0px;
+            background-color: #3A0C01;
+          }
+        }
+        .prod-list {
+          width: 100%;
+          padding: 20px 0px 20px 0px;
+          @media screen and (max-width: 600px)
+          {
+            margin-left: auto;
+            margin-right: auto;
+          }
+
+          .per-item {
+            margin-bottom: 30px;
+            &:hover {
+              cursor: pointer;
+              transition: 0.3s all ease;
+
+              .image-container {
+                img {
+                  opacity: 0.7;
+                  transition: 0.3s all ease;
+                }
+              }
+              .detail-container {
+                .item-name {
+                  color: #6d0401;
+                  transition: 0.3s all ease;
+                }
+                .button-container {
+                  background-color: #3A0C01;
+                  transition: 0.3s all ease;
+                }
+              }
+            }
+            
+            .image-container {
+              width: 100%;
+
+              img {
                 width: 100%;
+                object-fit: cover !important;
+              }
             }
+            .detail-container {
+              padding: 10px;
+              background-color: white;
+              border: 1px solid #dddddd;
 
-            /* PRODUCT LISTING */
-            .prod-list-container 
-            {
-                .title-container 
+              .item-name {
+                height: 50px;
+                overflow: hidden;
+                font-size: 13px;
+                font-weight: 400;
+                color: #1c1c1c;
+              }
+              .price-container {
+                padding-bottom: 10px;
+                color: #1c1c1c;
+                font-size: 13px;
+                font-weight: 700;
+              }
+              .button-container {
+                padding: 10px 0px 10px 0px;
+                background-color: #a1a1a1;
+                width: 100%;
+                text-align: center;
+                font-size: 13px;
+                font-weight: 600;
+                color: white;
+
+                @media screen and (max-width: 991px)
                 {
-                    font-family: $display-txt;
-                    position: relative;
-                    padding: 10px 10px 10px 0px;
-                    font-size: 20px;
-                    font-weight: 400;
-                    color: #1c1c1c;
-                    border-bottom: 1px solid #d1d1d1;
-
-                    .line-bot {
-                        position: absolute;
-                        width: 11%;
-                        background-color: $c-red;
-                        height: 2px;
-                        bottom: -1px;
-                        left: 0px;
-                    }
-
-                    @media screen and (max-width: 500px) {
-                        padding: 10px;
-                    }
+                  background-color: #3A0C01;
                 }
-
-                .prod-list 
-                {
-                    width: 100%;
-                    padding: 20px 0px 20px 0px;
-
-                    @media screen and (max-width: 600px) {
-                        margin-left: auto;
-                        margin-right: auto;
-                    }
-
-                   .prod-holder 
-                   {
-                       margin: 0 5px;
-                       font-family: $display-txt;
-                       background-color: #fff;
-                       &:hover
-                       {
-                          .details-container
-                          {
-                            .prod-name
-                            {
-                              color: $c-red;
-                            }
-                          }
-                          .btn-container
-                          {
-                              .btn-red
-                              {
-                                  opacity: 0.8
-                              }
-                          }
-                          .prod-image
-                          {
-                            .prod-overlay
-                            {
-                                @include transition(0.2s);
-                                display: block;
-                                text-align: center;
-                                background-color: #151515;
-                                opacity: 0.8;
-                                padding: 5px;
-                                color: #fff;
-                                position: absolute;
-                                width: 100%;
-                                height: 100%;
-                                .border
-                                {
-                                    height: 100%;
-                                    .top
-                                    {
-                                        height: 50% !important;
-                                        padding: 20px;
-                                    }
-                                    .bottom
-                                    {
-                                        height: 50% !important;
-                                        padding: 20px;
-                                    }
-                                }
-                                .label
-                                {
-                                    color: $c-red;
-                                }
-                                .point
-                                {
-                                    color: #000;
-                                }
-                            }
-                          }
-                       }
-                       .prod-image
-                       {
-                           padding: 1px;
-                           background-color: #ededed;
-                           min-height: 132px;
-                           width: 100%;
-                           position: relative;
-                           img
-                           {
-                               margin: auto;
-                               width: 100%;
-                           }
-                           .prod-overlay
-                           {
-                               display: none;
-                           }
-                       }
-                       .details-container 
-                       {
-                           margin: 0 8px;
-                           .prod-name 
-                           {
-                               color: $c-black;
-                               font-size: 15px;
-                               min-height: 50px;
-                               padding-top: 10px;
-                               @media screen and (max-width: 425px) 
-                               {
-                                   font-size: 13px;
-                               }
-                               @media screen and (max-width: 425px) 
-                               {
-                                   font-size: 11px;
-                               }
-                           }
-                           .prod-price 
-                           {
-                               color: $c-black;
-                               font-size: 12px;
-                               padding: 10px 0;
-                               font-weight: 600;
-                           }
-                       }
-                       .btn-container
-                       {
-                           padding: 0 0 15px;
-                           .btn-red
-                           {
-                               width: 100%;
-                               font-size: 13px;
-                           }
-                       }
-                   }
-                }
+              }
             }
+          }
         }
+      }
     }
+    .pagination-bottom
+    {
+      text-align: right;
+      @media screen and (max-width: 768px)
+      {
+        text-align: center;
+      }
+    }
+  }
 }

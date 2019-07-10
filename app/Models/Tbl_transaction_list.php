@@ -22,4 +22,22 @@ class Tbl_transaction_list extends Model
 	{
 		return $query->leftjoin("tbl_user", "user_id", "=", "transaction_sales_person");
 	}
+
+	public function scopeGetTransaction($query)
+	{
+		$query->join("tbl_transaction", "tbl_transaction.transaction_id", "=", "tbl_transaction_list.transaction_id");
+		$query->join("tbl_transaction_item", "tbl_transaction_item.transaction_list_id", "=", "tbl_transaction_list.transaction_list_id");
+		$query->join("tbl_item", "tbl_item.item_id", "=", "tbl_transaction_item.item_id");
+		$query->join("tbl_customer", "tbl_customer.customer_id", "=", "tbl_transaction.transaction_reference_id");
+
+		return $query;
+	}
+
+	public function scopePayment($query)
+	{
+		$query ->join('tbl_transaction_payment','tbl_transaction_payment.transaction_id','=','tbl_transaction_list.transaction_id');
+		return $query;
+	}
+
+	
 }

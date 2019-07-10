@@ -6,6 +6,7 @@ Route::group(array('prefix' => '/member/cashier'), function()
 	Route::post('/pos/search_item','Member\CashierController@pos_search_item');
 	Route::post('/pos/scan_item','Member\CashierController@pos_scan_item');
 	Route::post('/pos/change_qty','Member\CashierController@pos_change_qty');
+	Route::post('/pos/change_price','Member\CashierController@pos_change_non_inventory_price');
 	Route::any('/pos/remove_item','Member\CashierController@pos_remove_item');
 	Route::any('/pos/set_cart_info/{key}/{value}','Member\CashierController@set_cart_info');
 	Route::any('/pos/process_sale','Member\CashierController@process_sale');
@@ -14,6 +15,14 @@ Route::group(array('prefix' => '/member/cashier'), function()
 	Route::any('/pos/remove_payment','Member\CashierController@remove_payment');
 	Route::any('/pos/load_warehouse','Member\CashierController@load_warehouse');
 	Route::get('/pos/get_current_gc','Member\CashierController@get_current_gc');
+
+
+	/*SETTINGS JAMES*/
+	Route::get('/settings','Member\CashierController@settings');
+	Route::any('/settings/{id}','Member\CashierController@settings_action');
+
+
+
 
 	/* CUSTOMER */
 	Route::any('/pos/search_customer','Member\CashierController@pos_search_customer');
@@ -26,6 +35,8 @@ Route::group(array('prefix' => '/member/cashier'), function()
 	Route::any('/transactions/view_item/{transaction_list_id}','Member\TransactionController@view_item');
 	
 	Route::any('/transactions_list','Member\TransactionController@transaction_list');
+	Route::any('/transactions_list/export_excel','Member\TransactionController@transaction_export_excel');
+	Route::any('/transactions_list/export_pdf','Member\TransactionController@transaction_export_pdf');
 	Route::any('/transactions_list/table','Member\TransactionController@transaction_list_table');
 	Route::any('/transactions_list/view/{id}','Member\TransactionController@view_pdf');
 	Route::any('/transactions_list/view_receipt/{id}','Member\TransactionController@view_receipt');

@@ -12,6 +12,7 @@ use App\Models\Tbl_content;
 use App\Models\Tbl_ec_product;
 use App\Models\Tbl_country;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_recaptcha_setting;
 use App\Globals\Ecom_Product;
 use App\Globals\SocialNetwork;
@@ -43,6 +44,7 @@ class Shop extends Controller
         $data['lead_code'] = null;
         $data['customer_info'] = null;
     	$check_domain = Tbl_shop::where("shop_domain", $domain)->first();
+        $customer_id  = 0;
 
         if(hasSubdomain())
         {
@@ -140,7 +142,7 @@ class Shop extends Controller
             $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
             View::share("_categories", $product_category);
         }
-        elseif ($this->shop_theme == "3xcell") 
+        elseif ($this->shop_theme == "3xcell" || $this->shop_theme == "shell-canvas") 
         {
             $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
             View::share("_categories", $product_category);
@@ -156,10 +158,21 @@ class Shop extends Controller
                 if (isset($account["email"])) 
                 {
                     $check_account      = Customer::check_account($this->shop_info->shop_id, $account["email"], $account["auth"]);
+
+                    if ($check_account) 
+                    {
+                        $customer_id        = $check_account->customer_id;
+                    }
+                    else
+                    {
+                        $check_account      = null;
+                        $customer_id        = 0;
+                    }
                 }
                 else
                 {
                     $check_account      = null;
+                    $customer_id        = 0;
                 }
                 
                 Self::$customer_info    = $check_account;
@@ -191,6 +204,21 @@ class Shop extends Controller
                 {
                     $profile_image = "/themes/brown/img/user-placeholder.png";
                 }
+
+                if($customer_id!=0)
+                {
+                    $new_customer_id     = $customer_id;
+                    $slot_membership     = Tbl_mlm_slot::where('slot_owner',$customer_id)->value('slot_membership');
+                }
+                else
+                {
+                    $new_customer_id     = 0;
+                    $slot_membership     = 0;
+                }
+
+
+                View::share("slot_membership", $slot_membership);
+
 
                 View::share("customer", Self::$customer_info);
                 View::share("mlm_member", $mlm_member);

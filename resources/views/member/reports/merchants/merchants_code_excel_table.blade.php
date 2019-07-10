@@ -34,7 +34,7 @@
                @if($status == '_distributed' || $status == '_released')
               <td class="text-dark" scope="col">{{ucfirst($value->title_name." ".$value->first_name." ".$value->middle_name." ".$value->last_name." ".$value->suffix_name)}}</td>
               <td class="text-dark" scope="col">{{$value->receipt_number}}</td>
-              <td class="text-dark" scope="col">{{$value->amount}}</td>
+              <td class="text-dark" scope="col">{{currency('PHP ',$value->item_price)}}</td>
               <td class="text-dark" scope="col">{{$value->cellphone_number}}</td>
               <td class="text-dark" scope="col">{{$value->email}}</td>
               @endif

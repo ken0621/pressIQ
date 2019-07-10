@@ -10,6 +10,8 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/cart/update', 'Shop\ShopCartController@update_cart');
 	Route::get('/cart/clear', 'Shop\ShopCartController@clear_cart');
 	Route::get('/product', 'Shop\ShopProductController@index');
+	Route::get('/product_1', 'Shop\ShopProductController@product_1'); // JAM
+	Route::get('/product_2', 'Shop\ShopProductController@product_2'); // JAM
 	Route::get('/product/view/{id}', 'Shop\ShopProductContentController@index');
 	Route::get('/product/view2/{id}', 'Shop\ShopProductContent2Controller@index');
 	Route::get('/product/variant', 'Shop\ShopProductContentController@variant');
@@ -199,4 +201,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 
 	/* Alternative */
 	Route::get('/product2', 'Shop\ShopProductController@product2'); //Carlo
+	Route::any('/contact_us/shell/send', 'Shop\ShopMemberController@send_contact_us_shell'); //Carlo
+	Route::any('/karl_landicho', 'Shop\ShopAboutController@karl_biography'); //Carlo
 }

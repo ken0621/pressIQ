@@ -22,7 +22,7 @@ function transaction_list()
 		action_onload_view_receipt();
 		event_filter_date();
 	}
-	function action_onload_view_receipt()
+    function action_onload_view_receipt()
 	{
 		if($('.view-receipt').val() != '')
 		{			

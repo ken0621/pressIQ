@@ -10,7 +10,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
-        <link rel="icon" href="/themes/{{ $shop_theme }}/img/favicon.png" type="image/jpg" />
+        <link rel="icon" href="/themes/{{ $shop_theme }}/img/shell-canvas.png" type="image/jpg" />
         <!-- GOOGLE FONT -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
@@ -64,19 +64,30 @@
                     <span>BROWSE</span>
                     <ul class="links">
                         <li> 
-                            <a onclick="off()" href="#home"><i class="fa fa-home" aria-hidden="true"></i> HOME</a>
+                            <a onclick="off()" href="/#home"><i class="fa fa-home" aria-hidden="true"></i> HOME</a>
+                        </li>
+                        <li class="product-mobile-dropdown">
+                            <a href="javascript:"><i class="fa fa-shopping-cart" aria-hidden="true"></i> PRODUCTS & SERVICES <span class="pull-right"><i class="fa-change fa fa-angle-down" aria-hidden="true"></i></span></a>
+                        </li>
+                            @if(count($_categories) > 0)
+                                <ul class="product-mobile-dropdown-list">
+                                    @foreach($_categories as $categories)
+                                        <li>
+                                            <a href="/product?type={{ $categories["type_id"] }}">
+                                                {{ $categories["type_name"] }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        <li> 
+                            <a onclick="off()" href="/#about"><i class="fa fa-info" aria-hidden="true"></i> ABOUT US</a>
                         </li>
                         <li> 
-                            <a onclick="off()" href="#home"><i class="fa fa-shopping-cart" aria-hidden="true"></i> PRODUCTS & SERVICES</a>
+                            <a onclick="off()" href="/#gallery"><i class="fa fa-picture-o" aria-hidden="true"></i> GALLERY</a>
                         </li>
                         <li> 
-                            <a onclick="off()" href="#about"><i class="fa fa-info" aria-hidden="true"></i> ABOUT US</a>
-                        </li>
-                        <li> 
-                            <a onclick="off()" href="#gallery"><i class="fa fa-picture-o" aria-hidden="true"></i> GALLERY</a>
-                        </li>
-                        <li> 
-                            <a onclick="off()" href="#contact"><i class="fa fa-phone" aria-hidden="true"></i> CONTACT US</a>
+                            <a onclick="off()" href="/#contact"><i class="fa fa-phone" aria-hidden="true"></i> CONTACT US</a>
                         </li>
                     </ul>
                 </nav>
@@ -102,81 +113,75 @@
                     <!-- NAVIGATION -->
                         <nav class="navigation">
                             <ul>
-                                <li><a class="smoth-scroll" href="#home">Home</a></li>
+                                @if(Request::segment(1)=="product")
+                                    <li><a class="smoth-scroll" href="/#home">Home</a></li>
+                                    <li class="dropdown product-hover">
+                                        <a href="#">Products & Services<span class="caret"></span>
+                                        </a>
 
-                                {{-- <li class="dropdown">
-                                    <a class="smoth-scroll dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="">Products & Services&nbsp;&nbsp;
-                                        <span class="caret"></span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        @if(isset($_category))
-                                            @foreach($_category as $category)  
-                                                <li class="dropdown-submenu">
-                                                    @if($category['subcategory'] == true)
-                                                        <a href="">{{ $category['type_name'] }}
-                                                            <span class="fa fa-caret-right pull-right"></span>
-                                                        </a>
-                                                    @else
-                                                        <a href="">{{ $category['type_name'] }}</a>
-                                                    @endif
-                                                    @if($category['subcategory'])
-                                                        <ul class="dropdown-menu pull-right">
-                                                            @foreach($category['subcategory'] as $subcategory)
-                                                                <li><a href="">{{ $subcategory['type_name'] }}</a></li>
-                                                            @endforeach
-                                                        </ul>
-                                                    @endif
-                                                </li>
-                                            @endforeach
-                                        @else  
+                                        <!-- PRODUCT DROPDOWN -->
+                                        <div class="product-dropdown" style="display: none;">
+                                            @if(count($_categories) > 0)
+                                                @foreach($_categories as $categories)
+                                                <div class="cat-container">
+                                                    <a href="/product?type={{ $categories["type_id"] }}">
+                                                        <div class="per-cat">
+                                                            <div class="cat-img-container"><img style="width: 124px; height: 100px; object-fit: cover;" src="{{ $categories["type_image"] }}"></div>
+                                                            <div class="cat-name">{{ $categories["type_name"] }}</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                @endforeach
+                                            @else
+                                                <div class="cat-container">
+                                                    <a href="/product">
+                                                        <div class="per-cat">
+                                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/beauty-prod.png"></div>
+                                                            <div class="cat-name">BEAUTY SKIN CARE</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </li>
+                                    <li><a class="smoth-scroll" href="/#about">About Us</a></li>
+                                    <li><a class="smoth-scroll" href="/#gallery">Gallery</a></li>
+                                    <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
+                                @else
+                                    <li><a class="smoth-scroll" href="#home">Home</a></li>
+                                    <li class="dropdown product-hover">
+                                        <a href="#">Products & Services<span class="caret"></span>
+                                        </a>
 
-                                        @endif  
-                                    </ul>
-                                </li> --}}
-
-                                <li class="dropdown"><a class="smoth-scroll dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="">Products & Services&nbsp;&nbsp;<span class="caret"></span></a>
-                                    <ul class="dropdown-menu">
-                                        <li class="dropdown-submenu"><a>Home Furnishings<span class="fa fa-caret-right pull-right"></span></a>
-                                            <ul class="dropdown-menu pull-right">
-                                                <li><a>Wallpapers</a></li>
-                                                <li><a>Rugs and Carpets</a></li>
-                                                <li><a>Curtain Fabrics</a></li>
-                                                <li><a>Upholstery Fabrics</a></li>
-                                                <li><a>Blinds</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a>Sofas</a></li>
-                                        <li><a>Chairs</a></li>
-                                        <li><a>Tables</a></li>
-                                        <li><a>Beds</a></li>
-                                        <li><a>Lumiere Lights</a></li>
-                                        <li><a>Awning with Mechanisms</a></li>
-                                        <li class="dropdown-submenu"><a>Accessories<span class="fa fa-caret-right pull-right"></span></a>
-                                            <ul class="dropdown-menu pull-right">
-                                                <li><a>Frames</a></li>
-                                                <li><a>Mirrors</a></li>
-                                                <li><a>Figurines</a></li>
-                                                <li><a>Coat Stands</a></li>
-                                                <li><a>Curtain Rods</a></li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-submenu"><a>Garden<span class="fa fa-caret-right pull-right"></span></a>
-                                            <ul class="dropdown-menu pull-right">
-                                                <li><a>Garden Set</a></li>
-                                                <li><a>Awning with Mechanisms</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a>Antique Furnitures</a></li>
-                                        <li class="dropdown-submenu"><a>Clearance<span class="fa fa-caret-right pull-right"></span></a>
-                                            <ul class="dropdown-menu pull-right">
-                                                <li><a>Forever Sale</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a class="smoth-scroll" href="#about">About Us</a></li>
-                                <li><a class="smoth-scroll" href="#gallery">Gallery</a></li>
-                                <li><a class="smoth-scroll" href="#contact">Contact Us</a></li>
+                                        <!-- PRODUCT DROPDOWN -->
+                                        <div class="product-dropdown" style="display: none;">
+                                            @if(count($_categories) > 0)
+                                                @foreach($_categories as $categories)
+                                                <div class="cat-container">
+                                                    <a href="/product?type={{ $categories["type_id"] }}">
+                                                        <div class="per-cat">
+                                                            <div class="cat-img-container"><img style="width: 124px; height: 100px; object-fit: cover;" src="{{ $categories["type_image"] }}"></div>
+                                                            <div class="cat-name">{{ $categories["type_name"] }}</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                @endforeach
+                                            @else
+                                                <div class="cat-container">
+                                                    <a href="/product">
+                                                        <div class="per-cat">
+                                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/beauty-prod.png"></div>
+                                                            <div class="cat-name">BEAUTY SKIN CARE</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </li>
+                                    <li><a class="smoth-scroll" href="#about">About Us</a></li>
+                                    <li><a class="smoth-scroll" href="#gallery">Gallery</a></li>
+                                    <li><a class="smoth-scroll" href="#contact">Contact Us</a></li>
+                                @endif
                             </ul>
                         </nav>
                     </div>
@@ -199,7 +204,7 @@
                         <div class="image-holder">
                             <img src="/themes/{{ $shop_theme }}/img/shell-canvas-logo.png">
                         </div>
-                        <nav class="footer-navigation">
+                        {{-- <nav class="footer-navigation">
                             <ul>
                                 <li><a class="smoth-scroll" href="#home">Home</a></li>
                                 <li><a class="smoth-scroll dropdown-toggle" href="/product">Products & Services</a></li>
@@ -207,13 +212,88 @@
                                 <li><a class="smoth-scroll" href="#contact">Gallery</a></li>
                                 <li><a class="smoth-scroll" href="/legalities">Contact Us</a></li> 
                             </ul>
+                        </nav> --}}
+
+                        <nav class="footer-navigation">
+                            <ul>
+                                @if(Request::segment(1)=="product")
+                                    <li><a class="smoth-scroll" href="/#home">Home</a></li>
+                                    <li class="dropdown product-hovers">
+                                        <a href="#">Products & Services<span class="caret"></span>
+                                        </a>
+
+                                        <!-- PRODUCT DROPDOWN -->
+                                        <div class="product-dropdown-ftr" style="display: none;">
+                                            @if(count($_categories) > 0)
+                                                @foreach($_categories as $categories)
+                                                <div class="cat-container">
+                                                    <a href="/product?type={{ $categories["type_id"] }}">
+                                                        <div class="per-cat">
+                                                            <div class="cat-img-container"><img style="width: 124px; height: 100px; object-fit: cover;" src="{{ $categories["type_image"] }}"></div>
+                                                            <div class="cat-name">{{ $categories["type_name"] }}</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                @endforeach
+                                            @else
+                                                <div class="cat-container-ftr">
+                                                    <a href="/product">
+                                                        <div class="per-cat">
+                                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/beauty-prod.png"></div>
+                                                            <div class="cat-name">BEAUTY SKIN CARE</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </li>
+                                    <li><a class="smoth-scroll" href="/#about">About Us</a></li>
+                                    <li><a class="smoth-scroll" href="/#gallery">Gallery</a></li>
+                                    <li><a class="smoth-scroll" href="/#contact">Contact Us</a></li>
+                                @else
+                                    <li><a class="smoth-scroll" href="#home">Home</a></li>
+                                    <li class="dropdown product-hover">
+                                        <a href="#">Products & Services<span class="caret"></span>
+                                        </a>
+
+                                        <!-- PRODUCT DROPDOWN -->
+                                        <div class="product-dropdown-ftr" style="display: none;">
+                                            @if(count($_categories) > 0)
+                                                @foreach($_categories as $categories)
+                                                <div class="cat-container">
+                                                    <a href="/product?type={{ $categories["type_id"] }}">
+                                                        <div class="per-cat">
+                                                            <div class="cat-img-container"><img style="width: 124px; height: 100px; object-fit: cover;" src="{{ $categories["type_image"] }}"></div>
+                                                            <div class="cat-name">{{ $categories["type_name"] }}</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                                @endforeach
+                                            @else
+                                                <div class="cat-container-ftr">
+                                                    <a href="/product">
+                                                        <div class="per-cat">
+                                                            <div class="cat-img-container"><img src="/themes/{{ $shop_theme }}/img/beauty-prod.png"></div>
+                                                            <div class="cat-name">BEAUTY SKIN CARE</div>
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </li>
+                                    <li><a class="smoth-scroll" href="#about">About Us</a></li>
+                                    <li><a class="smoth-scroll" href="#gallery">Gallery</a></li>
+                                    <li><a class="smoth-scroll" href="#contact">Contact Us</a></li>
+                                @endif
+                            </ul>
                         </nav>
+
                         <div class="social-nav">
                             <ul>
-                                <li><a><i class="fa fa-facebook"></i></a></li>
-                                <li><a><i class="fab fa-twitter"></i></a></li>
-                                <li><a><i class="fab fa-google-plus-g"></i></a></li>
-                                <li><a><i class="fab fa-instagram"></i></a></li>
+                                <li><a href="https://www.facebook.com/Shell-Canvas-and-Upholstery-Supply-224656277577417/?ref=br_rs" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                                {{-- <li><a><i class="fab fa-twitter"></i></a></li>
+                                <li><a><i class="fab fa-google-plus-g"></i></a></li> --}}
+                                <li><a href="https://www.instagram.com/shellcanvas/?hl=en" target="_blank"><i class="fab fa-instagram"></i></a></li>
                             </ul>
                         </div>
                     </div>

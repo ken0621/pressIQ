@@ -10,7 +10,8 @@ use App\Globals\Utilities;
 use Request;
 use Session;
 use Carbon\Carbon;
-
+use App\Models\Tbl_payment_method;
+use DB;
 class CashierController extends Member
 {
     public function pos()
@@ -18,12 +19,11 @@ class CashierController extends Member
         Cart2::set_cart_key("cashier-" . $this->user_info->user_id);
     	$data["page"]           = "Point of Sale";
         $data["cart"]           = $_items = Cart2::get_cart_info();
-        $data["_price_level"]   = Item::list_price_level($this->user_info->shop_id);
+        $data["_price_level"]   = Item::list_price_level($this->user_info->shop_id,null,null,null);
         $data["current_level"]  = ($data["cart"]["info"] ? $data["cart"]["info"]->price_level_id : 0);
         $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id);
         $data['_salesperson'] = Utilities::get_all_users($this->user_info->shop_id, $this->user_info->user_id);
         $data['_payment'] = Cart2::load_payment($this->user_info->shop_id);
-        
         if(Session::has('customer_id'))
         {
             $data['customer'] = Customer::info(Session::get('customer_id'), $this->user_info->shop_id);
@@ -38,8 +38,14 @@ class CashierController extends Member
             $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id, $warehouse_id);
             $data['exist'] = $data['customer'];
         }
-        
-       	return view("member.cashier.pos", $data);
+
+        $data['_method'] = $method = Tbl_payment_method::where('shop_id',$this->user_info->shop_id)->where('isDefault',0)->get();
+        foreach ($method as $key => $value) 
+        {
+            $data['_method'][$key]['_type'] = DB::table('tbl_payment_tag')->where('tbl_payment_tag.payment_method_id',$value->payment_method_id)->join('tbl_payment_type','tbl_payment_type.payment_type_id','=','tbl_payment_tag.payment_type_id')->get();
+        }
+
+        return view("member.cashier.pos", $data);
     }
     public function add_payment()
     {
@@ -228,6 +234,30 @@ class CashierController extends Member
 
         echo json_encode($return);
     }
+
+    public function pos_change_non_inventory_price()
+    {
+        $data["shop_id"]    = $shop_id = $this->user_info->shop_id;
+        $data["item_id"]    = $item_id = Request::input("item_id");
+        $new_price          = Request::input("new_price");
+        $data["item"]       = $item = Cart2::scan_item($data["shop_id"], $data["item_id"]);
+        
+
+        if($data["item"])
+        {
+            $return["status"]   = "success";
+            $return["status_message"]  = "New Price Posted";
+            Cart2::add_item_to_cart($shop_id, $item_id, 0, false, $new_price);
+            $return["call_function"] = "";
+        }
+        else
+        {
+            $return["status"]   = "error";
+            $return["status_message"]  = "The ITEM you scanned didn't match any record.";
+        }   
+        echo json_encode($return);
+    }
+
     public function set_cart_info($key, $value)
     {
         $cart_key           = Cart2::get_cart_key();
@@ -248,14 +278,159 @@ class CashierController extends Member
         $data['_warehouse'] = Warehouse2::get_all_warehouse($this->user_info->shop_id, $warehouse_id);
         return view('member.cashier.pos_load_warehouse',$data);
     }
+
+    public function settings()
+    {
+        $data["page"]           = "Cashier Settings";
+        
+        /*THIS IS FOR PHILTECH ONLY ------INSERT IF NO DATA JAMES OMOSORA*/
+        $seed = ['CASH','GC','WALLET','BANK','REMITTANCE'];
+        $seeds = ['PALAWAN EXPRESS','LBC','BDO','ML KWARTA PADALA','CEBUANA LHUILLIER'];
+
+        foreach ($seed as $key => $value) 
+        {
+            $check = Tbl_payment_method::where('shop_id',$this->user_info->shop_id)->where('payment_name',$value)->first();
+            if(!$check && $this->user_info->shop_id == 1)
+            {
+                $ins['shop_id']         = $this->user_info->shop_id;
+                $ins['payment_name']    = $value;
+                $ins['isDefault']       = 0;
+                $ins['archived']        = 0;
+                $id = Tbl_payment_method::insertGetId($ins);
+
+                for($i = 1; $i <= 5; $i++)
+                {
+                    $tag['payment_method_id'] = $id;
+                    $tag['payment_type_id'] = $i;
+
+                    DB::table('tbl_payment_tag')->insert($tag);
+                }
+                
+            }
+        }
+
+        foreach ($seeds as $key => $value) 
+        {
+            $check = DB::table('tbl_payment_type')->where('payment_type_name',$value)->first();
+            if(!$check && $this->user_info->shop_id == 1)
+            {
+                $ins['payment_type_name']    = $value;
+                $id = DB::table('tbl_payment_type')->insert($ins);
+            }
+        }
+
+        $data['_list']          = Tbl_payment_method::where('shop_id',$this->user_info->shop_id)->where('isDefault',0)->where('archived',0)->get();
+
+        return view('member.cashier.settings.cashier_settings',$data);
+    }
+
+    
+    public function settings_action($id)
+    {
+        if($id == "submit")
+        {
+            $data = Request::all();
+            DB::table('tbl_payment_method')->where('payment_method_id',$data['payment_method_id'])->update(['payment_name'=>$data['payment_name']]);
+            
+            $list                    = DB::table('tbl_payment_tag')->where('payment_method_id',$data['payment_method_id'])->delete();
+            $return  = Self::adding_payment_type($data,$data['payment_method_id']);
+            
+        
+            return $return;
+        }
+        else if($id == "add")
+        {
+            $data['_type']          = DB::table('tbl_payment_type')->get();
+
+            return view('member.cashier.settings.cashier_settings_add',$data);
+        }
+        else if($id == "add_submit")
+        {
+            Self::settings_add_submit(Request::all());
+        }
+        else
+        {
+            $data['method']          = DB::table('tbl_payment_method')->where('payment_method_id',$id)->first();
+            $list                    = DB::table('tbl_payment_tag')->where('payment_method_id',$id)->join('tbl_payment_type','tbl_payment_type.payment_type_id','=','tbl_payment_tag.payment_method_id')->get();
+            $data['_type']           = $type  = DB::table('tbl_payment_type')->get();
+
+            foreach($type as $key=>$types)
+            {
+                $check               = DB::table('tbl_payment_tag')->where('payment_method_id',$id)->where('payment_type_id',$types->payment_type_id)->first();
+                
+                $data['_type'][$key]->is_check = $check ?  "checked" : "";
+            }
+
+            return view('member.cashier.settings.cashier_settings_edit',$data);
+        }
+        
+    }
+
+    public static function settings_add_submit($data)
+    {
+        if($data['payment_name'] == "")
+        {
+            $return['message'] = "Method Name Required";
+            $return['status'] = 'error';
+        }
+        else
+        {
+            $insert['shop_id']         = $this->user_info->shop_id;
+            $insert['payment_name']    = $data['payment_name'];
+            $insert['isDefault']       = 0;
+            $insert['archived']        = 0;
+            $id = Tbl_payment_method::insertGetId($insert);
+        
+            $return  = Self::adding_payment_type($data,$id);
+        }
+        return $return;
+    }
+
+    public static function adding_payment_type($data,$id)
+    {
+        foreach($data['payment_type_id'] as $key=>$payment)
+        {
+            $check = DB::table('tbl_payment_tag')->where('payment_method_id',$id)->where('payment_type_id',$payment)->first();
+            
+            if(!$check)
+            {
+                if($payment == 0 && $data['payment_type_name'][$key] != "")
+                {
+                    $ins['payment_type_name']    = $data['payment_type_name'][$key];
+                    $payment = DB::table('tbl_payment_type')->insert($ins);
+                }
+
+                $tag['payment_method_id'] = $id;
+                $tag['payment_type_id'] = $payment;
+                if($payment != 0)
+                {
+                    DB::table('tbl_payment_tag')->insert($tag);
+                }
+                
+            }
+        }
+        $return['message'] = "SUCCESS";
+        $return['status'] = 'success';
+
+        return $return;
+    }
+
     public function process_sale()
     {
         $cart = Cart2::get_cart_info();
         $consume_inventory                                  = Request::input('consume_inventory');
             
         $method                                             = Request::input('payment_method');
+        $payment_method_type                                = Request::input('payment_method_type');
+        $transaction_remark                                 = Request::input('transaction_remark');
+        $transaction_sales_person                           = Request::input('transaction_sales_person');
         $amount                                             = Request::input('payment_amount');
         $slot_id                                            = Request::input('slot_id');
+        $use_product_code                                   = Request::input('use_product_code');
+
+        $transaction_payment_method      = $method;
+        $transaction_payment_method_type = $payment_method_type;
+        $transaction_remark              = $transaction_remark;
 
         $shop_id                                            = $this->user_info->shop_id;
         $transaction_new["transaction_reference_table"]     = "tbl_customer";
@@ -293,7 +468,9 @@ class CashierController extends Member
                 {
                     Transaction::create_set_method('pos');
                     Transaction::create_set_method_id(0);
-                    $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, '-');
+                    /*FROM NEGATIVE SIGN> JAMES CHANGE*/
+                    $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, '-', null, null, null,$transaction_payment_method,$transaction_payment_method_type,$transaction_remark,$transaction_sales_person);
+                    // $transaction_list_id                                = Transaction::create($shop_id, $transaction_new, $transaction_type, $transaction_date, '-');
 
                     if(is_numeric($transaction_list_id))
                     {
@@ -304,7 +481,8 @@ class CashierController extends Member
 
                         if($consume_inventory == 'instant')
                         {
-                            Transaction::consume_in_warehouse($shop_id, $transaction_list_id, $remarks, $warehouse_id);
+                            /* NAG ADD AKO NG SLOT ID */
+                            Transaction::consume_in_warehouse($shop_id, $transaction_list_id, $remarks, $warehouse_id,$slot_id,$use_product_code);
                             $validate = 1;
                         }
                         if($consume_inventory == 'wis')
@@ -334,7 +512,8 @@ class CashierController extends Member
 
                             if(is_numeric($validate))
                             {
-                                $transaction_receipt_list_id      = Transaction::create($shop_id, $get_transaction_list->transaction_id, 'RECEIPT', $transaction_date, '+');
+                                /*FROM POSITIVE SIGN> JAMES CHANGE*/
+                                $transaction_receipt_list_id      = Transaction::create($shop_id, $get_transaction_list->transaction_id, 'RECEIPT', $transaction_date, '+', null, null, null,$transaction_payment_method,$transaction_payment_method_type,$transaction_remark,$transaction_sales_person);
                                 
                                 if(is_numeric($transaction_receipt_list_id))
                                 {

@@ -495,7 +495,7 @@
    <script type="text/javascript" src="js/match-height.js"></script>
    <script type="text/javascript" src="/resources/assets/slick/slick.min.js"></script>
    <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
-   <script type="text/javascript" src="/assets/front/js/global.js"></script>
+   <script type="text/javascript" src="/assets/front/js/global.js?version=1"></script>
    <script type="text/javascript" src="/assets/member/global.js"></script>
     <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
     <script type="text/javascript" src="resources/assets/frontend/js/jquery.fittext.js"></script>

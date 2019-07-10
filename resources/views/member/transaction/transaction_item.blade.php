@@ -15,8 +15,11 @@
 	        <label for="">Customer Name : </label> {{ucwords($customer_name)}} <br>
 	        <label>Transaction Number :</label> {{$list->transaction_number}}<br>
             @if($list->transaction_sales_person != 0)
-                <label for="">Sales Person : </label> {{ucwords($list->user_first_name .' '.$list->user_last_name)}}
+                <label for="">Sales Person : </label> {{ucwords($list->user_first_name .' '.$list->user_last_name)}}<br>
             @endif
+            <label>Payment Method :</label> {{$list->transaction_payment_method}}<br>
+            <label>Payment Type :</label> {{$list->transaction_payment_method_type}}<br>
+            <label>Remarks :</label> {{$list->transaction_remark}}<br>
 	    </div>
 	    <div class="col-md-3 text-right">
 	        <label>Date :</label> <br>
@@ -66,6 +69,12 @@
                         <td colspan='4' class="text-right"><b>TOTAL</b></td>
                         <td class="text-center">{{currency('PHP', $list->transaction_total)}}</td>
                     </tr>
+                    @if($list->transaction_sales_person == 0)
+                    <tr>
+                        <td colspan='5' class="text-right"><b>Shipping Fee Included</b></td>
+                    </tr>
+                    @endif
+                    
                 </tfoot>
             </table>
         </div>

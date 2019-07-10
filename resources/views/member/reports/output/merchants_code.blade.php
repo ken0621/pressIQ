@@ -27,7 +27,7 @@
                             <td class="text-center">{{date('m/d/Y', strtotime($item->record_log_date_updated))}}</td>
                             <td class="text-center">{{ucfirst($item->title_name." ".$item->first_name." ".$item->middle_name." ".$item->last_name." ".$item->suffix_name)}}</td>
                             <td class="text-center">{{$item->receipt_number}}</td>
-                            <td class="text-center">{{$item->amount}}</td>
+                            <td class="text-center">{{currency('PHP ',$item->item_price)}}</td>
                             <td class="text-center">{{$item->cellphone_number}}</td>
                             <td class="text-center">{{$item->email}}</td>       
                         </tr>

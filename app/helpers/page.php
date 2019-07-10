@@ -319,6 +319,15 @@ function page_list($pis = 0)
     $nav[$page]['submenu'][$code]['status'] = "90% Working";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Arcylen Gutierrez</span>";  
 
+     /* -- JAMESMADE => CASHIER SETTINGS */
+    $code = "cashier-settings";
+    $nav[$page]['submenu'][$code]['label'] = "Settings";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/settings";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "90% Working";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>James Omosora</span>";  
+
 
     /* E-COMMERCE */
     $page = "ecommerce";  

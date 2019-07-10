@@ -341,12 +341,17 @@ button:hover{
 		.footer-icon-container
 		{
 			padding-bottom: 20px;
+			width: 50%;
+			img
+			{
+				width: 100%;
+			}
 		}
 		.footer-image
 		{
 			img
 			{
-				max-width: 250px;
+				max-width: 200px;
 			}
 		}
 		p 

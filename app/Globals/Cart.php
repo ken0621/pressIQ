@@ -623,7 +623,7 @@ class Cart
 
         return $message;
     }
-    public static function update_coupon_code($coupon_id, $price,$coupon_product_id, $minimum_quantity = 0, $type="fixed",$all_product_id = false)
+    public static function update_coupon_code($coupon_id, $price,$coupon_product_id, $minimum_quantity = 0, $type="fixed",$all_product_id = false, $coupon_code)
     {
 
         $shop_id = Cart::get_shop_info();
@@ -642,6 +642,11 @@ class Cart
             $update["coupon_code_amount"] = $price;
             $update["coupon_discounted"]       =  $type;
             $update["coupon_minimum_quantity"] =  $minimum_quantity;
+
+            if ($coupon_code) 
+            {
+                $update["coupon_code"] = $coupon_code;
+            }
 
             Tbl_coupon_code::where("coupon_code_id",$coupon_id)->update($update);
 
@@ -975,17 +980,20 @@ class Cart
         $_cart = isset(Self::get_cart($shop_id)["cart"]) ? Self::get_cart($shop_id)["cart"] : null;
         unset($data["tbl_ec_order_item"]);
         /* ITEM ON CART */
-        foreach($_cart as $key => $cart)
+        if (count($_cart) > 0)
         {
-            $data["tbl_ec_order_item"][$key]["item_id"]     = $cart["cart_product_information"]["variant_id"];
-            $data["tbl_ec_order_item"][$key]["price"]       = $cart["cart_product_information"]["product_price"];
-            $data["tbl_ec_order_item"][$key]["quantity"]    = $cart["quantity"];
-            $data["tbl_ec_order_item"][$key]["subtotal"]    = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
-            $data["tbl_ec_order_item"][$key]["total"]       = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
-            $data["tbl_ec_order_item"][$key]["tax"]         = 0;
-            $data["tbl_ec_order_item"][$key]["ec_order_id"] = $data["tbl_ec_order"]["ec_order_id"];
+            foreach($_cart as $key => $cart)
+            {
+                $data["tbl_ec_order_item"][$key]["item_id"]     = $cart["cart_product_information"]["variant_id"];
+                $data["tbl_ec_order_item"][$key]["price"]       = $cart["cart_product_information"]["product_price"];
+                $data["tbl_ec_order_item"][$key]["quantity"]    = $cart["quantity"];
+                $data["tbl_ec_order_item"][$key]["subtotal"]    = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
+                $data["tbl_ec_order_item"][$key]["total"]       = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
+                $data["tbl_ec_order_item"][$key]["tax"]         = 0;
+                $data["tbl_ec_order_item"][$key]["ec_order_id"] = $data["tbl_ec_order"]["ec_order_id"];
 
-            $subtotal += $data["tbl_ec_order_item"][$key]["total"];
+                $subtotal += $data["tbl_ec_order_item"][$key]["total"];
+            }
         }
 
         /* SUMMARY OF DATA FOR ORDER */
@@ -1171,7 +1179,7 @@ class Cart
                     case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
                     case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
                     case 'e_wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
-                    case 'cashondelivery': return Cart::submit_using_cash_on_delivery($shop_id, $method_information); break;
+                    case 'cashondelivery': return Cart::submit_using_cash_on_delivery($shop_id, $method_information, $data); break;
                     default: dd("UNDER DEVELOPMENT"); break;
                 }
             }
@@ -1491,13 +1499,13 @@ class Cart
         $result['status'] = 'success';
         return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
     }
-    public static function submit_using_cash_on_delivery($shop_id, $method_information)
+    public static function submit_using_cash_on_delivery($shop_id, $method_information, $cart)
     {
         $payment_status = 0;
         $order_status   = "Pending";
         $customer       = Cart::get_customer();
 
-        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null, 0, $cart);
         Cart::clear_all($shop_id);
 
         $tbl_order = DB::table("tbl_ec_order")->where("tbl_ec_order.ec_order_id", $order_id)->leftJoin("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")->first();

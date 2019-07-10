@@ -23,6 +23,12 @@ class ShopAboutController extends Shop
     	return view("runruno", $data);
     }
 
+    public function bulletin()
+    {
+    	$data["page"] = "Bulletin";
+    	return view("bulletin", $data);
+    }
+
     public function news()
     {
         $data["page"] = "news";

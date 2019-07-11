@@ -167,7 +167,7 @@
                     <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
                     <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR MERCHANTS</a></li>
                     <li class="nav-border"><a href="https://www.cashbackworld.com/ph-en/registration/taflink?r=6cW7UUNsyoLQfy3qV%2BLFXek98pBL1PKK3d%2Fs7QVm1wIGPQXqhpYHo8unCDKTwyHr&t=81dea562-0729-4d8f-82e8-35bb6349a1f8">CASHBACK SYSTEM</a></li> 
-                    <li class="nav-border"><a href="/bulletin">ANNOUNCEMENT</a></li> 
+                    <li class="nav-border"><a href="/bulletin">ANNOUNCEMENTS</a></li> 
                     <li class="nav-border"><a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb">HOTEL BOOKING</a></li>
                     <li class="nav-border"><a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwiZmvKj-5HhAhVNjY8KHXVSDzwYABAAGgJzYg&ae=1&ohost=www.google.com&cid=CAESEeD2Xc5bI6KoIrkYoBEWupwe&sig=AOD64_1EdtsBF_3V8idbJaCKzKDmTL2__w&q&adurl=https://www.paymaya.com/?gclid%3DCjwKCAjwycfkBRAFEiwAnLX5IUBbvQBsYFD2WZKJKI9uVllkDKBXiRyDMDU3slHbDklqbiCrnl7e5BoClbQQAvD_BwE&ved=2ahUKEwje0u2j-5HhAhX17nMBHSi3BgcQ0Qx6BAgMEAE">E-MONEY</a></li>
                     <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">CAREER</a></li>
@@ -269,7 +269,7 @@
                             <a href="/"><li>HOME</li></a>
                             <a href="/partners"><li>OUR MERCHANTS</li></a>
                             <a href="https://www.cashbackworld.com/ph-en/registration/taflink?r=6cW7UUNsyoLQfy3qV%2BLFXek98pBL1PKK3d%2Fs7QVm1wIGPQXqhpYHo8unCDKTwyHr&t=81dea562-0729-4d8f-82e8-35bb6349a1f8"><li>CASHBACK SYSTEM</li></a>
-                            <a href="/bulletin"><li>ANNOUNCEMENT</li></a>
+                            <a href="/bulletin"><li>ANNOUNCEMENTS</li></a>
                             <a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb"><li>HOTEL BOOKING</li></a>
                             <a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwiZmvKj-5HhAhVNjY8KHXVSDzwYABAAGgJzYg&ae=1&ohost=www.google.com&cid=CAESEeD2Xc5bI6KoIrkYoBEWupwe&sig=AOD64_1EdtsBF_3V8idbJaCKzKDmTL2__w&q&adurl=https://www.paymaya.com/?gclid%3DCjwKCAjwycfkBRAFEiwAnLX5IUBbvQBsYFD2WZKJKI9uVllkDKBXiRyDMDU3slHbDklqbiCrnl7e5BoClbQQAvD_BwE&ved=2ahUKEwje0u2j-5HhAhX17nMBHSi3BgcQ0Qx6BAgMEAE"><li>E-MONEY</li></a>
                             <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
@@ -347,7 +347,7 @@
                         <a href="/"><li>HOME</li></a>
                         <a href="/partners"><li>OUR MERCHANTS</li></a>
                         <a href="https://www.cashbackworld.com/ph-en/registration/taflink?r=6cW7UUNsyoLQfy3qV%2BLFXek98pBL1PKK3d%2Fs7QVm1wIGPQXqhpYHo8unCDKTwyHr&t=81dea562-0729-4d8f-82e8-35bb6349a1f8"><li>CASHBACK SYSTEM</li></a>
-                        <a href="/bulletin"><li>ANNOUNCEMENT</li></a>
+                        <a href="/bulletin"><li>ANNOUNCEMENTS</li></a>
                         <a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb"><li>HOTEL BOOKING</li></a>
                         <a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwiZmvKj-5HhAhVNjY8KHXVSDzwYABAAGgJzYg&ae=1&ohost=www.google.com&cid=CAESEeD2Xc5bI6KoIrkYoBEWupwe&sig=AOD64_1EdtsBF_3V8idbJaCKzKDmTL2__w&q&adurl=https://www.paymaya.com/?gclid%3DCjwKCAjwycfkBRAFEiwAnLX5IUBbvQBsYFD2WZKJKI9uVllkDKBXiRyDMDU3slHbDklqbiCrnl7e5BoClbQQAvD_BwE&ved=2ahUKEwje0u2j-5HhAhX17nMBHSi3BgcQ0Qx6BAgMEAE"><li>E-MONEY</li></a>
                         <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
@@ -419,7 +419,7 @@
                         <ul>
                             <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partner Merchants</a></li>
                             <li><a href="https://www.cashbackworld.com/ph-en/registration/taflink?r=6cW7UUNsyoLQfy3qV%2BLFXek98pBL1PKK3d%2Fs7QVm1wIGPQXqhpYHo8unCDKTwyHr&t=81dea562-0729-4d8f-82e8-35bb6349a1f8">CASHBACK SYSTEM</a></li>
-                            <li><a href="/bulletin">ANNOUNCEMENT</a></li>
+                            <li><a href="/bulletin">ANNOUNCEMENTS</a></li>
                             <li><a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb">Hotel Booking</a></li>
                             {{-- <li><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></li>
                             <li><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></li> --}}

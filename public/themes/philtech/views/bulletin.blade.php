@@ -2,7 +2,7 @@
 @section("content")
 <div class="container">
     <div class="bulletin-container" style="text-align: center; height: 100vh; display: flex; align-items:center; justify-content: center; padding: 25px;">
-        <div>
+        <div style="max-width: 700px;">
             <img src="/themes/{{ $shop_theme }}/img/fcking-bulletin.jpg" alt="" style="width: 100%;">
         </div>
     </div>

@@ -27,6 +27,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 
 	Route::get('/events', 'Shop\ShopEventsController@index'); //EDWARD GUEVARRA
 	Route::get('/events/view/{id}', 'Shop\ShopEventsController@view'); //EDWARD GUEVARRA
+	Route::get('/events/view_description/{id}', 'Shop\ShopEventsController@view_description'); //EDWARD GUEVARRA
 	Route::any('/events/view_details','Shop\ShopEventsController@view_details'); // ARCY
 	Route::any('/events/event_reserve','Shop\ShopEventsController@event_reserve'); // ARCY
 	Route::any('/events/event_reserve_submit','Shop\ShopEventsController@event_reserve_submit'); // ARCY

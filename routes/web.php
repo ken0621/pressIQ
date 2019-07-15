@@ -690,10 +690,12 @@ Route::get('/member/customer/product_repurchase/get_slot_v_membership_code/{memb
 Route::get('/member/customer/product_repurchase/get_product_code/info/{id}','Member\MLM_ProductRepurchaseController@get_code_info');
 
 Route::get('/member/about','Member\StoreInfoController@storeInfo');
+Route::get('/member/about','Member\StoreInfoController@storeInfo');
 Route::post('/member/about/storeDescription','Member\StoreInfoController@storeDescription');
 Route::get('/member/about/edit/{id}','Member\StoreInfoController@edit');
 Route::post('/member/about/update','Member\StoreInfoController@update');
 Route::get('/member/about/remove/{id}','Member\StoreInfoController@remove');
+Route::get('/bulletin','Shop\ShopAboutController@bulletin');
 
 //arcy
 Route::any('/member/customer/credit_memo','Member\CreditMemoController@index');

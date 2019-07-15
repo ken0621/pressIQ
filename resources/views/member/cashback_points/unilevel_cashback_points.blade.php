@@ -127,10 +127,8 @@
 <script type="text/javascript">
   $(".dist_cashback").click(function()
   {
-      if(!{{$_slot}}){
         localStorage.setItem("show_dist_message",1);
         $(".secured_distribute").submit();
-      }
   });
 
   if(localStorage.getItem("show_dist_message") == 1)

@@ -379,11 +379,19 @@ class ProductOrderController2 extends Member
     }
     public function confirm_payment_submit()
     {
-        $val = Payment::manual_confirm_payment($this->user_info->shop_id, request('transaction_list_id'));
+        
+        if($this->user_info->shop_id == 1){
+            $lead_slot = Tbl_mlm_slot::where("slot_owner",$this->user_info->user_id)->first();
+            $val = Payment::manual_confirm_payment_philtech($this->user_info->shop_id, request('transaction_list_id'),$lead_slot->slot_id);
+        }
+        else{
+            $val = Payment::manual_confirm_payment($this->user_info->shop_id, request('transaction_list_id'));
+        }
+        
         if(!$val)
         {
             $get_transaction_list = Transaction::get_data_transaction_list(request('transaction_list_id'));
-            
+
             if ($get_transaction_list) 
             {
                 $get_transaction      = Tbl_transaction::where("transaction_id", $get_transaction_list->transaction_id)->first();
@@ -400,7 +408,7 @@ class ProductOrderController2 extends Member
                     }
                 }
 
-                if($this->user_info->shop_id == 47)
+                if($this->user_info->shop_id == 47 || $this->user_info->shop_id == 1)
                 {
                     $consume["id"] = $get_transaction_list->transaction_list_id;
                     $get_list_item = Tbl_transaction_item::where("transaction_list_id",$consume["id"])->get();
@@ -410,8 +418,11 @@ class ProductOrderController2 extends Member
                         $list_item_id  = $list_item->item_id;
                         $this->check_lead_bonus($consume,$list_item_id);
                     }
+                    // dd( $list_item_id );
                 }
-                
+                if($this->user_info->shop_id == 1){
+                    $validate = Transaction::consume_payment($this->user_info->shop_id , $get_transaction_list->transaction_list_id, $lead_slot->slot_id);
+                }
             }
             $return['status'] = 'success';
             $return['call_function'] = 'success_confirm';            

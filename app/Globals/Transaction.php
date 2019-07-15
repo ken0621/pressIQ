@@ -282,10 +282,12 @@ class Transaction
         foreach ($get_item as $key => $value) 
         {
             $item_type = Item::get_item_type($value->item_id);
+            $consume['item_type'] = $item_type;
             /*INVENTORY TYPE*/
             if($item_type == 1 || $item_type == 5)
             {   
                 $check = Cart2::get_item_pincode($shop_id, $value->item_id);
+                
                 if(count($check) > 0)
                 {
                     foreach ($check as $key_cart => $value_cart) 
@@ -297,7 +299,9 @@ class Transaction
                     }
                 }
                 else
-                {                    
+                {     
+                    // dd($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume); 
+
                     Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
                 }
 
@@ -1087,7 +1091,7 @@ class Transaction
         }
 
         $get_all_payment = Cart2::cart_payment_list($shop_id);
-
+        // dd($get_all_payment);
         $insert_payment = null;
         foreach ($get_all_payment as $key => $value) 
         {
@@ -1096,8 +1100,8 @@ class Transaction
             $insert_payment[$key]['transaction_payment_amount'] = $value->payment_amount;
             $insert_payment[$key]['transaction_payment_date'] = $transaction_date;
         }
-
-        if(count($insert_payment) > 0)
+        // count($insert_payment) > 0
+        if($insert_payment)
         {
             Tbl_transaction_payment::insert($insert_payment);
             $return = 1;

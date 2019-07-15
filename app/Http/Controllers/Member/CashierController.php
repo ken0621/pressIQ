@@ -417,6 +417,7 @@ class CashierController extends Member
 
     public function process_sale()
     {
+        // dd(Request::input('use_product_code'),$cart);
         $cart = Cart2::get_cart_info();
         $consume_inventory                                  = Request::input('consume_inventory');
             

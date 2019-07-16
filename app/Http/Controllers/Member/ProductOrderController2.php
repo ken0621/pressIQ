@@ -379,9 +379,11 @@ class ProductOrderController2 extends Member
     }
     public function confirm_payment_submit()
     {
-        
+        // dd(Tbl_transaction::where('transaction_id',request()->transaction_id)->get);
         if($this->user_info->shop_id == 1){
-            $lead_slot = Tbl_mlm_slot::where("slot_owner",$this->user_info->user_id)->first();
+            $_get = Tbl_transaction::where('transaction_id',request()->transaction_id)->first();
+            $lead_slot = Tbl_mlm_slot::where("slot_owner",$_get->transaction_reference_id)->first();
+            // dd($lead_slot);
             $val = Payment::manual_confirm_payment_philtech($this->user_info->shop_id, request('transaction_list_id'),$lead_slot->slot_id);
         } 
         else{

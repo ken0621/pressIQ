@@ -383,7 +383,7 @@ class ProductOrderController2 extends Member
         if($this->user_info->shop_id == 1){
             $lead_slot = Tbl_mlm_slot::where("slot_owner",$this->user_info->user_id)->first();
             $val = Payment::manual_confirm_payment_philtech($this->user_info->shop_id, request('transaction_list_id'),$lead_slot->slot_id);
-        }
+        } 
         else{
             $val = Payment::manual_confirm_payment($this->user_info->shop_id, request('transaction_list_id'));
         }

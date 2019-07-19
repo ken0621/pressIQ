@@ -697,6 +697,24 @@ class Payment
       }
       return $consume_validation;
     }
+
+    public static function manual_confirm_payment_philtech($shop_id, $transaction_list_id = 0, $slot_id)
+    {
+      $consume_validation = Transaction::consume_in_warehouse_validation($shop_id, $transaction_list_id);
+      if(!$consume_validation)
+      {
+        $transaction_list                                   = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->first();
+        $transaction_type                                   = "RECEIPT";
+        $transaction_id                                     = $transaction_list->transaction_id;
+        $transaction_date                                   = Carbon::now();
+        $source                                             = $transaction_list_id;
+        
+        // Transaction::create_update_transaction_details(serialize($data));
+        $transaction_list_id = Transaction::create($shop_id, $transaction_id, $transaction_type, $transaction_date, "+", $source);
+        Transaction::consume_in_warehouse($shop_id, $transaction_list_id, '', 0 ,$slot_id,'yes');
+      }
+      return $consume_validation;
+    }
    public static function manual_reject_payment($shop_id, $transaction_id = 0)
    {
       $update['order_status'] = 'reject';

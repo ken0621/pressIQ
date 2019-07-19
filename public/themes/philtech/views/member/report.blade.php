@@ -91,7 +91,7 @@
 				  			<tr>
 				  				<td class="text-left">{{ $code->mlm_pin }}</td>
 				  				<td class="text-left">{{ $code->mlm_activation }}</td>
-				  				<td class="text-left">{{ $code->item_type_id == 5 ? "Reward Code" : "Membership Code" }}</td>
+				  				<td class="text-left">{{ $code->item_type_id == 5 ? "Membership Code" : "Product Code" }}</td>
 				  				<td class="text-center">{{ $code->item_in_use }}</td>
 				  				<td class="text-center">{{ $code->used_by }}</td>
 				  			</tr>

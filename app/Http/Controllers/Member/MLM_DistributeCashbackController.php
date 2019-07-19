@@ -185,6 +185,6 @@ class MLM_DistributeCashbackController extends Member
         }
 
 
-		return redirect::to("/member/mlm/unilevel_cashback_points");
+		return redirect::to("/member/mlm/distribute_unilevel_cashback");
 	}
 }

@@ -464,6 +464,12 @@
                                     {{ isset($company_info['company_email']) ? $company_info['company_email']->value : 'youremailhere@company.com' }}
                                 </td>
                             </tr>
+                            <tr>
+                                <td><img src="/themes/{{ $shop_theme }}/img/icon/facebook.png"></td>
+                                <td>
+                                   <a href="https://www.facebook.com/philtechweprovidebusiness/" style="text-decoration: none; color: rgba(255,255,255,0.5); font-size: 13px;"  target="_blank"> https://www.facebook.com/philtechweprovidebusiness/</a>
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </div>

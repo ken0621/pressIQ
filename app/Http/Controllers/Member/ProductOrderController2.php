@@ -140,12 +140,13 @@ class ProductOrderController2 extends Member
     }
     public function details()
     {
-        $transaction_list_id    = request("id");
-        $transaction_list       = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();
-        $details                = $transaction_list->payment_details;
-
-        $transaction_id = Tbl_transaction_list::where("transaction_list_id",$transaction_list_id)->first()->transaction_id;
-        $transaction_payment_proof = Tbl_transaction::where('transaction_id',$transaction_id)->first()->transaction_payment_proof;
+        
+        $transaction_list_id        = request("id");
+        $transaction_list           = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();
+        $details                    = $transaction_list->payment_details;
+        $items                      = Tbl_transaction_item::where('transaction_list_id',$transaction_list->transaction_list_id)->get();
+        $transaction_id             = Tbl_transaction_list::where("transaction_list_id",$transaction_list_id)->first()->transaction_id;
+        $transaction_payment_proof  = Tbl_transaction::where('transaction_id',$transaction_id)->first()->transaction_payment_proof;
         $path_prefix = "http://digimaweb.solutions/uploadthirdparty/";
         $data['image_url'] = $path_prefix.$transaction_payment_proof;
 
@@ -153,12 +154,16 @@ class ProductOrderController2 extends Member
         if (is_serialized($details)) 
         {
             $data["details"]               = unserialize($details);
+            // dd( $data["details"] );
         }
         else
         {
             $data["details"]               = [];
         }
-
+        foreach ($items as $key => $value) {
+            $data["details"]['item_'.($key+1)] = $value->item_name;
+            $data["details"]['qty_'.($key+1)] = $value->quantity;
+        }
         return view("member.product_order2.details", $data);
     }
     public function payref()

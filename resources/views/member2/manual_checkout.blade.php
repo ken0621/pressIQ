@@ -60,7 +60,10 @@
 					
 					<div class="form-group">
 						<input name="sender_name" class="form-control" type="text" placeholder="Sender's Name">
-					</div>					
+					</div>		
+					<div class="form-group">
+						<input name="sender_number" class="form-control" type="text" placeholder="Sender's Contact Number">
+					</div>			
 					<div class="form-group">
 						<input name="amount" class="form-control" type="number" step="any" placeholder="Amount">
 					</div>

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Tbl_online_pymnt_method;
 use Redirect;
+use DB;
 
 
 class ShopManualCheckout extends Shop
@@ -82,12 +83,12 @@ class ShopManualCheckout extends Shop
     public function send_proof($transaction_list_id,$request)
     {
       $transaction_list     = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();
+      DB::table('tbl_customer_other_info')->where('customer_id', $transaction_list->transaction_reference_id)->update(['customer_mobile' => request()->sender_no]);
       $transaction_type     = "PROOF";
       $transaction_id       = $transaction_list->transaction_id;
       $shop_id              = $transaction_list->shop_id;
       $transaction_date     = Carbon::now();
       $source               = $transaction_list_id;
-
       $path = Storage::putFile('payment-proof', $request->file('proofupload'));
 
       Transaction::create_update_proof($path);

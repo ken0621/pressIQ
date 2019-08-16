@@ -64,7 +64,7 @@ class ProductOrderController2 extends Member
         {
             $pos = null;
         }
-
+        // dd($shop_id, 'proof',$keyword,$paginate, 0, null,null,$pos);
         if($active_tab == "paid")
         {
             $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate, 0, null,null,$pos);
@@ -93,7 +93,8 @@ class ProductOrderController2 extends Member
 
             if($active_tab == "paid") 
             {
-                $data["_raw_table"][$key]->action = '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a>';
+                $data["_raw_table"][$key]->action = '<a href="javascript:" class="popup" link="/member/ecommerce/product_order2/details?id=' . $raw_table->transaction_list_id . '" size="lg">VIEW DETAILS</a> | ';
+                $data["_raw_table"][$key]->action .= '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a>';
             }
             if($active_tab == "unconfirmed")
             {

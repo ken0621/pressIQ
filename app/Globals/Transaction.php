@@ -825,17 +825,18 @@ class Transaction
 
         //patrick
         $emails = array();
+        $transaction_id = array();
         if($transaction_type == 'proof' && $shop_id != 47)
         {
             foreach ($data as $key => $value) 
             {
-                if(in_array($value->email, $emails))
+                if(in_array($value->transaction_id, $transaction_id))
                 {
                     unset($data[$key]);                
                 }
                 else
                 {
-                    array_push($emails, $value->email);
+                    array_push($transaction_id, $value->transaction_id);
                 }
             }
         }

@@ -593,6 +593,48 @@ class ShopMemberController extends Shop
         Session::flash('message_concern', 'Message Successfully Sent!');
         return Redirect::back();
     }
+    public function send_contact_us_shell()
+    {
+        $shell_contactus["contactus_first_name"]         =request('contactus_first_name');
+        $shell_contactus["contactus_last_name"]          =request('contactus_last_name');
+        $shell_contactus["contactus_phone_number"]       =request('contactus_phone_number');
+        $shell_contactus["contactus_subject"]            =request('contactus_subject');
+        $shell_contactus["contactus_email"]              =request('contactus_email');
+        $shell_contactus["contactus_message"]            =request('contactus_message');
+        $shell_contactus["contactus_to"]                 =request('contactus_to');
+        $shell_contactus["explode_email"] = explode("@", $shell_contactus['contactus_email']);
+        Mail::send('email.contact_us',$shell_contactus, function($message) use ($shell_contactus)
+        {
+            $message->from('no-reply@digimahouse.com',$shell_contactus['contactus_email']);
+            $message->to("shellcanvasbuendia@gmail.com");  
+            // $message->to("carlosegovia5@gmail.com");  
+            $message->subject($shell_contactus['contactus_subject']);
+           
+        });
+        Session::flash('message_concern_shell', 'Message Successfully Sent!');
+        return Redirect::to('/#contact');  
+    }
+    public function send_contact_us_living()
+    {
+        $living_contactus["contactus_first_name"]         =request('contactus_first_name');
+        $living_contactus["contactus_last_name"]          =request('contactus_last_name');
+        $living_contactus["contactus_phone_number"]       =request('contactus_phone_number');
+        $living_contactus["contactus_subject"]            =request('contactus_subject');
+        $living_contactus["contactus_email"]              =request('contactus_email');
+        $living_contactus["contactus_message"]            =request('contactus_message');
+        $living_contactus["contactus_to"]                 =request('contactus_to');
+        $living_contactus["explode_email"] = explode("@", $living_contactus['contactus_email']);
+        Mail::send('email.contact_us',$living_contactus, function($message) use ($living_contactus)
+        {
+            $message->from('no-reply@digimahouse.com',$living_contactus['contactus_email']);
+            $message->to("franchising_livingwater@yahoo.com.ph");  
+            // $message->to("cyrilmea@gmail.com");  
+            $message->subject($living_contactus['contactus_subject']);
+           
+        });
+        Session::flash('message_concern_living', 'Message Successfully Sent!');
+        return Redirect::to('/#contact');  
+    }
                     
     public function send_demo()                             
     {

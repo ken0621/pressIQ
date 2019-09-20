@@ -69,6 +69,10 @@ class ProductOrderController2 extends Member
         {
             $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate, 0, null,null,$pos);
         }
+        if($active_tab == "all")
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'all',$keyword,$paginate, 0, null,null,$pos);
+        }
         elseif($active_tab == "unconfirmed")
         {
             $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'proof',$keyword,$paginate, 0, null,null,$pos);
@@ -85,6 +89,7 @@ class ProductOrderController2 extends Member
         {
             $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate, 0, null,null,$pos);
         }
+        
 
         foreach($data["_raw_table"] as $key => $raw_table)
         {
@@ -106,6 +111,9 @@ class ProductOrderController2 extends Member
             if($active_tab == "reject")
             { 
                 $data["_raw_table"][$key]->action = '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a>';
+            }
+            if($active_tab == 'all'){
+                $data["_raw_table"][$key]->action = '<a href="javascript:" class="popup" link="/member/ecommerce/product_order2/details?id=' . $raw_table->transaction_list_id . '" size="lg">VIEW DETAILS</a> ';
             }
         }
 

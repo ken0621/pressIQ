@@ -652,10 +652,11 @@ class Transaction
             $data->where('transaction_sales_person', null);
         }
         $data->transaction(); //join table transaction
+        // dd($transaction_type);
         if(isset($transaction_type))
         {
             if($transaction_type != 'all')
-            {
+            {   
                 if($transaction_type == 'proof')
                 {
                     if($shop_id == 47)
@@ -680,6 +681,8 @@ class Transaction
                 {
                     $data->where('transaction_type', $transaction_type)->where('order_status','!=','reject');
                 }
+            }else{
+                $data->groupBy("tbl_transaction_list.transaction_id");
             }
             
         }

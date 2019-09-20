@@ -143,14 +143,17 @@ class ProductOrderController2 extends Member
     {
         
         $transaction_list_id        = request("id");
+        
         $transaction_list           = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();
         $details                    = $transaction_list->payment_details;
         $items                      = Tbl_transaction_item::where('transaction_list_id',$transaction_list->transaction_list_id)->get();
         $transaction_id             = Tbl_transaction_list::where("transaction_list_id",$transaction_list_id)->first()->transaction_id;
-        $transaction_payment_proof  = Tbl_transaction::where('transaction_id',$transaction_id)->first()->transaction_payment_proof;
+        $customer_data              = Tbl_transaction::where('transaction_id',$transaction_id)->leftjoin('tbl_customer_address','tbl_customer_address.customer_id','tbl_transaction.transaction_reference_id')->where('tbl_customer_address.purpose','shipping')->first();
+        $transaction_payment_proof  = $customer_data->transaction_payment_proof;
+        $address                    = $customer_data->customer_street;
         $path_prefix = "http://digimaweb.solutions/uploadthirdparty/";
         $data['image_url'] = $path_prefix.$transaction_payment_proof;
-
+       
     
         if (is_serialized($details)) 
         {
@@ -161,6 +164,7 @@ class ProductOrderController2 extends Member
         {
             $data["details"]               = [];
         }
+        $data["details"]['shipping_address'] = $address; 
         foreach ($items as $key => $value) {
             $data["details"]['item_'.($key+1)] = $value->item_name;
             $data["details"]['qty_'.($key+1)] = $value->quantity;

@@ -11,8 +11,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name='B-verify' content='8b63efb2920a681d6f877a59a414659d09831140' />
         <meta property="og:image" content="http://philtechglobalinc.com/themes/philtech/img/social-thumb.jpg" />
-        
-      
+
+
         <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
         {{-- PHILTECH ICON --}}
         <link rel="icon" href="/themes/{{ $shop_theme }}/img/icon/philtech-icon.png" type="image/png"/>
@@ -28,12 +28,12 @@
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css?version=1.8">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/push_sidenav.css">
         {{-- <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css"> --}}
-        
+
         <!-- OTHER CSS -->
         @yield("css")
 
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/responsive.css?version=2">
-        
+
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
@@ -59,10 +59,10 @@
                                     <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>
                                     <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}">MERCHANT PRESENTATION</a>
                                     <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PAYMAYA PRESENTATION</a>
-                                @else 
+                                @else
                                     <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>
                                     <a href="{{ get_content($shop_theme_info, "legalities", "merchant_presentation") }}">MERCHANT PRESENTATION</a>
-                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PAYMAYA PRESENTATION</a>  
+                                    <a href="{{ get_content($shop_theme_info, "legalities", "privilege_card_presentation") }}">PAYMAYA PRESENTATION</a>
                                     <a href="{{ get_content($shop_theme_info, "legalities", "millionaire_system") }}">MARKETING PLAN PRESENTATION</a>
                                 @endif
                               </div>
@@ -83,8 +83,8 @@
                         </div>
                         {{-- @else
                         <div class="holder">
-                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>  
-                        </div>  
+                            <a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">BUSINESS PRESENTATION</a>
+                        </div>
                         @endif --}}
                     @endif
                     <div class="holder"><a href="javascript:" onClick="alert('Under Development')">NEWS</a></div>
@@ -107,17 +107,17 @@
                 <div class="container">
                     <div class="clearfix">
                         <div class="logo-holder">
-                            <img onClick="location.href='/'" style="cursor: pointer;" class="img-responsive logo" src="/themes/{{ $shop_theme }}/img/logo.png">            
+                            <img onClick="location.href='/'" style="cursor: pointer;" class="img-responsive logo" src="/themes/{{ $shop_theme }}/img/logo.png">
                         </div>
                         <div class="search-bar-holder">
 
-                            {{-- Search Bar --}}                          
+                            {{-- Search Bar --}}
                             <div class="search-bar">
                                 <form action="/product" method="get" id="form-search">
                                     <div class="input-group">
                                          <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" name="search" id="keyword1" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
                                          <span class="input-group-addon search-button" id="sizing-addon1">
-                                            <a href="" onclick="onSearch(1);" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>                          
+                                            <a href="" onclick="onSearch(1);" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>
                                          </span>
                                     </div>
                                 </form>
@@ -166,13 +166,13 @@
                 <ul class="nav navbar-nav">
                     <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
                     <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR MERCHANTS</a></li>
-                    <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li> 
+                    <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li>
                     <li class="nav-border"><a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb">HOTEL BOOKING</a></li>
                     <li class="nav-border"><a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwiZmvKj-5HhAhVNjY8KHXVSDzwYABAAGgJzYg&ae=1&ohost=www.google.com&cid=CAESEeD2Xc5bI6KoIrkYoBEWupwe&sig=AOD64_1EdtsBF_3V8idbJaCKzKDmTL2__w&q&adurl=https://www.paymaya.com/?gclid%3DCjwKCAjwycfkBRAFEiwAnLX5IUBbvQBsYFD2WZKJKI9uVllkDKBXiRyDMDU3slHbDklqbiCrnl7e5BoClbQQAvD_BwE&ved=2ahUKEwje0u2j-5HhAhX17nMBHSi3BgcQ0Qx6BAgMEAE">E-MONEY</a></li>
-                    <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">CAREER</a></li>
+                    <li class="nav-border"><a href="https://play.google.com/store/apps/details?id=pxsd5.philtech.com.app&hl=en" target="_blank">PBS APP</a></li>
                     <li class="nav-border"><a href="javascript:" onClick="alert('Under Development');">EVENTS</a></li>
                     <li class="nav-border {{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">LEGALITIES</a></li>
-                    <li class="nav-border {{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li> 
+                    <li class="nav-border {{ Request::segment(1) == 'contact' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
@@ -236,7 +236,7 @@
                     <span>CATEGORIES</span>
                     @if(isset($_categories))
                         @foreach($_categories as $category)
-                            <div class="links">                   
+                            <div class="links">
                                 @if($category['subcategory'])
                                     <div class="shop-container" onClick="location.href='/product?type={{ $category['type_id'] }}'">
                                         {{ $category['type_name'] }}
@@ -270,7 +270,7 @@
                             <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
                             <a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb"><li>HOTEL BOOKING</li></a>
                             <a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwiZmvKj-5HhAhVNjY8KHXVSDzwYABAAGgJzYg&ae=1&ohost=www.google.com&cid=CAESEeD2Xc5bI6KoIrkYoBEWupwe&sig=AOD64_1EdtsBF_3V8idbJaCKzKDmTL2__w&q&adurl=https://www.paymaya.com/?gclid%3DCjwKCAjwycfkBRAFEiwAnLX5IUBbvQBsYFD2WZKJKI9uVllkDKBXiRyDMDU3slHbDklqbiCrnl7e5BoClbQQAvD_BwE&ved=2ahUKEwje0u2j-5HhAhX17nMBHSi3BgcQ0Qx6BAgMEAE"><li>E-MONEY</li></a>
-                            <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
+                            <a href="https://play.google.com/store/apps/details?id=pxsd5.philtech.com.app&hl=en" target="_blank"><li>PBS APP</li></a>
                             <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
                             <a href="/legalities"><li>LEGALITIES</li></a>
                             <a href="/contact"><li>CONTACT US</li></a>
@@ -296,17 +296,17 @@
                     <div class="space2"></div>
                     <span>MEMBER'S AREA</span>
                     <ul class="links">
-                        <a href="/members"><li class="{{ Request::segment(1) == "members" ? "active" : "" }}" >DASHBOARD</li></a> 
+                        <a href="/members"><li class="{{ Request::segment(1) == "members" ? "active" : "" }}" >DASHBOARD</li></a>
                         <a href="/members/profile"><li>PROFILE</li></a>
                         @if($mlm_member)
                         <a href="/members/genealogy?mode=binary"><li class="{{ Request::segment(2) == "genealogy" ? "active" : "" }}">GENEALOGY</li></a>
                         <a href="/members/report"><li class="{{ Request::segment(2) == "report" ? "active" : "" }}">REPORTS</li></a>
                         <a href="/members/network"><li class="{{ Request::segment(2) == "network" ? "active" : "" }}">NETWORK LIST</li></a>
                         <a href="/members/lead-list"><li class="{{ Request::segment(2) == "leads" ? "active" : "" }}">LEAD LIST</li></a>
-                        <a href="/members/redeemable"><li class="{{ Request::segment(2) == "redeemable" ? "active" : "" }}">REDEEMABLE</li></a> 
+                        <a href="/members/redeemable"><li class="{{ Request::segment(2) == "redeemable" ? "active" : "" }}">REDEEMABLE</li></a>
                         <a href="/members/wallet-encashment"><li class="{{ Request::segment(2) == "wallet-encashment" ? "active" : "" }}">WALLET</li></a>
                         <a href="/members/wallet-transfer"><li class="{{ Request::segment(2) == "wallet-transfer" ? "active" : "" }}">WALLET TRANSFER</li></a>
-                        <a href="/members/wallet-refill"><li class="{{ Request::segment(2) == "wallet-refill" ? "active" : "" }}">WALLET REFILL</li></a> 
+                        <a href="/members/wallet-refill"><li class="{{ Request::segment(2) == "wallet-refill" ? "active" : "" }}">WALLET REFILL</li></a>
                             @if($customer)
                                 <a href="/members/logout"><li class="user-logout">Logout &nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"></i></li>
                                 </a>
@@ -347,7 +347,7 @@
                         <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
                         <a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb"><li>HOTEL BOOKING</li></a>
                         <a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwiZmvKj-5HhAhVNjY8KHXVSDzwYABAAGgJzYg&ae=1&ohost=www.google.com&cid=CAESEeD2Xc5bI6KoIrkYoBEWupwe&sig=AOD64_1EdtsBF_3V8idbJaCKzKDmTL2__w&q&adurl=https://www.paymaya.com/?gclid%3DCjwKCAjwycfkBRAFEiwAnLX5IUBbvQBsYFD2WZKJKI9uVllkDKBXiRyDMDU3slHbDklqbiCrnl7e5BoClbQQAvD_BwE&ved=2ahUKEwje0u2j-5HhAhX17nMBHSi3BgcQ0Qx6BAgMEAE"><li>E-MONEY</li></a>
-                        <a href="javascript:" onClick="alert('Under Development');"><li>CAREER</li></a>
+                        <a href="https://play.google.com/store/apps/details?id=pxsd5.philtech.com.app&hl=en" target="_blank"><li>PBS APP</li></a>
                         <a href="javascript:" onClick="alert('Under Development');"><li>EVENTS</li></a>
                         <a href="/legalities"><li>LEGALITIES</li></a>
                         <a href="/contact"><li>CONTACT US</li></a>
@@ -361,7 +361,7 @@
             <div class="subheader">
                 <div class="container">
                     @if($customer)
-                    <div class="right-container">                        
+                    <div class="right-container">
                         <span style="cursor: pointer;" onClick="location.href='/members'">MY ACCOUNT&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         <span style="cursor: pointer;" onClick="location.href='/members/logout'">LOGOUT</span>
                     </div>
@@ -372,7 +372,7 @@
                     </div>
                     @endif
                 </div>
-            </div>  
+            </div>
             <div class="main-header">
                 <div class="container">
                     <div id="nav_list" onclick="on()"><i class="fa fa-bars hamburger"></i></div>
@@ -388,7 +388,7 @@
                             <div class="input-group">
                                  <input onkeydown="javascript: if(event.keyCode == 13) onSearch();" type="text" class="form-control" style="border: none;" name="search" id="keyword2" aria-describedby="sizing-addon1" placeholder="Type the item you're looking for...">
                                  <span class="input-group-addon search-button mob-search" id="sizing-addon1">
-                                    <a href="javascript:" onclick="onSearch(2);" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>                          
+                                    <a href="javascript:" onclick="onSearch(2);" id="submit_link"><img src="/themes/{{ $shop_theme }}/img/search-icon.png"></a>
                                  </span>
                             </div>
                         </form>
@@ -410,7 +410,7 @@
                             <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech.jpg">
                         </div>
                         <p>PHILTECH, INC. is a corporation company registered under the SEC with Trade Name PHILIPPINE TECHNOLOGY FOR ENTREPRENEURS AND CONSUMERS HUB, INC.  The company is...<a style="color: #fff" href="/about">See more</a></p>
-                    </div> 
+                    </div>
                     <div class="col-md-2 col-sm-6 match-height">
                         <div class="btm-title">INFORMATION</div>
                         <ul>
@@ -420,7 +420,7 @@
                             {{-- <li><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></li>
                             <li><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></li> --}}
                             <li><a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwiZmvKj-5HhAhVNjY8KHXVSDzwYABAAGgJzYg&ae=1&ohost=www.google.com&cid=CAESEeD2Xc5bI6KoIrkYoBEWupwe&sig=AOD64_1EdtsBF_3V8idbJaCKzKDmTL2__w&q&adurl=https://www.paymaya.com/?gclid%3DCjwKCAjwycfkBRAFEiwAnLX5IUBbvQBsYFD2WZKJKI9uVllkDKBXiRyDMDU3slHbDklqbiCrnl7e5BoClbQQAvD_BwE&ved=2ahUKEwje0u2j-5HhAhX17nMBHSi3BgcQ0Qx6BAgMEAE">E-money</a></li>
-                            <li><a href="javascript:" onClick="alert('Under Development');">Career</a></li>
+                            <li><a href="https://play.google.com/store/apps/details?id=pxsd5.philtech.com.app&hl=en" target="_blank">PBS APP</a></li>
                             <li><a href="javascript:" onClick="alert('Under Development');">Events</a></li>
                             <li class="{{ Request::segment(1) == 'legalities' ? 'active' : '' }}"><a href="/legalities">Legalities</a></li>
                             <li><a href="{{ get_content($shop_theme_info, "legalities", "business_presentation") }}">Business Presentation</a></li>
@@ -468,7 +468,7 @@
 
         <footer id="bottom-footer">
             <div class="container bottom">
-                <div class="clearfix">                
+                <div class="clearfix">
                     <div class="ftr-title pull-left">© {{ isset($company_info['company_name']) ? $company_info['company_name']->value : 'Your Name' }} {{ date('Y') }}</div>
                     <div class="ftr-title pull-right">Powered By: Digima Web Solutions, Inc.</div>
                 </div>
@@ -480,7 +480,7 @@
           <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
-              
+
             </div>
           </div>
         </div>

@@ -64,10 +64,14 @@ class ProductOrderController2 extends Member
         {
             $pos = null;
         }
-
+        // dd($shop_id, 'proof',$keyword,$paginate, 0, null,null,$pos);
         if($active_tab == "paid")
         {
             $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate, 0, null,null,$pos);
+        }
+        if($active_tab == "all")
+        {
+            $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'all',$keyword,$paginate, 0, null,null,$pos);
         }
         elseif($active_tab == "unconfirmed")
         {
@@ -85,6 +89,7 @@ class ProductOrderController2 extends Member
         {
             $data["_raw_table"] = Transaction::get_transaction_list($shop_id, 'receipt',$keyword,$paginate, 0, null,null,$pos);
         }
+        
 
         foreach($data["_raw_table"] as $key => $raw_table)
         {
@@ -93,7 +98,8 @@ class ProductOrderController2 extends Member
 
             if($active_tab == "paid") 
             {
-                $data["_raw_table"][$key]->action = '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a>';
+                $data["_raw_table"][$key]->action = '<a href="javascript:" class="popup" link="/member/ecommerce/product_order2/details?id=' . $raw_table->transaction_list_id . '" size="lg">VIEW DETAILS</a> | ';
+                $data["_raw_table"][$key]->action .= '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a>';
             }
             if($active_tab == "unconfirmed")
             {
@@ -105,6 +111,9 @@ class ProductOrderController2 extends Member
             if($active_tab == "reject")
             { 
                 $data["_raw_table"][$key]->action = '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a>';
+            }
+            if($active_tab == 'all'){
+                $data["_raw_table"][$key]->action = '<a href="javascript:" class="popup" link="/member/ecommerce/product_order2/details?id=' . $raw_table->transaction_list_id . '" size="lg">VIEW DETAILS</a> ';
             }
         }
 
@@ -140,25 +149,34 @@ class ProductOrderController2 extends Member
     }
     public function details()
     {
-        $transaction_list_id    = request("id");
-        $transaction_list       = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();
-        $details                = $transaction_list->payment_details;
-
-        $transaction_id = Tbl_transaction_list::where("transaction_list_id",$transaction_list_id)->first()->transaction_id;
-        $transaction_payment_proof = Tbl_transaction::where('transaction_id',$transaction_id)->first()->transaction_payment_proof;
+        
+        $transaction_list_id        = request("id");
+        
+        $transaction_list           = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();
+        $details                    = $transaction_list->payment_details;
+        $items                      = Tbl_transaction_item::where('transaction_list_id',$transaction_list->transaction_list_id)->get();
+        $transaction_id             = Tbl_transaction_list::where("transaction_list_id",$transaction_list_id)->first()->transaction_id;
+        $customer_data              = Tbl_transaction::where('transaction_id',$transaction_id)->leftjoin('tbl_customer_address','tbl_customer_address.customer_id','tbl_transaction.transaction_reference_id')->where('tbl_customer_address.purpose','shipping')->first();
+        $transaction_payment_proof  = $customer_data->transaction_payment_proof;
+        $address                    = $customer_data->customer_street;
         $path_prefix = "http://digimaweb.solutions/uploadthirdparty/";
         $data['image_url'] = $path_prefix.$transaction_payment_proof;
-
+       
     
         if (is_serialized($details)) 
         {
             $data["details"]               = unserialize($details);
+            // dd( $data["details"] );
         }
         else
         {
             $data["details"]               = [];
         }
-
+        $data["details"]['shipping_address'] = $address; 
+        foreach ($items as $key => $value) {
+            $data["details"]['item_'.($key+1)] = $value->item_name;
+            $data["details"]['qty_'.($key+1)] = $value->quantity;
+        }
         return view("member.product_order2.details", $data);
     }
     public function payref()
@@ -379,11 +397,21 @@ class ProductOrderController2 extends Member
     }
     public function confirm_payment_submit()
     {
-        $val = Payment::manual_confirm_payment($this->user_info->shop_id, request('transaction_list_id'));
+        // dd(Tbl_transaction::where('transaction_id',request()->transaction_id)->get);
+        if($this->user_info->shop_id == 1){
+            $_get = Tbl_transaction::where('transaction_id',request()->transaction_id)->first();
+            $lead_slot = Tbl_mlm_slot::where("slot_owner",$_get->transaction_reference_id)->first();
+            // dd($lead_slot);
+            $val = Payment::manual_confirm_payment_philtech($this->user_info->shop_id, request('transaction_list_id'),$lead_slot->slot_id);
+        } 
+        else{
+            $val = Payment::manual_confirm_payment($this->user_info->shop_id, request('transaction_list_id'));
+        }
+        
         if(!$val)
         {
             $get_transaction_list = Transaction::get_data_transaction_list(request('transaction_list_id'));
-            
+
             if ($get_transaction_list) 
             {
                 $get_transaction      = Tbl_transaction::where("transaction_id", $get_transaction_list->transaction_id)->first();
@@ -400,7 +428,7 @@ class ProductOrderController2 extends Member
                     }
                 }
 
-                if($this->user_info->shop_id == 47)
+                if($this->user_info->shop_id == 47 || $this->user_info->shop_id == 1)
                 {
                     $consume["id"] = $get_transaction_list->transaction_list_id;
                     $get_list_item = Tbl_transaction_item::where("transaction_list_id",$consume["id"])->get();
@@ -410,8 +438,11 @@ class ProductOrderController2 extends Member
                         $list_item_id  = $list_item->item_id;
                         $this->check_lead_bonus($consume,$list_item_id);
                     }
+                    // dd( $list_item_id );
                 }
-                
+                if($this->user_info->shop_id == 1){
+                    $validate = Transaction::consume_payment($this->user_info->shop_id , $get_transaction_list->transaction_list_id, $lead_slot->slot_id);
+                }
             }
             $return['status'] = 'success';
             $return['call_function'] = 'success_confirm';            

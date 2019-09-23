@@ -137,7 +137,12 @@ class MLM_DistributeCashbackController extends Member
 								  	   	->where("points_log_converted",0)
 								  	   	->get();
 								  	   	// dd($_slot);
-        
+		if(!$_slot)
+		{
+			$ret['return']['message'] = 'error';
+			$ret['message'] = 'No slot to be distribute.';
+			return redirect::to("/member/mlm/unilevel_cashback_points",$ret);
+		}
 	    $batch_number = Tbl_cashback_points_distribute::where("shop_id",$shop_id)->orderBy("distribute_batch","DESC")->first();
 
         if(!$batch_number)
@@ -180,6 +185,6 @@ class MLM_DistributeCashbackController extends Member
         }
 
 
-		return redirect::to("/member/mlm/distribute_cashback");
+		return redirect::to("/member/mlm/distribute_unilevel_cashback");
 	}
 }

@@ -171,7 +171,7 @@
                                 <input type="hidden" name="payment_method_type" class="payment_method_type" value="">
                                 <div class="col-sm-12">
                                     @foreach($_method as $key=>$method)
-                                    @if($key == 0)
+                                    @if($key == 1)
                                     <a style="margin:5px 0px 5px 0px;" href="javascript:" class="btn btn-primary {{strtolower($method->payment_name)}} btn-payment" onClick="select_payment('{{strtolower($method->payment_name)}}')">{{$method->payment_name}}</a>
                                     @else
                                     <a style="margin:5px 0px 5px 0px;" href="javascript:" class="btn btn-custom-white {{str_replace(' ','-',strtolower($method->payment_name))}} btn-payment" onClick="select_payment('{{str_replace(' ','-',strtolower($method->payment_name))}}')">{{$method->payment_name}}</a>

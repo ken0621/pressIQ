@@ -151,7 +151,7 @@
         </div>
         <!-- NAVIGATION -->
         <nav class="navbar navbar-default">
-          <div class="container sticky-hide">
+          <div class="sticky-hide">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -166,7 +166,10 @@
                 <ul class="nav navbar-nav">
                     <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME</a></li>
                     <li class="nav-border {{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">OUR MERCHANTS</a></li>
-                    <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li>
+                    {{-- <li class="nav-border"><a href="https://loadcentral.net">ELOADING BUSINESS</a></li> --}}
+                    <li class="nav-border"><a href="https://www.cashbackworld.com/ph-en/registration/taflink?r=6cW7UUNsyoLQfy3qV%2BLFXek98pBL1PKK3d%2Fs7QVm1wIGPQXqhpYHo8unCDKTwyHr&t=81dea562-0729-4d8f-82e8-35bb6349a1f8">CASHBACK SYSTEM</a></li>
+                    <li class="nav-border"><a href="/bulletin">ANNOUNCEMENTS</a></li>
+                    <li class="nav-border"><a href="http://202.54.157.7/PhilTechInc/rftlogin.aspx">AIRLINE TICKETING</a></li>
                     <li class="nav-border"><a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb">HOTEL BOOKING</a></li>
                     <li class="nav-border"><a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwiZmvKj-5HhAhVNjY8KHXVSDzwYABAAGgJzYg&ae=1&ohost=www.google.com&cid=CAESEeD2Xc5bI6KoIrkYoBEWupwe&sig=AOD64_1EdtsBF_3V8idbJaCKzKDmTL2__w&q&adurl=https://www.paymaya.com/?gclid%3DCjwKCAjwycfkBRAFEiwAnLX5IUBbvQBsYFD2WZKJKI9uVllkDKBXiRyDMDU3slHbDklqbiCrnl7e5BoClbQQAvD_BwE&ved=2ahUKEwje0u2j-5HhAhX17nMBHSi3BgcQ0Qx6BAgMEAE">E-MONEY</a></li>
                     <li class="nav-border"><a href="https://play.google.com/store/apps/details?id=pxsd5.philtech.com.app&hl=en" target="_blank">PBS APP</a></li>
@@ -267,7 +270,9 @@
                     <ul class="links">
                             <a href="/"><li>HOME</li></a>
                             <a href="/partners"><li>OUR MERCHANTS</li></a>
-                            <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
+                            <a href="https://www.cashbackworld.com/ph-en/registration/taflink?r=6cW7UUNsyoLQfy3qV%2BLFXek98pBL1PKK3d%2Fs7QVm1wIGPQXqhpYHo8unCDKTwyHr&t=81dea562-0729-4d8f-82e8-35bb6349a1f8"><li>CASHBACK SYSTEM</li></a>
+                            <a href="/bulletin"><li>ANNOUNCEMENTS</li></a>
+                            <a href="http://202.54.157.7/PhilTechInc/rftlogin.aspx"><li>AIRLINE TICKETING</li></a>
                             <a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb"><li>HOTEL BOOKING</li></a>
                             <a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwiZmvKj-5HhAhVNjY8KHXVSDzwYABAAGgJzYg&ae=1&ohost=www.google.com&cid=CAESEeD2Xc5bI6KoIrkYoBEWupwe&sig=AOD64_1EdtsBF_3V8idbJaCKzKDmTL2__w&q&adurl=https://www.paymaya.com/?gclid%3DCjwKCAjwycfkBRAFEiwAnLX5IUBbvQBsYFD2WZKJKI9uVllkDKBXiRyDMDU3slHbDklqbiCrnl7e5BoClbQQAvD_BwE&ved=2ahUKEwje0u2j-5HhAhX17nMBHSi3BgcQ0Qx6BAgMEAE"><li>E-MONEY</li></a>
                             <a href="https://play.google.com/store/apps/details?id=pxsd5.philtech.com.app&hl=en" target="_blank"><li>PBS APP</li></a>
@@ -344,7 +349,9 @@
                     <ul class="links">
                         <a href="/"><li>HOME</li></a>
                         <a href="/partners"><li>OUR MERCHANTS</li></a>
-                        <a href="https://loadcentral.net"><li>E-LOADING BUSINESS</li></a>
+                        <a href="https://www.cashbackworld.com/ph-en/registration/taflink?r=6cW7UUNsyoLQfy3qV%2BLFXek98pBL1PKK3d%2Fs7QVm1wIGPQXqhpYHo8unCDKTwyHr&t=81dea562-0729-4d8f-82e8-35bb6349a1f8"><li>CASHBACK SYSTEM</li></a>
+                        <a href="/bulletin"><li>ANNOUNCEMENTS</li></a>
+                        <a href="http://202.54.157.7/PhilTechInc/rftlogin.aspx"><li>AIRLINE TICKETING</li></a>
                         <a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb"><li>HOTEL BOOKING</li></a>
                         <a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwiZmvKj-5HhAhVNjY8KHXVSDzwYABAAGgJzYg&ae=1&ohost=www.google.com&cid=CAESEeD2Xc5bI6KoIrkYoBEWupwe&sig=AOD64_1EdtsBF_3V8idbJaCKzKDmTL2__w&q&adurl=https://www.paymaya.com/?gclid%3DCjwKCAjwycfkBRAFEiwAnLX5IUBbvQBsYFD2WZKJKI9uVllkDKBXiRyDMDU3slHbDklqbiCrnl7e5BoClbQQAvD_BwE&ved=2ahUKEwje0u2j-5HhAhX17nMBHSi3BgcQ0Qx6BAgMEAE"><li>E-MONEY</li></a>
                         <a href="https://play.google.com/store/apps/details?id=pxsd5.philtech.com.app&hl=en" target="_blank"><li>PBS APP</li></a>
@@ -415,7 +422,9 @@
                         <div class="btm-title">INFORMATION</div>
                         <ul>
                             <li class="{{ Request::segment(1) == 'partners' ? 'active' : '' }}"><a href="/partners">Our Partner Merchants</a></li>
-                            <li><a href="https://loadcentral.net">E-loading Business</a></li>
+                            <li><a href="https://www.cashbackworld.com/ph-en/registration/taflink?r=6cW7UUNsyoLQfy3qV%2BLFXek98pBL1PKK3d%2Fs7QVm1wIGPQXqhpYHo8unCDKTwyHr&t=81dea562-0729-4d8f-82e8-35bb6349a1f8">CASHBACK SYSTEM</a></li>
+                            <li><a href="/bulletin">ANNOUNCEMENTS</a></li>
+                            <li><a href="http://202.54.157.7/PhilTechInc/rftlogin.aspx">AIRLINE TICKETING</a></li>
                             <li><a href="https://www.expedia.com.ph/TAAP-Agent?key=b4d334b0-6d4b-4d6f-aba2-c204fedbb5eb">Hotel Booking</a></li>
                             {{-- <li><a href="http://tour.philtechglobalinc.com">Airline Ticketing</a></li>
                             <li><a href="http://202.54.157.7/PhilTechInc/BKWLTOlogin.aspx">Travel and Tours</a></li> --}}
@@ -458,6 +467,12 @@
                                 <td><img src="/themes/{{ $shop_theme }}/img/icon/email.png"></td>
                                 <td>
                                     {{ isset($company_info['company_email']) ? $company_info['company_email']->value : 'youremailhere@company.com' }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><img src="/themes/{{ $shop_theme }}/img/icon/facebook.png"></td>
+                                <td>
+                                   <a href="https://www.facebook.com/philtechweprovidebusiness/" style="text-decoration: none; color: rgba(255,255,255,0.5); font-size: 13px;"  target="_blank"> https://www.facebook.com/philtechweprovidebusiness/</a>
                                 </td>
                             </tr>
                         </table>

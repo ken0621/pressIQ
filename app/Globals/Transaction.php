@@ -282,10 +282,12 @@ class Transaction
         foreach ($get_item as $key => $value) 
         {
             $item_type = Item::get_item_type($value->item_id);
+            $consume['item_type'] = $item_type;
             /*INVENTORY TYPE*/
             if($item_type == 1 || $item_type == 5)
             {   
                 $check = Cart2::get_item_pincode($shop_id, $value->item_id);
+                
                 if(count($check) > 0)
                 {
                     foreach ($check as $key_cart => $value_cart) 
@@ -297,7 +299,9 @@ class Transaction
                     }
                 }
                 else
-                {                    
+                {     
+                    // dd($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume); 
+
                     Warehouse2::consume($shop_id, $warehouse_id, $value->item_id, $value->quantity, $remarks, $consume);
                 }
 
@@ -648,10 +652,11 @@ class Transaction
             $data->where('transaction_sales_person', null);
         }
         $data->transaction(); //join table transaction
+        // dd($transaction_type);
         if(isset($transaction_type))
         {
             if($transaction_type != 'all')
-            {
+            {   
                 if($transaction_type == 'proof')
                 {
                     if($shop_id == 47)
@@ -676,6 +681,8 @@ class Transaction
                 {
                     $data->where('transaction_type', $transaction_type)->where('order_status','!=','reject');
                 }
+            }else{
+                $data->groupBy("tbl_transaction_list.transaction_id");
             }
             
         }
@@ -821,17 +828,18 @@ class Transaction
 
         //patrick
         $emails = array();
+        $transaction_id = array();
         if($transaction_type == 'proof' && $shop_id != 47)
         {
             foreach ($data as $key => $value) 
             {
-                if(in_array($value->email, $emails))
+                if(in_array($value->transaction_id, $transaction_id))
                 {
                     unset($data[$key]);                
                 }
                 else
                 {
-                    array_push($emails, $value->email);
+                    array_push($transaction_id, $value->transaction_id);
                 }
             }
         }
@@ -1087,7 +1095,7 @@ class Transaction
         }
 
         $get_all_payment = Cart2::cart_payment_list($shop_id);
-
+        // dd($get_all_payment);
         $insert_payment = null;
         foreach ($get_all_payment as $key => $value) 
         {
@@ -1096,8 +1104,8 @@ class Transaction
             $insert_payment[$key]['transaction_payment_amount'] = $value->payment_amount;
             $insert_payment[$key]['transaction_payment_date'] = $transaction_date;
         }
-
-        if(count($insert_payment) > 0)
+        // count($insert_payment) > 0
+        if($insert_payment)
         {
             Tbl_transaction_payment::insert($insert_payment);
             $return = 1;

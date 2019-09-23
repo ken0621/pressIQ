@@ -44,7 +44,7 @@
 				</div>
 
 				<div class="col-md-5">
-						<div id="location" class="content-title">Location</div>
+					<div id="location" class="content-title">Location</div>
 						<table>
 							<tr>
 								<td class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></td>
@@ -60,11 +60,19 @@
 							</tr>
 						</table>
 					<div>
-						<div class="content-title business-hours">Business Hours</div>
+					<div class="content-title business-hours">Business Hours</div>
 						<table>
 							<tr>
 								<td class="icon"><i class="fa fa-clock-o" aria-hidden="true"></i></td>
 								<td class="par">{{ isset($company_info['company_hour']) ? $company_info['company_hour']->value : 'Monday - Friday at 9:00am - 6:00pm' }}</td>
+							</tr>
+						</table>
+					</div>
+					<div class="content-title business-hours">Social Media</div>
+						<table>
+							<tr>
+								<td class="icon"><i class="fa fa-facebook-square" aria-hidden="true"></i></td>
+								<td class="par"><a href="https://www.facebook.com/philtechweprovidebusiness/" style="text-decoration: none; color: #333333; font-size: 13px;" target="_blank"> https://www.facebook.com/philtechweprovidebusiness/</a></td>
 							</tr>
 						</table>
 					</div>

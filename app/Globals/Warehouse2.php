@@ -723,6 +723,7 @@ class Warehouse2
     }
     public static function consume($shop_id, $warehouse_id, $item_id = 0, $quantity = 1, $remarks = '', $consume = array(), $serial = array(), $inventory_history = '')
     {
+
         $return = null;
 
         $insert_slip['warehouse_id']                 = $warehouse_id;
@@ -791,7 +792,7 @@ class Warehouse2
                             $purchase_activation = $purchase_inventory->mlm_activation;
 
                             $update_to_consume['record_log_date_updated']   = Carbon::now();
-                            $update_to_consume['item_in_use']               = "used";
+                            $update_to_consume['item_in_use']               = $consume["item_type"] == 5 ? "unused" : "used";
                             Tbl_warehouse_inventory_record_log::where('record_log_id',$purchase_inventory->record_log_id)->update($update_to_consume);
 
                             MLM2::purchase($shop_id, $consume['slot_id'], $purchase_inventory->record_item_id);
@@ -1151,6 +1152,7 @@ class Warehouse2
                                                  ->where('mlm_pin',$mlm_pin)
                                                  ->where('item_in_use', 'unused')
                                                  ->first();
+        // dd($code_used,'code_used');
         if($val)
         {
             if($val->record_inventory_status == 1)

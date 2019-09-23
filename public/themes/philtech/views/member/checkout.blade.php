@@ -141,7 +141,7 @@
 										<select class="show-select-slot hide" name="current_slot" style="margin-top: 15px;">
 											<option selected disabled hidden>SELECT SLOT</option>
 											@foreach($_slot as $slot)
-												<option value="{{ $slot->slot_id }}">{{ $slot->slot_no }} (&#8369; {{ number_format($slot->current_wallet, 2) }})</option>
+												<option value="{{ $slot->slot_id }}">{{ $slot->slot_no }} (&#8369; {{ number_format($slot->slot_wallet_current, 2) }})</option>
 											@endforeach
 										</select>
 									</div>

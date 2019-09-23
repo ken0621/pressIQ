@@ -705,9 +705,10 @@ function toggle_destination(className)
 }
 function select_payment(type = '')
 {
-
+	console.log(type);
 	$('.btn-payment').addClass('btn-custom-white');
 	$valtype = type.replace("-"," ");
+	
 	$('.input-payment-method').val($valtype);
 
 	$('.method_types').css('display','none');

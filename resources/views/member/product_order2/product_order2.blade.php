@@ -58,9 +58,10 @@
             </div>
         </div>
         <ul class="nav nav-tabs">
-            <li class="active change-tab pending-tab cursor-pointer" mode="paid"><a class="cursor-pointer"><i class="fa fa-check"></i> Paid</a></li>
+            <li class="active change-tab pending-tab cursor-pointer" mode="all"><a class="cursor-pointer"><i class="fa fa-check"></i> All</a></li>
+            <li class="active change-tab pen7ding-tab cursor-pointer" mode="paid"><a class="cursor-pointer"><i class="fa fa-check"></i> Paid</a></li>
             <li class="change-tab pending-tab cursor-pointer" mode="unconfirmed"><a class="cursor-pointer"><i class="fa fa-money"></i> Unconfirmed Payment</a></li>
-            <li class="change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-truck"></i> Pending for Delivery</a></li>
+            <!-- <li class="change-tab pending-tab cursor-pointer" mode="pending"><a class="cursor-pointer"><i class="fa fa-truck"></i> Pending for Delivery</a></li> -->
             <li class="cursor-pointer change-tab approve-tab" mode="reject"><a class="cursor-pointer"><i class="fa fa-close"></i> Rejected Payment</a></li>
             <li class="cursor-pointer change-tab approve-tab" mode="failed"><a class="cursor-pointer"><i class="fa fa-clock-o"></i> Failed Orders</a></li>
         </ul>

@@ -45,7 +45,7 @@
 </div>
 </div>
 
-<form type="POST" class="secured_distribute" action="/member/mlm/distribute_cashback/distribute">
+<form type="POST" class="secured_distribute" action="/member/mlm/distribute_unilevel_cashback/distribute">
     <input type="hidden" name="_token" value="{{csrf_token()}}">
 </form>
 @endsection
@@ -127,8 +127,8 @@
 <script type="text/javascript">
   $(".dist_cashback").click(function()
   {
-      localStorage.setItem("show_dist_message",1);
-      $(".secured_distribute").submit();
+        localStorage.setItem("show_dist_message",1);
+        $(".secured_distribute").submit();
   });
 
   if(localStorage.getItem("show_dist_message") == 1)

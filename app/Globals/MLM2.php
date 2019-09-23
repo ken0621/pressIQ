@@ -98,10 +98,10 @@ class MLM2
 				}
 			});
 
-			$query2 = Tbl_warehouse_inventory_record_log::item()->where("tbl_warehouse_inventory_record_log.record_shop_id", $shop_id)->where("tbl_release_product_code.customer_id", $customer_id)->join("tbl_release_product_code", "tbl_release_product_code.record_log_id", "=", "tbl_warehouse_inventory_record_log.record_log_id")->get();
+			$query2 = Tbl_warehouse_inventory_record_log::item()->where("tbl_warehouse_inventory_record_log.record_shop_id", $shop_id)->where("tbl_release_product_code.customer_id", $customer_id)->leftjoin("tbl_release_product_code", "tbl_release_product_code.record_log_id", "=", "tbl_warehouse_inventory_record_log.record_log_id")->get();
 			$merged = $query->get()->merge($query2);
 			$_codes = $merged->all();
-			
+			// dd($_codes);
 			foreach($_codes as $key => $code)
 			{
 				$slot = Tbl_mlm_slot::where("slot_id", $code->mlm_slot_id_created)->customer()->first();
@@ -786,7 +786,7 @@ class MLM2
 			$_reward = $query->orderBy("wallet_log_id", "desc")->get();
 		}
 		
-
+		
 		foreach($_reward as $key => $reward)
 		{
 			$reward_slot = Tbl_mlm_slot::where("slot_id", $reward->wallet_log_slot)->first();
@@ -796,7 +796,7 @@ class MLM2
 			$_reward[$key]->log = Self::customer_rewards_contructor($reward);
 			$_reward[$key]->slot_no = $reward_slot->slot_no;
 		}
-
+		// dd($_reward);
 		return $_reward;
 	}
 	public static function customer_rewards_points($shop_id, $customer_id, $limit = 10,$sort_by = "0")

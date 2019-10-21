@@ -4380,7 +4380,7 @@ class ShopMemberController extends Shop
         $data["_payment"]   = $_payment = Payment::get_list($shop_id);
         $data["_locale"]    = Tbl_locale::where("locale_parent", 0)->orderBy("locale_name", "asc")->get();
         $data["cart"]       = Cart2::get_cart_info(isset(Self::$customer_info->customer_id) ? Self::$customer_info->customer_id : null);
-        
+        $data["cart"]['info']->_shipphing = "PHP ".number_format((float)$data["cart"]['info']->shipping_fee, 2, '.', '');
         if(!Self::$customer_info)
         {
             $store["checkout_after_register"] = true;

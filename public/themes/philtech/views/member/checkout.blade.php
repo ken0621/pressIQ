@@ -114,6 +114,12 @@
 										<!--</div>-->
 										<!-- TOTAL -->
 										<div class="col-md-6">
+											<div class="left-detail">Shipping Fee</div>
+										</div>
+										<div class="col-md-6">
+											<div class="right-detail">{{ $cart["info"]->_shipphing }}</div>
+										</div>
+										<div class="col-md-6">
 											<div class="left-detail">Total</div>
 										</div>
 										<div class="col-md-6">

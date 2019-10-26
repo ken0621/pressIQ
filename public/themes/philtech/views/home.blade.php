@@ -2,6 +2,16 @@
 @section("content")
 <div class="content mob-margin">
 	<div class="container">
+	<?php
+		if(!$customer){
+			foreach ($_categories as $key => $value) {
+				if($value['type_id'] == 504)
+				{
+					unset($_categories[$key]);
+				}
+			}
+		}
+	?>
 	<!-- TOP CONTENT -->
 		<div class="row clearfix">
 			<div class="col-md-3">

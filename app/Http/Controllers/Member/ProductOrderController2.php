@@ -9,6 +9,7 @@ use App\Globals\Mail_global;
 use App\Globals\MLM2;
 use App\Globals\Mlm_slot_log;
 use App\Globals\Mlm_complan_manager;
+use App\Globals\Pdf_global;
 
 use App\Models\Tbl_transaction_list;
 use App\Models\Tbl_online_pymnt_link;
@@ -113,7 +114,8 @@ class ProductOrderController2 extends Member
                 $data["_raw_table"][$key]->action = '<a target="_blank" href="/member/ecommerce/product_order2/proof?id=' . $raw_table->transaction_list_id . '">VIEW PROOF</a>';
             }
             if($active_tab == 'all'){
-                $data["_raw_table"][$key]->action = '<a href="javascript:" class="popup" link="/member/ecommerce/product_order2/details?id=' . $raw_table->transaction_list_id . '" size="lg">VIEW DETAILS</a> ';
+                $data["_raw_table"][$key]->action = '<a href="javascript:" class="popup" link="/member/ecommerce/product_order2/details?id=' . $raw_table->transaction_list_id . '" size="lg">VIEW DETAILS</a> | ';
+                $data["_raw_table"][$key]->action .= '<a target="_blank" href="/member/ecommerce/product_order2/receipt?id=' . $raw_table->transaction_list_id . '">VIEW RECEIPT</a> | ';
             }
         }
 
@@ -150,6 +152,67 @@ class ProductOrderController2 extends Member
     public function details()
     {
         
+        $transaction_list_id        = request("id");
+        
+        $transaction_list           = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();
+        $details                    = $transaction_list->payment_details;
+        $items                      = Tbl_transaction_item::where('transaction_list_id',$transaction_list->transaction_list_id)->get();
+        $transaction_id             = Tbl_transaction_list::where("transaction_list_id",$transaction_list_id)->first()->transaction_id;
+        $customer_data              = Tbl_transaction::where('transaction_id',$transaction_id)->leftjoin('tbl_customer_address','tbl_customer_address.customer_id','tbl_transaction.transaction_reference_id')->where('tbl_customer_address.purpose','shipping')->first();
+        $transaction_payment_proof  = $customer_data->transaction_payment_proof;
+        $address                    = $customer_data->customer_street;
+        $path_prefix = "http://digimaweb.solutions/uploadthirdparty/";
+        $data['image_url'] = $path_prefix.$transaction_payment_proof;
+       
+    
+        if (is_serialized($details)) 
+        {
+            $data["details"]               = unserialize($details);
+            // dd( $data["details"] );
+        }
+        else
+        {
+            $data["details"]               = [];
+        }
+        $data["details"]['shipping_address'] = $address; 
+        foreach ($items as $key => $value) {
+            $data["details"]['item_'.($key+1)] = $value->item_name;
+            $data["details"]['qty_'.($key+1)] = $value->quantity;
+        }
+        return view("member.product_order2.details", $data);
+    }
+    public function receipt()
+    {
+      
+        $data['shop_key']            = strtoupper($this->user_info->shop_key);
+        $data['shop_address']        = ucwords($this->user_info->shop_street_address.' '.$this->user_info->shop_city.', '.$this->user_info->shop_zip);
+        $data['list']                = Tbl_transaction_list::salesperson()->transaction()->where('transaction_list_id',request("id"))->first();
+        $data['payment_details']     =   unserialize($data['list']->payment_details);
+        $data['_item']               = Tbl_transaction_item::where('transaction_list_id',request("id"))->get();
+        $data['customer_name']       = Transaction::getCustomerNameTransaction($data['list']->transaction_id);
+        $data['transaction_details'] = unserialize($data["list"]->transaction_details);
+        $data['customer_info']       = Transaction::getCustomerInfoTransaction($data['list']->transaction_id);
+        $data['customer_address']    = DB::table('tbl_customer_address')->where('customer_id', $data['customer_info']->customer_id)->where('purpose','shipping')->first();
+        $data['_payment_list']       = Transaction::get_payment($data['list']->transaction_id);
+        $data['_codes']              = Transaction::get_transaction_item_code(request("id"), $this->user_info->shop_id);
+        // dd($data);
+        $html = view("member.transaction.all_shop_receipt_pdf2", $data);
+        return $html;
+        $pdf = Pdf_global::show_pdfv2($html);
+        return $pdf;
+        if ($this->user_info->shop_theme == "3xcell") 
+        {
+            // return view("member.transaction.receipt.3xcell", $data);
+            $html = view("member.transaction.receipt.3xcell", $data);
+            $pdf = Pdf_global::show_pdfv2($html);
+            return $pdf;
+        }
+        else
+        {
+            // return view("member.transaction.all_shop_receipt_pdf", $data);
+           
+        }
+
         $transaction_list_id        = request("id");
         
         $transaction_list           = Tbl_transaction_list::where("transaction_list_id", $transaction_list_id)->transaction()->first();

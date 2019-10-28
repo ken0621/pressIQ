@@ -205,6 +205,7 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::post('product_order2/table','Member\ProductOrderController2@table');
 	Route::get('product_order2/proof','Member\ProductOrderController2@proof');
 	Route::get('product_order2/details','Member\ProductOrderController2@details');
+	Route::get('product_order2/receipt','Member\ProductOrderController2@receipt');
 	Route::get('product_order2/confirm_payment','Member\ProductOrderController2@confirm_payment');
 	Route::post('product_order2/confirm_payment_submit','Member\ProductOrderController2@confirm_payment_submit');
 	Route::get('product_order2/reject_payment','Member\ProductOrderController2@reject_payment');

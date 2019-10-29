@@ -60,7 +60,7 @@
             <div class="title">INVOICE</div>
             <div class="holder">
                 <div class="detail-row"><strong>Bill To :</strong> {{ucwords($customer_name)}}</div>
-                <div class="detail-row"><strong>Contact Number :</strong> {{$payment_details['sender_number']}}</div>
+                <div class="detail-row"><strong>Contact Number :</strong> {{$payment_details ? $payment_details['sender_number'] : ''}}</div>
                 @if($customer_address)
                 <div class="detail-row"><strong>Shipping Address :</strong> {{ $customer_address->customer_street }} {{ $customer_address->customer_state }} {{ $customer_address->customer_city }} {{ $customer_address->customer_zipcode }}</div>
                 @endif
@@ -154,6 +154,7 @@
                 </div>
                 <div class="holder">
                     <div class="total-summary text-right" {{isset($total_tendered) ? '' : $total_tendered = 0}}>
+                        <div class="rows">SHIPPING FEE     : PHP {{ number_format($shipping_fee, 2) }}</div>
                         <div class="rows">TENDERED PAYMENT : PHP {{ number_format($total_tendered, 2) }}</div>
                         <div class="rows">TOTAL PAID AMOUNT : PHP {{ number_format($list->transaction_total, 2) }}</div>
                         <div class="rows">CHANGE : PHP {{ number_format($total_tendered - $list->transaction_total, 2) }}</div>

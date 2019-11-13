@@ -6,7 +6,7 @@
             <img src="/themes/{{ $shop_theme }}/img/announcement-1.jpg" alt="" style="width: 100%;">
         </div>
         <div style="max-width: 700px;">
-            <img src="/themes/{{ $shop_theme }}/img/announcement-2.jpg" alt="" style="width: 100%;">
+            <img src="/themes/{{ $shop_theme }}/img/announcement-3.jpg" alt="" style="width: 100%;">
         </div>
     </div>
 </div>

@@ -20,6 +20,7 @@
         "laravel/framework": "5.5.*",
         "laravel/scout": "^3.0",
         "laravel/tinker": "~1.0",
+        "league/flysystem-aws-s3-v3": "^1.0",
         "lesichkovm/laravel-advanced-route": "dev-master",
         "maatwebsite/excel": "~2.1.0",
         "mpdf/mpdf": "^6.1",

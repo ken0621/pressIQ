@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'ftp'),
+    'default' => env('FILESYSTEM_DRIVER', 's3'),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,13 +55,23 @@ return [
             'visibility' => 'public',
         ],
 
-// test1
+        // 's3' => [
+        //     'driver' => 's3',
+        //     'key' => env('AWS_KEY'),
+        //     'secret' => env('AWS_SECRET'),
+        //     'region' => env('AWS_REGION'),
+        //     'bucket' => env('AWS_BUCKET'),
+        // ],
+
         's3' => [
-            'driver' => 's3',
-            'key' => env('AWS_KEY'),
-            'secret' => env('AWS_SECRET'),
-            'region' => env('AWS_REGION'),
-            'bucket' => env('AWS_BUCKET'),
+            'driver'    => 's3',
+            'key'       => 'filserverdigima2020',
+            'secret'    => '9NDawahXLkf9n4sgWLEv4X4VTNFBRU',
+            'region'    => 'us-east-1',
+            'bucket'    => 'pressiqfiles',
+            'endpoint'  => 'https://minio-server.image.payrollfiles.payrolldigima.com:9000',
+            'bucket_endpoint' => false,
+            'use_path_style_endpoint' => true,
         ],
 
         'ftp' => [

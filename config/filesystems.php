@@ -55,8 +55,6 @@ return [
             'visibility' => 'public',
         ],
 
-	/* TEST */
-
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_KEY'),

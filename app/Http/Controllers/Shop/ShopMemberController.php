@@ -779,7 +779,7 @@ class ShopMemberController extends Shop
                 else
                 {
 
-                $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
+                $path_prefix = 'https://minio-server.image.payrollfiles.payrolldigima.com:9000/pressiqfiles/';
                 $path ="";
 
                 if($request->hasFile('user_company_image'))
@@ -1344,7 +1344,7 @@ class ShopMemberController extends Shop
             }
             else
             {
-                $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
+                $path_prefix = 'https://minio-server.image.payrollfiles.payrolldigima.com:9000/pressiqfiles/';
                 $path ="";
                 if($request->hasFile('user_company_image'))
                 {
@@ -4568,7 +4568,7 @@ class ShopMemberController extends Shop
     public function postWalletRefillRequest(Request $request)
     {
         // dd("This page is under maintenance");
-        $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
+        $path_prefix = 'https://minio-server.image.payrollfiles.payrolldigima.com:9000/pressiqfiles/';
         $path ="";
         if($request->hasFile('attachment'))
         {
@@ -4630,7 +4630,7 @@ class ShopMemberController extends Shop
     }
     public function postUploadAttachment(Request $request)
     {
-        $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
+        $path_prefix = 'https://minio-server.image.payrollfiles.payrolldigima.com:9000/pressiqfiles/';
         $path ="";
         $response = 'error_upload';
         if($request->hasFile('attachment'))

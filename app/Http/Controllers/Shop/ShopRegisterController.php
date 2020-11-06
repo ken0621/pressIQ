@@ -52,7 +52,7 @@ class ShopRegisterController extends Shop
                 }
                 else
                 {
-                    $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
+                    $path_prefix = 'https://minio-server.image.payrollfiles.payrolldigima.com:9000/pressiqfiles/';
                     $path ="";
                     if($request->hasFile('user_company_image'))
                     {

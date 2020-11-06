@@ -39,7 +39,7 @@ class ManageLessonController extends Member
 
     public function lesson_add_submit(Request $request)
     {
-        $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
+        $path_prefix = 'https://minio-server.image.payrollfiles.payrolldigima.com:9000/pressiqfiles/';
         $path ="";
         if($request->hasFile('lesson_case_study'))
         {
@@ -90,7 +90,7 @@ class ManageLessonController extends Member
     public function chapter_add_submit(Request $request)
     {
 
-        $path_prefix = 'http://digimaweb.solutions/public/uploadthirdparty/';
+        $path_prefix = 'https://minio-server.image.payrollfiles.payrolldigima.com:9000/pressiqfiles/';
         $path ="";
         if($request->hasFile('chapter_video'))
         {

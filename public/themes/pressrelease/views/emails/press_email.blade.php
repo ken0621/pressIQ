@@ -134,11 +134,11 @@
 
 			<div class="sender-container"><span class="title-sender">Published by </span><span class="sender-name">{{$pr_sender_name}}</span></div>
 			<div class="date-container">{{$pr_date_sent}}</div>
-			<div class="content-container"><p>{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_content); !!}</p></div>
+			<div class="content-container"><p>{!! str_replace('../', 'https://minio-server.image.payrollfiles.payrolldigima.com:9000/pressiqfiles/', $pr_content); !!}</p></div>
 			<div class="border"></div>
 			<div class="title-about-container">About {{$pr_co_name}}</div>
 			{{-- <div class="title-about-container">{{$pr_type}}</div> --}}
-			<div class="content-container">{!! str_replace('../', 'http://digimaweb.solutions/public/uploadthirdparty/', $pr_boiler_content); !!}</div>			
+			<div class="content-container">{!! str_replace('../', 'https://minio-server.image.payrollfiles.payrolldigima.com:9000/pressiqfiles/', $pr_boiler_content); !!}</div>			
 		</div>
 	</div>
 	<div style="text-align: center;padding: 0px 20px 0px 20px">                                         
